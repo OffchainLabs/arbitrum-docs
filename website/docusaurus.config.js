@@ -33,9 +33,11 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          path: '../nitro/docs/',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          routeBasePath: 'docs',
           editUrl:
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
@@ -56,8 +58,8 @@ const config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: 'sdk',
-        path: 'sdk',
+        id: 'arbitrum-sdk',
+        path: '../arbitrum-sdk',
         routeBasePath: 'sdk',
         sidebarPath: require.resolve('./sidebars.js'),
         // ... other options
@@ -77,7 +79,7 @@ const config = {
         items: [
           {
             type: 'doc',
-            docId: 'intro',
+            docId: 'arbos/ArbOS',
             position: 'left',
             label: 'Tutorial',
           },
@@ -97,7 +99,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/sdk',
               },
             ],
           },
