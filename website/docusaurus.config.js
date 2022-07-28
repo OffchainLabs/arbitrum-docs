@@ -38,7 +38,9 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           routeBasePath: "/",
-          editUrl: "https://github.com/OffchainLabs/nitro/tree/master/docs"
+          editUrl: function(s){            
+            return "https://github.com/OffchainLabs/nitro/tree/docs/docs/" + s.docPath
+          }
         }
       })
     ]
