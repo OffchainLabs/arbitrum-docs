@@ -38,8 +38,11 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           routeBasePath: "/",
-          editUrl: function(s){            
-            return "https://github.com/OffchainLabs/nitro/tree/docs/docs/" + s.docPath
+          editUrl: function(s) {
+            return (
+              "https://github.com/OffchainLabs/nitro/tree/docs/docs/" +
+              s.docPath
+            );
           }
         }
       })
@@ -61,6 +64,13 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: {
+        appId: "IPZE4SH6AR",
+        apiKey: "aa50e2f5121c9813ef09c7ab5031da67",
+        indexName: "crawler_nitro_docs",
+        contextualSearch: true,
+        searchPagePath: "search"
+      },
       navbar: {
         title: "Arbitrum Dev Center (WORK IN PROGRESS)",
         logo: {
