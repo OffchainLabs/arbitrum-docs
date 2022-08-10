@@ -29,14 +29,12 @@ const config = {
 
   presets: [
     [
-      "classic",
+      "@docusaurus/preset-classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
           path: "../nitro/docs/",
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           routeBasePath: "/",
           editUrl: function(s) {
             return (
@@ -54,8 +52,7 @@ const config = {
       {
         id: "arbitrum-sdk",
         path: "../arbitrum-sdk",
-        routeBasePath: "sdk",
-        sidebarPath: require.resolve("./sidebars.js")
+        routeBasePath: "sdk"
         // ... other options
       }
     ]
@@ -80,9 +77,21 @@ const config = {
         items: [
           {
             type: "doc",
+            docId: "intro",
+            position: "left",
+            label: "Intro"
+          },
+          {
+            type: "doc",
+            docId: "migration/dapp_migration",
+            position: "left",
+            label: "For Devs"
+          },
+          {
+            type: "doc",
             docId: "arbos/ArbOS",
             position: "left",
-            label: "Docs"
+            label: "How It Works"
           },
           { to: "/sdk", label: "Sdk", position: "left" },
           {
