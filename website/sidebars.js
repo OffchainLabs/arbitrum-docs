@@ -20,7 +20,7 @@ const sidebars = {
   introSidebar: [
     {
       type: "doc",
-      id: "intro",
+      id: "intro/intro",
       label: "A Gentle Introduction"
     }
   ],
