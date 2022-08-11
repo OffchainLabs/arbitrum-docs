@@ -121,6 +121,11 @@ const sidebars = {
     },
     {
       type: "doc",
+      id: "why_nitro",
+      label: "Why Nitro?"
+    },
+    {
+      type: "doc",
       id: "inside_anytrust",
       label: "Inside AnyTrust"
     }
