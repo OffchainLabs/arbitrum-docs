@@ -78,11 +78,6 @@ const sidebars = {
           href: "/sdk"
         }
       ]
-    },
-    {
-      type: "link",
-      label: "Learn more",
-      href: "https://example.com"
     }
   ],
 
