@@ -95,6 +95,11 @@ const config = {
           },
           { to: "/sdk", label: "Sdk", position: "left" },
           {
+            href: "https://github.com/OffchainLabs/arbitrum-tutorials",
+            label: "Tutorials",
+            position: "left"
+          },
+          {
             href: "https://github.com/OffchainLabs/nitro",
             label: "GitHub",
             position: "right"
