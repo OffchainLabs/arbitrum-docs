@@ -50,7 +50,7 @@ const sidebars = {
         {
           type: "doc",
           label: "Precompiles",
-          id: "arbos/Precompiles"
+          id: "arbos/precompiles"
         },
         {
           type: "link",
@@ -69,7 +69,7 @@ const sidebars = {
   howItWorksSidebar: [
     {
       type: "doc",
-      id: "arbos/ArbOS",
+      id: "arbos/arbos",
       label: "ArbOS"
     },
     {
@@ -78,27 +78,27 @@ const sidebars = {
       items: [
         {
           type: "doc",
-          id: "proving/ChallengeManager",
+          id: "proving/challenge-manager",
           label: "Interactive Challenges"
         },
         {
           type: "doc",
-          id: "proving/WASMToWAVM",
+          id: "proving/wasm-to-wavm",
           label: "Wasm To WAVM"
         },
         {
           type: "doc",
-          id: "proving/WAVMCustomOpcodes",
+          id: "proving/wavm-custom-opcodes",
           label: "Custom WAVM Opcodes"
         },
         {
           type: "doc",
-          id: "proving/WAVMFloats",
+          id: "proving/wavm-floats",
           label: "WAVM Floats"
         },
         {
           type: "doc",
-          id: "proving/WAVMModules",
+          id: "proving/wavm-modules",
           label: "WAVM Modules"
         }
       ]
@@ -106,27 +106,27 @@ const sidebars = {
 
     {
       type: "doc",
-      id: "arbos/Geth",
+      id: "arbos/geth",
       label: "Geth"
     },
     {
       type: "doc",
-      id: "arbos/Gas",
+      id: "arbos/gas",
       label: "L2 Gas"
     },
     {
       type: "doc",
-      id: "arbos/L1 Pricing",
+      id: "arbos/l1-pricing",
       label: "L1 Pricing"
     },
     {
       type: "doc",
-      id: "why_nitro",
+      id: "why-nitro",
       label: "Why Nitro?"
     },
     {
       type: "doc",
-      id: "inside_anytrust",
+      id: "inside-anytrust",
       label: "Inside AnyTrust"
     }
   ]
