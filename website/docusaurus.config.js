@@ -136,7 +136,7 @@ const config = {
               },
               {
                 label: "Nova.arbitrum.io",
-                to: "  https://nova.arbitrum.io/"
+                to: "https://nova.arbitrum.io/"
               }
             ]
           },
