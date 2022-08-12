@@ -7,7 +7,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Arb",
-  tagline: "L2s are cool",
+  tagline: "Arbitrum is cool",
   url: "https://nitro-docs-beta.netlify.app/",
   baseUrl: "/",
   onBrokenLinks: "ignore",
@@ -89,7 +89,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "arbos/ArbOS",
+            docId: "arbos/arbos",
             position: "left",
             label: "How It Works"
           },

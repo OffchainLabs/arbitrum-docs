@@ -22,6 +22,16 @@ const sidebars = {
       type: "doc",
       id: "intro/intro",
       label: "A Gentle Introduction"
+    },
+    {
+      type: "doc",
+      id: "intro/glossary",
+      label: "Glossary"
+    },
+    {
+      type: "doc",
+      id: "mainnet-beta",
+      label: "Mainnet Beta Status"
     }
   ],
   devsSideBar: [
@@ -30,6 +40,16 @@ const sidebars = {
       label: "Running Nodes",
       collapsed: false,
       items: [
+        {
+          type: "doc",
+          id: "node-running/running-a-node",
+          label: "Run an Arbitrum Node"
+        },
+        {
+          type: "doc",
+          id: "node-running/node-providers",
+          label: "Node Providers"
+        },
         {
           type: "doc",
           id: "das/daserver-instructions",
