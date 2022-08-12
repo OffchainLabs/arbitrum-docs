@@ -100,19 +100,23 @@ const config = {
             position: "left"
           },
           {
-            href: "https://github.com/OffchainLabs/nitro",
-            label: "GitHub",
-            position: "right"
-          },
-          {
-            href: "https://research.arbitrum.io/",
-            label: "Research",
-            position: "right"
-          },
-          {
-            href: "https://medium.com/offchainlabs",
-            label: "Blog",
-            position: "right"
+            type: "dropdown",
+            label: "Links",
+            position: "right",
+            items: [
+              {
+                href: "https://github.com/OffchainLabs/nitro",
+                label: "GitHub"
+              },
+              {
+                href: "https://research.arbitrum.io/",
+                label: "Research"
+              },
+              {
+                href: "https://medium.com/offchainlabs",
+                label: "Blog"
+              }
+            ]
           }
         ]
       },
