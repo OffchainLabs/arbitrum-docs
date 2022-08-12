@@ -98,6 +98,16 @@ const config = {
             href: "https://github.com/OffchainLabs/nitro",
             label: "GitHub",
             position: "right"
+          },
+          {
+            href: "https://research.arbitrum.io/",
+            label: "Research",
+            position: "right"
+          },
+          {
+            href: "https://medium.com/offchainlabs",
+            label: "Blog",
+            position: "right"
           }
         ]
       },
@@ -105,11 +115,19 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Info",
             items: [
               {
-                label: "Tutorial",
-                to: "https://github.com/OffchainLabs/arbitrum-tutorials"
+                label: "Offchain Labs",
+                to: "https://offchainlabs.com/"
+              },
+              {
+                label: "Arbitrum.io",
+                to: "https://arbitrum.io/"
+              },
+              {
+                label: "Nova.arbitrum.io",
+                to: "  https://nova.arbitrum.io/"
               }
             ]
           },
@@ -123,6 +141,14 @@ const config = {
               {
                 label: "Twitter",
                 href: "https://twitter.com/ArbitrumDevs"
+              },
+              {
+                label: "Research forum",
+                href: "https://research.arbitrum.io/"
+              },
+              {
+                label: "Medium Blog",
+                href: "https://medium.com/offchainlabs"
               }
             ]
           }
