@@ -24,6 +24,37 @@ const sidebars = {
       label: "A Gentle Introduction"
     },
     {
+      type: "category",
+      label: "FAQs",
+      items: [
+        {
+          type: "doc",
+          id: "faqs/anytrust-vs-rollup",
+          label: "Rollup vs. AnyTrust"
+        },
+        {
+          type: "doc",
+          id: "faqs/how-fees",
+          label: "Fees"
+        },
+        {
+          type: "doc",
+          id: "faqs/what-if-dispute",
+          label: "Disputes and L2 Reorgs?"
+        },
+        {
+          type: "doc",
+          id: "faqs/seq-or-val",
+          label: "Sequencers vs. Validators"
+        },
+        {
+          type: "doc",
+          id: "faqs/beta-status",
+          label: "Decentralization Status"
+        },
+      ]
+    },
+    {
       type: "doc",
       id: "intro/glossary",
       label: "Glossary"
@@ -38,7 +69,6 @@ const sidebars = {
     {
       type: "category",
       label: "Running Nodes",
-      collapsed: false,
       items: [
         {
           type: "doc",
@@ -67,11 +97,24 @@ const sidebars = {
           label: "Classic-to-Nitro Migration",
           id: "migration/dapp_migration"
         },
+
         {
-          type: "doc",
+          type: "category",
           label: "Precompiles",
-          id: "arbos/precompiles"
+          items: [
+            {
+              type: "doc",
+              label: "Common Precompiles",
+              id: "arbos/common-precompiles"
+            },
+            {
+              type: "doc",
+              label: "All Precompiles",
+              id: "arbos/precompiles"
+            }
+          ]
         },
+
         {
           type: "link",
           label: "SDK",
@@ -125,19 +168,36 @@ const sidebars = {
       label: "Geth"
     },
     {
-      type: "doc",
-      id: "arbos/gas",
-      label: "L2 Gas"
+      type: "category",
+      label: "Gas / Fees",
+      items: [
+        {
+          type: "doc",
+          id: "arbos/gas",
+          label: "L2 Gas"
+        },
+        {
+          type: "doc",
+          id: "arbos/l1-pricing",
+          label: "L1 Pricing"
+        }
+      ]
     },
     {
       type: "doc",
-      id: "arbos/l1-pricing",
-      label: "L1 Pricing"
+      id: "sequencer",
+      label: "The Sequencer"
     },
+
     {
       type: "doc",
       id: "why-nitro",
       label: "Why Nitro?"
+    },
+    {
+      type: "doc",
+      id: "inside-arbitrum-nitro/inside_arbitrum_nitro",
+      label: "Deep Dive: Inside Arbitrum"
     },
     {
       type: "doc",
