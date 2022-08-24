@@ -51,7 +51,7 @@ const sidebars = {
           type: "doc",
           id: "faqs/beta-status",
           label: "Decentralization Status"
-        },
+        }
       ]
     },
     {
@@ -93,12 +93,6 @@ const sidebars = {
       collapsed: false,
       items: [
         {
-          type: "doc",
-          label: "Classic-to-Nitro Migration",
-          id: "migration/dapp_migration"
-        },
-
-        {
           type: "category",
           label: "Precompiles",
           items: [
@@ -119,6 +113,22 @@ const sidebars = {
           type: "link",
           label: "SDK",
           href: "/sdk"
+        }
+      ]
+    },
+    {
+      type: "category",
+      label: "Classic-to-Nitro Migration",
+      items: [
+        {
+          type: "doc",
+          label: "Dapp Migration",
+          id: "migration/dapp_migration"
+        },
+        {
+          type: "doc",
+          label: "State Migration",
+          id: "migration/state-migration"
         }
       ]
     }
