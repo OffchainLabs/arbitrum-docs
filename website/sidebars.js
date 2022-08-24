@@ -123,7 +123,7 @@ const sidebars = {
         {
           type: "doc",
           label: "Dapp Migration",
-          id: "migration/dapp_migration"
+          id: "migration/dapp-migration"
         },
         {
           type: "doc",
@@ -135,6 +135,11 @@ const sidebars = {
   ],
 
   howItWorksSidebar: [
+    {
+      type: "doc",
+      id: "tx-lifecycle",
+      label: "Overview: Transaction Lifecycle"
+    },
     {
       type: "doc",
       id: "arbos/arbos",

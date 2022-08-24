@@ -83,13 +83,13 @@ const config = {
           },
           {
             type: "doc",
-            docId: "migration/dapp_migration",
+            docId: "migration/dapp-migration",
             position: "left",
             label: "For Devs"
           },
           {
             type: "doc",
-            docId: "arbos/arbos",
+            docId: "tx-lifecycle",
             position: "left",
             label: "How It Works"
           },
