@@ -250,6 +250,12 @@ const sidebars = {
       label: "Deep Dive: Inside Arbitrum"
     },
     {
+      type: "link",
+      href:
+        "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+      label: "Deeper Dive: Whitepaper"
+    },
+    {
       type: "doc",
       id: "inside-anytrust",
       label: "Inside AnyTrust"
