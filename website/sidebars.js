@@ -94,6 +94,27 @@ const sidebars = {
       items: [
         {
           type: "category",
+          label: "Arbitrum/Ethereum Differences",
+          items: [
+            {
+              type: "doc",
+              label: "Arbitrum vs. Ethereum",
+              id: "arb-specific-things"
+            },
+            {
+              type: "doc",
+              label: "Solidity Support",
+              id: "solidity-support"
+            },
+            {
+              type: "doc",
+              label: "Block Numbers and Time",
+              id: "time"
+            }
+          ]
+        },
+        {
+          type: "category",
           label: "Precompiles",
           items: [
             {
@@ -108,7 +129,11 @@ const sidebars = {
             }
           ]
         },
-
+        {
+          type: "doc",
+          label: "Cross-chain Messaging",
+          id: "for-devs/cross-chain-messsaging"
+        },
         {
           type: "link",
           label: "SDK",
@@ -200,6 +225,16 @@ const sidebars = {
     },
     {
       type: "doc",
+      id: "arbos/l1-to-l2-messaging",
+      label: "L1-to-L2 Messaging"
+    },
+    {
+      type: "doc",
+      id: "arbos/l2-to-l1-messaging",
+      label: "L2-to-L1 Messaging"
+    },
+    {
+      type: "doc",
       id: "sequencer",
       label: "The Sequencer"
     },
@@ -211,7 +246,7 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "inside-arbitrum-nitro/inside_arbitrum_nitro",
+      id: "inside-arbitrum-nitro/inside-arbitrum-nitro",
       label: "Deep Dive: Inside Arbitrum"
     },
     {
