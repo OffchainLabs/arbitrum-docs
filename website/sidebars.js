@@ -114,6 +114,16 @@ const sidebars = {
           ]
         },
         {
+          type: "doc",
+          label: "Cross-chain Messaging",
+          id: "for-devs/cross-chain-messsaging"
+        },
+        {
+          type: "doc",
+          label: "Token Bridge",
+          id: "asset-bridging"
+        },
+        {
           type: "category",
           label: "Precompiles",
           items: [
@@ -129,16 +139,6 @@ const sidebars = {
             }
           ]
         },
-        {
-          type: "doc",
-          label: "Cross-chain Messaging",
-          id: "for-devs/cross-chain-messsaging"
-        },
-        {
-          type: "link",
-          label: "SDK",
-          href: "/sdk"
-        }
       ]
     },
     {
@@ -166,6 +166,27 @@ const sidebars = {
       type: "doc",
       label: "Useful Addresses",
       id: "useful-addresses"
+    },
+    {
+      type: "category",
+      label: "Resources",
+      items: [
+        {
+          type: "link",
+          label: "Tutorials",
+          href: "https://github.com/OffchainLabs/arbitrum-tutorials"
+        },
+        {
+          type: "link",
+          label: "SDK",
+          href: "/sdk"
+        },
+        {
+          type: "link",
+          label: "Github",
+          href: "https://github.com/OffchainLabs"
+        }
+      ]
     }
   ],
 

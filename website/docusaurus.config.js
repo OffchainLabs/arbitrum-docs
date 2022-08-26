@@ -93,16 +93,10 @@ const config = {
             position: "left",
             label: "How It Works"
           },
-          { to: "/sdk", label: "Sdk", position: "left" },
           {
             href:
               "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
             label: "Whitepaper",
-            position: "left"
-          },
-          {
-            href: "https://github.com/OffchainLabs/arbitrum-tutorials",
-            label: "Tutorials",
             position: "left"
           },
           {
@@ -117,6 +111,10 @@ const config = {
               {
                 href: "https://research.arbitrum.io/",
                 label: "Research"
+              },
+              {
+                href: "https://github.com/OffchainLabs/arbitrum-tutorials",
+                label: "Tutorials",
               },
               {
                 href: "https://medium.com/offchainlabs",
