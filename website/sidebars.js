@@ -156,6 +156,16 @@ const sidebars = {
           id: "migration/state-migration"
         }
       ]
+    },
+    {
+      type: "doc",
+      label: "Public Chains",
+      id: "public-chains"
+    },
+    {
+      type: "doc",
+      label: "Useful Addresses",
+      id: "useful-addresses"
     }
   ],
 
