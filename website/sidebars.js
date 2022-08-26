@@ -24,6 +24,11 @@ const sidebars = {
       label: "A Gentle Introduction"
     },
     {
+      type: "doc",
+      id: "getting-started-users",
+      label: "Get Started"
+    },
+    {
       type: "category",
       label: "FAQs",
       items: [
@@ -93,6 +98,11 @@ const sidebars = {
       collapsed: false,
       items: [
         {
+          type: "doc",
+          label: "Start Building",
+          id: "getting-started-devs"
+        },
+        {
           type: "category",
           label: "Arbitrum/Ethereum Differences",
           items: [
@@ -138,7 +148,7 @@ const sidebars = {
               id: "arbos/precompiles"
             }
           ]
-        },
+        }
       ]
     },
     {
