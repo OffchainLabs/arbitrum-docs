@@ -9,7 +9,7 @@ const config = {
   title: "Arb",
   tagline: "Arbitrum is cool",
   url: "https://nitro-docs-beta.netlify.app/",
-  baseUrl: "/docs/",
+  baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
