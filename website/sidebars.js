@@ -158,7 +158,7 @@ const sidebars = {
         {
           type: "doc",
           label: "Dapp Migration",
-          id: "migration/dapp-migration"
+          id: "migration/dapp_migration"
         },
         {
           type: "doc",
@@ -263,6 +263,11 @@ const sidebars = {
           label: "L1 Pricing"
         }
       ]
+    },
+    {
+      type: "doc",
+      id: "assertion-tree",
+      label: "Assertion Tree Protocol"
     },
     {
       type: "doc",

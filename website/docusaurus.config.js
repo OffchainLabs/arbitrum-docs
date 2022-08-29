@@ -83,7 +83,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "migration/dapp-migration",
+            docId: "migration/dapp_migration",
             position: "left",
             label: "For Devs"
           },
