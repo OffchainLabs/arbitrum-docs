@@ -1,56 +1,83 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.css';
+import React from "react";
+import clsx from "clsx";
+import styles from "./styles.module.css";
+import Link from "@docusaurus/Link";
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  Svg: React.ComponentType<React.ComponentProps<"svg">>;
   description: JSX.Element;
+  href?: string;
 };
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    title: "Introduction",
+    Svg: require("@site/static/img/welcome.svg").default,
+    href: "/intro/",
+    description: <> Overview for New Devs / Users </>
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: "For Developers",
+    Svg: require("@site/static/img/builder.svg").default,
+    href: "/getting-started-devs",
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Guides for Dapp Devs and Node Runners
       </>
-    ),
+    )
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: "How It All Works",
+    Svg: require("@site/static/img/bulb.svg").default,
+    href: "/tx-lifecycle",
+
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Technical Overview and specs
       </>
-    ),
+    )
   },
+  {
+    title: "Whitepaper",
+    Svg: require("@site/static/img/paper.svg").default,
+    href: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+    description: <>Arbitrum Nitro Whitepaper</>
+  },
+  {
+    title: "Research Forum",
+    Svg: require("@site/static/img/group.svg").default,
+    href: "https://research.arbitrum.io/",
+    description: (
+      <>
+        Public forum for research disucssion
+      </>
+    )
+  },
+  {
+    title: "The Code",
+    Svg: require("@site/static/img/logo.svg").default,
+    href: "https://github.com/OffchainLabs/nitro",
+    description: (
+      <>
+        View and contribute to the source code
+      </>
+    )
+  }
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({ title, Svg, description, href }: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <h3>{title}</h3>
-        <p>{description}</p>
-      </div>
+    <div className={clsx("col col--4")}>
+      <Link className={styles.landingPageLink} href={href}>
+        <div className="text--center">
+          <Svg className={styles.featureSvg} role="img" />
+        </div>
+        <div className="text--center padding-horiz--md info-box">
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </div>
+      </Link>
     </div>
   );
 }

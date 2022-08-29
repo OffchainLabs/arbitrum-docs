@@ -6,8 +6,8 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Arb",
-  tagline: "Arbitrum is cool",
+  title: "Arbitrum Documentation Center",
+  tagline: "Arbitrum Dev Docs",
   url: "https://nitro-docs-beta.netlify.app/",
   baseUrl: "/",
   onBrokenLinks: "ignore",
