@@ -4,13 +4,32 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
-import { useLocation } from "@docusaurus/router";
+import { useLocation, Redirect } from "@docusaurus/router";
 
 import styles from "./index.module.css";
+
+
+const oldPathToNewPath = {
+  "/docs/mainnet/": "/mainnet-beta",
+  "/migration/dapp-migration/": "/migration/dapp_migration/"
+}
 
 function HomepageHeader(props) {
   const { siteConfig } = useDocusaurusContext();
   const location = useLocation();
+
+  if(props.notFound ){
+    const normalizedPath = (location.pathname.endsWith("/") ? location.pathname : location.pathname + "/").toLowerCase()
+
+    let newPath = ''
+    if(newPath = oldPathToNewPath[normalizedPath]){
+      console.info('redirecting to ',newPath);
+      
+      return <Redirect to={newPath}/ >
+    }
+  
+  }
+
 
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
