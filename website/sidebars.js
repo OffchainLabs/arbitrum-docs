@@ -144,7 +144,7 @@ const sidebars = {
             },
             {
               type: "doc",
-              label: "All Precompiles",
+              label: "Precompiles",
               id: "arbos/precompiles"
             }
           ]
@@ -208,9 +208,31 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "arbos/arbos",
-      label: "ArbOS"
+      id: "sequencer",
+      label: "The Sequencer"
     },
+    {
+      type: "category",
+      label: "ArbOS",
+      items: [
+        {
+          type: "doc",
+          id: "arbos/arbos",
+          label: "ArbOS"
+        },
+        {
+          type: "doc",
+          id: "arbos/geth",
+          label: "Geth",
+        },
+        {
+          type: "doc",
+          label: "All Precompiles",
+          id: "arbos/precompiles"
+        }
+      ]
+    },
+
     {
       type: "category",
       label: "Fault Proofs",
@@ -242,12 +264,6 @@ const sidebars = {
         }
       ]
     },
-
-    {
-      type: "doc",
-      id: "arbos/geth",
-      label: "Geth"
-    },
     {
       type: "category",
       label: "Gas / Fees",
@@ -265,26 +281,31 @@ const sidebars = {
       ]
     },
     {
+      type: "category",
+      label: "Cross-chain Messaging",
+      items: [
+        {
+          type: "doc",
+          id: "arbos/l1-to-l2-messaging",
+          label: "L1-to-L2 Messaging"
+        },
+        {
+          type: "doc",
+          id: "arbos/l2-to-l1-messaging",
+          label: "L2-to-L1 Messaging"
+        }
+      ]
+    },
+    {
       type: "doc",
       id: "assertion-tree",
-      label: "Assertion Tree Protocol"
+      label: "The Assertion Tree"
     },
     {
       type: "doc",
-      id: "arbos/l1-to-l2-messaging",
-      label: "L1-to-L2 Messaging"
+      id: "inside-anytrust",
+      label: "The AnyTrust Protocol"
     },
-    {
-      type: "doc",
-      id: "arbos/l2-to-l1-messaging",
-      label: "L2-to-L1 Messaging"
-    },
-    {
-      type: "doc",
-      id: "sequencer",
-      label: "The Sequencer"
-    },
-
     {
       type: "doc",
       id: "why-nitro",
@@ -300,11 +321,6 @@ const sidebars = {
       href:
         "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
       label: "Deeper Dive: Whitepaper"
-    },
-    {
-      type: "doc",
-      id: "inside-anytrust",
-      label: "Inside AnyTrust"
     }
   ]
 };
