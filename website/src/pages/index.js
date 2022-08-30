@@ -4,14 +4,18 @@ import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Layout from "@theme/Layout";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
+import { useLocation } from "@docusaurus/router";
 
 import styles from "./index.module.css";
 
-function HomepageHeader() {
+function HomepageHeader(props) {
   const { siteConfig } = useDocusaurusContext();
+  const location = useLocation();
+
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
       <div className="container">
+        {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
         <h1 className="hero__title">{siteConfig.title}</h1>
         {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
         <div className={styles.buttons}>
@@ -24,14 +28,14 @@ function HomepageHeader() {
   );
 }
 
-export default function Home() {
+export default function Home(props) {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
       title={`Hello from ${siteConfig.title}`}
       description="Description will go into a meta tag in <head />"
     >
-      <HomepageHeader />
+      <HomepageHeader notFound={props.notFound} />
       <main>
         <HomepageFeatures />
       </main>
