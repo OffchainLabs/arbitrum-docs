@@ -235,7 +235,7 @@ const sidebars = {
 
     {
       type: "category",
-      label: "Fault Proofs",
+      label: "Fraud Proofs",
       items: [
         {
           type: "doc",
