@@ -15,7 +15,7 @@ export default function Layout(props) {
         />
         <meta
           name="twitter:image"
-          content="https://arbitrum.io/wp-content/uploads/2021/01/cropped-Arbitrum_Horizontal-Logo-Full-color-White-background-scaled-1.jpg"
+          content="https://nitro-docs-delta.vercel.app/img/devdocs.png"
         />
       </Head>
       <OriginalLayout {...props} />
