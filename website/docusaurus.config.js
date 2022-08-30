@@ -69,7 +69,7 @@ const config = {
         searchPagePath: "search"
       },
       navbar: {
-        title: "Arbitrum Dev Center (WORK IN PROGRESS)",
+        title: "Arbitrum Dev Center",
         logo: {
           alt: "My Site Logo",
           src: "img/logo.svg"
@@ -114,7 +114,7 @@ const config = {
               },
               {
                 href: "https://github.com/OffchainLabs/arbitrum-tutorials",
-                label: "Tutorials",
+                label: "Tutorials"
               },
               {
                 href: "https://medium.com/offchainlabs",
@@ -175,10 +175,10 @@ const config = {
       announcementBar: {
         id: "support_us",
         content:
-          'Note: These are the work-in-progress Nitro Docs, applicable to the Nova chain (now), and to Arb One on 8/31. Current Arb1 Docs <a target="_blank" rel="noopener noreferrer" href="https://developer.offchainlabs.com/docs/Developer_Quickstart">here</a>',
+          "Note: Welcome to the new Nitro docs! Applicable to the Arbitrum One chain as of 8/31/22!",
         backgroundColor: "rgb(121 241 3)",
         textColor: "#091E42",
-        isCloseable: false
+        isCloseable: true
       }
     })
 };
