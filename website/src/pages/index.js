@@ -8,28 +8,34 @@ import { useLocation, Redirect } from "@docusaurus/router";
 
 import styles from "./index.module.css";
 
-
 const oldPathToNewPath = {
   "/docs/mainnet/": "/mainnet-beta",
-  "/migration/dapp-migration/": "/migration/dapp_migration/"
-}
+  "/migration/dapp-migration/": "/migration/dapp_migration",
+  "/docs/public_chains/": "/public-chains",
+  "/docs/inside_arbitrum/": "/inside-arbitrum-nitro",
+  "/docs/l1_l2_messages/": "/arbos/l1-to-l2-messaging",
+  "/docs/bridging_assets/": "/asset-bridging",
+  "/docs/glossary/": "/intro/glossary",
+  "/docs/anytrust/": "/inside-anytrust"
+};
 
 function HomepageHeader(props) {
   const { siteConfig } = useDocusaurusContext();
   const location = useLocation();
 
-  if(props.notFound ){
-    const normalizedPath = (location.pathname.endsWith("/") ? location.pathname : location.pathname + "/").toLowerCase()
+  if (props.notFound) {
+    const normalizedPath = (location.pathname.endsWith("/")
+      ? location.pathname
+      : location.pathname + "/"
+    ).toLowerCase();
 
-    let newPath = ''
-    if(newPath = oldPathToNewPath[normalizedPath]){
-      console.info('redirecting to ',newPath);
-      
-      return <Redirect to={newPath}/ >
+    let newPath = "";
+    if ((newPath = oldPathToNewPath[normalizedPath])) {
+      console.info("redirecting to ", newPath);
+
+      return <Redirect to={newPath} />;
     }
-  
   }
-
 
   return (
     <header className={clsx("hero hero--primary", styles.heroBanner)}>
