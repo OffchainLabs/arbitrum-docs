@@ -16,7 +16,8 @@ const oldPathToNewPath = {
   "/docs/l1_l2_messages/": "/arbos/l1-to-l2-messaging",
   "/docs/bridging_assets/": "/asset-bridging",
   "/docs/glossary/": "/intro/glossary",
-  "/docs/anytrust/": "/inside-anytrust"
+  "/docs/anytrust/": "/inside-anytrust",
+  "/docs/node_providers/": "/node-running/node-providers"
 };
 
 function HomepageHeader(props) {
