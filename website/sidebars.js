@@ -78,17 +78,22 @@ const sidebars = {
         {
           type: "doc",
           id: "node-running/running-a-node",
-          label: "Run an Arbitrum Node"
+          label: "Run a Node"
         },
         {
           type: "doc",
           id: "node-running/node-providers",
-          label: "Node Providers"
+          label: "3rd Party Node Providers"
         },
         {
           type: "doc",
           id: "das/daserver-instructions",
           label: "Data Availability Server"
+        },
+        {
+          type: "doc",
+          id: "node-running/running-a-classic-node",
+          label: "Running a Classic (pre-Nitro) Node"
         }
       ]
     },
@@ -223,7 +228,7 @@ const sidebars = {
         {
           type: "doc",
           id: "arbos/geth",
-          label: "Geth",
+          label: "Geth"
         },
         {
           type: "doc",
