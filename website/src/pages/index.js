@@ -9,18 +9,28 @@ import { useLocation, Redirect } from "@docusaurus/router";
 import styles from "./index.module.css";
 
 const oldPathToNewPath = {
-  "/docs/mainnet/": "/mainnet-beta",
-  "/migration/dapp-migration/": "/migration/dapp_migration",
-  "/docs/public_chains/": "/public-chains",
-  "/docs/inside_arbitrum/": "/inside-arbitrum-nitro",
-  "/docs/l1_l2_messages/": "/arbos/l1-to-l2-messaging",
-  "/docs/bridging_assets/": "/asset-bridging",
-  "/docs/glossary/": "/intro/glossary",
-  "/docs/anytrust/": "/inside-anytrust",
-  "/docs/node_providers/": "/node-running/node-providers",
-  "/docs/useful_addresses/": "/useful-addresses",
-  "/docs/running_node/": "/node-running/running-a-node",
-  "/docs/running_nitro_node/":"/node-running/running-a-node"
+  "/docs/mainnet": "/mainnet-beta",
+  "/migration/dapp-migration": "/migration/dapp_migration",
+  "/docs/public_chains": "/public-chains",
+  "/docs/inside_arbitrum": "/inside-arbitrum-nitro",
+  "/docs/l1_l2_messages": "/arbos/l1-to-l2-messaging",
+  "/docs/bridging_assets": "/asset-bridging",
+  "/docs/glossary": "/intro/glossary",
+  "/docs/anytrust": "/inside-anytrust",
+  "/docs/node_providers": "/node-running/node-providers",
+  "/docs/useful_addresses": "/useful-addresses",
+  "/docs/running_node": "/node-running/running-a-node",
+  "/docs/running_nitro_node": "/node-running/running-a-node"
+};
+
+const getNewPath = _path => {
+  const path = _path.toLowerCase();
+
+  for (let oldPath of Object.keys(oldPathToNewPath)) {
+    if (path.includes(oldPath)) {
+      return oldPathToNewPath[oldPath];
+    }
+  }
 };
 
 function HomepageHeader(props) {
@@ -28,15 +38,9 @@ function HomepageHeader(props) {
   const location = useLocation();
 
   if (props.notFound) {
-    const normalizedPath = (location.pathname.endsWith("/")
-      ? location.pathname
-      : location.pathname + "/"
-    ).toLowerCase();
-
-    let newPath = "";
-    if ((newPath = oldPathToNewPath[normalizedPath])) {
-      console.info("redirecting to ", newPath);
-
+    let newPath = getNewPath(location.pathname);
+    if (newPath) {
+      console.info(`Redirecting from ${location.pathname} to ${newPath}`);
       return <Redirect to={newPath} />;
     }
   }
@@ -60,9 +64,7 @@ function HomepageHeader(props) {
 export default function Home(props) {
   const { siteConfig } = useDocusaurusContext();
   return (
-    <Layout
-      title={`Arbitrum 🔵`}
-    >
+    <Layout title={`Arbitrum 🔵`}>
       <HomepageHeader notFound={props.notFound} />
       <main>
         <HomepageFeatures />
