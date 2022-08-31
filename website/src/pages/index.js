@@ -22,7 +22,29 @@ const oldPathToNewPath = {
   "/docs/running_node": "/node-running/running-a-node",
   "/docs/running_nitro_node": "/node-running/running-a-node",
   "/docs/public_testnet": "/public-chains",
-  "/docs/developer_quickstart": "/"
+  "/docs/developer_quickstart": "/",
+  "/docs/installation": "/node-running/running-a-node",
+  "/docs/rollup_basics": "/intro",
+  "/docs/tutorials": "/getting-started-devs",
+  "/docs/security_considerations": "/arb-specific-things",
+  "/docs/frontend_integration": "/getting-started-devs",
+  "/docs/contract_deployment": "/getting-started-devs",
+  "/docs/arbsys": "/arbos/precompiles#ArbSys",
+  "/docs/finality": "/tx-lifecycle",
+  "/docs/withdrawals": "/tx-lifecycle",
+  "/docs/differences_overview": "/arb-specific-things",
+  "/docs/special_features": "/arb-specific-things",
+  "/docs/solidity_support": "/solidity-support",
+  "/docs/time_in_arbitrum": "/time",
+  "/docs/censorship_resistance": "/sequencer",
+  "/docs/arbgas": "/arbos/gas",
+  "/docs/arbos": "/arbos",
+  "/docs/tx_lifecycle": "/tx-lifecycle",
+  "/docs/rollup_protocol": "/assertion-tree",
+  "/docs/avm_design": "/inside-arbitrum-nitro",
+  "/docs/dispute_resolution": "/proving/challenge-manager",
+  "/docs/arbos_formats": "/arbos",
+  "/docs/avm_specification": "/proving/wavm-custom-opcodes"
 };
 
 const getNewPath = _path => {
