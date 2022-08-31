@@ -61,7 +61,7 @@ export default function Home(props) {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
+      title={`Arbitrum 🔵`}
     >
       <HomepageHeader notFound={props.notFound} />
       <main>
