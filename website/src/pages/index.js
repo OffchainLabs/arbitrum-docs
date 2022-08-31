@@ -20,7 +20,8 @@ const oldPathToNewPath = {
   "/docs/node_providers": "/node-running/node-providers",
   "/docs/useful_addresses": "/useful-addresses",
   "/docs/running_node": "/node-running/running-a-node",
-  "/docs/running_nitro_node": "/node-running/running-a-node"
+  "/docs/running_nitro_node": "/node-running/running-a-node",
+  "/docs/public_testnet": "/public-chains"
 };
 
 const getNewPath = _path => {
