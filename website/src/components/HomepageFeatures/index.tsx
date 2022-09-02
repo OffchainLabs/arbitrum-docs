@@ -69,9 +69,14 @@ function Feature({
       <Link className={styles.landingPageLink} href={href}>
         <div className="text--center">
           <Svg
-            style={{
-              backgroundColor: isDarkTheme && addBackground && "lightblue"
-            }}
+            style={
+              isDarkTheme && addBackground
+                ? {
+                    backgroundColor: "lightblue",
+                    borderRadius: "25%"
+                  }
+                : {}
+            }
             className={styles.featureSvg}
             role="img"
           />
