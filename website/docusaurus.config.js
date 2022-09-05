@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
   title: "Arbitrum Documentation Center",
   tagline: "Arbitrum Dev Docs",
-  url: "https://nitro-docs-beta.netlify.app/",
+  url: "https://developer.arbitrum.io/",
   baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
