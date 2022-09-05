@@ -36,9 +36,9 @@ const config = {
           path: "../nitro/docs/",
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
-          editUrl: function(s) {
+          editUrl: function (s) {
             return (
-              "https://github.com/OffchainLabs/nitro/tree/docs/docs/" +
+              "https://github.com/OffchainLabs/nitro/edit/master/docs/" +
               s.docPath
             );
           }
