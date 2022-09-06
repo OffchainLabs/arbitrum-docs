@@ -5,6 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus start",
+    "start_no_sdk":  "cd ../website && docusaurus start",
     "build": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -19,9 +20,11 @@
     "@docusaurus/preset-classic": "2.0.0-rc.1",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
+    "got": "11.8.5",
     "prism-react-renderer": "^1.3.5",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "trim": "0.0.3"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-rc.1",

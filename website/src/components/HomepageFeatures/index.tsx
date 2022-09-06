@@ -62,7 +62,8 @@ function Feature({
   href,
   addBackground
 }: FeatureItem) {
-  const { isDarkTheme } = useColorMode();
+  const { colorMode } = useColorMode();
+  const isDarkTheme = colorMode === "dark";
   const textStyle = { color: isDarkTheme ? "white" : "black" };
   return (
     <div className={clsx("col col--4")}>
