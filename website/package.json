@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus start",
     "build": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
