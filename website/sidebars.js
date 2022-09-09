@@ -56,6 +56,11 @@ const sidebars = {
           type: "doc",
           id: "faqs/beta-status",
           label: "Decentralization Status"
+        },
+        {
+          type: "doc",
+          id: "faqs/the-merge",
+          label: "The Merge"
         }
       ]
     },
