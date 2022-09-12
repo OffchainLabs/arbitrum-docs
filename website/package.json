@@ -1,11 +1,11 @@
 {
-  "name": "my-website",
+  "name": "nitro-docs",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "yarn generate_sdk_docs && start_nitro_docs",
-    "generate_sdk_docs": "cd ../arbitrum-sdk && yarn && generate_docs",
+    "start": "yarn generate_sdk_docs && yarn start_nitro_docs",
+    "generate_sdk_docs": "cd ../arbitrum-sdk && yarn && yarn generate_docs",
     "start_nitro_docs": "cd ../website && docusaurus start",
     "build": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus build",
     "swizzle": "docusaurus swizzle",
@@ -17,8 +17,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-rc.1",
-    "@docusaurus/preset-classic": "2.0.0-rc.1",
+    "@docusaurus/core": "^2.1.0",
+    "@docusaurus/preset-classic": "^2.1.0",
     "@mdx-js/react": "^1.6.22",
     "clsx": "^1.2.1",
     "got": "11.8.5",
@@ -28,8 +28,8 @@
     "trim": "0.0.3"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.0.0-rc.1",
-    "@tsconfig/docusaurus": "^1.0.5",
+    "@docusaurus/module-type-aliases": "^2.1.0",
+    "@tsconfig/docusaurus": "^1.0.6",
     "typescript": "^4.7.4"
   },
   "browserslist": {
