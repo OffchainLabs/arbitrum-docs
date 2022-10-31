@@ -119,7 +119,7 @@ const sidebars = {
             {
               type: "doc",
               label: "Arbitrum vs. Ethereum",
-              id: "arb-specific-things"
+              id: "arbitrum-ethereum-differences"
             },
             {
               type: "doc",

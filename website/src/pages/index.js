@@ -9,6 +9,7 @@ import { useLocation, Redirect } from "@docusaurus/router";
 import styles from "./index.module.css";
 
 const oldPathToNewPath = {
+  "/arb-specific-things": "/arbitrum-ethereum-differences",
   "/docs/mainnet": "/mainnet-beta",
   "/migration/dapp-migration": "/migration/dapp_migration",
   "/docs/public_chains": "/public-chains",
@@ -30,14 +31,14 @@ const oldPathToNewPath = {
   "/docs/installation": "/node-running/running-a-node",
   "/docs/rollup_basics": "/intro",
   "/docs/tutorials": "/getting-started-devs",
-  "/docs/security_considerations": "/arb-specific-things",
+  "/docs/security_considerations": "/arbitrum-ethereum-differences",
   "/docs/frontend_integration": "/getting-started-devs",
   "/docs/contract_deployment": "/getting-started-devs",
   "/docs/arbsys": "/arbos/precompiles#ArbSys",
   "/docs/finality": "/tx-lifecycle",
   "/docs/withdrawals": "/tx-lifecycle",
-  "/docs/differences_overview": "/arb-specific-things",
-  "/docs/special_features": "/arb-specific-things",
+  "/docs/differences_overview": "/arbitrum-ethereum-differences",
+  "/docs/special_features": "/arbitrum-ethereum-differences",
   "/docs/solidity_support": "/solidity-support",
   "/docs/time_in_arbitrum": "/time",
   "/docs/censorship_resistance": "/sequencer",
