@@ -44,5 +44,5 @@ git submodule update --remote nitro
 
 Sdk repo: 
 ```
-git submodule update --remote sdk
+git submodule update --remote arbitrum-sdk
 ```
