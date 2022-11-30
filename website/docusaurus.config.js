@@ -100,6 +100,12 @@ const config = {
             position: "left"
           },
           {
+            type: "doc",
+            docId: "intro/intro",
+            position: "left",
+            label: "Governance"
+          },
+          {
             type: "dropdown",
             label: "Links",
             position: "right",
