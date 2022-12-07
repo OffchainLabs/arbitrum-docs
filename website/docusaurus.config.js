@@ -33,12 +33,12 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: "../nitro/docs/",
+          path: "../arbitrum-docs/",
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
           editUrl: function (s) {
             return (
-              "https://github.com/OffchainLabs/nitro/edit/master/docs/" +
+              "https://github.com/OffchainLabs/nitro-docs/edit/master/arbitrum-docs/" +
               s.docPath
             );
           }
