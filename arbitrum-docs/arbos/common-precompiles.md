@@ -10,7 +10,7 @@ From the perspective of user applications, precompiles live as contracts at the 
 | [`ArbRetryableTx`](#ArbRetryableTx) &nbsp; | `0x6e`         | Managing retryables                 |
 | [`ArbSys`](#ArbSys)                        | `0x64`         | System-level functionality          |
 
-[ArbAggregator_link]: https://github.com/OffchainLabs/nitro/blob/master/precompiles/ArbAddressTable.go
+[ArbAggregator_link]: https://github.com/OffchainLabs/nitro/blob/master/precompiles/ArbAggregator.go
 [ArbGasInfo_link]: https://github.com/OffchainLabs/nitro/blob/master/precompiles/ArbGasInfo.go
 [ArbRetryableTx_link]: https://github.com/OffchainLabs/nitro/blob/master/precompiles/ArbRetryableTx.go
 [ArbSys_link]: https://github.com/OffchainLabs/nitro/blob/master/precompiles/ArbSys.go
