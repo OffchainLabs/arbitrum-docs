@@ -38,7 +38,7 @@ const config = {
           routeBasePath: "/",
           editUrl: function (s) {
             return (
-              "https://github.com/OffchainLabs/nitro-docs/edit/master/arbitrum-docs/" +
+              "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
             );
           }
