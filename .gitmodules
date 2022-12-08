@@ -1,7 +1,3 @@
-[submodule "nitro"]
-	path = nitro
-	url = https://github.com/OffchainLabs/nitro
-	branch = master
 [submodule "arbitrum-sdk"]
 	path = arbitrum-sdk
 	url = https://github.com/OffchainLabs/arbitrum-sdk
