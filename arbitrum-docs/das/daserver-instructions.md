@@ -16,7 +16,7 @@ There are two main interfaces, a REST interface supporting only GET operations a
 
 Committee members listen on the REST interface and additionally listen on the RPC interface for `das_store` RPC messages from the sequencer. The sequencer signs its requests and the committee member checks the signature. The RPC interface also has a health check that checks the underlying storage that responds requests with RPC method `das_healthCheck`.
 
-IPFS is an alternative interface serving batch retrieval. A mirror can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. A Nitro node that is configured to use IPFS that is syncing an AnyTrust chain that will use the batch hashes from L1 to find the batch data on the IPFS peer-to-peer network. Depending on network configuration that Nitro node may then also act as an IPFS node serving the batch data.
+IPFS is an alternative interface serving batch retrieval. A mirror can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. A Nitro node that is configured to use IPFS that is syncing an AnyTrust chain will use the batch hashes from L1 to find the batch data on the IPFS peer-to-peer network. Depending on network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
 
 ### Storage
 `daserver` can be configured to use one or more of four storage backends; S3, files on local disk, database on disk, and IPFS. If more than one is selected, store requests must succeed to all of them for it to be considered successful, and retrieve requests only require one to succeed.
