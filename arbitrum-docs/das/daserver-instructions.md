@@ -7,7 +7,7 @@ Committee members accept time-limited requests to store data batches from an Arb
 
 The data batches are content addressed with a keccak256 tree-based hashing scheme called `dastree`. The hash is part of the Data Availability Certificate placed on L1 and that hash is used by the Nitro node to retrieve the data from `daservers`.
 
-Mirrors exist to replicate and serve the data so that committee members to provide resiliency to the network in the case committee members going down, and to make it so committee members don't need to serve requests for the data directly. Mirrors may also provide archived data beyond the limited time that committee members are required to store the data.
+Mirrors exist to replicate and serve the data to provide resiliency to the network in the case of committee members going down, and to make it so committee members don't need to serve requests for the data directly. Mirrors may also provide archived data beyond the limited time that committee members are required to store the data.
 
 This document gives sample configurations for `daserver` in committee member and mirror mode.
 
