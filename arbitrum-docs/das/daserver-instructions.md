@@ -390,7 +390,7 @@ spec:
 		  mkdir -p /home/user/data/ipfsRepo
 		  mkdir -p /home/user/data/syncState
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT> --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.ipfs-storage.enable --data-availability.ipfs-storage.repo-dir /home/user/data/ipfsRepo --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
-        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
           limits:
