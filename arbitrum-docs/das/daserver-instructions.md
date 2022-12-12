@@ -30,9 +30,7 @@ An in-memory cache can be enabled to avoid needing to access underlying storage 
 `daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to L1) can automatically repair gaps in data they store, and how mirrors can sync. A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
 
 ## Image:
-`offchainlabs/nitro-node:v2.0.8-5b9fe9c` - pre-IPFS
-
-Release with IPFS not created yet
+`offchainlabs/nitro-node:v2.0.9-51f9452`
 
 ## Usage of daserver
 
@@ -52,7 +50,7 @@ Options for both committee members and mirrors:
       --data-availability.local-db-storage.data-dir string                                         directory in which to store the database
       --data-availability.local-db-storage.discard-after-timeout                                   discard data after its expiry timeout
       --data-availability.local-db-storage.enable                                                  enable storage/retrieval of sequencer batch data from a database on the local filesystem
-	  
+
       --data-availability.local-file-storage.data-dir string                                       local data directory
       --data-availability.local-file-storage.enable                                                enable storage/retrieval of sequencer batch data from a directory of files, one per batch
 
@@ -71,7 +69,7 @@ Options for both committee members and mirrors:
  # Cache options
       --data-availability.local-cache.enable                                                       Enable local in-memory caching of sequencer batch data
       --data-availability.local-cache.expiration duration                                          Expiration time for in-memory cached sequencer batches (default 1h0m0s)
-	  
+
  # REST fallback options
       --data-availability.rest-aggregator.enable                                                   enable retrieval of sequencer batch data from a list of remote REST endpoints; if other DAS storage types are enabled, this mode is used as a fallback
       --data-availability.rest-aggregator.online-url-list string                                   a URL to a list of URLs of REST das endpoints that is checked at startup; additive with the url option
@@ -168,7 +166,7 @@ spec:
           mkdir -p /home/user/data/keys
           /usr/local/bin/datool keygen --dir /home/user/data/keys
           sleep infinity
-        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
           limits:
@@ -223,7 +221,7 @@ spec:
 		  mkdir -p /home/user/data/badgerdb
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
 --enable-rpc --rpc-addr '0.0.0.0' --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.local-db-storage.discard-after-timeout --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.s3-storage.discard-after-timeout --data-availability.key.key-dir /home/user/data/keys  --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b'
-        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
           limits:
@@ -265,7 +263,7 @@ Using `daserver` as a mirror requires:
 - The Ethereum L1 address of the sequencer inbox contract, for syncing all batch data.
 - An Ethereum L1 RPC endpoint to query the sequencer inbox contract.
 - A persistent volume to write the stored data to if using one of the local disk modes.
-- A S3 bucket, and credentials (secret key, access key) of an IAM user that is able to read and write from it if you are uisng the S3 mode. 
+- A S3 bucket, and credentials (secret key, access key) of an IAM user that is able to read and write from it if you are uisng the S3 mode.
 
 The mirror does not require a BLS key since it will not be accepting store requests from the sequencer.
 
@@ -324,7 +322,7 @@ spec:
 		  mkdir -p /home/user/data/syncState
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
 --enable-rest --rest-addr '0.0.0.0' --log-level 3  --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
-        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
           limits:
@@ -392,7 +390,7 @@ spec:
 		  mkdir -p /home/user/data/ipfsRepo
 		  mkdir -p /home/user/data/syncState
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT> --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.ipfs-storage.enable --data-availability.ipfs-storage.repo-dir /home/user/data/ipfsRepo --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
-        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
           limits:
