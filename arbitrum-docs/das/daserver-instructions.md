@@ -1,21 +1,33 @@
 # Data Availability Server Instructions
 
 ## Description
-The Data Availability Server, `daserver`, allows storage and retrieval of transaction data batches for Arbitrum AnyTrust chains. It can be run in two modes: either committee member or mirror. Committee members accept time-limited requests to store data batches from an Arbitrum AnyTrust sequencer, and if they store the data then they return a signed certificate promising to store that data. Committee members and mirrors both respond to requests to retrieve the data batches. Mirrors exist to replicate and serve the data so that committee members to provide resiliency to the network in the case committee members going down, and to make it so committee members don't need to serve requests for the data directly. The data batches are addressed by a keccak256 hash of their contents. This document gives sample configurations for `daserver` in committee member and mirror mode.
+The Data Availability Server, `daserver`, allows storage and retrieval of transaction data batches for Arbitrum AnyTrust chains. It can be run in two modes: either committee member, or mirror.
+
+Committee members accept time-limited requests to store data batches from an Arbitrum AnyTrust sequencer, and if they store the data then they return a signed certificate promising to store that data. Committee members and mirrors both respond to requests to retrieve the data batches.
+
+The data batches are content addressed with a keccak256 tree-based hashing scheme called `dastree`. The hash is part of the Data Availability Certificate placed on L1 and that hash is used by the Nitro node to retrieve the data from `daservers`.
+
+Mirrors exist to replicate and serve the data to provide resiliency to the network in the case of committee members going down, and to make it so committee members don't need to serve requests for the data directly. Mirrors may also provide archived data beyond the limited time that committee members are required to store the data.
+
+This document gives sample configurations for `daserver` in committee member and mirror mode.
 
 ### Interfaces
-There are two interfaces, a REST interface supporting only GET operations and intended for public use, and an RPC interface intended for use only by the AnyTrust sequencer. Mirrors listen on the REST interface only and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash so it is cacheable; it contains a `cache-control` header specifying the object is immutable and to cache for up to 28 days. The REST interface has a health check on `/health` which will return 200 if the underling storage is working, otherwise 503.
+There are two main interfaces, a REST interface supporting only GET operations and intended for public use, and an RPC interface intended for use only by the AnyTrust sequencer. Mirrors listen on the REST interface only and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash so it is cacheable; it contains a `cache-control` header specifying the object is immutable and to cache for up to 28 days. The REST interface has a health check on `/health` which will return 200 if the underlying storage is working, otherwise 503.
 
 Committee members listen on the REST interface and additionally listen on the RPC interface for `das_store` RPC messages from the sequencer. The sequencer signs its requests and the committee member checks the signature. The RPC interface also has a health check that checks the underlying storage that responds requests with RPC method `das_healthCheck`.
 
+IPFS is an alternative interface serving batch retrieval. A mirror can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. A Nitro node that is configured to use IPFS that is syncing an AnyTrust chain will use the batch hashes from L1 to find the batch data on the IPFS peer-to-peer network. Depending on network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
+
 ### Storage
-`daserver` can be configured to use one or more of three storage backends; S3, files on local disk, and database on disk (please give us feedback if there are other storage backends you would like supported). If more than one is selected, store requests must succeed to all of them for it to be considered successful, and retrieve requests only require one to succeed.
+`daserver` can be configured to use one or more of four storage backends; S3, files on local disk, database on disk, and IPFS. If more than one is selected, store requests must succeed to all of them for it to be considered successful, and retrieve requests only require one to succeed.
+
+Please give us feedback if there are other storage backends you would like supported.
 
 ### Caching
-An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests .
+An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests.
 
 ### Synchronizing state
-`daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to L1) can automatically repair gaps in data they store, and how mirrors can sync (a sync mode that eagerly syncs all batches is planned for a future release). A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
+`daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to L1) can automatically repair gaps in data they store, and how mirrors can sync. A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
 
 ## Image:
 `offchainlabs/nitro-node:v2.0.9-51f9452`
@@ -50,6 +62,10 @@ Options for both committee members and mirrors:
       --data-availability.s3-storage.region string                                                 S3 region
       --data-availability.s3-storage.secret-key string                                             S3 secret key
 
+      --data-availability.ipfs-storage.enable                                                      enable storage/retrieval of sequencer batch data from IPFS
+      --data-availability.ipfs-storage.profiles string                                             comma separated list of IPFS profiles to use
+      --data-availability.ipfs-storage.read-timeout duration                                       timeout for IPFS reads, since by default it will wait forever. Treat timeout as not found (default 1m0s)
+
  # Cache options
       --data-availability.local-cache.enable                                                       Enable local in-memory caching of sequencer batch data
       --data-availability.local-cache.expiration duration                                          Expiration time for in-memory cached sequencer batches (default 1h0m0s)
@@ -58,8 +74,12 @@ Options for both committee members and mirrors:
       --data-availability.rest-aggregator.enable                                                   enable retrieval of sequencer batch data from a list of remote REST endpoints; if other DAS storage types are enabled, this mode is used as a fallback
       --data-availability.rest-aggregator.online-url-list string                                   a URL to a list of URLs of REST das endpoints that is checked at startup; additive with the url option
       --data-availability.rest-aggregator.urls strings                                             list of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints; additive with the online-url-list option
+      --data-availability.rest-aggregator.sync-to-storage.check-already-exists                     check if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)
       --data-availability.rest-aggregator.sync-to-storage.eager                                    eagerly sync batch data to this DAS's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily
-      --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this L1 block
+      --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state
+      --data-availability.rest-aggregator.sync-to-storage.retention-period duration                period to retain synced data (defaults to forever) (default 2562047h47m16.854775807s)
+      --data-availability.rest-aggregator.sync-to-storage.state-dir string                         directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time
+
 ```
 ```
 Options only for committee members:
@@ -167,11 +187,11 @@ spec:
           claimName: das-server
 ```
 
-#### Create DAS deployment
+#### Create Committee Member DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
-This configuration sets up all three storage types. To disable any of them, remove the --data-availability.(local-file-storage|local-disk-storage|s3-storage).enable option, and the other options for that storage type can also be removed. If updating an existing deployment from `offchainlabs/nitro-node:v2.0.9-51f9452` that is using the local files on disk storage type, you should use at least `local-file-storage`.
+This configuration sets up two storage types. To disable any of them, remove the --data-availability.(local-db-storage|s3-storage).enable option, and the other options for that storage type can also be removed. If updating an existing deployment from that is using the local files on disk storage type, you should use at least `local-file-storage`. It sets the storage backends to discard the data after timeout.
 
 ```
 apiVersion: apps/v1
@@ -198,10 +218,9 @@ spec:
         - bash
         - -c
         - |
-          mkdir -p /home/user/data/db
 		  mkdir -p /home/user/data/badgerdb
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
---enable-rpc --rpc-addr '0.0.0.0' --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/db  --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.key.key-dir /home/user/data/keys --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b'
+--enable-rpc --rpc-addr '0.0.0.0' --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.local-db-storage.discard-after-timeout --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.s3-storage.discard-after-timeout --data-availability.key.key-dir /home/user/data/keys  --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b'
         image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
@@ -241,7 +260,7 @@ spec:
 ### Sample Mirror
 
 Using `daserver` as a mirror requires:
-- The Ethereum L1 address of the sequencer inbox contract, for syncing all batch data (future capability)
+- The Ethereum L1 address of the sequencer inbox contract, for syncing all batch data.
 - An Ethereum L1 RPC endpoint to query the sequencer inbox contract.
 - A persistent volume to write the stored data to if using one of the local disk modes.
 - A S3 bucket, and credentials (secret key, access key) of an IAM user that is able to read and write from it if you are uisng the S3 mode.
@@ -268,11 +287,11 @@ spec:
   storageClassName: gp2
 ```
 
-#### Create DAS deployment
+#### Create Mirror DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
-This configuration sets up all three storage types. To disable any of them, remove the --data-availability.(local-file-storage|local-disk-storage|s3-storage).enable option, and the other options for that storage type can also be removed.
+This configuration sets up two storage types. To disable any of them, remove the --data-availability.(local-file-storage|s3-storage).enable option, and the other options for that storage type can also be removed. It sets the storage backends to keep all data forever.
 
 ```
 apiVersion: apps/v1
@@ -299,10 +318,10 @@ spec:
         - bash
         - -c
         - |
-          mkdir -p /home/user/data/db
 		  mkdir -p /home/user/data/badgerdb
+		  mkdir -p /home/user/data/syncState
           /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
---enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/db  --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b'
+--enable-rest --rest-addr '0.0.0.0' --log-level 3  --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
         image: offchainlabs/nitro-node:v2.0.9-51f9452
         imagePullPolicy: Always
         resources:
@@ -315,6 +334,77 @@ spec:
         ports:
         - containerPort: 9877
           hostPort: 9877
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /home/user/data/
+          name: data
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health/
+            port: 9877
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: das-mirror
+```
+
+#### Create IPFS Mirror DAS deployment
+
+This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
+
+This configuration sets up the `daserver` as an IPFS node. Port 4001 for the server should be exposed to the internet for IPFS p2p communication to work.
+
+If this is the first IPFS mirror set up, it will take a very long time to sync due to trying to find the data in IPFS first. Add this configuration option to skip this step and sync from the REST endpoints: `--data-availability.rest-aggregator.sync-to-storage.check-already-exists=false`
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: das-mirror
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: das-mirror
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: das-mirror
+    spec:
+      containers:
+      - command:
+        - bash
+        - -c
+        - |
+		  mkdir -p /home/user/data/ipfsRepo
+		  mkdir -p /home/user/data/syncState
+          /usr/local/bin/daserver --data-availability.l1-node-url <YOUR ETHEREUM L1 RPC ENDPOINT> --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.ipfs-storage.enable --data-availability.ipfs-storage.repo-dir /home/user/data/ipfsRepo --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
+        image: offchainlabs/nitro-node:v2.0.8-5b9fe9c
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: "4"
+            memory: 10Gi
+          requests:
+            cpu: "4"
+            memory: 10Gi
+        ports:
+        - containerPort: 9877
+          hostPort: 9877
+          protocol: TCP
+        - containerPort: 4001
+          hostPort: 4001
           protocol: TCP
         volumeMounts:
         - mountPath: /home/user/data/
