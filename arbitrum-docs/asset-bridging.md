@@ -1,4 +1,4 @@
-# Token Bridging 
+# Token Bridging
 
 The Arbitrum protocol's ability to pass messages between L1 and L2 (see [L1 to L2 messaging](./arbos/l1-to-l2-messaging.md)) can be leveraged to trustlessly move assets from Ethereum to an Arbitrum chain and back. Any asset / asset type can in principle be bridged, including Ether, ERC20 tokens, ERC-721 tokens, etc.
 

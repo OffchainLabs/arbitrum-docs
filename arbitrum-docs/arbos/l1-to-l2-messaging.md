@@ -46,10 +46,9 @@ If the lifecycle of a retryable ticket, two types of L2 transaction receipts wil
 
 **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted L2 execution of a retryable ticket. It includes a `RedeemScheduled` event from [`ArbRetryableTx`](./precompiles.md#ArbRetryableTx), with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided L2 gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
 
-
 ### Alternative "unsafe" Retryable Ticket Creation
 
-The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation / execution. It also will convert the provided `beneficiary` or `credit-back-address` to its address alias (see below) if either is a contract, providing a path for the L1 contract to recover funds. A power-user may by-pass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing. 
+The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation / execution. It also will convert the provided `beneficiary` or `credit-back-address` to its address alias (see below) if either is a contract, providing a path for the L1 contract to recover funds. A power-user may by-pass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
 
 ## Eth deposits
 
@@ -67,17 +66,17 @@ While Retryables and Eth deposits _must_ be submitted through the delayed inbox,
 
 All messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these unsigned messages are executed on L2, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the L1 address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111`:
 
-```
+```sol
 L2_Alias = L1_Contract_ Address + 0x1111000000000000000000000000000000001111
 ```
 
-The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1. 
+The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.
 
 If for some reason you need to compute the L1 address from an L2 alias on chain, you can use our `AddressAliasHelper` library:
 
 ```sol
-    modifier onlyFromMyL1Contract() override {
-        require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
-        _;
-    }
+modifier onlyFromMyL1Contract() override {
+    require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
+    _;
+}
 ```
