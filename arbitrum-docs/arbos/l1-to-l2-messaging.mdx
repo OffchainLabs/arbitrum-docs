@@ -1,3 +1,32 @@
+import { BigNumber } from "@ethersproject/bignumber";
+import { useEffect, useState } from "react";
+
+export const AddressAliasHelper = () => {
+  const CONSTANT = BigNumber.from("0x1111000000000000000000000000000000001111");
+  const [l1Address, setL1Address] = useState("");
+  return (
+    <>
+      <input
+        style={{
+          width: "100%",
+          fontSize: "16px",
+          padding: "14px 20px",
+          marginBottom: "6px",
+        }}
+        placeholder="Paste an L1 Contract Address"
+        value={l1Address}
+        onChange={(event) => setL1Address(event.target.value)}
+      />
+      {l1Address && (
+        <span>
+          <strong>L2 Alias:</strong>{" "}
+          {BigNumber.from(l1Address).add(CONSTANT, 16).toHexString()}
+        </span>
+      )}
+    </>
+  );
+};
+
 # L1 To L2 Messaging
 
 ## Retryables
@@ -70,7 +99,16 @@ All messages submitted via the Delayed Inbox get their sender's addressed "alias
 L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
 ```
 
-The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.
+:::tip Try it out
+
+<AddressAliasHelper />
+:::
+<br />
+The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain
+exploits that would otherwise be possible if we simply reused the same L1 addresses
+as the L2 sender; i.e., tricking an L2 contract that expects a call from a given
+contract address by sending retryable ticket from the expected contract address on
+L1.
 
 If for some reason you need to compute the L1 address from an L2 alias on chain, you can use our `AddressAliasHelper` library:
 
