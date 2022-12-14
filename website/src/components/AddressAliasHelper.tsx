@@ -15,9 +15,8 @@ export const AddressAliasHelper = () => {
       setL2Address(afterApply.value);
       setError(undefined);
     } catch (err) {
-      console.error(err);
-      setError(err.message);
       setL2Address(undefined);
+      setError(err.message);
     }
   }, [l1Address]);
   return (
