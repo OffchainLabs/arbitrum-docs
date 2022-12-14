@@ -17,6 +17,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@arbitrum/sdk": "^3.0.0",
     "@docusaurus/core": "^2.2.0",
     "@docusaurus/preset-classic": "^2.2.0",
     "@docusaurus/theme-mermaid": "^2.2.0",
@@ -30,7 +31,6 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.1.0",
     "@tsconfig/docusaurus": "^1.0.6",
-    "ethers": "^5.7.2",
     "typescript": "^4.7.4"
   },
   "browserslist": {

@@ -1,31 +1,4 @@
-import { BigNumber } from "@ethersproject/bignumber";
-import { useEffect, useState } from "react";
-
-export const AddressAliasHelper = () => {
-  const CONSTANT = BigNumber.from("0x1111000000000000000000000000000000001111");
-  const [l1Address, setL1Address] = useState("");
-  return (
-    <>
-      <input
-        style={{
-          width: "100%",
-          fontSize: "16px",
-          padding: "14px 20px",
-          marginBottom: "6px",
-        }}
-        placeholder="Paste an L1 Contract Address"
-        value={l1Address}
-        onChange={(event) => setL1Address(event.target.value)}
-      />
-      {l1Address && (
-        <span>
-          <strong>L2 Alias:</strong>{" "}
-          {BigNumber.from(l1Address).add(CONSTANT, 16).toHexString()}
-        </span>
-      )}
-    </>
-  );
-};
+import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
 
 # L1 To L2 Messaging
 
