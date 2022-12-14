@@ -4,19 +4,19 @@ import Head from "@docusaurus/Head";
 import { useLocation } from "@docusaurus/router";
 
 const pathNameToPreviewText = (pathName: string) => {
-  const splitPaths = pathName.split("/").filter(x => x);
+  const splitPaths = pathName.split("/").filter((x) => x);
   const probablyID = splitPaths[splitPaths.length - 1];
   if (!probablyID) return "";
   return probablyID
     .split("-")
-    .map(word => word[0].toUpperCase() + word.slice(1))
+    .map((word) => word[0].toUpperCase() + word.slice(1))
     .join(" ");
 };
 
 export default function Layout(props) {
   const { pathname } = useLocation();
 
-  const previewText = pathNameToPreviewText(pathname);  
+  const previewText = pathNameToPreviewText(pathname);
 
   return (
     <>
