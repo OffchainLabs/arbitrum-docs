@@ -3,6 +3,19 @@
  * and scoped locally.
  */
 
+/**
+  * custom CSS variables here
+  */
+:root {
+  --space-l: 20px;
+  --space-m: 14px;
+  --space-s: 10px;
+  --space-xs: 6px;
+  --border-radius-s: 4px;
+  --red: red;
+  --red-light: #fbbebe;
+}
+
 .heroBanner {
   padding: 4rem 0;
   text-align: center;

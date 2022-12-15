@@ -13,7 +13,10 @@ const config = {
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-
+  markdown: {
+    mermaid: true,
+  },
+  themes: ["@docusaurus/theme-mermaid"],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "OffchainLabs", // Usually your GitHub org/user name.
@@ -24,7 +27,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: "en",
-    locales: ["en"]
+    locales: ["en"],
   },
 
   presets: [
@@ -41,10 +44,10 @@ const config = {
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
             );
-          }
-        }
-      })
-    ]
+          },
+        },
+      }),
+    ],
   ],
   plugins: [
     [
@@ -52,10 +55,10 @@ const config = {
       {
         id: "arbitrum-sdk",
         path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk"
+        routeBasePath: "sdk",
         // ... other options
-      }
-    ]
+      },
+    ],
   ],
 
   themeConfig:
@@ -66,38 +69,37 @@ const config = {
         apiKey: "aa50e2f5121c9813ef09c7ab5031da67",
         indexName: "crawler_nitro_docs",
         contextualSearch: true,
-        searchPagePath: "search"
+        searchPagePath: "search",
       },
       navbar: {
         title: "Arbitrum Dev Center",
         logo: {
           alt: "My Site Logo",
-          src: "img/logo.svg"
+          src: "img/logo.svg",
         },
         items: [
           {
             type: "doc",
             docId: "intro/intro",
             position: "left",
-            label: "Intro"
+            label: "Intro",
           },
           {
             type: "doc",
             docId: "migration/dapp_migration",
             position: "left",
-            label: "For Devs"
+            label: "For Devs",
           },
           {
             type: "doc",
             docId: "tx-lifecycle",
             position: "left",
-            label: "How It Works"
+            label: "How It Works",
           },
           {
-            href:
-              "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+            href: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
             label: "Whitepaper",
-            position: "left"
+            position: "left",
           },
           {
             type: "doc",
@@ -112,23 +114,23 @@ const config = {
             items: [
               {
                 href: "https://github.com/OffchainLabs/nitro",
-                label: "GitHub"
+                label: "GitHub",
               },
               {
                 href: "https://research.arbitrum.io/",
-                label: "Research"
+                label: "Research",
               },
               {
                 href: "https://github.com/OffchainLabs/arbitrum-tutorials",
-                label: "Tutorials"
+                label: "Tutorials",
               },
               {
                 href: "https://medium.com/offchainlabs",
-                label: "Blog"
-              }
-            ]
-          }
-        ]
+                label: "Blog",
+              },
+            ],
+          },
+        ],
       },
       footer: {
         style: "dark",
@@ -138,54 +140,55 @@ const config = {
             items: [
               {
                 label: "Offchain Labs",
-                to: "https://offchainlabs.com/"
+                to: "https://offchainlabs.com/",
               },
               {
                 label: "Arbitrum.io",
-                to: "https://arbitrum.io/"
+                to: "https://arbitrum.io/",
               },
               {
                 label: "Nova.arbitrum.io",
-                to: "https://nova.arbitrum.io/"
-              }
-            ]
+                to: "https://nova.arbitrum.io/",
+              },
+            ],
           },
           {
             title: "Community",
             items: [
               {
                 label: "Discord",
-                href: "https://discord.gg/ZpZuw7p"
+                href: "https://discord.gg/ZpZuw7p",
               },
               {
                 label: "Twitter",
-                href: "https://twitter.com/ArbitrumDevs"
+                href: "https://twitter.com/ArbitrumDevs",
               },
               {
                 label: "Research forum",
-                href: "https://research.arbitrum.io/"
+                href: "https://research.arbitrum.io/",
               },
               {
                 label: "Medium Blog",
-                href: "https://medium.com/offchainlabs"
-              }
-            ]
-          }
+                href: "https://medium.com/offchainlabs",
+              },
+            ],
+          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`
+        copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
-        darkTheme: darkCodeTheme
+        darkTheme: darkCodeTheme,
+        additionalLanguages: ["solidity"],
       },
       announcementBar: {
         id: "support_us",
         content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
         backgroundColor: "rgb(121 241 3)",
         textColor: "#091E42",
-        isCloseable: true
-      }
-    })
+        isCloseable: true,
+      },
+    }),
 };
 
 module.exports = config;
