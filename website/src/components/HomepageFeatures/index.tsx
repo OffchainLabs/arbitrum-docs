@@ -17,42 +17,41 @@ const FeatureList: FeatureItem[] = [
     title: "Introduction",
     Svg: require("@site/static/img/welcome.svg").default,
     href: "/intro/",
-    description: <> Overview for New Devs / Users </>
+    description: <> Overview for New Devs / Users </>,
   },
   {
     title: "For Developers",
     Svg: require("@site/static/img/builder.svg").default,
     href: "/getting-started-devs",
-    description: <>Guides for Dapp Devs and Node Runners</>
+    description: <>Guides for Dapp Devs and Node Runners</>,
   },
   {
     title: "How It All Works",
     Svg: require("@site/static/img/bulb.svg").default,
     href: "/tx-lifecycle",
 
-    description: <>Technical Overview and specs</>
+    description: <>Technical Overview and specs</>,
   },
   {
     title: "Whitepaper",
     Svg: require("@site/static/img/paper.svg").default,
-    href:
-      "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+    href: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
     description: <>Arbitrum Nitro Whitepaper</>,
-    addBackground: true
+    addBackground: true,
   },
   {
     title: "Research Forum",
     Svg: require("@site/static/img/group.svg").default,
     href: "https://research.arbitrum.io/",
     description: <>Public forum for research disucssion</>,
-    addBackground: true
+    addBackground: true,
   },
   {
     title: "The Code",
     Svg: require("@site/static/img/logo.svg").default,
     href: "https://github.com/OffchainLabs/nitro",
-    description: <>View and contribute to the source code</>
-  }
+    description: <>View and contribute to the source code</>,
+  },
 ];
 
 function Feature({
@@ -60,7 +59,7 @@ function Feature({
   Svg,
   description,
   href,
-  addBackground
+  addBackground,
 }: FeatureItem) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === "dark";
@@ -74,7 +73,7 @@ function Feature({
               isDarkTheme && addBackground
                 ? {
                     backgroundColor: "lightblue",
-                    borderRadius: "25%"
+                    borderRadius: "25%",
                   }
                 : {}
             }
