@@ -1,9 +1,8 @@
-
 # Glossary of Arbitrum Terms
 
 - **Arbitrum Chain**: A Layer 2 EVM environment running on Ethereum using Arbitrum technologies. Arbitrum Chains come in two forms, rollup and anytrust, depending on a user's needs.
 
-- **Arbitrum AnyTrust**: Arbitrum protocol in which data availability is managed by a permissioned set of parties; compared to Arbitrum Rollup, not strictly trustless, but offers lower fees (e.g., Arbitrum Nova). 
+- **Arbitrum AnyTrust**: Arbitrum protocol in which data availability is managed by a permissioned set of parties; compared to Arbitrum Rollup, not strictly trustless, but offers lower fees (e.g., Arbitrum Nova).
 
 - **Arbitrum Rollup**: Trustless Arbitrum L2 protocol in which participation is permissionless and underlying layer is used for data availability (e.g., Arbitrum One).
 
@@ -21,7 +20,7 @@
 
 - **Data Availability Committee (DAC)**: Permissioned set of parties responsibly for data availability in an AnyTrust chain.
 
-- **Data Availability Certificate**: Signed promise from a DAC of relevant data's availability as of a given Inbox hash. 
+- **Data Availability Certificate**: Signed promise from a DAC of relevant data's availability as of a given Inbox hash.
 
 - **Chain state**: A particular point in the history of an Arbitrum Chain. A chain state corresponds to a sequence of assertions that have been made, and a verdict about whether each of those assertions was accepted.
 
@@ -47,9 +46,7 @@
 
 - **One Step Proof**: Final step in a challenge; a single operation of the L2 VM (Wasm) is executed on L1, and the validity of its state transition is verified.
 
-
 - **Staker**: A party who deposits a stake, in ETH, to vouch for a particular RBlock in an Arbitrum Chain. A party who stakes on a false RBlock can expect to lose their stake. An honest staker can recover their stake once the node they are staked on has been confirmed.
-
 
 - **Active Validator**: A party who makes staked, disputable assertions about the state of the Arbitrum chain; i.e., proposing state updates or challenging the validity of assertions. (Not to be confused with the Sequencer)
 
