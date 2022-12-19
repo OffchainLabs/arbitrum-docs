@@ -3,22 +3,23 @@
 The One Step Proof (OSP) implementation makes certain assumptions about the cases that can arise
 in a correct execution. This documents those assumptions about what's being executed.
 
-If a case is "unreachable", that is, the case is assumed to never arise in correct execution, 
-then the OSP can implement any instruction semantics in that case. 
-* In a challenge between malicious parties, any case can arise. The challenge protocol must do
-something safe in every case. But the instruction semantics can be weird in such cases because
-if both parties to a challenge are malicious, the protocol doesn't care who wins the challenge.
-* In a challenge with one honest party, the honest party will never need to one-step prove an
-unreachable case. The honest party will only assert correct executions, so it will only have to
-prove reachable cases.
-* In a challenge with one honest party, the dishonest party could assert an execution that transitions
-into an unreachable case, but such an execution must include an invalid execution of a reachable case
-earlier in the assertion. Because a challenge involving an honest party will eventually require an OSP
-over the first instruction where the parties disagree, the eventual OSP will be over the earlier point
-of divergence, and not over the later execution from an unreachable case.
+If a case is "unreachable", that is, the case is assumed to never arise in correct execution,
+then the OSP can implement any instruction semantics in that case.
 
-In general, some unreachable cases will be detectable by the OSP checker and some will not. For safety, the 
-detectable unreachable cases should be defined by transition the machine into an error state, allowing 
+- In a challenge between malicious parties, any case can arise. The challenge protocol must do
+  something safe in every case. But the instruction semantics can be weird in such cases because
+  if both parties to a challenge are malicious, the protocol doesn't care who wins the challenge.
+- In a challenge with one honest party, the honest party will never need to one-step prove an
+  unreachable case. The honest party will only assert correct executions, so it will only have to
+  prove reachable cases.
+- In a challenge with one honest party, the dishonest party could assert an execution that transitions
+  into an unreachable case, but such an execution must include an invalid execution of a reachable case
+  earlier in the assertion. Because a challenge involving an honest party will eventually require an OSP
+  over the first instruction where the parties disagree, the eventual OSP will be over the earlier point
+  of divergence, and not over the later execution from an unreachable case.
+
+In general, some unreachable cases will be detectable by the OSP checker and some will not. For safety, the
+detectable unreachable cases should be defined by transition the machine into an error state, allowing
 governance to eventually push an upgrade to recover from the error. An undetectable unreachable case, if
 such a case were reached in correct execution, could lead to a security failure.
 
