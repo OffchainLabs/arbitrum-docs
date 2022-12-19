@@ -13,12 +13,12 @@ Arbitrum Nova started as a Nitro chain, so has no classic blocks.
 The following commands require an Arbitrum Classic node to execute data
 on pre-Nitro blocks.
 
-* `eth_call`
-* `eth_estimateGas`
-* `eth_getBalance`
-* `eth_getCode`
-* `eth_getTransactionCount`
-* `eth_getStorageAt`
+- `eth_call`
+- `eth_estimateGas`
+- `eth_getBalance`
+- `eth_getCode`
+- `eth_getTransactionCount`
+- `eth_getStorageAt`
 
 ### Required Artifacts
 
@@ -65,21 +65,21 @@ on pre-Nitro blocks.
 ### Optional parameters
 
 - `--core.cache.timed-expire`
-    - Defaults to `20m`, or 20 minutes. Age of oldest blocks to hold in cache so that disk lookups are not required
+  - Defaults to `20m`, or 20 minutes. Age of oldest blocks to hold in cache so that disk lookups are not required
 - `--node.rpc.max-call-gas`
-    - Maximum amount of gas that a node will use in call, default is `5000000`
+  - Maximum amount of gas that a node will use in call, default is `5000000`
 - `--core.checkpoint-gas-frequency`
-    - Defaults to `1000000000`. Amount of gas between saving checkpoints to disk. When making archive queries node has to load closest previous checkpoint and then execute up to the requested block. The farther apart the checkpoints, the longer potential execution required. However, saving checkpoints more often slows down the node in general.
+  - Defaults to `1000000000`. Amount of gas between saving checkpoints to disk. When making archive queries node has to load closest previous checkpoint and then execute up to the requested block. The farther apart the checkpoints, the longer potential execution required. However, saving checkpoints more often slows down the node in general.
 - `--node.cache.allow-slow-lookup`
-    - When this option is present, will load old blocks from disk if not in memory cache
-    - If archive support is desired, recommend using `--node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000`
+  - When this option is present, will load old blocks from disk if not in memory cache
+  - If archive support is desired, recommend using `--node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000`
 - `--node.rpc.tracing.enable`
-    - Note that you also need to have a database populated with an archive node if you want to trace previous transactions
-    - This option enables the ability to call a tracing api which is inspired by the parity tracing API with some differences
-        - Example: `curl http://arbnode -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"arbtrace_call","params":[{"to": "0x6b175474e89094c44da98b954eedeac495271d0f","data": "0x70a082310000000000000000000000006E0d01A76C3Cf4288372a29124A26D4353EE51BE"},["trace"], "latest"],"id":67}'`
-    - The `trace_*` methods are renamed to `arbtrace_*`, except `trace_rawTransaction` is not supported
-    - Only `trace` type is supported. `vmTrace` and `stateDiff` types are not supported
-    - The self-destruct opcode is not included in the trace. To get the list of self-destructed contracts, you can provide the `deletedContracts` parameter to the method
+  - Note that you also need to have a database populated with an archive node if you want to trace previous transactions
+  - This option enables the ability to call a tracing api which is inspired by the parity tracing API with some differences
+    - Example: `curl http://arbnode -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"arbtrace_call","params":[{"to": "0x6b175474e89094c44da98b954eedeac495271d0f","data": "0x70a082310000000000000000000000006E0d01A76C3Cf4288372a29124A26D4353EE51BE"},["trace"], "latest"],"id":67}'`
+  - The `trace_*` methods are renamed to `arbtrace_*`, except `trace_rawTransaction` is not supported
+  - Only `trace` type is supported. `vmTrace` and `stateDiff` types are not supported
+  - The self-destruct opcode is not included in the trace. To get the list of self-destructed contracts, you can provide the `deletedContracts` parameter to the method
 
 ### Arb-Relay
 
