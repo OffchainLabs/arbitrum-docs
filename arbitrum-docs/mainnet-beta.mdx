@@ -1,54 +1,51 @@
 **Mainnet Beta: Understanding the Risks**
 
-Arbitrum One — the first permissionless Ethereum layer 2 rollup with full Ethereum smart contract functionality — is [live on mainnet](https://offchain.medium.com/mainnet-for-everyone-27ce0f67c85e) — as is [Nova](https://medium.com/offchainlabs/its-time-for-a-new-dawn-nova-is-open-to-the-public-a081df1e4ad2), our first [AnyTrust](https://developer.arbitrum.io/inside-anytrust) chain; We're sure you're (almost) as excited as we are! 
+Arbitrum One — the first permissionless Ethereum layer 2 rollup with full Ethereum smart contract functionality — is [live on mainnet](https://offchain.medium.com/mainnet-for-everyone-27ce0f67c85e) — as is [Nova](https://medium.com/offchainlabs/its-time-for-a-new-dawn-nova-is-open-to-the-public-a081df1e4ad2), our first [AnyTrust](https://developer.arbitrum.io/inside-anytrust) chain; We're sure you're (almost) as excited as we are!
 
 Here are some risks you should know about before using the system:
 
 **State Of Progressive Decentralization**
 
-	There are three key components that determine the state of decentralization for an Arbitrum Rollup chain like Arbitrum One: chain ownership, Validators, and the Sequencer. Here we’ll track the current status of all three, as well as the risks involved:
+    There are three key components that determine the state of decentralization for an Arbitrum Rollup chain like Arbitrum One: chain ownership, Validators, and the Sequencer. Here we’ll track the current status of all three, as well as the risks involved:
 
+1. **Chain Ownership:**
 
-
-1. **Chain Ownership:** 
-* **Description:** A chain’s owner is an entity that has the ability to change the protocol in various ways, including upgrading the core smart contracts, setting system parameters, and pausing the system.
-* **Current status: Arbitrum Governance **Chain ownership is under control of the Arbitrum governance system; for details, see the Arbitrum Constitution [QQQ link].
+- **Description:** A chain’s owner is an entity that has the ability to change the protocol in various ways, including upgrading the core smart contracts, setting system parameters, and pausing the system.
+- **Current status: Arbitrum Governance **Chain ownership is under control of the Arbitrum governance system; for details, see the Arbitrum Constitution [QQQ link].
 
         In short: chain-owner operations can be carried out via governance vote by the Arbitrum DAO (the decentralized community of ARB holders and delegates) or quickly by the emergency Security Council, a 9 of 12 multisig of entities listed here [QQQ link] that gets biannually elected by the DAO.
 
-* **Risks**: 
-    * If 9 of the Security Council members are compromised or behave maliciously, the safety of the system could be compromised, including users’ funds.
-    * If a malicious proposal is successfully put through DAO governance, it could compromise the safety of the system. In this situation, users will have several weeks to withdraw their funds back to Ethereum before the proposal takes effect.
+- **Risks**:
+  - If 9 of the Security Council members are compromised or behave maliciously, the safety of the system could be compromised, including users’ funds.
+  - If a malicious proposal is successfully put through DAO governance, it could compromise the safety of the system. In this situation, users will have several weeks to withdraw their funds back to Ethereum before the proposal takes effect.
+
 2. **Validation**
-    * **Description**: Validators are responsible for updating the state of the Arbitrum chain and ensuring that all updates are valid.
-    * **Current Status: ** **Whitelisted **Validation is currently whitelisted to X public entities; you can see the list of validators here [qqq link].** **
-    * **Risks: **If all X Arbitrum One validators behave maliciously, the safety of the system could be compromised. 
+   - **Description**: Validators are responsible for updating the state of the Arbitrum chain and ensuring that all updates are valid.
+   - **Current Status: ** **Whitelisted **Validation is currently whitelisted to X public entities; you can see the list of validators here [qqq link].\*\* \*\*
+   - **Risks: **If all X Arbitrum One validators behave maliciously, the safety of the system could be compromised.
 3. **Sequencer**:
-    * **Description: **The Sequencer the party that is typically responsible for collecting and ordering users’ transactions.
-    * **Status: Centralized **The Sequencer is currently centralized; it is run and maintained by Offchain Labs. 
-    * **Risks: **The Sequencer has the ability to delay the inclusion of a user’s transaction by up to 24 hours. The Sequencer also has the ability to reorder transactions over short time-horizons (note that the Sequencer cannot compromise the safety of the system).
 
-     4. **Data Availability Committee (Arbitrum Nova Only): **
+   - **Description: **The Sequencer the party that is typically responsible for collecting and ordering users’ transactions.
+   - **Status: Centralized **The Sequencer is currently centralized; it is run and maintained by Offchain Labs.
+   - **Risks: **The Sequencer has the ability to delay the inclusion of a user’s transaction by up to 24 hours. The Sequencer also has the ability to reorder transactions over short time-horizons (note that the Sequencer cannot compromise the safety of the system).
 
+   4. **Data Availability Committee (Arbitrum Nova Only): **
 
-
-* **Description: **AnyTrust chains like Arbitrum Nova rely on a permissioned committee to store the chain’s data and provide it on demand.
-* **Status: 7 Member Committee **The Arbitrum Nova chain has a 7-party DAC whose members can be seen here [QQQ link]** **
-* **Risks: **If 6 of the 7 committee members as well as the Sequencer behave maliciously and collude, the safety of the system can be compromised. 
+- **Description: **AnyTrust chains like Arbitrum Nova rely on a permissioned committee to store the chain’s data and provide it on demand.
+- **Status: 7 Member Committee **The Arbitrum Nova chain has a 7-party DAC whose members can be seen here [QQQ link]\*\* \*\*
+- **Risks: **If 6 of the 7 committee members as well as the Sequencer behave maliciously and collude, the safety of the system can be compromised.
 
 See the following for updates on the state of progressive decentralization:
 
-
-
-* Roadmap [QQQ link]
-* QQQ
-* 
+- Roadmap [QQQ link]
+- QQQ
+-
 
 **General Words Of Caution: Software Bugs**
 
 Offchain Labs’ [implementation](https://github.com/OffchainLabs/nitro) of the Arbitrum protocol has been carefully constructed, is perpetually being audited by several independent firms, and is continuously reviewed and tested following best engineering practices.
 
-That said, there remains a non-zero chance that our codebase contains some undiscovered vulnerabilities that put user funds at risk. Users should carefully factor this risk into their decision to use Arbitrum One and/or Arbitrum Nova, and in deciding how much of their value to entrust into the system. Note that  Offchain Labs also sponsors a [multi-million dollar bug bounty program](https://immunefi.com/bounty/arbitrum/) to incentivize any party who funds such a critical bug to disclose it responsibly.
+That said, there remains a non-zero chance that our codebase contains some undiscovered vulnerabilities that put user funds at risk. Users should carefully factor this risk into their decision to use Arbitrum One and/or Arbitrum Nova, and in deciding how much of their value to entrust into the system. Note that Offchain Labs also sponsors a [multi-million dollar bug bounty program](https://immunefi.com/bounty/arbitrum/) to incentivize any party who funds such a critical bug to disclose it responsibly.
 
 **General Words of Caution: Scams**
 
