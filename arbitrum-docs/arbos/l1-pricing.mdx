@@ -10,11 +10,11 @@ The total fee charged to a transaction is the product of the transaction's estim
 
 The estimated size is measured in L1 gas and is calculated as follows: first, compress the transaction's data using the brotli-zero algorithm, then multiply the size of the result by 16. (16 is because L1 charges 16 gas per byte. L1 charges less for bytes that are zero, but that doesn't make sense here.) Brotli-zero is used in order to reward users for posting transactions that are compressible. Ideally we would like to reward for posting transactions that contribute to the compressibility (using the brotli compressor) of the entire batch, but that is a difficult notion to define and in any case would be too expensive to compute at L2. Brotli-zero is an approximation that is cheap enough to compute.
 
-L1 gas fee funds that are collected from transactions are transferred to a special [`L1PricerFundsPool`][L1PricerFundsPool_link] account, so that account's balance represents the amount of funds that have been collected and are available to pay for costs.
+L1 gas fee funds that are collected from transactions are transferred to a special [`L1PricerFundsPool`][l1pricerfundspool_link] account, so that account's balance represents the amount of funds that have been collected and are available to pay for costs.
 
 The L1 pricer also records the total number of "data units" (the sum of the estimated sizes, after multiplying by 16) that have been received.
 
-[L1PricerFundsPool_link]: https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46
+[l1pricerfundspool_link]: https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46
 
 ## L1 costs
 
@@ -32,9 +32,9 @@ The L1 pricer keep track of the funds due to the reward address, based on the nu
 
 When a batch posting report is processed at L2, the pricer allocates some of the collected funds to pay for costs incurred. To allocate funds, the pricer considers three timestamps:
 
-* `currentTime` is the current time, when the batch posting report message arrives at L2
-* `updateTime` is the time at which the reported batch was submitted (which will typically be around 20 minutes before currentTime)
-* `lastUpdateTime` is the time at which the previous reported batch was submitted
+- `currentTime` is the current time, when the batch posting report message arrives at L2
+- `updateTime` is the time at which the reported batch was submitted (which will typically be around 20 minutes before currentTime)
+- `lastUpdateTime` is the time at which the previous reported batch was submitted
 
 The pricer computes an allocation fraction `F = (updateTime-lastUpdateTime) / (currentTime-lastUpdateTime)` and allocates a fraction `F` of funds in the `L1PricerFundsPool` to the current report. The intuition is that the pricer knows how many funds have been collected between `lastUpdateTime` and `currentTime`, and we want to figure out how many of those funds to allocate to the interval between `lastUpdateTime` and `updateTime`. The given formula is the correct allocation, if we assume that funds arrived at a uniform rate during the interval between `lastUpdateTime` and `currentTime`. The pricer similarly allocates a portion of the total data units to the current report.
 
@@ -48,8 +48,8 @@ The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minu
 
 A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee is the surplus is increasing, and increase the Basefee is the surplus is shrinking.
 
-## Getting L1 Fee Info 
+## Getting L1 Fee Info
 
 The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](precompiles.mdx). To estimate the L1 fee a transaction will use, the [`NodeInterface.gasEstimateComponents`](gas.mdx) or [`NodeInterface.gasEstimateL1Component`](gas.mdx) method can be used.
 
- Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.
+Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.
