@@ -1,6 +1,6 @@
-# Running a local dev node
+## Running a local dev node
 
-1.  Install
+### 1. Install
 
 - Install [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/)
 - Clone and `cd` into [nitro repo](https://github.com/OffchainLabs/nitro)
@@ -14,18 +14,19 @@
   ```
   This will build and launch the node.
 
-2. Launch node
-   To relaunch node, run
+### 2. Launch node
 
-   ```bash
-   ./test-node.bash
-   ```
+- To relaunch node, run
 
-   (Running with the --init flag will clear all chain data and redeploy)
+  ```bash
+  ./test-node.bash
+  ```
 
-   L1 Geth devnet will be running at http://localhost:8545 the L2 Nitro devent at http://localhost:7545
+  (Running with the --init flag will clear all chain data and redeploy)
 
-Address `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2` will be prefunded with test Ether.
+  L1 Geth devnet will be running at http://localhost:8545 the L2 Nitro devent at http://localhost:7545
+
+  Address `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2` will be prefunded with test Ether.
 
 ### Get Core Contracts
 
