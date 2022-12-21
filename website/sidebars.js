@@ -92,6 +92,11 @@ const sidebars = {
         },
         {
           type: "doc",
+          id: "node-running/local-dev-node",
+          label: "Run a Local Dev Node"
+        },
+        {
+          type: "doc",
           id: "das/daserver-instructions",
           label: "Data Availability Server"
         },
