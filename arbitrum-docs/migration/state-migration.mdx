@@ -8,7 +8,7 @@ The recommended way to initialize a nitro node is to point it to a pre-initializ
 
 ## Exporting Data from a Classic Arbitrum Node
 
-Launch node with the option `--node.rpc.nitroexport.enable=true` note: this is only recommended for nodes with no public/external interfaces. All exported data will be written to directory "nitroexport" under the classic instance directory - e.g. `${HOME}/.arbitrum/arb1/nitroexport`.
+Launch node with the option `--node.rpc.nitroexport.enable=true` note: this is only recommended for nodes with no public/external interfaces. All exported data will be written to directory "nitroexport" under the classic instance directory - e.g. `${HOME}/.arbitrum/mainnet/nitroexport`.
 Make sure the classic node has read the entire rollup state.
 
 **Important Note:** Exporting the state on your own classic node should produce the same state as using files supplied by offchain labs (e.g. the same genesis blockhash). However, multiple exports of the same state will not necessarily create identical intermediate files. For example - state export is done in parallel, so order of entries in the file is not deterministic.
