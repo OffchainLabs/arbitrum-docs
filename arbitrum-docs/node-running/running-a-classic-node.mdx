@@ -4,7 +4,7 @@ Note: If you’re interested in accessing the Arbitrum network but you don’t w
 
 ### Do You Need To Run A Classic Node?
 
-Arbitrum One and Arbitrum Rinkeby testnet have both been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack.
+Arbitrum One has both been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack.
 The Nitro node databases have the raw data of all blocks, including pre-Nitro
 blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks.
 
@@ -29,7 +29,7 @@ on pre-Nitro blocks.
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard Ethereum node RPC endpoint.
 - `--node.chain-id=<L2 Chain ID>`
-  - Must use `42161` for Arbitrum One, or `421611` for Arbitrum Rinkeby Testnet
+  - Must use `42161` for Arbitrum One
 
 ### Important ports
 
@@ -38,14 +38,10 @@ on pre-Nitro blocks.
 
 ### Putting it all together
 
-- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet` or `/home/user/.arbitrum/rinkeby` depending on what chain you are connecting to.
+- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
   - Here is an example of how to run arb-node for mainnet (only good for archive requests on pre-Nitro blocks, so probably want to enable archive as well):
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
-  ```
-  - Here is an example of how to run arb-node for rinkeby (only good for archive requests on pre-Nitro blocks, so probably want to enable archive as well):
-  ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum-rinkeby/:/home/user/.arbitrum/rinkeby -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-rinkeby-node:8545 --node.chain-id=421611
   ```
 
 ### Note on permissions
@@ -55,11 +51,6 @@ on pre-Nitro blocks.
   ```shell
   mkdir /some/local/dir/arbitrum-mainnet
   chmod -fR 777 /some/local/dir/arbitrum-mainnet
-  ```
-  - For Rinkeby:
-  ```shell
-  mkdir /some/local/dir/arbitrum-rinkeby
-  chmod -fR 777 /some/local/dir/arbitrum-rinkeby
   ```
 
 ### Optional parameters
