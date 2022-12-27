@@ -58,6 +58,7 @@ const config = {
         routeBasePath: "sdk",
         // ... other options
       },
+      require.resolve("docusaurus-plugin-fathom"),
     ],
   ],
 
@@ -70,6 +71,11 @@ const config = {
         indexName: "crawler_nitro_docs",
         contextualSearch: true,
         searchPagePath: "search",
+      },
+      fathomAnalytics: {
+        siteId: 'DOHOZGJO',
+        // Optional fields.
+        customDomain: 'https//twentyone-unreal.arbitrum.io', // Use a custom domain, see https://usefathom.com/support/custom-domains
       },
       navbar: {
         title: "Arbitrum Dev Center",
