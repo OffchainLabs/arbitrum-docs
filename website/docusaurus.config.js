@@ -58,8 +58,8 @@ const config = {
         routeBasePath: "sdk",
         // ... other options
       },
-      require.resolve("docusaurus-plugin-fathom"),
     ],
+    require.resolve("docusaurus-plugin-fathom"),
   ],
 
   themeConfig:
