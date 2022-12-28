@@ -29,40 +29,9 @@ const sidebars = {
       label: "Get Started"
     },
     {
-      type: "category",
-      label: "FAQs",
-      items: [
-        {
-          type: "doc",
-          id: "faqs/anytrust-vs-rollup",
-          label: "Rollup vs. AnyTrust"
-        },
-        {
-          type: "doc",
-          id: "faqs/how-fees",
-          label: "Fees"
-        },
-        {
-          type: "doc",
-          id: "faqs/what-if-dispute",
-          label: "Disputes and L2 Reorgs?"
-        },
-        {
-          type: "doc",
-          id: "faqs/seq-or-val",
-          label: "Sequencers vs. Validators"
-        },
-        {
-          type: "doc",
-          id: "faqs/beta-status",
-          label: "Decentralization Status"
-        },
-        {
-          type: "doc",
-          id: "faqs/the-merge",
-          label: "The Merge"
-        }
-      ]
+      type: "doc",
+      id: "faqs",
+      label: "FAQs"
     },
     {
       type: "doc",

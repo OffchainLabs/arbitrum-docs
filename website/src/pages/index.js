@@ -49,7 +49,13 @@ const oldPathToNewPath = {
   "/docs/avm_design": "/inside-arbitrum-nitro",
   "/docs/dispute_resolution": "/proving/challenge-manager",
   "/docs/arbos_formats": "/arbos",
-  "/docs/avm_specification": "/proving/wavm-custom-opcodes"
+  "/docs/avm_specification": "/proving/wavm-custom-opcodes",
+  "/faqs/anytrust-vs-rollup": "/faqs#q-rollup-vs-anytrust",
+  "/faqs/how-fees": "/faqs#cat--gas",
+  "/faqs/what-if-dispute": "/faqs#q-dispute-reorg",
+  "/faqs/seq-or-val": "/faqs#q-seq-vs-val",
+  "/faqs/beta-status": "/mainnet-beta",
+  "/faqs/the-merge": "/"
 };
 
 const getNewPath = _path => {
