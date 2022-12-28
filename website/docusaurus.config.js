@@ -75,7 +75,7 @@ const config = {
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
         // Optional fields.
-        customDomain: 'https//twentyone-unreal.arbitrum.io', // Use a custom domain, see https://usefathom.com/support/custom-domains
+        customDomain: 'https://twentyone-unreal.arbitrum.io', // Use a custom domain, see https://usefathom.com/support/custom-domains
       },
       navbar: {
         title: "Arbitrum Dev Center",
