@@ -29,9 +29,39 @@ const sidebars = {
       label: "Get Started"
     },
     {
-      type: "doc",
-      id: "faqs",
-      label: "FAQs"
+      type: "category",
+      label: "FAQs",
+      items: [  {
+        type: "doc",
+        id: "faqs/faqs-index",
+        label: "FAQ Index"
+      },
+      {
+        type: "doc",
+        id: "faqs/gas-faqs",
+        label: "Gas"
+      },
+      {
+        type: "doc",
+        id: "faqs/nodes-faqs",
+        label: "Nodes"
+      },
+      {
+        type: "doc",
+        id: "faqs/x-chain-faqs",
+        label: "X-Chain Messaging"
+      },
+      {
+        type: "doc",
+        id: "faqs/protocol-faqs",
+        label: "Protocol"
+      },
+      {
+        type: "doc",
+        id: "faqs/misc-faqs",
+        label: "Misc"
+      }
+    ]
     },
     {
       type: "doc",

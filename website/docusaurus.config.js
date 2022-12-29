@@ -93,6 +93,12 @@ const config = {
           },
           {
             type: "doc",
+            docId: "faqs/faqs-index",
+            position: "left",
+            label: "FAQs",
+          },
+          {
+            type: "doc",
             docId: "migration/dapp_migration",
             position: "left",
             label: "For Devs",
