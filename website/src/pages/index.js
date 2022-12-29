@@ -50,10 +50,10 @@ const oldPathToNewPath = {
   "/docs/dispute_resolution": "/proving/challenge-manager",
   "/docs/arbos_formats": "/arbos",
   "/docs/avm_specification": "/proving/wavm-custom-opcodes",
-  "/faqs/anytrust-vs-rollup": "/faqs#q-rollup-vs-anytrust",
-  "/faqs/how-fees": "/faqs#cat--gas",
-  "/faqs/what-if-dispute": "/faqs#q-dispute-reorg",
-  "/faqs/seq-or-val": "/faqs#q-seq-vs-val",
+  "/faqs/anytrust-vs-rollup": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
+  "/faqs/how-fees": "/faqs/gas-faqs",
+  "/faqs/what-if-dispute": "/faqs/protocol-faqs#q-dispute-reorg",
+  "/faqs/seq-or-val": "/faqs/protocol-faqs#q-seq-vs-val",
   "/faqs/beta-status": "/mainnet-beta",
   "/faqs/the-merge": "/"
 };
