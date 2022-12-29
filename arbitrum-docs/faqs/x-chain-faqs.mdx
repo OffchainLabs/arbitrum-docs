@@ -16,7 +16,7 @@ The "padding on both ends" involves three events that have to occur between a cl
 
 1. The Sequencer posts their transaction in a batch (usually within a few minutes, though the Sequencer will wait a bit longer if the L1 is congested). Then,
 2. A validator includes their transaction in an RBlock (usually within the hour). Then, after the ~week long dispute window passes, the RBlock is confirmable, and
-3. Somebody (anybody) confirms the RBlock on L1. (usually within ~15 minutes)
+3. Somebody (anybody) confirms the RBlock on L1 (usually within ~15 minutes).
 
 Additionally, in the rare and unlikely event of a dispute, this delay period will be extended for the dispute to resolve.
 
