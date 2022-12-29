@@ -8,7 +8,7 @@ In the happy / common case, all outstanding assertions will be valid; i.e., a va
 
 If, however, two or more conflicting assertions exist, the Assertion Tree bifurcates into multiple branches:
 
-![img](assertionTree.png)
+![img](./assets/assertionTree.png)
 
 Crucially, the rules of advancing an Arbitrum chain are deterministic; this means that given a chain state and some new inputs, there is only one valid output. Thus, if the Assertion Tree contains more than one leaf, then at most only one leaf can represent the valid chain-state; if we assume there is at least one honest active validator, _exactly_ one leaf will be valid.
 
