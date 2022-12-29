@@ -45,6 +45,7 @@ const config = {
               s.docPath
             );
           },
+          showLastUpdateTime: true,
         },
       }),
     ],
@@ -73,9 +74,9 @@ const config = {
         searchPagePath: "search",
       },
       fathomAnalytics: {
-        siteId: 'DOHOZGJO',
+        siteId: "DOHOZGJO",
         // Optional fields.
-        customDomain: 'https://twentyone-unreal.arbitrum.io', // Use a custom domain, see https://usefathom.com/support/custom-domains
+        customDomain: "https://twentyone-unreal.arbitrum.io", // Use a custom domain, see https://usefathom.com/support/custom-domains
       },
       navbar: {
         title: "Arbitrum Dev Center",
