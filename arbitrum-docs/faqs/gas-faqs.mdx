@@ -22,7 +22,7 @@ See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensi
 
 ### How is the L1 portion of an Arbitrum transaction’s gas fee computed? {#q-gas-l1}
 
-The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS’s current call data price; the later value can be queried via the `getPricesInWei` method of the `ArbGasInfo` precompile.
+The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS’s current call data price; the latter value can be queried via the `getPricesInWei` method of the `ArbGasInfo` precompile.
 
 ### Does Arbitrum have a mempool? {#q-mempool}
 
