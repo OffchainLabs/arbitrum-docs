@@ -58,6 +58,11 @@ const sidebars = {
       },
       {
         type: "doc",
+        id: "faqs/tooling-faqs",
+        label: "Tooling"
+      },
+      {
+        type: "doc",
         id: "faqs/misc-faqs",
         label: "Misc"
       }
