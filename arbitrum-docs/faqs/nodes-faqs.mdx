@@ -1,0 +1,11 @@
+# FAQs: Running Nodes
+
+### How do I run a nitro node locally for development? {#q-node-local}
+
+See instructions [here](/node-running/local-dev-node.mdx).
+
+We recommend running nitro nodes via docker; to compile directly / run without docker, you can follow the steps in this file then run the executable directly.
+
+### Can I run an Arbitrum Node in p2p mode? {#q-node-p2p}
+
+Arbitrum doesn’t have a consensus mechanism, so “p2p mode” doesn’t apply. For nodes to sync to the latest chain state, they connect to an L1 node to sync the chain’s history that’s been posted in calldata and connect to the Sequencer feed for the transactions that have yet to be posted in batches. In no case do nodes need to peer up and sync with each other.
