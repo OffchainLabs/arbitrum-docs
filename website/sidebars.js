@@ -49,7 +49,7 @@ const sidebars = {
       {
         type: "doc",
         id: "faqs/x-chain-faqs",
-        label: "X-Chain Messaging"
+        label: "Cross-Chain Messaging"
       },
       {
         type: "doc",
