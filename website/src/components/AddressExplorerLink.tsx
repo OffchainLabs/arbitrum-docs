@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 type ChainID = 1 | 5 | 42170 | 421613 | 42161;
 
-const chainIDToExplorerUrlRool: {
+const chainIDToExplorerUrlRoot: {
   [chainId in ChainID]: string;
 } = {
   1: "https://etherscan.io/address",
