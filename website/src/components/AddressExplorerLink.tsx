@@ -17,7 +17,7 @@ export const AddressExplorerLink = (props: {
   chainID: ChainID;
 }) => {
   const { address, chainID } = props;
-  const rootUrl = chainIDToExplorerUrlRool[chainID];
+  const rootUrl = chainIDToExplorerUrlRoot[chainID];
   // if(!rootUrl) throw new Error(`Error: no root url set for chain id ${chainID} `)
   return (
     <a href={`${rootUrl}/${address}`} target="_blank">
