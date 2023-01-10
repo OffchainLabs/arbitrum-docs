@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type ChainID = 1 | 5 | 42170 | 421613 | 42161;
 
