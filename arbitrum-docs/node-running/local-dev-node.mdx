@@ -1,0 +1,43 @@
+## Running a local dev node
+
+### 1. Install
+
+- Install [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/)
+- Clone and `cd` into [nitro repo](https://github.com/OffchainLabs/nitro)
+- Run
+  ```bash
+  git submodule update --init --recursive
+  ```
+- Run
+  ```bash
+  ./test-node.bash --init
+  ```
+  This will build and launch the node.
+
+### 2. Launch node
+
+- To relaunch node, run
+
+  ```bash
+  ./test-node.bash
+  ```
+
+  (Note that running with the --init flag will clear all chain data and redeploy!)
+
+  The L1 Geth devnet will be running at http://localhost:8545 and the L2 Nitro devent at http://localhost:7545.
+
+  Address `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2` will be prefunded with test Ether.
+
+### Get Core Contracts
+
+For addresses of the deployed core protocol contracts, run
+
+```bash
+docker exec nitro-sequencer-1  cat /config/deployment.json
+```
+
+For the outbox address, run (replace "PUT_THE_ROLLUP_ADDRESS_HERE" with rollup address):
+
+```bash
+`curl '[http://localhost:8545/](http://localhost:8545/)' -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":0,"method":"eth_call","params":[{"to":"PUT_THE_ROLLUP_ADDRESS_HERE","data":"0xce11e6ab"},"latest"]}'`
+```

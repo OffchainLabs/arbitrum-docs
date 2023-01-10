@@ -38,15 +38,15 @@ From the perspective of user applications, precompiles live as contracts at the 
 
 [ArbAddressTable][arbaddresstable_link] provides the ability to create short-hands for commonly used accounts.
 
-| Methods                                                         |                                                                                           |
-| :-------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
-| [![](e.png)][ats0] [`addressExists`][at0]`(address)`            | Checks if an address exists in the table                                                  |
-| [![](e.png)][ats1] [`compress`][at1]`(address)`                 | Gets bytes that represent the address                                                     |
-| [![](e.png)][ats2] [`decompress`][at2]`(buffer, offset)` &nbsp; | Replaces the compressed bytes at the given offset with those of the corresponding account |
-| [![](e.png)][ats3] [`lookup`][at3]`(address)`                   | Gets the index of an address in the table                                                 |
-| [![](e.png)][ats4] [`lookupIndex`][at4]`(index)`                | Gets the address at an index in the table                                                 |
-| [![](e.png)][ats5] [`register`][at5]`(address)`                 | Adds an address to the table, shrinking its compressed representation                     |
-| [![](e.png)][ats6] [`size`][at6]`()`                            | Gets the number of addresses in the table                                                 |
+| Methods                                                                   |                                                                                           |
+| :------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------- |
+| [![](../assets/e.png)][ats0] [`addressExists`][at0]`(address)`            | Checks if an address exists in the table                                                  |
+| [![](../assets/e.png)][ats1] [`compress`][at1]`(address)`                 | Gets bytes that represent the address                                                     |
+| [![](../assets/e.png)][ats2] [`decompress`][at2]`(buffer, offset)` &nbsp; | Replaces the compressed bytes at the given offset with those of the corresponding account |
+| [![](../assets/e.png)][ats3] [`lookup`][at3]`(address)`                   | Gets the index of an address in the table                                                 |
+| [![](../assets/e.png)][ats4] [`lookupIndex`][at4]`(index)`                | Gets the address at an index in the table                                                 |
+| [![](../assets/e.png)][ats5] [`register`][at5]`(address)`                 | Adds an address to the table, shrinking its compressed representation                     |
+| [![](../assets/e.png)][ats6] [`size`][at6]`()`                            | Gets the number of addresses in the table                                                 |
 
 [at0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbAddressTable.go#L18
 [at1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbAddressTable.go#L23
@@ -69,16 +69,16 @@ From the perspective of user applications, precompiles live as contracts at the 
 
 Compression ratios are measured in basis points. Methods that are checkmarked are access-controlled and will revert if not called by the aggregator, its fee collector, or a chain owner.
 
-| Methods                                                                   |                                                         |     |
-| :------------------------------------------------------------------------ | :------------------------------------------------------ | :-- |
-| [![](e.png)][as0] [`getPreferredAggregator`][a0]`(account)`               | Gets an account's preferred aggregator                  |     |
-| [![](e.png)][as1] [`setPreferredAggregator`][a1]`(aggregator)`            | Sets the caller's preferred aggregator to that provided |     |
-| [![](e.png)][as2] [`getDefaultAggregator`][a2]`()`                        | Gets the chain's default aggregator                     |     |
-| [![](e.png)][as3] [`setDefaultAggregator`][a3]`(default)`                 | Sets the chain's default aggregator                     | ✔️  |
-| [![](e.png)][as4] [`getCompressionRatio`][a4]`(aggregator)`               | Gets the aggregator's compression ratio                 |     |
-| [![](e.png)][as5] [`setCompressionRatio`][a5]`(aggregator, ratio)`        | Set the aggregator's compression ratio                  | ✔️  |
-| [![](e.png)][as6] [`getFeeCollector`][a6]`(aggregator)`                   | Gets an aggregator's fee collector                      |     |
-| [![](e.png)][as7] [`setFeeCollector`][a7]`(aggregator, collector)` &nbsp; | Sets an aggregator's fee collector                      | ✔️  |
+| Methods                                                                             |                                                         |     |
+| :---------------------------------------------------------------------------------- | :------------------------------------------------------ | :-- |
+| [![](../assets/e.png)][as0] [`getPreferredAggregator`][a0]`(account)`               | Gets an account's preferred aggregator                  |     |
+| [![](../assets/e.png)][as1] [`setPreferredAggregator`][a1]`(aggregator)`            | Sets the caller's preferred aggregator to that provided |     |
+| [![](../assets/e.png)][as2] [`getDefaultAggregator`][a2]`()`                        | Gets the chain's default aggregator                     |     |
+| [![](../assets/e.png)][as3] [`setDefaultAggregator`][a3]`(default)`                 | Sets the chain's default aggregator                     | ✔️  |
+| [![](../assets/e.png)][as4] [`getCompressionRatio`][a4]`(aggregator)`               | Gets the aggregator's compression ratio                 |     |
+| [![](../assets/e.png)][as5] [`setCompressionRatio`][a5]`(aggregator, ratio)`        | Set the aggregator's compression ratio                  | ✔️  |
+| [![](../assets/e.png)][as6] [`getFeeCollector`][a6]`(aggregator)`                   | Gets an aggregator's fee collector                      |     |
+| [![](../assets/e.png)][as7] [`setFeeCollector`][a7]`(aggregator, collector)` &nbsp; | Sets an aggregator's fee collector                      | ✔️  |
 
 [a0]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L25
 [a1]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L42
@@ -97,10 +97,10 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 [as6]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/solgen/src/precompiles/ArbAggregator.sol#L56
 [as7]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/solgen/src/precompiles/ArbAggregator.sol#L62
 
-| Deprecated Methods                                          |              |
-| :---------------------------------------------------------- | :----------- |
-| [![](e.png)][ads0] [`getTxBaseFee`][ad0]`(aggregator)`      | Returns 0    |
-| [![](e.png)][ads1] [`setTxBaseFee`][ad1]`(aggregator, fee)` | Does nothing |
+| Deprecated Methods                                                    |              |
+| :-------------------------------------------------------------------- | :----------- |
+| [![](../assets/e.png)][ads0] [`getTxBaseFee`][ad0]`(aggregator)`      | Returns 0    |
+| [![](../assets/e.png)][ads1] [`setTxBaseFee`][ad1]`(aggregator, fee)` | Does nothing |
 
 [ad0]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L108
 [ad1]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L114
@@ -111,12 +111,12 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbBLS][arbbls_link] provides a registry of BLS public keys for accounts.
 
-| Methods                                                             |                                                             |
-| :------------------------------------------------------------------ | :---------------------------------------------------------- |
-| [![](e.png)][bs0] [`registerAltBN128`][b0]`(x0, x1, y0, y1)` &nbsp; | Associate an AltBN128 public key with the caller's address  |
-| [![](e.png)][bs1] [`getAltBN128`][b1]`(account)`                    | Gets the AltBN128 public key associated with an address     |
-| [![](e.png)][bs2] [`registerBLS12381`][b2]`(key)`                   | Associate a BLS 12-381 public key with the caller's address |
-| [![](e.png)][bs3] [`getBLS12381`][b3]`(account)`                    | Gets the BLS 12-381 public key associated with an address   |
+| Methods                                                                       |                                                             |
+| :---------------------------------------------------------------------------- | :---------------------------------------------------------- |
+| [![](../assets/e.png)][bs0] [`registerAltBN128`][b0]`(x0, x1, y0, y1)` &nbsp; | Associate an AltBN128 public key with the caller's address  |
+| [![](../assets/e.png)][bs1] [`getAltBN128`][b1]`(account)`                    | Gets the AltBN128 public key associated with an address     |
+| [![](../assets/e.png)][bs2] [`registerBLS12381`][b2]`(key)`                   | Associate a BLS 12-381 public key with the caller's address |
+| [![](../assets/e.png)][bs3] [`getBLS12381`][b3]`(account)`                    | Gets the BLS 12-381 public key associated with an address   |
 
 [b0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L27
 [b1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L32
@@ -127,10 +127,10 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 [bs2]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L63
 [bs3]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L66
 
-| Deprecated Methods                                            |                                |
-| :------------------------------------------------------------ | :----------------------------- |
-| [![](e.png)][bds0] [`register`][bd0]`(x0, x1, y0, y1)` &nbsp; | equivalent to registerAltBN128 |
-| [![](e.png)][bds1] [`getPublicKey`][bd1]`(account)`           | equivalent to getAltBN128      |
+| Deprecated Methods                                                      |                                |
+| :---------------------------------------------------------------------- | :----------------------------- |
+| [![](../assets/e.png)][bds0] [`register`][bd0]`(x0, x1, y0, y1)` &nbsp; | equivalent to registerAltBN128 |
+| [![](../assets/e.png)][bds1] [`getPublicKey`][bd1]`(account)`           | equivalent to getAltBN128      |
 
 [bd0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L17
 [bd1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L22
@@ -141,21 +141,21 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbDebug][arbdebug_link] provides mechanisms useful for testing. The methods of `ArbDebug` are only available for chains with the `AllowDebugPrecompiles` chain parameter set. Otherwise, calls to this precompile will revert.
 
-| Methods                                                |                                                    |
-| :----------------------------------------------------- | :------------------------------------------------- |
-| [![](e.png)][ds0] [`becomeChainOwner`][d0]`()`         | Caller becomes a chain owner                       |
-| [![](e.png)][ds1] [`events`][d1]`(flag, value)` &nbsp; | Emit events with values based on the args provided |
+| Methods                                                          |                                                    |
+| :--------------------------------------------------------------- | :------------------------------------------------- |
+| [![](../assets/e.png)][ds0] [`becomeChainOwner`][d0]`()`         | Caller becomes a chain owner                       |
+| [![](../assets/e.png)][ds1] [`events`][d1]`(flag, value)` &nbsp; | Emit events with values based on the args provided |
 
 [d0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbDebug.go#L38
 [d1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbDebug.go#L19
 [ds0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbDebug.sol#L27
 [ds1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbDebug.sol#L30
 
-| Events                                   |                                            |
-| :--------------------------------------- | :----------------------------------------- |
-| [![](e.png)][des0] [`basic`][de0] &nbsp; | Emitted in `Events` for testing            |
-| [![](e.png)][des1] [`mixed`][de1]        | Emitted in `Events` for testing            |
-| [![](e.png)][des2] [`store`][de2]        | Never emitted (used for testing log sizes) |
+| Events                                             |                                            |
+| :------------------------------------------------- | :----------------------------------------- |
+| [![](../assets/e.png)][des0] [`basic`][de0] &nbsp; | Emitted in `Events` for testing            |
+| [![](../assets/e.png)][des1] [`mixed`][de1]        | Emitted in `Events` for testing            |
+| [![](../assets/e.png)][des2] [`store`][de2]        | Never emitted (used for testing log sizes) |
 
 [de0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbDebug.go#L24
 [de1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbDebug.go#L29
@@ -168,11 +168,11 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbFunctionTable][arbfunctiontable_link] provides aggregators the ability to manage function tables, to enable one form of transaction compression. The Nitro aggregator implementation does not use these, so these methods have been stubbed and their effects disabled. They are kept for backwards compatibility.
 
-| Methods                                                  |                                            |
-| :------------------------------------------------------- | :----------------------------------------- |
-| [![](e.png)][fts0] [`get`][ft0]`(address, index)` &nbsp; | Reverts since the table is empty           |
-| [![](e.png)][fts1] [`size`][ft1]`(address)`              | Returns the empty table's size, which is 0 |
-| [![](e.png)][fts2] [`upload`][ft2]`(bytes)`              | Does nothing                               |
+| Methods                                                            |                                            |
+| :----------------------------------------------------------------- | :----------------------------------------- |
+| [![](../assets/e.png)][fts0] [`get`][ft0]`(address, index)` &nbsp; | Reverts since the table is empty           |
+| [![](../assets/e.png)][fts1] [`size`][ft1]`(address)`              | Returns the empty table's size, which is 0 |
+| [![](../assets/e.png)][fts2] [`upload`][ft2]`(bytes)`              | Does nothing                               |
 
 [ft0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbFunctionTable.go#L30
 [ft1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbFunctionTable.go#L25
@@ -185,23 +185,23 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbGasInfo][arbgasinfo_link] orovides insight into the cost of using the chain. These methods have been adjusted to account for Nitro's heavy use of calldata compression. Of note to end-users, we no longer make a distinction between non-zero and zero-valued calldata bytes.
 
-| Methods                                                                   |                                                                                                  |
-| :------------------------------------------------------------------------ | :----------------------------------------------------------------------------------------------- |
-| [![](e.png)][gis0] [`getPricesInWeiWithAggregator`][gi0]`(aggregator)`    | Get prices in wei when using the provided aggregator                                             |
-| [![](e.png)][gis1] [`getPricesInWei`][gi1]`()`                            | Get prices in wei when using the caller's preferred aggregator                                   |
-| [![](e.png)][gis2] [`getPricesInArbGasWithAggregator`][gi2]`(aggregator)` | Get prices in ArbGas when using the provided aggregator                                          |
-| [![](e.png)][gis3] [`getPricesInArbGas`][gi3]`()`                         | Get prices in ArbGas when using the caller's preferred aggregator                                |
-| [![](e.png)][gis4] [`getGasAccountingParams`][gi4]`()`                    | Get the chain speed limit, pool size, and tx gas limit                                           |
-| [![](e.png)][gis5] [`getMinimumGasPrice`][gi5]`()`                        | Get the minimum gas price needed for a transaction to succeed                                    |
-| [![](e.png)][gis6] [`getGasPoolSeconds`][gi6]`()`                         | Get the number of seconds worth of the speed limit the gas pool contains                         |
-| [![](e.png)][gis7] [`getGasPoolTarget`][gi7]`()`                          | Get the target fullness in bips the pricing model will try to keep the pool at                   |
-| [![](e.png)][gis8] [`getGasPoolWeight`][gi8]`()`                          | Get the extent in bips to which the pricing model favors filling the pool over increasing speeds |
-| [![](e.png)][gis9] [`getRateEstimate`][gi9]`()`                           | Get ArbOS's estimate of the amount of gas being burnt per second                                 |
-| [![](e.png)][gis10] [`getRateEstimateInertia`][gi10]`()`                  | Get how slowly ArbOS updates its estimate the amount of gas being burnt per second               |
-| [![](e.png)][gis11] [`getL1BaseFeeEstimate`][gi11]`()`                    | Get ArbOS's estimate of the L1 basefee in wei                                                    |
-| [![](e.png)][gis12] [`getL1BaseFeeEstimateInertia`][gi12]`()`             | Get how slowly ArbOS updates its estimate of the L1 basefee                                      |
-| [![](e.png)][gis13] [`getL1GasPriceEstimate`][gi13]`()`                   | Deprecated -- Same as getL1BaseFeeEstimate()                                                     |
-| [![](e.png)][gis14] [`getCurrentTxL1GasFees`][gi14]`()`                   | Get L1 gas fees paid by the current transaction                                                  |
+| Methods                                                                             |                                                                                                  |
+| :---------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| [![](../assets/e.png)][gis0] [`getPricesInWeiWithAggregator`][gi0]`(aggregator)`    | Get prices in wei when using the provided aggregator                                             |
+| [![](../assets/e.png)][gis1] [`getPricesInWei`][gi1]`()`                            | Get prices in wei when using the caller's preferred aggregator                                   |
+| [![](../assets/e.png)][gis2] [`getPricesInArbGasWithAggregator`][gi2]`(aggregator)` | Get prices in ArbGas when using the provided aggregator                                          |
+| [![](../assets/e.png)][gis3] [`getPricesInArbGas`][gi3]`()`                         | Get prices in ArbGas when using the caller's preferred aggregator                                |
+| [![](../assets/e.png)][gis4] [`getGasAccountingParams`][gi4]`()`                    | Get the chain speed limit, pool size, and tx gas limit                                           |
+| [![](../assets/e.png)][gis5] [`getMinimumGasPrice`][gi5]`()`                        | Get the minimum gas price needed for a transaction to succeed                                    |
+| [![](../assets/e.png)][gis6] [`getGasPoolSeconds`][gi6]`()`                         | Get the number of seconds worth of the speed limit the gas pool contains                         |
+| [![](../assets/e.png)][gis7] [`getGasPoolTarget`][gi7]`()`                          | Get the target fullness in bips the pricing model will try to keep the pool at                   |
+| [![](../assets/e.png)][gis8] [`getGasPoolWeight`][gi8]`()`                          | Get the extent in bips to which the pricing model favors filling the pool over increasing speeds |
+| [![](../assets/e.png)][gis9] [`getRateEstimate`][gi9]`()`                           | Get ArbOS's estimate of the amount of gas being burnt per second                                 |
+| [![](../assets/e.png)][gis10] [`getRateEstimateInertia`][gi10]`()`                  | Get how slowly ArbOS updates its estimate the amount of gas being burnt per second               |
+| [![](../assets/e.png)][gis11] [`getL1BaseFeeEstimate`][gi11]`()`                    | Get ArbOS's estimate of the L1 basefee in wei                                                    |
+| [![](../assets/e.png)][gis12] [`getL1BaseFeeEstimateInertia`][gi12]`()`             | Get how slowly ArbOS updates its estimate of the L1 basefee                                      |
+| [![](../assets/e.png)][gis13] [`getL1GasPriceEstimate`][gi13]`()`                   | Deprecated -- Same as getL1BaseFeeEstimate()                                                     |
+| [![](../assets/e.png)][gis14] [`getCurrentTxL1GasFees`][gi14]`()`                   | Get L1 gas fees paid by the current transaction                                                  |
 
 [gi0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbGasInfo.go#L27
 [gi1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbGasInfo.go#L63
@@ -244,10 +244,10 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbInfo][arbinfo_link] provides the ability to lookup basic info about accounts and contracts.
 
-| Methods                                                |                                      |
-| :----------------------------------------------------- | :----------------------------------- |
-| [![](e.png)][is0] [`getBalance`][i0]`(account)` &nbsp; | Retrieves an account's balance       |
-| [![](e.png)][is1] [`getCode`][i1]`(account)`           | Retrieves a contract's deployed code |
+| Methods                                                          |                                      |
+| :--------------------------------------------------------------- | :----------------------------------- |
+| [![](../assets/e.png)][is0] [`getBalance`][i0]`(account)` &nbsp; | Retrieves an account's balance       |
+| [![](../assets/e.png)][is1] [`getCode`][i1]`(account)`           | Retrieves a contract's deployed code |
 
 [i0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbInfo.go#L18
 [i1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbInfo.go#L26
@@ -258,9 +258,9 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 [ArbosTest][arbostest_link] Ppovides a method of burning arbitrary amounts of gas, which exists for historical reasons. In Classic, `ArbosTest` had additional methods only the zero address could call. These have been removed since users don't use them and calls to missing methods revert.
 
-| Methods                                               |                                                     | Nitro changes |
-| :---------------------------------------------------- | :-------------------------------------------------- | ------------- |
-| [![](e.png)][ts0] [`burnArbGas`][t0]`(amount)` &nbsp; | unproductively burns the amount of L2 ArbGas &nbsp; | Now pure      |
+| Methods                                                         |                                                     | Nitro changes |
+| :-------------------------------------------------------------- | :-------------------------------------------------- | ------------- |
+| [![](../assets/e.png)][ts0] [`burnArbGas`][t0]`(amount)` &nbsp; | unproductively burns the amount of L2 ArbGas &nbsp; | Now pure      |
 
 [t0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbosTest.go#L17
 [ts0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbosTest.sol#L27
@@ -275,24 +275,24 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 - ArbOS upgrades happen with the rest of the system rather than being independent
 - Exemptions to address aliasing are no longer offered. Exemptions were intended to support backward compatibility for contracts deployed before aliasing was introduced, but no exemptions were ever requested.
 
-| Methods                                                          |                                                                                                  |
-| :--------------------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
-| [![](e.png)][os0] [`addChainOwner`][o0]`(account)`               | Add account as a chain owner                                                                     |
-| [![](e.png)][os1] [`removeChainOwner`][o1]`(account)`            | Remove account from the list of chain owners                                                     |
-| [![](e.png)][os2] [`isChainOwner`][o2]`(account)`                | See if account is a chain owner                                                                  |
-| [![](e.png)][os3] [`getAllChainOwners`][o3]`()`                  | Retrieves the list of chain owners                                                               |
-| [![](e.png)][os4] [`setL1BaseFeeEstimate`][o4]`(price)`          | Set the L1 basefee estimate directly, bypassing the autoregression                               |
-| [![](e.png)][os5] [`setL1BaseFeeEstimateInertia`][o5]`(inertia)` | Set how slowly ArbOS updates its estimate of the L1 basefee                                      |
-| [![](e.png)][os6] [`setL2GasPrice`][o6]`(price)`                 | Set the L2 gas price directly, bypassing the pool calculus                                       |
-| [![](e.png)][os7] [`setMinimumGasPrice`][o7]`(price)`            | Set the minimum gas price needed for a transaction to succeed                                    |
-| [![](e.png)][os8] [`setSpeedLimit`][o8]`(limit)`                 | Set the computational speed limit for the chain                                                  |
-| [![](e.png)][os9] [`setGasPoolSeconds`][o9]`(seconds)`           | Set the number of seconds worth of the speed limit the gas pool contains                         |
-| [![](e.png)][os10] [`setGasPoolTarget`][o10]`(target)`           | Set the target fullness in bips the pricing model will try to keep the pool at                   |
-| [![](e.png)][os11] [`setGasPoolWeight`][o11]`(weight)`           | Set the extent in bips to which the pricing model favors filling the pool over increasing speeds |
-| [![](e.png)][os12] [`setRateEstimateInertia`][o12]`(inertia)`    | Set how slowly ArbOS updates its estimate the amount of gas being burnt per second               |
-| [![](e.png)][os13] [`setMaxTxGasLimit`][o13]`(limit)`            | Set the maximum size a tx (and block) can be                                                     |
-| [![](e.png)][os14] [`getNetworkFeeAccount`][o14]`()`             | Get the network fee collector                                                                    |
-| [![](e.png)][os15] [`setNetworkFeeAccount`][o15]`(account)`      | Set the network fee collector                                                                    |
+| Methods                                                                    |                                                                                                  |
+| :------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| [![](../assets/e.png)][os0] [`addChainOwner`][o0]`(account)`               | Add account as a chain owner                                                                     |
+| [![](../assets/e.png)][os1] [`removeChainOwner`][o1]`(account)`            | Remove account from the list of chain owners                                                     |
+| [![](../assets/e.png)][os2] [`isChainOwner`][o2]`(account)`                | See if account is a chain owner                                                                  |
+| [![](../assets/e.png)][os3] [`getAllChainOwners`][o3]`()`                  | Retrieves the list of chain owners                                                               |
+| [![](../assets/e.png)][os4] [`setL1BaseFeeEstimate`][o4]`(price)`          | Set the L1 basefee estimate directly, bypassing the autoregression                               |
+| [![](../assets/e.png)][os5] [`setL1BaseFeeEstimateInertia`][o5]`(inertia)` | Set how slowly ArbOS updates its estimate of the L1 basefee                                      |
+| [![](../assets/e.png)][os6] [`setL2GasPrice`][o6]`(price)`                 | Set the L2 gas price directly, bypassing the pool calculus                                       |
+| [![](../assets/e.png)][os7] [`setMinimumGasPrice`][o7]`(price)`            | Set the minimum gas price needed for a transaction to succeed                                    |
+| [![](../assets/e.png)][os8] [`setSpeedLimit`][o8]`(limit)`                 | Set the computational speed limit for the chain                                                  |
+| [![](../assets/e.png)][os9] [`setGasPoolSeconds`][o9]`(seconds)`           | Set the number of seconds worth of the speed limit the gas pool contains                         |
+| [![](../assets/e.png)][os10] [`setGasPoolTarget`][o10]`(target)`           | Set the target fullness in bips the pricing model will try to keep the pool at                   |
+| [![](../assets/e.png)][os11] [`setGasPoolWeight`][o11]`(weight)`           | Set the extent in bips to which the pricing model favors filling the pool over increasing speeds |
+| [![](../assets/e.png)][os12] [`setRateEstimateInertia`][o12]`(inertia)`    | Set how slowly ArbOS updates its estimate the amount of gas being burnt per second               |
+| [![](../assets/e.png)][os13] [`setMaxTxGasLimit`][o13]`(limit)`            | Set the maximum size a tx (and block) can be                                                     |
+| [![](../assets/e.png)][os14] [`getNetworkFeeAccount`][o14]`()`             | Get the network fee collector                                                                    |
+| [![](../assets/e.png)][os15] [`setNetworkFeeAccount`][o15]`(account)`      | Set the network fee collector                                                                    |
 
 [o0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbOwner.go#L24
 [o1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbOwner.go#L29
@@ -327,9 +327,9 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 [os14]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbOwner.sol#L72
 [os15]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbOwner.sol#L75
 
-| Events                                       |                                                           |
-| :------------------------------------------- | :-------------------------------------------------------- |
-| [![](e.png)][oes0] [`OwnerActs`][oe0] &nbsp; | Emitted when a successful call is made to this precompile |
+| Events                                                 |                                                           |
+| :----------------------------------------------------- | :-------------------------------------------------------- |
+| [![](../assets/e.png)][oes0] [`OwnerActs`][oe0] &nbsp; | Emitted when a successful call is made to this precompile |
 
 [oe0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/wrapper.go#L105
 [oes0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbOwner.sol#L78
@@ -338,11 +338,11 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 
 [ArbOwnerPublic][arbownerpublic_link] provides non-owners with info about the current chain owners.
 
-| Methods                                                    |                                 |
-| :--------------------------------------------------------- | :------------------------------ |
-| [![](e.png)][ops0] [`isChainOwner`][op0]`(account)` &nbsp; | See if account is a chain owner |
-| [![](e.png)][ops1] [`getAllChainOwners`][op1]`()`          | Gets the list of chain owners   |
-| [![](e.png)][ops2] [`getNetworkFeeAccount`][op2]`()`       | Gets the network fee collector  |
+| Methods                                                              |                                 |
+| :------------------------------------------------------------------- | :------------------------------ |
+| [![](../assets/e.png)][ops0] [`isChainOwner`][op0]`(account)` &nbsp; | See if account is a chain owner |
+| [![](../assets/e.png)][ops1] [`getAllChainOwners`][op1]`()`          | Gets the list of chain owners   |
+| [![](../assets/e.png)][ops2] [`getNetworkFeeAccount`][op2]`()`       | Gets the network fee collector  |
 
 [op0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbOwnerPublic.go#L24
 [op1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbOwnerPublic.go#L19
@@ -353,16 +353,16 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 
 # ArbRetryableTx
 
-[ArbRetryableTx][arbretryabletx_link] provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](arbos.mdx#)Retryables).
+[ArbRetryableTx][arbretryabletx_link] provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](arbos#Retryables).
 
-| Methods                                                     |                                                                                    | Nitro changes          |
-| :---------------------------------------------------------- | :--------------------------------------------------------------------------------- | :--------------------- |
-| [![](e.png)][rts0] [`cancel`][rt0]`(ticket)`                | Cancel the ticket and refund its callvalue to its beneficiary                      |                        |
-| [![](e.png)][rts1] [`getBeneficiary`][rt1]`(ticket)` &nbsp; | Gets the beneficiary of the ticket                                                 |                        |
-| [![](e.png)][rts2] [`getLifetime`][rt2]`()`                 | Gets the default lifetime period a retryable has at creation                       | Reverts when not found |
-| [![](e.png)][rts3] [`getTimeout`][rt3]`(ticket)`            | Gets the timestamp for when ticket will expire                                     |                        |
-| [![](e.png)][rts4] [`keepAlive`][rt4]`(ticket)`             | Adds one lifetime period to the ticket's expiry                                    | Doesn't add callvalue  |
-| [![](e.png)][rts5] [`redeem`][rt5]`(ticket)`                | Schedule an attempt to redeem the retryable, donating all of the call's gas &nbsp; | Happens in a future tx |
+| Methods                                                               |                                                                                    | Nitro changes          |
+| :-------------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :--------------------- |
+| [![](../assets/e.png)][rts0] [`cancel`][rt0]`(ticket)`                | Cancel the ticket and refund its callvalue to its beneficiary                      |                        |
+| [![](../assets/e.png)][rts1] [`getBeneficiary`][rt1]`(ticket)` &nbsp; | Gets the beneficiary of the ticket                                                 |                        |
+| [![](../assets/e.png)][rts2] [`getLifetime`][rt2]`()`                 | Gets the default lifetime period a retryable has at creation                       | Reverts when not found |
+| [![](../assets/e.png)][rts3] [`getTimeout`][rt3]`(ticket)`            | Gets the timestamp for when ticket will expire                                     |                        |
+| [![](../assets/e.png)][rts4] [`keepAlive`][rt4]`(ticket)`             | Adds one lifetime period to the ticket's expiry                                    | Doesn't add callvalue  |
+| [![](../assets/e.png)][rts5] [`redeem`][rt5]`(ticket)`                | Schedule an attempt to redeem the retryable, donating all of the call's gas &nbsp; | Happens in a future tx |
 
 [rt0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbRetryableTx.go#L184
 [rt1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbRetryableTx.go#L171
@@ -377,12 +377,12 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 [rts4]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbRetryableTx.sol#L55
 [rts5]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbRetryableTx.sol#L32
 
-| Events                                                |                                                    | Nitro Changes                       |
-| :---------------------------------------------------- | :------------------------------------------------- | :---------------------------------- |
-| [![](e.png)][rtes0] [`ticketCreated`][rte0]           | Emitted when creating a retryable                  |                                     |
-| [![](e.png)][rtes1] [`lifetimeExtended`][rte1] &nbsp; | Emitted when extending a retryable's expiry &nbsp; |                                     |
-| [![](e.png)][rtes2] [`redeemScheduled`][rte2]         | Emitted when scheduling a retryable                | Replaces [Redeemed][old_event_link] |
-| [![](e.png)][rtes3] [`canceled`][rte3]                | Emitted when cancelling a retryable                |                                     |
+| Events                                                          |                                                    | Nitro Changes                       |
+| :-------------------------------------------------------------- | :------------------------------------------------- | :---------------------------------- |
+| [![](../assets/e.png)][rtes0] [`ticketCreated`][rte0]           | Emitted when creating a retryable                  |                                     |
+| [![](../assets/e.png)][rtes1] [`lifetimeExtended`][rte1] &nbsp; | Emitted when extending a retryable's expiry &nbsp; |                                     |
+| [![](../assets/e.png)][rtes2] [`redeemScheduled`][rte2]         | Emitted when scheduling a retryable                | Replaces [Redeemed][old_event_link] |
+| [![](../assets/e.png)][rtes3] [`canceled`][rte3]                | Emitted when cancelling a retryable                |                                     |
 
 [rte0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/arbos/tx_processor.go#L143
 [rte1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbRetryableTx.go#L163
@@ -398,9 +398,9 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 
 [ArbStatistics][arbstatistics_link] provides statistics about the chain as of just before the Nitro upgrade. In Arbitrum Classic, this was how a user would get info such as the total number of accounts, but there are better ways to get that info in Nitro.
 
-| Methods                                         |                                                                                         |
-| :---------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| [![](e.png)][sts0] [`GetStats`][st0]`()` &nbsp; | Returns the current block number and some statistics about the rollup's pre-Nitro state |
+| Methods                                                   |                                                                                         |
+| :-------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| [![](../assets/e.png)][sts0] [`GetStats`][st0]`()` &nbsp; | Returns the current block number and some statistics about the rollup's pre-Nitro state |
 
 [st0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbStatistics.go#L19
 [sts0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbStatistics.sol#L32
@@ -409,20 +409,20 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 
 [ArbSys][arbsys_link] provides system-level functionality for interacting with L1 and understanding the call stack.
 
-| Methods                                                                                  |                                                                                                              | Nitro changes     |
-| :--------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :---------------- |
-| [![](e.png)][ss0] [`arbBlockNumber`][s0]`()`                                             | Gets the current L2 block number                                                                             |                   |
-| [![](e.png)][ss1] [`arbBlockHash`][s1]`(blocknum)`                                       | Gets the L2 block hash at blocknum, if blocknum is sufficiently recent                                       |                   |
-| [![](e.png)][ss2] [`arbChainID`][s2]`()`                                                 | Gets the chain's ChainID                                                                                     |                   |
-| [![](e.png)][ss3] [`arbOSVersion`][s3]`()`                                               | Gets the current ArbOS version                                                                               | Now view          |
-| [![](e.png)][ss4] [`getStorageGasAvailable`][s4]`()`                                     | Returns 0 since Nitro has no concept of storage gas                                                          | Now always 0      |
-| [![](e.png)][ss5] [`isTopLevelCall`][s5]`()`                                             | Checks if the caller is top-level (i.e. if the caller was called directly by an EOA or an L1 contract)       |                   |
-| [![](e.png)][ss6] [`mapL1SenderContractAddressToL2Alias`][s6]`(contract, unused)` &nbsp; | Gets contract's L2 alias                                                                                     | 2nd arg is unused |
-| [![](e.png)][ss7] [`wasMyCallersAddressAliased`][s7]`()`                                 | Checks if the caller's caller was aliased                                                                    |                   |
-| [![](e.png)][ss8] [`myCallersAddressWithoutAliasing`][s8]`()`                            | Gets the caller's caller without any potential address aliasing                                              | New outbox scheme |
-| [![](e.png)][ss9] [`sendTxToL1`][s9]`(destination, calldataForL1)`                       | Sends a transaction to L1, adding it to the outbox; callvalue is sent to L1 attached to the sent transaction | New outbox scheme |
-| [![](e.png)][ss10] [`sendMerkleTreeState`][s10]`()`                                      | Gets the root, size, and partials of the outbox Merkle tree state                                            | New outbox scheme |
-| [![](e.png)][ss11] [`withdrawEth`][s11]`(destination)`                                   | Send callvalue to the destination address on L1                                                              |                   |
+| Methods                                                                                            |                                                                                                              | Nitro changes     |
+| :------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------- | :---------------- |
+| [![](../assets/e.png)][ss0] [`arbBlockNumber`][s0]`()`                                             | Gets the current L2 block number                                                                             |                   |
+| [![](../assets/e.png)][ss1] [`arbBlockHash`][s1]`(blocknum)`                                       | Gets the L2 block hash at blocknum, if blocknum is sufficiently recent                                       |                   |
+| [![](../assets/e.png)][ss2] [`arbChainID`][s2]`()`                                                 | Gets the chain's ChainID                                                                                     |                   |
+| [![](../assets/e.png)][ss3] [`arbOSVersion`][s3]`()`                                               | Gets the current ArbOS version                                                                               | Now view          |
+| [![](../assets/e.png)][ss4] [`getStorageGasAvailable`][s4]`()`                                     | Returns 0 since Nitro has no concept of storage gas                                                          | Now always 0      |
+| [![](../assets/e.png)][ss5] [`isTopLevelCall`][s5]`()`                                             | Checks if the caller is top-level (i.e. if the caller was called directly by an EOA or an L1 contract)       |                   |
+| [![](../assets/e.png)][ss6] [`mapL1SenderContractAddressToL2Alias`][s6]`(contract, unused)` &nbsp; | Gets contract's L2 alias                                                                                     | 2nd arg is unused |
+| [![](../assets/e.png)][ss7] [`wasMyCallersAddressAliased`][s7]`()`                                 | Checks if the caller's caller was aliased                                                                    |                   |
+| [![](../assets/e.png)][ss8] [`myCallersAddressWithoutAliasing`][s8]`()`                            | Gets the caller's caller without any potential address aliasing                                              | New outbox scheme |
+| [![](../assets/e.png)][ss9] [`sendTxToL1`][s9]`(destination, calldataForL1)`                       | Sends a transaction to L1, adding it to the outbox; callvalue is sent to L1 attached to the sent transaction | New outbox scheme |
+| [![](../assets/e.png)][ss10] [`sendMerkleTreeState`][s10]`()`                                      | Gets the root, size, and partials of the outbox Merkle tree state                                            | New outbox scheme |
+| [![](../assets/e.png)][ss11] [`withdrawEth`][s11]`(destination)`                                   | Send callvalue to the destination address on L1                                                              |                   |
 
 [s0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbSys.go#L30
 [s1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbSys.go#L35
@@ -449,20 +449,20 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 [ss10]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbSys.sol#L111
 [ss11]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbSys.sol#L92
 
-| Events                                               |                                                                 |
-| :--------------------------------------------------- | :-------------------------------------------------------------- |
-| [![](e.png)][ses0] [`L2ToL1Transaction`][se0] &nbsp; | Logs a send tx from L2 to L1, including data for outbox proving |
-| [![](e.png)][ses1] [`sendMerkleUpdate`][se1]         | Logs a new merkle branch needed for constructing outbox proofs  |
+| Events                                                         |                                                                 |
+| :------------------------------------------------------------- | :-------------------------------------------------------------- |
+| [![](../assets/e.png)][ses0] [`L2ToL1Transaction`][se0] &nbsp; | Logs a send tx from L2 to L1, including data for outbox proving |
+| [![](../assets/e.png)][ses1] [`sendMerkleUpdate`][se1]         | Logs a new merkle branch needed for constructing outbox proofs  |
 
 [se0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbSys.go#L152
 [se1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbSys.go#L138
 [ses0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbSys.sol#L124
 [ses1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbSys.sol#L143
 
-| Removed Methods                                                   |                                                                   |
-| :---------------------------------------------------------------- | :---------------------------------------------------------------- |
-| [![](e.png)][srs0] [`getStorageAt`][sr0]`(account, index)` &nbsp; | Nitro doesn't need this introspection, and users couldn't call it |
-| [![](e.png)][srs1] [`getTransactionCount`][sr1]`(account)`        | Nitro doesn't need this introspection, and users couldn't call it |
+| Removed Methods                                                             |                                                                   |
+| :-------------------------------------------------------------------------- | :---------------------------------------------------------------- |
+| [![](../assets/e.png)][srs0] [`getStorageAt`][sr0]`(account, index)` &nbsp; | Nitro doesn't need this introspection, and users couldn't call it |
+| [![](../assets/e.png)][srs1] [`getTransactionCount`][sr1]`(account)`        | Nitro doesn't need this introspection, and users couldn't call it |
 
 [sr0]: https://github.com/OffchainLabs/arb-os/blob/89e36db597c4857a4dac3efd7cc01b13c7845cc0/arb_os/arbsys.mini#L335
 [sr1]: https://github.com/OffchainLabs/arb-os/blob/89e36db597c4857a4dac3efd7cc01b13c7845cc0/arb_os/arbsys.mini#L315

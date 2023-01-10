@@ -31,38 +31,42 @@ const sidebars = {
     {
       type: "category",
       label: "FAQs",
-      items: [
-        {
-          type: "doc",
-          id: "faqs/anytrust-vs-rollup",
-          label: "Rollup vs. AnyTrust"
-        },
-        {
-          type: "doc",
-          id: "faqs/how-fees",
-          label: "Fees"
-        },
-        {
-          type: "doc",
-          id: "faqs/what-if-dispute",
-          label: "Disputes and L2 Reorgs?"
-        },
-        {
-          type: "doc",
-          id: "faqs/seq-or-val",
-          label: "Sequencers vs. Validators"
-        },
-        {
-          type: "doc",
-          id: "faqs/beta-status",
-          label: "Decentralization Status"
-        },
-        {
-          type: "doc",
-          id: "faqs/the-merge",
-          label: "The Merge"
-        }
-      ]
+      items: [  {
+        type: "doc",
+        id: "faqs/faqs-index",
+        label: "FAQ Index"
+      },
+      {
+        type: "doc",
+        id: "faqs/gas-faqs",
+        label: "Gas"
+      },
+      {
+        type: "doc",
+        id: "faqs/nodes-faqs",
+        label: "Nodes"
+      },
+      {
+        type: "doc",
+        id: "faqs/x-chain-faqs",
+        label: "Cross-Chain Messaging"
+      },
+      {
+        type: "doc",
+        id: "faqs/protocol-faqs",
+        label: "Protocol"
+      },
+      {
+        type: "doc",
+        id: "faqs/tooling-faqs",
+        label: "Tooling"
+      },
+      {
+        type: "doc",
+        id: "faqs/misc-faqs",
+        label: "Misc"
+      }
+    ]
     },
     {
       type: "doc",
@@ -89,6 +93,11 @@ const sidebars = {
           type: "doc",
           id: "node-running/node-providers",
           label: "3rd Party Node Providers"
+        },
+        {
+          type: "doc",
+          id: "node-running/local-dev-node",
+          label: "Run a Local Dev Node"
         },
         {
           type: "doc",
