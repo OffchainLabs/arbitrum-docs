@@ -228,7 +228,13 @@ const sidebars = {
       ]
     }
   ],
-
+  usersSidebar: [
+    {
+      type: "doc",
+      id: "for-users/troubleshooting-users",
+      label: "Troubleshooting"
+    },
+  ],
   howItWorksSidebar: [
     {
       type: "doc",
