@@ -43,7 +43,7 @@ docker exec nitro-sequencer-1  cat /config/deployment.json
 For the outbox address, run (replace "PUT_THE_ROLLUP_ADDRESS_HERE" with rollup address):
 
 ```bash
-`curl 'http://localhost:8545/' -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":0,"method":"eth_call","params":[{"to":"PUT_THE_ROLLUP_ADDRESS_HERE","data":"0xce11e6ab"},"latest"]}'`
+curl 'http://localhost:8545/' -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":0,"method":"eth_call","params":[{"to":"PUT_THE_ROLLUP_ADDRESS_HERE","data":"0xce11e6ab"},"latest"]}'
 ```
 
 ---
