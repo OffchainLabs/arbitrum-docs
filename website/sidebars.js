@@ -230,7 +230,7 @@ const sidebars = {
     {
       type: "doc",
       label: "Troubleshooting",
-      id: "troubleshooting-arbitrum"
+      id: "troubleshooting-using-arbitrum"
     }
   ],
   howItWorksSidebar: [
