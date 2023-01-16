@@ -1,6 +1,6 @@
 ---
-id: troubleshooting-arbitrum
-title: Troubleshooting Arbitrum
+id: troubleshooting-using-arbitrum
+title: "Troubleshooting: Using Arbitrum"
 description: todo
 ---
 
