@@ -226,14 +226,12 @@ const sidebars = {
           href: "https://github.com/OffchainLabs"
         }
       ]
-    }
-  ],
-  usersSidebar: [
+    },
     {
       type: "doc",
-      id: "for-users/troubleshooting-users",
-      label: "Troubleshooting"
-    },
+      label: "Troubleshooting",
+      id: "troubleshooting-arbitrum"
+    }
   ],
   howItWorksSidebar: [
     {
