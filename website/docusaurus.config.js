@@ -105,6 +105,12 @@ const config = {
           },
           {
             type: "doc",
+            docId: "for-users/troubleshooting-users",
+            position: "left",
+            label: "For Users",
+          },
+          {
+            type: "doc",
             docId: "tx-lifecycle",
             position: "left",
             label: "How It Works",
