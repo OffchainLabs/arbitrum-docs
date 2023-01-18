@@ -77,6 +77,11 @@ const sidebars = {
       type: "doc",
       id: "mainnet-beta",
       label: "Mainnet Beta Status"
+    },
+    {
+      type: "doc",
+      label: "Troubleshooting",
+      id: "troubleshooting-using-arbitrum"
     }
   ],
   devsSideBar: [
@@ -226,11 +231,6 @@ const sidebars = {
           href: "https://github.com/OffchainLabs"
         }
       ]
-    },
-    {
-      type: "doc",
-      label: "Troubleshooting",
-      id: "troubleshooting-using-arbitrum"
     }
   ],
   howItWorksSidebar: [
