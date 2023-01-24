@@ -1,5 +1,6 @@
 # Troubleshooting: Running Nodes
-import FaqPartial, {toc as FAQTOC} from '../partials/_troubleshooting-nodes-partial.md';
+
+import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-nodes-partial.md';
 
 <div data-faq-origin-slug='node-faq'>
     <FaqPartial />
