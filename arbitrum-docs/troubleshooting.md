@@ -4,8 +4,10 @@ title: "Troubleshooting: Using Arbitrum"
 description: todo
 ---
 
-TODOs:
- - description
- - align on the IA of this -> should this contain user-focused things and other things within sections that are revealed in interior docs & troubleshooting pages? Eventually create a "For Users" header link and shift towards consistently identity-centric headers?
- - body
- - PR generated from FAQ CMS
+import FaqPartial, {toc as FAQTOC} from './partials/_troubleshooting-users-partial.md';
+
+<div data-faq-origin-slug='user-faq'>
+    <FaqPartial />
+</div>
+
+export const toc = FAQTOC
