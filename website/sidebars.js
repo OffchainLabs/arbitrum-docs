@@ -81,7 +81,7 @@ const sidebars = {
     {
       type: "doc",
       label: "Troubleshooting",
-      id: "troubleshooting-using-arbitrum"
+      id: "troubleshooting-using"
     }
   ],
   devsSideBar: [

@@ -1,8 +1,4 @@
----
-id: troubleshooting-building
-title: "Troubleshooting: Building on Arbitrum"
-description: todo
----
+# Troubleshooting: BUIDling on Arbitrum
 
 import FaqPartial, {toc as FAQTOC} from '../partials/_troubleshooting-building-partial.md';
 
