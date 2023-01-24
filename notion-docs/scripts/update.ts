@@ -10,7 +10,11 @@ import {
 } from '@offchainlabs/notion-docs-generator'
 import dotenv from 'dotenv'
 
-import type { KnowledgeItem, LinkableTerms, LinkValidity } from '@offchainlabs/notion-docs-generator'
+import type {
+  KnowledgeItem,
+  LinkableTerms,
+  LinkValidity,
+} from '@offchainlabs/notion-docs-generator'
 
 import fs from 'fs'
 
@@ -20,11 +24,8 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 })
 
-
 export function recordValidity(record: Record): LinkValidity {
-  if (
-    record.status != '4 - Continuously publishing'
-  ) {
+  if (record.status != '4 - Continuously publishing') {
     return { reason: 'page not yet marked as ready' }
   }
   if (record.publishable != 'Publishable') {
@@ -90,7 +91,7 @@ async function generateFiles() {
       ],
     },
   })
-  
+
   const linkableTerms: LinkableTerms = {}
   const isValid = (item: KnowledgeItem) => {
     return recordValidity(item) == 'Valid'
