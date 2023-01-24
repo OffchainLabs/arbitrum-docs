@@ -4,7 +4,10 @@ title: "Troubleshooting: Building on Arbitrum"
 description: todo
 ---
 
-TODOs:
- - description
- - body
- - PR generated from FAQ CMS
+import FaqPartial, {toc as FAQTOC} from '../partials/_troubleshooting-building-partial.md';
+
+<div data-faq-origin-slug='build-faq'>
+    <FaqPartial />
+</div>
+
+export const toc = FAQTOC
