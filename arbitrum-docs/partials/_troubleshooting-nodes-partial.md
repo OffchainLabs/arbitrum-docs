@@ -64,7 +64,7 @@
 
 type BroadcastMessage struct {
 	Version int `json:"version"`
-	// TODO better name than messages since there are different types of messages
+	// Note: "Messages" is slightly ambiguous naming since there are different types of messages
 	Messages                       []*BroadcastFeedMessage         `json:"messages,omitempty"`
 	ConfirmedSequenceNumberMessage *ConfirmedSequenceNumberMessage `json:"confirmedSequenceNumberMessage,omitempty"`
 }

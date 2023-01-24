@@ -8,8 +8,8 @@
 ### I tried to create a retryable ticket but the transaction reverted on L1.  How can I debug the issue? {#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue}
 <p>Creation of retryable tickets can revert with one of these custom errors:</p>
 
-<ol><li><strong>InsufficientValue</strong>: not enough gas included in your L1 transaction's callvalue to cover the total cost of your retryable ticket; i.e., <code>msg.value &lt; (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)</code>. Note that as of the Nitro upgrade, your L1 transaction's callvalue must cover this full cost (previously an L2 message's execution could be paid for with funds on L2: see <a href="https://developer.offchainlabs.com/migration/dapp_migration#breaking-changes">dapp migration</a> and "retryable ticket creation" [TODO link to inbox / ticket creation FAQ].)</li>
-<li><strong>InsufficientSubmissionCost: </strong>provided submission cost isn't high enough to create your retryable ticket [TODO: link to submission cost FAQ]</li>
+<ol><li><strong>InsufficientValue</strong>: not enough gas included in your L1 transaction's callvalue to cover the total cost of your retryable ticket; i.e., <code>msg.value &lt; (maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas)</code>. Note that as of the Nitro upgrade, your L1 transaction's callvalue must cover this full cost (previously an L2 message's execution could be paid for with funds on L2: see <a href="https://developer.offchainlabs.com/migration/dapp_migration#breaking-changes">dapp migration</a> and "retryable ticket creation".</li>
+<li><strong>InsufficientSubmissionCost: </strong>provided submission cost isn't high enough to create your retryable ticket.</li>
 <li><strong>GasLimitTooLarge: </strong>provided gas limit is greater than 2^64</li>
 <li><strong>DataTooLarge</strong>: provided data is greater than 117.964 KB  (90% of Geth's 128 KB transaction size limit).</li>
 </ol>
