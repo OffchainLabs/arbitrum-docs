@@ -4,6 +4,9 @@ Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitru
 
 [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk) auto-genned docs are included as submodule.
 
+## Contribution
+Contributing to the three troubleshooting pages — [nodes](arbitrum-docs/partials/_troubleshooting-nodes-partial.md), [builders](arbitrum-docs/partials/_troubleshooting-building-partial.md), and [users](arbitrum-docs/partials/_troubleshooting-users-partial.md) — requires internal Offchain Labs access; for the rest of the docs, simply open a PR! 
+
 ### Initial set up
 
 ```shell
