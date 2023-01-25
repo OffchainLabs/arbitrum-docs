@@ -7,7 +7,7 @@ export const AddressAliasHelper = () => {
   const [error, setError] = useState();
   useEffect(() => {
     if (!l1Address) {
-      return;
+      return setError(undefined);
     }
     try {
       const l1addr = new Address(l1Address);
