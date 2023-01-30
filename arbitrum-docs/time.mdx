@@ -7,9 +7,9 @@ Once in the chain's core inbox contract, transactions are processed in order. Ge
 
 ## Block Numbers: Arbitrum vs. Ethereum
 
-Arbitrum blocks are assigned their own L2 block numbers, distinct from Ethereum's L1 block numbers.
+Arbitrum blocks are assigned their own L2 block numbers, distinct from Ethereum's block numbers.
 
-A single Ethereum block could include within it multiple Arbitrum blocks (if, say, the Arbitrum chain is getting heavy activity); however, an Arbitrum block cannot span across multiple Ethereum blocks. Thus, any given Arbitrum transaction is associated with exactly one Ethereum block and one Arbitrum block.
+A single Ethereum block could include within multiple Arbitrum blocks (if, say, the Arbitrum chain is getting heavy activity); however, an Arbitrum block cannot span across multiple Ethereum blocks. Thus, any given Arbitrum transaction is associated with exactly one Ethereum block and one Arbitrum block.
 
 ## Ethereum Block Numbers Within Arbitrum
 
@@ -57,7 +57,7 @@ _**Arbitrum Block number from RPCs:** note that this can be updated multiple tim
 
 ## Case Study: Multicall
 
-The Multicall contract offers a great case study for the difference between L1 and L2 block numbers.
+The Multicall contract offers a great case study for the differences between L1 and L2 block numbers.
 
 The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behaviour.
 
