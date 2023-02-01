@@ -24,7 +24,7 @@
 
 ### How do I read messages from the Sequencer feed? {#how-do-i-read-messages-from-the-sequencer-feed}
 
-<p>Running an Arbitrum relay locally <a href="https://developer.offchainlabs.com/node-running/running-a-node#feed-relay">Feed Relay </a> gives users the ability to subscribe to the Sequencer feed at for real-time data as the Sequencer accepts and orders transactions off-chain. </p>
+<p>Running an Arbitrum relay locally as a <a href="https://developer.offchainlabs.com/node-running/running-a-node#feed-relay">Feed Relay </a>gives users the ability to subscribe to the Sequencer feed at for real-time data as the Sequencer accepts and orders transactions off-chain.</p>
 
 <p></p>
 
