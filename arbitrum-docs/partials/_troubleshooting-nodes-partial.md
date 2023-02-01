@@ -24,11 +24,11 @@
 
 ### How do I read messages from the Sequencer feed? {#how-do-i-read-messages-from-the-sequencer-feed}
 
-<p>An Arbitrum full node run as an <a href="https://developer.offchainlabs.com/node-running/running-a-node#arb-relay">Arb-Relay </a>can subscribe to the Sequencer feed at for real-time data as the Sequencer accepts and orders transactions off-chain. </p>
+<p>Running an Arbitrum relay locally as a <a href="https://developer.offchainlabs.com/node-running/running-a-node#feed-relay">Feed Relay </a>gives users the ability to subscribe to the Sequencer feed at for real-time data as the Sequencer accepts and orders transactions off-chain.</p>
 
 <p></p>
 
-<p>When connected, you'll receive feed data that looks something like this:</p>
+<p>When connected to websocket port 9642 of the local relay, you'll receive feed data that looks something like this:</p>
 
 ```typescript
 {
