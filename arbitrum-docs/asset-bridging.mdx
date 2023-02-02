@@ -81,11 +81,13 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 #### Deposits
 
-1. A user calls `GatewayRouter.outBoundTransfer` (with `SomeERC20Token`'s L1 address as an argument).
+1. A user calls `GatewayRouter.outboundTransferCustomRefund` [1] (with `SomeERC20Token`'s L1 address as an argument).
 1. `GatewayRouter` looks up `SomeERC20Token`'s gateway, and finding that it's Standard ERC20 gateway (the `L1ERC20Gateway` contract).
-1. `GatewayRouter` calls `L1ERC20Gateway.outBoundTransfer`, forwarding the appropriate parameters.
+1. `GatewayRouter` calls `L1ERC20Gateway.outboundTransferCustomRefund`, forwarding the appropriate parameters.
 1. `L1ERC20Gateway` escrows tokens, and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on L2.
 1. `finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on L2.
+
+*[1] Please keep in mind that some older gateways might not have `outboundTransferCustomRefund` available. In that case, please use function `GatewayRouter.outboundTransfer`.*
 
 Note that arbSomeERC20Token is an instance of StandardArbERC20, which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
 
