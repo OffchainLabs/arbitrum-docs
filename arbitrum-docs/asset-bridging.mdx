@@ -87,7 +87,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 1. `L1ERC20Gateway` escrows tokens, and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on L2.
 1. `finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on L2.
 
-*[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` available. In that case, please use function `GatewayRouter.outboundTransfer`.*
+*[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` available and `GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `GatewayRouter.outboundTransfer`.*
 
 Note that arbSomeERC20Token is an instance of StandardArbERC20, which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
 
