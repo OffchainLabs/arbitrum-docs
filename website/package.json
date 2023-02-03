@@ -22,9 +22,9 @@
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
-    "@docusaurus/core": "^2.2.0",
-    "@docusaurus/preset-classic": "^2.2.0",
-    "@docusaurus/theme-mermaid": "^2.2.0",
+    "@docusaurus/core": "^2.3.1",
+    "@docusaurus/preset-classic": "^2.3.1",
+    "@docusaurus/theme-mermaid": "^2.3.1",
     "clsx": "^1.2.1",
     "docusaurus-plugin-fathom": "^1.1.0",
     "got": "11.8.5",
