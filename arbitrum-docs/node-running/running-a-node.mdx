@@ -98,13 +98,13 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 - `--node.rpc.tx-fee-cap`
   - Defaults to `1`, cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)
 
-### Arb-Relay
+### Feed Relay
 
-- When running more than one node, you want to run a single arb-relay per datacenter, which will reduce ingress fees and improve stability
-- The arb-relay is in the same docker image
-- Here is an example of how to run nitro-relay for Arbitrum One:
+- When running more than one node, you want to run a single feed relay per datacenter, which will reduce ingress fees and improve stability
+- The feed relay is in the same docker image
+- Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.10-73224e3 --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.10-73224e3 --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed --l2.chain-id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with custom relay:
   ```shell
