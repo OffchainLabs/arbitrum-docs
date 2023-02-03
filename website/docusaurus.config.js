@@ -61,18 +61,13 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
+    require.resolve("@cmfcmf/docusaurus-search-local")
   ],
+  
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        appId: "IPZE4SH6AR",
-        apiKey: "aa50e2f5121c9813ef09c7ab5031da67",
-        indexName: "crawler_nitro_docs",
-        contextualSearch: true,
-        searchPagePath: "search",
-      },
       fathomAnalytics: {
         siteId: "DOHOZGJO",
         // Optional fields.
