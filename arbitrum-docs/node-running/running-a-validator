@@ -1,0 +1,301 @@
+# Running a Validator
+
+Instructions for configuring a deployment for a Nitro node to be run as a validator, on either the Arbitrum One or Arbitrum Nova chain. 
+
+### Kubernetes Instructions 
+
+**Before You Begin:**
+
+- Create a PVC named `arbitrum-validator-storage` on the storage back of your choice. Examples included for AWS on GP2 EBS.
+- Create a deployment using the latest release running sleep infinity (see included sample)
+
+### Create Validator Configuration
+
+- Fill in the stubbed out values:
+    - Nova values:
+        - L1 Chain ID: 1
+        - L2 Chain ID: 42170
+    - Arb1 default values:
+        - L1 Chain ID: 1
+        - L2 Chain ID: 42161
+- `kubectl create configmap arbitrum-validator-config --from-file=config.json`
+
+### L1 Wallet Configuration:
+
+- If Using Existing Wallet:
+    - Create directory on the container: `kubectl exec <VALIDATOR_POD_NAME> -it -- bash -c "mkdir -p /home/user/data/keystore"`
+    - Copy existing wallet: `kubectl cp <EXISTING_WALLET_FILE> <VALIDATOR_POD_NAME>:/home/user/data/keystore/wallet.dat`
+- If Creating Wallet:
+    - `kubectl exec <VALIDATOR_POD_NAME> -it -- /usr/local/bin/nitro --metrics --conf.file=/config/config.json --l1.wallet.only-create-key --l1.wallet.password=<SECURE_PASSWORD>`
+
+### L1 Smart Contract Wallet Creation:
+
+- Fund this wallet address on L1
+- `kubectl exec <VALIDATOR_POD_NAME> -it -- /usr/local/bin/nitro --metrics --conf.file=/config/config.json --node.validator.use-smart-contract-wallet --node.validator.only-create-wallet-contract --l1.wallet.password=<SECURE_PASSWORD>`
+    - This may need to be rerun if you receive a context deadline exceeded error
+- Provide this last address to Offchain Labs for whitelisting
+
+### Database Setup (arb1 only):
+
+- If Using Existing Database:
+    - Copy existing database to `/home/user/data/nitro`
+- If Using Offchain Hosted Snapshot:
+    - `kubectl exec <VALIDATOR_POD_NAME> -it -- bash` `mkdir -p /home/user/data/nitro` `cd /home/user/data/nitro` `curl https://snapshot.arbitrum.io/mainnet/nitro.tar` `tar xvzf db.tar` `rm db.tar`
+
+### Node Deployment:
+
+- Deploy validator using example below
+    - `<VALIDATOR_STRATEGY>` can be:
+        - `Defensive` strategy only stakes and challenges when it sees an invalid assertion (**RECOMMENDED**)
+        - `Watchtower` strategy never stakes / never takes on chain action but logs an error if it sees an invalid assertion.
+        - `StakeLatest` strategy actively stakes on the latest node, challenging when it sees an invalid assertion
+        - `MakeNodes` strategy is the most expensive to run because it creates new validation nodes as well as actively staking and challenging when needed
+
+## Deployment Files
+
+### PVC Deployment
+
+[https://gist.github.com/baburgess/6ccfd96944fc52ea2c126c99a42c1c4c](https://gist.github.com/baburgess/6ccfd96944fc52ea2c126c99a42c1c4c)
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: arbitrum-validator-storage
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Ti
+  storageClassName: gp2
+
+```
+
+### Sleep Infinity Deployment
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arbitrum-validator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arbitrum-validator
+      cluster: mainnet
+      ident: arbitrum-validator
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /debug/metrics/prometheus
+        prometheus.io/port: "6070"
+      labels:
+        app: arbitrum-validator
+        cluster: mainnet
+        ident: arbitrum-validator
+    spec:
+      containers:
+      - command:
+        - bash
+        - -c
+        - |
+          sleep infinity
+        image: offchainlabs/nitro-node:v2.0.6-92bc70d
+        imagePullPolicy: Always
+        name: arbitrum-validator
+        ports:
+        - containerPort: 8547
+          protocol: TCP
+        - containerPort: 6070
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "22"
+            memory: 170Gi
+          requests:
+            cpu: "22"
+            memory: 170Gi
+        volumeMounts:
+        - mountPath: /home/user/data/
+          name: arbitrum-storage
+        - mountPath: /config/
+          name: config
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          chown -R 1000:1000 /data
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        name: pvc-permission-fix
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data
+          name: arbitrum-storage
+      volumes:
+      - name: arbitrum-storage
+        persistentVolumeClaim:
+          claimName: arbitrum-validator-storage
+  - configMap:
+      name: arbitrum-validator-config
+    name: config
+
+```
+
+### Validator Deployment
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arbitrum-validator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arbitrum-validator
+      cluster: mainnet
+      ident: arbitrum-validator
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /debug/metrics/prometheus
+        prometheus.io/port: "6070"
+      labels:
+        app: arbitrum-validator
+        cluster: mainnet
+        ident: arbitrum-validator
+    spec:
+      containers:
+      - command:
+        - bash
+        - -c
+        - |
+          exec /usr/local/bin/nitro --metrics --node.validator.strategy=Defensive --conf.file=/config/config.json
+        image: offchainlabs/nitro-node:v2.0.6-92bc70d
+        imagePullPolicy: Always
+        name: arbitrum-validator
+        ports:
+        - containerPort: 8547
+          protocol: TCP
+        - containerPort: 6070
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "22"
+            memory: 170Gi
+          requests:
+            cpu: "22"
+            memory: 170Gi
+        volumeMounts:
+        - mountPath: /home/user/data/
+          name: arbitrum-storage
+        - mountPath: /config/
+          name: config
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - |
+          chown -R 1000:1000 /data
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        name: pvc-permission-fix
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /data
+          name: arbitrum-storage
+      volumes:
+      - name: arbitrum-storage
+        persistentVolumeClaim:
+          claimName: arbitrum-validator-storage
+  - configMap:
+      name: arbitrum-validator-config
+    name: config
+
+```
+
+### Config File
+
+```
+{
+  "l1":
+  {
+      "chain-id": <L1 Chain ID>,
+      "url": "<L1 URL>",
+      "wallet":
+      {
+          "password": "password",
+          "pathname": "/home/user/data/keystore/"
+      }
+  },
+  "l2": {
+    "chain-id": <L2 Chain ID>
+  },
+  "log-type": "json",
+  "node":
+  {
+      "archive": true,
+      "validator": {
+            "enable": true,
+            "staker-interval": "10s",
+            "target-machine-count": 4,
+            "use-smart-contract-wallet": true
+      },
+			"block-validator": {
+            "enable": true
+			},
+      "wasm": {
+            "root-path": "/home/user/target/machines"
+      }
+  },
+  "http":{
+    "api": [ "net", "web3", "eth", "txpool", "debug" ]
+  },
+  "ws":{
+    "api": [ "net", "eth", "personal", "web3"]
+  },
+  "metrics-server":{
+    "addr": "0.0.0.0"
+  },
+  "persistent":
+  {
+      "chain": "/home/user/data/"
+  }
+}
+```
+
+## Verifying it’s working
+
+This log line shows the wallet is setup correctly:
+
+```go
+INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
+```
+
+- `whitelisted` should be `true` after we’ve whitelisted it
+- `strategy` should be `Defensive`
+- `txSender` and `actingAsWallet` should both be present and not “nil”
+
+The log line `validation succeeded` shows that the block validator is working, and the log line `found correct assertion` (in previous versions `found correct node`) shows that the L1 validator is working. If all of these log lines show up as expected, the validator is working! 🎉
