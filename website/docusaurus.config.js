@@ -63,9 +63,8 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
-    require.resolve("@cmfcmf/docusaurus-search-local")
+    require.resolve('docusaurus-lunr-search'),
   ],
-  
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
