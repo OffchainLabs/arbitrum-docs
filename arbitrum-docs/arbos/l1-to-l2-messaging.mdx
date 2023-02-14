@@ -11,6 +11,10 @@ A retryable is submitted via the `Inbox`'s `createRetryableTicket` method. In th
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L207
 
+## Retryable Ticket Lifecycle
+
+See [here](../assets/retryable_flowchart.png) for a flowchart of the lifecycle of a retryable ticket.
+
 ### Submitting a Retryable
 
 A transaction to submit a Retryable does the following:
@@ -42,11 +46,15 @@ During redemption of a retryable, attempts to cancel the same retryable, or to s
 
 ### Receipts
 
-If the lifecycle of a retryable ticket, two types of L2 transaction receipts will be emitted:
+In the lifecycle of a retryable ticket, two types of L2 transaction receipts will be emitted:
 
 **Ticket Creation Receipt**: This receipts indicates that a retryable ticket was successfully created; any successful L1 call to the `Inbox`'s `createRetryableTicket` method is guaranteed to create a ticket. The ticket creation receipt includes a `TicketCreated` event (from [`ArbRetryableTx`](./precompiles#ArbRetryableTx)), which includes a `ticketId` field. This `ticketId` is computable via RLP encoding and hashing the transaction; see [calculateSubmitRetryableId](https://github.com/OffchainLabs/arbitrum-sdk/blob/6cc143a3bb019dc4c39c8bcc4aeac9f1a48acb01/src/lib/message/L1ToL2Message.ts#L109).
 
 **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted L2 execution of a retryable ticket. It includes a `RedeemScheduled` event from [`ArbRetryableTx`](./precompiles#ArbRetryableTx), with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided L2 gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
+
+### Submission Fee
+
+In addition to L2 gas costs, the creator of a retryable ticket is required to pay a retryable “submission fee.” This submission fee is directly proportional to the size of the retryable’s data. If the retryable’s auto-redeem fails, the submission fee is collected at L2 to cover the resources required to temporarily keep the retryable ticket in memory; if the auto-redeem succeeds, the submission fee is refunded to the user at L2.
 
 ### Alternative "unsafe" Retryable Ticket Creation
 

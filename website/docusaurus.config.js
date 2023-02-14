@@ -40,6 +40,8 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
           editUrl: function (s) {
+            // troubleshooting docs content has external source-of-truth:
+            if(s.docPath.includes("troubleshooting")) return undefined
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -61,18 +63,12 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
+    require.resolve('docusaurus-lunr-search'),
   ],
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      algolia: {
-        appId: "IPZE4SH6AR",
-        apiKey: "aa50e2f5121c9813ef09c7ab5031da67",
-        indexName: "crawler_nitro_docs",
-        contextualSearch: true,
-        searchPagePath: "search",
-      },
       fathomAnalytics: {
         siteId: "DOHOZGJO",
         // Optional fields.

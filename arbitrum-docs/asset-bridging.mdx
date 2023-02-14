@@ -65,7 +65,11 @@ Our architecture consists of three types of contracts:
 
 All Ethereum to Arbitrum token transfers are initiated via the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit-call to it's appropriate `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping L1 token addresses to L1Gateway, thus acting as L1/L2 address oracle and ensuring that each token corresponds to only one gateway. The `L1ArbitrumGateway` communicates to an `L2ArbitrumGateway` (typically/expectedly via retryable tickets (see [Retryable Tickets](./arbos/l1-to-l2-messaging.mdx)).
 
+![img](./assets/bridge_deposits.png)
+
 Similarly, Arbitrum to Ethereum transfers are initiated via the `L2GatewayRouter` contract, which forwards calls the token's `L2ArbitrumGateway`, which in turn communicates to its corresponding `L1ArbitrumGateway` (typically/expectedly via sending messages to the Outbox.)
+
+![img](./assets/bridge_withdrawals.png)
 
 For any given gateway pairing, we require that calls be initiated through the `GatewayRouter`, and that the gateways conform to the `TokenGateway` interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
@@ -81,23 +85,21 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 #### Deposits
 
-1. A user calls `GatewayRouter.outBoundTransfer` (with `SomeERC20Token`'s L1 address as an argument).
+1. A user calls `GatewayRouter.outboundTransferCustomRefund` **[1]** (with `SomeERC20Token`'s L1 address as an argument).
 1. `GatewayRouter` looks up `SomeERC20Token`'s gateway, and finding that it's Standard ERC20 gateway (the `L1ERC20Gateway` contract).
-1. `GatewayRouter` calls `L1ERC20Gateway.outBoundTransfer`, forwarding the appropriate parameters.
+1. `GatewayRouter` calls `L1ERC20Gateway.outboundTransferCustomRefund`, forwarding the appropriate parameters.
 1. `L1ERC20Gateway` escrows tokens, and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on L2.
 1. `finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on L2.
 
-Note that arbSomeERC20Token is an instance of StandardArbERC20, which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
+❗️ *[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `GatewayRouter.outboundTransfer`.*
 
-![img](./assets/bridge_deposits.png)
+Note that arbSomeERC20Token is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
 
 #### Withdrawals
 
 1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., L2ERC20Gateway).
 1. This burns arbSomeERC20Token tokens, and calls ArbSys with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will be eventually executed on L1.
 1. After the dispute window expires and the assertion with the user's transaction is confirmed, a user can call `Outbox.executeTransaction`, which in turn calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the L1ERC20Gateway contract's escrow.
-
-![img](./assets/bridge_withdrawals.png)
 
 ### The Arbitrum Generic Custom Gateway
 
@@ -133,7 +135,7 @@ After your token's registration to the Custom Gateway is complete, have your L1 
 | If you have questions about your custom token needs, feel free to [reach out](https://discord.gg/ZpZuw7p). |
 | ---------------------------------------------------------------------------------------------------------- |
 
-#### Other Flavors of Gateways
+### Other Flavors of Gateways
 
 Note that in the system described above, one pair of Gateway contracts handles the bridging of many ERC20s; i.e., many ERC20s on L1 are each paired with their own ERC20s on Arbitrum via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
 
@@ -145,6 +147,8 @@ No matter the complexity of a particular token's bridging needs, a gateway can i
 
 See [token-deposit](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit) and [token-withdraw](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-withdraw) for demos of interacting with the bridge architecture via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
 
-#### A Word of Caution on Bridges (aka, "I've Got a Bridge To Sell You")
+See also [custom-token-bridging](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-token-bridging) for a demo on how to set up a custom token to use the Generic-Custom gateway.
+
+### A Word of Caution on Bridges (aka, "I've Got a Bridge To Sell You")
 
 Cross chain bridging is an exciting design space; alternative bridge designs can potentially offer faster withdrawals, interoperability with other chains, different trust assumptions with their own potentially valuable UX tradeoffs, etc. They can also potentially be completely insecure and/or outright scams. Users should treat other, non-canonical bridge applications the same way they treat any application running on Arbitrum, and exercise caution and due diligence before entrusting them with their value.

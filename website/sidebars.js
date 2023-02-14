@@ -31,7 +31,7 @@ const sidebars = {
     {
       type: "category",
       label: "FAQs",
-      items: [  {
+      items: [{
         type: "doc",
         id: "faqs/faqs-index",
         label: "FAQ Index"
@@ -66,7 +66,7 @@ const sidebars = {
         id: "faqs/misc-faqs",
         label: "Misc"
       }
-    ]
+      ]
     },
     {
       type: "doc",
@@ -77,6 +77,11 @@ const sidebars = {
       type: "doc",
       id: "mainnet-beta",
       label: "Mainnet Beta Status"
+    },
+    {
+      type: "doc",
+      label: "Troubleshooting",
+      id: "for-users/troubleshooting-users"
     }
   ],
   devsSideBar: [
@@ -108,6 +113,11 @@ const sidebars = {
           type: "doc",
           id: "node-running/running-a-classic-node",
           label: "Running a Classic (pre-Nitro) Node"
+        },
+        {
+          type: "doc",
+          label: "Troubleshooting",
+          id: "node-running/troubleshooting-running-nodes"
         }
       ]
     },
@@ -167,6 +177,11 @@ const sidebars = {
               id: "arbos/precompiles"
             }
           ]
+        },
+        {
+          type: "doc",
+          label: "Troubleshooting",
+          id: "for-devs/troubleshooting-building"
         }
       ]
     },
@@ -218,7 +233,6 @@ const sidebars = {
       ]
     }
   ],
-
   howItWorksSidebar: [
     {
       type: "doc",

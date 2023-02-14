@@ -2,9 +2,19 @@
 
 Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider
 
+### Minimum Hardware Configuration 
+
+- Followings specify the minimum hardware configuration required to setup a Nitro full node (not archival):
+  - RAM: 4-8 GB
+  - CPU: 2-4 core CPU (For AWS: t3 xLarge)
+  - Storage: Minimum 1.2TB SSD (make sure it is extendable)
+  - Estimated Growth Rate: 14GB per day
+
+❗️Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
+
 ### Required Artifacts
 
-- Latest Docker Image: `offchainlabs/nitro-node:v2.0.9-51f9452`
+- Latest Docker Image: `offchainlabs/nitro-node:v2.0.10-73224e3`
 
 - Arbitrum One Nitro Genesis Database Snapshot
 
@@ -41,7 +51,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   - Note that is important that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.9-51f9452 --l1.url https://l1-node:8545 --l2.chain-id=<L2ChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.10-73224e3 --l1.url https://l1-node:8545 --l2.chain-id=<L2ChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
   ```
 
   - Note that if you are running L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
@@ -88,17 +98,17 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 - `--node.rpc.tx-fee-cap`
   - Defaults to `1`, cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)
 
-### Arb-Relay
+### Feed Relay
 
-- When running more than one node, you want to run a single arb-relay per datacenter, which will reduce ingress fees and improve stability
-- The arb-relay is in the same docker image
-- Here is an example of how to run nitro-relay for Arbitrum One:
+- When running more than one node, you want to run a single feed relay per datacenter, which will reduce ingress fees and improve stability
+- The feed relay is in the same docker image
+- Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.9-51f9452 --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.10-73224e3 --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed --l2.chain-id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with custom relay:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.9-51f9452 --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.10-73224e3 --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.feed.input.url=ws://local-relay-address:9642
   ```
 
 ### Running a Validator
@@ -107,6 +117,6 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 - Running a validator in `Watchtower` mode is the same as running an archive Nitro node with `--node.validator.enable --node.validator.strategy=Watchtower`
 - Here is an example of how to run validator for Arbitrum One:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.9-51f9452 --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.caching.archive --node.validator.enable --node.validator.strategy=Watchtower
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.10-73224e3 --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.caching.archive --node.validator.enable --node.validator.strategy=Watchtower
   ```
 - If a deviation is detected, a validator in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
