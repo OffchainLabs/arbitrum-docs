@@ -47,10 +47,10 @@ const FeatureList: FeatureItem[] = [
     addBackground: true,
   },
   {
-    title: "The Code",
+    title: "Governance",
     Svg: require("@site/static/img/logo.svg").default,
-    href: "https://github.com/OffchainLabs/nitro",
-    description: <>View and contribute to the source code</>,
+    href: "TODO_GOV_ROOT_URL",
+    description: <>Learn about Arbitrum governance</>,
   },
 ];
 
