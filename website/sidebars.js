@@ -84,43 +84,39 @@ const sidebars = {
       id: "for-users/troubleshooting-users"
     }
   ],
-  devsSideBar: [
+  runNodesSidebar: [
     {
-      type: "category",
-      label: "Running Nodes",
-      items: [
-        {
-          type: "doc",
-          id: "node-running/running-a-node",
-          label: "Run a Node"
-        },
-        {
-          type: "doc",
-          id: "node-running/node-providers",
-          label: "3rd Party Node Providers"
-        },
-        {
-          type: "doc",
-          id: "node-running/local-dev-node",
-          label: "Run a Local Dev Node"
-        },
-        {
-          type: "doc",
-          id: "das/daserver-instructions",
-          label: "Data Availability Server"
-        },
-        {
-          type: "doc",
-          id: "node-running/running-a-classic-node",
-          label: "Running a Classic (pre-Nitro) Node"
-        },
-        {
-          type: "doc",
-          label: "Troubleshooting",
-          id: "node-running/troubleshooting-running-nodes"
-        }
-      ]
+      type: "doc",
+      id: "node-running/running-a-node",
+      label: "Run a Node"
     },
+    {
+      type: "doc",
+      id: "node-running/node-providers",
+      label: "3rd Party Node Providers"
+    },
+    {
+      type: "doc",
+      id: "node-running/local-dev-node",
+      label: "Run a Local Dev Node"
+    },
+    {
+      type: "doc",
+      id: "das/daserver-instructions",
+      label: "Data Availability Server"
+    },
+    {
+      type: "doc",
+      id: "node-running/running-a-classic-node",
+      label: "Running a Classic (pre-Nitro) Node"
+    },
+    {
+      type: "doc",
+      label: "Troubleshooting",
+      id: "node-running/troubleshooting-running-nodes"
+    }
+  ],
+  devsSideBar: [
     {
       type: "category",
       label: "BUIDLing on Arbitrum",
