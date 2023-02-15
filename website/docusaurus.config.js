@@ -106,9 +106,7 @@ const config = {
             label: "Learn",
           },
           {
-            type: "doc",
-            docId: "intro/intro",
-            position: "left",
+            href: "http://docs.arbitrum.foundation",
             label: "Governance"
           },
           {
