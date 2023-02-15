@@ -199,7 +199,7 @@ You might wonder why we need the rollup protocol. If everyone knows the results 
 
 With those preliminaries behind us, let’s jump into the details of the rollup protocol.
 
-The parties who participate in the protocol are called _validators_. Some validators will choose to be stakers--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be staked, since as long as it's staked on the current outcome, and there are no conflicting claims, there's no need for other parties to stake / take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/stakers are whitelisted (see ["State of Progressive Decentralization"](TODO_STATE_OF_DECENTRALIZATION_URL)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
+The parties who participate in the protocol are called _validators_. Some validators will choose to be stakers--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be staked, since as long as it's staked on the current outcome, and there are no conflicting claims, there's no need for other parties to stake / take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/stakers are whitelisted (see ["State of Progressive Decentralization"](http://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
 The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
 
@@ -373,7 +373,7 @@ Every validator can choose their own approach, but we expect validators to follo
 
 Under normal conditions, validators using the defensive and watchtower strategies won’t do anything except observe. A malicious actor who is considering whether to try cheating won’t be able to tell how many defensive and watchtower validators are operating incognito. Perhaps some defensive validators will announce themselves, but others probably won’t, so a would-be attacker will always have to worry that defenders are waiting to emerge.
 
-The underlying protocol supports permissionless validation, i.e.,--anyone can do it. Currently on Arbitrum One, validators that require stake (i.e., active and defensive validators) are whitelisted; see ["State of Progressive Decentralization"](TODO_STATE_OF_DECENTRALIZATION_URL).
+The underlying protocol supports permissionless validation, i.e.,--anyone can do it. Currently on Arbitrum One, validators that require stake (i.e., active and defensive validators) are whitelisted; see ["State of Progressive Decentralization"](http://docs.arbitrum.foundation/state-of-progressive-decentralization).
 
 Who will be validators? Anyone will be able to do it, but most people will choose not to. In practice we expect people to validate a chain for several reasons.
 
@@ -403,7 +403,7 @@ The Sequencer is a specially designated full node, which is given limited power 
 
 Clients interact with the Sequencer in exactly the same way they would interact with any full node, for example by giving their wallet software a network URL that happens to point to the Sequencer.
 
-[Currently](TODO_STATE_OF_DECENTRALIZATION_URL), on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
+[Currently](http://docs.arbitrum.foundation/state-of-progressive-decentralization), on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
 
 ### Instant confirmation
 
@@ -436,7 +436,7 @@ So a Sequencer is generally a win, if the Sequencer is well behaved.
 
 A malicious Sequencer, on the other hand, could cause some pain. If it refuses to handle your transactions, you're forced to go through the delayed inbox, with longer delay. And a malicious Sequencer has great power to front-run everyone's transactions, so it could profit greatly at users' expense.
 
-On Arbitrum One, Offchain Labs [currently](TODO_STATE_OF_DECENTRALIZATION_URL) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to decentralized, fair sequencing, as described below.
+On Arbitrum One, Offchain Labs [currently](http://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to decentralized, fair sequencing, as described below.
 
 Because the Sequencer will be run by a trusted party at first, and will be decentralized later, we haven't built in a mechanism to directly punish a misbehaving Sequencer. We're asking users to trust the centralized Sequencer at first, until we switch to decentralized fair sequencing later.
 
