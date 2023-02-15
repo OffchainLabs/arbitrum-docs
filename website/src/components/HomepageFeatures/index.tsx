@@ -49,7 +49,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Governance",
     Svg: require("@site/static/img/logo.svg").default,
-    href: "http://docs.arbitrum.foundation/",
+    href: "https://docs.arbitrum.foundation/",
     description: <>Learn about Arbitrum governance</>,
   },
 ];

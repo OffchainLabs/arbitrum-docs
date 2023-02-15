@@ -106,7 +106,7 @@ const config = {
             label: "Learn",
           },
           {
-            href: "http://docs.arbitrum.foundation",
+            href: "https://docs.arbitrum.foundation",
             label: "Governance"
           },
           {
@@ -185,7 +185,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum's Mainnet chains are owned by the Governance system. See <a rel="noopener noreferrer" href="http://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details.`,
+        content: `Note: Arbitrum's Mainnet chains are owned by the Governance system. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details.`,
         backgroundColor: "rgb(121 241 3)",
         textColor: "#091E42",
         isCloseable: true,
