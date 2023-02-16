@@ -448,9 +448,6 @@ From the pod:
 ```
 $ /usr/local/bin/datool client rest getbyhash --url http://localhost:9877   --data-hash 0x8b248e2bd8f75bf1334fe7f0da75cc7c1a34e00e00a22a96b7a43d580d250f3d
 Message: Test-Data
-
-$ /usr/local/bin/datool client rpc getbyhash --url http://localhost:9876   --data-hash 0x8b248e2bd8f75bf1334fe7f0da75cc7c1a34e00e00a22a96b7a43d580d250f3d
-Message: Test-Data
 ```
 
 If you do not have the health check configured yet, you can trigger one manually as follows:
@@ -499,8 +496,6 @@ $ /usr/local/bin/datool client rpc store  --url http://localhost:9876 --message 
 The above command outputs the `Hex Encoded Data Hash: ` which can be used to retrieve the data:
 
 ```
-$ /usr/local/bin/datool client rpc getbyhash --url  http://localhost:9876 --data-hash 0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423
-Message: Hello world
 $ /usr/local/bin/datool client rest getbyhash --url  http://localhost:9877 --data-hash 0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423
 Message: Hello world
 ```
