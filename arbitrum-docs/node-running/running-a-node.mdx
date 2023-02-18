@@ -139,7 +139,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   ```shell
   INFO [09-28|18:43:49.367] running as validator                     txSender=nil actingAsWallet=nil whitelisted=false strategy=Watchtower
   ```
-  - 'strategy` should be `Watchtower`
+  - `strategy` should be `Watchtower`
   - The log line `validation succeeded` shows that the L2 block validator is working
   - The log line `found correct assertion` shows that the L1 validator is working
 
@@ -168,7 +168,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
   ```
   - `whitelisted` should be `true` after your wallet has been added to whitelist
-  - 'strategy` should be `Defensive`
-  - 'txSender` and `actingAsWallet` should both be present and not `nil`
+  - `strategy` should be `Defensive`
+  - `txSender` and `actingAsWallet` should both be present and not `nil`
   - The log line `validation succeeded` shows that the L2 block validator is working
   - The log line `found correct assertion` shows that the L1 validator is working
