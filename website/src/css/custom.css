@@ -1,9 +1,8 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Any CSS included here will be global.
+ * Uses Infima. Infima docs -> https://infima.dev/
+ * If you're updating this, make sure you're updating the LESS file.
  */
-
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #2e8555;
@@ -16,7 +15,6 @@
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
-
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-primary: #25c2a0;
@@ -27,4 +25,77 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+/*todo: weigh pros and cons of bundling component-specific css with components*/
+/*debt: some components and css (eg header badges) are shared between repos via code duplication */
+.header-badges {
+  display: block;
+  margin-bottom: 15px;
+  min-height: 35px;
+  text-align: right;
+  /*pragmatism over perfection*/
+}
+.header-badges .header-badge {
+  transition-property: all;
+  transition-duration: 0.2s;
+  display: inline-block;
+  border-radius: 20px;
+  background-color: #efefef;
+  padding: 3px 20px 3px 3px;
+  height: 31px;
+  margin-right: 6px;
+  margin-bottom: 5px;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.header-badges .header-badge:hover {
+  text-decoration: none;
+  background-color: #e6e6e6;
+  opacity: 1;
+}
+.header-badges .header-badge:hover .badge-avatar {
+  opacity: 1;
+}
+.header-badges .header-badge:hover .badge-label {
+  color: #000;
+}
+.header-badges .header-badge .badge-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition-property: all;
+  transition-duration: 0.2s;
+  font-size: 13px;
+  line-height: 24px;
+  color: #333;
+  display: inline-block;
+  vertical-align: top;
+  height: 25px;
+  max-width: calc(100% - 33px);
+}
+.header-badges .header-badge .badge-avatar {
+  transition-property: all;
+  transition-duration: 0.2s;
+  display: inline-block;
+  border-radius: 30px;
+  width: 25px;
+  height: 25px;
+  background-size: cover;
+  margin-right: 12px;
+  font-size: 12px;
+  vertical-align: top;
+  line-height: 23px;
+  padding-left: 8px;
+  opacity: 0.7;
+}
+.header-badges .header-badge .emoji-avatar {
+  margin-right: 8px !important;
+}
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
