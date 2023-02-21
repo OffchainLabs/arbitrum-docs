@@ -120,16 +120,16 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   * `Defensive` (Whitelist required)
     - Post stake and create challenge if local state disagrees with on-chain assertion (wallet required, will only post stake on-chain if bad assertion found)
   * `StakeLatest` (Whitelist required)
-    - Stay staked on latest node and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
+    - Stay staked on latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
   * `ResolveNodes` (Whitelist required)
-    - Stay staked on latest node, resolve any unconformed nodes and challenge any bad assertions found (wallet required, always staked, uses some gas every time unconfirmed node resolved or new assertion created)
+    - Stay staked on latest assertion, resolve any unconfirmed assertions and challenge any bad assertions found (wallet required, always staked, uses some gas every time unconfirmed assertion resolved or new assertion created)
   * `MakeNodes` (Whitelist required)
-    - Continuously create new nodes, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
-    - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new node at same time. In that case, only one will be successful, and the others will have still spent gas on reverted call that didn't do anything.
+    - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
+    - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted call that didn't do anything.
 
 ### Running Watchtower Validator
 
-- Running a validator in `Watchtower` mode is the same as running an Nitro node with `--node.validator.enable --node.validator.strategy=Watchtower`
+- Running a validator in `Watchtower` mode is the same as running a Nitro node with `--node.validator.enable --node.validator.strategy=Watchtower`
 - Here is an example of how to run a watchtower validator for Arbitrum One:
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Watchtower
