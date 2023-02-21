@@ -6,19 +6,19 @@ This document presents an overview of some of the minor differences, perks, and 
 
 ## Transactions / Blocks
 
-##### Blocks and Time
+#### Blocks and Time
 
 Time in L2 is tricky; the timing assumptions one is used to making about L1 blocks don't exactly carry over into the timing of Arbitrum blocks. For details, see [Block Numbers and Time](./time.mdx).
 
-##### Block hashes and randomness
+#### Block hashes and randomness
 
 Arbitrum's L2 block hashes should not be relied on as a secure source of randomness (see ['blockhash(x);](./solidity-support.mdx))
 
-##### L1 Fees
+#### L1 Fees
 
 The L2 fees an Arbitrum transaction pays essentially work identically to gas fees on Ethereum. Arbitrum transactions must also, however, pay an L1-fee component to cover the cost of their calldata. (See [L1 pricing](./arbos/l1-pricing.mdx).)
 
-##### Tx Receipts
+#### Tx Receipts
 
 Arbitrum transaction receipts include two additional fields:
 
@@ -44,3 +44,27 @@ Of particular note is the [ArbAddressTable](./arbos/precompiles#ArbAddressTable)
 ## Solidity
 
 You can deploy Solidity contracts onto Arbitrum just like you do Ethereum; there are only a few minor differences in behavior. See [Solidity Support](./solidity-support.mdx) for details.
+
+## JSON-RPC Comparisons
+
+### Blocks
+
+When calling `eth_getBlockByHash` or `eth_getBlockByNumber`, Arbitrum includes a few additional fields and leverages some existing fields in different ways than mainnet Ethereum.
+
+#### Additional Fields
+
+- `l1BlockNumber`: An approximate L1 block number that occurred before this L2 block. See [Block Numbers and Time](time) for more info.
+- `sendCount`: The number of L2-to-L1 messages since Nitro genesis
+- `sendRoot`: The Merkle root of the Outbox tree state
+
+#### Existing Fields With Different Behavior
+
+- `extraData`: This field is equivalent to `sendRoot`
+- `mixHash`: First 8 bytes is equivalent to `sendCount`, second 8 bytes is equivalent to `l1BlockNumber`
+- `difficulty`: Fixed at `0x1`
+- `gasLimit`: Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum currently has a 32M gas limit per block
+
+See full list of [mainnet block fields](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbyhash) for additional reference.
+
+### Transactions
+
