@@ -152,7 +152,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --l1.wallet.only-create-key --l1.wallet.password="SOME SECURE PASSWORD"
   ```
-- Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova.  Be sure to backup the wallet, it will be the only way to withdrawal stake when desired
+- Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova.  Be sure to backup the wallet, it will be the only way to withdraw stake when desired
 
 ### Running Whitelisted Defensive Validator
 
