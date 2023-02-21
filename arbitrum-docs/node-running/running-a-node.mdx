@@ -158,7 +158,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 
 - A defensive validator requires that a wallet has already been created using the above steps
 - Defensive validator wallets do not need to be funded initially
-- If a defensive validator detects a deviation, it will log `bringing defensive validator online because of incorrect assertion`, and wait for funds to be added to wallet so stake can be posted and dispute created
+- If a defensive validator detects a deviation, it will log `bringing defensive validator online because of incorrect assertion`, and wait for funds to be added to wallet so stake can be posted and a dispute created
 - Here is an example of how to run a whitelisted defensive validator for Arbitrum One:
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Defensive --l1.wallet.password="SOME SECURE PASSWORD"
