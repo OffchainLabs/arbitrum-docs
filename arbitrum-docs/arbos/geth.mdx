@@ -7,6 +7,12 @@ We store ArbOS's state at an address inside a geth `statedb`. In doing so, ArbOS
 **0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF**<br/>
 The fictional account representing ArbOS
 
+:::info
+
+Please note any links on this page may be referencing old releases of Nitro or our fork of Geth. While we try to keep this up to date and most of this should be stable, please check against latest releases for [Nitro](https://github.com/OffchainLabs/nitro/releases) and [Geth](https://github.com/OffchainLabs/go-ethereum/releases) for most recent changes.
+
+:::
+
 ## Hooks
 
 Arbitrum uses various hooks to modify geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the tx during its lifetime. Transactions are applied using geth's [`ApplyTransaction`][applytransaction_link] function.
