@@ -4,7 +4,7 @@
 
 Solidity calls to `block.number` on Arbitrum will return the block number of the under lying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.
 
-Solidity calls to `block.timestamp` on Arbitrum are not linked to the timestamp of the L1 block, it updated every block based on the sequencer’s clock.
+Solidity calls to `block.timestamp` on Arbitrum are not linked to the timestamp of the L1 block, it is updated every L2 block based on the sequencer’s clock.
 
 For more info, see [block numbers and time](/time.mdx).
 
