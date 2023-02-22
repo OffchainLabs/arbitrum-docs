@@ -64,7 +64,7 @@ These hooks track the callers within the EVM callstack, pushing and popping as c
 
 ### [`L1BlockHash`][l1blockhash_link]
 
-In arbitrum, the BlockHash and Number operations return data that relies on underlying L1 blocks intead of L2 blocks, to accomendate the normal use-case of these opcodes, which often assume ethereum-like time passes between different blocks. The L1BlockHash and L1BlockNumber hooks have the required data for these operations.
+In arbitrum, the BlockHash and Number operations return data that relies on underlying L1 blocks instead of L2 blocks, to accommodate the normal use-case of these opcodes, which often assume ethereum-like time passes between different blocks. The L1BlockHash and L1BlockNumber hooks have the required data for these operations.
 
 ### [`ForceRefundGas`][forcerefundgas_link]
 
@@ -259,7 +259,7 @@ We created the AdvancedPrecompile interface, which executes and charges gas with
 
 ### WASM build support
 
-The WASM arbitrum executable does not support file oprations. We created [`fileutil.go`](../../go-ethereum/core/rawdb/fileutil.go) to wrap fileutil calls, stubbing them out when building WASM. [`fake_leveldb.go`](../../go-ethereum/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for leveldb. These are not required for the WASM block-replayer.
+The WASM arbitrum executable does not support file operations. We created [`fileutil.go`](../../go-ethereum/core/rawdb/fileutil.go) to wrap fileutil calls, stubbing them out when building WASM. [`fake_leveldb.go`](../../go-ethereum/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for leveldb. These are not required for the WASM block-replayer.
 
 ### Types
 
@@ -271,7 +271,7 @@ Geth natively only allows reorgs to a fork of the currently-known network. In ni
 
 ### Genesis block creation
 
-Genesis block in nitro is not necessarily block #0. Nitro supports importing blocks that take place before genesis. We split out [`WriteHeadBlock`][writeheadblock_link] from gensis.Commit and use it to commit non-zero genesis blocks.
+Genesis block in nitro is not necessarily block #0. Nitro supports importing blocks that take place before genesis. We split out [`WriteHeadBlock`][writeheadblock_link] from genesis.Commit and use it to commit non-zero genesis blocks.
 
 [pad_estimates_link]: https://github.com/OffchainLabs/go-ethereum/blob/0ba62aab54fd7d6f1570a235f4e3a877db9b2bd0/accounts/abi/bind/base.go#L352
 [conservation_link]: https://github.com/OffchainLabs/go-ethereum/blob/0ba62aab54fd7d6f1570a235f4e3a877db9b2bd0/core/state/statedb.go#L42
