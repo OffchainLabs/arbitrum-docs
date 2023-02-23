@@ -188,7 +188,7 @@ const config = {
         content: `Note: Arbitrum's Mainnet chains are governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details.`,
         backgroundColor: "rgb(121 241 3)",
         textColor: "#091E42",
-        isCloseable: true,
+        isCloseable: false,
       },
     }),
 };
