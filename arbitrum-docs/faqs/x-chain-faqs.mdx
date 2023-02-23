@@ -20,7 +20,7 @@ The "padding on both ends" involves three events that have to occur between a cl
 
 Additionally, in the rare and unlikely event of a dispute, this delay period will be extended for the dispute to resolve.
 
-### What is a retryable ticket’s “submission fee”? How can I calculate it? What happens if I the fee I provide is insufficient? {#q-submission-fee}
+### What is a retryable ticket’s “submission fee”? How can I calculate it? What happens if the fee I provide is insufficient? {#q-submission-fee}
 
 A [retryable’s](/arbos/l1-to-l2-messaging.mdx) submission fee is a special fee a user must pay to create a retryable ticket. The fee is directly proportional to the size of the L1 calldata the retryable ticket uses. The fee can be queried using the `Inbox.calculateRetryableSubmissionFee` method. If insufficient fee is provided, the transactions will revert on L1, and the ticket won't get created.
 
