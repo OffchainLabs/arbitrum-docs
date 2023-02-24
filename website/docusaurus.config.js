@@ -41,7 +41,7 @@ const config = {
           routeBasePath: "/",
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth:
-            if(s.docPath.includes("troubleshooting")) return undefined
+            if (s.docPath.includes("troubleshooting")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -63,7 +63,7 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
-    require.resolve('docusaurus-lunr-search'),
+    require.resolve("docusaurus-lunr-search"),
   ],
 
   themeConfig:
@@ -107,7 +107,7 @@ const config = {
           },
           {
             href: "https://docs.arbitrum.foundation",
-            label: "Governance"
+            label: "Governance",
           },
           {
             type: "dropdown",
@@ -185,9 +185,9 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum's Mainnet chains are governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details.`,
-        backgroundColor: "rgb(121 241 3)",
-        textColor: "#091E42",
+        content: `✨ Arbitrum's Mainnet chains are now governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details. ✨`,
+        backgroundColor: "rgb(8 53 117)",
+        textColor: "white",
         isCloseable: false,
       },
     }),
