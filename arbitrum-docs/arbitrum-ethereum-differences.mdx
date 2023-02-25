@@ -73,18 +73,18 @@ See full list of [mainnet block fields](https://ethereum.org/en/developers/docs/
 
 In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on mainnet, Arbitrum adds additional types listed below and [documented in full detail here](arbos/geth#transaction-types).
 
-On calls that return custom Arbitrum type transactions, such as [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash), the `type` field will reflect the custom codes where applicable. 
+On RPC calls that return transactions, such as [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash), the `type` field will reflect the custom codes where applicable. 
 
-- `100` - `ArbitrumDepositTxType`: A deposit of ETH from L1 to L2 via the Arbitrum bridge
-- `101` - `ArbitrumUnsignedTxType`: An L1 user can use to call an L2 contract via the bridge
-- `102` - `ArbitrumContractTxType`: Allows an L1 contract to call an L2 contract method via the bridge
-- `104` - `ArbitrumRetryTxType`: Used to [redeem a retryable ticket](arbos/l1-to-l2-messaging#redeeming-a-retryable) on L2, which finalizes a L1 to L2 message that failed to redeem automatically (usually due to low gas)
-- `105` - `ArbitrumSubmitRetryableTxType`: Retryable tickets are [submitted via the L1 bridge](/arbos/l1-to-l2-messaging#submitting-a-retryable) and allow arbitrary L1 to L2 messages to be created and executed on L2
-- `106` - `ArbitrumInternalTxType`: Internal transactions created by the ArbOS itself for certain internal state updates, like L1 base fee and block number. 
+- `100` - `ArbitrumDepositTxType`: A deposit of ETH from L1 to L2 via the Arbitrum bridge.
+- `101` - `ArbitrumUnsignedTxType`: An L1 user can use to call an L2 contract via the bridge.
+- `102` - `ArbitrumContractTxType`: Allows an L1 contract to call an L2 contract method via the bridge.
+- `104` - `ArbitrumRetryTxType`: Used to [redeem a retryable ticket](arbos/l1-to-l2-messaging#redeeming-a-retryable) on L2, which finalizes a [retryable](/arbos/l1-to-l2-messaging#retryables) that failed to execute automatically (usually due to low gas).
+- `105` - `ArbitrumSubmitRetryableTxType`: Retryable tickets are [submitted via the L1 bridge](/arbos/l1-to-l2-messaging#submitting-a-retryable) and allow arbitrary L1 to L2 messages to be created and executed on L2.
+- `106` - `ArbitrumInternalTxType`: Internal transactions created by the ArbOS itself for certain state updates, like L1 base fee and block number.
 
 #### Additional Fields
 
-- `requestId`: Added to L1-to-L2 transactions to indicate position in the `Inbox` queue
+- `requestId`: Added to L1-to-L2 transactions to indicate position in the `Inbox` queue.
 
 #### Existing Fields With Different Behavior
 
@@ -96,7 +96,7 @@ See full list of [mainnet transaction fields](https://ethereum.org/en/developers
 
 #### Additional Fields
 
-- `l1BlockNumber`: The l1 block number that would be used [for block.number calls](time).
-- `gasUsedForL1`: Amount of gas spent on l1 computation in units of l2 gas.
+- `l1BlockNumber`: The L1 block number that would be used [for block.number calls](time).
+- `gasUsedForL1`: Amount of gas spent on L1 computation in units of L2 gas.
 
 See full list of [mainnet transaction receipt fields](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionreceipt) for additional reference.
