@@ -95,7 +95,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "migration/dapp_migration",
+            docId: "getting-started-devs",
             position: "left",
             label: "Build DApps",
           },
