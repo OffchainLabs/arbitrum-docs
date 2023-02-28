@@ -41,7 +41,7 @@ const config = {
           routeBasePath: "/",
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth:
-            if(s.docPath.includes("troubleshooting")) return undefined
+            if (s.docPath.includes("troubleshooting")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -63,7 +63,7 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
-    require.resolve('docusaurus-lunr-search'),
+    require.resolve("docusaurus-lunr-search"),
   ],
 
   themeConfig:
@@ -182,8 +182,8 @@ const config = {
       announcementBar: {
         id: "support_us",
         content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
-        backgroundColor: "rgb(121 241 3)",
-        textColor: "#091E42",
+        backgroundColor: "rgb(8 53 117)",
+        textColor: "white",
         isCloseable: true,
       },
     }),

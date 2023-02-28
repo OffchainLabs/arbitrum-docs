@@ -55,10 +55,10 @@ const oldPathToNewPath = {
   "/faqs/what-if-dispute": "/faqs/protocol-faqs#q-dispute-reorg",
   "/faqs/seq-or-val": "/faqs/protocol-faqs#q-seq-vs-val",
   "/faqs/beta-status": "/mainnet-beta",
-  "/faqs/the-merge": "/"
+  "/faqs/the-merge": "/",
 };
 
-const getNewPath = _path => {
+const getNewPath = (_path) => {
   const path = _path.toLowerCase();
 
   for (let oldPath of Object.keys(oldPathToNewPath)) {
