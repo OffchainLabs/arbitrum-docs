@@ -72,7 +72,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 
 ### Optional parameters
 
-- `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"`
+- `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
   - URL to download genesis database from. Only needed when starting Arbitrum One without database
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
@@ -104,7 +104,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 - The feed relay is in the same docker image
 - Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.11-8e786ec --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feedy --l2.chain-id=42161
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.11-8e786ec --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed --l2.chain-id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with custom relay:
   ```shell
