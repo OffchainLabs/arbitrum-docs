@@ -191,6 +191,7 @@ article .markdown .footnotes hr {
 article a:not([data-quicklook-from]):not(.footnote-ref) {
   text-decoration: underline;
 }
+/* default mermaid container */
 .docusaurus-mermaid-container {
   display: flex;
   justify-content: center;
