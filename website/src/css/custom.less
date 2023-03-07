@@ -6,31 +6,36 @@
 
 /* You can override the default Infima variables here. */
 :root {
-    --ifm-color-primary: #2e8555;
-    --ifm-color-primary-dark: #29784c;
-    --ifm-color-primary-darker: #277148;
-    --ifm-color-primary-darkest: #205d3b;
-    --ifm-color-primary-light: #33925d;
-    --ifm-color-primary-lighter: #359962;
-    --ifm-color-primary-lightest: #3cad6e;
+    --ifm-color-primary: #007bdd;
+    --ifm-color-primary-dark: #295f78;
+    --ifm-color-primary-darker: #275771;
+    --ifm-color-primary-darkest: #20465d;
+    --ifm-color-primary-light: #337292;
+    --ifm-color-primary-lighter: #357899;
+    --ifm-color-primary-lightest: #3c85ad;
+    --ifm-color-content: #000;
+    --ifm-link-color: #007bdd;
     --ifm-code-font-size: 95%;
+    --ifm-global-radius: 2px;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+    --ifm-color-info-dark: #359aec;
+    --ifm-color-info-contrast-background: #f0f8ff;
+    --ifm-alert-padding-vertical: 1.5rem;
+    --ifm-alert-padding-horizontal: 1.5rem;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-    --ifm-color-primary: #25c2a0;
-    --ifm-color-primary-dark: #21af90;
-    --ifm-color-primary-darker: #1fa588;
-    --ifm-color-primary-darkest: #1a8870;
-    --ifm-color-primary-light: #29d5b0;
-    --ifm-color-primary-lighter: #32d8b4;
-    --ifm-color-primary-lightest: #4fddbf;
+    --ifm-color-primary: #28a0f0;
+    --ifm-color-primary-dark: #2182af;
+    --ifm-color-primary-darker: #1f7fa5;
+    --ifm-color-primary-darkest: #1a6c88;
+    --ifm-color-primary-light: #29b0d5;
+    --ifm-color-primary-lighter: #32b4d8;
+    --ifm-color-primary-lightest: #4fbcdd;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
-/*todo: weigh pros and cons of bundling component-specific css with components*/
-/*debt: some components and css (eg header badges) are shared between repos via code duplication */
 .header-badges {
     display: block;
     margin-bottom: 15px;
@@ -108,4 +113,128 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+article {
+    .markdown {
+        h1:first-child {
+            font-size: 30px;
+        }
+
+        >h3 {
+            font-size: 21px;
+            margin-top: 50px;
+            margin-bottom: 15px;
+        }
+
+        li li {
+            margin-top: 4px;
+        }
+
+        .small-table {
+            font-size: 12px;
+            margin-top: 20px;
+
+            td {
+                padding: 10px;
+            }
+        }
+
+
+
+        .definition-list {
+            dt {
+                font-weight: 700;
+                margin-top: 20px;
+            }
+
+            dd {
+                margin-left: 0;
+            }
+        }
+
+        a {
+            font-weight: 600;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
+            }
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .theme-admonition {
+            margin-bottom: 2em;
+
+            svg {
+                height: 1.3rem;
+                width: 1.3rem;
+            }
+        }
+
+        .a-b-list {
+            list-style-type: lower-alpha;
+        }
+
+        sup {
+            padding-left: 2px;
+        }
+
+        .footnote-backref {
+            display: none;
+        }
+
+        .footnotes {
+            border-top: 1px solid #ddd;
+            margin-top: 50px;
+
+            &:before {
+                content: "Footnotes:";
+                font-weight: 600;
+                margin-top: 30px;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+
+            hr {
+                display: none;
+            }
+        }
+    }
+}
+
+.theme-doc-sidebar-menu {
+    font-size: 13.5px;
+}
+
+.tippy-box {
+    padding: 8px;
+}
+
+.tippy-content p:last-child {
+    margin-bottom: 0
+}
+
+@media (max-width: 736px) {
+    .markdown h1:first-child {
+        font-size: 24px;
+    }
+
+    .markdown>h3 {
+        font-size: 18px;
+        margin-top: 35px;
+        margin-bottom: 10px;
+    }
+}
+
+article a:not([data-quicklook-from]):not(.footnote-ref) {
+    text-decoration: underline;
+}
+
+.docusaurus-mermaid-container {
+    display: flex;
+    justify-content: center;
 }

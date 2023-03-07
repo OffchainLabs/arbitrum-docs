@@ -6,7 +6,7 @@ export const HeaderBadges = () => {
     <BrowserOnly>
       {() => (
         <div className="header-badges">
-          <a className="header-badge" href={`https://github.com/CoolChainCo/docs/issues/new?title=Docs update request: ${new URL(window.location.href).pathname}&body=Source: ${window.location.href}%0A%0ARequest: (how can we help?)`}>
+          <a className="header-badge" href={`https://github.com/OffchainLabs/arbitrum-docs/issues/new?title=Docs update request: ${new URL(window.location.href).pathname}&body=Source: ${window.location.href}%0A%0ARequest: (how can we help?)`}>
             <span className="badge-avatar emoji-avatar">✏️</span>
             <span className="badge-label">Request an update</span>
           </a>
@@ -16,4 +16,4 @@ export const HeaderBadges = () => {
   );
 };
 
-/*debt: some components and css (eg header badges) are shared between repos via code duplication */
+/*debt: some components and css (eg header badges) are duplicated between repos */
