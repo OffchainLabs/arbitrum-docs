@@ -2,7 +2,7 @@
 
 Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider
 
-### Minimum Hardware Configuration 
+### Minimum Hardware Configuration
 
 - Followings specify the minimum hardware configuration required to setup a Nitro full node (not archival):
   - RAM: 4-8 GB
@@ -72,7 +72,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 
 ### Optional parameters
 
-- `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"`
+- `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
   - URL to download genesis database from. Only needed when starting Arbitrum One without database
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
@@ -104,7 +104,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 - The feed relay is in the same docker image
 - Here is an example of how to run the feed relay for Arbitrum One:
   ```shell
-  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.11-8e786ec --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feedy --l2.chain-id=42161
+  docker run --rm -it  -p 0.0.0.0:9642:9642 --entrypoint relay offchainlabs/nitro-node:v2.0.11-8e786ec --node.feed.output.addr=0.0.0.0 --node.feed.input.url=wss://arb1.arbitrum.io/feed --l2.chain-id=42161
   ```
 - Here is an example of how to run nitro-node for Arbitrum One with custom relay:
   ```shell
@@ -115,15 +115,15 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
 
 - Currently, the ability to post assertions on-chain for mainnet Arbitrum chains is whitelisted. However, anyone can run a validator in `Watchtower` mode which will immediately log an error if an on-chain assertion deviates from the locally computed chain state
 - Full list of validator strategies:
-  * `Watchtower`
+  - `Watchtower`
     - If local state disagrees with on-chain assertion, simply log an error (no wallet required, gas never spent on-chain)
-  * `Defensive` (Whitelist required)
+  - `Defensive` (Whitelist required)
     - Post stake and create challenge if local state disagrees with on-chain assertion (wallet required, will only post stake on-chain if bad assertion found)
-  * `StakeLatest` (Whitelist required)
+  - `StakeLatest` (Whitelist required)
     - Stay staked on latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
-  * `ResolveNodes` (Whitelist required)
+  - `ResolveNodes` (Whitelist required)
     - Stay staked on latest assertion, resolve any unconfirmed assertions and challenge any bad assertions found (wallet required, always staked, uses some gas every time unconfirmed assertion resolved or new assertion created)
-  * `MakeNodes` (Whitelist required)
+  - `MakeNodes` (Whitelist required)
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted call that didn't do anything.
 
@@ -152,7 +152,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --l1.wallet.only-create-key --l1.wallet.password="SOME SECURE PASSWORD"
   ```
-- Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova.  Be sure to backup the wallet, it will be the only way to withdraw stake when desired
+- Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova. Be sure to backup the wallet, it will be the only way to withdraw stake when desired
 
 ### Running Whitelisted Defensive Validator
 
