@@ -40,8 +40,9 @@ const config = {
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
           editUrl: function (s) {
-            // troubleshooting docs content has external source-of-truth:
-            if (s.docPath.includes("troubleshooting")) return undefined;
+            // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
+
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
