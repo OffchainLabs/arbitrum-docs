@@ -26,7 +26,7 @@ When a batch posting report message arrives at L2, ArbOS computes the cost of th
 
 The second type of L1 cost is an optional (per chain) per-unit reward for handling transaction calldata. In general the reward might be paid to the sequencer, or to members of the Data Availability Committee in an AnyTrust chain, or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
 
-The L1 pricer keep track of the funds due to the reward address, based on the number of data units handled so far. This amount is updated whenever a batch posting report arrives at L2.
+The L1 pricer keeps track of the funds due to the reward address, based on the number of data units handled so far. This amount is updated whenever a batch posting report arrives at L2.
 
 ## Allocating funds and paying what is owed
 
@@ -46,7 +46,7 @@ After allocating funds and paying what is owed, the L1 Pricer adjusts the L1 Gas
 
 The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the L1 Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
 
-A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee is the surplus is increasing, and increase the Basefee is the surplus is shrinking.
+A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
 
 ## Getting L1 Fee Info
 

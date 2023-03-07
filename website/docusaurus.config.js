@@ -41,8 +41,8 @@ const config = {
           routeBasePath: "/",
           breadcrumbs: false,
           editUrl: function (s) {
-            // troubleshooting docs content has external source-of-truth:
-            if (s.docPath.includes("troubleshooting")) return undefined
+            // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -67,7 +67,7 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
-    require.resolve('docusaurus-lunr-search'),
+    require.resolve("docusaurus-lunr-search"),
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -98,7 +98,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "migration/dapp_migration",
+            docId: "getting-started-devs",
             position: "left",
             label: "Build DApps",
           },
@@ -184,9 +184,9 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum is in <a rel="noopener noreferrer" href="/mainnet-beta">Mainnet Beta</a>.`,
-        backgroundColor: "rgba(0, 123, 221, 0.7)",
-        textColor: "#091E42",
+        content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
+        backgroundColor: "rgb(8 53 117)",
+        textColor: "white",
         isCloseable: true,
       },
     }),
