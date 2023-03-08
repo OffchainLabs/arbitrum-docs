@@ -39,11 +39,11 @@ Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additiona
 
 What follows is an overview of each hook, in chronological order.
 
-### [`ReadyEVMForL2`][readyevmforl2_link]
+### [`ReadyEVMForL2`][readyevmforl2_link]{#ReadyEVMForL2}
 
 A call to [`ReadyEVMForL2`][readyevmforl2_link] installs the other transaction-specific hooks into each geth [`EVM`][evm_link] right before it performs a state transition. Without this call, the state transition will instead use the default [`DefaultTxProcessor`][defaulttxprocessor_link] and get exactly the same results as vanilla geth. A [`TxProcessor`][txprocessor_link] object is what carries these hooks and the associated arbitrum-specific state during the transaction's lifetime.
 
-### [`StartTxHook`][starttxhook_link]
+### [`StartTxHook`][starttxhook_link]{#StartTxHook}
 
 The [`StartTxHook`][starttxhook_link] is called by geth before a transaction starts executing. This allows ArbOS to handle two arbitrum-specific transaction types.
 
@@ -53,7 +53,7 @@ If the transaction is an `ArbitrumSubmitRetryableTx`, ArbOS creates a retryable 
 
 The hook returns `true` for both of these transaction types, signifying that the state transition is complete.
 
-### [`GasChargingHook`][gascharginghook_link]
+### [`GasChargingHook`][gascharginghook_link]{#GasChargingHook}
 
 This fallible hook ensures the user has enough funds to pay their poster's L1 calldata costs. If not, the tx is reverted and the [`EVM`][evm_link] does not start. In the common case that the user can pay, the amount paid for calldata is set aside for later reimbursement of the poster. All other fees go to the network account, as they represent the tx's burden on validators and nodes more generally.
 
@@ -64,7 +64,7 @@ If the user attempts to purchase compute gas in excess of ArbOS's per-block gas 
 [that_seen_link]: https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/block_processor.go#L176
 [max_perblock_limit_link]: https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/l2pricing/l2pricing.go#L86
 
-### [`PushCaller`][pushcaller_link]
+### [`PushCaller`][pushcaller_link]{#PushCaller}
 
 These hooks track the callers within the EVM callstack, pushing and popping as calls are made and complete. This provides [`ArbSys`](precompiles#ArbSys) with info about the callstack, which it uses to implement the methods [`WasMyCallersAddressAliased`](precompiles#ArbSys) and [`MyCallersAddressWithoutAliasing`](precompiles#ArbSys).
 
@@ -72,15 +72,15 @@ These hooks track the callers within the EVM callstack, pushing and popping as c
 
 In arbitrum, the BlockHash and Number operations return data that relies on underlying L1 blocks instead of L2 blocks, to accommodate the normal use-case of these opcodes, which often assume ethereum-like time passes between different blocks. The L1BlockHash and L1BlockNumber hooks have the required data for these operations.
 
-### [`ForceRefundGas`][forcerefundgas_link]
+### [`ForceRefundGas`][forcerefundgas_link]{#ForceRefundGas}
 
 This hook allows ArbOS to add additional refunds to the user's tx. This is currently only used to refund any compute gas purchased in excess of ArbOS's per-block gas limit during the [`GasChargingHook`](#GasChargingHook).
 
-### [`NonrefundableGas`][nonrefundablegas_link]
+### [`NonrefundableGas`][nonrefundablegas_link]{#NonrefundableGas}
 
 Because poster costs come at the expense of L1 aggregators and not the network more broadly, the amounts paid for L1 calldata should not be refunded. This hook provides geth access to the equivalent amount of L2 gas the poster's cost equals, ensuring this amount is not reimbursed for network-incentivized behaviors like freeing storage slots.
 
-### [`EndTxHook`][endtxhook_link]
+### [`EndTxHook`][endtxhook_link]{#EndTxHook}
 
 The [`EndTxHook`][endtxhook_link] is called after the [`EVM`][evm_link] has returned a transaction's result, allowing one last opportunity for ArbOS to intervene before the state transition is finalized. Final gas amounts are known at this point, enabling ArbOS to credit the network and poster each's share of the user's gas expenditures as well as adjust the pools. The hook returns from the [`TxProcessor`][txprocessor_link] a final time, in effect discarding its state as the system moves on to the next transaction where the hook's contents will be set afresh.
 
@@ -158,27 +158,27 @@ Nitro geth includes a few L2-specific transaction types. Click on any to jump to
 
 The following reference documents each type.
 
-### [`ArbitrumUnsignedTx`][arbitrumunsignedtx_link]
+### [`ArbitrumUnsignedTx`][arbitrumunsignedtx_link]{#ArbitrumUnsignedTx}
 
 Provides a mechanism for a user on L1 to message a contract on L2. This uses the bridge for authentication rather than requiring the user's signature. Note, the user's acting address will be remapped on L2 to distinguish them from a normal L2 caller.
 
-### [`ArbitrumContractTx`][arbitrumcontracttx_link]
+### [`ArbitrumContractTx`][arbitrumcontracttx_link]{#ArbitrumContractTx}
 
 These are like an [`ArbitrumUnsignedTx`][arbitrumunsignedtx_link] but are intended for smart contracts. These use the bridge's unique, sequential nonce rather than requiring the caller specify their own. An L1 contract may still use an [`ArbitrumUnsignedTx`][arbitrumunsignedtx_link], but doing so may necessitate tracking the nonce in L1 state.
 
-### [`ArbitrumDepositTx`][arbitrumdeposittx_link]
+### [`ArbitrumDepositTx`][arbitrumdeposittx_link]{#ArbitrumDepositTx}
 
 Represents a user deposit from L1 to L2. This increases the user's balance by the amount deposited on L1.
 
-### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]
+### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]{#ArbitrumSubmitRetryableTx}
 
 Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](arbos#Retryables) for more info.
 
-### [`ArbitrumRetryTx`][arbitrumretrytx_link]
+### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
 These are scheduled by calls to the [`redeem`](precompiles#ArbRetryableTx) precompile method and via retryable auto-redemption. Please see the [retryables documentation](arbos#Retryables) for more info.
 
-### [`ArbitrumInternalTx`][arbitruminternaltx_link]
+### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
 Because tracing support requires ArbOS's state-changes happen inside a transaction, ArbOS may create a tx of this type to update its state in-between user-generated transactions. Such a tx has a [`Type`][internaltype_link] field signifying the state it will update, though currently this is just future-proofing as there's only one value it may have. Below are the internal tx types.
 
