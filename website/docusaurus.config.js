@@ -110,7 +110,7 @@ const config = {
           },
           {
             href: "https://docs.arbitrum.foundation",
-            label: "Governance"
+            label: "Governance",
           },
           {
             type: "dropdown",
@@ -188,7 +188,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum's Mainnet chains are governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details.`,
+        content: `✨ Arbitrum's Mainnet chains are now governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
