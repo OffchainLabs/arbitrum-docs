@@ -14,14 +14,15 @@ This quickstart is for developers who want to start building decentralized appli
 
 ### What we're building
 
-We're going to implement a digital cupcake vending machine using Solidity smart contracts[^1]. This vending machine will follow these rules:
+We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. Our vending machine will follow three rules:
 
 1. The vending machine will distribute a cupcake to anyone who wants one.
 2. The vending machine will not distribute a cupcake to someone who has recently received one.
+3. The vending machine's rules can't be changed by anyone.
 
-Here's a Javascript version of the vending machine we'll build:
+Here's our vending machine implemented with Javascript:
 
-```js title="VendingMachine.js" live
+```js title="VendingMachine.js" live className="foo" id="bar"
 function VendingMachineFactory(props) {
     class VendingMachine {
         // Internal memory of the vending machine
