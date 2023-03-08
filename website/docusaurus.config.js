@@ -184,7 +184,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Arbitrum is in <a rel="noopener noreferrer" href="/mainnet-beta">Mainnet Beta</a>.`,
+        content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: true,
