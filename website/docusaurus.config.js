@@ -39,9 +39,10 @@ const config = {
           path: "../arbitrum-docs/",
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
+          breadcrumbs: false,
           editUrl: function (s) {
-            // troubleshooting docs content has external source-of-truth:
-            if (s.docPath.includes("troubleshooting")) return undefined;
+            // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -49,6 +50,9 @@ const config = {
           },
           showLastUpdateTime: true,
         },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css')
+        }
       }),
     ],
   ],
@@ -65,7 +69,6 @@ const config = {
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
