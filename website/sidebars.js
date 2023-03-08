@@ -20,6 +20,10 @@ const sidebars = {
   introSidebar: [
     {
       type: "doc",
+      id: "for-devs/arbitrum-quickstart",
+    },
+    {
+      type: "doc",
       id: "intro/intro",
       label: "A Gentle Introduction"
     },

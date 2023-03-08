@@ -24,6 +24,7 @@
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
     "@docusaurus/core": "^2.3.1",
     "@docusaurus/preset-classic": "^2.3.1",
+    "@docusaurus/theme-live-codeblock": "^2.3.1",
     "@docusaurus/theme-mermaid": "^2.3.1",
     "clsx": "^1.2.1",
     "docusaurus-lunr-search": "^2.3.2",

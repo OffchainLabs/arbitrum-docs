@@ -16,7 +16,7 @@ const config = {
   markdown: {
     mermaid: true,
   },
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: ["@docusaurus/theme-mermaid", "@docusaurus/theme-live-codeblock"],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "OffchainLabs", // Usually your GitHub org/user name.
@@ -57,15 +57,15 @@ const config = {
     ],
   ],
   plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
@@ -188,6 +188,13 @@ const config = {
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: true,
+      },
+      liveCodeBlock: {
+        /**
+         * The position of the live playground, above or under the editor
+         * Possible values: "top" | "bottom"
+         */
+        playgroundPosition: 'top',
       },
     }),
 };
