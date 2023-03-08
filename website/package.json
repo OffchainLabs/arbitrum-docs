@@ -15,7 +15,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "prettier:format": "yarn prettier:format:docs && yarn prettier:format:app",
-    "prettier:format:app": "prettier --config-precedence file-override --write \"src/**/*.{tsx,ts,scss,md,json}\"",
+    "prettier:format:app": "prettier --config-precedence file-override --write \"src/**/*.{tsx,ts,scss,md,json,js}\"",
     "prettier:format:docs": "prettier --config-precedence file-override --write \"../arbitrum-docs/**/*.{md,mdx}\"",
     "typecheck": "tsc"
   },
