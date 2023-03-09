@@ -169,6 +169,39 @@ article .markdown .footnotes:before {
 article .markdown .footnotes hr {
   display: none;
 }
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] {
+  box-shadow: unset !important;
+}
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:not(:nth-child(2)) {
+  display: none;
+}
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) {
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 150px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div #cupcake {
+  display: block;
+  font-size: 30px;
+}
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div button:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+.prism-code {
+  font-size: 12px;
+}
 .theme-doc-sidebar-menu {
   font-size: 13.5px;
 }

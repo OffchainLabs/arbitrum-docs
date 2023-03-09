@@ -206,6 +206,50 @@ article {
     }
 }
 
+// todo: ensure this only applies when needed, not to all instances of the live code block
+[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] {
+    box-shadow: unset !important;
+
+    >div:not(:nth-child(2)) {
+        display: none;
+    }
+
+    >div:nth-child(2) {
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 150px;
+        text-align: center;
+        border: 1px solid #ddd;
+
+        div {
+
+            #cupcake {
+                display: block;
+                font-size: 30px;
+            }
+
+            button {
+                padding: 10px 20px;
+                border-radius: 5px;
+                margin-top: 20px;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+}
+
+.prism-code {
+    font-size: 12px;
+}
+
 .theme-doc-sidebar-menu {
     font-size: 13.5px;
 }
