@@ -57,6 +57,7 @@ const config = {
     ],
   ],
   plugins: [
+    // TEMP for windows
     //[
     //  "@docusaurus/plugin-content-docs",
     //  {
