@@ -38,14 +38,17 @@ function VendingMachineFactory(props) {
 
             const fiveSeconds = 5000;
             const userCanReceiveCupcake = this.cupcakeDistributionTimes[userId] + fiveSeconds <= Date.now();
-            if (!userCanReceiveCupcake) {
-                console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
-                return false;
-            } else {
+            if (userCanReceiveCupcake) {
+                // Rule 1: The vending machine will distribute a cupcake to anyone who wants one.
                 this.cupcakeBalances[userId]++;
                 this.cupcakeDistributionTimes[userId] = Date.now();
                 console.log(`Enjoy your cupcake, ${userId}!`);
                 return true;
+                
+            } else {
+                // Rule 2: The vending machine will not distribute a cupcake to someone who has recently received one.
+                console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+                return false;
             }
         }
 
@@ -101,15 +104,15 @@ The code in this quickstart is tooling-agnostic, so feel free to use whatever to
  - Ethereum is a decentralized blockchain that runs small programs called smart contracts.
  - Smart contracts allow decentralized apps (dApps) to process transactions according to pre-defined rules.
  - DApps let users carry their data and identity between applications without having to trust centralized service providers.
- - While traditional (web2) apps are hosted on centralized servers, decentralized (web3) apps are hosted by Ethereum's decentralized network of nodes.
- - People who run <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>Ethereum nodes</a> receive rewards for processing and validating transactions.
- - These transactions can be expensive for end-users. Layer 2 (L2) scaling solutions like Arbitrum can help reduce costs for end-users.
+ - This is made possible by Ethereum's decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a>.
+ - People who run Ethereum nodes receive rewards for processing and validating transactions.
+ - These transactions can be expensive. Layer 2 (L2) scaling solutions like Arbitrum can help reduce costs for end-users.
  - Arbitrum is a suite of L2 scaling solutions. It lets you to build dApps that can process thousands of transactions per second with low latency, low transaction costs, and high security standards.
 
 
 ### Review our dumb contract
 
-The above vending machine is implemented as a Javascript class:
+Here is our vending machine implemented as a Javascript class:
 
 ```js title="VendingMachine.js"
     class VendingMachine {
@@ -126,14 +129,17 @@ The above vending machine is implemented as a Javascript class:
 
             const fiveSeconds = 5000;
             const userCanReceiveCupcake = this.cupcakeDistributionTimes[userId] + fiveSeconds <= Date.now();
-            if (!userCanReceiveCupcake) {
-                console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
-                return false;
-            } else {
+            if (userCanReceiveCupcake) {
+                // Rule 1: The vending machine will distribute a cupcake to anyone who wants one.
                 this.cupcakeBalances[userId]++;
                 this.cupcakeDistributionTimes[userId] = Date.now();
                 console.log(`Enjoy your cupcake, ${userId}!`);
                 return true;
+                
+            } else {
+                // Rule 2: The vending machine will not distribute a cupcake to someone who has recently received one.
+                console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+                return false;
             }
         }
 
@@ -143,9 +149,9 @@ The above vending machine is implemented as a Javascript class:
     }
 ```
 
-We're calling it a "dumb contract" because it's hosted by a centralized server that we (Offchain Labs) control. This means that we can change the contract's rules to give our friends extra cupcakes. This is a problem because it means that you have to trust us, and we have to trust our hosting provider.
+The `VendingMachine` class is like a contract - it contains *state* and implements *rules*. We're calling it a "dumb contract" because it's hosted by a centralized server that we (Offchain Labs) control. This means that we can change the contract's rules to give our friends extra cupcakes. This is a problem because it means that you have to trust us, and we have to trust our hosting provider.
 
-DApps solve this problem by using smart contracts to build end-user experiences that nobody in particular controls[^2]. Let's convert our dumb contract into a smart contract.
+DApps solve this type of problem by using smart contracts to build end-user experiences that nobody in particular controls[^2]. Let's convert our dumb contract into a smart contract.
 
 
 ### Review our smart contract
@@ -155,7 +161,7 @@ Here is our vending machine's dumb Javascript contract implemented as a Solidity
 ```solidity title="VendingMachine.sol"
 pragma solidity ^0.8.0;
 
-contract VendingMachine {
+contract VendingMachine { // Rule 3: The vending machine's rules can't be changed by anyone.
     // Internal storage of the vending machine
     mapping(address => uint) private _cupcakeBalances;
     mapping(address => uint) private _cupcakeDistributionTimes;
@@ -169,12 +175,14 @@ contract VendingMachine {
         }
 
         bool userCanReceiveCupcake = _cupcakeDistributionTimes[userId] + fiveSeconds <= block.timestamp;
-        if (!userCanReceiveCupcake) {
-            revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
-        } else {
+        if (userCanReceiveCupcake) {
+            // Rule 1: The vending machine will distribute a cupcake to anyone who wants one.
             _cupcakeBalances[userId]++;
             _cupcakeDistributionTimes[userId] = block.timestamp;
             return true;
+        } else {
+            // Rule 2: The vending machine will not distribute a cupcake to someone who has recently received one.
+            revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
         }
     }
 
@@ -185,14 +193,15 @@ contract VendingMachine {
 }
 ```
 
+Before we deploy this smart contract to Ethereum's network, let's test it locally.
 
-### Test our smart contract
+### Test our smart contract locally
 
 Create a directory for your project and open it with VS Code. Then, use VS Code's integrated terminal to create a React app with `npx create-react-app react dapp`. When this command finishes, you should see a new `react-dapp` directory in your project directory.
 
-Navigate into this directory and run `yarn start` to verify that your React app can be served locally. You should see a new browser window open with a React app that says "Edit `src/App.js` and save to reload." You can close this for now; we'll spin this back up later.
+Navigate into the `react-dapp` directory and run `yarn start` to verify that your React app can be served locally. You should see a new browser window open with a React app that says "Edit `src/App.js` and save to reload." You can close this for now; we'll spin this back up later.
 
-Next, install [ethers.js](https://docs.ethers.org/v5/) and [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview):
+Next, install [ethers.js](https://docs.ethers.org/v5/) and [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview) from your `react-dapp` directory:
 
 <!--todo: toggles for npm / yarn? -->
 ```
@@ -215,18 +224,48 @@ At this point, you should see the following items in your `react-dapp` project d
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
 
-Run `npx hardhat compile` to compile your `contracts`. You may be prompted to install additional dependencies. Once this command finishes, you should see a new `.artifacts/` directory appear. This directory contains the compiled smart contracts.
+Run `npx hardhat compile` to compile your `contracts`. You may be prompted to install additional dependencies. Once this command finishes, you should see a new `.artifacts/` directory. This directory contains the compiled smart contracts.
 
 Next, run `npx hardhat node` to start a local Ethereum node. This node will be used to simulate the Ethereum blockchain. You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you. We'll use these to test our smart contract.
 
-From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to your local Ethereum node.
+From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to your local Ethereum node. You should see something like `Lock with 0.001ETH and unlock timestamp 1678405789 deployed to 0x5FbDB2315678afecb367f032d93F642f64180aa3` in your terminal. This is the address of your smart contract on the local Ethereum node.
+
+
+
+
+-------
 
 todo - may have to pin ethers.js to 5.7.2
 
+// yarn add @nomiclabs/hardhat-ethers
+// https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
 
-
-
-
+<!--
+"@ethersproject/abi": "^5.7.0",
+    "@ethersproject/providers": "^5.7.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@nomiclabs/hardhat-ethers": "^2.1.1",
+    "@nomiclabs/hardhat-etherscan": "^3.1.0",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/hardhat": "^6.1.2",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.7.0",
+    "hardhat": "^2.11.1",
+    "hardhat-gas-reporter": "^1.0.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "solidity-coverage": "^0.8.2",
+    "typechain": "^8.1.0",
+    "web-vitals": "^2.1.4"
+ -->
 
 ----
 
@@ -254,4 +293,4 @@ and install Hardhat with `npm install --save-dev hardhat`. We'll also need a few
 
 
 [^1]: Inspired by [Ethereum.org's Introduction to Smart Contracts](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's From vending machines to smart contracts](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
-[^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts aren't hosted by an institution's private, centralized network of servers. Instead, they're hosted by Ethereum's public, decentralized network of nodes. This means that instead of trusting centralized service providers, we're trusting the open-source code that runs on Ethereum's nodes.
+[^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. This means that instead of asking users to trust centralized service providers, web3 apps ask users to trust Ethereum's decentralized network of nodes and the open source client software that they use to process and validate transactions.
