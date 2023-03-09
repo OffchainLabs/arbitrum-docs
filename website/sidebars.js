@@ -116,6 +116,13 @@ const sidebars = {
       id: "node-running/troubleshooting-running-nodes"
     }
   ],
+  launchAChainSidebar: [
+    {
+      type: "doc",
+      id: "chain-launching/launch-a-chain",
+      label: "Launch a Chain",
+    },
+  ],
   devsSideBar: [
     {
       type: "category",

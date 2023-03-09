@@ -92,6 +92,13 @@ const config = {
           },
           {
             type: "doc",
+            docId: "chain-launching/launch-a-chain",
+            position: "left",
+            label: "Launch a Chain (new!)",
+            value: '<button>Give feedback</button>',
+          },
+          {
+            type: "doc",
             docId: "node-running/running-a-node",
             label: "Run a Node",
             position: "left",
