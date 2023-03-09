@@ -150,6 +150,11 @@ const sidebars = {
         },
         {
           type: "doc",
+          label: "How to estimate gas",
+          id: "devs-how-tos/how-to-estimate-gas"
+        },
+        {
+          type: "doc",
           label: "Cross-chain Messaging",
           id: "for-devs/cross-chain-messsaging"
         },
