@@ -116,10 +116,6 @@ const config = {
             label: "Learn",
           },
           {
-            href: "https://docs.arbitrum.foundation",
-            label: "DAO",
-          },
-          {
             type: "dropdown",
             label: "Links",
             position: "right",
