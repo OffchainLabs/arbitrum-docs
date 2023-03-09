@@ -94,7 +94,7 @@ const config = {
             type: "doc",
             docId: "chain-launching/launch-a-chain",
             position: "left",
-            label: "Launch a Chain (new!)",
+            label: "Launch an L3 (new!)",
             value: '<button>Give feedback</button>',
           },
           {
@@ -117,7 +117,7 @@ const config = {
           },
           {
             href: "https://docs.arbitrum.foundation",
-            label: "Governance",
+            label: "DAO",
           },
           {
             type: "dropdown",
