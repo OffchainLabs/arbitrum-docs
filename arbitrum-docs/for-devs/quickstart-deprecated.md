@@ -1,7 +1,6 @@
 ---
-id: arbitrum-quickstart
-title: Get started with Arbitrum (Solidity, Hardhat)
-sidebar_label: Quickstart (Solidity, Hardhat)
+title: Get started with Arbitrum (Obsolete)
+sidebar_label: Quickstart (Obsolete)
 description: This quickstart will walk you through the process of deploying a simple Solidity contract to Ethereum mainnet, and then to Arbitrum.
 author: symbolpunk
 sme: dzgoldman
@@ -10,8 +9,7 @@ task: deploy your first smart contract directly to L2
 type: quickstart (could be tutorial instead)
 ---
 
-This quickstart is for developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum or Arbitrum. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
-
+This quickstart is for developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ### What we're building
 
@@ -236,7 +234,7 @@ From another terminal instance, run `npx hardhat run scripts/deploy.js --network
 
 // connect metamask to localhost
 
-// test react app
+// test react app (or maybe just use the docs site?)
 
 // replace with vending machine
 

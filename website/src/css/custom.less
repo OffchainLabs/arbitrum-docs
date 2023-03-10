@@ -131,17 +131,6 @@ article {
             margin-top: 4px;
         }
 
-        .small-table {
-            font-size: 12px;
-            margin-top: 20px;
-
-            td {
-                padding: 10px;
-            }
-        }
-
-
-
         .definition-list {
             dt {
                 font-weight: 700;
@@ -206,45 +195,91 @@ article {
     }
 }
 
-// todo: ensure this only applies when needed, not to all instances of the live code block
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] {
-    box-shadow: unset !important;
+.small-table {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 
-    >div:not(:nth-child(2)) {
-        display: none;
+    td {
+        padding: 10px;
+    }
+}
+
+[class*="quickstart-solidity-hardhat"] {
+    table {
+        .small-table;
     }
 
-    >div:nth-child(2) {
+    .vending-machine {
         border-radius: 5px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         width: 200px;
-        height: 150px;
+        height: auto;
         text-align: center;
-        border: 1px solid #ddd;
+        border: 1px solid #bbb;
+        padding: 20px;
+        margin-bottom: 30px;
 
-        div {
+        h4 {
+            text-transform: uppercase;
+            color: rgb(130, 130, 130);
+            margin: 0;
+            font-family: monospace;
+        }
 
-            #cupcake {
-                display: block;
-                font-size: 30px;
+        .subheader {
+            font-family: monospace;
+            text-transform: uppercase;
+            color: rgb(130, 130, 130);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        #name-input {
+            padding: 10px;
+            width: 90%;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        #cupcake {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        #cupcake-please {
+            color: white;
+            background-color: #007bdd;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border-width: 0px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
             }
+        }
 
-            button {
-                padding: 10px 20px;
-                border-radius: 5px;
-                margin-top: 20px;
+        #balance-wrapper {
+            padding: 10px 20px;
+            font-size: 11px;
+            margin: 0;
 
-                &:hover {
-                    cursor: pointer;
-                    opacity: 0.9;
-                }
+            >span:first-child {
+                font-weight: 600;
+                padding-right: 5px;
             }
         }
     }
 }
+
+
 
 .prism-code {
     font-size: 12px;

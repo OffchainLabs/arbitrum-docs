@@ -119,7 +119,7 @@ const sidebars = {
   devsSideBar: [
     {
       type: "doc",
-      id: "for-devs/arbitrum-quickstart",
+      id: "for-devs/quickstart-solidity-hardhat",
     },
     {
       type: "category",

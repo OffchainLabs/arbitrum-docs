@@ -115,13 +115,6 @@ article .markdown > h3 {
 article .markdown li li {
   margin-top: 4px;
 }
-article .markdown .small-table {
-  font-size: 12px;
-  margin-top: 20px;
-}
-article .markdown .small-table td {
-  padding: 10px;
-}
 article .markdown .definition-list dt {
   font-weight: 700;
   margin-top: 20px;
@@ -169,35 +162,80 @@ article .markdown .footnotes:before {
 article .markdown .footnotes hr {
   display: none;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] {
-  box-shadow: unset !important;
+.small-table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:not(:nth-child(2)) {
-  display: none;
+.small-table td {
+  padding: 10px;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) {
+[class*="quickstart-solidity-hardhat"] table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+[class*="quickstart-solidity-hardhat"] table td {
+  padding: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 200px;
-  height: 150px;
+  height: auto;
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid #bbb;
+  padding: 20px;
+  margin-bottom: 30px;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div #cupcake {
+[class*="quickstart-solidity-hardhat"] .vending-machine h4 {
+  text-transform: uppercase;
+  color: #828282;
+  margin: 0;
+  font-family: monospace;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine .subheader {
+  font-family: monospace;
+  text-transform: uppercase;
+  color: #828282;
+  font-size: 12px;
+  font-weight: 800;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #name-input {
+  padding: 10px;
+  width: 90%;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake {
   display: block;
   font-size: 30px;
+  margin-bottom: 10px;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div button {
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please {
+  color: white;
+  background-color: #007bdd;
   padding: 10px 20px;
   border-radius: 5px;
+  border-width: 0px;
   margin-top: 20px;
+  margin-bottom: 20px;
 }
-[class="playgroundContainer_node_modules-@docusaurus-theme-live-codeblock-lib-theme-Playground-styles-module"] > div:nth-child(2) div button:hover {
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please:hover {
   cursor: pointer;
   opacity: 0.9;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper {
+  padding: 10px 20px;
+  font-size: 11px;
+  margin: 0;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
+  font-weight: 600;
+  padding-right: 5px;
 }
 .prism-code {
   font-size: 12px;
