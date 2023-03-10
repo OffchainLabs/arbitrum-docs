@@ -161,7 +161,8 @@ Here is our vending machine's dumb Javascript contract implemented as a Solidity
 ```solidity title="VendingMachine.sol"
 pragma solidity ^0.8.0;
 
-contract VendingMachine { // Rule 3: The vending machine's rules can't be changed by anyone.
+// Rule 3: The vending machine's rules can't be changed by anyone.
+contract VendingMachine {
     // Internal storage of the vending machine
     mapping(address => uint) private _cupcakeBalances;
     mapping(address => uint) private _cupcakeDistributionTimes;
@@ -212,15 +213,13 @@ This installs three packages: `ethers` lets us interact with the Ethereum blockc
 
 Next, run `npx hardhat` to configure Hardhat for your project. Select `Create a JavaScript project` when prompted. Make sure you specify your `react-dapp` folder as the project root when asked.
 
-At this point, you should see the following items in your `react-dapp` project directory (you may see others - these are the important ones):
+At this point, you should see the following items in your `react-dapp` project directory (among others):
 
 | Item                | Description                                                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
 | `contracts/`        | Contains your smart contracts. You should see the `Lock.sol` contract here.                               |
-| `public/`           | Contains web app artifacts.                                                                               |
 | `scripts/`          | Contains scripts that you can use to interact with your smart contracts. You should see `deploy.js` here. |
-| `src/`              | Contains web app artifacts.                                                                               |
-| `test/`             | Contains test files for your smart contracts. `Lock.js` is the test we can use to test `Lock.sol`.        |
+| `test/`             | Contains test files for your smart contracts. We can use `Lock.js` to test `Lock.sol`.                    |
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
 
@@ -234,6 +233,8 @@ From another terminal instance, run `npx hardhat run scripts/deploy.js --network
 
 
 -------
+
+todo - abi
 
 todo - may have to pin ethers.js to 5.7.2
 
