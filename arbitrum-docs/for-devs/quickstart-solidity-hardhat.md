@@ -251,6 +251,7 @@ import { Web3VendingMachine } from '@site/src/components/VendingMachines/Web3Ven
 todo:
  - get past errors
  - might have to fix chain id via hardhat config <- yup
+ - explain how this technically still doesn't follow the second rule
 
 
 ### Deploy the smart contract to Arbitrum
@@ -258,7 +259,10 @@ todo:
 When developing smart contracts professionally, you'll likely want to deploy them to a testnet before deploying them to mainnet. For this quickstart, we'll deploy our smart contract straight to Arbitrum mainnet.
 
 
-
+todo:
+ - do we want to express opinions / conventions RE staged deployments?
+ - eg local -> l1 testnet -> l2 testnet -> mainnet?
+ - what does the decision tree look like?
 
 
 ### Summary
