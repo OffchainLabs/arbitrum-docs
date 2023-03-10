@@ -18,54 +18,29 @@ export const Web3VendingMachine = () => {
         await this.requestAccount()
 
         // todo: this needs to come from the client
-        const vendingMachineAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
+        const vendingMachineAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        console.log('provider')
         const signer = provider.getSigner()
+        console.log('signer')
         const userAddress = await signer.getAddress() // get user's public wallet address
+        console.log('userAddress: ' + userAddress);
         const contract = new ethers.Contract(vendingMachineAddress, VendingMachineContract.abi, signer)
+        console.log('contract')
+        const cupcakeCountBefore = await contract.getCupcakeBalanceFor(userAddress);
+        console.log('before: ' + cupcakeCountBefore);
         const transaction = await contract.giveCupcakeTo(userAddress);
-        const txReceipt = await transaction.wait();
-
-        //const result = contract.interface.decodeFunctionResult("giveCupcakeTo", txReceipt.logs[0].data);
-        //const returnValue = result[0];
-        //console.log("TX RESULT: " + JSON.stringify(returnValue));
+        const cupcakeCountAfter = await contract.getCupcakeBalanceFor(userAddress);
+        console.log('after: ' + cupcakeCountAfter);
+        const succeeded = cupcakeCountAfter == cupcakeCountBefore + 1;
+        console.log('succeeded? ' + succeeded);
+        return succeeded;
       }
-
-      // old
-      //if (this.cupcakeBalances[userId] === undefined) {
-      //    this.cupcakeBalances[userId] = 0;
-      //    this.cupcakeDistributionTimes[userId] = 0;
-      //}
-      //
-      //// Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
-      //const fiveSeconds = 5000;
-      //const userCanReceiveCupcake = this.cupcakeDistributionTimes[userId] + fiveSeconds <= Date.now();
-      //if (userCanReceiveCupcake) {
-      //    this.cupcakeBalances[userId]++;
-      //    this.cupcakeDistributionTimes[userId] = Date.now();
-      //    console.log(`Enjoy your cupcake, ${userId}!`);
-      //    return true;
-      //} else {
-      //    console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
-      //    return false;
-      //}
     }
 
     async getCupcakeBalanceFor(userId) {
       // todo
-      if (typeof window.ethereum !== 'undefined') {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider)
-        try {
-          const data = await contract.greet()
-          console.log('data: ', data)
-        } catch (err) {
-          console.log("Error: ", err)
-        }
-      }
-      // old
-      //return this.cupcakeBalances[userId];
     }
   }
 
@@ -73,7 +48,13 @@ export const Web3VendingMachine = () => {
 
   const handleButtonClick = async () => {
     const name = document.getElementById("name-input").value;
-    let gotCupcake = await vendingMachineClient.giveCupcakeTo(name);
+    let gotCupcake = false;
+    try {
+      gotCupcake = await vendingMachineClient.giveCupcakeTo(name);
+    } catch (error) {
+      console.error("ERROR: " + JSON.stringify(error));
+    }
+
     let existingFadeout;
     if (gotCupcake) {
       const cupcake = document.getElementById("cupcake");
@@ -102,7 +83,7 @@ export const Web3VendingMachine = () => {
     <div class='vending-machine'>
       <h4>Free Cupcakes</h4>
       <span class='subheader'>(web3)</span>
-      <input id="name-input" type="text" placeholder="Enter name" />
+      <input id="name-input" type="text" placeholder="Enter contract address" />
       <button id="cupcake-please" onClick={handleButtonClick}>Cupcake please!</button>
       <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
       <p id='balance-wrapper'>
