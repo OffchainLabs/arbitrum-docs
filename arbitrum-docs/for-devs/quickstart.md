@@ -7,6 +7,7 @@ author: symbolpunk
 sme: dzgoldman
 audience: web developers who haven't ever built on Ethereum/Arbitrum
 task: deploy your first smart contract directly to L2
+type: quickstart (could be tutorial instead)
 ---
 
 This quickstart is for developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum or Arbitrum. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
@@ -229,7 +230,17 @@ Next, run `npx hardhat node` to start a local Ethereum node. This node will be u
 
 From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to your local Ethereum node. You should see something like `Lock with 0.001ETH and unlock timestamp 1678405789 deployed to 0x5FbDB2315678afecb367f032d93F642f64180aa3` in your terminal. This is the address of your smart contract on the local Ethereum node.
 
+// copy address and private key
 
+// add to metamask
+
+// connect metamask to localhost
+
+// test react app
+
+// replace with vending machine
+
+// review architecture / data flows / data structures via supporting concept docs maybe
 
 
 -------
