@@ -250,7 +250,7 @@ import { Web3VendingMachine } from '@site/src/components/VendingMachines/Web3Ven
 
 todo:
  - get past errors
- - might have to fix chain id via hardhat config
+ - might have to fix chain id via hardhat config <- yup
 
 
 ### Deploy the smart contract to Arbitrum

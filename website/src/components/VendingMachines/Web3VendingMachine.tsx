@@ -17,16 +17,19 @@ export const Web3VendingMachine = () => {
       if (typeof window.ethereum !== 'undefined') {
         await this.requestAccount()
 
-        // this needs to come from the client
-        const vendingMachineAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+        // todo: this needs to come from the client
+        const vendingMachineAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3"
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner()
         const userAddress = await signer.getAddress() // get user's public wallet address
         const contract = new ethers.Contract(vendingMachineAddress, VendingMachineContract.abi, signer)
         const transaction = await contract.giveCupcakeTo(userAddress);
-        console.log("TX RESULT: " + transaction);
-        await transaction.wait();
+        const txReceipt = await transaction.wait();
+
+        //const result = contract.interface.decodeFunctionResult("giveCupcakeTo", txReceipt.logs[0].data);
+        //const returnValue = result[0];
+        //console.log("TX RESULT: " + JSON.stringify(returnValue));
       }
 
       // old
