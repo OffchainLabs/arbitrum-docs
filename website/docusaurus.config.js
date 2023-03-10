@@ -188,7 +188,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum's Mainnet chains are now governed by the Arbitrum DAO. See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/state-of-progressive-decentralization" target="_blank">here</a> for details. ✨`,
+        content: `✨ Arbitrum DAO has been officially announced. Learn more See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
