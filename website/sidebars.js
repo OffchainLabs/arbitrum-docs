@@ -149,9 +149,15 @@ const sidebars = {
           ]
         },
         {
-          type: "doc",
-          label: "How to estimate gas",
-          id: "devs-how-tos/how-to-estimate-gas"
+          type: "category",
+          label: "How Tos",
+          items: [
+            {
+              type: "doc",
+              label: "How to estimate gas",
+              id: "devs-how-tos/how-to-estimate-gas"
+            },
+          ]
         },
         {
           type: "doc",
