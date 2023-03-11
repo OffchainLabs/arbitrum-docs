@@ -3,6 +3,7 @@ id: how-to-estimate-gas
 title: "How to estimate gas in Arbitrum"
 description: Learn how to estimate gas before submitting transactions.
 author: TucksonDev
+content-type: how-to
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
@@ -11,7 +12,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 This how-to is intended for users and developers who want to understand how gas is calculated in Arbitrum, and how it can be estimated before submitting transactions. More information about the theory behind these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/arbos/gas) page. 
 
-We will first break down the formula mentioned in the Medium article, moving then to where to get the information of each variable, and finally seeing an example of how to apply the formula in your code as well as other practical ways of estimating gas costs.
+We'll first break down the formula mentioned in the Medium article, moving then to where to get the information of each variable, and finally seeing an example of how to apply the formula in your code as well as other practical ways of estimating gas costs.
 
 However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) that goes through all the calculations explained in this how-to.
 
@@ -45,7 +46,7 @@ To calculate the buffer, that estimated cost is divided by the L2 Gas Price.
 Extra Buffer (B) = L1 Estimated Cost (L1C) / L2 Gas Price (P)
 ```
 
-Finally, using all these elements, the formula can be written as follows:
+Finally, using all of the above elements, the formula can be written as follows:
 
 ```
 TXFEES = P * (L2G + ((L1P * L1S) / P))
@@ -53,20 +54,20 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We will use two resources available in Arbitrum: the [ArbGasInfo](https://arbiscan.io/address/0x000000000000000000000000000000000000006c) precompile and the [NodeInterface](/arbos/gas#nodeinterfacesol).
+We'll use two resources available in Arbitrum: the [ArbGasInfo](https://arbiscan.io/address/0x000000000000000000000000000000000000006c) precompile and the [NodeInterface](/arbos/gas#nodeinterfacesol).
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at 0.1 gwei on Arbitrum One (0.01 gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
-    - Call `ArbGasInfo.getPricesInWei()` and get the sixth element
+    - Call `ArbGasInfo.getPricesInWei()` and get the sixth element.
 - L2G (Gas used on L2) ⇒ Gas used to compute the transaction on L2. This does not include the “*posting on L1”* part of the calculations. The value of L2G will depend on the transaction itself, but having the data of the transaction, we can calculate it as follows:
     - Call `NodeInterface.GasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`, which estimates the L1 part of the fees) from the first (`gasEstimate`, which includes both the L1 and the L2 parts).
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on L1:
-    - Call `ArbGasInfo.getPricesInWei()` and get the second element
+    - Call `ArbGasInfo.getPricesInWei()` and get the second element.
 - L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on L1 (140 bytes).
     - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate is posted on L1, [as explained here](/inside-anytrust#data-availability-certificates).
 
 ## An example of how to apply this formula in your code
 
-Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We will use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to `ArbGasInfo` and `NodeInterface`.
+Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We'll use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to `ArbGasInfo` and `NodeInterface`.
 
 We first instantiate a factory object for ArbGasInfo and NodeInterface, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the L2 network we are using, and both `ARB_GAS_INFO` and `NODE_INTERFACE_ADDRESS` are the addresses of the precompiles in said network.
 
@@ -88,7 +89,7 @@ const nodeInterface = NodeInterface__factory.connect(
 );
 ```
 
-For this example, we will use the method `ArbGasInfo.getPricesInWei()` and `NodeInterface.gasEstimateComponents()` to get all the information we need. For the gasEstimateComponents() call we will pass a destinationAddress (might be any address) and the data we want to send, to get results as accurate as possible.
+For this example, we'll use the method `ArbGasInfo.getPricesInWei()` and `NodeInterface.gasEstimateComponents()` to get the information we need. For the `gasEstimateComponents()` call, we'll pass a `destinationAddress` (this can be any address) and the data we want to send, to get results as accurate as possible.
 
 ```ts
 // Getting the gas prices from ArbGasInfo.getPricesInWei()
@@ -102,7 +103,7 @@ const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponen
 );
 ```
 
-With this, we can now get the values of the 4 variables we will use in our formula.
+With this, we can now get the values of the 4 variables we'll use in our formula:
 
 ```ts
 // Setting the variables of the formula
@@ -128,7 +129,7 @@ const G = L2G.add(B);
 const TXFEES = P.mul(G);
 ```
 
-You can also see a working example of this code in [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation).
+Refer to [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) for a working example of this code.
 
 ## Other practical ways of estimating gas costs in your code
 
@@ -139,4 +140,4 @@ Instead of going through the formula, we can also use the following methods to e
 
 ## Final note
 
-Always keep in mind that this calculations are just an estimate and they might not be exactly what the transaction needs to pay for gas fees.
+Note that gas estimations from the above techniques are approximate and the actual gas fees may differ. We encourage developers to set this expectation explicitly wherever this information is shared with end-users.
