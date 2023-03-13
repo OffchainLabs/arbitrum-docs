@@ -14,18 +14,9 @@ todos:
   4: attach to behavior
   5: demonstrate "funnel testing"
   6: demonstrate other patterns / components / best practices
-  7: rationalize target audience
-  8: rationalize shareable content experiences
-  9: rationalize timing
-  10: meet partnerships and marketing needs
-  11: hidden opportunities
-  12: codepen
-  13: samples repo
-  14: memo to tie it all together (flip triangle - target audience = time-constrained partners)
-  15: data-driven decisions (LP, clicks)
-  16: hook
-  17: memorability <> absurdity
-  18: table styling
+  7: meet partnerships and marketing needs
+  8: codepen?
+  9: samples repo?
 ---
 
 This quickstart is for web developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
@@ -272,7 +263,7 @@ todo:
 todo
 
 
-### Next steps / things to link
+### Next steps / things to link / things to think about integrating
  - Testing
  - Samples
  - Blockchain exploring
