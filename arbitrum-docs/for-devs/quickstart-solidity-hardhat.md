@@ -260,9 +260,11 @@ When developing smart contracts professionally, you'll likely want to deploy the
 
 
 todo:
- - do we want to express opinions / conventions RE staged deployments?
+ - do we want to express opinions / conventions RE staged deployments? what are the industry norms there?
+ - patterns and best practices for deploying to mainnet?
+ - what about multiple chains, side chain concerns, etc? what do devs need to know?
  - eg local -> l1 testnet -> l2 testnet -> mainnet?
- - what does the decision tree look like?
+ - are there any decision trees? eg if x conditions are met, stage your deployments like y
 
 
 ### Summary
