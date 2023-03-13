@@ -3,7 +3,7 @@
 import React from "react";
 import { ethers } from 'ethers'
 import VendingMachineContract from './VendingMachine.sol/VendingMachine.json'
-
+//todo: pull into one component and parameterize the differences
 export const Web3VendingMachine = () => {
 
   class VendingMachineClient {
@@ -82,8 +82,10 @@ export const Web3VendingMachine = () => {
   return (
     <div class='vending-machine'>
       <h4>Free Cupcakes</h4>
-      <span class='subheader'>(web3)</span>
+      <span class='subheader'>(web3 - localhost)</span>
+      <input id="name-input" type="text" placeholder="Enter wallet address" />
       <input id="name-input" type="text" placeholder="Enter contract address" />
+      <input id="name-input" type="text" placeholder="Enter port" />
       <button id="cupcake-please" onClick={handleButtonClick}>Cupcake please!</button>
       <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
       <p id='balance-wrapper'>
