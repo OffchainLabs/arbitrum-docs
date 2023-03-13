@@ -82,6 +82,11 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "doc",
+      label: "Audit Reports",
+      id: "audit-reports"
     }
   ],
   runNodesSidebar: [
