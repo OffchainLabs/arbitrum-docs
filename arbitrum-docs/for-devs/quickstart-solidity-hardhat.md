@@ -17,7 +17,13 @@ todos:
   7: meet partnerships and marketing needs
   8: codepen?
   9: samples repo?
+  10: public preview
+  11: default Build DApps to this page
 ---
+
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+
+<PublicPreviewBannerPartial />
 
 This quickstart is for web developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
