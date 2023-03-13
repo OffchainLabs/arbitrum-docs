@@ -266,7 +266,12 @@ todo:
 
 ### Summary
 
-todo
+todo - visualize the components, layers, data structures, information flows, procedure
+
+
+### Live code editor
+
+this is where we use Docusaurus' live code editor to let users play with the code in the browser
 
 
 ### Next steps / things to link / things to think about integrating
