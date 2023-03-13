@@ -3,7 +3,7 @@ title: "Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)"
 sidebar_label: Quickstart (Solidity, Hardhat)
 description: This quickstart will prepare you to build your first decentralized app (dApp / web3 app) by speedwalking you through the process of deploying a simple Solidity smart contract directly to Arbitrum.
 author: symbolpunk
-author-objective: build a shareable quickstart that onboard web2 developers into Arbitrum
+author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum
 reader-audience: web developers who haven't ever built on Ethereum/Arbitrum
 reader-task: deploy my first smart contract directly to L2 with a confident understanding of Arbitrum's value prop
 content-type: quickstart
