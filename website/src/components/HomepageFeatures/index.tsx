@@ -27,7 +27,7 @@ const FeatureList: FeatureItem[] = [
     description: <>Guides for Dapp Devs and Node Runners</>,
   },
   {
-    title: "Governance",
+    title: "The Arbitrum DAO",
     Svg: require("@site/static/img/logo.svg").default,
     href: "https://docs.arbitrum.foundation/",
     description: <>Learn about Arbitrum governance</>,

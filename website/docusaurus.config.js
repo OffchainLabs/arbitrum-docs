@@ -92,6 +92,13 @@ const config = {
           },
           {
             type: "doc",
+            docId: "chain-launching/launch-a-chain",
+            position: "left",
+            label: "Launch an L3 (new!)",
+            value: '<button>Give feedback</button>',
+          },
+          {
+            type: "doc",
             docId: "node-running/running-a-node",
             label: "Run a Node",
             position: "left",
@@ -107,10 +114,6 @@ const config = {
             docId: "tx-lifecycle",
             position: "left",
             label: "Learn",
-          },
-          {
-            href: "https://docs.arbitrum.foundation",
-            label: "Governance",
           },
           {
             type: "dropdown",
