@@ -1,5 +1,5 @@
 import React from "react";
-
+//todo: pull into one component and parameterize the differences
 export const Web2VendingMachine = () => {
 
   class VendingMachine {
