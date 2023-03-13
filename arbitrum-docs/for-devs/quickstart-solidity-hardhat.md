@@ -266,12 +266,17 @@ todo:
 
 ### Summary
 
-todo - visualize the components, layers, data structures, information flows, procedure
+todo
 
 
-### Live code editor
+### Vending machine code walkthrough
+
+visualize the components, layers, data structures, information flows, procedure
 
 this is where we use Docusaurus' live code editor to let users play with the code in the browser
+
+could highlight specific lines of code too
+
 
 
 ### Next steps / things to link / things to think about integrating
