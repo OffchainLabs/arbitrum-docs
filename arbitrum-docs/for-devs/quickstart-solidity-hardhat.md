@@ -103,13 +103,13 @@ Here's our vending machine implemented as a Javascript class:
     }
 ```
 
-The `VendingMachine` class is like a contract - it uses *state variables* and *code* to implement *predefined rules*. This implementation is useful because it can operate without a human, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
+The `VendingMachine` class is like a contract - it uses *state variables* and *code* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
 
 This is a problem because it means that you have to trust us, we have to trust our hosting provider. How do we keep our cupcakes secure without having to trust anyone?
 
 DApps solve this problem by using Ethereum smart contracts to build *trustless* end-user experiences that nobody in particular controls[^2]. This gives us a way to follow the second rule: *"The vending machine's rules can't be changed by anyone."* 
 
-When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed (footnote to elaborate on infeasibility vs impossibility, upgradeability).
+When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed[^3].
 
 Let's convert our dumb contract into a smart contract.
 
@@ -129,7 +129,7 @@ This installs two packages: `hardhat` lets us test and deploy our smart contract
 
 Next, run `npx hardhat` to configure Hardhat. Select `Create a JavaScript project` when prompted. Make sure you specify your `decentralized-cupcakes` directory as the project root when asked.
 
-At this point, you should see the following items in your `decentralized-cupcakes` project directory (among others):
+At this point, you should see the following items (among others) in your `decentralized-cupcakes` project directory:
 
 | Item                | Description                                                                                               |
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -139,9 +139,9 @@ At this point, you should see the following items in your `decentralized-cupcake
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
 
-Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^4]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract (todo - abi).
+Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^4]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract[^5].
 
-Delete the `test/` directory; we'll worry about testing another time. Open `scripts/deploy.js` and replace its contents with the following:
+Delete the `test/` directory; testing is beyond the scope of this quickstart. Open `scripts/deploy.js` and replace its contents with the following:
 
 ```javascript title="scripts/deploy.js"
 const hre = require("hardhat");
@@ -163,7 +163,7 @@ main().catch((error) => {
 });
 ```
 
-Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our dumb Javascript contract:
+We'll use this to deploy our smart contract in a moment. Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our dumb Javascript contract:
 
 ```solidity title="VendingMachine.sol"
 pragma solidity ^0.8.9;
@@ -201,9 +201,9 @@ contract VendingMachine {
 Run `npx hardhat compile` again. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/contracts/VendingMachine.sol` directory.
 
 
-### Test the smart contract locally
+### Deploy the smart contract locally
 
-To test our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet: 
+To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet: 
 
 1. We'll use the first terminal window to run Hardhat's built-in local Ethereum node
 2. We'll then configure a wallet so we can interact with our smart contract after it's deployed to (1)
@@ -212,7 +212,7 @@ To test our `VendingMachine` smart contract locally, we'll use two terminal wind
 
 #### Run a local Ethereum node
 
-Run `npx hardhat node` to begin running a local Ethereum node. You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
+Run `npx hardhat node` from your `decentralized-cupcakes` directory to begin running a local Ethereum node. You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
 
 ```
 Account #0: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000 ETH)
@@ -238,7 +238,7 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 You should see the account's balance update to 10,000 ETH. 
 
 
-#### Deploy the smart contract to your local node / get cupcake
+#### Deploy the smart contract to your local node
 
 From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local node running in your other terminal instance. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract on your local node. 
 
@@ -289,3 +289,6 @@ todo
 
 [^1]: Inspired by [Ethereum.org's Introduction to Smart Contracts](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's From vending machines to smart contracts](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. This means that instead of asking users to trust centralized service providers, web3 apps ask users to trust Ethereum's decentralized network of nodes and the open source client software that they use to process and validate transactions.
+[^3]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
+[^4]: (windows-specific callouts)
+[^5]: ABI explainer

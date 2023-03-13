@@ -184,16 +184,17 @@ article .markdown .footnotes hr {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 200px;
+  width: 230px;
   height: auto;
   text-align: center;
-  border: 1px solid #bbb;
+  border: 1px solid #aaa;
   padding: 20px;
   margin-bottom: 30px;
+  background-color: rgba(150, 150, 150, 0.2);
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine h4 {
   text-transform: uppercase;
-  color: #828282;
+  color: var(--ifm-color-content);
   margin: 0;
   font-family: monospace;
 }
@@ -222,14 +223,23 @@ article .markdown .footnotes hr {
   border-radius: 5px;
   border-width: 0px;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please:hover {
   cursor: pointer;
   opacity: 0.9;
 }
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance {
+  font-size: 11px;
+  display: block;
+  margin-bottom: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
 [class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper {
-  padding: 10px 20px;
+  padding: 10px 0px;
   font-size: 11px;
   margin: 0;
 }

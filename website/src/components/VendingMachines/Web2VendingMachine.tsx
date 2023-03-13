@@ -29,13 +29,16 @@ export const Web2VendingMachine = () => {
     }
 
     getCupcakeBalanceFor(userId) {
-      return this.cupcakeBalances[userId];
+      let balance = this.cupcakeBalances[userId];
+      if (balance === undefined)
+        balance = 0;
+      return balance;
     }
   }
 
   const vendingMachine = new VendingMachine();
 
-  const handleButtonClick = () => {
+  const handleCupcakePlease = () => {
     const name = document.getElementById("name-input").value;
     let gotCupcake = vendingMachine.giveCupcakeTo(name);
     let existingFadeout;
@@ -55,11 +58,22 @@ export const Web2VendingMachine = () => {
         cupcake.style.opacity = 0;
       }, 5000);
 
-      const cupcakeCount = document.getElementById("cupcake-balance");
-      cupcakeCount.textContent = vendingMachine.getCupcakeBalanceFor(name);
+      handleRefreshBalance();
     } else {
       alert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
     }
+  };
+
+  const handleRefreshBalance = () => {
+    const name = document.getElementById("name-input").value;
+    let nameToDisplay = name;
+    if (name == null || name == "")
+      nameToDisplay = "no name";
+
+    const cupcakeCountEl = document.getElementById("cupcake-balance");
+    const balanceToDisplay = vendingMachine.getCupcakeBalanceFor(name);
+
+    cupcakeCountEl.textContent = `${balanceToDisplay} (${nameToDisplay})`
   };
 
   return (
@@ -67,7 +81,8 @@ export const Web2VendingMachine = () => {
       <h4>Free Cupcakes</h4>
       <span class='subheader'>(web2)</span>
       <input id="name-input" type="text" placeholder="Enter name" />
-      <button id="cupcake-please" onClick={handleButtonClick}>Cupcake please!</button>
+      <button id="cupcake-please" onClick={handleCupcakePlease}>Cupcake please!</button>
+      <a id="refresh-balance" onClick={handleRefreshBalance}>Refresh balance</a>
       <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
       <p id='balance-wrapper'>
         <span>Cupcake balance:</span>
