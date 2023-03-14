@@ -7,6 +7,7 @@ import {
   renderGlossary,
   renderSimpleFAQs,
   Record,
+  renderGlossaryJSON
 } from '@offchainlabs/notion-docs-generator'
 import dotenv from 'dotenv'
 
@@ -33,8 +34,26 @@ export function recordValidity(record: Record): LinkValidity {
   }
   return 'Valid'
 }
+const isValid = (item: KnowledgeItem) => {
+  return recordValidity(item) === 'Valid'
+}
+
 
 async function generateFiles() {
+  const linkableTerms: LinkableTerms = {}
+
+  const devDocsV2Project = await lookupProject(notion, 'Arbitrum developer docs portal v2.0')
+  
+
+  const _definitions = await lookupGlossaryTerms(notion, {filter:  {
+    property: 'Project(s)',
+    relation: {
+      contains: devDocsV2Project,
+    },
+  }})
+  const validDefs = _definitions.filter(isValid)
+
+  
   const userFAQ = await lookupFAQs(notion, {
     filter: {
       and: [
@@ -92,10 +111,32 @@ async function generateFiles() {
     },
   })
 
-  const linkableTerms: LinkableTerms = {}
-  const isValid = (item: KnowledgeItem) => {
-    return recordValidity(item) == 'Valid'
+  const addItems = (items: KnowledgeItem[], page: string) => {
+    for (const item of items) {
+      linkableTerms[item.pageId] = {
+        text: item.title,
+        anchor: item.title,
+        page: page,
+        valid: recordValidity(item),
+        notionURL: item.url,
+      }
+    }
   }
+  console.log('Rendering contents')
+
+  addItems(validDefs, '/intro/glossary')
+  const glossaryJSON = renderGlossaryJSON(validDefs, linkableTerms)
+  fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
+
+  const definitionsHTML = `\n\n${renderGlossary(
+    validDefs,
+    linkableTerms
+  )}\n`
+  fs.writeFileSync('../arbitrum-docs/partials/_glossary-partial.md', definitionsHTML)
+
+
+  
+
 
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-users-partial.md',
