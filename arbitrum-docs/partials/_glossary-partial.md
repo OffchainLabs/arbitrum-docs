@@ -51,6 +51,9 @@
 ### Batch {#batch}
 <p>A group of L2 transactions posted in a single L1 transaction into the <a href="/intro/glossary#fast-inbox">Fast Inbox</a>  by the <a href="/intro/glossary#sequencer">Sequencer</a>.</p>
 
+### Blockchain {#blockchain}
+<p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols. </p>
+
 ### **Chain state** {#chain-state}
 <p>A particular point in the history of an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>. A chain's state is determined by applying Arbitrum state-transition function to sequence of transactions (i.e., the chain's history).</p>
 
@@ -78,6 +81,9 @@
 ### Custom gateway {#custom-gateway}
 <p>Any <a href="/intro/glossary#token-gateway">Token Gateway</a> that isn't the <a href="/intro/glossary#standarderc20-gateway">StandardERC20 gateway</a>.</p>
 
+### dApp {#dapp}
+<p>Short for "decentralized application." A dApp typically consists of smart contracts as well as a user-interface for interacting with them.</p>
+
 ### **Data Availability Certificate** {#data-availability-certificate}
 <p>Signed promise from a <a href="/intro/glossary#data-availability-committee-dac"><strong>Data Availability Committee (DAC)</strong></a> attesting to the availability of a batch of data for an <a href="/intro/glossary#arbitrum-anytrust-chain"><strong>Arbitrum AnyTrust Chain</strong></a>.</p>
 
@@ -96,6 +102,9 @@
 
 ### Dissection {#dissection}
 <p>A step in the <a href="/intro/glossary#challenge-protocol">Challenge protocol</a>  in which two challenging parties interactively narrow down their disagreement until they reach a <a href="/intro/glossary#one-step-proof">One Step Proof</a>.</p>
+
+### Ethereum Wallet {#ethereum-wallet}
+<p>A software application used for transacting with the Ethereum <a href="/intro/glossary#blockchain">Blockchain</a>.</p>
 
 ### Fair Ordering Algorithm {#fair-ordering-algorithm}
 <p>BFT algorithm in which a committee comes to consensus on transaction ordering; current single-party <a href="/intro/glossary#sequencer">Sequencer</a> on Arbitrum may eventually be replaced by a fair-ordering committee.</p>
@@ -160,6 +169,9 @@
 ### Sequencer Feed {#sequencer-feed}
 <p>Off chain data feed published by the <a href="/intro/glossary#sequencer">Sequencer</a> which clients can subscribe to for <a href="/intro/glossary#soft-confirmation">Soft Confirmation</a>s of transactions before they are posted in <a href="/intro/glossary#batch">Batch</a>es.</p>
 
+### Smart Contract {#smart-contract}
+<p>A computer program whose operations are defined and executed within a blockchain consensus protocol.</p>
+
 ### Soft Confirmation {#soft-confirmation}
 <p>A semi-trusted promise from the <a href="/intro/glossary#sequencer">Sequencer</a>  to post a user's transaction in the near future; soft-confirmations happen prior to posting on L1, and thus can be given near-instantaneously (i.e., faster than L1 block times)</p>
 
@@ -180,6 +192,9 @@
 
 ### Token Gateway {#token-gateway}
 <p>A pair of contracts in the token bridge — one on L1, one on L2 — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the <a href="/intro/glossary#standarderc20-gateway">StandardERC20 gateway</a> , the <a href="/intro/glossary#genericcustom-gateway">Generic-Custom Gateway</a> , and the <a href="/intro/glossary#weth-gateway">WETH Gateway</a>.</p>
+
+### Transaction {#transaction}
+<p>A user-initiated interaction with a Blockchain. Transactions are typically signed by users via wallets and are paid for via transaction fees. </p>
 
 ### Trustless {#trustless}
 <p>In the context of Ethereum, trustless refers to the ability of a system to operate without reliance on a central authority or intermediary. Instead, users place their trust in math and protocols.<br />
