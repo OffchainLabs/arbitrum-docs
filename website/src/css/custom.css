@@ -163,6 +163,12 @@ article .markdown .footnotes:before {
 article .markdown .footnotes hr {
   display: none;
 }
+article .markdown p > code {
+  font-size: 13px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background-color: rgba(150, 150, 150, 0.2);
+}
 .small-table {
   font-size: 12px;
   margin-top: 20px;

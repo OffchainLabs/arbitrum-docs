@@ -146,16 +146,17 @@ module.exports = {
       chainId: 1337
     },
     arbitrumGoerli: {
-      url: "https://goerli.arbitrum.io/rpc",
-      accounts: [process.env.PRIVATE_KEY]
+      url: "https://goerli-rollup.arbitrum.io/rpc",
+      chainId: 421613
+      //accounts: [process.env.PRIVATE_KEY]
     },
     arbitrumOne: {
       url: "https://arb1.arbitrum.io/rpc",
-      accounts: [process.env.PRIVATE_KEY]
-    }, 
+      //accounts: [process.env.PRIVATE_KEY]
+    },
     arbitrumNova: {
       url: "https://arbnova.com/rpc",
-      accounts: [process.env.PRIVATE_KEY]
+      //accounts: [process.env.PRIVATE_KEY]
     }
   }
 };
@@ -292,15 +293,17 @@ To follow this rule completely, we'll deploy our smart contract to Arbitrum's Go
 
 ### Deploy the smart contract to Arbitrum Goerli
 
-1. get goerli eth from faucet
-2. add arb goerli to metamask
-3. bridge from goerli to arb goerli
-4. specify provider endpoint (with api key?)
-5. deploy vending machine to arb-goerli
-6. inspect on blockchain explorer
-7. get goerli cupcake
+1. get Goerli eth from L2 faucet
+  - todo: find functional faucet - https://faucet.quicknode.com/arbitrum/goerli doesn't work as of 3/14
+1. deploy vending machine to arb-goerli: https://goerli-rollup.arbitrum.io/rpc (no api key needed)
+2. inspect on blockchain explorer
+3. get goerli cupcake
 
 <VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
+
+
+### Dumpster fire below this line
+------
 
 ### Deploy the smart contract to Arbitrum Mainnet
 
