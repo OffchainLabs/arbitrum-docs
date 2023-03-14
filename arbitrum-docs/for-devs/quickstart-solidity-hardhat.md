@@ -25,7 +25,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-This quickstart is for web developers who want to start building decentralized applications (dApps) using Arbitrum. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building <a data-quicklook-from='decentralized-application'>decentralized applications</a> (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ### What we're building
 
@@ -36,31 +36,30 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 
 Here's our vending machine implemented with Javascript:
 
-import { Web2VendingMachine } from '@site/src/components/VendingMachines/Web2VendingMachine'
+import { VendingMachine } from '@site/src/components/VendingMachines/VendingMachine'
 
-<Web2VendingMachine />
+<VendingMachine id='dumb-cupcakes' type='web2' />
 
 Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet)[^2].
-
 
 ### Prerequisites
 
 - **VS Code**: The IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.
-- **Metamask**: The wallet we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) to install.
+- **Metamask**: The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) to install.
 
 We'll install the rest of our dependencies as we go.
 
 
 ### Ethereum and Arbitrum in a nutshell
 
- - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public blockchain data structure.
- - The data within Ethereum's blockchain data structure changes one transaction at a time.
- - Smart contracts are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
+ - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
+ - The data within Ethereum's blockchain data structure changes one <a data-quicklook-from='ethereum-transaction'>transaction</a> at a time.
+ - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
  - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
  - DApps let users carry their data and identity between applications without having to trust centralized service providers.
  - People who run Ethereum nodes receive rewards for processing and validating transactions on behalf of users and dApps.
- - These transactions can be expensive when the network is under heavy load. Layer 2 (L2) scaling solutions like Arbitrum solve this problem.
- - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps that can process thousands of transactions per second with low latency and low transaction costs while inheriting Ethereum's high security standards.
+ - These transactions can be expensive when the network is under heavy load. <a data-quicklook-from='layer-2'>Layer 2</a> (L2) scaling solutions like Arbitrum solve this problem.
+ - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps that can process thousands of transactions per second with low latency and low transaction costs while inheriting Ethereum's high security standards[^3].
 
 
 ### Review our dumb contract
@@ -68,6 +67,7 @@ We'll install the rest of our dependencies as we go.
 Here's our vending machine implemented as a Javascript class:
 
 ```js title="VendingMachine.js"
+   // todo - pull from github / jsx before publishing to ensure latest is displayed
    class VendingMachine {
         // state variables = internal memory of the vending machine
         cupcakeBalances = {};
@@ -100,13 +100,11 @@ Here's our vending machine implemented as a Javascript class:
     }
 ```
 
-The `VendingMachine` class is like a contract - it uses *state variables* and *code* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
+The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
 
 This is a problem because it means that you have to trust us, we have to trust our hosting provider. How do we keep our cupcakes secure without having to trust anyone?
 
-DApps solve this problem by using Ethereum smart contracts to build *trustless* end-user experiences that nobody in particular controls[^2]. This gives us a way to follow the second rule: *"The vending machine's rules can't be changed by anyone."* 
-
-When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed[^3].
+DApps solve this problem by using Ethereum smart contracts to build <a data-quicklook-from='trustless'>*trustless*</a> end-user experiences that nobody in particular controls[^4]. This gives us a way to follow the second rule: *"The vending machine's rules can't be changed by anyone."*[^5]
 
 Let's convert our dumb contract into a smart contract.
 
@@ -115,9 +113,9 @@ Let's convert our dumb contract into a smart contract.
 
 Create a `decentralized-cupcakes` directory for your project. Navigate to this directory from VS Code's integrated terminal and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview):
 
-<!-- todo: toggles for npm / yarn? -->
+<!-- todo: toggles for npm / yarn -->
 <!-- todo: save-dev? -->
-<!-- todo: note about windows / wsl / yarn --->
+<!-- todo: note about windows / wsl / yarn in footnote --->
 ```
 yarn add hardhat @nomicfoundation/hardhat-toolbox
 ```
@@ -136,7 +134,7 @@ At this point, you should see the following items (among others) in your `decent
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
 
-Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^4]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract[^5].
+Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^6]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract[^7].
 
 Delete the `test/` directory; testing is beyond the scope of this quickstart. Open `scripts/deploy.js` and replace its contents with the following:
 
@@ -297,6 +295,8 @@ could highlight specific lines of code too
 
 [^1]: Inspired by [Ethereum.org's Introduction to Smart Contracts](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's From vending machines to smart contracts](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. This means that instead of asking users to trust centralized service providers, web3 apps ask users to trust Ethereum's decentralized network of nodes and the open source client software that they use to process and validate transactions.
-[^3]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
-[^4]: (windows-specific callouts)
-[^5]: ABI explainer
+[^3]: todo
+[^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed.
+[^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
+[^6]: (windows-specific callouts)
+[^7]: ABI explainer

@@ -189,6 +189,7 @@ article .markdown .footnotes hr {
   text-align: center;
   border: 1px solid #aaa;
   padding: 20px;
+  margin-top: 10px;
   margin-bottom: 30px;
   background-color: rgba(150, 150, 150, 0.2);
 }
@@ -206,7 +207,7 @@ article .markdown .footnotes hr {
   font-weight: 800;
   margin-bottom: 20px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #name-input {
+[class*="quickstart-solidity-hardhat"] .vending-machine input {
   padding: 10px;
   width: 90%;
   margin-bottom: 5px;
@@ -246,6 +247,9 @@ article .markdown .footnotes hr {
 [class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
   font-weight: 600;
   padding-right: 5px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine .hidden {
+  display: none;
 }
 .prism-code {
   font-size: 12px;
