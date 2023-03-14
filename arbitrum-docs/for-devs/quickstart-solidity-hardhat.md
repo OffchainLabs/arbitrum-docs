@@ -57,7 +57,7 @@ We'll install the rest of our dependencies as we go.
  - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
  - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
  - DApps let users carry their data and identity between applications without having to trust centralized service providers.
- - People who run Ethereum nodes receive rewards for processing and validating transactions on behalf of users and dApps.
+ - People who run Ethereum nodes[^3] (todo - enhance precision) receive rewards for processing and validating transactions on behalf of users and dApps.
  - These transactions can be expensive when the network is under heavy load. <a data-quicklook-from='layer-2'>Layer 2</a> (L2) scaling solutions like Arbitrum solve this problem.
  - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps that can process thousands of transactions per second with low latency and low transaction costs while inheriting Ethereum's high security standards[^3].
 
@@ -102,7 +102,7 @@ Here's our vending machine implemented as a Javascript class:
 
 The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
 
-This is a problem because it means that you have to trust us, we have to trust our hosting provider. How do we keep our cupcakes secure without having to trust anyone?
+This is a problem because it means that you have to trust us, and we have to trust our hosting provider. How do we keep our cupcakes secure without having to trust anyone?
 
 DApps solve this problem by using Ethereum smart contracts to build <a data-quicklook-from='trustless'>*trustless*</a> end-user experiences that nobody in particular controls[^4]. This gives us a way to follow the second rule: *"The vending machine's rules can't be changed by anyone."*[^5]
 
@@ -148,7 +148,7 @@ module.exports = {
     arbitrumGoerli: {
       url: "https://goerli-rollup.arbitrum.io/rpc",
       chainId: 421613
-      //accounts: [process.env.PRIVATE_KEY]
+      //accounts: [process.env.PRIVATE_KEY] TODOs
     },
     arbitrumOne: {
       url: "https://arb1.arbitrum.io/rpc",
@@ -199,7 +199,7 @@ contract VendingMachine {
 
     function giveCupcakeTo(address userAddress) public returns (bool) {
         if (_cupcakeBalances[userAddress] == 0) {
-            _cupcakeDistributionTimes[userAddress] = block.timestamp;
+            _cupcakeDistributionTimes[userAddress] = block.timestamp; // todo - decide whether or not there should be 1:1-ish mapping between js and solidity "contracts" for the sake of pattern recognition / learning; if so, mirror; if not, delete
         }
 
         // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
@@ -234,6 +234,8 @@ To deploy our `VendingMachine` smart contract locally, we'll use two terminal wi
 
 
 #### Run a local Ethereum node
+
+// pull explanation up here - emulator etc
 
 Run `npx hardhat node` from your `decentralized-cupcakes` directory to begin running a local Ethereum node. You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
 
@@ -295,9 +297,9 @@ To follow this rule completely, we'll deploy our smart contract to Arbitrum's Go
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
-We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by real nodes, we'll need to pay a transaction fee to deploy our smart contract using the testnet's token.
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by real nodes, we'll need to pay a transaction fee to deploy our smart contract. This fee will be paid with the Arbitrum Goerli testnet's token, $TODO.
 
-There are a few ways to get this token:
+There are a few ways to acquire $TODO:
 
 1. Use an L2 Goerli ETH faucet: todo find functional faucet - https://faucet.quicknode.com/arbitrum/goerli doesn't work as of 3/14
 2. Use an L1 Goerli ETH faucet and bridge it to L2: todo
@@ -357,7 +359,7 @@ could highlight specific lines of code too
 // https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
 
 
-[^1]: Inspired by [Ethereum.org's Introduction to Smart Contracts](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's From vending machines to smart contracts](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
+[^1]: Inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. This means that instead of asking users to trust centralized service providers, web3 apps ask users to trust Ethereum's decentralized network of nodes and the open source client software that they use to process and validate transactions.
 [^3]: todo
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed.
