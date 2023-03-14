@@ -67,7 +67,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     }
 
     async getCupcakeBalanceFor(identity) {
-      let balance = this.cupcakeBalances[userId];
+      let balance = this.cupcakeBalances[identity];
       if (balance === undefined)
         balance = 0;
       return balance;
@@ -93,11 +93,14 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   vendingMachineClient.getElementById = (id) => document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
 
   const handleCupcakePlease = async () => {
-    const identity = vendingMachineClient.getElementById("identity-input").value;
+
+    const identityInput = vendingMachineClient.getElementById("identity-input");
+    console.log("identityInput", identityInput);
+    const identity = identityInput.value;
 
     let gotCupcake = false;
     try {
-      gotCupcake = await vendingMachineClient.giveCupcakeTo(name);
+      gotCupcake = await vendingMachineClient.giveCupcakeTo(identity);
     } catch (error) {
       console.error("ERROR: " + JSON.stringify(error));
     }
@@ -143,7 +146,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   return (
     <div className='vending-machine' id={vendingMachineClient.domId}>
       <h4>Free Cupcakes</h4>
-      <span className='subheader'>(web2)</span>
+      <span className='subheader'>{props.type}</span>
       <input id="identity-input" type="text" placeholder="Enter identity" />
       <input id="contract-address-input" type="text" placeholder="Enter contract address" className={isWeb3 ? '' : 'hidden'} />
       <input id="port-input" type="text" placeholder="Enter port" className={isWeb3 ? '' : 'hidden'} />

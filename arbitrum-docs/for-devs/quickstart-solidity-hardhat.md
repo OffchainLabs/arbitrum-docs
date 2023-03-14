@@ -235,7 +235,7 @@ You should see the account's balance update to 10,000 ETH.
 
 #### Deploy the smart contract to your local node
 
-From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local node running in your other terminal instance. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract on your local node. 
+From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract on your local node.
 
 Copy and paste it below and click `Get cupcake!`. You should get a cupcake.
 

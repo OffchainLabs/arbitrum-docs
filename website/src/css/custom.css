@@ -31,6 +31,7 @@
   --ifm-color-primary-light: #29b0d5;
   --ifm-color-primary-lighter: #32b4d8;
   --ifm-color-primary-lightest: #4fbcdd;
+  --ifm-link-color: #51b2ff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 .header-badges {
@@ -189,7 +190,7 @@ article .markdown .footnotes hr {
   text-align: center;
   border: 1px solid #aaa;
   padding: 20px;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 30px;
   background-color: rgba(150, 150, 150, 0.2);
 }
