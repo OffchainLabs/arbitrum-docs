@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "update:all": "node --loader ts-node/esm ./scripts/update.ts",
+    "verifyQuicklooks": "node --loader ts-node/esm ./scripts/verifyQuicklooks.ts",
     "format": "prettier --config .prettierrc.js 'scripts/**/*.ts' --write",
     "lint": "eslint . --ext .ts"
   },
