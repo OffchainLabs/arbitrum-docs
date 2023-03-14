@@ -225,6 +225,7 @@ article {
         margin-top: 30px;
         margin-bottom: 30px;
         background-color: rgba(150, 150, 150, 0.2);
+        position: relative;
 
         h4 {
             text-transform: uppercase;
@@ -257,6 +258,8 @@ article {
             padding: 10px;
             width: 90%;
             margin-bottom: 5px;
+            font-size: 11px;
+            font-family: monospace;
         }
 
         #cupcake {
@@ -295,11 +298,33 @@ article {
             padding: 10px 0px;
             font-size: 11px;
             margin: 0;
+            font-family: monospace;
 
             >span:first-child {
                 font-weight: 600;
                 padding-right: 5px;
             }
+        }
+
+        #error-indicator,
+        #success-indicator {
+            background: #f00;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: none;
+
+            &.visible {
+                display: block;
+            }
+        }
+
+        #success-indicator {
+            background: #0f0;
+            display: block;
         }
 
         .hidden {

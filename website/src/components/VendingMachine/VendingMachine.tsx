@@ -18,8 +18,8 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       this.initContract = this.initContract.bind(this);
     }
 
-    async giveCupcakeTo(identity, vendingMachineContractAddress, port) {
-      const contract = await this.initContract(vendingMachineContractAddress, port);
+    async giveCupcakeTo(identity, vendingMachineContractAddress, providerUrl) {
+      const contract = await this.initContract(vendingMachineContractAddress, providerUrl);
       const cupcakeCountBefore = Number(await contract.getCupcakeBalanceFor(identity));
       const transaction = await contract.giveCupcakeTo(identity);
       const receipt = await transaction.wait();
@@ -28,49 +28,45 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       return succeeded;
     }
 
-    async getCupcakeBalanceFor(identity, vendingMachineContractAddress, port) {
-      console.log("getCupcakeBalanceFor: " + identity);
-      // log this
-      console.log("this: ", this);
-
-      const contract = await this.initContract(vendingMachineContractAddress, port);
+    async getCupcakeBalanceFor(identity, vendingMachineContractAddress, providerUrl) {
+      const contract = await this.initContract(vendingMachineContractAddress, providerUrl);
       const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
       return cupcakeBalance;
     }
 
     async requestAccount() {
       if (!this.hasRequestedAccount && typeof window.ethereum !== 'undefined') {
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          if (accounts && accounts.length > 0) {
-            this.hasRequestedAccount = true;
-          }
-        } catch (err) {
-          console.error("ERROR: requestAccount: " + err);
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts && accounts.length > 0) {
+          this.hasRequestedAccount = true;
         }
       }
     }
 
     async getWalletAddress() {
       if (typeof window.ethereum !== 'undefined') {
-        await this.requestAccount();
-
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner()
+        const signer = await this.initSigner();
         const walletAddress = await signer.getAddress();
-
         return walletAddress;
       }
     }
 
-    async initContract(vendingMachineContractAddress, port) {
+    async initSigner(providerUrl) {
       if (typeof window.ethereum !== 'undefined') {
         await this.requestAccount();
 
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner()
-        const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
+        const customProviderUrl = providerUrl;
+        const customProvider = new ethers.providers.JsonRpcProvider(customProviderUrl);
 
+        const signer = customProvider.getSigner();
+        return signer;
+      }
+    }
+
+    async initContract(vendingMachineContractAddress, providerUrl) {
+      if (typeof window.ethereum !== 'undefined') {
+        const signer = await this.initSigner();
+        const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
         return contract;
       }
     }
@@ -117,6 +113,9 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     case "web3-arb-goerli":
       vendingMachineClient = new Web3VendingMachineClient();
       break;
+    case "web3-arb-mainnet":
+      vendingMachineClient = new Web3VendingMachineClient();
+      break;
     default:
       throw new Error(`Error: unknown vending machine type ${props.type}`);
   }
@@ -132,77 +131,96 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     }
   }
 
+  const updateSuccessIndicator = (success) => {
+    const errorIndicator = vendingMachineClient.getElementById("error-indicator");
+    if (success) {
+      console.log('should see green')
+      errorIndicator.classList.remove("visible");
+    }
+    else {
+      console.log('should see red')
+      errorIndicator.classList.add("visible");
+    }
+  }
+
   const callWeb3VendingMachine = async (func) => {
     const identityInput = vendingMachineClient.getElementById("identity-input");
     const identity = identityInput.value;
     const contractAddressInput = vendingMachineClient.getElementById("contract-address-input");
     contractAddressInput.value = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // temp
     const contractAddress = contractAddressInput.value;
-    const portInput = vendingMachineClient.getElementById("port-input");
-    const port = portInput.value;
-    console.log("calling " + func.name + " with identity " + identity + " and contract address " + contractAddress + " and port " + port);
-    return await func(identity, contractAddress, port);
+    const providerUrlInput = vendingMachineClient.getElementById("provider-url-input");
+    const providerUrl = providerUrlInput.value;
+    return await func(identity, contractAddress, providerUrl);
   }
 
   const handleCupcakePlease = async () => {
+    try {
+      const identityInput = vendingMachineClient.getElementById("identity-input");
+      const identity = identityInput.value;
 
-    const identityInput = vendingMachineClient.getElementById("identity-input");
-    const identity = identityInput.value;
+      let gotCupcake;
+      if (isWeb3) {
+        await prefillWeb3Identity();
+        gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
+      } else {
+        gotCupcake = await vendingMachineClient.giveCupcakeTo(identity);
+      }
 
-    let gotCupcake;
-    if (isWeb3) {
-      await prefillWeb3Identity();
-      gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
-    } else {
-      gotCupcake = await vendingMachineClient.giveCupcakeTo(identity);
-    }
+      let existingFadeout;
+      if (gotCupcake) {
+        const cupcake = vendingMachineClient.getElementById("cupcake");
+        cupcake.style.opacity = 1;
+        cupcake.style.transition = "unset";
+        clearTimeout(existingFadeout);
 
-    let existingFadeout;
-    if (gotCupcake) {
-      const cupcake = vendingMachineClient.getElementById("cupcake");
-      cupcake.style.opacity = 1;
-      cupcake.style.transition = "unset";
-      clearTimeout(existingFadeout);
+        existingFadeout = setTimeout(() => {
+          cupcake.style.transition = "opacity 5.5s";
+          cupcake.style.opacity = 0;
+        }, 0);
 
-      existingFadeout = setTimeout(() => {
-        cupcake.style.transition = "opacity 5.5s";
-        cupcake.style.opacity = 0;
-      }, 0);
+        setTimeout(() => {
+          cupcake.style.transition = "opacity 0s";
+          cupcake.style.opacity = 0;
+        }, 5000);
 
-      setTimeout(() => {
-        cupcake.style.transition = "opacity 0s";
-        cupcake.style.opacity = 0;
-      }, 5000);
-
-      await handleRefreshBalance();
-    } else if (gotCupcake === false) {
-      alert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+        await handleRefreshBalance();
+      } else if (gotCupcake === false) {
+        alert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+      }
+      updateSuccessIndicator(true);
+    } catch (err) {
+      console.error("ERROR: handleCupcakePlease: " + err);
+      updateSuccessIndicator(false);
     }
   };
 
   const handleRefreshBalance = async () => {
-    const identityInputEl = vendingMachineClient.getElementById("identity-input");
-    let identityFromInput = identityInputEl.value;
-    let identityToDisplay;
-    const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
-    let balanceToDisplay;
+    try {
+      const identityInputEl = vendingMachineClient.getElementById("identity-input");
+      let identityFromInput = identityInputEl.value;
+      let identityToDisplay;
+      const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
+      let balanceToDisplay;
 
-    if (isWeb3) {
-      console.log("prefilling web3 identity");
-      await prefillWeb3Identity();
-      console.log("calling getCupcakeBalanceFor");
-      balanceToDisplay = await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor);
-      console.log("got balance: " + balanceToDisplay);
-      identityFromInput = identityInputEl.value;
-      identityToDisplay = identityFromInput.truncateAddress();
-    } else {
-      identityToDisplay = identityFromInput;
-      if (identityToDisplay == null || identityToDisplay == "")
-        identityToDisplay = "no name";
-      balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identityFromInput);
+      if (isWeb3) {
+        await prefillWeb3Identity();
+        balanceToDisplay = await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor);
+        identityFromInput = identityInputEl.value;
+        identityToDisplay = identityFromInput.truncateAddress();
+      } else {
+        identityToDisplay = identityFromInput;
+        if (identityToDisplay == null || identityToDisplay == "")
+          identityToDisplay = "no name";
+        balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identityFromInput);
+      }
+
+      cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`
+      updateSuccessIndicator(true);
+    } catch (err) {
+      console.error("ERROR: handleRefreshBalance: " + err);
+      updateSuccessIndicator(false);
     }
-
-    cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`
   };
 
   String.prototype.truncateAddress = function () {
@@ -217,8 +235,8 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       <input id="identity-input" type="text" placeholder="Enter identity" />
       <label className={isWeb3 ? '' : 'hidden'}>Contract address</label>
       <input id="contract-address-input" type="text" placeholder="Enter contract address" className={isWeb3 ? '' : 'hidden'} />
-      <label className={isWeb3 ? '' : 'hidden'}>Port</label>
-      <input id="port-input" type="text" placeholder="Enter port" className={isWeb3 ? '' : 'hidden'} defaultValue="8545" />
+      <label className={isWeb3 ? '' : 'hidden'}>Provider URL</label>
+      <input id="provider-url-input" type="text" placeholder="Enter provider URL" className={isWeb3 ? '' : 'hidden'} defaultValue="http://localhost:8545" />
       <button id="cupcake-please" onClick={handleCupcakePlease}>Cupcake please!</button>
       <a id="refresh-balance" onClick={handleRefreshBalance}>Refresh balance</a>
       <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
@@ -226,6 +244,8 @@ export const VendingMachine = (props: { id: string, type: string }) => {
         <span>Cupcake balance:</span>
         <span id="cupcake-balance">0</span>
       </p>
+      <span id="success-indicator"></span>
+      <span id="error-indicator"></span>
     </div>
   );
 };

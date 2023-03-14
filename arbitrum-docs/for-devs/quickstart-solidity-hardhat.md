@@ -145,6 +145,18 @@ module.exports = {
     hardhat: {
       chainId: 1337
     },
+    arbitrumGoerli: {
+      url: "https://goerli.arbitrum.io/rpc",
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    arbitrumOne: {
+      url: "https://arb1.arbitrum.io/rpc",
+      accounts: [process.env.PRIVATE_KEY]
+    }, 
+    arbitrumNova: {
+      url: "https://arbnova.com/rpc",
+      accounts: [process.env.PRIVATE_KEY]
+    }
   }
 };
 ```
@@ -280,10 +292,19 @@ To follow this rule completely, we'll deploy our smart contract to Arbitrum's Go
 
 ### Deploy the smart contract to Arbitrum Goerli
 
+1. get goerli eth from faucet
+2. add arb goerli to metamask
+3. bridge from goerli to arb goerli
+4. specify provider endpoint (with api key?)
+
+<VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
 
 
 ### Deploy the smart contract to Arbitrum Mainnet
 
+todo
+
+<VendingMachine id='smart-mainnet-cupcakes' type='web3-arb-mainnet' />
 
 
 ### Summary

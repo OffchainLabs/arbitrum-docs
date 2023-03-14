@@ -193,6 +193,7 @@ article .markdown .footnotes hr {
   margin-top: 30px;
   margin-bottom: 30px;
   background-color: rgba(150, 150, 150, 0.2);
+  position: relative;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine h4 {
   text-transform: uppercase;
@@ -222,6 +223,8 @@ article .markdown .footnotes hr {
   padding: 10px;
   width: 90%;
   margin-bottom: 5px;
+  font-size: 11px;
+  font-family: monospace;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #cupcake {
   display: block;
@@ -254,10 +257,30 @@ article .markdown .footnotes hr {
   padding: 10px 0px;
   font-size: 11px;
   margin: 0;
+  font-family: monospace;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
   font-weight: 600;
   padding-right: 5px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+  background: #f00;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: none;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator.visible,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator.visible {
+  display: block;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+  background: #0f0;
+  display: block;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine .hidden {
   display: none;
