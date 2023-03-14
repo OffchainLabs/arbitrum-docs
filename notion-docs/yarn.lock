@@ -111,10 +111,10 @@
     "@types/node-fetch" "^2.5.10"
     node-fetch "^2.6.1"
 
-"@offchainlabs/notion-docs-generator@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@offchainlabs/notion-docs-generator/-/notion-docs-generator-0.0.2.tgz#de8bb71f4c7f18a85de05d31aba0e5380dbe72c7"
-  integrity sha512-uStfNWAuoFHAKfwIM6+AZx9O7zxtH33Q7l8zyRmxznWTfNqi4NClloETGL7tOl3lbr5XgvPKQ0VwuGyvnUFjUQ==
+"@offchainlabs/notion-docs-generator@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@offchainlabs/notion-docs-generator/-/notion-docs-generator-0.0.3.tgz#4c2a6595575af8f931939e4eba64e5c9db3254a7"
+  integrity sha512-rZwXpb57JIuO5fMGkkSVDJ5fMCCl/WzSJg/K4UnN0w+Qh4Bj8mA13aI0z2RbcRK/kjcL/QRHFZnesLKpcXDPqQ==
   dependencies:
     "@notionhq/client" "^2.2.3"
     "@types/node" "^18.11.18"
