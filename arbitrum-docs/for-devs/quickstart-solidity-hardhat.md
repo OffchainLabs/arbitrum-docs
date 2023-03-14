@@ -25,7 +25,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-This quickstart is for web developers who want to start building <a data-quicklook-from='decentralized-application'>decentralized applications</a> (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building <a data-quicklook-from='decentralized-application'>decentralized applications</a> (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and package managers like `npm` and/or `yarn` is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 ### What we're building
 
@@ -111,12 +111,12 @@ Let's convert our dumb contract into a smart contract.
 
 ### Configure your project directory
 
-Create a `decentralized-cupcakes` directory for your project. Navigate to this directory from VS Code's integrated terminal and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview):
+Create a `decentralized-cupcakes` directory for your project and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview)[^6] using VS Code's integrated terminal:
 
-<!-- todo: toggles for npm / yarn -->
-<!-- todo: save-dev? -->
-<!-- todo: note about windows / wsl / yarn in footnote --->
 ```
+mkdir decentralized-cupcakes
+cd decentralized-cupcakes
+yarn init -y
 yarn add hardhat @nomicfoundation/hardhat-toolbox
 ```
 
@@ -130,7 +130,6 @@ At this point, you should see the following items (among others) in your `decent
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
 | `contracts/`        | Contains your smart contracts. You should see the `Lock.sol` contract here.                               |
 | `scripts/`          | Contains scripts that you can use to interact with your smart contracts. You should see `deploy.js` here. |
-| `test/`             | Contains test files for your smart contracts. We can use `Lock.js` to test `Lock.sol`.                    |
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
 
@@ -152,7 +151,7 @@ module.exports = {
 
 Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^6]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract[^7].
 
-Delete the `test/` directory; testing is beyond the scope of this quickstart. Open `scripts/deploy.js` and replace its contents with the following:
+Open `scripts/deploy.js` and replace its contents with the following:
 
 ```javascript title="scripts/deploy.js"
 const hre = require("hardhat");
@@ -253,7 +252,7 @@ You should see the account's balance update to 10,000 ETH.
 
 From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract on your local node.
 
-Copy and paste it below and click `Get cupcake!`. You should get a cupcake.
+Copy and paste your **contract address** below and click `Get cupcake!`. You should get a cupcake.
 
 <VendingMachine id='smart-local-cupcakes' type='web3-localhost' />
 
@@ -270,9 +269,13 @@ Our second `VendingMachine` is labeled `WEB3-LOCALHOST` because it demonstrates 
 
 Although the frontend is centralized, the smart contract is decentralized, which brings us one step closer to following Rule 2: "The vending machine's rules can't be changed by anyone."
 
+// note that in one, data persists between tabs/refeshes, in the other it doesn't
+
 To follow this rule completely, we'll deploy our smart contract to Arbitrum's Goerli testnet, and then to Arbitrum mainnet:
 
 // diagram
+
+
 
 
 ### Deploy the smart contract to Arbitrum Goerli
@@ -319,6 +322,7 @@ could highlight specific lines of code too
 [^3]: todo
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed.
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
+[^6]: You can also use npm for this. 
 [^6]: See https://hardhat.org/hardhat-network/docs/metamask-issue
 [^6]: (windows-specific callouts)
 [^7]: ABI explainer

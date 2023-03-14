@@ -182,6 +182,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
 
   const handleRefreshBalance = async () => {
     const identityInputEl = vendingMachineClient.getElementById("identity-input");
+    let identityFromInput = identityInputEl.value;
     let identityToDisplay;
     const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
     let balanceToDisplay;
@@ -192,12 +193,13 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       console.log("calling getCupcakeBalanceFor");
       balanceToDisplay = await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor);
       console.log("got balance: " + balanceToDisplay);
-      identityToDisplay = identityInputEl.value.truncateAddress();
+      identityFromInput = identityInputEl.value;
+      identityToDisplay = identityFromInput.truncateAddress();
     } else {
-      identityToDisplay = identityInputEl.value;
+      identityToDisplay = identityFromInput;
       if (identityToDisplay == null || identityToDisplay == "")
         identityToDisplay = "no name";
-      balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identity);
+      balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identityFromInput);
     }
 
     cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`
