@@ -261,9 +261,11 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 You should see the account's balance update to 10,000 ETH. 
 
 
-#### Deploy the smart contract to your local node
+#### Deploy the smart contract to your local testnet
 
-From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract on your local node.
+From another terminal instance, run `npx hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
+
+// footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes
 
 Copy and paste your **contract address** below and click `Get cupcake!`. You should get a cupcake.
 
@@ -284,20 +286,32 @@ Although the frontend is centralized, the smart contract is decentralized, which
 
 // note that in one, data persists between tabs/refeshes, in the other it doesn't
 
-To follow this rule completely, we'll deploy our smart contract to Arbitrum's Goerli testnet, and then to Arbitrum mainnet:
+To follow this rule completely, we'll deploy our smart contract to Arbitrum's Goerli testnet, and then to Arbitrum Mainnet:
 
 // diagram
 
 
 
 
-### Deploy the smart contract to Arbitrum Goerli
+### Deploy the smart contract to the Arbitrum Goerli testnet
 
-1. get Goerli eth from L2 faucet
-  - todo: find functional faucet - https://faucet.quicknode.com/arbitrum/goerli doesn't work as of 3/14
-1. deploy vending machine to arb-goerli: https://goerli-rollup.arbitrum.io/rpc (no api key needed)
-2. inspect on blockchain explorer
-3. get goerli cupcake
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by real nodes, we'll need to pay a transaction fee to deploy our smart contract using the testnet's token.
+
+There are a few ways to get this token:
+
+1. Use an L2 Goerli ETH faucet: todo find functional faucet - https://faucet.quicknode.com/arbitrum/goerli doesn't work as of 3/14
+2. Use an L1 Goerli ETH faucet and bridge it to L2: todo
+3. Ask someone to send you some: todo
+
+To deploy to Arbitrum's Goerli testnet, we'll need to update our deployment script...mnemonic...todo
+
+deploy vending machine to arb-goerli: https://goerli-rollup.arbitrum.io/rpc (no api key needed)
+
+
+inspect on blockchain explorer
+
+
+get goerli cupcake
 
 <VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
 
