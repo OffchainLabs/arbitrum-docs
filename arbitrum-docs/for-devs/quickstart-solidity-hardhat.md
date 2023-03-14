@@ -296,9 +296,11 @@ To follow this rule completely, we'll deploy our smart contract to Arbitrum's Go
 2. add arb goerli to metamask
 3. bridge from goerli to arb goerli
 4. specify provider endpoint (with api key?)
+5. deploy vending machine to arb-goerli
+6. inspect on blockchain explorer
+7. get goerli cupcake
 
 <VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
-
 
 ### Deploy the smart contract to Arbitrum Mainnet
 

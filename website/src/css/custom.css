@@ -265,7 +265,7 @@ article .markdown .footnotes hr {
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator,
 [class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
-  background: #f00;
+  background: #aa0000;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -279,7 +279,7 @@ article .markdown .footnotes hr {
   display: block;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
-  background: #0f0;
+  background: #00a400;
   display: block;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine .hidden {
