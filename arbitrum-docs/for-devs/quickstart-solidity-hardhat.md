@@ -241,7 +241,7 @@ Copy and paste it below and click `Get cupcake!`. You should get a cupcake.
 
 import { Web3VendingMachine } from '@site/src/components/VendingMachines/Web3VendingMachine'
 
-<Web3VendingMachine />
+<VendingMachine id='smart-local-cupcakes' type='web3-localhost' />
 
 todo:
  - get past errors

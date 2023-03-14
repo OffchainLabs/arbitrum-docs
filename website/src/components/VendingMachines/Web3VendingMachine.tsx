@@ -1,4 +1,4 @@
-
+/*
 
 import React from "react";
 import { ethers } from 'ethers'
@@ -95,3 +95,4 @@ export const Web3VendingMachine = () => {
     </div>
   );
 };
+*/

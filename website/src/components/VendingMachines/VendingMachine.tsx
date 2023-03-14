@@ -133,7 +133,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       identityToDisplay = "no name";
 
     const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
-    const balanceToDisplay = await vendingMachine.getCupcakeBalanceFor(identity);
+    const balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identity);
 
     cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`
   };
@@ -141,7 +141,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   const isWeb3 = props.type.startsWith("web3");
 
   return (
-    <div className='vending-machine'>
+    <div className='vending-machine' id={vendingMachineClient.domId}>
       <h4>Free Cupcakes</h4>
       <span className='subheader'>(web2)</span>
       <input id="identity-input" type="text" placeholder="Enter identity" />
