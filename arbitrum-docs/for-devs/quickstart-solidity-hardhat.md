@@ -36,7 +36,7 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 
 Here's our vending machine implemented with Javascript:
 
-import { VendingMachine } from '@site/src/components/VendingMachines/VendingMachine'
+import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine'
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
@@ -133,6 +133,22 @@ At this point, you should see the following items (among others) in your `decent
 | `test/`             | Contains test files for your smart contracts. We can use `Lock.js` to test `Lock.sol`.                    |
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
 
+
+Replace the contents of `hardhat.config.js` with the following[^6]:
+
+```javascript title="hardhat.config.js"
+require("@nomicfoundation/hardhat-toolbox");
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+  solidity: "0.8.18",
+  networks: {
+    hardhat: {
+      chainId: 1337
+    },
+  }
+};
+```
 
 Run `npx hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully[^6]. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract[^7].
 
@@ -239,27 +255,32 @@ From another terminal instance, run `npx hardhat run scripts/deploy.js --network
 
 Copy and paste it below and click `Get cupcake!`. You should get a cupcake.
 
-import { Web3VendingMachine } from '@site/src/components/VendingMachines/Web3VendingMachine'
-
 <VendingMachine id='smart-local-cupcakes' type='web3-localhost' />
 
-todo:
- - get past errors
- - might have to fix chain id via hardhat config <- yup
- - explain how this technically still doesn't follow the second rule
+
+### Sidebar: What's going on here?
+
+Our first `VendingMachine` is labeled `WEB2` because it demonstrates web2 architecture: a centralized server that stores the machine's state and implementation of rules.
+
+// diagram
+
+Our second `VendingMachine` is labeled `WEB3-LOCALHOST` because it demonstrates web3 architecture: a decentralized network of nodes that store the machine's state and implementation of rules. In this case, we're using Hardhat to run a single node as a local testnet, and we're using our docs to host the frontend. 
+
+// diagram
+
+Although the frontend is centralized, the smart contract is decentralized, which brings us one step closer to following Rule 2: "The vending machine's rules can't be changed by anyone."
+
+To follow this rule completely, we'll deploy our smart contract to Arbitrum's Goerli testnet, and then to Arbitrum mainnet:
+
+// diagram
 
 
-### Deploy the smart contract to Arbitrum
-
-When developing smart contracts professionally, you'll likely want to deploy them to a testnet before deploying them to mainnet. For this quickstart, we'll deploy our smart contract straight to Arbitrum mainnet.
+### Deploy the smart contract to Arbitrum Goerli
 
 
-todo:
- - do we want to express opinions / conventions RE staged deployments? what are the industry norms there?
- - patterns and best practices for deploying to mainnet?
- - what about multiple chains, side chain concerns, etc? what do devs need to know?
- - eg local -> l1 testnet -> l2 testnet -> mainnet?
- - are there any decision trees? eg if x conditions are met, stage your deployments like y
+
+### Deploy the smart contract to Arbitrum Mainnet
+
 
 
 ### Summary
@@ -298,5 +319,6 @@ could highlight specific lines of code too
 [^3]: todo
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed.
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
+[^6]: See https://hardhat.org/hardhat-network/docs/metamask-issue
 [^6]: (windows-specific callouts)
 [^7]: ABI explainer

@@ -208,6 +208,16 @@ article .markdown .footnotes hr {
   font-weight: 800;
   margin-bottom: 20px;
 }
+[class*="quickstart-solidity-hardhat"] .vending-machine label {
+  font-family: monospace;
+  text-transform: uppercase;
+  color: #828282;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 5px;
+  display: block;
+  text-align: left;
+}
 [class*="quickstart-solidity-hardhat"] .vending-machine input {
   padding: 10px;
   width: 90%;
