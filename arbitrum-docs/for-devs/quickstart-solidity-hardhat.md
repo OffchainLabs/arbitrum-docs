@@ -274,7 +274,7 @@ Copy and paste your **contract address** below and click `Get cupcake!`. You sho
 <VendingMachine id='smart-local-cupcakes' type='web3-localhost' />
 
 
-### Sidebar: What's going on here?
+### What's going on here?
 
 Our first `VendingMachine` is labeled `WEB2` because it demonstrates web2 architecture: a centralized server that stores the machine's state and implementation of rules.
 
