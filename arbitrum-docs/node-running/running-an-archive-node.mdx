@@ -10,13 +10,14 @@ An archival node is a full (nitro) node that also builds an archive of historica
   - RAM: 16GB+ for Nitro and 32GB+ for Classic
   - CPU: 4+ core CPU
   - Storage: Minimum 2TB SSD (make sure it is extendable)
-  - Estimated Growth Rate: Around 128GB per week
+  - Estimated Growth Rate: Around 128GB per week for Arbitrum One (Nitro)
 
 ❗️Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust archival node.
 
 ### Required Artifacts
 
-- Latest Docker Image: `offchainlabs/nitro-node:v2.0.11-8e786ec`
+- Latest Docker Image for Arbitrum One: `offchainlabs/nitro-node:v2.0.11-8e786ec`
+- Latest Docker Image for Arbitrum Classic: `offchainlabs/arb-node:v1.4.5-e97c1a4`
 
 - Arbitrum One Nitro Genesis Database Snapshot
 
@@ -26,16 +27,16 @@ An archival node is a full (nitro) node that also builds an archive of historica
 
 - Other chains do not have classic blocks, and do not require an initial genesis database
 
-### Required parameter
+### Required parameter 
 
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
 - `--l2.chain-id=<L2 Chain ID>`
   - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
 - `--node.caching.archive`
-  - Retain past block state
+  - Required for running an Arbitrum One archival node and retains past block state
 - `--node.rpc.classic-redirect=<classic node RPC>`
-  - Redirects archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
+  - Required for running an Arbitrum Classic archival node and redirects archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 
 ### Important ports
 
@@ -46,9 +47,16 @@ An archival node is a full (nitro) node that also builds an archive of historica
 ### Putting it all together
 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
-  - Here is an example of how to run an archival node:
+- You could run both Arbitrum One and classic in archive mode. Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks.
+- Here we provide examples for running both Arbitrum One and Arbitrum Classic in archival mode:
+  
+  - Here is an example of how to run an Arbitrum One archival node:
+   ```shell
+  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --node.caching.archive 
+  ```
+ - Here is an example of how to run an Arbitrum Classic archival node:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --node.caching.archive --node.rpc.classic-redirect=<classic node RPC>
+  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC>
   ```
 
 ### Note on permissions
