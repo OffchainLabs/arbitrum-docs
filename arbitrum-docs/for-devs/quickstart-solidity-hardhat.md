@@ -284,11 +284,11 @@ Our second `VendingMachine` is labeled `WEB3-LOCALHOST` because it demonstrates 
 
 // diagram
 
-Although the frontend is centralized, the smart contract is decentralized, which brings us one step closer to following Rule 2: "The vending machine's rules can't be changed by anyone."
+Although the frontend is centralized, the smart contract is decentralized. Relate to rule -> "The vending machine's rules can't be changed by anyone."
 
 // note that in one, data persists between tabs/refeshes, in the other it doesn't
 
-To follow this rule completely, we'll deploy our smart contract to Arbitrum's Goerli testnet, and then to Arbitrum Mainnet:
+This "decentralization" is currently being emulated. To make it real, we'll deploy our smart contract to Arbitrum's Goerli testnet. And then to make it really real, we'll deploy it to Arbitrum Mainnet:
 
 // diagram
 
