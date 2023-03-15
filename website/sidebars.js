@@ -93,7 +93,7 @@ const sidebars = {
     {
       type: "doc",
       id: "node-running/running-a-node",
-      label: "Run a Node"
+      label: "Running a Node"
     },
     {
       type: "doc",
@@ -103,7 +103,7 @@ const sidebars = {
     {
       type: "doc",
       id: "node-running/local-dev-node",
-      label: "Run a Local Dev Node"
+      label: "Running a Local Dev Node"
     },
     {
       type: "doc",
@@ -119,6 +119,16 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "node-running/troubleshooting-running-nodes"
+    },
+    {
+      type: "doc",
+      label: "Running a Feed Relay",
+      id: "node-running/running-a-feed-relay"
+    },
+    {
+      type: "doc",
+      label: "Running a Validator",
+      id: "node-running/running-a-validator"
     }
   ],
   launchAChainSidebar: [
