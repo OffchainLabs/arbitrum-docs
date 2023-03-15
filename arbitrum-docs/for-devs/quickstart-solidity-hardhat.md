@@ -276,24 +276,22 @@ Copy and paste your **contract address** below and click `Get cupcake!`. You sho
 
 ### What's going on here?
 
-Our first `VendingMachine` is labeled `WEB2` because it demonstrates web2 architecture: a centralized server that stores the machine's state and implementation of rules.
+Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional n-tier web application architecture: 
 
-// diagram
+![Architecture diagram](assets/quickstart-vending-machine-architecture.png)
 
-Our second `VendingMachine` is labeled `WEB3-LOCALHOST` because it demonstrates web3 architecture: a decentralized network of nodes that store the machine's state and implementation of rules. In this case, we're using Hardhat to run a single node as a local testnet, and we're using our docs to host the frontend. 
-
-// diagram
-
-Although the frontend is centralized, the smart contract is decentralized. Relate to rule -> "The vending machine's rules can't be changed by anyone."
-
-// note that in one, data persists between tabs/refeshes, in the other it doesn't
-
-This "decentralization" is currently being emulated. To make it real, we'll deploy our smart contract to Arbitrum's Goerli testnet. And then to make it really real, we'll deploy it to Arbitrum Mainnet:
-
-// diagram
+Our vending machine's `WEB3` architecture is similar to its `WEB2` architecture, but with the `WEB3` versions, the data and logic are deployed to a **decentralized** network of nodes instead of a **centralized** network of servers. Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 
+| Layer                 | WEB2                                                                                    | WEB3-LOCALHOST                                                                    | WEB3-ARB-GOERLI                                                                                                  | WEB3-ARB-MAINNET                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **Data** (cupcakes)   | Stored only in your browser. (Usually, stored by centralized infrastructure.)           | Stored on your device in an emulated Ethereum network (via smart contract).       | Stored by Ethereum's decentralized test network (via smart contract).                                            | Stored by Ethereum's decentralized mainnet network (via smart contract).              |
+| **Logic** (vending)   | Served from Offchain's servers. Executed by your browser.                               | Stored and executed by your local emulated Ethereum network (via smart contract). | Stored and executed by Ethereum's decentralized test network (via smart contract).                               | Stored and executed by Ethereum's decentralized mainnet network (via smart contract). |
+| **Presentation** (UI) | Served from Offchain's servers. Executed by your browser.                               | Served from Offchain's servers. Executed by your browser (via this page).         | Served from Offchain's servers. Executed by your browser (via this page).                                        | Served from Offchain's servers. Executed by your browser (via this page).             |
+| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | <- same, but only for the frontend.                                               | <- same, but devs and users pay testnet $ETH to node-runners to deploy smart contracts and execute transactions. | <- same, but instead of testnet $ETH, they pay using mainnet $ETH.                    |
 
+
+Let's deploy our smart contract to a testnet that's powered by real nodes. We'll use Arbitrum's Goerli testnet.
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
