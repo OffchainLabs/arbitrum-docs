@@ -59,7 +59,7 @@ We'll install the rest of our dependencies as we go.
  - DApps let users carry their data and identity between applications without having to trust centralized service providers.
  - People who run Ethereum nodes[^3] (todo - enhance precision) receive rewards for processing and validating transactions on behalf of users and dApps.
  - These transactions can be expensive when the network is under heavy load. <a data-quicklook-from='layer-2'>Layer 2</a> (L2) scaling solutions like Arbitrum solve this problem.
- - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps that can process thousands of transactions per second with low latency and low transaction costs while inheriting Ethereum's high security standards[^3].
+ - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^3].
 
 
 ### Review our dumb contract
@@ -359,7 +359,7 @@ could highlight specific lines of code too
 
 [^1]: Inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. This means that instead of asking users to trust centralized service providers, web3 apps ask users to trust Ethereum's decentralized network of nodes and the open source client software that they use to process and validate transactions.
-[^3]: todo
+[^3]: temp context - "Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards" - need to provide some clear metrics on throughput, latency, costs, etc. Also elaborate on security standards, DAC compromise, etc.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. We won't be able to modify the contract's code after it's deployed.
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
 [^6]: You can also use npm for this. 
