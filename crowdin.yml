@@ -1,4 +1,3 @@
 files:
-  # JSON translation files
   - source: /arbitrum-docs/**/*
     translation: /website/i18n/%two_letters_code%/**/%original_file_name%
