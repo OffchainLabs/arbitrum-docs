@@ -1,0 +1,13 @@
+# FAQs: Dev Tooling
+
+### Do I need to download any special npm libraries in order to use web3.js or ethers-js on Arbitrum? {#q-ethers-web3}
+
+Nope; web3.js and ethers.js will work out of the box just like they do on L1 Ethereum.
+
+Once upon a time, Arbitrum developers were required to download supplemental packages with names like “arb-provider-ethers” and “arb-ethers-web3-bridge”, but these packages are deprecated and no longer required! Any guide that directs devs to use them should be considered outdated.
+
+### Why do I get “custom tx type” errors when I use hardhat? {#q-hardhat}
+
+In Arbitrum, we use a number of non-standard [EIP-2718](https://eips.ethereum.org/EIPS/eip-2718) typed transactions. See [here](/arbos/geth.mdx#transaction-types) for the full list and the rationale.
+
+[Hardhat v2.12.2](https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2) added support for forking networks like Arbitrum with custom transaction types, so if you’re using hardhat, upgrade to 2.12.2!
