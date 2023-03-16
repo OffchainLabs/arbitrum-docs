@@ -17,11 +17,13 @@
     "prettier:format": "yarn prettier:format:docs && yarn prettier:format:app",
     "prettier:format:app": "prettier --config-precedence file-override --write \"src/**/*.{tsx,ts,scss,md,json,js}\"",
     "prettier:format:docs": "prettier --config-precedence file-override --write \"../arbitrum-docs/**/*.{md,mdx}\"",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "crowdin": "crowdin"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
+    "@crowdin/cli": "3",
     "@docusaurus/core": "^2.3.1",
     "@docusaurus/preset-classic": "^2.3.1",
     "@docusaurus/theme-mermaid": "^2.3.1",
