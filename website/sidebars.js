@@ -82,6 +82,11 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "doc",
+      label: "Audit Reports",
+      id: "audit-reports"
     }
   ],
   runNodesSidebar: [
@@ -126,6 +131,13 @@ const sidebars = {
       id: "node-running/troubleshooting-running-nodes"
     }
     
+  ],
+  launchAChainSidebar: [
+    {
+      type: "doc",
+      id: "chain-launching/launch-a-chain",
+      label: "Launch a Chain",
+    },
   ],
   devsSideBar: [
     {
