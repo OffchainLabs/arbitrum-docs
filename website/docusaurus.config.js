@@ -12,7 +12,7 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
   markdown: {
     mermaid: true,
   },
