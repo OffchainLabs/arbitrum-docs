@@ -1,0 +1,241 @@
+/**
+ * Any CSS included here will be global.
+ * Uses Infima. Infima docs -> https://infima.dev/
+ * If you're updating this, make sure you're updating the LESS file.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+    --ifm-color-primary: #007bdd;
+    --ifm-color-primary-dark: #295f78;
+    --ifm-color-primary-darker: #275771;
+    --ifm-color-primary-darkest: #20465d;
+    --ifm-color-primary-light: #337292;
+    --ifm-color-primary-lighter: #357899;
+    --ifm-color-primary-lightest: #3c85ad;
+    --ifm-color-content: #000;
+    --ifm-link-color: #007bdd;
+    --ifm-code-font-size: 95%;
+    --ifm-global-radius: 2px;
+    --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+    --ifm-color-info-dark: #359aec;
+    --ifm-color-info-contrast-background: #f0f8ff;
+    --ifm-alert-padding-vertical: 1.5rem;
+    --ifm-alert-padding-horizontal: 1.5rem;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+    --ifm-color-primary: #28a0f0;
+    --ifm-color-primary-dark: #2182af;
+    --ifm-color-primary-darker: #1f7fa5;
+    --ifm-color-primary-darkest: #1a6c88;
+    --ifm-color-primary-light: #29b0d5;
+    --ifm-color-primary-lighter: #32b4d8;
+    --ifm-color-primary-lightest: #4fbcdd;
+    --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+.header-badges {
+    display: block;
+    margin-bottom: 15px;
+    min-height: 35px;
+    text-align: right;
+    /*pragmatism over perfection*/
+
+    .header-badge {
+        .truncate;
+        transition-property: all;
+        transition-duration: 0.2s;
+        display: inline-block;
+        border-radius: 20px;
+        background-color: #efefef;
+        padding: 3px 20px 3px 3px;
+        height: 31px;
+        margin-right: 6px;
+        margin-bottom: 5px;
+        vertical-align: top;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+
+        &:hover {
+            text-decoration: none;
+            background-color: #e6e6e6;
+            opacity: 1;
+
+            .badge-avatar {
+                opacity: 1;
+            }
+
+            .badge-label {
+                color: #000;
+            }
+        }
+
+        .badge-label {
+            .truncate;
+            transition-property: all;
+            transition-duration: 0.2s;
+            font-size: 13px;
+            line-height: 24px;
+            color: #333;
+            display: inline-block;
+            vertical-align: top;
+            height: 25px;
+            max-width: calc(100% ~'-' 33px);
+        }
+
+        .badge-avatar {
+            transition-property: all;
+            transition-duration: 0.2s;
+            display: inline-block;
+            border-radius: 30px;
+            width: 25px;
+            height: 25px;
+            background-size: cover;
+            margin-right: 12px;
+            font-size: 12px;
+            vertical-align: top;
+            line-height: 23px;
+            padding-left: 8px;
+            opacity: 0.7;
+        }
+
+        .emoji-avatar {
+            margin-right: 8px !important;
+        }
+    }
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+article {
+    .markdown {
+        h1:first-child {
+            font-size: 30px;
+        }
+
+        >h3 {
+            font-size: 21px;
+            margin-top: 50px;
+            margin-bottom: 15px;
+        }
+
+        li li {
+            margin-top: 4px;
+        }
+
+        .small-table {
+            font-size: 12px;
+            margin-top: 20px;
+
+            td {
+                padding: 10px;
+            }
+        }
+
+
+
+        .definition-list {
+            dt {
+                font-weight: 700;
+                margin-top: 20px;
+            }
+
+            dd {
+                margin-left: 0;
+            }
+        }
+
+        a {
+            font-weight: 600;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
+            }
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        .theme-admonition {
+            margin-bottom: 2em;
+
+            svg {
+                height: 1.3rem;
+                width: 1.3rem;
+            }
+        }
+
+        .a-b-list {
+            list-style-type: lower-alpha;
+        }
+
+        sup {
+            padding-left: 2px;
+        }
+
+        .footnote-backref {
+            display: none;
+        }
+
+        .footnotes {
+            border-top: 1px solid #ddd;
+            margin-top: 50px;
+
+            &:before {
+                content: "Footnotes:";
+                font-weight: 600;
+                margin-top: 30px;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+
+            hr {
+                display: none;
+            }
+        }
+    }
+}
+
+.theme-doc-sidebar-menu {
+    font-size: 13.5px;
+}
+
+.tippy-box {
+    padding: 8px;
+}
+
+.tippy-content p:last-child {
+    margin-bottom: 0
+}
+
+@media (max-width: 736px) {
+    .markdown h1:first-child {
+        font-size: 24px;
+    }
+
+    .markdown>h3 {
+        font-size: 18px;
+        margin-top: 35px;
+        margin-bottom: 10px;
+    }
+}
+
+article a:not([data-quicklook-from]):not(.footnote-ref) {
+    text-decoration: underline;
+}
+
+/* default mermaid container */
+.docusaurus-mermaid-container {
+    display: flex;
+    justify-content: center;
+}

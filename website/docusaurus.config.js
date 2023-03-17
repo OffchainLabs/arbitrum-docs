@@ -39,9 +39,10 @@ const config = {
           path: "../arbitrum-docs/",
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
+          breadcrumbs: false,
           editUrl: function (s) {
-            // troubleshooting docs content has external source-of-truth:
-            if (s.docPath.includes("troubleshooting")) return undefined;
+            // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -49,6 +50,9 @@ const config = {
           },
           showLastUpdateTime: true,
         },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css')
+        }
       }),
     ],
   ],
@@ -65,7 +69,6 @@ const config = {
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -86,6 +89,13 @@ const config = {
             docId: "intro/intro",
             position: "left",
             label: "Overview",
+          },
+          {
+            type: "doc",
+            docId: "chain-launching/launch-a-chain",
+            position: "left",
+            label: "Launch an L3 (new!)",
+            value: '<button>Give feedback</button>',
           },
           {
             type: "doc",
@@ -181,10 +191,10 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
+        content: `✨ Arbitrum DAO has been officially announced. Learn more See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
-        isCloseable: true,
+        isCloseable: false,
       },
     }),
 };

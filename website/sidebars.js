@@ -82,28 +82,18 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "doc",
+      label: "Audit Reports",
+      id: "audit-reports"
     }
   ],
   runNodesSidebar: [
     {
       type: "doc",
       id: "node-running/running-a-node",
-      label: "Run a Node"
-    },
-    {
-      type: "doc",
-      id: "node-running/node-providers",
-      label: "3rd Party Node Providers"
-    },
-    {
-      type: "doc",
-      id: "node-running/local-dev-node",
-      label: "Run a Local Dev Node"
-    },
-    {
-      type: "doc",
-      id: "das/daserver-instructions",
-      label: "Data Availability Server"
+      label: "Running a Node"
     },
     {
       type: "doc",
@@ -112,9 +102,42 @@ const sidebars = {
     },
     {
       type: "doc",
+      id: "node-running/local-dev-node",
+      label: "Running a Local Dev Node"
+    },
+    {
+      type: "doc",
+      label: "Running a Feed Relay",
+      id: "node-running/running-a-feed-relay"
+    },
+    {
+      type: "doc",
+      label: "Running a Validator",
+      id: "node-running/running-a-validator"
+    },
+    {
+      type: "doc",
+      id: "node-running/node-providers",
+      label: "3rd Party Node Providers"
+    },
+    {
+      type: "doc",
+      id: "das/daserver-instructions",
+      label: "Data Availability Server"
+    },
+    {
+      type: "doc",
       label: "Troubleshooting",
       id: "node-running/troubleshooting-running-nodes"
     }
+    
+  ],
+  launchAChainSidebar: [
+    {
+      type: "doc",
+      id: "chain-launching/launch-a-chain",
+      label: "Launch a Chain",
+    },
   ],
   devsSideBar: [
     {
@@ -146,6 +169,17 @@ const sidebars = {
               label: "Block Numbers and Time",
               id: "time"
             }
+          ]
+        },
+        {
+          type: "category",
+          label: "How Tos",
+          items: [
+            {
+              type: "doc",
+              label: "How to estimate gas",
+              id: "devs-how-tos/how-to-estimate-gas"
+            },
           ]
         },
         {
