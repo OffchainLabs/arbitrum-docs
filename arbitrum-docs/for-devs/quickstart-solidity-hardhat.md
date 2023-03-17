@@ -120,7 +120,7 @@ yarn init -y
 yarn add hardhat @nomicfoundation/hardhat-toolbox
 ```
 
-This installs two packages: `hardhat` lets us test and deploy our smart contracts, and `hardhat-toolbox` is a bundle of popular Hardhat plugins that we'll use later.
+This installs two packages: `hardhat` lets us write, test and deploy our smart contracts, and `hardhat-toolbox` is a bundle of popular Hardhat plugins that we'll use later.
 
 Next, run `npx hardhat` to configure Hardhat. Select `Create a JavaScript project` when prompted. Make sure you specify your `decentralized-cupcakes` directory as the project root when asked.
 
