@@ -391,7 +391,7 @@ todo - via CMS
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. Arbitrum uses advanced cryptography techniques to reduce the cost of using Ethereum without requiring developers to compromise on security or decentralization. It offers a pure win.
 [^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called *validators*. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
-[^5]: "Hi, I'm new to Arbitrum and I'm trying to deploy my smart contract to the Arbitrum Goerli testnet. Does anyone have any L1 or L2 Goerli ETH to spare? If so, could you please send it to me at this address (insert wallet address)? Thanks!"
+[^5]: If you're not sure how to ask, steal this: "Hi, I'm new to Arbitrum and I'm trying to deploy my smart contract to the Arbitrum Goerli testnet. Does anyone have any L1 or L2 Goerli ETH to spare? If so, could you please send it to me at this address (insert wallet address)? Thanks!"
 
 <!-- 
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
