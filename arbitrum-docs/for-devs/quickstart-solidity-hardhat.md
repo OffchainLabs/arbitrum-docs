@@ -327,7 +327,7 @@ First, update the `hardhat.config.js` file to specify the private key of the tes
 ```javascript title="hardhat.config.js"
 // etc
 
-const GOERLI_TESTNET_PRIVATE_KEY = ""; // <- this should begin with "0x"
+const GOERLI_TESTNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
 
 // etc
 ```
