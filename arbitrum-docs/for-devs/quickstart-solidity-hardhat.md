@@ -358,7 +358,7 @@ Congratulations! You've just deployed **real business logic** to a **real decent
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
-Select `Arbitrum Goerli` from Metamask's dropdown. Paste your contract address into the `VendingMachine` below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+It's time for some Arbitrum Goerli cupcakes. Select `Arbitrum Goerli` from Metamask's dropdown. Paste your contract address into the `VendingMachine` below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
 <VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
 
