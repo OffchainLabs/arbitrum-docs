@@ -40,7 +40,7 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet). Rule 2 is traditionally very difficult to enforce because we usually have to trust centralized service providers to host and run our apps. Arbitrum solves this problem by making it easy for you to migrate business logic (and data) from trusted centralized servers into Ethereum's <a data-quicklook-from='trustless'>trustless</a> decentralized network of nodes[^2].
+Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet). Rule 2 is traditionally very difficult to enforce because we usually have to trust centralized service providers to host and run our apps. Arbitrum solves this problem by making it easy for you to deploy your apps to Ethereum's <a data-quicklook-from='trustless'>trustless</a> decentralized network of nodes[^2].
 
 ### Prerequisites
 
