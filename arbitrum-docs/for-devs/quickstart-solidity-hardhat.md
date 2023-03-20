@@ -366,56 +366,19 @@ It's time for some Arbitrum Goerli cupcakes. Select `Arbitrum Goerli` from Metam
 ### Deploy the smart contract to Arbitrum One Mainnet
 
 todo
+ - same as above
+ - disclaimers about security best practices
+ - signers, service accounts, disposable service wallets?
+
+
 
 <VendingMachine id='smart-mainnet-cupcakes' type='web3-arb-one' />
-
-
-
-
-
-
-
-
-
-### Dumpster fire below this line
-------
-
- - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
- - example arbitrum one contract: 
- - example arbitrum nova contract:
-
-
 
 
 ### Summary
 
 todo
 
-
-### Vending machine code walkthrough
-
-visualize the components, layers, data structures, information flows, procedure
-
-this is where we use Docusaurus' live code editor to let users play with the code in the browser
-
-could highlight specific lines of code too
-
-
-
-### Next steps / things to link / things to think about integrating
-
- - Testing
- - Samples
- - Blockchain exploring
- - Architecting
- - Patterns
- - Tutorials
- - Differences between Ethereum and Arbitrum - op codes etc
- - Upgrading contracts
- - Oracles
- - One vs Nova
- - https://yos.io/2019/11/10/smart-contract-development-best-practices/
-// https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
 
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
@@ -431,4 +394,33 @@ could highlight specific lines of code too
 [^7]: ABI explainer
 [^6]: If you're using Windows,.
 [^7]: ABI stands for "Application Binary Interface". It's a JSON file that describes the functions and events of a smart contract. It's used by frontend applications to interact with smart contracts. See [this article](https://ethereum.org/en/developers/docs/abi/) for a beginner-friendly introduction to ABI.
+
+
+### Dumpster fire below this line
+------
+
+TODOs:
+ - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
+ - example arbitrum one contract: 
+ - example arbitrum nova contract:
+ - concept doc for this -> visualize the components, layers, data structures, information flows, procedure 
+ - consider using Docusaurus' live code editor to let users play with the code in the browser
+ - Testing
+ - Samples
+ - Blockchain exploring
+ - Architecting
+ - Patterns
+ - Tutorials
+ - Differences between Ethereum and Arbitrum - op codes etc
+ - Upgrading contracts
+ - Oracles
+ - One vs Nova
+ - https://yos.io/2019/11/10/smart-contract-development-best-practices/
+ - https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
+
+
+
+
+
+
 -->
