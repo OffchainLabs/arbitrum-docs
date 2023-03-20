@@ -380,6 +380,13 @@ todo
 ### Dumpster fire below this line
 ------
 
+ - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
+ - example arbitrum one contract: 
+ - example arbitrum nova contract:
+
+
+
+
 ### Summary
 
 todo
