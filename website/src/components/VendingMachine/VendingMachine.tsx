@@ -5,21 +5,22 @@ import VendingMachineContract from './VendingMachine.sol/VendingMachine.json'
 export const VendingMachine = (props: { id: string, type: string }) => {
 
   class Web3VendingMachineClient {
-
-    // stash hasRequestedAccount to prevent multiple requests
-    hasRequestedAccount = false;
+    isWeb3 = true;
+    defaultProviderUrl;
+    identityLabel = "Ethereum address";
 
     // ensures that the context of this is always defined
-    constructor() {
+    constructor(defaultProviderUrl = null) {
       this.giveCupcakeTo = this.giveCupcakeTo.bind(this);
       this.getCupcakeBalanceFor = this.getCupcakeBalanceFor.bind(this);
       this.requestAccount = this.requestAccount.bind(this);
       this.getWalletAddress = this.getWalletAddress.bind(this);
       this.initContract = this.initContract.bind(this);
+      this.defaultProviderUrl = defaultProviderUrl;
     }
 
-    async giveCupcakeTo(identity, vendingMachineContractAddress, providerUrl) {
-      const contract = await this.initContract(vendingMachineContractAddress, providerUrl);
+    async giveCupcakeTo(identity, vendingMachineContractAddress) {
+      const contract = await this.initContract(vendingMachineContractAddress);
       const cupcakeCountBefore = Number(await contract.getCupcakeBalanceFor(identity));
       const transaction = await contract.giveCupcakeTo(identity);
       const receipt = await transaction.wait();
@@ -28,18 +29,17 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       return succeeded;
     }
 
-    async getCupcakeBalanceFor(identity, vendingMachineContractAddress, providerUrl) {
-      const contract = await this.initContract(vendingMachineContractAddress, providerUrl);
+    async getCupcakeBalanceFor(identity, vendingMachineContractAddress) {
+      // console log everything in one line
+      console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
+      const contract = await this.initContract(vendingMachineContractAddress);
       const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
       return cupcakeBalance;
     }
 
     async requestAccount() {
-      if (!this.hasRequestedAccount && typeof window.ethereum !== 'undefined') {
+      if (typeof window.ethereum !== 'undefined') {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        if (accounts && accounts.length > 0) {
-          this.hasRequestedAccount = true;
-        }
       }
     }
 
@@ -47,23 +47,23 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       if (typeof window.ethereum !== 'undefined') {
         const signer = await this.initSigner();
         const walletAddress = await signer.getAddress();
+        console.log(`wallet address: ${walletAddress}`);
         return walletAddress;
       }
     }
 
-    async initSigner(providerUrl) {
+    async initSigner() {
+      // we want to always use metamask to sign transactions
+      // but we want to use the user-specified provider URL for reading / writing to the chain
       if (typeof window.ethereum !== 'undefined') {
         await this.requestAccount();
-
-        const customProviderUrl = providerUrl;
-        const customProvider = new ethers.providers.JsonRpcProvider(customProviderUrl);
-
-        const signer = customProvider.getSigner();
+        const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = metamaskProvider.getSigner();
         return signer;
       }
     }
 
-    async initContract(vendingMachineContractAddress, providerUrl) {
+    async initContract(vendingMachineContractAddress) {
       if (typeof window.ethereum !== 'undefined') {
         const signer = await this.initSigner();
         const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
@@ -73,6 +73,8 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   }
 
   class Web2VendingMachineClient {
+    isWeb3 = false;
+    identityLabel = "Name";
     cupcakeBalances = {};
     cupcakeDistributionTimes = {};
 
@@ -103,18 +105,22 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   }
 
   let vendingMachineClient;
+  // todo: send this in from the consumer of this component
   switch (props.type) {
     case "web2":
       vendingMachineClient = new Web2VendingMachineClient();
       break;
     case "web3-localhost":
-      vendingMachineClient = new Web3VendingMachineClient();
+      vendingMachineClient = new Web3VendingMachineClient("http://localhost:8545");
       break;
     case "web3-arb-goerli":
-      vendingMachineClient = new Web3VendingMachineClient();
+      vendingMachineClient = new Web3VendingMachineClient("https://goerli-rollup.arbitrum.io/rpc");
       break;
-    case "web3-arb-mainnet":
-      vendingMachineClient = new Web3VendingMachineClient();
+    case "web3-arb-one":
+      vendingMachineClient = new Web3VendingMachineClient("todo");
+      break;
+    case "web3-arb-nova":
+      vendingMachineClient = new Web3VendingMachineClient("todo");
       break;
     default:
       throw new Error(`Error: unknown vending machine type ${props.type}`);
@@ -122,7 +128,6 @@ export const VendingMachine = (props: { id: string, type: string }) => {
 
   vendingMachineClient.domId = props.id;
   vendingMachineClient.getElementById = (id) => document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
-  const isWeb3 = props.type.startsWith("web3");
 
   const prefillWeb3Identity = async () => {
     const identityInput = vendingMachineClient.getElementById("identity-input");
@@ -147,11 +152,10 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     const identityInput = vendingMachineClient.getElementById("identity-input");
     const identity = identityInput.value;
     const contractAddressInput = vendingMachineClient.getElementById("contract-address-input");
-    contractAddressInput.value = "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // temp
     const contractAddress = contractAddressInput.value;
-    const providerUrlInput = vendingMachineClient.getElementById("provider-url-input");
-    const providerUrl = providerUrlInput.value;
-    return await func(identity, contractAddress, providerUrl);
+    // console log everything in one line
+    console.log(`calling ${func.name} with ${identity} on ${contractAddress}`);
+    return await func(identity, contractAddress);
   }
 
   const handleCupcakePlease = async () => {
@@ -160,7 +164,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       const identity = identityInput.value;
 
       let gotCupcake;
-      if (isWeb3) {
+      if (vendingMachineClient.isWeb3) {
         await prefillWeb3Identity();
         gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
       } else {
@@ -203,7 +207,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
       let balanceToDisplay;
 
-      if (isWeb3) {
+      if (vendingMachineClient.isWeb3) {
         await prefillWeb3Identity();
         balanceToDisplay = await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor);
         identityFromInput = identityInputEl.value;
@@ -231,12 +235,10 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     <div className='vending-machine' id={vendingMachineClient.domId}>
       <h4>Free Cupcakes</h4>
       <span className='subheader'>{props.type}</span>
-      <label>Identity</label>
-      <input id="identity-input" type="text" placeholder="Enter identity" />
-      <label className={isWeb3 ? '' : 'hidden'}>Contract address</label>
-      <input id="contract-address-input" type="text" placeholder="Enter contract address" className={isWeb3 ? '' : 'hidden'} />
-      <label className={isWeb3 ? '' : 'hidden'}>Provider URL</label>
-      <input id="provider-url-input" type="text" placeholder="Enter provider URL" className={isWeb3 ? '' : 'hidden'} defaultValue="http://localhost:8545" />
+      <label>{vendingMachineClient.identityLabel}</label>
+      <input id="identity-input" type="text" placeholder={"Enter " + vendingMachineClient.identityLabel.toLowerCase()} />
+      <label className={vendingMachineClient.isWeb3 ? '' : 'hidden'}>Contract address</label>
+      <input id="contract-address-input" type="text" placeholder="Enter contract address" className={vendingMachineClient.isWeb3 ? '' : 'hidden'} />
       <button id="cupcake-please" onClick={handleCupcakePlease}>Cupcake please!</button>
       <a id="refresh-balance" onClick={handleRefreshBalance}>Refresh balance</a>
       <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
