@@ -191,7 +191,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum DAO has been officially announced. Learn more See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
+        content: `✨ Arbitrum DAO has been officially announced. <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">Learn more</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
