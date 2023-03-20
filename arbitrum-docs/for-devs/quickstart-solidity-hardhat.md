@@ -40,7 +40,7 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet). Rule 2 is traditionally very difficult to enforce because we usually have to trust centralized service providers to host and run our apps. Arbitrum solves this problem by making it easy for you to migrate business logic from trusted centralized servers into Ethereum's <a data-quicklook-from='trustless'>trustless</a> decentralized network of nodes[^2].
+Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet). Rule 2 is traditionally very difficult to enforce because we usually have to trust centralized service providers to host and run our apps. Arbitrum solves this problem by making it easy for you to migrate business logic (and data) from trusted centralized servers into Ethereum's <a data-quicklook-from='trustless'>trustless</a> decentralized network of nodes[^2].
 
 ### Prerequisites
 
@@ -354,7 +354,7 @@ You should see the following output:
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **real business logic** to a **real decentralized network of nodes**. 
+Congratulations! You've just deployed **real business logic and data** to a **real decentralized network of nodes**. 
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
