@@ -28,7 +28,7 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but this exposes us to the following risks:
+Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but:
 
  1. Our centralized service provider can deny access to particular users.
  2. A malicious actor can change the rules of the vending machine at any time.
