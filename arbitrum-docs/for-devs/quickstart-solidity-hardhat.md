@@ -158,11 +158,11 @@ module.exports = {
     arbitrumGoerli: {
       url: "https://goerli-rollup.arbitrum.io/rpc",
       chainId: 421613,
-      accounts: [GOERLI_TESTNET_PRIVATE_KEY]
+      //accounts: [GOERLI_TESTNET_PRIVATE_KEY]
     },
     arbitrumOne: {
       url: "https://arb1.arbitrum.io/rpc",
-      accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY]
+      //accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY]
     }
   }
 };
@@ -334,9 +334,9 @@ First, update the `hardhat.config.js` file to specify the private key of the tes
 
 ```javascript title="hardhat.config.js"
 // ...
-
 const GOERLI_TESTNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
-
+// ...
+accounts: [GOERLI_TESTNET_PRIVATE_KEY] // <- uncomment this line
 // ...
 ```
 
@@ -382,9 +382,9 @@ First, update the `hardhat.config.js` file to specify the private key of the **o
 
 ```javascript title="hardhat.config.js"
 // ...
-
 const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
-
+// ...
+accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY] // <- uncomment this line
 // ...
 ```
 
