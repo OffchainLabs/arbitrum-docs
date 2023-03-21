@@ -260,7 +260,7 @@ Note that in the context of this quickstart, "account" refers to a public wallet
 
 #### Configure Metamask
 
-Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks through Metamask's settings. Then select the `Localhost 8545` network:
+Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
 ![Connect Metamask to Localhost 8545](assets/quickstart-localhost-metamask.png)
 

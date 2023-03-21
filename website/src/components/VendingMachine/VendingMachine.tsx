@@ -4,80 +4,13 @@ import VendingMachineContract from './VendingMachine.sol/VendingMachine.json'
 
 export const VendingMachine = (props: { id: string, type: string }) => {
 
-  class Web3VendingMachineClient {
-    isWeb3 = true;
-    defaultProviderUrl;
-    identityLabel = "Ethereum address";
-
-    // ensures that the context of this is always defined
-    constructor(defaultProviderUrl = null) {
-      this.giveCupcakeTo = this.giveCupcakeTo.bind(this);
-      this.getCupcakeBalanceFor = this.getCupcakeBalanceFor.bind(this);
-      this.requestAccount = this.requestAccount.bind(this);
-      this.getWalletAddress = this.getWalletAddress.bind(this);
-      this.initContract = this.initContract.bind(this);
-      this.defaultProviderUrl = defaultProviderUrl;
-    }
-
-    async giveCupcakeTo(identity, vendingMachineContractAddress) {
-      const contract = await this.initContract(vendingMachineContractAddress);
-      const cupcakeCountBefore = Number(await contract.getCupcakeBalanceFor(identity));
-      const transaction = await contract.giveCupcakeTo(identity);
-      const receipt = await transaction.wait();
-      const cupcakeCountAfter = Number(await contract.getCupcakeBalanceFor(identity));
-      const succeeded = cupcakeCountAfter == cupcakeCountBefore + 1;
-      return succeeded;
-    }
-
-    async getCupcakeBalanceFor(identity, vendingMachineContractAddress) {
-      // console log everything in one line
-      console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
-      const contract = await this.initContract(vendingMachineContractAddress);
-      const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
-      return cupcakeBalance;
-    }
-
-    async requestAccount() {
-      if (typeof window.ethereum !== 'undefined') {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      }
-    }
-
-    async getWalletAddress() {
-      if (typeof window.ethereum !== 'undefined') {
-        const signer = await this.initSigner();
-        const walletAddress = await signer.getAddress();
-        console.log(`wallet address: ${walletAddress}`);
-        return walletAddress;
-      }
-    }
-
-    async initSigner() {
-      // we want to always use metamask to sign transactions
-      // but we want to use the user-specified provider URL for reading / writing to the chain
-      if (typeof window.ethereum !== 'undefined') {
-        await this.requestAccount();
-        const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = metamaskProvider.getSigner();
-        return signer;
-      }
-    }
-
-    async initContract(vendingMachineContractAddress) {
-      if (typeof window.ethereum !== 'undefined') {
-        const signer = await this.initSigner();
-        const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
-        return contract;
-      }
-    }
-  }
-
   class Web2VendingMachineClient {
     isWeb3 = false;
     identityLabel = "Name";
     cupcakeBalances = {};
     cupcakeDistributionTimes = {};
 
+    // the web3 version of the vending machine implements this using ethereum
     async giveCupcakeTo(identity) {
       if (this.cupcakeDistributionTimes[identity] === undefined) {
         this.cupcakeBalances[identity] = 0;
@@ -96,6 +29,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       }
     }
 
+    // the web3 version of the vending machine implements this using ethereum
     async getCupcakeBalanceFor(identity) {
       let balance = this.cupcakeBalances[identity];
       if (balance === undefined)
@@ -104,32 +38,86 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     }
   }
 
-  let vendingMachineClient;
-  // todo: send this in from the consumer of this component
-  switch (props.type) {
-    case "web2":
-      vendingMachineClient = new Web2VendingMachineClient();
-      break;
-    case "web3-localhost":
-      vendingMachineClient = new Web3VendingMachineClient("http://localhost:8545");
-      break;
-    case "web3-arb-goerli":
-      vendingMachineClient = new Web3VendingMachineClient("https://goerli-rollup.arbitrum.io/rpc");
-      break;
-    case "web3-arb-one":
-      vendingMachineClient = new Web3VendingMachineClient("todo");
-      break;
-    case "web3-arb-nova":
-      vendingMachineClient = new Web3VendingMachineClient("todo");
-      break;
-    default:
-      throw new Error(`Error: unknown vending machine type ${props.type}`);
+  class Web3VendingMachineClient {
+    isWeb3 = true;
+    identityLabel = "Ethereum address";
+
+    // ensures that the context of this is always defined
+    constructor() {
+      this.giveCupcakeTo = this.giveCupcakeTo.bind(this);
+      this.getCupcakeBalanceFor = this.getCupcakeBalanceFor.bind(this);
+      this.requestAccount = this.requestAccount.bind(this);
+      this.getWalletAddress = this.getWalletAddress.bind(this);
+      this.initContract = this.initContract.bind(this);
+    }
+
+    // the web2 version of the vending machine implements this without using ethereum
+    async giveCupcakeTo(identity, vendingMachineContractAddress) {
+      const contract = await this.initContract(vendingMachineContractAddress);
+      const cupcakeCountBefore = Number(await contract.getCupcakeBalanceFor(identity));
+      const transaction = await contract.giveCupcakeTo(identity);
+      const receipt = await transaction.wait();
+      const cupcakeCountAfter = Number(await contract.getCupcakeBalanceFor(identity));
+      const succeeded = cupcakeCountAfter == cupcakeCountBefore + 1;
+      return succeeded;
+    }
+
+    // the web2 version of the vending machine implements this without using ethereum
+    async getCupcakeBalanceFor(identity, vendingMachineContractAddress) {
+      // console log everything in one line
+      console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
+      const contract = await this.initContract(vendingMachineContractAddress);
+      const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
+      return cupcakeBalance;
+    }
+
+    async requestAccount() {
+      if (ethereumAvailable()) {
+        // "hey metamask, please ask the user to connect their wallet and select an account"
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      }
+    }
+
+    async getWalletAddress() {
+      if (ethereumAvailable()) {
+        // "hey metamask, please give me the wallet address corresponding to the account the user has selected"
+        const signer = await this.initSigner();
+        const walletAddress = await signer.getAddress();
+        console.log(`wallet address: ${walletAddress}`);
+        return walletAddress;
+      }
+    }
+
+    async initSigner() {
+      if (ethereumAvailable()) {
+        // "hey metamask, let's prepare to sign transactions with the account the user has selected"
+        await this.requestAccount();
+        const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = metamaskProvider.getSigner();
+        return signer;
+      }
+    }
+
+    async initContract(vendingMachineContractAddress) {
+      if (ethereumAvailable()) {
+        // "hey metamask, let's use the network and account the user has selected to interact with the contract"
+        const signer = await this.initSigner();
+        const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
+        return contract;
+      }
+    }
+
+    ethereumAvailable() {
+      return typeof window.ethereum !== 'undefined';
+    }
   }
 
+  const vendingMachineClient = props.type == "web2" ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
   vendingMachineClient.domId = props.id;
   vendingMachineClient.getElementById = (id) => document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
 
   const prefillWeb3Identity = async () => {
+    // if the user has metamask installed, prefill the identity input with their wallet address
     const identityInput = vendingMachineClient.getElementById("identity-input");
     if (identityInput.value == "" || identityInput.value == null) {
       identityInput.value = await vendingMachineClient.getWalletAddress();
