@@ -413,11 +413,15 @@ In this quickstart, we:
 - Identified two business rules: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
 - Identified a challenge: These business rules are difficult to follow in a centralized application.
 - Identified a solution: Arbitrum
-- Compared the differences between a **centralized application**'s business logic (implemented as a Javascript class) and a **decentralized application**'s business logic (implemented as a Solidity smart contract).
+- Converted a vending machine's Javascript business logic into a Solidity smart contract.
 - Deployed our smart contract to Hardhat's local development network.
 - Deployed our smart contract to Arbitrum's Goerli testnet.
 - Deployed our smart contract to Arbitrum One Mainnet.
 - Got a permissionless, immutable cupcake from a vending machine hosted on Ethereum mainnet, by way of Arbitrum One.
+
+
+
+<!--todo: next steps -->
    
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
