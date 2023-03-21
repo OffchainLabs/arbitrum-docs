@@ -5,8 +5,11 @@ import VendingMachineContract from './VendingMachine.sol/VendingMachine.json'
 export const VendingMachine = (props: { id: string, type: string }) => {
 
   class Web2VendingMachineClient {
+    // UI concerns
     isWeb3 = false;
     identityLabel = "Name";
+
+    // state variables = internal memory of the vending machine
     cupcakeBalances = {};
     cupcakeDistributionTimes = {};
 
@@ -17,6 +20,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
         this.cupcakeDistributionTimes[identity] = 0;
       }
 
+      // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
       const fiveSeconds = 5000;
       const userCanReceiveCupcake = this.cupcakeDistributionTimes[identity] + fiveSeconds <= Date.now();
       if (userCanReceiveCupcake) {
@@ -39,10 +43,13 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   }
 
   class Web3VendingMachineClient {
+    // UI concerns
     isWeb3 = true;
     identityLabel = "Ethereum address";
 
-    // ensures that the context of this is always defined
+    // notice the absence of state variables; the web3 version of the vending machine stores its state in a blockchain data structure hosted by Ethereum's decentralized network of nodes
+
+    // ensures that the context of `this` is always defined
     constructor() {
       this.giveCupcakeTo = this.giveCupcakeTo.bind(this);
       this.getCupcakeBalanceFor = this.getCupcakeBalanceFor.bind(this);
@@ -118,22 +125,11 @@ export const VendingMachine = (props: { id: string, type: string }) => {
 
   const prefillWeb3Identity = async () => {
     // if the user has metamask installed, prefill the identity input with their wallet address
-    const identityInput = vendingMachineClient.getElementById("identity-input");
-    if (identityInput.value == "" || identityInput.value == null) {
-      identityInput.value = await vendingMachineClient.getWalletAddress();
-    }
+    identityInput.value = identityInput.value || await vendingMachineClient.getWalletAddress();
   }
 
   const updateSuccessIndicator = (success) => {
-    const errorIndicator = vendingMachineClient.getElementById("error-indicator");
-    if (success) {
-      console.log('should see green')
-      errorIndicator.classList.remove("visible");
-    }
-    else {
-      console.log('should see red')
-      errorIndicator.classList.add("visible");
-    }
+    vendingMachineClient.getElementById("error-indicator").classList.toggle("visible", !success);
   }
 
   const callWeb3VendingMachine = async (func) => {
@@ -141,8 +137,6 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     const identity = identityInput.value;
     const contractAddressInput = vendingMachineClient.getElementById("contract-address-input");
     const contractAddress = contractAddressInput.value;
-    // console log everything in one line
-    console.log(`calling ${func.name} with ${identity} on ${contractAddress}`);
     return await func(identity, contractAddress);
   }
 

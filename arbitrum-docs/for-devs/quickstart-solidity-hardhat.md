@@ -40,7 +40,16 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine follows Rule 1, it doesn't follow Rule 2 (yet). Rule 2 is traditionally very difficult to enforce because we usually have to trust centralized service providers to host and run our apps. Arbitrum solves this problem by making it easy for you to deploy your apps to Ethereum's <a data-quicklook-from='trustless'>trustless</a> decentralized network of nodes[^2].
+Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but this exposes us to (previously unavoidable) risks:
+
+ 1. Our centralized service provider can deny access to particular users.
+ 2. A malicious actor can change the rules of the vending machine at any time.
+  
+These risks originate from the centralization of power, which represents a single point of failure that malicious actors may be incentivized to exploit. 
+
+To mitigate these risks, we can decentralize our vending machine's business logic and data such that exploitation is infeasible.
+
+This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's <a data-quicklok-from='permissionless'>permissionless</a>, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2].
 
 ### Prerequisites
 
@@ -67,7 +76,6 @@ We'll install the rest of our dependencies as we go.
 Here's our vending machine implemented as a Javascript class:
 
 ```js title="VendingMachine.js"
-   // todo - pull from github / jsx before publishing to ensure latest is displayed
    class VendingMachine {
         // state variables = internal memory of the vending machine
         cupcakeBalances = {};
@@ -75,7 +83,7 @@ Here's our vending machine implemented as a Javascript class:
 
         // Vend a cupcake to the caller
         giveCupcakeTo(userId) {
-            if (this.cupcakeBalances[userId] === undefined) {
+            if (this.cupcakeDistributionTimes[userId] === undefined) {
                 this.cupcakeBalances[userId] = 0;
                 this.cupcakeDistributionTimes[userId] = 0;
             }
@@ -136,9 +144,9 @@ Replace the contents of `hardhat.config.js` with the following:
 ```javascript title="hardhat.config.js"
 require("@nomicfoundation/hardhat-toolbox");
 
-// NEVER record private keys for MAINNET wallets in your code
+// NEVER record private keys for MAINNET accounts in your code - this is for demo purposes
 const GOERLI_TESTNET_PRIVATE_KEY = "";
-const DEPLOYMENT_ACCOUNT_PRIVATE_KEY = "";
+const ARBITRUM_MAINNET_PRIVATE_KEY = "";
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -153,18 +161,16 @@ module.exports = {
       accounts: [GOERLI_TESTNET_PRIVATE_KEY]
     },
     arbitrumOne: {
-      url: "https://arb1.arbitrum.io/rpc",
-      accounts: [DEPLOYMENT_ACCOUNT_PRIVATE_KEY]
-    },
+      url: "todo",
+      accounts: [ARBITRUM_MAINNET_PRIVATE_KEY]
+    }
     arbitrumNova: {
-      url: "https://arbnova.com/rpc",
-      accounts: [DEPLOYMENT_ACCOUNT_PRIVATE_KEY]
+      url: "todo",
+      accounts: [ARBITRUM_MAINNET_PRIVATE_KEY]
     }
   }
 };
 ```
-
-(todo: npm vs yarn tabs)
 
 Run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
 
@@ -202,8 +208,9 @@ contract VendingMachine {
     mapping(address => uint) private _cupcakeDistributionTimes;
 
     function giveCupcakeTo(address userAddress) public returns (bool) {
-        if (_cupcakeBalances[userAddress] == 0) {
-            _cupcakeDistributionTimes[userAddress] = block.timestamp; // todo - decide whether or not there should be 1:1-ish mapping between js and solidity "contracts" for the sake of pattern recognition / learning; if so, mirror; if not, delete
+        if (_cupcakeDistributionTimes[userAddress] == 0) {
+            _cupcakeBalances[userAddress] = 0;
+            _cupcakeDistributionTimes[userAddress] = block.timestamp;
         }
 
         // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
@@ -225,6 +232,8 @@ contract VendingMachine {
 }
 ```
 
+Note that this smart contract is written in Solidity, a language that compiles to EVM bytecode. This means that it can be deployed to any Ethereum-compatible blockchain, including <a data-quicklook-from='ethereum-mainnet'>Ethereum mainnet</a>, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
+
 Run `yarn hardhat compile` again. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/contracts/VendingMachine.sol` directory.
 
 
@@ -237,17 +246,17 @@ To deploy our `VendingMachine` smart contract locally, we'll use two terminal wi
 3. We'll then deploy our smart contract to (1)'s node
 
 
-#### Run a local Ethereum node
+#### Run a local Ethereum network and node
 
-// pull explanation up here - emulator etc
+Run `yarn hardhat node` from your `decentralized-cupcakes` directory to begin running a local Ethereum network powered by a single node. This will mimic Ethereum's behavior on your local machine by using Hardhat's built-in [Hardhat Network](https://hardhat.org/hardhat-network/docs/overview). 
 
-Run `yarn hardhat node` from your `decentralized-cupcakes` directory to begin running a local Ethereum node. You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
+You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
 
 ```
+...
 Account #0: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000 ETH)
 Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-
-...etc
+...
 ```
 
 :::caution Never share your private keys
@@ -256,7 +265,7 @@ Your Ethereum Mainnet wallet's private key is the password to all of your money.
 
 :::
 
-Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key.
+Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key[^99].
 
 #### Configure Metamask
 
@@ -278,7 +287,6 @@ Next, click Metamask's network selector dropdown, and then click the `Add Networ
 - New RPC URL: `https://goerli-rollup.arbitrum.io/rpc`
 - Chain ID: `421613`
 - Currency Symbol: `AGOR`
-
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
@@ -317,7 +325,7 @@ Let's deploy our smart contract to a testnet that's powered by real nodes: Arbit
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
-We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by real nodes, we'll need to pay a small transaction fee to deploy our smart contract. This fee will be paid with the Arbitrum Goerli testnet's token, $AGOR.
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by a real network of real nodes, we'll need to pay a small transaction fee to deploy our smart contract. This fee will be paid with the Arbitrum Goerli testnet's token, $AGOR.
 
 :::info $AGOR ISN'T REAL
 
@@ -371,7 +379,7 @@ Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address i
 todo
  - same as above
  - disclaimers about security best practices
- - signers, service accounts, disposable service wallets?
+ - signers, service accounts, "disposable service wallets"?
 
 
 
@@ -380,12 +388,37 @@ todo
 
 ### Summary
 
-todo
+In this quickstart, we:
+
+- Identified two business rules: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
+- Identified a challenge: These business rules are difficult to follow in a centralized application.
+- Compared the differences between a **centralized application**'s business logic (Javascript) and a **decentralized application**'s business logic (Solidity).
+- 
+   
 
 
 #### FAQ
 
-todo - via CMS
+todo - here first, then CMS when repeated:
+ - Why do I need to sign a transaction to get a cupcake?
+ - What's the difference between L1 and L2?
+ - Will my wallet carry balances between networks? Layers?
+ - How do wallets work?
+ - How do I upgrade my smart contract?
+ - What are people building on Arbitrum?
+ - What if I didn't use an L2 scaling solution like Arbitrum?
+ - Can I use uniswap to convert ETH into $AGOR?
+ - How do people normally stage deployments of smart contracts?
+ - What are some best practices for smart contract development?
+ - Can I deploy to Mainnet first and then deploy to Arbitrum?
+ - What's the difference between a smart contract and a dapp?
+ - What's the difference between Arbitrum One and Arbitrum Nova?
+ - Are these cupcakes "NFTs"? (no)
+
+
+#### Code
+
+live editor
 
 
 
@@ -405,13 +438,12 @@ todo - via CMS
 [^7]: ABI stands for "Application Binary Interface". It's a JSON file that describes the functions and events of a smart contract. It's used by frontend applications to interact with smart contracts. See [this article](https://ethereum.org/en/developers/docs/abi/) for a beginner-friendly introduction to ABI.
 
 
-### Dumpster fire below this line
-------
-
 TODOs:
  - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
  - example arbitrum one contract: 
  - example arbitrum nova contract:
+ - next docs to do / upgrade:
+   - public chains and addresses
  - concept doc for this -> visualize the components, layers, data structures, information flows, procedure 
  - consider using Docusaurus' live code editor to let users play with the code in the browser
  - Testing
@@ -426,10 +458,4 @@ TODOs:
  - One vs Nova
  - https://yos.io/2019/11/10/smart-contract-development-best-practices/
  - https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
-
-
-
-
-
-
 -->
