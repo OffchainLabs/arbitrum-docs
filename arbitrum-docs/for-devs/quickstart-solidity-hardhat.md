@@ -266,7 +266,7 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 
 ![Connect Metamask to Localhost 8545](assets/quickstart-import-metamask.png)
 
-You should see the account's balance update to 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
+You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
 
 Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
