@@ -28,16 +28,18 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but this exposes us to (previously unavoidable) risks:
+Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but this exposes us to the following risks:
 
  1. Our centralized service provider can deny access to particular users.
  2. A malicious actor can change the rules of the vending machine at any time.
   
-These risks originate from the centralization of power, which represents a single point of failure that malicious actors may be incentivized to exploit. 
+These risks originate from centralization of infrastructure, which represents a single point of failure that malicious actors may become incentivized to exploit. 
 
-To mitigate these risks, we can decentralize our vending machine's business logic and data so that this type of exploitation is infeasible.
+To mitigate this type of risk, we can decentralize our vending machine's **business logic and data** to make this type of exploitation infeasible.
 
-This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2].
+This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2] while keeping costs low for you and your users.
+
+Let's implement the "web3" version of the above vending machine using Arbitrum.
 
 ### Prerequisites
 
@@ -156,7 +158,7 @@ module.exports = {
 };
 ```
 
-We'll explain what these are for later. For now, run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
+Run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
 
 Open `scripts/deploy.js` and replace its contents with the following:
 
