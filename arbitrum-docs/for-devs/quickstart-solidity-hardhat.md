@@ -415,7 +415,7 @@ In this quickstart, we:
 - Deployed our smart contract to Arbitrum One Mainnet.
 - Got a permissionless, immutable cupcake from a vending machine hosted on Ethereum mainnet, by way of Arbitrum One.
 
-
+If you have any questions or feedback, please reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page!
 
 <!--todo: next steps -->
    
