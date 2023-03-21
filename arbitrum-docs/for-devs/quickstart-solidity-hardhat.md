@@ -28,7 +28,7 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 
 <VendingMachine id='dumb-cupcakes' type='web2' />
 
-Note that although this vending machine appears to follow the rules, it really doesn't. The vending machine's business logic and data are hosted by a centralized service provider. We're trusting that this service provider isn't malicious, but:
+Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
 
  1. Our centralized service provider can deny access to particular users.
  2. A malicious actor can change the rules of the vending machine at any time.
@@ -96,9 +96,7 @@ Here's our vending machine implemented as a Javascript class:
     }
 ```
 
-The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server that we (Offchain Labs) control. So it's technically possible for someone at Offchain to give their friends extra cupcakes by modifying the above contract's code.
-
-DApps solve this problem by using Ethereum smart contracts to build <a data-quicklook-from='trustless'>*trustless*</a> end-user experiences that nobody in particular controls[^4]. This gives us a way to follow the second rule: *"The vending machine's rules can't be changed by anyone."*
+The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server controlled by a third-party service provider.
 
 Let's convert our dumb contract into a smart contract.
 
