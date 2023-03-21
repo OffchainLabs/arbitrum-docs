@@ -204,14 +204,15 @@ contract VendingMachine {
     mapping(address => uint) private _cupcakeDistributionTimes;
 
     function giveCupcakeTo(address userAddress) public returns (bool) {
+        // this code is unnecessary, but we're keeping it here so you can compare it to the JS implementation
         if (_cupcakeDistributionTimes[userAddress] == 0) {
             _cupcakeBalances[userAddress] = 0;
-            _cupcakeDistributionTimes[userAddress] = block.timestamp;
+            _cupcakeDistributionTimes[userAddress] = 0;
         }
 
         // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
-        uint fiveSeconds = 5 * 1 seconds;
-        bool userCanReceiveCupcake = _cupcakeDistributionTimes[userAddress] + fiveSeconds <= block.timestamp;
+        uint fiveSecondsFromLastDistribution = _cupcakeDistributionTimes[userAddress] + 5 seconds;
+        bool userCanReceiveCupcake = fiveSecondsFromLastDistribution <= block.timestamp;
         if (userCanReceiveCupcake) {
             _cupcakeBalances[userAddress]++;
             _cupcakeDistributionTimes[userAddress] = block.timestamp;
@@ -455,6 +456,7 @@ todo - here first, then CMS when repeated:
  - What's the difference between a smart contract and a dapp?
  - What's the difference between Arbitrum One and Arbitrum Nova?
  - Are these cupcakes "NFTs"? (no)
+ - figure out where to store the samples
 
 
 #### Code
