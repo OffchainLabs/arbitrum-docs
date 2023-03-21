@@ -130,7 +130,7 @@ Replace the contents of `hardhat.config.js` with the following:
 ```javascript title="hardhat.config.js"
 require("@nomicfoundation/hardhat-toolbox");
 
-// NEVER record private keys in your code - this is for demo purposes
+// NEVER record important private keys in your code - this is for demo purposes
 const GOERLI_TESTNET_PRIVATE_KEY = "";
 const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = "";
 
