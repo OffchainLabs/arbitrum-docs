@@ -33,9 +33,7 @@ Note that although this vending machine appears to follow the rules, it really d
  1. Our centralized service provider can deny access to particular users.
  2. A malicious actor can change the rules of the vending machine at any time.
   
-Centralized third-party intermediaries represent a **single point of failure** that malicious actors may become incentivized to exploit.
-
-To mitigate this type of risk, we can decentralize our vending machine's **business logic and data**, rendering this type of exploitation infeasible.
+Centralized third-party intermediaries represent a **single point of failure** that malicious actors may become incentivized to exploit. To mitigate this type of risk, we can decentralize our vending machine's **business logic and data**, rendering this type of exploitation infeasible.
 
 This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2] while keeping costs low for you and your users.
 
