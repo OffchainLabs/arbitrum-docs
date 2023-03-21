@@ -144,9 +144,9 @@ Replace the contents of `hardhat.config.js` with the following:
 ```javascript title="hardhat.config.js"
 require("@nomicfoundation/hardhat-toolbox");
 
-// NEVER record private keys for MAINNET accounts in your code - this is for demo purposes
+// NEVER record private keys in your code - this is for demo purposes
 const GOERLI_TESTNET_PRIVATE_KEY = "";
-const ARBITRUM_MAINNET_PRIVATE_KEY = "";
+const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = "";
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -161,18 +161,14 @@ module.exports = {
       accounts: [GOERLI_TESTNET_PRIVATE_KEY]
     },
     arbitrumOne: {
-      url: "todo",
-      accounts: [ARBITRUM_MAINNET_PRIVATE_KEY]
-    }
-    arbitrumNova: {
-      url: "todo",
-      accounts: [ARBITRUM_MAINNET_PRIVATE_KEY]
+      url: "https://arb1.arbitrum.io/rpc",
+      accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY]
     }
   }
 };
 ```
 
-Run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
+We'll explain what these are for later. For now, run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
 
 Open `scripts/deploy.js` and replace its contents with the following:
 
@@ -362,14 +358,14 @@ Once you've acquired some $AGOR, you'll be able to deploy your smart contract to
 yarn hardhat run scripts/deploy.js --network arbitrumGoerli
 ```
 
-You should see the following output:
+This tells hardhat to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumGoerli` in `hardhat.config.js`. You should see the following output:
 
 
 ```bash
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli's decentralized network of nodes.
+Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will find its way to Ethereum's L1 Goerli testnet, where it will be stored in a Merkle tree and mirrored across all nodes in the Goerli network.
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
@@ -386,7 +382,7 @@ First, update the `hardhat.config.js` file to specify the private key of the **o
 ```javascript title="hardhat.config.js"
 // ...
 
-const ARBITRUM_MAINNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
+const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
 
 // ...
 ```
@@ -410,7 +406,7 @@ You should see the following output:
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Arbitrum One's decentralized network of nodes.
+Congratulations! You've just deployed **business logic and data** to Ethereum's decentralized network of nodes by way of Arbitrum One.
 
 To view your smart contract in a blockchain explorer, visit `https://arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
@@ -430,7 +426,7 @@ In this quickstart, we:
 - Deployed our smart contract to Hardhat's local development network.
 - Deployed our smart contract to Arbitrum's Goerli testnet.
 - Deployed our smart contract to Arbitrum One Mainnet.
-- Got a permissionless, immutable cupcake.
+- Got a permissionless, immutable cupcake from a vending machine hosted on Ethereum mainnet, by way of Arbitrum One.
    
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
