@@ -417,7 +417,7 @@ In this quickstart, we:
 
 If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
 
-#### Next steps
+### Next steps
 
  <!--todo: figure out what next steps they're actually looking for by performing content tests -->
  - Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
