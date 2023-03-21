@@ -103,7 +103,7 @@ Let's convert our dumb contract into a smart contract.
 
 ### Configure your project directory
 
-Create a `decentralized-cupcakes` directory for your project and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview)[^6] using VS Code's integrated terminal:
+Create a `decentralized-cupcakes` directory for your project and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview) using VS Code's integrated terminal:
 
 ```
 mkdir decentralized-cupcakes
