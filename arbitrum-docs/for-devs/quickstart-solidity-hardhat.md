@@ -109,7 +109,7 @@ Create a `decentralized-cupcakes` directory for your project and install [hardha
 mkdir decentralized-cupcakes
 cd decentralized-cupcakes
 yarn init -y
-yarn add hardhat @nomicfoundation/hardhat-toolbox
+yarn add hardhat @nomicfoundation/hardhat-toolbox -D
 ```
 
 This installs two packages: `hardhat` lets us write, test and deploy our smart contracts, and `hardhat-toolbox` is a bundle of popular Hardhat plugins that we'll use later.
