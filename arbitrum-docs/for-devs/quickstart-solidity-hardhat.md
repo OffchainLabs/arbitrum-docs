@@ -429,7 +429,8 @@ In this quickstart, we:
 
 
 
-<!--
+<!-- clean this up eventually:
+
 #### FAQ
 
 todo - here first, then CMS when repeated:
