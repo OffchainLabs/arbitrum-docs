@@ -417,7 +417,10 @@ In this quickstart, we:
 
 If you have any questions or feedback, please reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page!
 
-<!--todo: next steps -->
+#### Next steps
+
+ - Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
+ - Visit [Public chains](../public-chains.mdx) for a list of public chains that you can deploy your smart contracts to.
    
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
