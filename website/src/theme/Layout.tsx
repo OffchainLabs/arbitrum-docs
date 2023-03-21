@@ -30,7 +30,7 @@ export default function Layout(props) {
         />
         <meta
           name="twitter:image"
-          content="https://nitro-docs-delta.vercel.app/img/devdocs.png"
+          content="https://developer.arbitrum.io/img/devdocs.png"
         />
       </Head>
       <OriginalLayout {...props} />
