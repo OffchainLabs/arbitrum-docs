@@ -82,6 +82,11 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "doc",
+      label: "Audit Reports",
+      id: "audit-reports"
     }
   ],
   runNodesSidebar: [
@@ -92,28 +97,13 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "node-running/node-providers",
-      label: "3rd Party Node Providers"
-    },
-    {
-      type: "doc",
-      id: "node-running/local-dev-node",
-      label: "Running a Local Dev Node"
-    },
-    {
-      type: "doc",
-      id: "das/daserver-instructions",
-      label: "Data Availability Server"
-    },
-    {
-      type: "doc",
       id: "node-running/running-a-classic-node",
       label: "Running a Classic (pre-Nitro) Node"
     },
     {
       type: "doc",
-      label: "Troubleshooting",
-      id: "node-running/troubleshooting-running-nodes"
+      id: "node-running/local-dev-node",
+      label: "Running a Local Dev Node"
     },
     {
       type: "doc",
@@ -124,7 +114,30 @@ const sidebars = {
       type: "doc",
       label: "Running a Validator",
       id: "node-running/running-a-validator"
+    },
+    {
+      type: "doc",
+      id: "node-running/node-providers",
+      label: "3rd Party Node Providers"
+    },
+    {
+      type: "doc",
+      id: "das/daserver-instructions",
+      label: "Data Availability Server"
+    },
+    {
+      type: "doc",
+      label: "Troubleshooting",
+      id: "node-running/troubleshooting-running-nodes"
     }
+    
+  ],
+  launchAChainSidebar: [
+    {
+      type: "doc",
+      id: "chain-launching/launch-a-chain",
+      label: "Launch a Chain",
+    },
   ],
   devsSideBar: [
     {

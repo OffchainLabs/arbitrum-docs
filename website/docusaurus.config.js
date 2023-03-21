@@ -12,7 +12,7 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
   markdown: {
     mermaid: true,
   },
@@ -90,6 +90,13 @@ const config = {
             docId: "intro/intro",
             position: "left",
             label: "Overview",
+          },
+          {
+            type: "doc",
+            docId: "chain-launching/launch-a-chain",
+            position: "left",
+            label: "Launch an L3 (new!)",
+            value: '<button>Give feedback</button>',
           },
           {
             type: "doc",
@@ -185,10 +192,10 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
+        content: `✨ Arbitrum DAO has been officially announced. <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">Learn more</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
-        isCloseable: true,
+        isCloseable: false,
       },
       liveCodeBlock: {
         /**

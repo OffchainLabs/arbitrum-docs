@@ -10,6 +10,7 @@ type FeatureItem = {
   description: JSX.Element;
   href?: string;
   addBackground?: boolean;
+  animate?: boolean;
 };
 
 const FeatureList: FeatureItem[] = [
@@ -24,6 +25,13 @@ const FeatureList: FeatureItem[] = [
     Svg: require("@site/static/img/builder.svg").default,
     href: "/getting-started-devs",
     description: <>Guides for Dapp Devs and Node Runners</>,
+  },
+  {
+    title: "The Arbitrum DAO",
+    Svg: require("@site/static/img/logo.svg").default,
+    href: "https://docs.arbitrum.foundation/",
+    description: <>Learn about Arbitrum governance</>,
+    animate: true,
   },
   {
     title: "How It All Works",
@@ -46,12 +54,6 @@ const FeatureList: FeatureItem[] = [
     description: <>Public forum for research disucssion</>,
     addBackground: true,
   },
-  {
-    title: "The Code",
-    Svg: require("@site/static/img/logo.svg").default,
-    href: "https://github.com/OffchainLabs/nitro",
-    description: <>View and contribute to the source code</>,
-  },
 ];
 
 function Feature({
@@ -60,12 +62,13 @@ function Feature({
   description,
   href,
   addBackground,
+  animate,
 }: FeatureItem) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === "dark";
   const textStyle = { color: isDarkTheme ? "white" : "black" };
   return (
-    <div className={clsx("col col--4")}>
+    <div className={clsx("col col--4")} id={animate && styles.animate}>
       <Link className={styles.landingPageLink} href={href}>
         <div className="text--center">
           <Svg
