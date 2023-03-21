@@ -280,6 +280,9 @@ Next, click Metamask's network selector dropdown, and then click the `Add Networ
 - Currency Symbol: `AGOR`
 
 
+As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
+
+
 #### Deploy the smart contract to your local testnet
 
 From another terminal instance, run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
@@ -332,7 +335,7 @@ const GOERLI_TESTNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
 // etc
 ```
 
-Note that we're specifying the private key of a test account in our deployment script. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of specifying a private key.
+Note that we're specifying the private key of a test account here. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of specifying a private key.
 
 Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. There are a few ways to acquire $AGOR:
 
@@ -354,11 +357,11 @@ You should see the following output:
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **real business logic and data** to a **real decentralized network of nodes**. 
+Congratulations! You've just deployed **business logic and data** to a **decentralized network of nodes**.
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
-It's time for some Arbitrum Goerli cupcakes. Select `Arbitrum Goerli` from Metamask's dropdown. Paste your contract address into the `VendingMachine` below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
 <VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
 
