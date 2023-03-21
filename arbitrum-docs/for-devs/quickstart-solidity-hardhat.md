@@ -419,10 +419,13 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 ### Next steps
 
- <!--todo: figure out what next steps they're actually looking for by performing content tests -->
  - Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
  - Visit [Public chains](../public-chains.mdx) for a list of public chains that you can deploy your smart contracts to.
    
+
+ <!--todo: figure out what next steps they're actually looking for by performing content tests -->
+
+
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. Arbitrum uses advanced cryptography techniques to reduce the cost of using Ethereum without requiring developers to compromise on security or decentralization. It offers a pure win.
