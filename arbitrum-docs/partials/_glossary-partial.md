@@ -36,6 +36,9 @@
 ### Arbitrum One {#arbitrum-one}
 <p>The first <a href="/intro/glossary#arbitrum-rollup-chain"><strong>Arbitrum Rollup Chain</strong></a> running on Ethereum mainnet. Fully trustless; inherits Ethereum's base-layer security guarantees without introducing additional trust assumptions; great for decentralized finance and other use-cases that demand L1-level trustlessness.</p>
 
+### Arbitrum Orbit {#arbitrum-orbit}
+<p>Arbitrum Orbit refers to the ability for anyone to permissionlessly deploy <a href="/intro/glossary#layer-3-l3">Layer 3 (L3)</a> s on top of Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chains.</p>
+
 ### **Arbitrum Rollup Chain** {#arbitrum-rollup-chain}
 <p>An <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a> that implements the <a href="/intro/glossary#arbitrum-rollup-protocol"><strong>Arbitrum Rollup Protocol</strong></a>.</p>
 
@@ -145,6 +148,9 @@
 ### Layer 2 (L2) {#layer-2-l2}
 <p>Trustless scaling solutions built on top of Ethereum's <a href="/intro/glossary#layer-1-l1">Layer 1 (L1)</a> base protocol, such as state channels,  plasma chains, optimistic rollups, and ZK-rollups. Layer 2 solutions aim to increase scalability and reduce the cost of transactions on Ethereum's Layer 1 without introducing additional trust assumptions.</p>
 
+### Layer 3 (L3) {#layer-3-l3}
+<p>An Arbitrum chain whose core contract reside on an  Arbitrum<a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chain.</p>
+
 ### One Step Proof {#one-step-proof}
 <p>Final step in a challenge; a single operation of the L2 VM (Wasm) is executed on L1, and the validity of its state transition is verified.</p>
 
@@ -162,6 +168,9 @@
 
 ### **Retryable Ticket** {#retryable-ticket}
 <p>An L1 to L2 cross chain message initiated by an L1 transaction sent to an Arbitrum chain for execution (e.g., a token deposit).</p>
+
+### Reverse Token Gateway {#reverse-token-gateway}
+<p>A <a href="/intro/glossary#token-gateway">Token Gateway</a> in which the L2 Gateway contract escrows and releases tokens, which the L1 Gateway contract mints and burns tokens. This in the inverse to how "typical" gateways work.</p>
 
 ### Sequencer {#sequencer}
 <p>An entity (currently a single-party on Arbitrum One) given rights to reorder transactions in the <a href="/intro/glossary#fast-inbox">Fast Inbox</a>  over a fixed window of time, who can thus give clients sub-blocktime <a href="/intro/glossary#soft-confirmation">Soft Confirmation</a>s. (Not to be confused with a <a href="/intro/glossary#validator">Validator</a>).</p>
