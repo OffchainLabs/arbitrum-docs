@@ -304,7 +304,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 | **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | <- same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | <- same, but devs and users pay **testnet $ETH** to testnet validators.                | <- same, but instead of testnet $ETH, they use **mainnet $ETH**.                          |
 
 
-Let's deploy our smart contract to a testnet that's powered by real nodes: Arbitrum's Goerli testnet.
+Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goerli testnet.
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
