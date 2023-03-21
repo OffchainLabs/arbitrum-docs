@@ -47,9 +47,9 @@ Note that although this vending machine appears to follow the rules, it really d
   
 These risks originate from the centralization of power, which represents a single point of failure that malicious actors may be incentivized to exploit. 
 
-To mitigate these risks, we can decentralize our vending machine's business logic and data such that exploitation is infeasible.
+To mitigate these risks, we can decentralize our vending machine's business logic and data so that this type of exploitation is infeasible.
 
-This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's <a data-quicklok-from='permissionless'>permissionless</a>, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2].
+This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's <a data-quicklook-from='permissionless'>permissionless</a>, <a data-quicklook-from='trustless'>trustless</a>, *decentralized* network of nodes[^2].
 
 ### Prerequisites
 
@@ -336,14 +336,18 @@ $AGOR isn't a canonical term, or a real token. It's just convenient shorthand fo
 First, update the `hardhat.config.js` file to specify the private key of the test account that you'll use to deploy your smart contract (and pay the transaction fee):
 
 ```javascript title="hardhat.config.js"
-// etc
+// ...
 
 const GOERLI_TESTNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
 
-// etc
+// ...
 ```
 
-Note that we're specifying the private key of a test account here. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of specifying a private key.
+:::caution
+
+Note that we're adding a private key to a config file. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of handling private keys directly.
+
+:::
 
 Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. There are a few ways to acquire $AGOR:
 
@@ -365,7 +369,7 @@ You should see the following output:
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to a **decentralized network of nodes**.
+Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli's decentralized network of nodes.
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
@@ -376,12 +380,41 @@ Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address i
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
-todo
- - same as above
- - disclaimers about security best practices
- - signers, service accounts, "disposable service wallets"?
+
+First, update the `hardhat.config.js` file to specify the private key of the **one-time-use deployment account** that you'll use to deploy your smart contract (and pay the transaction fee):
+
+```javascript title="hardhat.config.js"
+// ...
+
+const ARBITRUM_MAINNET_PRIVATE_KEY = ""; // <- this should **not** begin with "0x"
+
+// ...
+```
+
+:::caution
+
+Note that we're adding a private key to a config file. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of handling private keys directly.
+
+:::
 
 
+Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum's Goerli testnet by issuing the following command:
+
+```bash
+yarn hardhat run scripts/deploy.js --network arbitrumOne
+```
+
+You should see the following output:
+
+```bash
+Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
+```
+
+Congratulations! You've just deployed **business logic and data** to Arbitrum One's decentralized network of nodes.
+
+To view your smart contract in a blockchain explorer, visit `https://arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
+
+Select `Arbitrum One` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
 <VendingMachine id='smart-mainnet-cupcakes' type='web3-arb-one' />
 
@@ -392,11 +425,23 @@ In this quickstart, we:
 
 - Identified two business rules: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
 - Identified a challenge: These business rules are difficult to follow in a centralized application.
-- Compared the differences between a **centralized application**'s business logic (Javascript) and a **decentralized application**'s business logic (Solidity).
-- 
+- Identified a solution: Arbitrum
+- Compared the differences between a **centralized application**'s business logic (implemented as a Javascript class) and a **decentralized application**'s business logic (implemented as a Solidity smart contract).
+- Deployed our smart contract to Hardhat's local development network.
+- Deployed our smart contract to Arbitrum's Goerli testnet.
+- Deployed our smart contract to Arbitrum One Mainnet.
+- Got a permissionless, immutable cupcake.
    
 
+[^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
+[^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. Arbitrum uses advanced cryptography techniques to reduce the cost of using Ethereum without requiring developers to compromise on security or decentralization. It offers a pure win.
+[^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called *validators*. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
+[^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
+[^5]: If you're not sure how to ask, steal this: "Hi, I'm new to Arbitrum and I'm trying to deploy my smart contract to the Arbitrum Goerli testnet. Does anyone have any L1 or L2 Goerli ETH to spare? If so, could you please send it to me at this address (insert wallet address)? Thanks!"
 
+
+
+<!--
 #### FAQ
 
 todo - here first, then CMS when repeated:
@@ -419,15 +464,8 @@ todo - here first, then CMS when repeated:
 #### Code
 
 live editor
+-->
 
-
-
-
-[^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
-[^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted by Ethereum's public, decentralized network of nodes. Arbitrum uses advanced cryptography techniques to reduce the cost of using Ethereum without requiring developers to compromise on security or decentralization. It offers a pure win.
-[^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called *validators*. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
-[^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
-[^5]: If you're not sure how to ask, steal this: "Hi, I'm new to Arbitrum and I'm trying to deploy my smart contract to the Arbitrum Goerli testnet. Does anyone have any L1 or L2 Goerli ETH to spare? If so, could you please send it to me at this address (insert wallet address)? Thanks!"
 
 <!-- 
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
