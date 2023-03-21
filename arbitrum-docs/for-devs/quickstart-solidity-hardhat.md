@@ -1,24 +1,12 @@
 ---
 title: "Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)"
 sidebar_label: Quickstart (Solidity, Hardhat)
-description: This quickstart will prepare you to build your first decentralized app (dApp / web3 app) by speedwalking you through the process of deploying a simple Solidity smart contract directly to Arbitrum.
+description: This quickstart will walk you through the process of converting a Javascript "dumb contract" into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Goerli testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
 author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum
 reader-audience: web developers who haven't ever built on Ethereum/Arbitrum
 reader-task: deploy my first smart contract directly to L2 with a confident understanding of Arbitrum's value prop
 content-type: quickstart
-todos:
-  1: footnotes
-  2: faq
-  3: quicklooks
-  4: attach to behavior
-  5: demonstrate "funnel testing"
-  6: demonstrate other patterns / components / best practices
-  7: meet partnerships and marketing needs
-  8: codepen?
-  9: samples repo?
-  10: public preview
-  11: default Build DApps to this page
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
