@@ -31,7 +31,7 @@ import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachi
 Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
 
  1. Our centralized service provider can deny access to particular users.
- 2. A malicious actor can change the rules of the vending machine at any time.
+ 2. A malicious actor can change the rules of the vending machine at any time, for example, to give their friends extra cupcakes.
   
 Centralized third-party intermediaries represent a **single point of failure** that malicious actors may become incentivized to exploit. To mitigate this type of risk, we can decentralize our vending machine's **business logic and data**, rendering this type of exploitation infeasible.
 
