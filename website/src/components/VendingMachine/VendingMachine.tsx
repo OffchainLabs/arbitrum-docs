@@ -45,7 +45,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   class Web3VendingMachineClient {
     // UI concerns
     isWeb3 = true;
-    identityLabel = "Ethereum address";
+    identityLabel = "Metamask wallet address";
 
     // notice the absence of state variables; the web3 version of the vending machine stores its state in a blockchain data structure hosted by Ethereum's decentralized network of nodes
 
