@@ -291,12 +291,12 @@ Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional
 
 ![Architecture diagram](assets/quickstart-vending-machine-architecture.png)
 
-The `WEB3-LOCALHOST` architecture is similar to to the `WEB2` architecture, with one key difference: with the `WEB3` versions, **the business logic and data live in a decentralized network of nodes** instead of a centralized network of servers. 
+The `WEB3-LOCALHOST` architecture is similar to to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in a decentralized network of nodes** instead of a centralized network of servers. 
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 
-|                       | `WEB2`                                                                                  | `WEB3-LOCALHOST`                                                                           | `WEB3-ARB-GOERLI`                                                                      | `WEB3-ARB-MAINNET`                                                                        |
+|                       | `WEB2` (the first one)                                                                  | `WEB3-LOCALHOST` (the latest one)                                                          | `WEB3-ARB-GOERLI` (the next one)                                                       | `WEB3-ARB-MAINNET` (the final one)                                                        |
 | --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).        | Stored by Ethereum's **decentralized test network** (via smart contract).              | Stored by Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).    | Stored and executed by Ethereum's **decentralized test network** (via smart contract). | Stored and executed by Ethereum's **decentralized mainnet network** (via smart contract). |
