@@ -409,8 +409,8 @@ In this quickstart, we:
 - Identified **two business rules**: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
 - Identified a **challenge**: These business rules are difficult to follow in a centralized application.
 - Identified a **solution**: Arbitrum makes it easy for developers to deploy business logic and data to Ethereum mainnet.
-- Converted a vending machine's Javascript business logic into a Solidity smart contract.
-- Deployed our smart contract to Hardhat's local development network, and then Arbitrum's Goerli testnet, and then Arbitrum One Mainnet.
+- Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
+- **Deployed our smart contract** to Hardhat's local development network, and then Arbitrum's Goerli testnet, and then Arbitrum One Mainnet.
 
 If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
 
