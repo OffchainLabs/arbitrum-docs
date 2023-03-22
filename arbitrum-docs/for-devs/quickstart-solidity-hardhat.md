@@ -353,7 +353,7 @@ This tells hardhat to deploy the compiled smart contract through the RPC endpoin
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will find its way to Ethereum's L1 Goerli testnet, where it'll be stored in a Merkle tree and mirrored across all nodes in the Goerli network.
+Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will find its way to Ethereum's L1 Goerli testnet, where it'll be hashed and stored in a Merkle tree and mirrored across all nodes in the Goerli network.
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
