@@ -49,14 +49,18 @@ We'll install the rest of our dependencies as we go.
 
 ### Ethereum and Arbitrum in a nutshell
 
- - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
- - The data within Ethereum's blockchain data structure changes one transaction at a time.
- - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
- - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
- - DApps let users carry their data and identity between applications without having to trust centralized service providers.
- - People who run Ethereum nodes[^3] can receive rewards for processing and validating transactions on behalf of users and dApps.
- - These transactions can be expensive when the network is under heavy load. **Layer 2** (L2) scaling solutions like Arbitrum solve this problem.
- - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
+ - **Ethereum**
+   - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
+   - The data within Ethereum's blockchain data structure changes one transaction at a time.
+   - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
+   - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
+   - DApps let users carry their data and identity between applications without having to trust centralized service providers.
+   - People who run Ethereum nodes[^3] can receive rewards for processing and validating transactions on behalf of users and dApps.
+   - These transactions can be expensive when the network is under heavy load.
+ - **Arbitrum**
+   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
+   - <a data-quicklook-from='arbitrum-one'>Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from='arbitrum-rollup'>Arbitrum Rollup</a> protocol.
+   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
 
 ### Review our Javascript vending machine
@@ -214,7 +218,7 @@ contract VendingMachine {
 }
 ```
 
-Note that this smart contract is written in Solidity, a language that compiles to EVM bytecode. This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
+Note that this smart contract is written in Solidity, a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
 Run `yarn hardhat compile` again. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/contracts/VendingMachine.sol` directory.
 
@@ -308,11 +312,11 @@ Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goe
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
-We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by a real network of real nodes, we'll need to pay a small transaction fee to deploy our smart contract. This fee will be paid with the Arbitrum Goerli testnet's token, $AGOR.
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by a real network of real nodes, we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Goerli testnet's token, $AGOR.
 
-:::info $AGOR ISN'T REAL
+:::info $AGOR IS SHORTHAND
 
-$AGOR isn't a canonical term, or a real token. It's just convenient shorthand for "Arbitrum Goerli testnet ETH" that we use to make this quickstart more readable.
+$AGOR isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use to make this quickstart more readable.
 
 :::
 
@@ -328,16 +332,14 @@ accounts: [GOERLI_TESTNET_PRIVATE_KEY] // <- uncomment this line
 
 :::caution
 
-Note that we're adding a private key to a config file. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of handling private keys directly.
+Note that we're adding a private key to a config file. This is **not** a best practice. Consider using environment variables instead.
 
 :::
 
-Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. There are a few ways to acquire $AGOR:
+Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network: 
 
-1. Use an L2 Goerli ETH faucet.
-2. Use an L1 Goerli ETH faucet and bridge your L1 Goerli ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
-   - [goerlifaucet.com](https://goerlifaucet.com/) is a popular L1 Goerli ETH faucet.
-3. Ask someone nicely on [Discord](https://discord.gg/ZpZuw7p)[^6].
+ 1. Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
+ 2. Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
 Once you've acquired some $AGOR, you'll be able to deploy your smart contract to Arbitrum's Goerli testnet by issuing the following command:
 
@@ -352,7 +354,7 @@ This tells hardhat to deploy the compiled smart contract through the RPC endpoin
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will find its way to Ethereum's L1 Goerli testnet, where it'll be hashed and stored in a Merkle tree and mirrored across all nodes in the Goerli network.
+Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Goerli network, and then it will be mirrored across all nodes in the Goerli network[^6].
 
 To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
@@ -376,7 +378,7 @@ accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY] // <- uncomment this line
 
 :::caution
 
-Note that we're adding a private key to a config file. This is **not** a best practice. In a real application, you should use a [signer](https://docs.ethers.io/v5/api/signer/) to sign transactions instead of handling private keys directly.
+Note that we're adding a private key to a config file. This is **not** a best practice. Consider using environment variables instead.
 
 :::
 
@@ -430,7 +432,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 [^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called *validators*. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
-[^6]: If you're not sure how to ask, steal this: "Hi, I'm new to Arbitrum and I'm trying to deploy my smart contract to the Arbitrum Goerli testnet. Does anyone have any L1 or L2 Goerli ETH to spare? If so, could you please send it to me at this address (insert wallet address)? Thanks!"
+[^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
 
 
 
