@@ -434,11 +434,10 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 
 
-<!-- clean this up eventually:
+<!-- TODOs
 
-#### FAQ
+#### FAQs
 
-todo - here first, then CMS when repeated:
  - Why do I need to sign a transaction to get a cupcake?
  - What's the difference between L1 and L2?
  - Will my wallet carry balances between networks? Layers?
@@ -455,14 +454,12 @@ todo - here first, then CMS when repeated:
  - Are these cupcakes "NFTs"? (no)
  - figure out where to store the samples
 
-
 #### Code
 
-live editor
--->
+ - live editor
 
+#### Footnote drafts
 
-<!-- 
 [^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
 [^6]: See https://hardhat.org/hardhat-network/docs/metamask-issue
 [^6]: (windows-specific callouts)
@@ -470,8 +467,8 @@ live editor
 [^6]: If you're using Windows,.
 [^7]: ABI stands for "Application Binary Interface". It's a JSON file that describes the functions and events of a smart contract. It's used by frontend applications to interact with smart contracts. See [this article](https://ethereum.org/en/developers/docs/abi/) for a beginner-friendly introduction to ABI.
 
+#### Optimizations
 
-TODOs:
  - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
  - example arbitrum one contract: 
  - example arbitrum nova contract:
