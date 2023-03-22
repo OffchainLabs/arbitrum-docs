@@ -1,7 +1,7 @@
 ---
 title: "Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)"
 sidebar_label: Quickstart (Solidity, Hardhat)
-description: This quickstart will walk you through the process of converting a Javascript "dumb contract" into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Goerli testnet, and finally Arbitrum One mainnet.
+description: This quickstart will walk you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Goerli testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
 author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum
 reader-audience: web developers who haven't ever built on Ethereum/Arbitrum
@@ -59,7 +59,7 @@ We'll install the rest of our dependencies as we go.
  - Arbitrum is a suite of L2 scaling solutions for dApp developers. It lets you to build dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
 
-### Review our dumb contract
+### Review our Javascript vending machine
 
 Here's our vending machine implemented as a Javascript class:
 
@@ -96,10 +96,9 @@ Here's our vending machine implemented as a Javascript class:
     }
 ```
 
-The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but it's "dumb" because it's hosted by a centralized server controlled by a third-party service provider.
+The `VendingMachine` class uses *state variables* and *functions* to implement *predefined rules*. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
 
-Let's convert our dumb contract into a smart contract.
-
+Let's decentralize our vending machine's business logic and data by porting the above Javascript implementation into a Solidity smart contract.
 
 ### Configure your project directory
 
@@ -178,7 +177,7 @@ main().catch((error) => {
 });
 ```
 
-We'll use this to deploy our smart contract in a moment. Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our dumb Javascript contract:
+We'll use this to deploy our smart contract in a moment. Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our Javascript implementation:
 
 ```solidity title="VendingMachine.sol"
 pragma solidity ^0.8.9;
