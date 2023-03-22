@@ -407,8 +407,8 @@ Select `Arbitrum One` from Metamask's dropdown, paste your contract address into
 In this quickstart, we:
 
 - Identified **two business rules**: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
-- Identified a **challenge**: These business rules are difficult to follow in a centralized application.
-- Identified a **solution**: Arbitrum makes it easy for developers to deploy business logic and data to Ethereum mainnet.
+- Identified a **challenge**: These rules are difficult to follow in a centralized application.
+- Identified a **solution**: Arbitrum makes it easy for developers to decentralize business logic and data (using Ethereum mainnet as a settlement layer).
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
 - **Deployed our smart contract** to Hardhat's local development network, and then Arbitrum's Goerli testnet, and then Arbitrum One Mainnet.
 
