@@ -21,12 +21,12 @@ const sidebars = {
     {
       type: "doc",
       id: "intro/intro",
-      label: "A gentle introduction: Arbitrum"
+      label: "A Gentle Introduction"
     },
     {
       type: "doc",
       id: "getting-started-users",
-      label: "Get started"
+      label: "Get Started"
     },
     {
       type: "category",
@@ -34,7 +34,7 @@ const sidebars = {
       items: [{
         type: "doc",
         id: "faqs/faqs-index",
-        label: "FAQ index"
+        label: "FAQ Index"
       },
       {
         type: "doc",
@@ -49,7 +49,7 @@ const sidebars = {
       {
         type: "doc",
         id: "faqs/x-chain-faqs",
-        label: "Cross-chain messaging"
+        label: "Cross-Chain Messaging"
       },
       {
         type: "doc",
@@ -76,7 +76,7 @@ const sidebars = {
     {
       type: "doc",
       id: "mainnet-beta",
-      label: "Mainnet Beta status"
+      label: "Mainnet Beta Status"
     },
     {
       type: "doc",
@@ -85,7 +85,7 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Audit reports",
+      label: "Audit Reports",
       id: "audit-reports"
     }
   ],
@@ -93,32 +93,32 @@ const sidebars = {
     {
       type: "doc",
       id: "node-running/running-a-node",
-      label: "Run a node"
+      label: "Running a Node"
     },
     {
       type: "doc",
       id: "node-running/running-a-classic-node",
-      label: "Run a Classic (pre-Nitro) node"
+      label: "Running a Classic (pre-Nitro) Node"
     },
     {
       type: "doc",
       id: "node-running/local-dev-node",
-      label: "Run a local dev node"
+      label: "Running a Local Dev Node"
     },
     {
       type: "doc",
-      label: "Run a feed relay",
+      label: "Running a Feed Relay",
       id: "node-running/running-a-feed-relay"
     },
     {
       type: "doc",
-      label: "Run a validator",
+      label: "Running a Validator",
       id: "node-running/running-a-validator"
     },
     {
       type: "doc",
       id: "node-running/node-providers",
-      label: "Third-party node providers"
+      label: "3rd Party Node Providers"
     },
     {
       type: "doc",
@@ -136,7 +136,7 @@ const sidebars = {
     {
       type: "doc",
       id: "chain-launching/launch-a-chain",
-      label: "Launch an L3 chain",
+      label: "Launch a Chain",
     },
   ],
   devsSideBar: [
@@ -146,39 +146,17 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "How-to guides",
+      label: "BUIDLing on Arbitrum",
       collapsed: false,
       items: [
         {
           type: "doc",
-          label: "Start building",
+          label: "Start Building",
           id: "getting-started-devs"
         },
         {
-          type: "doc",
-          label: "Estimate gas",
-          id: "devs-how-tos/how-to-estimate-gas"
-        },
-        {
-          type: "doc",
-          label: "Migrate from Classic to Nitro (architecture, contracts)",
-          id: "migration/dapp_migration"
-        },
-        {
-          type: "doc",
-          label: "Migrate from Classic to Nitro (state)",
-          id: "migration/state-migration"
-        }
-      ]
-    },
-    {
-      type: "category",
-      label: "Concepts",
-      collapsed: false,
-      items: [
-        {
           type: "category",
-          label: "Arbitrum/Ethereum differences",
+          label: "Arbitrum/Ethereum Differences",
           items: [
             {
               type: "doc",
@@ -187,24 +165,35 @@ const sidebars = {
             },
             {
               type: "doc",
-              label: "Solidity support",
+              label: "Solidity Support",
               id: "solidity-support"
             },
             {
               type: "doc",
-              label: "Block numbers and time",
+              label: "Block Numbers and Time",
               id: "time"
             }
           ]
         },
         {
+          type: "category",
+          label: "How Tos",
+          items: [
+            {
+              type: "doc",
+              label: "How to estimate gas",
+              id: "devs-how-tos/how-to-estimate-gas"
+            },
+          ]
+        },
+        {
           type: "doc",
-          label: "Cross-chain messaging",
+          label: "Cross-chain Messaging",
           id: "for-devs/cross-chain-messsaging"
         },
         {
           type: "doc",
-          label: "Token bridge",
+          label: "Token Bridge",
           id: "asset-bridging"
         },
         {
@@ -213,7 +202,7 @@ const sidebars = {
           items: [
             {
               type: "doc",
-              label: "Common precompiles",
+              label: "Common Precompiles",
               id: "arbos/common-precompiles"
             },
             {
@@ -223,22 +212,37 @@ const sidebars = {
             }
           ]
         },
+        {
+          type: "doc",
+          label: "Troubleshooting",
+          id: "for-devs/troubleshooting-building"
+        }
+      ]
+    },
+    {
+      type: "category",
+      label: "Classic-to-Nitro Migration",
+      items: [
+        {
+          type: "doc",
+          label: "Dapp Migration",
+          id: "migration/dapp_migration"
+        },
+        {
+          type: "doc",
+          label: "State Migration",
+          id: "migration/state-migration"
+        }
       ]
     },
     {
       type: "doc",
-      label: "Troubleshooting",
-      id: "for-devs/troubleshooting-building"
-    },
-
-    {
-      type: "doc",
-      label: "Public chains",
+      label: "Public Chains",
       id: "public-chains"
     },
     {
       type: "doc",
-      label: "Useful addresses",
+      label: "Useful Addresses",
       id: "useful-addresses"
     },
     {
@@ -267,12 +271,12 @@ const sidebars = {
     {
       type: "doc",
       id: "tx-lifecycle",
-      label: "Overview: Transaction lifecycle"
+      label: "Overview: Transaction Lifecycle"
     },
     {
       type: "doc",
       id: "sequencer",
-      label: "Sequencer"
+      label: "The Sequencer"
     },
     {
       type: "category",
@@ -290,12 +294,11 @@ const sidebars = {
         },
         {
           type: "doc",
-          label: "All precompiles",
+          label: "All Precompiles",
           id: "arbos/precompiles"
         }
       ]
     },
-
     {
       type: "category",
       label: "Fraud Proofs",
@@ -303,7 +306,7 @@ const sidebars = {
         {
           type: "doc",
           id: "proving/challenge-manager",
-          label: "Interactive challenges"
+          label: "Interactive Challenges"
         },
         {
           type: "doc",
@@ -313,61 +316,61 @@ const sidebars = {
         {
           type: "doc",
           id: "proving/wavm-custom-opcodes",
-          label: "Custom WAVM opcodes"
+          label: "Custom WAVM Opcodes"
         },
         {
           type: "doc",
           id: "proving/wavm-floats",
-          label: "WAVM floats"
+          label: "WAVM Floats"
         },
         {
           type: "doc",
           id: "proving/wavm-modules",
-          label: "WAVM modules"
+          label: "WAVM Modules"
         }
       ]
     },
     {
       type: "category",
-      label: "Gas / fees",
+      label: "Gas / Fees",
       items: [
         {
           type: "doc",
           id: "arbos/gas",
-          label: "L2 gas"
+          label: "L2 Gas"
         },
         {
           type: "doc",
           id: "arbos/l1-pricing",
-          label: "L1 pricing"
+          label: "L1 Pricing"
         }
       ]
     },
     {
       type: "category",
-      label: "Cross-chain messaging",
+      label: "Cross-chain Messaging",
       items: [
         {
           type: "doc",
           id: "arbos/l1-to-l2-messaging",
-          label: "L1-to-L2 messaging"
+          label: "L1-to-L2 Messaging"
         },
         {
           type: "doc",
           id: "arbos/l2-to-l1-messaging",
-          label: "L2-to-L1 messaging"
+          label: "L2-to-L1 Messaging"
         }
       ]
     },
     {
       type: "doc",
       id: "assertion-tree",
-      label: "Assertion tree"
+      label: "The Assertion Tree"
     },
     {
       type: "doc",
       id: "inside-anytrust",
-      label: "AnyTrust protocol"
+      label: "The AnyTrust Protocol"
     },
     {
       type: "doc",
@@ -377,13 +380,13 @@ const sidebars = {
     {
       type: "doc",
       id: "inside-arbitrum-nitro/inside-arbitrum-nitro",
-      label: "Deep dive: Inside arbitrum"
+      label: "Deep Dive: Inside Arbitrum"
     },
     {
       type: "link",
       href:
         "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
-      label: "Deeper dive: Whitepaper"
+      label: "Deeper Dive: Whitepaper"
     }
   ]
 };
