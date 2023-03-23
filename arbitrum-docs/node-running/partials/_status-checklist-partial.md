@@ -60,14 +60,21 @@ import TabItem from '@theme/TabItem';
         <div class='task hidden-in-status-guide'>
             <div class='input-container'><input id="st-10" type='checkbox'/><span class='done'></span></div>
             <div class='guidance-container'>
-                <label for="st-10">12. Troubleshooting scenarios and solutions</label>
-                <p>Running into unexpected output, warnings, or errors? Although this is unintuitive, <strong>many errors and warnings are expected</strong> and have been identified in the below list of troubleshooting scenarios and solutions. We gratefully ask that you review this before asking for support.</p>
+                <label for="st-10">4. Troubleshooting scenarios and solutions</label>
+                <p>Although this is unintuitive, <strong>many errors and warnings are expected</strong> and have been identified in the below list of troubleshooting scenarios and solutions. We gratefully ask that you review this before asking for support.</p>
+            </div>
+        </div>
+        <div class='task hidden-in-status-guide'>
+            <div class='input-container'><input id="st-10" type='checkbox'/><span class='done'></span></div>
+            <div class='guidance-container'>
+                <label for="st-10">5. Troubleshooting FAQ</label>
+                <p>Review the FAQ below (TODO)</p>
             </div>
         </div>
         <div class='task hidden-in-status-guide'>
             <div class='input-container'><input id="st-11" type='checkbox'/><span class='done'></span></div>
             <div class='guidance-container'>
-                <label for="st-11">13. Troubleshooting report</label>
+                <label for="st-11">6. Troubleshooting report</label>
                 <p>Issue still not resolved? <a href='#generate-troubleshooting-report'>Generate a troubleshooting report below</a>. Head over to <a href='https://discord.gg/ZpZuw7p'>Discord</a> and paste your report for additional troubleshooting assistance.</p>
             </div>
         </div>

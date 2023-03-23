@@ -7,7 +7,9 @@ sidebar_label: Troubleshooting
 # Troubleshooting: Run a node
 
 ### Select a configuration
-<br />
+
+The guidance displayed on this page will change based on your selected configuration:
+
 
 import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/partials/_multidimensional-content-controls-partial.md';
 
@@ -21,7 +23,7 @@ import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/parti
 
 ### Troubleshooting checklist
 
-If you're running into unexpected outputs or errors, use the following checklist to check the status of your configuration. In many cases, this checklist will help you independently resolve your issue. If you still need help after completing this checklist, you can generate a [**troubleshooting report** below](#generate-troubleshooting-report) and paste it into [Discord](https://discord.gg/prysmaticlabs) when asking for support.
+If you're running into unexpected outputs or errors, use the following checklist to check the status of your configuration. In many cases, this checklist will help you independently resolve your issue.
 
 :::tip Thank you!
 
@@ -48,17 +50,18 @@ import TroubleshootingAllPartial from '@site/../arbitrum-docs/node-running/parti
 
 ### Generate troubleshooting report
 
- 1. Complete the above troubleshooting checklist
- 2. Fill in the below form
- 3. Click `Generate troubleshooting report`
- 4. Copy and paste the **generated report text** into [Discord](https://discord.gg/prysmaticlabs) when asking for support
+ 1. Complete the above troubleshooting checklist.
+ 2. Fill in the below form.
+ 3. Click `Generate troubleshooting report`.
+ 4. Copy and paste the **generated report text** into [Discord](https://discord.gg/ZpZuw7p) when asking for support.
 
 import GenerateTroubleshootingReportPartial from '@site/../arbitrum-docs/node-running/partials/_generate-troubleshooting-report.md';
 
 <GenerateTroubleshootingReportPartial />
 
 
-<!--
+### Troubleshooting FAQ
+
 import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-nodes-partial.md';
 
 <div data-faq-origin-slug='node-faq'>
@@ -66,5 +69,3 @@ import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-nodes-par
 </div>
 
 export const toc = FAQTOC
--->
-
