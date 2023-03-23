@@ -42,7 +42,11 @@ const config = {
           breadcrumbs: false,
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
-            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
+            if (
+              s.docPath.includes("troubleshooting") ||
+              s.docPath.includes("node-providers")
+            )
+              return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -51,8 +55,8 @@ const config = {
           showLastUpdateTime: true,
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css')
-        }
+          customCss: require.resolve("./src/css/custom.css"),
+        },
       }),
     ],
   ],
@@ -95,7 +99,7 @@ const config = {
             docId: "chain-launching/launch-a-chain",
             position: "left",
             label: "Launch an L3 (new!)",
-            value: '<button>Give feedback</button>',
+            value: "<button>Give feedback</button>",
           },
           {
             type: "doc",
@@ -191,7 +195,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum DAO has been officially announced. <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">Learn more</a>. ✨`,
+        content: `✨ Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a rel="noopener noreferrer" href="https://arbitrum.foundation/" target="_blank">here</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
@@ -201,7 +205,7 @@ const config = {
          * The position of the live playground, above or under the editor
          * Possible values: "top" | "bottom"
          */
-        playgroundPosition: 'top',
+        playgroundPosition: "top",
       },
     }),
 };
