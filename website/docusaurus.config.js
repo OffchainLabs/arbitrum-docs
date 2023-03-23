@@ -42,11 +42,7 @@ const config = {
           breadcrumbs: false,
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
-            if (
-              s.docPath.includes("troubleshooting") ||
-              s.docPath.includes("node-providers")
-            )
-              return undefined;
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -55,8 +51,8 @@ const config = {
           showLastUpdateTime: true,
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
-        },
+          customCss: require.resolve('./src/css/custom.css')
+        }
       }),
     ],
   ],
@@ -99,7 +95,7 @@ const config = {
             docId: "chain-launching/launch-a-chain",
             position: "left",
             label: "Launch an L3 (new!)",
-            value: "<button>Give feedback</button>",
+            value: '<button>Give feedback</button>',
           },
           {
             type: "doc",
@@ -205,7 +201,7 @@ const config = {
          * The position of the live playground, above or under the editor
          * Possible values: "top" | "bottom"
          */
-        playgroundPosition: "top",
+        playgroundPosition: 'top',
       },
     }),
 };
