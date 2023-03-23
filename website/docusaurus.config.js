@@ -191,7 +191,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a rel="noopener noreferrer" href="https://arbitrum.foundation/" target="_blank">here</a>. ✨`,
+        content: `✨ Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
