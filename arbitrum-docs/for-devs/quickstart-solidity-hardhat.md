@@ -332,7 +332,7 @@ accounts: [GOERLI_TESTNET_PRIVATE_KEY] // <- uncomment this line
 
 :::caution
 
-Note that we're adding a private key to a config file. This is **not** a best practice. Consider using environment variables instead.
+Note that we're adding a private key to a config file. This is **not** a best practice; we're doing it here for convenience. Consider using environment variables when working on a real project.
 
 :::
 
@@ -378,7 +378,7 @@ accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY] // <- uncomment this line
 
 :::caution
 
-Note that we're adding a private key to a config file. This is **not** a best practice. Consider using environment variables instead.
+Note that we're adding a private key to a config file. This is **not** a best practice; we're doing it here for convenience. Consider using environment variables when working on a real project.
 
 :::
 

@@ -57,15 +57,15 @@ const config = {
     ],
   ],
   plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
@@ -92,28 +92,28 @@ const config = {
           },
           {
             type: "doc",
-            docId: "chain-launching/launch-a-chain",
+            docId: "getting-started-devs",
             position: "left",
-            label: "Launch an L3 (new!)",
-            value: '<button>Give feedback</button>',
+            label: "Build decentralized apps",
           },
           {
             type: "doc",
             docId: "node-running/running-a-node",
-            label: "Run a Node",
+            label: "Run a node",
             position: "left",
           },
           {
             type: "doc",
-            docId: "getting-started-devs",
+            docId: "chain-launching/launch-a-chain",
             position: "left",
-            label: "Build DApps",
+            label: "Launch an L3 chain",
+            value: '<button>Give feedback</button>',
           },
           {
             type: "doc",
             docId: "tx-lifecycle",
             position: "left",
-            label: "Learn",
+            label: "Learn more",
           },
           {
             type: "dropdown",
