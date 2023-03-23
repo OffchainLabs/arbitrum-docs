@@ -141,6 +141,10 @@ const sidebars = {
   ],
   devsSideBar: [
     {
+      type: "doc",
+      id: "for-devs/quickstart-solidity-hardhat",
+    },
+    {
       type: "category",
       label: "BUIDLing on Arbitrum",
       collapsed: false,

@@ -12,11 +12,11 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
   markdown: {
     mermaid: true,
   },
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: ["@docusaurus/theme-mermaid", "@docusaurus/theme-live-codeblock"],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "OffchainLabs", // Usually your GitHub org/user name.
@@ -191,10 +191,17 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum DAO has been officially announced. Learn more See <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
+        content: `✨ Arbitrum DAO has been officially announced. <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">Learn more</a>. ✨`,
         backgroundColor: "rgb(8 53 117)",
         textColor: "white",
         isCloseable: false,
+      },
+      liveCodeBlock: {
+        /**
+         * The position of the live playground, above or under the editor
+         * Possible values: "top" | "bottom"
+         */
+        playgroundPosition: 'top',
       },
     }),
 };
