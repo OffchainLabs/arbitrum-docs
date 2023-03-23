@@ -107,7 +107,6 @@ const config = {
             docId: "chain-launching/launch-a-chain",
             position: "left",
             label: "Launch an L3 chain",
-            value: '<button>Give feedback</button>',
           },
           {
             type: "doc",
