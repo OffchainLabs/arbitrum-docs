@@ -56,13 +56,13 @@ An archival node is a full (nitro) node that also builds an archive of historica
 - Here we provide examples for running both Arbitrum One and Arbitrum Classic in archival mode:
   
 - An example of how to run an Arbitrum One archival node:
-   ```shell
+  ```shell
   docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive 
-  
+  ```
 - An example of how to run an Arbitrum Classic archival node:
   ```shell
   docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
-  
+  ```
 - Note the above commands both map to 8547 port on their hosts, if you want to run those two at the same time, you should edit those mapping to different ports, and add `--node.rpc.classic-redirect=<classic node RPC>` to your Nitro node. In addition to make sure they can connect correctly, you can see [this docker guide](https://www.middlewareinventory.com/blog/docker-network-example/).
 
 ### Note on permissions
