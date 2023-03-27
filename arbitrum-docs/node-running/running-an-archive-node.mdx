@@ -33,11 +33,12 @@ An archival node is a full (nitro) node that also builds an archive of historica
   - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
 - `--l2.chain-id=<L2 Chain ID>`
   - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
-- `--node.caching.archive`
+- `--node.caching.archive` 
   - Required for running an Arbitrum One archival node and retains past block state
-- `--node.rpc.classic-redirect=<classic node RPC>`
-  - Required for running an Arbitrum Classic archival node and redirects archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
-
+- `--node.cache.allow-slow-lookup`
+  - Required for running an Arbitrum Classic archival node. When this option is present, will load old blocks from disk if not in memory cache.
+- `--core.checkpoint-gas-frequency=156250000`
+  - Required for running an Arbitrum Classic archival node.
 ### Important ports
 
 - RPC: `8547`
@@ -52,12 +53,13 @@ An archival node is a full (nitro) node that also builds an archive of historica
   
   - Here is an example of how to run an Arbitrum One archival node:
    ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --node.caching.archive 
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive 
   ```
  - Here is an example of how to run an Arbitrum Classic archival node:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC>
+  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
   ```
+- Note the above commands both map to 8547 port on their hosts, if you want to run those two at the same time, you should edit those mapping to different ports, and add `--node.rpc.classic-redirect=<classic node RPC>` to your Nitro node. In addition to make sure they can connect correctly, you can see [this docker guide](https://www.middlewareinventory.com/blog/docker-network-example/).
 
 ### Note on permissions
 
