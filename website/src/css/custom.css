@@ -31,6 +31,7 @@
   --ifm-color-primary-light: #29b0d5;
   --ifm-color-primary-lighter: #32b4d8;
   --ifm-color-primary-lightest: #4fbcdd;
+  --ifm-link-color: #51b2ff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 .header-badges {
@@ -115,13 +116,6 @@ article .markdown > h3 {
 article .markdown li li {
   margin-top: 4px;
 }
-article .markdown .small-table {
-  font-size: 12px;
-  margin-top: 20px;
-}
-article .markdown .small-table td {
-  padding: 10px;
-}
 article .markdown .definition-list dt {
   font-weight: 700;
   margin-top: 20px;
@@ -168,6 +162,137 @@ article .markdown .footnotes:before {
 }
 article .markdown .footnotes hr {
   display: none;
+}
+article .markdown p > code {
+  font-size: 13px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background-color: rgba(150, 150, 150, 0.2);
+}
+.small-table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.small-table td {
+  padding: 10px;
+}
+[class*="quickstart-solidity-hardhat"] table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+[class*="quickstart-solidity-hardhat"] table td {
+  padding: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine {
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: auto;
+  text-align: center;
+  border: 1px solid #aaa;
+  padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: rgba(150, 150, 150, 0.2);
+  position: relative;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine h4 {
+  text-transform: uppercase;
+  color: var(--ifm-color-content);
+  margin: 0;
+  font-family: monospace;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine .subheader {
+  font-family: monospace;
+  text-transform: uppercase;
+  color: #828282;
+  font-size: 12px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine label {
+  font-family: monospace;
+  text-transform: uppercase;
+  color: #828282;
+  font-size: 12px;
+  font-weight: 800;
+  margin-top: 5px;
+  display: block;
+  text-align: left;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine input {
+  padding: 10px;
+  width: 90%;
+  margin-bottom: 5px;
+  font-size: 11px;
+  font-family: monospace;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake {
+  display: block;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please {
+  color: white;
+  background-color: #007bdd;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border-width: 0px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance {
+  font-size: 11px;
+  display: block;
+  margin-bottom: 10px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper {
+  padding: 10px 0px;
+  font-size: 11px;
+  margin: 0;
+  font-family: monospace;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
+  font-weight: 600;
+  padding-right: 5px;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+  background: #aa0000;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  display: none;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator.visible,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator.visible {
+  display: block;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+  background: #00a400;
+  display: block;
+}
+[class*="quickstart-solidity-hardhat"] .vending-machine .hidden {
+  display: none;
+}
+.prism-code {
+  font-size: 12px;
 }
 .theme-doc-sidebar-menu {
   font-size: 13.5px;

@@ -33,6 +33,7 @@
     --ifm-color-primary-light: #29b0d5;
     --ifm-color-primary-lighter: #32b4d8;
     --ifm-color-primary-lightest: #4fbcdd;
+    --ifm-link-color: #51b2ff;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
 
@@ -131,17 +132,6 @@ article {
             margin-top: 4px;
         }
 
-        .small-table {
-            font-size: 12px;
-            margin-top: 20px;
-
-            td {
-                padding: 10px;
-            }
-        }
-
-
-
         .definition-list {
             dt {
                 font-weight: 700;
@@ -203,7 +193,158 @@ article {
                 display: none;
             }
         }
+
+        p>code {
+            font-size: 13px;
+            padding: 3px 6px;
+            border-radius: 3px;
+            background-color: rgba(150, 150, 150, 0.2);
+        }
     }
+}
+
+.small-table {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    td {
+        padding: 10px;
+    }
+}
+
+[class*="quickstart-solidity-hardhat"] {
+    table {
+        .small-table;
+    }
+
+    .vending-machine {
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: auto;
+        text-align: center;
+        border: 1px solid #aaa;
+        padding: 20px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        background-color: rgba(150, 150, 150, 0.2);
+        position: relative;
+
+        h4 {
+            text-transform: uppercase;
+            color: var(--ifm-color-content);
+            margin: 0;
+            font-family: monospace;
+        }
+
+        .subheader {
+            font-family: monospace;
+            text-transform: uppercase;
+            color: rgb(130, 130, 130);
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-family: monospace;
+            text-transform: uppercase;
+            color: rgb(130, 130, 130);
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 5px;
+            display: block;
+            text-align: left;
+        }
+
+        input {
+            padding: 10px;
+            width: 90%;
+            margin-bottom: 5px;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        #cupcake {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        #cupcake-please {
+            color: white;
+            background-color: #007bdd;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border-width: 0px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
+            }
+        }
+
+        #refresh-balance {
+            font-size: 11px;
+            display: block;
+            margin-bottom: 10px;
+
+            &:hover {
+                cursor: pointer;
+                opacity: 0.9;
+            }
+        }
+
+        #balance-wrapper {
+            padding: 10px 0px;
+            font-size: 11px;
+            margin: 0;
+            font-family: monospace;
+
+            >span:first-child {
+                font-weight: 600;
+                padding-right: 5px;
+            }
+        }
+
+        #error-indicator,
+        #success-indicator {
+            background: rgb(170, 0, 0);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            display: none;
+
+            &.visible {
+                display: block;
+            }
+        }
+
+        #success-indicator {
+            background: rgb(0, 164, 0);
+            display: block;
+        }
+
+        .hidden {
+            display: none;
+        }
+    }
+}
+
+
+
+
+.prism-code {
+    font-size: 12px;
 }
 
 .theme-doc-sidebar-menu {
