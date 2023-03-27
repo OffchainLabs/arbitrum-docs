@@ -37,7 +37,7 @@
 <p>The first <a href="/intro/glossary#arbitrum-rollup-chain"><strong>Arbitrum Rollup Chain</strong></a> running on Ethereum mainnet. Fully trustless; inherits Ethereum's base-layer security guarantees without introducing additional trust assumptions; great for decentralized finance and other use-cases that demand L1-level trustlessness.</p>
 
 ### Arbitrum Orbit {#arbitrum-orbit}
-<p>Arbitrum Orbit refers to the ability for anyone to permissionlessly deploy <a href="/intro/glossary#layer-3-l3">Layer 3 (L3)</a> s on top of Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chains.</p>
+<p>Arbitrum Orbit refers to the ability for anyone to permissionlessly deploy <a href="/intro/glossary#layer-3-l3">Layer 3 (L3)</a> chains on top of Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chains.</p>
 
 ### **Arbitrum Rollup Chain** {#arbitrum-rollup-chain}
 <p>An <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a> that implements the <a href="/intro/glossary#arbitrum-rollup-protocol"><strong>Arbitrum Rollup Protocol</strong></a>.</p>
@@ -149,7 +149,7 @@
 <p>Trustless scaling solutions built on top of Ethereum's <a href="/intro/glossary#layer-1-l1">Layer 1 (L1)</a> base protocol, such as state channels,  plasma chains, optimistic rollups, and ZK-rollups. Layer 2 solutions aim to increase scalability and reduce the cost of transactions on Ethereum's Layer 1 without introducing additional trust assumptions.</p>
 
 ### Layer 3 (L3) {#layer-3-l3}
-<p>An Arbitrum chain whose core contract reside on an  Arbitrum<a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chain.</p>
+<p>An Arbitrum chain whose core contract reside on an  Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chain.</p>
 
 ### One Step Proof {#one-step-proof}
 <p>Final step in a challenge; a single operation of the L2 VM (Wasm) is executed on L1, and the validity of its state transition is verified.</p>
