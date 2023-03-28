@@ -102,6 +102,11 @@ const sidebars = {
     },
     {
       type: "doc",
+      id: "node-running/running-an-archive-node",
+      label: "Running an Archive Node"
+    },
+    {
+      type: "doc",
       id: "node-running/local-dev-node",
       label: "Run a local dev node"
     },
