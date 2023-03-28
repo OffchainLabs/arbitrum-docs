@@ -1,0 +1,76 @@
+# Running an Archive Node
+
+Note: If you’re interested in accessing the Arbitrum network but you don’t want to setup your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+Also, the following instructions are for running an Arbitrum One node in an archival mode (only Arbitrum One needs to un both Nitro and Classic). See [this](./running-a-node.mdx) if you want to run an archive node for Nitro Goerli Rollup Testnet or Arbitrum Nova.
+
+### Do You Need To Run An Archive Node?
+
+An archival node is a full (nitro) node that also builds an archive of historical states. Note that the use cases for having an archival node are rare (e.g., if you need to process historical data), and the great majority of users don't need it.
+
+- Followings specify the minimum hardware configuration required to setup an Arbitrum archival node:
+  - RAM: 16GB+ for Nitro and 32GB+ for Classic
+  - CPU: 4+ core CPU
+  - Storage: Minimum 2TB SSD (make sure it is extendable)
+  - Estimated Growth Rate: Around 128GB per week for Arbitrum One (Nitro)
+
+❗️Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust archival node.
+
+### Required Artifacts
+
+- Latest Docker Image for Arbitrum One: `offchainlabs/nitro-node:v2.0.11-8e786ec`
+- Latest Docker Image for Arbitrum Classic: `offchainlabs/arb-node:v1.4.5-e97c1a4`
+
+- Arbitrum One Nitro Genesis Database Snapshot
+
+  - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize Nitro database
+  - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
+  - size: 33.5573504 GB
+
+- Arbitrum One Classic Database Snapshot
+  
+  - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/db.tar"` on first startup to initialize Classic database
+
+- Other chains do not have classic blocks, and do not require an initial genesis database
+
+### Required parameter 
+
+- `--l1.url=<Layer 1 Ethereum RPC URL>`
+  - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
+- `--l2.chain-id=<L2 Chain ID>`
+  - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
+- `--node.caching.archive` 
+  - Required for running an Arbitrum One archival node and retains past block state
+- `--node.cache.allow-slow-lookup`
+  - Required for running an Arbitrum Classic archival node. When this option is present, will load old blocks from disk if not in memory cache.
+- `--core.checkpoint-gas-frequency=156250000`
+  - Required for running an Arbitrum Classic archival node.
+### Important ports
+
+- RPC: `8547`
+- Sequencer Feed: `9642`
+- WebSocket: `8548`
+
+### Putting it all together
+
+- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
+- You could run both Arbitrum One and classic in archive mode. Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks.
+- Here we provide examples for running both Arbitrum One and Arbitrum Classic in archival mode.
+  
+- An example of how to run an Arbitrum One archival node:
+  ```shell
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive 
+  ```
+- An example of how to run an Arbitrum Classic archival node:
+  ```shell
+  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
+  ```
+- Note the above commands both map to 8547 port on their hosts, if you want to run those two at the same time, you should edit those mapping to different ports, and add `--node.rpc.classic-redirect=<classic node RPC>` to your Nitro node. In addition to make sure they can connect correctly, you can see [this docker guide](https://www.middlewareinventory.com/blog/docker-network-example/).
+
+### Note on permissions
+
+- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders
+  - For mainnet:
+  ```shell
+  mkdir /some/local/dir/arbitrum-mainnet
+  chmod -fR 777 /some/local/dir/arbitrum-mainnet
+  ```
