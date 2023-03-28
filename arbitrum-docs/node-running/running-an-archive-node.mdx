@@ -1,6 +1,7 @@
 # Running an Archive Node
 
 Note: If you’re interested in accessing the Arbitrum network but you don’t want to setup your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+Also, the following instructions are for running an Arbitrum One node in an archival mode (only Arbitrum One needs to un both Nitro and Classic). See [this](./running-a-node.mdx) if you want to run an archive node for Nitro Goerli Rollup Testnet or Arbitrum Nova.
 
 ### Do You Need To Run An Archive Node?
 
@@ -25,7 +26,7 @@ An archival node is a full (nitro) node that also builds an archive of historica
   - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
   - size: 33.5573504 GB
 
-- Arbitrum Classic Database Snapshot
+- Arbitrum One Classic Database Snapshot
   
   - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/db.tar"` on first startup to initialize Classic database
 
@@ -53,7 +54,7 @@ An archival node is a full (nitro) node that also builds an archive of historica
 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
 - You could run both Arbitrum One and classic in archive mode. Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks.
-- Here we provide examples for running both Arbitrum One and Arbitrum Classic in archival mode:
+- Here we provide examples for running both Arbitrum One and Arbitrum Classic in archival mode.
   
 - An example of how to run an Arbitrum One archival node:
   ```shell
