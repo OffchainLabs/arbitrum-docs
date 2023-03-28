@@ -57,15 +57,15 @@ const config = {
     ],
   ],
   plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
