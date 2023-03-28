@@ -359,7 +359,7 @@ article {
     .hidden;
 }
 
-.quickstart-tabs {
+.dynamic-content-tabs {
     position: relative;
     margin-bottom: 25px;
 
@@ -525,12 +525,11 @@ article {
 }
 
 
-
 html[data-theme='dark'] {
     --prysm-pink: var(--prysm-pink-light);
     --tab-gray: #aaa;
 
-    .quickstart-tabs {
+    .dynamic-content-tabs {
         .tabs__item {
             &:first-child {
                 color: #eee;
@@ -567,6 +566,15 @@ html[data-theme='dark'] {
                 }
             }
         }
+    }
+}
+
+[data-faq-origin-slug="node-faq"] {
+
+    /* CSS properties */
+    h3 {
+        font-size: 16px;
+        margin-bottom: 5px;
     }
 }
 

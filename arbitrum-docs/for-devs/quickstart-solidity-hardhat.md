@@ -55,13 +55,16 @@ We'll install the rest of our dependencies as we go.
    - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
    - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
    - DApps let users carry their data and identity between applications without having to trust centralized service providers.
-   - People who run Ethereum nodes[^3] can receive rewards for processing and validating transactions on behalf of users and dApps.
+   - People who run Ethereum nodes[^3] can earn $ETH for processing and validating transactions on behalf of users and dApps.
    - These transactions can be expensive when the network is under heavy load.
  - **Arbitrum**
    - Arbitrum is a suite of L2 scaling solutions for dApp developers.
    - <a data-quicklook-from='arbitrum-one'>Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from='arbitrum-rollup'>Arbitrum Rollup</a> protocol.
    - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
+  
+Let's review our vending machine's Javascript implementation, then convert it into a Solidity smart contract, then deploy it to Arbitrum One.
 
+We'll ask your smart contract for cupcakes using the vending machines on this page.
 
 ### Review our Javascript vending machine
 
@@ -227,9 +230,11 @@ Run `yarn hardhat compile` again. You should see `Compiled 1 Solidity file succe
 
 To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet: 
 
+<!-- we do it in this order because we want to be able to say "here's your contract address; paste it here" instead of "here's your contract address, save it for later" -->
+<!-- not confident that this is a good reason -->
 1. We'll use the first terminal window to run Hardhat's built-in local Ethereum node
 2. We'll then configure a wallet so we can interact with our smart contract after it's deployed to (1)
-3. We'll then deploy our smart contract to (1)'s node
+3. We'll then use the second terminal window to deploy our smart contract to (1)'s node
 
 
 #### Run a local Ethereum network and node
@@ -294,7 +299,7 @@ Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional
 
 ![Architecture diagram](assets/quickstart-vending-machine-architecture.png)
 
-The `WEB3-LOCALHOST` architecture is similar to to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for mow) decentralized network of nodes** instead of a centralized network of servers. 
+The `WEB3-LOCALHOST` architecture is similar to to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers. 
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
@@ -312,11 +317,11 @@ Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goe
 
 ### Deploy the smart contract to the Arbitrum Goerli testnet
 
-We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Because Arbitrum's Goerli testnet is powered by a real network of real nodes, we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Goerli testnet's token, $AGOR.
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Arbitrum's Goerli testnet is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Goerli testnet's token, $AGOR.
 
 :::info $AGOR IS SHORTHAND
 
-$AGOR isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use to make this quickstart more readable.
+"$AGOR" isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use to make this section of the quickstart more readable.
 
 :::
 
@@ -336,7 +341,7 @@ Note that we're adding a private key to a config file. This is **not** a best pr
 
 :::
 
-Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network: 
+Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network:
 
  1. Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
  2. Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
@@ -365,7 +370,9 @@ Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address i
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
+Now that we've verified that our smart contract works on Arbitrum's Goerli testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Goerli testnet, except that we'll need to pay a transaction fee in real $ETH instead of $AGOR.
 
+<!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 First, update the `hardhat.config.js` file to specify the private key of the **one-time-use deployment account** that you'll use to deploy your smart contract (and pay the transaction fee):
 
 ```javascript title="hardhat.config.js"
@@ -395,11 +402,11 @@ You should see the following output:
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Ethereum's decentralized network of nodes by way of Arbitrum One.
+Congratulations! You've just deployed **business logic and data** to Ethereum's decentralized network of nodes by way of Arbitrum One[^2].
 
 To view your smart contract in a blockchain explorer, visit `https://arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
-Select `Arbitrum One` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+Select `Arbitrum One` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you an immutable cupcake.
 
 <VendingMachine id='smart-mainnet-cupcakes' type='web3-arb-one' />
 
@@ -408,7 +415,7 @@ Select `Arbitrum One` from Metamask's dropdown, paste your contract address into
 
 In this quickstart, we:
 
-- Identified **two business rules**: 1) fair and permissionless cupcake distribution, 2) immutable business logic.
+- Identified **two business rules**: 1) fair and permissionless cupcake distribution, 2) immutable business logic and data.
 - Identified a **challenge**: These rules are difficult to follow in a centralized application.
 - Identified a **solution**: Arbitrum makes it easy for developers to decentralize business logic and data (using Ethereum mainnet as a settlement layer).
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.

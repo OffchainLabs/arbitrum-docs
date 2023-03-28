@@ -5,8 +5,9 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
 
 <MultiDimensionalContentWidget />
 
-<div class='quickstart-tabs'>
+<!-- todo: end the annoyance of this file not being clearly tightly coupled to the MultiDimensionalContentWidget.js file that lives somewhere else; probably move it next to that other file -->
 
+<div className='dynamic-content-tabs'>
 <Tabs className="tabgroup-with-label os-tabgroup" groupId="os" defaultValue="others" values={[
     {label: 'Operating system:', value: 'label'},
     {label: 'Linux, MacOS, Arm64', value: 'others'},
@@ -17,40 +18,18 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
   <TabItem value="win"></TabItem>
 </Tabs>
 
-<Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="mainnet" values={[
+<Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultvalue="arb-one" values={[
         {label: 'Network:', value: 'label'},
-        {label: 'Mainnet', value: 'mainnet'},
-        {label: 'Goerli-Prater', value: 'goerli-prater'},
-        {label: 'Sepolia', value: 'sepolia'},
-        {label: 'Ropsten', value: 'ropsten'}
+        {label: 'Localhost', value: 'localhost'},
+        {label: 'Arbitrum Goerli', value: 'arb-goerli'},
+        {label: 'Arbitrum One', value: 'arb-one'},
+        {label: 'Arbitrum Nova', value: 'arb-nova'}
     ]}>
     <TabItem className="unclickable-element" value="label"></TabItem>
-    <TabItem value="mainnet"></TabItem>
-    <TabItem value="goerli-prater"></TabItem>
-    <TabItem value="sepolia"></TabItem>
-    <TabItem value="ropsten"></TabItem>
+    <TabItem value="localhost"></TabItem>
+    <TabItem value="arb-goerli"></TabItem>
+    <TabItem value="arb-one"></TabItem>
+    <TabItem value="arb-nova"></TabItem>
+    
 </Tabs>
-
-<Tabs className="tabgroup-with-label hidden-in-docker-guide el-tabgroup" groupId="execution-clients" defaultValue="geth" values={[
-  {label: 'Execution client:', value: 'label'},
-  {label: 'Geth', value: 'geth'},
-  {label: 'Nethermind', value: 'nethermind'},
-  {label: 'Besu', value: 'besu'}
-  ]}>
-  <TabItem className="unclickable-element" value="label"></TabItem>
-  <TabItem value="geth"></TabItem>
-  <TabItem value="nethermind"></TabItem>
-  <TabItem value="besu"></TabItem>
-</Tabs>
-
-<Tabs className="tabgroup-with-label hidden-in-jwt-guide hidden-in-docker-guide enbn-tabgroup" groupId="protocol" defaultValue="jwt" values={[
-        {label: 'EN-BN connection:', value: 'label'},
-        {label: 'HTTP-JWT', value: 'jwt'},
-        {label: 'IPC', value: 'ipc'}
-    ]}>
-    <TabItem className="unclickable-element" value="label"></TabItem>
-    <TabItem value="jwt"></TabItem>
-    <TabItem value="ipc"></TabItem>
-</Tabs>
-
 </div>

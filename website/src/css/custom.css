@@ -310,11 +310,11 @@ article .markdown p > code {
   margin: 0 !important;
   padding: 0 !important;
 }
-.quickstart-tabs {
+.dynamic-content-tabs {
   position: relative;
   margin-bottom: 25px;
 }
-.quickstart-tabs .tabgroup-with-label {
+.dynamic-content-tabs .tabgroup-with-label {
   font-size: 13px;
   font-weight: 500;
   border: 1px solid transparent;
@@ -323,7 +323,7 @@ article .markdown p > code {
   position: static;
   margin-bottom: 10px;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item {
   font-size: 13px;
   font-weight: 500;
   border-top: 1px solid var(--tab-gray);
@@ -332,25 +332,25 @@ article .markdown p > code {
   border-radius: 0px !important;
   position: relative;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item:first-child {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item:first-child {
   cursor: default !important;
   color: black;
   width: 150px;
   border: 1px solid transparent !important;
   border-right: 0px !important;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item:first-child:hover {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item:first-child:hover {
   background-color: transparent !important;
   cursor: default !important;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item:nth-child(2) {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item:nth-child(2) {
   border-top-left-radius: 5px !important;
   border-bottom-left-radius: 5px !important;
   border-left: 1px solid var(--tab-gray);
   border-right: 0px !important;
   z-index: 2;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item:last-child {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item:last-child {
   border-top-right-radius: 5px !important;
   border-bottom-right-radius: 5px !important;
   border-right: 1px solid var(--tab-gray);
@@ -358,17 +358,17 @@ article .markdown p > code {
   border-bottom: 1px solid var(--tab-gray);
   border-left: 0px;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item.tabs__item--active {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item.tabs__item--active {
   font-size: 13px;
   font-weight: 500;
   background-color: var(--tab-active-color) !important;
   border-color: var(--tab-active-color) !important;
   color: white !important;
 }
-.quickstart-tabs .tabgroup-with-label .tabs__item.disabled-tab {
+.dynamic-content-tabs .tabgroup-with-label .tabs__item.disabled-tab {
   color: #999 !important;
 }
-.quickstart-tabs .tabgroup-with-label:after {
+.dynamic-content-tabs .tabgroup-with-label:after {
   font-size: 13px;
   font-weight: 500;
   padding: 10px 15px;
@@ -380,7 +380,7 @@ article .markdown p > code {
   display: inline-block;
   content: "Content updated!";
 }
-.quickstart-tabs .tabgroup-with-label.updated:after {
+.dynamic-content-tabs .tabgroup-with-label.updated:after {
   color: var(--tab-active-color);
 }
 /* Troubleshooting reports */
@@ -451,10 +451,10 @@ html[data-theme='dark'] {
   --prysm-pink: var(--prysm-pink-light);
   --tab-gray: #aaa;
 }
-html[data-theme='dark'] .quickstart-tabs .tabs__item:first-child {
+html[data-theme='dark'] .dynamic-content-tabs .tabs__item:first-child {
   color: #eee;
 }
-html[data-theme='dark'] .quickstart-tabs .tabs__item:first-child:hover {
+html[data-theme='dark'] .dynamic-content-tabs .tabs__item:first-child:hover {
   background-color: transparent !important;
 }
 html[data-theme='dark'] .troubleshooting-report-area > span {
@@ -468,6 +468,13 @@ html[data-theme='dark'] .checklist .task .guidance-container label {
 }
 html[data-theme='dark'] .checklist .task .guidance-container > p {
   color: white;
+}
+[data-faq-origin-slug="node-faq"] {
+  /* CSS properties */
+}
+[data-faq-origin-slug="node-faq"] h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
 }
 .troubleshooting-report-area {
   text-align: left;

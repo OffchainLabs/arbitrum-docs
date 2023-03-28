@@ -4,28 +4,19 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 export const GenerateTroubleshootingReportWidget = () => {
 
     let appendConfigDetailsToOutput = function (output) {
-        var tabWidget = document.querySelector('.quickstart-tabs');
+        var tabWidget = document.querySelector('.dynamic-content-tabs');
         output = appendLineToText(output, 'Operating system: ' + tabWidget.dataset.selectedOS);
         output = appendLineToText(output, 'Network: ' + tabWidget.dataset.selectedNetwork);
-        output = appendLineToText(output, 'Execution client: ' + tabWidget.dataset.selectedEL);
-        output = appendLineToText(output, 'EN-BN connection: ' + tabWidget.dataset.selectedENBN);
         return output;
     }
 
     let appendUserInputToOutput = function (output) {
+        console.log('appending user input to output');
+        let inputToRead, innerText;
         try {
-            var inputToRead = document.querySelector('#el-cmd');
-            var innerText = inputToRead.value;
-            if (innerText)
-                output = appendLineToText(output, 'Execution client command: ' + innerText);
-
-            inputToRead = document.querySelector('#bn-cmd');
-            innerText = inputToRead.value;
-            if (innerText)
-                output = appendLineToText(output, 'Beacon node command: ' + innerText);
-
             inputToRead = document.querySelector('#vn-cmd');
             innerText = inputToRead.value;
+            console.log('innerText: ' + innerText);
             if (innerText)
                 output = appendLineToText(output, 'Validator node command: ' + innerText);
 
@@ -38,12 +29,29 @@ export const GenerateTroubleshootingReportWidget = () => {
 
             return output;
 
-        } catch {
+        } catch (e) {
+            console.log('error appending user input to output: ' + e);
             return output;
         }
     }
 
     let appendChecklistDetailsToOutput = function (output) {
+        try {
+            const checkboxes = document.querySelectorAll('.task input[type="checkbox"]');
+            const labels = document.querySelectorAll('.task label');
+
+            output = appendLineToText(output, 'Checklist:');
+            checkboxes.forEach((checkbox, index) => {
+                const isChecked = checkbox.checked;
+                const labelText = labels[index].textContent;
+                output = appendLineToText(output, `${labelText} ${isChecked ? '✓' : '✗'}`);
+            });
+            output = appendLineToText(output, '---------');
+
+        } catch (e) {
+            console.log('Error appending checklist details to output: ' + e);
+        }
+
         return output;
     }
 

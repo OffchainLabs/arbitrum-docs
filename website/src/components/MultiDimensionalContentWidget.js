@@ -4,7 +4,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 export const MultiDimensionalContentWidget = () => {
 
     let getAllTabElements = function () {
-        var tabElements = document.querySelectorAll('.quickstart-tabs .tabs__item');
+        var tabElements = document.querySelectorAll('.dynamic-content-tabs .tabs__item');
         return tabElements;
     }
 
@@ -42,105 +42,60 @@ export const MultiDimensionalContentWidget = () => {
         return isSelected;
     }
 
-    let jwtOnly = function () {
-        var isOnAuthPage = window.location.href.indexOf('/authentication') > -1;
-        return isOnAuthPage;
-    }
-
-    let isViewingMergePrep = function () {
-        var isOnMergePrepPage = window.location.href.indexOf('/prepare-for-merge') > -1;
-        return isOnMergePrepPage;
-    }
-
-    let scrollDownASmidge = function () {
-        window.scrollBy(0, 10)
-    }
-
     let toggleUpdated = function (element) {
+        // this displays the "updated" animation on the tab
+        // to ensure that it's obvious to the user that the content is changing, even if it's not obvious
         var parent = element.parentElement;
         parent.classList.remove('updated');
         parent.classList.add('updated');
         setTimeout(function () {
+            console.log("removing updated")
             parent.classList.remove('updated');
         }, 2000)
     }
 
     let stashConfig = function () {
         var selectedOS, selectedNetwork, selectedEL, selectedENBN;
+        // todo: we do this because we want the selection to be remembered when the user navigates away from the page (and between pages)
 
+        // this could probably be a one-liner
         if (isSelectedByText('Windows'))
             selectedOS = "Windows";
         else
             selectedOS = "Linux, MacOS, Arm64";
 
-        if (isSelectedByText('Mainnet'))
-            selectedNetwork = "Mainnet";
-        else if (isSelectedByText('Goerli-Prater'))
-            selectedNetwork = "Goerli-Prater";
-        else if (isSelectedByText('Sepolia'))
-            selectedNetwork = "Sepolia";
-        else if (isSelectedByText('Ropsten'))
-            selectedNetwork = "Ropsten";
+        if (isSelectedByText('Localhost'))
+            selectedNetwork = "Localhost";
+        else if (isSelectedByText('Arbitrum Goerli'))
+            selectedNetwork = "Arbitrum Goerli";
+        else if (isSelectedByText('Arbitrum One'))
+            selectedNetwork = "Arbitrum One";
+        else if (isSelectedByText('Arbitrum Nova'))
+            selectedNetwork = "Arbitrum Nova";
 
-        if (isSelectedByText('Geth'))
-            selectedEL = "Geth";
-        else if (isSelectedByText('Nethermind'))
-            selectedEL = "Nethermind";
-        else if (isSelectedByText('Besu'))
-            selectedEL = "Besu";
 
-        if (isSelectedByText('IPC'))
-            selectedENBN = "IPC";
-        else
-            selectedENBN = "HTTP-JWT";
-
-        var tabWidget = document.querySelector('.quickstart-tabs');
+        var tabWidget = document.querySelector('.dynamic-content-tabs');
         tabWidget.dataset.selectedOS = selectedOS;
         tabWidget.dataset.selectedNetwork = selectedNetwork;
-        tabWidget.dataset.selectedEL = selectedEL;
-        tabWidget.dataset.selectedENBN = selectedENBN;
     }
 
     let bindTabs = function () {
+        // I think I used timeouts because I don't know how to wire up a direct connection to docusaurus's rendering lifecycle; this is a hack; there are probably some docs I should read
         setTimeout(function () {
-            if (jwtOnly()) {
-                setTimeout(function () { selectByText('HTTP-JWT'); stashConfig(); }, 50)
-                disableByText('IPC');
-            }
-
             var tabElements = getAllTabElements();
             tabElements.forEach(element => {
                 var isLabel = element.textContent.indexOf(":") > -1;
 
                 if (isLabel) {
-                    // unbind so tab can't be selected
+                    // we're just repurposing the OOB docusaurus tab widget to display labels
+                    // so we'll always turn the label tabs into unselectable labels
+                    // we do this by unbinding the click event handler so that the tab can't be selected
+                    // then we treat the tab at index 1 as the first selectable tab
                     element.outerHTML = element.outerHTML;
                 } else {
                     element.addEventListener("click", function (event) {
+                        // when we click a selectable tab, we want to display the "updated" animation and then stash the config so it persists between navs
                         var targetElement = event.target;
-                        var textContent = targetElement.textContent;
-
-                        if (textContent == 'Besu') {
-                            if (isSelectedByText('IPC')) {
-                                selectByText('HTTP-JWT');
-                            }
-                            disableByText('IPC');
-                        } else if (textContent == 'Geth' || textContent == 'Nethermind') {
-                            enableByText('IPC');
-                        } else if (textContent == 'IPC') {
-                            if (jwtOnly()) {
-                                setTimeout(function () { selectByText('HTTP-JWT'); }, 50)
-                                disableByText('IPC');
-                            } else {
-                                if (isSelectedByText('Besu')) {
-                                    selectByText('Geth');
-                                }
-                                disableByText('Besu');
-                            }
-                        } else if (textContent == 'HTTP-JWT') {
-                            enableByText('Besu');
-                        }
-
                         toggleUpdated(targetElement);
                         stashConfig();
                     }, false)
