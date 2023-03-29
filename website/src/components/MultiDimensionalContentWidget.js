@@ -4,6 +4,7 @@ import BrowserOnly from '@docusaurus/BrowserOnly';
 export const MultiDimensionalContentWidget = () => {
 
     let getAllTabElements = function () {
+        console.log('getting all tab elements...');
         var tabElements = document.querySelectorAll('.dynamic-content-tabs .tabs__item');
         return tabElements;
     }
@@ -44,7 +45,7 @@ export const MultiDimensionalContentWidget = () => {
 
     let toggleUpdated = function (element) {
         // this displays the "updated" animation on the tab
-        // to ensure that it's obvious to the user that the content is changing, even if it's not obvious
+        // to ensure that it's obvious to the user that the content is changing
         var parent = element.parentElement;
         parent.classList.remove('updated');
         parent.classList.add('updated');
