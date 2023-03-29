@@ -18,7 +18,7 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
   <TabItem value="win"></TabItem>
 </Tabs>
 
-<Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultvalue="arb-one" values={[
+<Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="arb-one" values={[
         {label: 'Network:', value: 'label'},
         {label: 'Localhost', value: 'localhost'},
         {label: 'Arbitrum Goerli', value: 'arb-goerli'},
