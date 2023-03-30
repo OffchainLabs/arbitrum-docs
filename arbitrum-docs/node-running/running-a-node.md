@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: Run an Arbitrum node"
+title: "Quickstart: Run a node"
 description: This quickstart will help you get an Arbitrum node up and running on your local machine.
 author-objective: build a quickstart that helps readers understand how to run an Arbitrum node, and why they might want to
 reader-audience: moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure

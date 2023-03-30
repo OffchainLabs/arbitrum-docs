@@ -135,7 +135,7 @@ const sidebars = {
     {
       type: "category",
       label: "Concepts",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "doc",
@@ -173,8 +173,12 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting",
       id: "node-running/troubleshooting-running-nodes"
+    },
+    {
+      type: "doc",
+      label: "Frequently asked questions",
+      id: "node-running/faq"
     }
-
   ],
   launchAChainSidebar: [
     {
