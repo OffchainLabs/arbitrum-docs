@@ -476,6 +476,9 @@ html[data-theme='dark'] .checklist .task .guidance-container > p {
   font-size: 16px;
   margin-bottom: 5px;
 }
+h2.anchor {
+  font-size: 24px;
+}
 .troubleshooting-report-area {
   text-align: left;
 }

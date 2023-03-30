@@ -1,7 +1,5 @@
 ---
 title: "Troubleshooting: Run a node"
-sidebar_label: Troubleshooting
-ask_team: "Is there anything we can do to make it easy to troubleshoot nodes from this page? similar to how we connect to local & remote nodes from the quickstart's vending machines? eg connect to their node and troubleshoot via HTTP apis?"
 ---
 
 
