@@ -93,7 +93,7 @@ function HomepageHeader(props) {
               <Link to="/todo">Build decentralized apps</Link> that are fast, secure, and scalable.
               <ol>
                 <li>
-                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>developers</strong>.
+                  <Link to="/for-devs/quickstart-solidity-hardhat">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>developers</strong>.
                 </li>
                 <li>
                   <Link to="/todo">Quickstart</Link>: Deploy your first smart contract.
