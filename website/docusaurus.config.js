@@ -57,7 +57,7 @@ const config = {
     ],
   ],
   plugins: [
-    // temp for windows
+    // todo: temp for windows
     //[
     //  "@docusaurus/plugin-content-docs",
     //  {
