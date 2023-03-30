@@ -121,7 +121,7 @@ function HomepageHeader(props) {
                   <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>end-users</strong>.
                 </li>
                 <li>
-                  <Link to="/todo">Quickstart</Link>: Bridge funds with confidence .
+                  <Link to="/todo">Quickstart</Link>: Learn how to confidently bridge funds from Ethereum's L1 to Arbitrum's L2 (and why you might want to).
                 </li>
               </ol>
             </li>
