@@ -101,13 +101,13 @@ function HomepageHeader(props) {
               </ol>
             </li>
             <li>
-              <Link to="/faqs">Bridge funds</Link> between Ethereum and Arbitrum.
+              <Link to="/faqs">Bridge tokens</Link> between Ethereum and Arbitrum.
               <ol>
                 <li>
                   <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>end-users</strong>.
                 </li>
                 <li>
-                  <Link to="/todo">Quickstart</Link>: Learn how to confidently bridge funds from Ethereum's L1 to Arbitrum's L2 (and why you might want to).
+                  <Link to="/todo">Quickstart</Link>: Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains.
                 </li>
               </ol>
             </li>
@@ -121,7 +121,7 @@ function HomepageHeader(props) {
                   <Link to="/todo">Quickstart</Link>: Get your node up and running using Docker.
                 </li>
                 <li>
-                  <Link to="/todo">Troubleshooting</Link>: Powered by GPT-4.
+                  <Link to="/todo">Troubleshooting</Link>: Use our interactive troubleshooting page to diagnose common node-running issues.
                 </li>
               </ol>
             </li>
