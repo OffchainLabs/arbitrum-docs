@@ -129,7 +129,7 @@ function HomepageHeader(props) {
               <Link to="/faqs">Launch an L3 chain</Link> that inherits Arbitrum's security and scalability.
             </li>
             <li>
-              <Link to="/faqs">Learn more</Link> about how Arbitrum is scaling Ethereum.
+              <Link to="/faqs">Learn more</Link> about how Arbitrum is scaling Ethereum. For beginners, experts, and everyone in between.
             </li>
             <li>
               <Link to="/faqs">Visit the Arbitrum DAO docs</Link> to learn more about how the Arbitrum One and Arbitrum Nova chains are governed.
