@@ -87,15 +87,15 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "intro/intro",
-            position: "left",
-            label: "Get started",
-          },
-          {
-            type: "doc",
             docId: "getting-started-devs",
             position: "left",
             label: "Build decentralized apps",
+          },
+          {
+            type: "doc",
+            docId: "intro/intro",
+            position: "left",
+            label: "Bridge funds",
           },
           {
             type: "doc",
@@ -140,6 +140,7 @@ const config = {
           },
         ],
       },
+      // todo: descriptive footer
       footer: {
         style: "dark",
         links: [

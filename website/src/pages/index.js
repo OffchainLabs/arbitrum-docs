@@ -93,7 +93,7 @@ function HomepageHeader(props) {
               <Link to="/todo">Build decentralized apps</Link> that are fast, secure, and scalable.
               <ol>
                 <li>
-                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for developers.
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>developers</strong>.
                 </li>
                 <li>
                   <Link to="/todo">Quickstart</Link>: Deploy your first smart contract.
@@ -104,7 +104,7 @@ function HomepageHeader(props) {
               <Link to="/todo">Run a node</Link> to support the decentralized Arbitrum network.
               <ol>
                 <li>
-                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for node-runners.
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>node-runners</strong>.
                 </li>
                 <li>
                   <Link to="/todo">Quickstart</Link>: Get your node up and running using Docker.
@@ -118,7 +118,7 @@ function HomepageHeader(props) {
               <Link to="/faqs">Bridge funds</Link> between Ethereum and Arbitrum.
               <ol>
                 <li>
-                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for end-users.
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for <strong>end-users</strong>.
                 </li>
                 <li>
                   <Link to="/todo">Quickstart</Link>: Bridge funds with confidence .
