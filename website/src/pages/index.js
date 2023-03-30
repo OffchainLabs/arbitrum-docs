@@ -81,18 +81,63 @@ function HomepageHeader(props) {
   }
 
   return (
-    <header className={clsx("hero hero--primary", styles.heroBanner)}>
-      <div className="container">
-        {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
-        <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/intro">
-            Gentle Introduction to Arbitrum 🔵
-          </Link>
+    <section>
+      <header className="hero hero--primary">
+        <div className="container">
+          <h1 className="hero__title">
+            <span>Arbitrum</span> <span class='with-blue-gradient'>Docs</span>
+          </h1>
+          <p>Arbitrum makes it easy for you to build decentralized apps on top of Ethereum. Get started by visiting one of the following docs:</p>
+          <ol>
+            <li>
+              <Link to="/todo">Build decentralized apps</Link> that are fast, secure, and scalable.
+              <ol>
+                <li>
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for developers.
+                </li>
+                <li>
+                  <Link to="/todo">Quickstart</Link>: Deploy your first smart contract.
+                </li>
+              </ol>
+            </li>
+            <li>
+              <Link to="/todo">Run a node</Link> to support the decentralized Arbitrum network.
+              <ol>
+                <li>
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for node-runners.
+                </li>
+                <li>
+                  <Link to="/todo">Quickstart</Link>: Get your node up and running using Docker.
+                </li>
+                <li>
+                  <Link to="/todo">Troubleshooting</Link>: Powered by GPT-4.
+                </li>
+              </ol>
+            </li>
+            <li>
+              <Link to="/faqs">Bridge funds</Link> between Ethereum and Arbitrum.
+              <ol>
+                <li>
+                  <Link to="/todo">A gentle introduction</Link>: A beginner-friendly conceptual introduction for end-users.
+                </li>
+                <li>
+                  <Link to="/todo">Quickstart</Link>: Bridge funds with confidence .
+                </li>
+              </ol>
+            </li>
+            <li>
+              <Link to="/faqs">Launch an L3 chain</Link> that inherits Arbitrum's security and scalability.
+            </li>
+            <li>
+              <Link to="/faqs">Learn more</Link> about how Arbitrum is scaling Ethereum.
+            </li>
+            <li>
+              <Link to="/faqs">Visit the Arbitrum DAO docs</Link> to learn more about how the Arbitrum One and Arbitrum Nova chains are governed.
+            </li>
+          </ol>
         </div>
-      </div>
-    </header>
+      </header>
+    </section>
   );
 }
 

@@ -75,9 +75,9 @@ function Feature({
             style={
               isDarkTheme && addBackground
                 ? {
-                    backgroundColor: "lightblue",
-                    borderRadius: "25%",
-                  }
+                  backgroundColor: "lightblue",
+                  borderRadius: "25%",
+                }
                 : {}
             }
             className={styles.featureSvg}
@@ -95,12 +95,10 @@ function Feature({
 
 export default function HomepageFeatures(): JSX.Element {
   return (
-    <section className={styles.features}>
-      <div className="container">
+    <section className="dark-blue-background">
+      <div className="container ">
         <div className="row">
-          {FeatureList.map((props, idx) => (
-            <Feature key={idx} {...props} />
-          ))}
+
         </div>
       </div>
     </section>

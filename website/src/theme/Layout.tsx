@@ -26,7 +26,7 @@ export default function Layout(props) {
         <meta name="twitter:title" content={previewText || "Arbitrum Docs!"} />
         <meta
           name="twitter:description"
-          content="Arbitrum Documentation Center"
+          content="Arbitrum Docs"
         />
         <meta
           name="twitter:image"

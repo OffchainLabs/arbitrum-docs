@@ -6,8 +6,8 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Arbitrum Documentation Center",
-  tagline: "Arbitrum Dev Docs",
+  title: "Arbitrum Docs",
+  tagline: "Arbitrum Docs",
   url: "https://developer.arbitrum.io/",
   baseUrl: "/",
   onBrokenLinks: "ignore",
@@ -57,15 +57,16 @@ const config = {
     ],
   ],
   plugins: [
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    // temp for windows
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
@@ -78,7 +79,7 @@ const config = {
         customDomain: "https://twentyone-unreal.arbitrum.io", // Use a custom domain, see https://usefathom.com/support/custom-domains
       },
       navbar: {
-        title: "Arbitrum Dev Center",
+        title: "Arbitrum Docs",
         logo: {
           alt: "My Site Logo",
           src: "img/logo.svg",
@@ -157,6 +158,14 @@ const config = {
                 label: "Nova.arbitrum.io",
                 to: "https://nova.arbitrum.io/",
               },
+              {
+                label: "Nitro whitepaper",
+                to: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+              },
+              {
+                label: "Research forum",
+                to: "https://research.arbitrum.io/",
+              },
             ],
           },
           {
@@ -190,9 +199,7 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `✨ Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a rel="noopener noreferrer" href="https://docs.arbitrum.foundation/" target="_blank">here</a>. ✨`,
-        backgroundColor: "rgb(8 53 117)",
-        textColor: "white",
+        content: `Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>here</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
