@@ -21,22 +21,6 @@ export const MultiDimensionalContentWidget = () => {
         return selectedElement;
     }
 
-    let disableByText = function (text) {
-        var targetElement = getByText(text);
-        targetElement.classList.add('disabled-tab');
-    }
-
-    let enableByText = function (text) {
-        var targetElement = getByText(text);
-        targetElement.classList.remove('disabled-tab');
-    }
-
-    let selectByText = function (text) {
-        console.log("selecting " + text + '...');
-        var targetElement = getByText(text);
-        targetElement.click();
-    }
-
     let isSelectedByText = function (text) {
         var targetElement = getByText(text);
         var isSelected = targetElement.classList.contains('tabs__item--active');
@@ -56,28 +40,46 @@ export const MultiDimensionalContentWidget = () => {
     }
 
     let stashConfig = function () {
-        var selectedOS, selectedNetwork, selectedEL, selectedENBN;
-        // todo: we do this because we want the selection to be remembered when the user navigates away from the page (and between pages)
+        // lots of hacky timeouts here; it works, but it's not ideal
+        setTimeout(function () {
+            var selectedOS, selectedNetwork, selectedNodeType, selectedEL, selectedENBN;
+            // todo: we do this because we want the selection to be remembered when the user navigates away from the page (and between pages)
 
-        // this could probably be a one-liner
-        if (isSelectedByText('Windows'))
-            selectedOS = "Windows";
-        else
-            selectedOS = "Linux, MacOS, Arm64";
+            // this could probably be a one-liner without any magic strings...
 
-        if (isSelectedByText('Localhost'))
-            selectedNetwork = "Localhost";
-        else if (isSelectedByText('Arbitrum Goerli'))
-            selectedNetwork = "Arbitrum Goerli";
-        else if (isSelectedByText('Arbitrum One'))
-            selectedNetwork = "Arbitrum One";
-        else if (isSelectedByText('Arbitrum Nova'))
-            selectedNetwork = "Arbitrum Nova";
+            // OS tab selection
+            if (isSelectedByText('Windows'))
+                selectedOS = "Windows";
+            else
+                selectedOS = "Linux, MacOS, Arm64";
 
+            // Network tab selection
+            if (isSelectedByText('Localhost'))
+                selectedNetwork = "Localhost";
+            else if (isSelectedByText('Arbitrum Goerli'))
+                selectedNetwork = "Arbitrum Goerli";
+            else if (isSelectedByText('Arbitrum One'))
+                selectedNetwork = "Arbitrum One";
+            else if (isSelectedByText('Arbitrum Nova'))
+                selectedNetwork = "Arbitrum Nova";
 
-        var tabWidget = document.querySelector('.dynamic-content-tabs');
-        tabWidget.dataset.selectedOS = selectedOS;
-        tabWidget.dataset.selectedNetwork = selectedNetwork;
+            // Node Type tab selection
+            if (isSelectedByText('Standard'))
+                selectedNodeType = "Standard";
+            else if (isSelectedByText('Archive'))
+                selectedNodeType = "Archive";
+            else if (isSelectedByText('Dev'))
+                selectedNodeType = "Dev";
+            else if (isSelectedByText('Feed relay'))
+                selectedNodeType = "Feed relay";
+            else if (isSelectedByText('Validator'))
+                selectedNodeType = "Validator";
+
+            var tabWidget = document.querySelector('.dynamic-content-tabs');
+            tabWidget.dataset.selectedOS = selectedOS;
+            tabWidget.dataset.selectedNetwork = selectedNetwork;
+            tabWidget.dataset.selectedNodeType = selectedNodeType;
+        }, 100);
     }
 
     let bindTabs = function () {

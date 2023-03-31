@@ -21,7 +21,7 @@ import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/parti
 
 ### Step 1: Try the troubleshooting checklist
 
-If you're running into unexpected outputs or errors, use the following checklist to check the status of your configuration. In many cases, this checklist will help you independently resolve your issue.
+If you're running into unexpected outputs or errors, the following checklist may help you independently resolve your issue.
 
 :::tip Thank you!
 
@@ -35,55 +35,36 @@ If you're running into unexpected outputs or errors, use the following checklist
         <div className='task'>
             <div className='input-container'><input id="tc-1" type='checkbox'/><span className='done'></span></div>
             <div className='guidance-container'>
-                <label htmlFor="tc-1">1. Review the quickstart</label>
-                <p>Many common issues are resolved by the steps in our <a target="_blank">Quickstart</a>. Review this before proceeding here.</p>
+                <label htmlFor="tc-1">1. Select an Operating system, Network, and Node type above</label>
+                <p>The guidance displayed on this page will change based on your selected configuration.</p>
             </div>
         </div>
         <div className='task'>
             <div className='input-container'><input id="tc-2" type='checkbox'/><span className='done'></span></div>
             <div className='guidance-container'>
-                <label htmlFor="tc-2">2. Select an Operating system and Network above</label>
-                <p>The guidance displayed on this page will change based on your selected configuration.</p>
+                <label htmlFor="tc-2">2. Review the docs</label>
+                 <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="standard" values={[ 
+                        {label: 'Node type:', value: 'label'},
+                        {label: 'Standard', value: 'standard'},
+                        {label: 'Archive', value: 'archive'},
+                        {label: 'Dev', value: 'local-dev'},
+                        {label: 'Feed relay', value: 'feed-relay'},
+                        {label: 'Validator', value: 'validator'}
+                    ]}>
+                    <TabItem className="unclickable-element" value="label"></TabItem>
+                    <TabItem value="standard"><p>The <a href='/node-running/running-a-node'>Quickstart</a> may address your issue.</p></TabItem>
+                    <TabItem value="archive"><p><a href='/node-running/running-an-archive-node'>How to run an archive node</a> may address your issue.</p></TabItem>
+                    <TabItem value="local-dev"><p><a href='/node-running/local-dev-node'>How to run a local dev node</a> may address your issue.</p></TabItem>
+                    <TabItem value="feed-relay"><p><a href='/node-running/running-a-feed-relay'>How to run a feed relay</a> may address your issue.</p></TabItem>
+                    <TabItem value="validator"><p><a href='/node-running/running-a-validator'>How to run a validator</a> may address your issue.</p></TabItem>
+                </Tabs> 
             </div>
         </div>
         <div className='task'>
             <div className='input-container'><input id="tc-3" type='checkbox'/><span className='done'></span></div>
             <div className='guidance-container'>
                 <label htmlFor="tc-3">3. Review the FAQ</label>
-                <p>Answers to frequently asked questions can be found in <a href="/node-running/faq">FAQ: Run a node</a>.</p>
-            </div>
-        </div>
-        <div className='task'>
-            <div className='input-container'><input id="st-1" type='checkbox'/><span className='done'></span></div>
-            <div className='guidance-container'>
-                <label htmlFor="st-1">4. TODO - this changes with the OS</label>
-                <Tabs className="tabgroup-with-label" groupId="os" defaultValue="others" values={[
-                    {label: 'Operating system:', value: 'label'},
-                    {label: 'Linux, MacOS, Arm64', value: 'others'},
-                    {label: 'Windows', value: 'win'}
-                    ]}>
-                    <TabItem className="unclickable-element" value="label"></TabItem>
-                    <TabItem value="others"><p>Demo -  others</p></TabItem>
-                    <TabItem value="win"><p>Demo -  windows</p></TabItem>
-                </Tabs>
-            </div>
-        </div>
-        <div className='task'>
-            <div className='input-container'><input id="st-2" type='checkbox'/><span className='done'></span></div>
-            <div className='guidance-container'>
-                <label htmlFor="st-2">5. TODO - this changes with the network</label>
-                <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultvalue="arb-one" values={[   {label: 'Network:', value: 'label'},
-                            {label: 'Localhost', value: 'localhost'},
-                            {label: 'Arbitrum Goerli', value: 'arb-goerli'},
-                            {label: 'Arbitrum One', value: 'arb-one'},
-                            {label: 'Arbitrum Nova', value: 'arb-nova'}
-                        ]}>
-                    <TabItem className="unclickable-element" value="label"></TabItem>
-                    <TabItem value="localhost"><p>Demo -  localhost</p></TabItem>
-                    <TabItem value="arb-goerli"><p>Demo -  goerli</p></TabItem>
-                    <TabItem value="arb-one"><p>Demo -  one</p></TabItem>
-                    <TabItem value="arb-nova"><p>Demo -  nova</p></TabItem>
-                </Tabs>
+                <p>Answers to frequently asked questions can be found in <a href="/node-running/faq">Frequently asked questions: Run a node</a>.</p>
             </div>
         </div>
     </div>
@@ -91,12 +72,48 @@ If you're running into unexpected outputs or errors, use the following checklist
 
 </div>
 
+<!-- demo of other dynamic content types
+<div className='task'>
+    <div className='input-container'><input id="st-1" type='checkbox'/><span className='done'></span></div>
+    <div className='guidance-container'>
+        <label htmlFor="st-1">4. TODO - this changes with the OS</label>
+        <Tabs className="tabgroup-with-label" groupId="os" defaultValue="others" values={[
+            {label: 'Operating system:', value: 'label'},
+            {label: 'Linux, MacOS, Arm64', value: 'others'},
+            {label: 'Windows', value: 'win'}
+            ]}>
+            <TabItem className="unclickable-element" value="label"></TabItem>
+            <TabItem value="others"><p>Demo -  others</p></TabItem>
+            <TabItem value="win"><p>Demo -  windows</p></TabItem>
+        </Tabs>
+    </div>
+</div>
+<div className='task'>
+    <div className='input-container'><input id="st-2" type='checkbox'/><span className='done'></span></div>
+    <div className='guidance-container'>
+        <label htmlFor="st-2">5. TODO - this changes with the network</label>
+        <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultvalue="arb-one" values={[   {label: 'Network:', value: 'label'},
+                    {label: 'Localhost', value: 'localhost'},
+                    {label: 'Arbitrum Goerli', value: 'arb-goerli'},
+                    {label: 'Arbitrum One', value: 'arb-one'},
+                    {label: 'Arbitrum Nova', value: 'arb-nova'}
+                ]}>
+            <TabItem className="unclickable-element" value="label"></TabItem>
+            <TabItem value="localhost"><p>Demo -  localhost</p></TabItem>
+            <TabItem value="arb-goerli"><p>Demo -  goerli</p></TabItem>
+            <TabItem value="arb-one"><p>Demo -  one</p></TabItem>
+            <TabItem value="arb-nova"><p>Demo -  nova</p></TabItem>
+        </Tabs>
+    </div>
+</div>
+-->
+
 
 ### Step 2: Look for your scenario
 
 Common troubleshooting scenarios and solutions are detailed below.
 
-<table class='small-table'>
+<table className='small-table'>
   <tbody>
       <tr>
           <th style={{minWidth: 180 + 'px'}}>Scenario</th> 

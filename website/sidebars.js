@@ -129,6 +129,11 @@ const sidebars = {
           type: "doc",
           id: "node-running/how-tos/read-sequencer-feed",
           label: "Read the sequencer feed",
+        },
+        {
+          type: "doc",
+          id: "das/daserver-instructions",
+          label: "Run a Data Availability Server"
         }
       ]
     },
@@ -156,11 +161,6 @@ const sidebars = {
           type: "doc",
           id: "node-running/concepts/l1-inbox",
           label: "L1 inbox"
-        },
-        {
-          type: "doc",
-          id: "das/daserver-instructions",
-          label: "Data Availability Server"
         }
       ]
     },

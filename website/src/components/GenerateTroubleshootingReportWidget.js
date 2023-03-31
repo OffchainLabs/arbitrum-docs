@@ -7,6 +7,7 @@ export const GenerateTroubleshootingReportWidget = () => {
         var tabWidget = document.querySelector('.dynamic-content-tabs');
         output = appendLineToText(output, 'Operating system: ' + tabWidget.dataset.selectedOS);
         output = appendLineToText(output, 'Network: ' + tabWidget.dataset.selectedNetwork);
+        output = appendLineToText(output, 'Node type: ' + tabWidget.dataset.selectedNodeType);
         return output;
     }
 
