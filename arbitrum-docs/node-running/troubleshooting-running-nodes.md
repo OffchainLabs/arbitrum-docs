@@ -13,22 +13,17 @@ import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/parti
 
 <MultidimensionalContentControlsPartial />
 
-<div className='hide-tabs'>
+:::tip Thank you!
 
-<br />
-<br />
+At the end of this troubleshooting guide, you'll find a "Generate troubleshooting report" button. Clicking this button will generate a report that includes your selected configuration. You can include this report when asking for help.
 
+**Using this page to generate a troubleshooting report is helpful** because it gathers the information that we need in order to resolve your issue.
+
+:::
 
 ### Step 1: Try the troubleshooting checklist
 
 If you're running into unexpected outputs or errors, the following checklist may help you independently resolve your issue.
-
-:::tip Thank you!
-
-**Using this checklist will help us help you** because it makes it easy for us to quickly gather the information that we need in order to resolve your issue.
-
-:::
-
 
 <div className='hide-tabs'>
     <div className='checklist'>
@@ -68,8 +63,6 @@ If you're running into unexpected outputs or errors, the following checklist may
             </div>
         </div>
     </div>
-</div>
-
 </div>
 
 <!-- demo of other dynamic content types
@@ -169,8 +162,18 @@ import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running
 
 <br />
 
-import GenerateTroubleshootingReportPartial from '@site/../arbitrum-docs/node-running/partials/_generate-troubleshooting-report.md';
+import {GenerateTroubleshootingReportWidget} from '@site/src/components/GenerateTroubleshootingReportWidget.js';
 
-<GenerateTroubleshootingReportPartial />
+<GenerateTroubleshootingReportWidget />
+
+<div className='troubleshooting-report-area'>
+    <p>Node startup command</p>
+    <textarea id="vn-cmd" rows="3" placeholder='Optional. Paste something like "{example command}" (or Docker config) here...'></textarea>
+    <p>Unexpected output</p>
+    <span><strong>Tip:</strong> Paste the ~100 lines of output <strong>before and including</strong> the unexpected output you're asking about.</span>
+    <textarea id="output" rows="3" placeholder='Paste your unexpected output here...'></textarea>
+    <a id='generate-report' className='generate-report'>Generate troubleshooting report</a>
+    <div id='generated-report' className='generated-report'>Complete the checklist above before generating...</div>
+</div>
 
 <!-- todo: gpt-n + langchain + pinecone -->

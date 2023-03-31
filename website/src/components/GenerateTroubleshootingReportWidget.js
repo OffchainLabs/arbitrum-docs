@@ -19,7 +19,7 @@ export const GenerateTroubleshootingReportWidget = () => {
             innerText = inputToRead.value;
             console.log('innerText: ' + innerText);
             if (innerText)
-                output = appendLineToText(output, 'Validator node command: ' + innerText);
+                output = appendLineToText(output, 'Node command: ' + innerText);
 
             inputToRead = document.querySelector('#output');
             innerText = inputToRead.value;
