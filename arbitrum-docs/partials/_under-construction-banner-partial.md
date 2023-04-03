@@ -1,7 +1,7 @@
 :::info COMING SOON
 
-This document hasn't been produced yet. We decide what net-new content to produce based on a combination of reader feedback and content analytics. 
+This document hasn't been produced yet, but it's on our radar. 
 
-If you'd really like to see this content produced, click the `Request an update` button at the top of this page to let us know. **Thank you!**
+If you'd *really* like to see this content produced, click the `Request an update` button at the top of this page to let us know. We incorporate these requests into our content prioritization discussions. **Thank you!**
 
 :::
