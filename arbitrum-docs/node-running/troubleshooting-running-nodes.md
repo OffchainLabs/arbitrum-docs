@@ -143,7 +143,7 @@ import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running
  1. Complete the above troubleshooting checklist.
  2. Fill in the below form.
  3. Click `Generate troubleshooting report`.
- 4. Copy and paste the **generated report text** into [Discord](https://discord.gg/ZpZuw7p) or [Telegram](https://t.me/arbitrum) when asking for support.
+ 4. Copy and paste the **generated report text** when asking for support on [Discord](https://discord.gg/ZpZuw7p) or any other support channel.
 
 <br />
 
