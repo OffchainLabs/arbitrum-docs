@@ -5,7 +5,7 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
 
 <MultiDimensionalContentWidget />
 
-<!-- todo: end the annoyance of this file not being clearly tightly coupled to the MultiDimensionalContentWidget.js file that lives somewhere else; probably move it next to that other file -->
+<!-- todo: end the annoyance of this file not being clearly tightly coupled to the MultiDimensionalContentWidget.js file that lives somewhere else; probably move this file next to that other file -->
 
 <div className='dynamic-content-tabs'>
   <Tabs className="tabgroup-with-label os-tabgroup" groupId="os" defaultValue="others" values={[
@@ -18,33 +18,31 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
   <TabItem value="win"></TabItem>
   </Tabs>
 
-  <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="arb-one" values={[
+  <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="arb-one-nitro" values={[
         {label: 'Network:', value: 'label'},
-        {label: 'Localhost', value: 'localhost'},
+        {label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro'},
+        {label: 'Arbitrum One (Classic)', value: 'arb-one-classic'},
+        {label: 'Arbitrum Nova', value: 'arb-nova'},
         {label: 'Arbitrum Goerli', value: 'arb-goerli'},
-        {label: 'Arbitrum One', value: 'arb-one'},
-        {label: 'Arbitrum Nova', value: 'arb-nova'}
+        {label: 'Localhost', value: 'localhost'},
     ]}>
     <TabItem className="unclickable-element" value="label"></TabItem>
-    <TabItem value="localhost"></TabItem>
-    <TabItem value="arb-goerli"></TabItem>
-    <TabItem value="arb-one"></TabItem>
+    <TabItem value="arb-one-nitro"></TabItem>
+    <TabItem value="arb-one-classic"></TabItem>
     <TabItem value="arb-nova"></TabItem>
+    <TabItem value="arb-goerli"></TabItem>
+    <TabItem value="localhost"></TabItem>
   </Tabs>
 
-  <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="standard" values={[
+  <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="full-node" values={[
         {label: 'Node type:', value: 'label'},
-        {label: 'Standard', value: 'standard'},
-        {label: 'Archive', value: 'archive'},
-        {label: 'Dev', value: 'local-dev'},
-        {label: 'Feed relay', value: 'feed-relay'},
-        {label: 'Validator', value: 'validator'}
+        {label: 'Full node', value: 'full-node'},
+        {label: 'Archive node', value: 'archive-node'},
+        {label: 'Validator node', value: 'validator-node'}
     ]}>
     <TabItem className="unclickable-element" value="label"></TabItem>
-    <TabItem value="standard"></TabItem>
-    <TabItem value="archive"></TabItem>
-    <TabItem value="local-dev"></TabItem>
-    <TabItem value="feed-relay"></TabItem>
-    <TabItem value="validator"></TabItem>
+    <TabItem value="full-node"></TabItem>
+    <TabItem value="archive-node"></TabItem>
+    <TabItem value="validator-node"></TabItem>
   </Tabs>
 </div>

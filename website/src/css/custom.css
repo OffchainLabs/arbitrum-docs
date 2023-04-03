@@ -542,6 +542,7 @@ rows .troubleshooting-report-area > textarea::placeholder {
   padding: 15px 25px;
   cursor: pointer;
   margin-top: 20px;
+  text-decoration: none !important;
 }
 .troubleshooting-report-area .generate-report:hover {
   background-color: var(--tab-active-color-hover);

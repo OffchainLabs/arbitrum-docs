@@ -93,7 +93,7 @@ const sidebars = {
     {
       type: "doc",
       id: "node-running/running-a-node",
-      label: "Quickstart"
+      label: "Quickstart: Run a full node (Nitro)"
     },
     {
       type: "category",
@@ -103,7 +103,7 @@ const sidebars = {
         {
           type: "doc",
           id: "node-running/running-a-classic-node",
-          label: "Run a Classic (pre-Nitro) node"
+          label: "Run a full node (Classic, pre-Nitro)"
         },
         {
           type: "doc",
@@ -171,12 +171,12 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Troubleshooting",
-      id: "node-running/troubleshooting-running-nodes"
+      id: "node-running/troubleshooting-running-nodes",
+      label: "Troubleshooting: Run a node",
     },
     {
       type: "doc",
-      label: "Frequently asked questions",
+      label: "Frequently asked questions: Run a node",
       id: "node-running/faq"
     }
   ],

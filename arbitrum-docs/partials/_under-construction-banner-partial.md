@@ -1,5 +1,7 @@
 :::info COMING SOON
 
-This document hasn't been produced yet. If you'd like to see it produced, click the `Request an update` button at the top of this page and **let us know what information you're looking for**. We incorporate these requests into our content prioritization process. **Thank you!**
+This document hasn't been produced yet. We decide what net-new content to produce based on a combination of reader feedback and content analytics. 
+
+If you'd really like to see this content produced, click the `Request an update` button at the top of this page to let us know. **Thank you!**
 
 :::

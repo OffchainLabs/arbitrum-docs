@@ -38,20 +38,42 @@ If you're running into unexpected outputs or errors, the following checklist may
             <div className='input-container'><input id="tc-2" type='checkbox'/><span className='done'></span></div>
             <div className='guidance-container'>
                 <label htmlFor="tc-2">2. Review the docs</label>
-                 <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="standard" values={[ 
+                 <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="full-node" values={[ 
                         {label: 'Node type:', value: 'label'},
-                        {label: 'Standard', value: 'standard'},
-                        {label: 'Archive', value: 'archive'},
-                        {label: 'Dev', value: 'local-dev'},
-                        {label: 'Feed relay', value: 'feed-relay'},
-                        {label: 'Validator', value: 'validator'}
+                        {label: 'Full node', value: 'full-node'},
+                        {label: 'Archive node', value: 'archive-node'},
+                        {label: 'Validator node', value: 'validator-node'}
                     ]}>
                     <TabItem className="unclickable-element" value="label"></TabItem>
-                    <TabItem value="standard"><p>The <a href='/node-running/running-a-node'>Quickstart</a> may address your issue.</p></TabItem>
-                    <TabItem value="archive"><p><a href='/node-running/running-an-archive-node'>How to run an archive node</a> may address your issue.</p></TabItem>
-                    <TabItem value="local-dev"><p><a href='/node-running/local-dev-node'>How to run a local dev node</a> may address your issue.</p></TabItem>
-                    <TabItem value="feed-relay"><p><a href='/node-running/running-a-feed-relay'>How to run a feed relay</a> may address your issue.</p></TabItem>
-                    <TabItem value="validator"><p><a href='/node-running/running-a-validator'>How to run a validator</a> may address your issue.</p></TabItem>
+                    <TabItem value="full-node">
+                          <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="arb-one-nitro" values={[
+                                {label: 'Network:', value: 'label'},
+                                {label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro'},
+                                {label: 'Arbitrum One (Classic)', value: 'arb-one-classic'},
+                                {label: 'Arbitrum Nova', value: 'arb-nova'},
+                                {label: 'Arbitrum Goerli', value: 'arb-goerli'},
+                                {label: 'Localhost', value: 'localhost'},
+                            ]}>
+                            <TabItem className="unclickable-element" value="label"></TabItem>
+                            <TabItem value="arb-one-nitro">
+                                <p>The <a href='/node-running/running-a-node'>Quickstart: Run a full node (Nitro)</a> may address your issue.</p>
+                            </TabItem>
+                            <TabItem value="arb-one-classic">
+                                <p><a href='/node-running/running-a-classic-node'>How to run a full node (Classic, pre-Nitro)</a> may address your issue.</p>
+                            </TabItem>
+                            <TabItem value="arb-nova">
+                                <p>The <a href='/node-running/running-a-node'>Quickstart: Run a full node (Nitro)</a> may address your issue.</p>
+                            </TabItem>
+                            <TabItem value="arb-goerli">
+                                <p>The <a href='/node-running/running-a-node'>Quickstart: Run a full node (Nitro)</a> may address your issue.</p>
+                            </TabItem>
+                            <TabItem value="localhost">
+                                <p>The <a href='/node-running/local-dev-node'>How to run a local dev node</a> may address your issue.</p>
+                            </TabItem>
+                        </Tabs>                    
+                    </TabItem>
+                    <TabItem value="archive-node"><p><a href='/node-running/running-an-archive-node'>How to run an archive node</a> may address your issue.</p></TabItem>
+                    <TabItem value="validator-node"><p><a href='/node-running/running-a-validator'>How to run a validator</a> may address your issue.</p></TabItem>
                 </Tabs> 
             </div>
         </div>
@@ -64,43 +86,6 @@ If you're running into unexpected outputs or errors, the following checklist may
         </div>
     </div>
 </div>
-
-<!-- demo of other dynamic content types
-<div className='task'>
-    <div className='input-container'><input id="st-1" type='checkbox'/><span className='done'></span></div>
-    <div className='guidance-container'>
-        <label htmlFor="st-1">4. TODO - this changes with the OS</label>
-        <Tabs className="tabgroup-with-label" groupId="os" defaultValue="others" values={[
-            {label: 'Operating system:', value: 'label'},
-            {label: 'Linux, MacOS, Arm64', value: 'others'},
-            {label: 'Windows', value: 'win'}
-            ]}>
-            <TabItem className="unclickable-element" value="label"></TabItem>
-            <TabItem value="others"><p>Demo -  others</p></TabItem>
-            <TabItem value="win"><p>Demo -  windows</p></TabItem>
-        </Tabs>
-    </div>
-</div>
-<div className='task'>
-    <div className='input-container'><input id="st-2" type='checkbox'/><span className='done'></span></div>
-    <div className='guidance-container'>
-        <label htmlFor="st-2">5. TODO - this changes with the network</label>
-        <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultvalue="arb-one" values={[   {label: 'Network:', value: 'label'},
-                    {label: 'Localhost', value: 'localhost'},
-                    {label: 'Arbitrum Goerli', value: 'arb-goerli'},
-                    {label: 'Arbitrum One', value: 'arb-one'},
-                    {label: 'Arbitrum Nova', value: 'arb-nova'}
-                ]}>
-            <TabItem className="unclickable-element" value="label"></TabItem>
-            <TabItem value="localhost"><p>Demo -  localhost</p></TabItem>
-            <TabItem value="arb-goerli"><p>Demo -  goerli</p></TabItem>
-            <TabItem value="arb-one"><p>Demo -  one</p></TabItem>
-            <TabItem value="arb-nova"><p>Demo -  nova</p></TabItem>
-        </Tabs>
-    </div>
-</div>
--->
-
 
 ### Step 2: Look for your scenario
 
@@ -138,7 +123,7 @@ Common troubleshooting scenarios and solutions are detailed below.
       </tr>
       <tr>
         <td>You get <code>403</code> errors from the feed URL.</td>
-        <td>This often happens when Cloudflare attempts to block botnets and other malicious actors, but accidentally ends up blocking node runners. If you see this, TODO.</td>
+        <td>This often happens when Cloudflare attempts to block botnets and other malicious actors, but accidentally ends up blocking node runners.</td>
       </tr>
     </tbody>
 </table>
@@ -158,7 +143,7 @@ import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running
  1. Complete the above troubleshooting checklist.
  2. Fill in the below form.
  3. Click `Generate troubleshooting report`.
- 4. Copy and paste the **generated report text** into [Discord](https://discord.gg/ZpZuw7p) or Telegram (TODO: confirm channels we want to direct folks to) when asking for support.
+ 4. Copy and paste the **generated report text** into [Discord](https://discord.gg/ZpZuw7p) or [Telegram](https://t.me/arbitrum) when asking for support.
 
 <br />
 

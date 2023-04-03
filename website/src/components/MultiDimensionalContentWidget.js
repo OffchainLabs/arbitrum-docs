@@ -58,22 +58,20 @@ export const MultiDimensionalContentWidget = () => {
                 selectedNetwork = "Localhost";
             else if (isSelectedByText('Arbitrum Goerli'))
                 selectedNetwork = "Arbitrum Goerli";
-            else if (isSelectedByText('Arbitrum One'))
-                selectedNetwork = "Arbitrum One";
+            else if (isSelectedByText('Arbitrum One (Classic)'))
+                selectedNetwork = "Arbitrum One (Classic)";
+            else if (isSelectedByText('Arbitrum One (Nitro)'))
+                selectedNetwork = "Arbitrum One (Nitro)";
             else if (isSelectedByText('Arbitrum Nova'))
                 selectedNetwork = "Arbitrum Nova";
 
             // Node Type tab selection
-            if (isSelectedByText('Standard'))
-                selectedNodeType = "Standard";
-            else if (isSelectedByText('Archive'))
-                selectedNodeType = "Archive";
-            else if (isSelectedByText('Dev'))
-                selectedNodeType = "Dev";
-            else if (isSelectedByText('Feed relay'))
-                selectedNodeType = "Feed relay";
-            else if (isSelectedByText('Validator'))
-                selectedNodeType = "Validator";
+            if (isSelectedByText('Full node'))
+                selectedNodeType = "Full node";
+            else if (isSelectedByText('Archive node'))
+                selectedNodeType = "Archive node";
+            else if (isSelectedByText('Validator node'))
+                selectedNodeType = "Validator node";
 
             var tabWidget = document.querySelector('.dynamic-content-tabs');
             tabWidget.dataset.selectedOS = selectedOS;

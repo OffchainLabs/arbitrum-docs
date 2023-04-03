@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: Run a node"
+title: "Quickstart: Run a full node (Nitro)"
 description: Learn how to run an Arbitrum node on your local machine.
 author-objective: build a quickstart that helps readers understand how to run an Arbitrum node, and why they might want to
 reader-audience: moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
@@ -7,7 +7,7 @@ reader-task: run a node with minimal effort and maximum understanding
 content-type: quickstart
 ---
 
-Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider
+Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 ### Minimum Hardware Configuration
 
