@@ -55,7 +55,7 @@ We'll install the rest of our dependencies as we go.
    - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions according to predefined rules. Ethereum's nodes host and execute smart contracts.
    - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
    - DApps let users carry their data and identity between applications without having to trust centralized service providers.
-   - People who run Ethereum nodes[^3] can earn $ETH for processing and validating transactions on behalf of users and dApps.
+   - People who run Ethereum validator nodes[^3] can earn $ETH for processing and validating transactions on behalf of users and dApps.
    - These transactions can be expensive when the network is under heavy load.
  - **Arbitrum**
    - Arbitrum is a suite of L2 scaling solutions for dApp developers.
@@ -370,7 +370,9 @@ Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address i
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
-Now that we've verified that our smart contract works on Arbitrum's Goerli testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Goerli testnet, except that we'll need to pay a transaction fee in real $ETH instead of $AGOR.
+Now that we've verified that our smart contract works on Arbitrum's Goerli testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Goerli testnet, except that we'll need to pay a transaction fee in real $ETH instead of $AGOR. 
+
+Expect to see inconsistent $ETH gas fees in this step - our [Gas FAQs](../faqs/gas-faqs.mdx) contain more information about how gas fees are determined for Arbitrum transactions.
 
 <!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 First, update the `hardhat.config.js` file to specify the private key of the **one-time-use deployment account** that you'll use to deploy your smart contract (and pay the transaction fee):

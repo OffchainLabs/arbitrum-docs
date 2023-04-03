@@ -107,7 +107,7 @@ Common troubleshooting scenarios and solutions are detailed below.
       </tr>
       <tr>
         <td>You see <code>failed to read inbox messages</code></td>
-        <td>This is usually because your L1 RPC is unreachable. Check your L1 RPC status or use another L1 RPC.</td>
+        <td>This is usually because either A) your L1 RPC is unreachable or B) your L1 node hasn't finished syncing and an old L1 node's state that doesn't have our inbox contracts deployed is being used. Check your L1 RPC sync status and connection status, or consider using another L1 RPC to isolate the issue.</td>
       </tr>
       <tr>
         <td>Your local machine is running out of memory</td>
