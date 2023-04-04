@@ -1,0 +1,50 @@
+# Building nitro locally
+
+### 0. Setup Prerequisites
+  ```bash
+  apt install git curl build-essential cmake npm golang clang make
+  npm install --global yarn
+  ```
+### 1. Setup git and nitro package
+  ```bash
+  git clone https://github.com/OffchainLabs/nitro.git
+  cd nitro
+  git submodule update --init --recursive --force
+  ```
+### 2. Setup Rust [1.66.1](https://www.rust-lang.org/tools/install)
+  ```bash
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  source "$HOME/.cargo/env"
+  rustup install 1.66.1
+  rustup default 1.66.1
+  rustup target add wasm32-unknown-unknown --toolchain 1.66.1
+  rustup target add wasm32-wasi --toolchain 1.66.1
+  cargo install cbindgen
+  ```
+### 3. Setup [Docker](https://docs.docker.com/engine/install/debian/)
+  ```bash
+  apt-get remove docker docker-engine docker.io containerd runc
+  apt-get update
+  apt-get install ca-certificates curl gnupg
+  mkdir -m 0755 -p /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo \
+    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null
+  apt-get update
+  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  ```
+### 4. Setup GO [1.19.5](https://github.com/moovweb/gvm)
+  ```bash
+  bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+  source /root/.gvm/scripts/gvm
+  apt-get install bison
+  gvm install go1.19.5
+  gvm use 1.19.5
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+  ```
+### 5. Start Build
+  ```bash
+  make
+  ```
