@@ -274,6 +274,19 @@ const sidebars = {
       ]
     },
     {
+      type: "category",
+      label: "Oracles",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          label: "API3",
+          id: "oracles/api3"
+        }
+      ]
+    },
+
+    {
       type: "doc",
       label: "Troubleshooting",
       id: "for-devs/troubleshooting-building"
