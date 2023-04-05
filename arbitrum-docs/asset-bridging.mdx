@@ -12,6 +12,8 @@ function depositEth(address destAddr) external payable override returns (uint256
 
 As far as Ethereum knows, all deposited funds are held by Arbitrum's Bridge contract.
 
+![img](./assets/diagram-eth-deposit.png)
+
 Withdrawing ether can be done using the [ArbSys](./arbos/precompiles#ArbSys) withdrawEth method:
 
 ```sol
