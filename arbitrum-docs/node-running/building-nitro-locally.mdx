@@ -2,8 +2,9 @@
 Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso)
 ### 0. Setup Prerequisites
   ```bash
-  apt install git curl build-essential cmake npm golang clang make
+  apt install git curl build-essential cmake npm golang clang make gotestsum wabt llvm-13
   npm install --global yarn
+  ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
   ```
 ### 1. Setup git and nitro package
   ```bash
