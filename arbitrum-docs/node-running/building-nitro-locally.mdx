@@ -41,7 +41,7 @@ Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/de
   source /root/.gvm/scripts/gvm
   apt-get install bison
   gvm install go1.19.5
-  gvm use 1.19.5
+  gvm use 1.19.5 --default
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
   ```
 ### 5. Start Build
