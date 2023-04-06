@@ -57,8 +57,10 @@ const config = {
     ],
   ],
   plugins: [
-    // todo: I need to disable this plugin in order to build on Windows; confirmed as OS-specific.
-    // should get this working on Windows, or find a way to remove it without losing the sdk base path
+    // todo: this breaks local builds on Windows
+    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
+    // ideally would be able to get `arbitrum-sdk/docs` generating on windows
+    // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -108,7 +110,7 @@ const config = {
             type: "doc",
             docId: "chain-launching/launch-a-chain",
             position: "left",
-            label: "Launch an L3 chain",
+            label: "Launch an L3",
           },
           {
             type: "doc",
@@ -121,6 +123,10 @@ const config = {
             label: "Links",
             position: "right",
             items: [
+              {
+                href: "/sdk",
+                label: "SDK docs",
+              },
               {
                 href: "https://github.com/OffchainLabs/nitro",
                 label: "GitHub",
