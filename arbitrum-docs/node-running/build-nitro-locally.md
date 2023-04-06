@@ -4,7 +4,6 @@ sidebar_label: Build Nitro locally (Docker, Debian)
 description: This how-to will help you build Nitro locally using Docker on Debian.
 author: amsanghi
 content-type: how-to
-todos: edit, narrate
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
