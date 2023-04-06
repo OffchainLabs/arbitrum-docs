@@ -21,7 +21,7 @@ const sidebars = {
     {
       type: "doc",
       id: "for-devs/gentle-introduction-dapps",
-      label: "A gentle introduction: Arbitrum DApps"
+      label: "A gentle introduction: Building dApps"
     },
     {
       type: "doc",
