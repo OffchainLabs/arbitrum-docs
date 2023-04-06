@@ -58,7 +58,9 @@ const config = {
   ],
   plugins: [
     // todo: this breaks local builds on Windows
-    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable; need to investigate, or just stop using windows
+    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
+    // ideally would be able to get `arbitrum-sdk/docs` generating on windows
+    // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
     [
       "@docusaurus/plugin-content-docs",
       {
