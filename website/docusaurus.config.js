@@ -96,7 +96,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "bridge-tokens/gentle-introduction-bridge",
+            docId: "getting-started-users",
             position: "left",
             label: "Bridge tokens",
           },
