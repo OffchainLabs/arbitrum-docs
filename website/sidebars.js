@@ -132,6 +132,11 @@ const sidebars = {
         },
         {
           type: "doc",
+          id: "node-running/build-nitro-locally",
+          label: "Build Nitro locally"
+        },
+        {
+          type: "doc",
           id: "das/daserver-instructions",
           label: "Run a Data Availability Server"
         }

@@ -1,18 +1,38 @@
-# Building nitro locally
-Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso)
-### 0. Setup Prerequisites
+---
+title: "How to build Nitro locally (Docker, Debian)"
+sidebar_label: Build Nitro locally (Docker, Debian)
+description: This how-to will help you build Nitro locally using Docker on Debian.
+author: amsanghi
+content-type: how-to
+todos: edit, narrate
+---
+
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+
+<PublicPreviewBannerPartial />
+
+This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso).
+
+### 1. Configure prerequisites
+
   ```bash
   apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13
   npm install --global yarn
   ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
   ```
-### 1. Setup git and nitro package
+
+
+### 2. Clone and configure the Nitro repository
+
   ```bash
   git clone https://github.com/OffchainLabs/nitro.git
   cd nitro
   git submodule update --init --recursive --force
   ```
-### 2. Setup Rust [1.66.1](https://www.rust-lang.org/tools/install)
+
+
+### 3. Configure Rust [1.66.1](https://www.rust-lang.org/tools/install)
+
   ```bash
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
   source "$HOME/.cargo/env"
@@ -22,7 +42,9 @@ Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/de
   rustup target add wasm32-wasi --toolchain 1.66.1
   cargo install cbindgen
   ```
-### 3. Setup [Docker](https://docs.docker.com/engine/install/debian/)
+
+### 4. Configure [Docker](https://docs.docker.com/engine/install/debian/)
+
   ```bash
   apt-get remove docker docker-engine docker.io containerd runc
   apt-get update
@@ -36,7 +58,9 @@ Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/de
   apt-get update
   apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   ```
-### 4. Setup GO [1.19.5](https://github.com/moovweb/gvm)
+
+### 5. Configure Go [1.19.5](https://github.com/moovweb/gvm)
+
   ```bash
   bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
   source /root/.gvm/scripts/gvm
@@ -45,7 +69,8 @@ Note: This guide is based on [debian-11.6.0-arm64](https://cdimage.debian.org/de
   gvm use 1.19.5 --default
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
   ```
-### 5. Start Build
+### 6. Start build
+
   ```bash
   make
   ```
