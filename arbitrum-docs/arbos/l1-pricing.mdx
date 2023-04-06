@@ -6,7 +6,7 @@ ArbOS dynamically prices L1 gas, with the price adjusting to ensure that the amo
 
 A transaction is charged for L1 gas if and only if it arrived as part of a sequencer batch. This means that someone would have paid for L1 gas to post the transaction on the L1 chain.
 
-The total fee charged to a transaction is the product of the transaction's estimated size, and the current L1 Gas Basefee.
+The estimated cost of posting a transaction on L1 is the product of the transaction's estimated size, and the current L1 Gas Basefee. This estimated cost is divided by the current L2 gas basefee to obtain the amount of L2 gas that corresponds to the L1 operation (more information about this can be found in [this article][two_dimensional_fees_medium_article_link]).
 
 The estimated size is measured in L1 gas and is calculated as follows: first, compress the transaction's data using the brotli-zero algorithm, then multiply the size of the result by 16. (16 is because L1 charges 16 gas per byte. L1 charges less for bytes that are zero, but that doesn't make sense here.) Brotli-zero is used in order to reward users for posting transactions that are compressible. Ideally we would like to reward for posting transactions that contribute to the compressibility (using the brotli compressor) of the entire batch, but that is a difficult notion to define and in any case would be too expensive to compute at L2. Brotli-zero is an approximation that is cheap enough to compute.
 
@@ -15,6 +15,7 @@ L1 gas fee funds that are collected from transactions are transferred to a speci
 The L1 pricer also records the total number of "data units" (the sum of the estimated sizes, after multiplying by 16) that have been received.
 
 [l1pricerfundspool_link]: https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46
+[two_dimensional_fees_medium_article_link]: https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9
 
 ## L1 costs
 

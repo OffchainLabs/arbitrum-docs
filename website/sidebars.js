@@ -93,32 +93,76 @@ const sidebars = {
     {
       type: "doc",
       id: "node-running/running-a-node",
-      label: "Run a node"
+      label: "Quickstart: Run a full node (Nitro)"
     },
     {
-      type: "doc",
-      id: "node-running/running-a-classic-node",
-      label: "Run a Classic (pre-Nitro) node"
+      type: "category",
+      label: "How-to guides",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          id: "node-running/running-a-classic-node",
+          label: "Run a full node (Classic, pre-Nitro)"
+        },
+        {
+          type: "doc",
+          id: "node-running/running-an-archive-node",
+          label: "Run an archive node"
+        },
+        {
+          type: "doc",
+          id: "node-running/local-dev-node",
+          label: "Run a local dev node"
+        },
+        {
+          type: "doc",
+          id: "node-running/running-a-feed-relay",
+          label: "Run a feed relay"
+        },
+        {
+          type: "doc",
+          id: "node-running/running-a-validator",
+          label: "Run a validator",
+        },
+        {
+          type: "doc",
+          id: "node-running/how-tos/read-sequencer-feed",
+          label: "Read the sequencer feed",
+        },
+        {
+          type: "doc",
+          id: "das/daserver-instructions",
+          label: "Run a Data Availability Server"
+        }
+      ]
     },
     {
-      type: "doc",
-      id: "node-running/running-an-archive-node",
-      label: "Running an Archive Node"
-    },
-    {
-      type: "doc",
-      id: "node-running/local-dev-node",
-      label: "Run a local dev node"
-    },
-    {
-      type: "doc",
-      label: "Run a feed relay",
-      id: "node-running/running-a-feed-relay"
-    },
-    {
-      type: "doc",
-      label: "Run a validator",
-      id: "node-running/running-a-validator"
+      type: "category",
+      label: "Concepts",
+      collapsed: true,
+      items: [
+        {
+          type: "doc",
+          id: "node-running/concepts/arbitrum-nodes-networks",
+          label: "Nodes and networks"
+        },
+        {
+          type: "doc",
+          id: "node-running/concepts/feed-relay",
+          label: "Feed relay"
+        },
+        {
+          type: "doc",
+          id: "node-running/concepts/sequencer",
+          label: "Sequencer"
+        },
+        {
+          type: "doc",
+          id: "node-running/concepts/l1-inbox",
+          label: "L1 inbox"
+        }
+      ]
     },
     {
       type: "doc",
@@ -127,15 +171,14 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "das/daserver-instructions",
-      label: "Data Availability Server"
+      id: "node-running/troubleshooting-running-nodes",
+      label: "Troubleshooting: Run a node",
     },
     {
       type: "doc",
-      label: "Troubleshooting",
-      id: "node-running/troubleshooting-running-nodes"
+      label: "Frequently asked questions: Run a node",
+      id: "node-running/faq"
     }
-
   ],
   launchAChainSidebar: [
     {
@@ -300,7 +343,6 @@ const sidebars = {
         }
       ]
     },
-
     {
       type: "category",
       label: "Fraud Proofs",

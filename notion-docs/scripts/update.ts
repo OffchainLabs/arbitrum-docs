@@ -43,17 +43,18 @@ async function generateFiles() {
   const linkableTerms: LinkableTerms = {}
 
   const devDocsV2Project = await lookupProject(notion, 'Arbitrum developer docs portal v2.0')
-  
 
-  const _definitions = await lookupGlossaryTerms(notion, {filter:  {
-    property: 'Project(s)',
-    relation: {
-      contains: devDocsV2Project,
-    },
-  }})
+  const _definitions = await lookupGlossaryTerms(notion, {
+    filter: {
+      property: 'Project(s)',
+      relation: {
+        contains: devDocsV2Project,
+      },
+    }
+  })
   const validDefs = _definitions.filter(isValid)
 
-  
+
   const userFAQ = await lookupFAQs(notion, {
     filter: {
       and: [
@@ -135,7 +136,7 @@ async function generateFiles() {
   fs.writeFileSync('../arbitrum-docs/partials/_glossary-partial.md', definitionsHTML)
 
 
-  
+
 
 
   fs.writeFileSync(
