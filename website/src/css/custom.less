@@ -1,10 +1,4 @@
-/**
- * Any CSS included here will be global.
- * Uses Infima. Infima docs -> https://infima.dev/
- * If you're updating this, make sure you're updating the LESS file.
- */
-
-/* You can override the default Infima variables here. */
+// #region imports, variables, mixins, darkmode
 
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
@@ -17,7 +11,6 @@
 .sairafont {
     font-family: 'Saira', sans-serif;
 }
-
 
 :root {
     --ifm-color-primary: #007bdd;
@@ -41,7 +34,6 @@
     --tab-gray: #ddd;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
     --ifm-color-primary: #28a0f0;
     --ifm-color-primary-dark: #2182af;
@@ -52,7 +44,117 @@
     --ifm-color-primary-lightest: #4fbcdd;
     --ifm-link-color: #51b2ff;
     --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+    --prysm-pink: var(--prysm-pink-light);
+    --tab-gray: #aaa;
+
+    .dynamic-content-tabs {
+        .tabs__item {
+            &:first-child {
+                color: #eee;
+
+                &:hover {
+                    background-color: transparent !important;
+                }
+            }
+        }
+    }
+
+    .troubleshooting-report-area {
+        >span {
+            color: #ddd !important;
+        }
+    }
+
+    .checklist {
+        .task {
+
+            .input-container {
+                input:checked+.done {
+                    background-color: #002862;
+                }
+            }
+
+            .guidance-container {
+                label {
+                    color: white;
+                }
+
+                >p {
+                    color: white;
+                }
+            }
+        }
+    }
 }
+
+/* MIXINS */
+.enable-transition {
+    -o-transition: all .15s ease;
+    -ms-transition: all .15s ease;
+    -moz-transition: all .15s ease;
+    -webkit-transition: all .15s ease;
+    /* ...and now for the proper property */
+    transition: all .15s ease;
+}
+
+.enable-transition(@timeWithSAppendedLike2s) {
+    -o-transition: all @timeWithSAppendedLike2s ease;
+    -ms-transition: all @timeWithSAppendedLike2s ease;
+    -moz-transition: all @timeWithSAppendedLike2s ease;
+    -webkit-transition: all @timeWithSAppendedLike2s ease;
+    /* ...and now for the proper property */
+    transition: all @timeWithSAppendedLike2s ease;
+}
+
+.enable-transition-via-properties(@properties) {
+    -o-transition: @properties .15s ease;
+    -ms-transition: @properties .15s ease;
+    -moz-transition: @properties .15s ease;
+    -webkit-transition: @properties .15s ease;
+    /* ...and now for the proper property */
+    transition: @properties .15s ease;
+}
+
+.invisible-horizontal-scroll {
+    -ms-overflow-style: none;
+    /* for Internet Explorer, Edge */
+    scrollbar-width: none;
+    /* for Firefox */
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+        /* for Chrome, Safari, and Opera */
+    }
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.small-table {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    td {
+        padding: 10px;
+    }
+}
+
+.dark-blue-background {
+    background-color: #062455 !important;
+}
+
+.gently-animated {
+    transition: all 0.1s ease-in-out;
+}
+
+// #endregion
+
+// #region header badges
 
 .header-badges {
     display: block;
@@ -127,11 +229,9 @@
     }
 }
 
-.truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+// #endregion
+
+// #region universal content body styles
 
 article {
     .markdown {
@@ -220,15 +320,9 @@ article {
     }
 }
 
-.small-table {
-    font-size: 12px;
-    margin-top: 20px;
-    margin-bottom: 30px;
+// #endregion
 
-    td {
-        padding: 10px;
-    }
-}
+// #region quickstart styles
 
 [class*="quickstart-solidity-hardhat"] {
     table {
@@ -357,11 +451,10 @@ article {
     }
 }
 
-.dark-blue-background {
-    background-color: #062455 !important;
-}
+// #endregion
 
-// landing page
+// #region landing page / hero styles
+
 .hero {
     text-align: left !important;
 
@@ -410,15 +503,13 @@ article {
     }
 }
 
-.gently-animated {
-    transition: all 0.1s ease-in-out;
-}
-
 .hero--primary {
     .dark-blue-background;
 }
 
-/*TABS*/
+// #endregion
+
+// #region dynamic content tabs
 
 /* used to hide all but the topmost tabs when using the multidimensional content widget */
 
@@ -520,142 +611,9 @@ article {
     }
 }
 
-/* Troubleshooting reports */
+// #endregion
 
-.checklist {
-    .task {
-        display: table;
-        position: relative;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        padding: 10px;
-        overflow: hidden;
-        width: 100%;
-
-        .input-container {
-            display: table-cell;
-            vertical-align: middle;
-            padding: 10px 5px;
-            width: 40px;
-
-            input {
-                width: 25px;
-                height: 25px;
-                display: inline-block;
-                position: relative;
-                z-index: 2;
-                cursor: pointer;
-            }
-
-            .done {
-                transition-property: background-color;
-                transition-duration: 0.2s;
-                transition-delay: 0s;
-            }
-
-            input:checked+.done {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background-color: #dfebfd;
-                z-index: 0;
-            }
-        }
-
-        .guidance-container {
-            display: inline-block;
-            padding-top: 0px;
-            position: relative;
-            z-index: 2;
-            padding-left: 10px;
-
-            label {
-                display: block;
-                font-weight: bold;
-            }
-
-            >p,
-            p {
-                font-size: 14px;
-                line-height: 20px;
-                margin-bottom: 0 !important;
-            }
-
-            .margin-top--md {
-                margin-top: 0 !important;
-            }
-
-            .tabs-container {
-                margin-bottom: 0 !important;
-            }
-        }
-    }
-
-    input {
-
-        margin-right: 5px;
-    }
-}
-
-
-html[data-theme='dark'] {
-    --prysm-pink: var(--prysm-pink-light);
-    --tab-gray: #aaa;
-
-    .dynamic-content-tabs {
-        .tabs__item {
-            &:first-child {
-                color: #eee;
-
-                &:hover {
-                    background-color: transparent !important;
-                }
-            }
-        }
-    }
-
-    .troubleshooting-report-area {
-        >span {
-            color: #ddd !important;
-        }
-    }
-
-    .checklist {
-        .task {
-
-            .input-container {
-                input:checked+.done {
-                    background-color: #002862;
-                }
-            }
-
-            .guidance-container {
-                label {
-                    color: white;
-                }
-
-                >p {
-                    color: white;
-                }
-            }
-        }
-    }
-}
-
-[data-faq-origin-slug="node-faq"] {
-
-    /* CSS properties */
-    h3 {
-        font-size: 16px;
-        margin-bottom: 5px;
-    }
-}
-
-h2.anchor {
-    font-size: 24px;
-}
+// #region troubleshooting checklist and report
 
 .troubleshooting-report-area {
     text-align: left;
@@ -736,49 +694,104 @@ h2.anchor {
     }
 }
 
+.checklist {
+    .task {
+        display: table;
+        position: relative;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        padding: 10px;
+        overflow: hidden;
+        width: 100%;
 
-/* MIXINS */
-.enable-transition {
-    -o-transition: all .15s ease;
-    -ms-transition: all .15s ease;
-    -moz-transition: all .15s ease;
-    -webkit-transition: all .15s ease;
-    /* ...and now for the proper property */
-    transition: all .15s ease;
-}
+        .input-container {
+            display: table-cell;
+            vertical-align: middle;
+            padding: 10px 5px;
+            width: 40px;
 
-.enable-transition(@timeWithSAppendedLike2s) {
-    -o-transition: all @timeWithSAppendedLike2s ease;
-    -ms-transition: all @timeWithSAppendedLike2s ease;
-    -moz-transition: all @timeWithSAppendedLike2s ease;
-    -webkit-transition: all @timeWithSAppendedLike2s ease;
-    /* ...and now for the proper property */
-    transition: all @timeWithSAppendedLike2s ease;
-}
+            input {
+                width: 25px;
+                height: 25px;
+                display: inline-block;
+                position: relative;
+                z-index: 2;
+                cursor: pointer;
+            }
 
-.enable-transition-via-properties(@properties) {
-    -o-transition: @properties .15s ease;
-    -ms-transition: @properties .15s ease;
-    -moz-transition: @properties .15s ease;
-    -webkit-transition: @properties .15s ease;
-    /* ...and now for the proper property */
-    transition: @properties .15s ease;
-}
+            .done {
+                transition-property: background-color;
+                transition-duration: 0.2s;
+                transition-delay: 0s;
+            }
 
-.invisible-horizontal-scroll {
-    -ms-overflow-style: none;
-    /* for Internet Explorer, Edge */
-    scrollbar-width: none;
-    /* for Firefox */
-    overflow-x: scroll;
+            input:checked+.done {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-color: #dfebfd;
+                z-index: 0;
+            }
+        }
 
-    &::-webkit-scrollbar {
-        display: none;
-        /* for Chrome, Safari, and Opera */
+        .guidance-container {
+            display: inline-block;
+            padding-top: 0px;
+            position: relative;
+            z-index: 2;
+            padding-left: 10px;
+
+            label {
+                display: block;
+                font-weight: bold;
+            }
+
+            >p,
+            p {
+                font-size: 14px;
+                line-height: 20px;
+                margin-bottom: 0 !important;
+            }
+
+            .margin-top--md {
+                margin-top: 0 !important;
+            }
+
+            .tabs-container {
+                margin-bottom: 0 !important;
+            }
+        }
+    }
+
+    input {
+
+        margin-right: 5px;
     }
 }
 
-// banner
+// #endregion
+
+
+[data-faq-origin-slug="node-faq"] {
+
+    /* CSS properties */
+    h3 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+}
+
+h2.anchor {
+    font-size: 24px;
+}
+
+
+
+
+
+// #region banner
 [class*="announcementBar_node_modules-@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module"],
 .announcementBar_mb4j {
     .spacefont;
@@ -791,6 +804,9 @@ h2.anchor {
         text-decoration: none !important;
     }
 }
+
+// #endregion
+
 
 .prism-code {
     font-size: 12px;
