@@ -57,17 +57,15 @@ const config = {
     ],
   ],
   plugins: [
-    // todo: I need to disable this plugin in order to build on Windows; confirmed as OS-specific.
-    // should get this working on Windows, or find a way to remove it without losing the sdk base path
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
