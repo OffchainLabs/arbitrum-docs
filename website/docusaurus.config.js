@@ -58,7 +58,7 @@ const config = {
   ],
   plugins: [
     // todo: this breaks local builds on Windows
-    // could detect env and auto-disable when local + windows, need to investigate
+    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable; need to investigate, or just stop using windows
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -108,7 +108,7 @@ const config = {
             type: "doc",
             docId: "chain-launching/launch-a-chain",
             position: "left",
-            label: "Launch an L3 chain",
+            label: "Launch an L3",
           },
           {
             type: "doc",
@@ -121,6 +121,10 @@ const config = {
             label: "Links",
             position: "right",
             items: [
+              {
+                href: "/sdk",
+                label: "SDK docs",
+              },
               {
                 href: "https://github.com/OffchainLabs/nitro",
                 label: "GitHub",
