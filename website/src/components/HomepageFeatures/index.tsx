@@ -21,7 +21,7 @@ const FeatureList: FeatureItem[] = [
     description: <> Learn about Arbitrum's core technologies and product portfolio.</>,
   },
   {
-    title: "Quickstart: Build a DApp",
+    title: "Quickstart: Build a dApp",
     Svg: require("@site/static/img/cupcake.svg").default,
     href: "/for-devs/quickstart-solidity-hardhat",
     description: <>Deploy a cupcake vending machine contract locally, then to Arbitrum Goerli, then to Arbitrum Mainnet.</>,
