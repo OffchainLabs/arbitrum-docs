@@ -90,15 +90,15 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "getting-started-devs",
+            docId: "for-devs/quickstart-solidity-hardhat",
             position: "left",
             label: "Build decentralized apps",
           },
           {
             type: "doc",
-            docId: "intro/intro",
+            docId: "bridge-tokens/gentle-introduction-bridge",
             position: "left",
-            label: "Bridge funds",
+            label: "Bridge tokens",
           },
           {
             type: "doc",
@@ -114,7 +114,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "tx-lifecycle",
+            docId: "intro/intro",
             position: "left",
             label: "Learn more",
           },
