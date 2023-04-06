@@ -466,6 +466,7 @@ article .markdown p > code {
 .landingPageLink_aBTe svg {
   height: 130px;
   width: 130px;
+  margin-top: 10px;
 }
 /* used to hide all but the topmost tabs when using the multidimensional content widget */
 .hidden {
