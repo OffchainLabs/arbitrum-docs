@@ -462,6 +462,11 @@ article .markdown p > code {
   margin-top: 10px;
   margin-bottom: 5px;
 }
+.features_src-components-HomepageFeatures-styles-module svg,
+.landingPageLink_aBTe svg {
+  height: 130px;
+  width: 130px;
+}
 /* used to hide all but the topmost tabs when using the multidimensional content widget */
 .hidden {
   visibility: hidden !important;
