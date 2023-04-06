@@ -492,9 +492,6 @@ article .markdown p > code {
 .hero .container > ol > li {
   margin-top: 10px;
 }
-.hero--primary {
-  background-color: #062455 !important;
-}
 /* used to hide all but the topmost tabs when using the multidimensional content widget */
 .hidden {
   visibility: hidden !important;
