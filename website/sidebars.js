@@ -133,7 +133,6 @@ const sidebars = {
         {
           type: "doc",
           id: "node-running/build-nitro-locally",
-          label: "Build Nitro locally"
         },
         {
           type: "doc",
