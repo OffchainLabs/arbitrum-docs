@@ -457,7 +457,8 @@ article .markdown p > code {
 .hero--primary .hero__title {
   margin-bottom: 20px;
 }
-.features_src-components-HomepageFeatures-styles-module .text--center > h3 {
+.features_src-components-HomepageFeatures-styles-module .text--center > h3,
+.landingPageLink_aBTe .text--center > h3 {
   margin-top: 10px;
   margin-bottom: 5px;
 }
