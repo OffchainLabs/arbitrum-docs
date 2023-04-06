@@ -21,7 +21,7 @@ This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-
   ```
 
 
-### 2. Clone and configure the Nitro repository
+### 2. Configure Nitro
 
   ```bash
   git clone https://github.com/OffchainLabs/nitro.git
