@@ -210,6 +210,13 @@ const config = {
          */
         playgroundPosition: 'top',
       },
+      mermaid: {
+        options: {
+          flowchart: {
+            curve: 'basis',
+          },
+        }
+      }
     }),
 };
 
