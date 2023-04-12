@@ -61,15 +61,15 @@ const config = {
     // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
     // ideally would be able to get `arbitrum-sdk/docs` generating on windows
     // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
+    //[
+    //  "@docusaurus/plugin-content-docs",
+    //  {
+    //    id: "arbitrum-sdk",
+    //    path: "../arbitrum-sdk/docs",
+    //    routeBasePath: "sdk",
+    //    // ... other options
+    //  },
+    //],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
@@ -169,11 +169,7 @@ const config = {
               {
                 label: "Nitro whitepaper",
                 to: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
-              },
-              {
-                label: "Research forum",
-                to: "https://research.arbitrum.io/",
-              },
+              }
             ],
           },
           {
