@@ -15,45 +15,42 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Introduction",
+    title: "A gentle introduction",
     Svg: require("@site/static/img/welcome.svg").default,
-    href: "/intro/",
-    description: <> Overview for New Devs / Users </>,
+    href: "/intro",
+    description: <> Learn about Arbitrum's core technologies and product portfolio.</>,
   },
   {
-    title: "For Developers",
-    Svg: require("@site/static/img/builder.svg").default,
-    href: "/getting-started-devs",
-    description: <>Guides for Dapp Devs and Node Runners</>,
+    title: "Quickstart: Build a dApp",
+    Svg: require("@site/static/img/cupcake.svg").default,
+    href: "/for-devs/quickstart-solidity-hardhat",
+    description: <>Deploy a cupcake vending machine contract locally, then to Arbitrum Goerli, then to Arbitrum Mainnet.</>,
+  },
+  {
+    title: "Quickstart: Run a node",
+    Svg: require("@site/static/img/node.svg").default,
+    href: "/node-running/running-a-node",
+    description: <>Learn how to run a full node (Nitro) on your local machine.</>,
+  },
+  {
+    title: "Quickstart: Bridge tokens",
+    Svg: require("@site/static/img/layer-up.svg").default,
+    href: "/getting-started-users",
+    description: <>Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using Arbitrum Bridge.</>,
   },
   {
     title: "The Arbitrum DAO",
     Svg: require("@site/static/img/logo.svg").default,
     href: "https://docs.arbitrum.foundation/",
-    description: <>Learn about Arbitrum governance</>,
+    description: <>Learn about the decentralized organization that governs the One and Nova chains.</>,
     animate: true,
   },
   {
-    title: "How It All Works",
-    Svg: require("@site/static/img/bulb.svg").default,
-    href: "/tx-lifecycle",
-
-    description: <>Technical Overview and specs</>,
-  },
-  {
-    title: "Whitepaper",
-    Svg: require("@site/static/img/paper.svg").default,
-    href: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
-    description: <>Arbitrum Nitro Whitepaper</>,
-    addBackground: true,
-  },
-  {
-    title: "Research Forum",
-    Svg: require("@site/static/img/group.svg").default,
-    href: "https://research.arbitrum.io/",
-    description: <>Public forum for research disucssion</>,
-    addBackground: true,
-  },
+    title: "Troubleshoot your node",
+    Svg: require("@site/static/img/node.svg").default,
+    href: "/node-running/troubleshooting-running-nodes",
+    description: <>Use this interactive troubleshooting guide to quickly diagnose your node issues.</>,
+  }
 ];
 
 function Feature({
@@ -75,9 +72,9 @@ function Feature({
             style={
               isDarkTheme && addBackground
                 ? {
-                    backgroundColor: "lightblue",
-                    borderRadius: "25%",
-                  }
+                  backgroundColor: "lightblue",
+                  borderRadius: "25%",
+                }
                 : {}
             }
             className={styles.featureSvg}
