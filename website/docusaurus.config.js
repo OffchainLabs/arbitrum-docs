@@ -212,6 +212,7 @@ const config = {
       },
       mermaid: {
         options: {
+          securityLevel: 'loose',
           flowchart: {
             curve: 'basis',
           },

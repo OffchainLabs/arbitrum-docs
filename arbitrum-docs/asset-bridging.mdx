@@ -1,3 +1,5 @@
+import DepositEthDiagram from './diagrams/\_deposit-eth.mdx';
+
 # Token Bridging
 
 The Arbitrum protocol's ability to pass messages between L1 and L2 (see [L1 to L2 messaging](./arbos/l1-to-l2-messaging.mdx)) can be leveraged to trustlessly move assets from Ethereum to an Arbitrum chain and back. Any asset / asset type can in principle be bridged, including Ether, ERC20 tokens, ERC-721 tokens, etc.
@@ -11,41 +13,7 @@ function depositEth(address destAddr) external payable override returns (uint256
 ```
 
 As far as Ethereum knows, all deposited funds are held by Arbitrum's Bridge contract.
-```mermaid
-flowchart TB
-  subgraph L2 ["L2 - Arbitrum"]
-    %% Nodes
-    NODE[(Node)]
-    NODENOTE["
-        Nodes pick up the transaction
-        from the Bridge's emitted events and
-        add it to a block
-    "]:::noteBox
-
-    %% Links
-    NODE -.- NODENOTE
-  end
-  L1 --> L2
-  subgraph L1 ["L1 - Ethereum"]
-    %% Nodes
-    USER["#128100;"]
-    INBOX("Inbox\ncontract")
-    BRIDGE("Bridge\ncontract")
-    WAIT{{"
-        Wait for the transaction to be
-        justified on Ethereum, meaning that
-        2 epochs have passed
-    "}}
-
-    %% Links
-    USER --->|"&nbsp;depositEth()&nbsp;"| INBOX
-    INBOX --->|"&nbsp;enqueueDelayedMessage()&nbsp;"| BRIDGE
-    BRIDGE ---> WAIT
-  end
-
-%% Styling
-classDef noteBox fill:#ffffcc,stroke:#000000,color:#000000
-```
+<DepositEthDiagram />
 
 Withdrawing ether can be done using the [ArbSys](./arbos/precompiles#ArbSys) withdrawEth method:
 
