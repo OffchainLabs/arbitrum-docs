@@ -55,7 +55,7 @@ async function generateFiles() {
   const validDefs = _definitions.filter(isValid)
 
 
-  const userFAQ = await lookupFAQs(notion, {
+  const getStartedFAQ = await lookupFAQs(notion, {
     filter: {
       and: [
         {
@@ -72,6 +72,12 @@ async function generateFiles() {
         },
       ],
     },
+    sorts: [
+      {
+        property: 'FAQ order index',
+        direction: 'ascending'
+      }
+    ]
   })
 
   const nodeFAQ = await lookupFAQs(notion, {
@@ -91,6 +97,12 @@ async function generateFiles() {
         },
       ],
     },
+    sorts: [
+      {
+        property: 'FAQ order index',
+        direction: 'ascending'
+      }
+    ]
   })
 
   const buildFAQ = await lookupFAQs(notion, {
@@ -110,6 +122,37 @@ async function generateFiles() {
         },
       ],
     },
+    sorts: [
+      {
+        property: 'FAQ order index',
+        direction: 'ascending'
+      }
+    ]
+  })
+
+  const bridgeFAQ = await lookupFAQs(notion, {
+    filter: {
+      and: [
+        {
+          property: 'Target document slugs',
+          multi_select: {
+            contains: 'troubleshooting-bridging',
+          },
+        },
+        {
+          property: 'Publishable?',
+          select: {
+            equals: 'Publishable',
+          },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: 'FAQ order index',
+        direction: 'ascending'
+      }
+    ]
   })
 
   const addItems = (items: KnowledgeItem[], page: string) => {
@@ -141,7 +184,7 @@ async function generateFiles() {
 
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-users-partial.md',
-    renderSimpleFAQs(userFAQ.filter(isValid), linkableTerms)
+    renderSimpleFAQs(getStartedFAQ.filter(isValid), linkableTerms)
   )
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-nodes-partial.md',
@@ -150,6 +193,10 @@ async function generateFiles() {
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-building-partial.md',
     renderSimpleFAQs(buildFAQ.filter(isValid), linkableTerms)
+  )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-bridging-partial.md',
+    renderSimpleFAQs(bridgeFAQ.filter(isValid), linkableTerms)
   )
 }
 

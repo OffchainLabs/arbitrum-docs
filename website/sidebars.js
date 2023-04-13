@@ -409,45 +409,9 @@ const sidebars = {
       ]
     },
     {
-      type: "category",
-      label: "FAQs",
-      items: [
-        {
-          type: "doc",
-          id: "faqs/faqs-index",
-          label: "FAQ index"
-        },
-        {
-          type: "doc",
-          id: "faqs/gas-faqs",
-          label: "Gas"
-        },
-        {
-          type: "doc",
-          id: "faqs/nodes-faqs",
-          label: "Nodes"
-        },
-        {
-          type: "doc",
-          id: "faqs/x-chain-faqs",
-          label: "Cross-chain messaging"
-        },
-        {
-          type: "doc",
-          id: "faqs/protocol-faqs",
-          label: "Protocol"
-        },
-        {
-          type: "doc",
-          id: "faqs/tooling-faqs",
-          label: "Tooling"
-        },
-        {
-          type: "doc",
-          id: "faqs/misc-faqs",
-          label: "Misc"
-        }
-      ]
+      type: "doc",
+      id: "learn-more/faq",
+      label: "Frequently asked questions: Get started"
     },
     {
       type: "doc",
