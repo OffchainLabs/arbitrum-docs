@@ -91,7 +91,7 @@
 
 <p>Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the <em>Validators</em>.</p>
 
-<p>Arbitrum One's Validator set is currently whitelisted; overtime, the whitelist will grow and then be removed entirely. For more info see <a href="https://developer.arbitrum.io/mainnet-beta">"Mainnet Beta"</a>.</p>
+<p>Arbitrum One's Validator set is currently allowlisted; overtime, the allowlist will grow and then be removed entirely. For more info see <a href="https://developer.arbitrum.io/mainnet-beta">"Mainnet Beta"</a>.</p>
 
 
 
