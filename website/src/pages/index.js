@@ -88,7 +88,7 @@ function HomepageHeader(props) {
         {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/intro">
-            Gentle Introduction to Arbitrum 🔵
+            A gentle introduction to Arbitrum 🔵
           </Link>
         </div>
       </div>
