@@ -5,11 +5,13 @@ author: jason-wanxt
 content-type: how-to
 ---
 
-An Arbitrum **archive node** is a full node that maintains an archive of historical chain states. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data. Note that most users won't need to configure an archive node. This type of node is great for a small number of use-cases - for example, if you need to process historical data.
+An Arbitrum **archive node** is a full node that maintains an archive of historical chain states. This how-to walks you through the process of configuring an archive node on your local machine so that you can query both pre-Nitro and post-Nitro state data.
+
+Note that **most users won't need to configure an archive node**. This type of node is great for a small number of use-cases - for example, if you need to process historical data.
 
 ### Before we begin
 
-Before the Nitro upgrade happened, Arbitrum One was running on the Classic stack for about one year (before block height 2207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state (see [state migration](../migration/state-migration.mdx)), the Nitro stack can't serve archive requests for pre-Nitro blocks. **Running an Arbitrum One full node in archive mode lets you do this**, but it requires you to run both Nitro and Classic nodes together. You may not need to do this, depending on your use case:
+Before the Nitro upgrade happened, Arbitrum One was running on the Classic stack for about one year (before block height 2207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state (see [state migration](../migration/state-migration.mdx)), **the Nitro stack can't serve archive requests for pre-Nitro blocks**. Running an Arbitrum One full node in archive mode lets you access both pre-Nitro and post-Nitro blocks, but it requires you to run **both Classic and Nitro nodes** together. You may not need to do this, depending on your use case:
 
 | Use case                                                                         | Required node type(s)                                     | Docs                                                       |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
