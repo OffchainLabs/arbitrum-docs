@@ -1,4 +1,12 @@
-# Launch an L3 Chain
+---
+title: "A gentle introduction: Launch an L3 chain"
+description: "Launch your own L3 Arbitrum chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
+author: dzgoldman
+---
+
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+
+<PublicPreviewBannerPartial />
 
 The [Arbitrum Nitro codebase's](https://github.com/OffchainLabs/nitro) license now allows anybody to launch their own "L3" Arbitrum chain, a chain that runs on top of one of Arbitrum's L2s (currently Arbitrum One or Nova), settling via bridge contracts deployed on its underlying L2 chain. Developers don't need permission from the Arbitrum DAO, Offchain Labs, or anyone else to create their own L3s; they are also free to modify the Nitro codebase for their L3 however they chose.
 
