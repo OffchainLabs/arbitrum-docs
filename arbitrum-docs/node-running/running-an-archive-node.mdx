@@ -45,17 +45,7 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 
 Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
 
-### Required parameters
-
-| Parameter                                   | Description                                                                                                                                     |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [Node Providers](./node-providers.mdx)) |
-| `--l2.chain-id=<L2 Chain ID>`               | See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 chain IDs                                         |
-| `--node.caching.archive`                    | Required for running an **Arbitrum One** archival node and retains past block state                                                             |
-| `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache. |
-| `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum Classic** archival node.                                                                                     |
-
-### Configure ports
+### Review and configure ports
 
 <!-- todo: explain why these ports are important and what action needs to be taken - do rules need to be configured? -->
 
@@ -63,7 +53,7 @@ Note that other chains don't have Classic blocks, and thus don't require an init
 - Sequencer Feed: `9642`
 - WebSocket: `8548`
 
-### Run docker image
+### Run Docker image
 
 <!-- this is the procedure part, so we can focus on steps to take, and move "conceptual information" into a dedicated concept doc -->
 <!-- Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks. -->
@@ -97,3 +87,19 @@ The Docker image is configured to run as non-root `UID 1000`. If you're running 
 mkdir /some/local/dir/arbitrum-mainnet
 chmod -fR 777 /some/local/dir/arbitrum-mainnet
 ```
+
+### Review and configure parameters
+
+| Parameter                                   | Description                                                                                                                                     |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [Node Providers](./node-providers.mdx)) |
+| `--l2.chain-id=<L2 Chain ID>`               | See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 chain IDs                                         |
+| `--node.caching.archive`                    | Required for running an **Arbitrum One** archival node and retains past block state                                                             |
+| `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache. |
+| `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum Classic** archival node.                                                                                     |
+
+<!-- todo: FAQ -->
+
+### Troubleshooting
+
+If you run into any issues, visit the [Node-running Troubleshooting guide](./troubleshooting-running-nodes).
