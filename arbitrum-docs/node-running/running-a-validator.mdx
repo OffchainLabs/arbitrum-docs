@@ -25,7 +25,7 @@ Here we describe different types of validators and provide instructions on how t
 - Running a validator in `Watchtower` mode is the same as running a Nitro node with `--node.validator.enable --node.validator.strategy=Watchtower`
 - Here is an example of how to run a watchtower validator for Arbitrum One:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.12-65d4e7a --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Watchtower
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.13-174496c --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Watchtower
   ```
 - If a deviation is detected, a validator in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
 - To verify validator is working, this log line shows the wallet is setup correctly:
@@ -43,7 +43,7 @@ Here we describe different types of validators and provide instructions on how t
 - All other validators require a funded wallet to immediately post stake, as well as additional funds that will be spent at regular intervals
 - Here is an example of how to tell Nitro to create validator wallet for Arbitrum One and exit:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.12-65d4e7a --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --l1.wallet.only-create-key --l1.wallet.password="SOME SECURE PASSWORD"
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.13-174496c --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --l1.wallet.only-create-key --l1.wallet.password="SOME SECURE PASSWORD"
   ```
 - Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova. Be sure to backup the wallet, it will be the only way to withdraw stake when desired
 
@@ -54,7 +54,7 @@ Here we describe different types of validators and provide instructions on how t
 - If a defensive validator detects a deviation, it will log `bringing defensive validator online because of incorrect assertion`, and wait for funds to be added to wallet so stake can be posted and a dispute created
 - Here is an example of how to run a whitelisted defensive validator for Arbitrum One:
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.12-65d4e7a --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Defensive --l1.wallet.password="SOME SECURE PASSWORD"
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.0.13-174496c --l1.url=https://l1-mainnet-node:8545 --l2.chain-id=42161 --node.validator.enable --node.validator.strategy=Defensive --l1.wallet.password="SOME SECURE PASSWORD"
   ```
 - To verify validator is working, this log line shows the wallet is setup correctly:
   ```shell
