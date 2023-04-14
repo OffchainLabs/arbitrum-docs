@@ -11,11 +11,13 @@ An Arbitrum **archive node** is a full node that maintains an archive of histori
 
 Before the Nitro upgrade happened, Arbitrum One was running on the Classic stack for about one year (before block height 2207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state (see [state migration](../migration/state-migration.mdx)), the Nitro stack can't serve archive requests for pre-Nitro blocks. **Running an Arbitrum One full node in archive mode lets you do this**, but it requires you to run both Nitro and Classic nodes together. You may not need to do this, depending on your use case:
 
-- If you want to run an archive node for Nitro Goerli Rollup Testnet or Arbitrum Nova, see [How to run a full node](./running-a-node.md).
-- If you want to access the Arbitrum network but you don’t want to run your own node, see [Node Providers](./node-providers.mdx). This contains a list of third-party node providers and RPC addresses pointing to the fully-managed nodes.
-- If you only need to send **post-Nitro** archive requests, see [How to run a full node](./running-a-node.md).
-- If you only need to send **pre-Nitro** archive requests, see [How to run a classic node](./running-a-classic-node.mdx).
-- If you need both **post-Nitro** _and_ **pre-Nitro** archive requests, you should run **both** an archive Nitro node _and_ an archive Classic node. That's what this how-to is for.
+| Use case                                                                         | Required node type(s)                                     | Docs                                                       |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------- |
+| Run an **archive node** for **Nitro Goerli Rollup Testnet** or **Arbitrum Nova** | Full node (Nitro)                                         | [How to run a full node](./running-a-node.md)              |
+| Access the **Arbitrum network** but you don’t want to run your own node          | Fully managed by third-parties, exposed via RPC endpoints | [Node Providers](./node-providers.mdx)                     |
+| Send **post-Nitro** archive requests                                             | Full node (Nitro)                                         | [How to run a full node](./running-a-node.md)              |
+| Send **pre-Nitro** archive requests                                              | Full node (Classic)                                       | [How to run a classic node](./running-a-classic-node.mdx)  |
+| Send **post-Nitro** _and_ **pre-Nitro** archive requests                         | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place. |
 
 ### System requirements
 
@@ -28,29 +30,28 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 1. **RAM:** 16GB+ for Nitro and 32GB+ for Classic
 2. **CPU:** 4+ core CPU
 3. **Storage:** Minimum 2TB SSD (make sure it is extendable)
-4. Latest Docker image for **Arbitrum One**: `offchainlabs/nitro-node:v2.0.13-174496c`
-5. Latest Docker image for **Arbitrum Classic**: `offchainlabs/arb-node:v1.4.5-e97c1a4`
-6. Arbitrum One Nitro genesis database snapshot
-   - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize the Nitro database
-   - SHA256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
-   - Size: 33.5573504 GB
-7. Arbitrum One Classic database snapshot
-   - Download the latest Arbitrum One Classic database snapshot `"https://snapshot.arbitrum.io/mainnet/db.tar"` and put it to the mounted point directory.
+4. **Docker images:**
+   - Latest Docker image for **Arbitrum One**: `offchainlabs/nitro-node:v2.0.13-174496c`
+   - Latest Docker image for **Arbitrum Classic**: `offchainlabs/arb-node:v1.4.5-e97c1a4`
+5. **Database snapshots:**
+   - Arbitrum One Nitro genesis database snapshot
+     - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize the Nitro database
+     - SHA256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
+     - Size: 33.5573504 GB
+   - Arbitrum One Classic database snapshot
+     - Download the latest Arbitrum One Classic database snapshot `"https://snapshot.arbitrum.io/mainnet/db.tar"` and put it to the mounted point directory.
 
 Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
 
 ### Required parameters
 
-- `--l1.url=<Layer 1 Ethereum RPC URL>`
-  - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
-- `--l2.chain-id=<L2 Chain ID>`
-  - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
-- `--node.caching.archive`
-  - Required for running an Arbitrum One archival node and retains past block state
-- `--node.cache.allow-slow-lookup`
-  - Required for running an Arbitrum Classic archival node. When this option is present, will load old blocks from disk if not in memory cache.
-- `--core.checkpoint-gas-frequency=156250000`
-  - Required for running an Arbitrum Classic archival node.
+| Parameter                                   | Description                                                                                                                                     |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [Node Providers](./node-providers.mdx)) |
+| `--l2.chain-id=<L2 Chain ID>`               | See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 chain IDs                                         |
+| `--node.caching.archive`                    | Required for running an **Arbitrum One** archival node and retains past block state                                                             |
+| `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache. |
+| `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum Classic** archival node.                                                                                     |
 
 ### Configure ports
 
