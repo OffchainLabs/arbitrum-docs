@@ -17,7 +17,7 @@ An archival node is a full (nitro) node that also builds an archive of historica
 
 ### Required Artifacts
 
-- Latest Docker Image for Arbitrum One: `offchainlabs/nitro-node:v2.0.11-8e786ec`
+- Latest Docker Image for Arbitrum One: `offchainlabs/nitro-node:v2.0.13-174496c`
 - Latest Docker Image for Arbitrum Classic: `offchainlabs/arb-node:v1.4.5-e97c1a4`
 
 - Arbitrum One Nitro Genesis Database Snapshot
@@ -58,7 +58,7 @@ An archival node is a full (nitro) node that also builds an archive of historica
   
 - An example of how to run an Arbitrum One archival node:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive 
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.13-174496c --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive 
   ```
 - An example of how to run an Arbitrum Classic archival node:
   ```shell
