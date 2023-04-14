@@ -213,6 +213,14 @@ const config = {
          */
         playgroundPosition: 'top',
       },
+      mermaid: {
+        options: {
+          securityLevel: 'loose',
+          flowchart: {
+            curve: 'basis',
+          },
+        }
+      }
     }),
 };
 
