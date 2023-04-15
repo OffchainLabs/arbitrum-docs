@@ -110,14 +110,14 @@ To let's find out which is custom error this signature represents, we can use th
 
 
 ### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs? {#why-am-i-getting-error-429-too-many-requests-when-using-one-of-offchain-labs-public-rpcs}
-<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/running-a-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
+<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you are hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/running-a-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
 
 <p></p>
 
 
 
 ### How do block.timestamp and block.number work on Arbitrum? {#how-do-blocktimestamp-and-blocknumber-work-on-arbitrum}
-<p>Solidity calls to <code>block.number</code> and <code>block.timestamp</code> on Arbitrum will return the block number/ timestamp of the under lying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.</p>
+<p>Solidity calls to <code>block.number</code> and <code>block.timestamp</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.</p>
 
 <p>For more info, see <a href="https://developer.arbitrum.io/time">block numbers and time</a>.</p>
 
@@ -128,7 +128,7 @@ To let's find out which is custom error this signature represents, we can use th
 ### Do I need to download any special npm libraries in order to use web3.js or ethers-js on Arbitrum?  {#do-i-need-to-download-any-special-npm-libraries-in-order-to-use-web3js-or-ethersjs-on-arbitrum-}
 <p>Nope; web3.js and ethers.js will work out of the box just like they do on L1 Ethereum.<br />
 <br />
-Once upon a time, Arbitrum developers were required to download supplemental packages with names like "arb-provider-ethers" and "arb-ethers-web3-bridge", but these packages are deprecated and no longer required! Any guide that directs devs to use them should be considered out-dated.</p>
+Once upon a time, Arbitrum developers were required to download supplemental packages with names like "arb-provider-ethers" and "arb-ethers-web3-bridge", but these packages are deprecated and no longer required! Any guide that directs devs to use them should be considered outdated.</p>
 
 <p></p>
 

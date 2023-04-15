@@ -1,5 +1,5 @@
 ### Why do I need ETH to use the Arbitrum network? {#why-do-i-need-eth-to-use-the-arbitrum-network}
-<p>When moving funds from Mainnet (L1) to Arbitrum (L2), you'll need ETH in your Arbitrum wallet. Even if you want only to use another, non-ETH, token, you will still need a small amount of ETH in your wallet on the Arbitrum network. This is because all Arbitrum transactions are powered by ETH. ETH is the currency used for gas fees.</p>
+<p>When moving funds (ETH and non-ETH) from Ethereum (L1) to Arbitrum (L2), you'll need to have ETH in your wallet on the corresponding Arbitrum chain. This is because ETH is the currency used for gas fees on Arbitrum and all Arbitrum transactions are powered by ETH.</p>
 
 <p></p>
 
@@ -8,11 +8,11 @@
 
 
 ### Do I need to pay a tip / Priority fee for my Arbitrum transactions? {#do-i-need-to-pay-a-tip--priority-fee-for-my-arbitrum-transactions}
-<p>Since transactions are processed in the order that the Sequencer receives them, no priority fee is necessary for Arbitrum transactions; if a transaction does include a priority fee, it will be refunded to the transaction's origin address at the end of execution.</p>
+<p>Since transactions are processed in the order that the Sequencer receives them, no priority fee is necessary for Arbitrum transactions; if a transaction does include a priority fee, it will be refunded to the transaction's origin address at the end of the execution.</p>
 
 
 
-### How can I see the balance of my Eth / Tokens on Arbitrum in my wallet? {#how-can-i-see-the-balance-of-my-eth--tokens-on-arbitrum-in-my-wallet}
+### How can I see the balance of my ETH / Tokens on Arbitrum in my wallet? {#how-can-i-see-the-balance-of-my-eth--tokens-on-arbitrum-in-my-wallet}
 <p>Most wallets are "connected" to one given network at a time. To view your Ether / Token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.</p>
 
 <p></p>
