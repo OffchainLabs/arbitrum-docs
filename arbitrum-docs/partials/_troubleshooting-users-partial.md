@@ -65,7 +65,7 @@
 
 
 
-### If there is a dispute, can my L2 transaction get reorged / throw out / "yeeted"? {#if-there-is-a-dispute-can-my-l2-transaction-get-reorged--throw-out--yeeted}
+### If there is a dispute, can my L2 transaction get reorged / thrown out / "yeeted"? {#if-there-is-a-dispute-can-my-l2-transaction-get-reorged--thrown-out--yeeted}
 <p>Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See <a href="https://developer.arbitrum.io/tx-lifecycle">Transaction Lifecycle</a>)</p>
 
 
@@ -76,12 +76,12 @@
 ## 
 
 
-### Are "Sequencers" the same thing as "Validators"? Can a centralized Sequencer do bad things like steal all my money? {#are-sequencers-the-same-thing-as-validators-can-a-centralized-sequencer-do-bad-things-like-steal-all-my-money}
+### Are "Sequencers" the same entities as "Validators"? Can a centralized Sequencer act maliciously (e.g., steal all my money)? {#are-sequencers-the-same-entities-as-validators-can-a-centralized-sequencer-act-maliciously-eg-steal-all-my-money}
 <p>No and no!</p>
 
 <p>An Arbitrum Chain's Sequencer(s) and Validators and completely distinct entities, with their own distinct roles.</p>
 
-<p>The <a href="https://developer.arbitrum.io/sequencer">Sequencer</a> is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reorder transactions or <em>temporarily</em> delay a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.</p>
+<p>The <a href="https://developer.arbitrum.io/sequencer">Sequencer</a> is the entity granted specific privileges over ordering transactions; once the Sequencer commits to an ordering (by posting a batch on Ethereum), it has no say over what happens next (i.e., execution). A malicious/faulty Sequencer can do things like reordering transactions or <em>temporarily</em> delaying a transaction's inclusion — things which could be, to be sure, annoying and bad — but can do nothing to compromise the chain's safety.</p>
 
 <p>The <em>Validators</em> are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.</p>
 
@@ -96,7 +96,7 @@
 
 
 ### Why was "one week" chosen for Arbitrum One's dispute window? {#why-was-one-week-chosen-for-arbitrum-ones-dispute-window}
-<p>Generally, some dispute period is necessary for Arbitrum Rollup so that validators have time to dispute an invalid assertion.<br />
+<p>Generally, some amount of time is necessary for the Arbitrum validators to dispute an invalid assertion.<br />
 <br />
 A week is expected to be more than enough time for validators to carry out an interactive dispute, assuming they don't encounter difficulty in getting their transactions included on L1. One week was chosen following the general consensus among the Ethereum research community — as well as other layer 2 projects — to provide enough time for the community to socially coordinate in the case of a coordinated Ethereum-staker censorship attack.</p>
 
@@ -105,9 +105,9 @@ A week is expected to be more than enough time for validators to carry out an in
 
 
 ### What's the state of Arbitrum One's decentralization? {#whats-the-state-of-arbitrum-ones-decentralization}
-<p>Arbitrum One runs on a <a href="https://github.com/OffchainLabs/nitro">full, feature complete implementation</a> of the Arbitrum Rollup protocol; given that this is still fairly new technology, however, we currently maintain administrative "training wheels." The centralized components of the system will be progressively phased out over time.</p>
+<p>See <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">"State of Progressive Decentralization"</a></strong>, or check out the work of our friends at <strong><a href="https://l2beat.com/scaling/risk/">L2BEAT</a></strong><strong>.</strong></p>
 
-<p>For status updates, see <a href="https://developer.arbitrum.io/mainnet-beta">"Mainnet Beta"</a>, or check out the work of our friends at <a href="https://l2beat.com/scaling/risk/">L2BEAT</a>.</p>
+<p></p>
 
 
 

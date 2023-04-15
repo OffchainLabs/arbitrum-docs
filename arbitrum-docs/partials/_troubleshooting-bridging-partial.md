@@ -1,5 +1,5 @@
 ### How do I move assets between One and Nova? {#how-do-i-move-assets-between-one-and-nova}
-<p>Both Arbitrum One and Arbitrum Nova run as layers on top of Ethereum. Thus, you can always move assets between the two chains in two steps by going "through" Ethereum. In other words: withdraw your assets on Arbitrum One to Ethereum and then deposit them onto Nova, or conversely, withdraw your assets from Nova on to Ethreum and then deposit them on to Arbitrum One. These steps can all be done at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.</p>
+<p>Both Arbitrum One and Arbitrum Nova run as layers on top of Ethereum. Thus, you can always move assets between the two chains in two steps by going "through" Ethereum. In other words: withdraw your assets from Arbitrum One to Ethereum and then deposit them onto Nova, or conversely, withdraw your assets from Nova on to Ethreum and then deposit them on to Arbitrum One. These steps can all be done at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.</p>
 
 <p>Some <a href="https://portal.arbitrum.one/#bridges">third party bridges</a> support transferring between Arbitrum One and Nova directly; (remember that third party bridges are created by third parties; DYOR!)</p>
 
@@ -10,12 +10,12 @@
 ### What fees do I have to pay when bridging funds from L1 to L2? {#what-fees-do-i-have-to-pay-when-bridging-funds-from-l1-to-l2}
 <p>When bridging over tokens from L1 to L2, you will have to sign one or two transactions with their corresponding fees:</p>
 
-<ol><li>If your bridging a token for the first time, you'll sign one <strong>approval transaction</strong>.</li>
+<ol><li>If you are bridging a token for the first time, you'll sign one <strong>approval transaction</strong>.</li>
 <li>In all cases, you'll sign a <strong>deposit transaction</strong> that will send your tokens to the Bridge.</li>
 </ol>
 <p></p>
 
-<p>Keep in mind that the approval transaction needs to be executed once per token and wallet. This means that if you bridge again the same token from the same wallet, you won't have to pay that transaction. However, if you bridge the same token from a different wallet, you will have to pay that transaction again.</p>
+<p>Keep in mind that the approval transaction needs to be executed once per token and wallet. This means that if you bridge the same token from the same wallet again, you won't have to pay for that transaction. However, if you bridge the same token from a different wallet, you will have to pay for that transaction again.</p>
 
 <p></p>
 
@@ -25,7 +25,7 @@
 
 
 
-### When I initiate withdrawal from Arbitrum, how long does it take before I receive my funds? {#when-i-initiate-withdrawal-from-arbitrum-how-long-does-it-take-before-i-receive-my-funds}
+### How long does it take before I receive my funds when I initiate withdrawal from Arbitrum chains (One and Nova)? {#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-withdrawal-from-arbitrum-chains-one-and-nova}
 <p><a href="https://developer.arbitrum.io/faqs/what-if-dispute#okay-okay-but-if-were-just-talking-about-an-l2-to-l1-message-and-assuming-theres-no-disputes-how-long-between-the-time-the-message-is-initiated-and-when-i-can-execute-it-on-l1-is-it-exactly-one-week"></a></p>
 
 <p>It will typically be <em>roughly</em> one week.</p>
