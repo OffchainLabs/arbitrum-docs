@@ -1,3 +1,5 @@
+import DepositEthDiagram from './diagrams/\_deposit-eth.mdx';
+
 # Token Bridging
 
 The Arbitrum protocol's ability to pass messages between L1 and L2 (see [L1 to L2 messaging](./arbos/l1-to-l2-messaging.mdx)) can be leveraged to trustlessly move assets from Ethereum to an Arbitrum chain and back. Any asset / asset type can in principle be bridged, including Ether, ERC20 tokens, ERC-721 tokens, etc.
@@ -11,6 +13,7 @@ function depositEth(address destAddr) external payable override returns (uint256
 ```
 
 As far as Ethereum knows, all deposited funds are held by Arbitrum's Bridge contract.
+<DepositEthDiagram />
 
 Withdrawing ether can be done using the [ArbSys](./arbos/precompiles#ArbSys) withdrawEth method:
 
@@ -91,7 +94,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 1. `L1ERC20Gateway` escrows tokens, and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on L2.
 1. `finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on L2.
 
-❗️ *[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `GatewayRouter.outboundTransfer`.*
+❗️ _[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `GatewayRouter.outboundTransfer`._
 
 Note that arbSomeERC20Token is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
 
@@ -127,10 +130,10 @@ Follow the following steps to get your token set up to use the Generic Custom Ga
   interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [TestArbCustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestArbCustomToken.sol).
 
 **2. Register Your Token on L1 to Your Token on L2 via the L1CustomGateway Contract**
-Have your L1 token's contract make an external call to `L1CustomGateway.registerTokenToL2`. This registration can alternatively be performed as an admin registration.
+Have your L1 token's contract make an external call to `L1CustomGateway.registerTokenToL2`. This registration can alternatively be performed as a chain-owner registration via [Arbitrum DAO](https://forum.arbitrum.foundation) proposal.
 
 **3. Register Your Token on L1 To the L1Gateway Router**
-After your token's registration to the Custom Gateway is complete, have your L1 token's contract make an external call to `L1GatewayRouter.setGateway`; this registration can also alternatively be performed as an admin registration.
+After your token's registration to the Custom Gateway is complete, have your L1 token's contract make an external call to `L1GatewayRouter.setGateway`; this registration can also alternatively be performed as a chain-owner registration via [Arbitrum DAO](https://forum.arbitrum.foundation) proposal.
 
 | If you have questions about your custom token needs, feel free to [reach out](https://discord.gg/ZpZuw7p). |
 | ---------------------------------------------------------------------------------------------------------- |

@@ -10,9 +10,29 @@
   width: 150px;
 }
 
-
-.landingPageLink{
+.landingPageLink {
   background-color: black;
   color: black;
   text-decoration: none;
+}
+
+#animate {
+  opacity: 0;
+  animation-duration: 1.2s;
+  animation-name: animate-pop;
+  animation-timing-function: cubic-bezier(0.23, 0.53, 0.74, 2.2);
+  animation-delay: 0.8s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes animate-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.1, 0.1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
 }

@@ -6,17 +6,17 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Arbitrum Documentation Center",
-  tagline: "Arbitrum Dev Docs",
+  title: "Arbitrum Docs",
+  tagline: "Arbitrum Docs",
   url: "https://developer.arbitrum.io/",
   baseUrl: "/",
   onBrokenLinks: "ignore",
   onBrokenMarkdownLinks: "warn",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
   markdown: {
     mermaid: true,
   },
-  themes: ["@docusaurus/theme-mermaid"],
+  themes: ["@docusaurus/theme-mermaid", "@docusaurus/theme-live-codeblock"],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "OffchainLabs", // Usually your GitHub org/user name.
@@ -39,9 +39,10 @@ const config = {
           path: "../arbitrum-docs/",
           sidebarPath: require.resolve("./sidebars.js"),
           routeBasePath: "/",
+          breadcrumbs: false,
           editUrl: function (s) {
-            // troubleshooting docs content has external source-of-truth:
-            if(s.docPath.includes("troubleshooting")) return undefined
+            // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
+            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
             return (
               "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
               s.docPath
@@ -49,10 +50,17 @@ const config = {
           },
           showLastUpdateTime: true,
         },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css')
+        }
       }),
     ],
   ],
   plugins: [
+    // todo: this breaks local builds on Windows
+    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
+    // ideally would be able to get `arbitrum-sdk/docs` generating on windows
+    // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -63,9 +71,8 @@ const config = {
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
-    require.resolve('docusaurus-lunr-search'),
+    require.resolve("docusaurus-lunr-search"),
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -75,7 +82,7 @@ const config = {
         customDomain: "https://twentyone-unreal.arbitrum.io", // Use a custom domain, see https://usefathom.com/support/custom-domains
       },
       navbar: {
-        title: "Arbitrum Dev Center",
+        title: "Arbitrum Docs",
         logo: {
           alt: "My Site Logo",
           src: "img/logo.svg",
@@ -83,33 +90,43 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "intro/intro",
+            docId: "for-devs/quickstart-solidity-hardhat",
             position: "left",
-            label: "Overview",
+            label: "Build decentralized apps",
+          },
+          {
+            type: "doc",
+            docId: "getting-started-users",
+            position: "left",
+            label: "Bridge tokens",
           },
           {
             type: "doc",
             docId: "node-running/running-a-node",
-            label: "Run a Node",
+            label: "Run a node",
             position: "left",
           },
           {
             type: "doc",
-            docId: "migration/dapp_migration",
+            docId: "chain-launching/launch-a-chain",
             position: "left",
-            label: "Build DApps",
+            label: "Launch an L3",
           },
           {
             type: "doc",
-            docId: "tx-lifecycle",
+            docId: "intro/intro",
             position: "left",
-            label: "Learn",
+            label: "Learn more",
           },
           {
             type: "dropdown",
             label: "Links",
             position: "right",
             items: [
+              {
+                href: "/sdk",
+                label: "SDK docs",
+              },
               {
                 href: "https://github.com/OffchainLabs/nitro",
                 label: "GitHub",
@@ -130,6 +147,7 @@ const config = {
           },
         ],
       },
+      // todo: descriptive footer
       footer: {
         style: "dark",
         links: [
@@ -148,6 +166,10 @@ const config = {
                 label: "Nova.arbitrum.io",
                 to: "https://nova.arbitrum.io/",
               },
+              {
+                label: "Nitro whitepaper",
+                to: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
+              }
             ],
           },
           {
@@ -181,11 +203,24 @@ const config = {
       },
       announcementBar: {
         id: "support_us",
-        content: `Note: Arbitrum is in mainnet beta, which includes trusted admin controls; use at your own risk! See <a rel="noopener noreferrer" href="/mainnet-beta">here</a> for details.`,
-        backgroundColor: "rgb(121 241 3)",
-        textColor: "#091E42",
-        isCloseable: true,
+        content: `Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>here</a>.`,
+        isCloseable: false,
       },
+      liveCodeBlock: {
+        /**
+         * The position of the live playground, above or under the editor
+         * Possible values: "top" | "bottom"
+         */
+        playgroundPosition: 'top',
+      },
+      mermaid: {
+        options: {
+          securityLevel: 'loose',
+          flowchart: {
+            curve: 'basis',
+          },
+        }
+      }
     }),
 };
 

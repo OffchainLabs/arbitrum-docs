@@ -55,10 +55,10 @@ const oldPathToNewPath = {
   "/faqs/what-if-dispute": "/faqs/protocol-faqs#q-dispute-reorg",
   "/faqs/seq-or-val": "/faqs/protocol-faqs#q-seq-vs-val",
   "/faqs/beta-status": "/mainnet-beta",
-  "/faqs/the-merge": "/"
+  "/faqs/the-merge": "/",
 };
 
-const getNewPath = _path => {
+const getNewPath = (_path) => {
   const path = _path.toLowerCase();
 
   for (let oldPath of Object.keys(oldPathToNewPath)) {
@@ -88,7 +88,7 @@ function HomepageHeader(props) {
         {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
         <div className={styles.buttons}>
           <Link className="button button--secondary button--lg" to="/intro">
-            Gentle Introduction to Arbitrum 🔵
+            A gentle introduction to Arbitrum 🔵
           </Link>
         </div>
       </div>

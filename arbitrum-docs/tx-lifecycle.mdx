@@ -4,7 +4,7 @@ As an introduction to the various components that compose the Arbitrum protocol,
 
 We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
 
-This overview will be focused on the Arbitrum Rollup protocol; see [Inside AnyTrust](./inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the system in its final form in terms of things like permissionless validation and contract upgradability; for the current state of the Arbitrum Mainnet chains, see ["Mainnet Beta"](./mainnet-beta.mdx).
+This overview will be focused on the Arbitrum Rollup protocol; see [Inside AnyTrust](./inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properies of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
 
 For clarity on any terminology that may be unfamiliar, see our [glossary](./intro/glossary.mdx).
 
@@ -77,7 +77,7 @@ How are we able to make such bold a claim? A few (related) things:
 - Once the Sequencer posts a batch, its transactions' ordering is entirely determined by the L1; the Sequencer effectively has no more say in our transaction's lifecycle at all.
 - The Inbox contract on L1 ensures that when the Sequencer posts a batch, it posts data sufficient for any Arbitrum Node to reconstruct and validate the state of the L2 chain; i.e., the availability of this "input" data is guaranteed by Ethereum itself.
 - Execution on Arbitrum is fully deterministic; i.e., a current chain state along with new input data is sufficient to compute the new chain state; thus, the moment this input data is available (i.e., when the Sequencer posts a batch), the L2 chain's state can be computed.
-- Arbitrum's fault-proof system is sound; i.e., if any validator (later) tries to deviate from the valid L2 state, an honest validator will ultimately be able challenge this and win. Since we already know that valid state will ultimately win out, we can treat our transaction as L1-finalized now.
+- Arbitrum's fault-proof system is sound; i.e., if any validator (later) tries to deviate from the valid L2 state, an honest validator will ultimately be able to challenge this and win. Since we already know that valid state will ultimately win out, we can treat our transaction as L1-finalized now.
 
 ### 4. Validator asserts RBlock that includes transaction
 

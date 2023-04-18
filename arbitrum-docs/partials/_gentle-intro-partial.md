@@ -1,8 +1,6 @@
-# A Gentle Introduction to Arbitrum
-
 #### Q: Hello! What’s Arbitrum?
 
-Hi! Arbitrum is a technology suite designed to scale Ethereum. You can use Arbitrum chains to do all things you do on Ethereum — use Web3 apps, deploy smart contracts, etc., but your transactions will be cheaper and faster. Our flagship product — Arbitrum Rollup — is an Optimistic rollup protocol that inherits Ethereum-level security.
+Hi! <a data-quicklook-from='arbitrum'>Arbitrum</a> is a technology suite designed to scale Ethereum. You can use Arbitrum chains to do all things you do on Ethereum — use Web3 apps, deploy smart contracts, etc., but your transactions will be cheaper and faster. Our flagship product — Arbitrum Rollup — is an Optimistic rollup protocol that inherits Ethereum-level security.
 
 #### Q: What, what’s “Ethereum”? What's a “smart contract”? Where am I?
 
@@ -33,7 +31,7 @@ Yes, indeed we can be. This is where the “rollup” part comes in. The data th
 
 The parties who move the Arbitrum chain state forward on L1 — i.e., making claims about the chain’s state, disputing other’s claims, etc. — are called validators.
 In practice, we don’t expect the average Arbitrum user to be interested in running a
-validator, just like the average Ethereum user typically doesn’t run their own layer 1 staking node. The crucial property, however, is that anybody can; becoming an Arbitrum validator requires no special permission ([post-mainnet beta](../mainnet-beta.mdx)), only that a user runs the [open source validator software](https://github.com/OffchainLabs/nitro) (and stakes Ether when/if they need to take action).
+validator, just like the average Ethereum user typically doesn’t run their own layer 1 staking node. The crucial property, however, is that anybody can; becoming an Arbitrum validator requires no special permission ([once the whitelist is lifted](https://docs.arbitrum.foundation/state-of-progressive-decentralization)), only that a user runs the [open source validator software](https://github.com/OffchainLabs/nitro) (and stakes Ether when/if they need to take action).
 
 Additionally, as long as there’s even just one honest validator, the chain will remain secure; i.e., it only takes one non-malicious fraud-prover to catch any number of malicious trouble-makers. These properties together make the system “trustless”; users are not relying on any special designated party for their funds to be secure.
 
@@ -69,3 +67,7 @@ For applications that require high transaction throughput and don’t require th
 #### Q: So there's more than one Arbitrum chain out there?
 
 Yep! The fact that multiple chains can run in parallel is a crucial perk to off-chain scaling technology. Currently, on Ethereum mainnet, there are 2 Arbitrum chains: one Arbitrum Rollup chain, called ["Arbitrum One,"](https://portal.arbitrum.one/) and one AnyTrust chain, called ["Nova"](https://nova.arbitrum.io/); users and developers can pick whatever suits their security / transaction cost needs.
+
+
+#### Q: Who makes decisions about the future of Arbitrum One and Arbitrum Nova?
+The Arbitrum One and Nova chains are owned by the Governance system; to learn more, see the [Arbitrum Governance docs](https://docs.arbitrum.foundation/).
