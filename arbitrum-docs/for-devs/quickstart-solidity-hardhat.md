@@ -125,7 +125,7 @@ Next, run `yarn hardhat` to configure Hardhat. Select `Create a JavaScript proje
 At this point, you should see the following items (among others) in your `decentralized-cupcakes` project directory:
 
 | Item                | Description                                                                                               |
-| ------------------- | --------------------------------------------------------------------------------------------------------- |
+|---------------------|-----------------------------------------------------------------------------------------------------------|
 | `contracts/`        | Contains your smart contracts. You should see the `Lock.sol` contract here.                               |
 | `scripts/`          | Contains scripts that you can use to interact with your smart contracts. You should see `deploy.js` here. |
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
@@ -306,7 +306,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2` (the first one)                                                                  | `WEB3-LOCALHOST` (the latest one)                                                          | `WEB3-ARB-GOERLI` (the next one)                                                       | `WEB3-ARB-MAINNET` (the final one)                                                        |
-| --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+|-----------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).        | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).    | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | <- same                                                                                    | <- same                                                                                | <- same                                                                                   |
@@ -441,8 +441,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 [^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called *validators*. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
-[^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
-
+[^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.md) for a beginner-friendly introduction to Arbitrum's rollup protocol.
 
 
 <!-- TODOs
