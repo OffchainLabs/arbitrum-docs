@@ -1,5 +1,13 @@
-### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs? {#why-am-i-getting-error-429-too-many-requests-when-using-one-of-offchain-labs-public-rpcs}
-<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/running-a-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
+### How does gas work on Arbitrum? {#how-does-gas-work-on-arbitrum}
+<p>Fees on Arbitrum chains are collected on L2 in the chains' native currency (ETH on both Arbitrum One and Nova).</p>
+
+<p>A transaction fee is comprised of both an L1 and an L2 component:</p>
+
+<p>The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See <a href="https://developer.arbitrum.io/arbos/l1-pricing">L1 Pricing</a>.)</p>
+
+<p>The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See [Gas](/arbos/gas.mdx)).</p>
+
+<p>L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.</p>
 
 <p></p>
 
@@ -41,13 +49,10 @@ To let's find out which is custom error this signature represents, we can use th
 
 
 
-### Do I need to pay a tip / Priority fee for my Arbitrum transactions? {#do-i-need-to-pay-a-tip--priority-fee-for-my-arbitrum-transactions}
-<p>Since transactions are processed in the order that the Sequencer receives them, no priority fee is necessary for Arbitrum transactions; if a transaction does include a priority fee, it will be refunded to the transaction's origin address at the end of execution.</p>
-
-
-
 ### How is the L1 portion of an Arbitrum transaction's gas fee computed?  {#how-is-the-l1-portion-of-an-arbitrum-transactions-gas-fee-computed-}
-<p>The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile.</p>
+<p>The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile. You can find more information about gas calculations in <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">Understanding Arbitrum: 2-Dimensional Fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a>.</p>
+
+<p></p>
 
 
 
@@ -75,26 +80,68 @@ To let's find out which is custom error this signature represents, we can use th
 
 <p><a href="https://github.com/NomicFoundation/hardhat/releases/tag/hardhat%402.12.2">Hardhat v2.12.2</a> added supports for forking networks like Arbitrum with custom transaction types, so if you're using hardhat, upgrade to 2.12.2!</p>
 
+<p></p>
 
-### References
-<ul><li><a href="https://github.com/NomicFoundation/hardhat/issues/2995">https://github.com/NomicFoundation/hardhat/issues/2995</a></li></ul>
+<p><strong>References</strong></p>
+
+<ul><li><a href="https://github.com/NomicFoundation/hardhat/issues/2995">https://github.com/NomicFoundation/hardhat/issues/2995</a></li>
+</ul>
+<p></p>
 
 
 
-### Why does it look like two identical transaction consume a different amount of gas? {#why-does-it-look-like-two-identical-transaction-consume-a-different-amount-of-gas}
+### Why does it look like two identical transactions consume a different amount of gas? {#why-does-it-look-like-two-identical-transactions-consume-a-different-amount-of-gas}
 <p></p>
 
 <p>Calling an Arbitrum node's <code>eth_estimateGas</code> RPC returns a value sufficient to cover both the L1 and L2 components of the fee for the current gas price; this is the value that, e.g., will appear in users' wallets in the "gas limit" field.</p>
 
 <p>Thus, if the L1 calldata price changes over time, it will appear (in e.g., a wallet) that a transaction's gas limit is changing. In fact, the L2 gas limit isn't changing, merely the total gas required to cover the transaction's L1 + L2 fees.</p>
 
-<p>See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">2-D fees</a> for more.</p>
+<p>See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">2-D fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a> for more.</p>
+
+<p></p>
+
+<p><strong>References</strong></p>
+
+<p><a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9</a></p>
 
 <p></p>
 
 
-### References
-<p><a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9</a></p>
+
+### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs? {#why-am-i-getting-error-429-too-many-requests-when-using-one-of-offchain-labs-public-rpcs}
+<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you are hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/running-a-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
+
+<p></p>
+
+
+
+### How do block.timestamp and block.number work on Arbitrum? {#how-do-blocktimestamp-and-blocknumber-work-on-arbitrum}
+<p>Solidity calls to <code>block.number</code> and <code>block.timestamp</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.</p>
+
+<p>For more info, see <a href="https://developer.arbitrum.io/time">block numbers and time</a>.</p>
+
+<p></p>
+
+
+
+### Do I need to download any special npm libraries in order to use web3.js or ethers-js on Arbitrum?  {#do-i-need-to-download-any-special-npm-libraries-in-order-to-use-web3js-or-ethersjs-on-arbitrum-}
+<p>Nope; web3.js and ethers.js will work out of the box just like they do on L1 Ethereum.<br />
+<br />
+Once upon a time, Arbitrum developers were required to download supplemental packages with names like "arb-provider-ethers" and "arb-ethers-web3-bridge", but these packages are deprecated and no longer required! Any guide that directs devs to use them should be considered outdated.</p>
+
+<p></p>
+
+<p></p>
+
+
+
+### How can I list my token on the Arbitrum Bridge? {#how-can-i-list-my-token-on-the-arbitrum-bridge}
+<p>The L2 token list used in the Arbitrum bridge is generated from the L1 tokens that are part of the token list of Uniswap, Gemini or Coinmarketcap. This is valid for L1-native tokens that have been bridged over to L2, and for L2-native tokens that have been bridged over to L1 as long as they are part of any of those lists.</p>
+
+<p>Currently, there isn't any L2-only token list.</p>
+
+<p></p>
 
 <p></p>
 

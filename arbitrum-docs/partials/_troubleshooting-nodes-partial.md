@@ -1,7 +1,5 @@
-### Why do I need an L1 node to run an Arbitrum node? {#why-do-i-need-an-l1-node-to-run-an-arbitrum-node}
-<p>On the node syncing stage, Arbitrum nodes read transactions from batches that were previously posted on L1 and have been executed. They then connect to the Sequencer feed to receive new incoming batched transactions that have not yet been posted on L1.</p>
-
-<p>When fully synced, the Arbitrum node uses the State Transition Function (STF) to consume transactions coming from the Sequencer feed and creates a new state. It also waits for the L1 batch to be posted. If the L1 batch that is finalized on L1 is different from what the Sequencer published, the node will change the state based on the L1 batched transactions.</p>
+### How do I run a node? {#how-do-i-run-a-node}
+<p>See instructions <a href="https://developer.arbitrum.io/node-running/running-a-node">here</a>! </p>
 
 <p></p>
 
@@ -23,8 +21,10 @@
 
 
 
-### How do I run a node? {#how-do-i-run-a-node}
-<p>See instructions <a href="https://developer.arbitrum.io/node-running/running-a-node">here</a>! </p>
+### Why do I need an L1 node to run an Arbitrum node? {#why-do-i-need-an-l1-node-to-run-an-arbitrum-node}
+<p>On the node syncing stage, Arbitrum nodes read transactions from batches that were previously posted on L1 and have been executed. They then connect to the Sequencer feed to receive new incoming batched transactions that have not yet been posted on L1.</p>
+
+<p>When fully synced, the Arbitrum node uses the State Transition Function (STF) to consume transactions coming from the Sequencer feed and creates a new state. It also waits for the L1 batch to be posted. If the L1 batch that is finalized on L1 is different from what the Sequencer published, the node will change the state based on the L1 batched transactions.</p>
 
 <p></p>
 
