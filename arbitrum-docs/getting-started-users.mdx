@@ -1,7 +1,7 @@
 ---
-title: "Quickstart: Bridge tokens using Arbitrum Bridge"
-description: "Learn how to use Arbitrum's Bridge to transfer tokens between Ethereum's L1 and Arbitrum's L2 chains."
-author: dzgoldman
+title: "Quickstart: Bridge Funds using the Arbitrum Bridge"
+description: "Learn how to use Arbitrum's Bridge to transfer ETH/ tokens between Ethereum's L1 and Arbitrum's L2 chains."
+author: mahsamoosavi
 ---
 
 import PublicPreviewBannerPartial from './partials/_public-preview-banner-partial.md'; 
@@ -10,32 +10,98 @@ import PublicPreviewBannerPartial from './partials/_public-preview-banner-partia
 
 _**Note: before interacting with a mainnet chain, users should familiarize themselves with the risks; see [Mainnet Beta](mainnet-beta)**_.
 
-#### Connect Your Wallet
+#### 1- Get Some Native Currency
 
-Connect [your wallet](https://portal.arbitrum.one/#wallets) to an Arbitrum chain, adding the chain's RPC endpoint if required.
+This tutorial assumes you have already downloaded a web3 wallet like MetaMask. If you don’t have a wallet, visit [portal page](https://portal.arbitrum.one/) to download one.
 
-#### Get Some Native Currency
-
-You'll need a chain's native currency to transact. You can either acquire funds directly on an Arbitrum chain, or get funds on a chain's underlying L1 and bridge it across. You can get testnet Ether from the following faucets:
+You'll also need a chain's native currency to transact. You can either acquire funds directly on an Arbitrum chain, or get funds on a chain's underlying L1 and bridge it across. You can get testnet Ether from the following faucets:
 
 - [Goerli](https://goerlifaucet.com/)
 - [Nitro Goerli Rollup](https://twitter.com/intent/tweet?text=Ok%20I%20need%20@arbitrum%20to%20give%20me%20Arbitrum%20Goerli%20testnet%20gas.%20I%20can't%20wait%20to%20start%20developing%20on%20@nitro_devnet.%20%20SEND%20HERE:%200xAddA0B73Fe69a6E3e7c1072Bb9523105753e08f8)
 
 [Supported centralized exchanges](https://portal.arbitrum.one/#centralizedexchanges) allow you to purchase (mainnet) Ether and withdraw it directly onto Arbitrum one.
 
-#### Deposit And Withdraw
+#### 1- Add a Network
 
-To move your Ether and Tokens between Arbitrum and Ethereum chains, visit [bridge.arbitrum.io](https://bridge.arbitrum.io/).
+To start using the Arbitrum bridge, you need to add the desired chain's RPC endpoint to your wallet. Here, we provide an example for doing this using the MetaMask wallet.
+You need to first click on the MetaMask extension on your browser, click MetaMask's network selector dropdown, and then click the `Add Network` button. 
+Click "Add a network manually" and then provide the information corresponding the the Arbitrum chain you want to connect to:
 
-#### Use L2 Dapps!
+![Add the desired Arbitrum Network to your MetaMask wallet](assets/getting_started_users_1.png)
 
-Interacting with Arbitrum chains will feel very similar to using Ethereum, just cheaper and faster! To get a sense of what's out there, you can check out our [portal page](https://portal.arbitrum.one/), where we showcase some of the dApps, wallets, and infrastructure currently live on Arbitrum One.
+##### Nitro Goerli Rollup Testnet:
+- Network Name: `Arbitrum Goerli`
+- New RPC URL: `https://goerli-rollup.arbitrum.io/rpc`
+- Chain ID: `421613`
+- Currency Symbol: `AGOR`
+- Block Explorer URL: `https://goerli.arbiscan.io`
 
-#### Build on Arbitrum
+##### Arbitrum One:
+- Network Name: `Arbitrum One`
+- New RPC URL: `https://arb1.arbitrum.io/rpc`
+- Chain ID: `42161`
+- Currency Symbol: `ETH`
+- Block Explorer URL: `https://arbiscan.io`
 
-Dapp developers can [build on Arbitrum seamlessly](getting-started-devs) using their favorite Ethereum tooling.
+##### Arbitrum Nova:
+- Network Name: `Arbitrum Nova`
+- New RPC URL: `https://nova.arbitrum.io/rpc`
+- Chain ID: `42170`
+- Currency Symbol: `ETH`
+- Block Explorer URL: `https://nova.arbiscan.io/`
 
-#### What's Next
+If you’re a developer you can also rely on some popular third party node providers to interact with public Arbitrum chain, see the list [here](node-running/node-providers.mdx).
+
+#### 2- Deposit Your ETH/ Tokens (L1 → L2)
+
+To move your Ether and tokens to Arbitrum chains, visit [bridge.arbitrum.io](https://bridge.arbitrum.io/). 
+Login to the bridge with your wallet and make sure you are connected to the Ethereum mainnet network.
+Now choose the desired network you wish to bridge to, e.g., Arbitrum One or Arbitrum Nova. Note that Arbitrum Goerli only appears if you are connected to the Goerli network rather than the Ethereum Mainnet.
+
+![Add the desired Arbitrum Network to your MetaMask wallet](assets/getting_started_users_2.png)
+
+Select the token you want to bridge in the token drop-down menu. You can also enable/disable the token lists by clicking `Manage Token lists` button on the bottom right corner of the drop-down menu.
+
+![Select the token to bridge](assets/getting_started_users_3.png)
+
+Enter the amount of ETH/ tokens you want to bridge over in the “Mainnet” field and then press `deposit`. Follow the prompts on MetaMask.
+
+_**Please make sure you leave enough ETH on your wallet to pay for the transaction, otherwise there will be no MetaMask popup.**_
+
+![Enter the amount of tokens to bridge](assets/getting_started_users_4.png)
+
+After you submit the transaction through MetaMask you can expect your funds to arrive on Arbitrum One within roughly 10 minutes to an hour (depending on the chain congestion).
+
+Also make sure your MetaMask wallet is set to any of the Arbitrum One **or** Arbitrum Nova **or** Arbitrum Goerli networks (depending on which one you chose to bridge to) so you can see your funds when they arrive.
+
+#### 3- Withdraw Your ETH/ Tokens (L2 -> L1)
+
+:::info There's At Least A 7 Day Withdrawal Period for Arbitrum One and Nova Networks
+Once you move your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least 7 days to recieve them on Ethereum Mainnet.
+For more details, see [here](https://developer.arbitrum.io/for-users/troubleshooting-users#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-withdrawal-from-arbitrum-chains-one-and-nova).
+
+:::
+
+To move your funds back to Ethereum Mainnet, your need to be logged in to the [Arbitrum bridge](https://bridge.arbitrum.io/) with your wallet and make sure you are connected to the Arbitrum network you want to withdraw from (Arbitrum One, Arbitrum Nova, or Arbitrum Goerli).
+Select the token you want to bridge in the token drop-down menu. 
+
+![Select the token to withdraw](assets/getting_started_users_5.png)
+
+Enter the amount of ETH/ tokens you want to bridge over in the `Arbitrum field` field and then press `withdraw`. Follow the prompts on MetaMask.
+
+_**Please make sure you leave enough ETH on your wallet to pay for the transaction, otherwise there will be no MetaMask popup.**_
+
+![Enter the amount of token to withdraw](assets/getting_started_users_6.png)
+
+A countdown will pop up stating you’ll get your funds in 7-8 days.
+
+You can check the status of your withdrawal by clicking on your profile on the top right and opening the `Transactions` tab, and claim it there when it’s ready.
+
+![See the transaction history](assets/getting_started_users_7.png)
+
+Once the countdown is done, switch to the Ethereum mainnet network on your wallet and press the `claim` button that has now turned blue to receive your funds!
+
+#### What's Next?
 
 The team working on Arbitrum is always interested and looking forward to engage with its users.
 Why not follow us on [Twitter](https://twitter.com/arbitrum) or join our community on [Discord](https://discord.gg/5KE54JwyTs)?
