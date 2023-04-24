@@ -109,10 +109,68 @@ const sidebars = {
       ]
     },
     {
+      type: "category",
+      label: "Developer tools and resources",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          label: "Overview",
+          id: "for-devs/dev-tools-and-resources/overview"
+        },
+        {
+          type: "doc",
+          label: "Arbitrum chains",
+          id: "public-chains"
+        },
+        {
+          type: "doc",
+          label: "Arbitrum useful addresses",
+          id: "useful-addresses"
+        },
+        {
+          type: "doc",
+          id: "node-running/node-providers",
+          label: "RPC providers / Node infrastructure"
+        },
+        {
+          type: "doc",
+          label: "Development frameworks",
+          id: "for-devs/dev-tools-and-resources/development-frameworks"
+        },
+        {
+          type: "doc",
+          label: "Web3 libraries and tools",
+          id: "for-devs/dev-tools-and-resources/web3-libraries-tools"
+        },
+        {
+          type: "doc",
+          label: "Monitoring tools and block explorers",
+          id: "for-devs/dev-tools-and-resources/monitoring-tools-block-explorers"
+        },
+        {
+          type: "doc",
+          label: "Debugging tools",
+          id: "for-devs/dev-tools-and-resources/debugging-tools"
+        },
+        {
+          type: "link",
+          label: "Arbitrum SDK",
+          href: "/sdk"
+        },
+        {
+          type: "link",
+          label: "Arbitrum tutorials",
+          href: "https://github.com/OffchainLabs/arbitrum-tutorials"
+        },
+      ]
+    },
+    {
       type: "doc",
       label: "Troubleshooting",
       id: "for-devs/troubleshooting-building"
     },
+    /*
     {
       type: "doc",
       label: "Public chains",
@@ -144,6 +202,7 @@ const sidebars = {
         }
       ]
     }
+    */
   ],
   bridgeTokensSidebar: [
     {
@@ -246,11 +305,13 @@ const sidebars = {
         }
       ]
     },
+    /*
     {
       type: "doc",
       id: "node-running/node-providers",
       label: "Third-party node providers"
     },
+    */
     {
       type: "doc",
       id: "node-running/troubleshooting-running-nodes",
