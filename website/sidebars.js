@@ -110,6 +110,23 @@ const sidebars = {
     },
     {
       type: "category",
+      label: "Arbitrum resources",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          label: "Chains",
+          id: "public-chains"
+        },
+        {
+          type: "doc",
+          label: "Useful addresses",
+          id: "useful-addresses"
+        },
+      ]
+    },
+    {
+      type: "category",
       label: "Developer tools and resources",
       collapsed: false,
       items: [
@@ -117,16 +134,6 @@ const sidebars = {
           type: "doc",
           label: "Overview",
           id: "for-devs/dev-tools-and-resources/overview"
-        },
-        {
-          type: "doc",
-          label: "Arbitrum chains",
-          id: "public-chains"
-        },
-        {
-          type: "doc",
-          label: "Arbitrum useful addresses",
-          id: "useful-addresses"
         },
         {
           type: "doc",
@@ -160,7 +167,7 @@ const sidebars = {
         },
         {
           type: "link",
-          label: "Arbitrum tutorials",
+          label: "Tutorials",
           href: "https://github.com/OffchainLabs/arbitrum-tutorials"
         },
       ]
