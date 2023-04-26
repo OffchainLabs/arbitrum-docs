@@ -41,7 +41,7 @@
 
 
 ### Is there a way to cancel a withdrawal from Arbitrum? {#is-there-a-way-to-cancel-a-withdrawal-from-arbitrum}
-<p>There is no way to cancel a withdrawal that has already initiated. However, you can claim your funds on L1 and deposit them again on L2 once the <a href="https://developer.arbitrum.io/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window">withdrawal period</a> has finished.</p>
+<p>There is no way to cancel a withdrawal that has been already initiated. However, you can claim your funds on L1 and deposit them again on L2 once the <a href="https://developer.arbitrum.io/learn-more/faq#why-was-one-week-chosen-for-arbitrum-ones-dispute-window">withdrawal period</a> is past.</p>
 
 <p></p>
 
