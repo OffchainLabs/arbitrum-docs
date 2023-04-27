@@ -104,6 +104,7 @@ content-type: quickstart
   - Defaults to `50000000`, cap on computation gas that can be used in `eth_call`/`estimateGas` (0 = no cap)
 - `--node.rpc.tx-fee-cap`
   - Defaults to `1`, cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)
-- `--ipcpath`
+- `--ipc.path`
   - Filename for IPC socket/pipe within the datadir (explicit paths escape it)
-  🔉 Note that `IPC` is not supported on the macOS yet, and hence, it will return connection refused if used
+  🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
+  🔉 Also note that this path is within the Docker container, you need to put it to the Docker mountpoint in order to use it
