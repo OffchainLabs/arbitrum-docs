@@ -1,5 +1,5 @@
 :::info KNOW MORE TOOLS?
 
-If you know other tools different than the ones listed here, contact us through the [Arbitrum Discord](https://discord.gg/arbitrum) or [open an issue](https://github.com/OffchainLabs/arbitrum-docs/issues/new) on our Github repository to share your knowledge.
+See something missing? Let us know on the [Arbitrum Discord](https://discord.gg/arbitrum) or by [opening an issue on GitHub](https://github.com/OffchainLabs/arbitrum-docs/issues/new).
 
 :::
