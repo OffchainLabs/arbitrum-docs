@@ -174,7 +174,7 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Troubleshooting",
+      label: "Troubleshooting: Building dApps",
       id: "for-devs/troubleshooting-building"
     },
     /*
@@ -224,7 +224,7 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Troubleshooting",
+      label: "Troubleshooting: Bridge tokens",
       id: "for-users/troubleshooting-users"
     },
   ],
