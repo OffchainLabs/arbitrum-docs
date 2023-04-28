@@ -51,3 +51,45 @@
 
 
 
+### **Is there any way to retrieve pre-nitro archive data from a nitro node?** {#is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node}
+<p>The pre-nitro stack is also referred to as a "classic" stack. Full nitro nodes start with a database that contains the information from the "classic" era. However, it is not possible for a nitro node to query archive information contained in "classic" blocks right away. To do that, you need to also run a classic node (<a href="https://developer.arbitrum.io/node-running/running-a-classic-node">instructions here</a>) and set the parameter <code>—node.rpc.classic-redirect=your-classic-node-RPC</code>.</p>
+
+<p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova and Arbitrum Goerli nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
+
+<p></p>
+
+
+
+### How can I verify that my node is syncing at a desirable speed? {#how-can-i-verify-that-my-node-is-syncing-at-a-desirable-speed}
+<p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
+
+<p></p>
+
+
+
+### How can I verify that my node is fully synced? {#how-can-i-verify-that-my-node-is-fully-synced}
+<p>You can make an <code>eth_syncing</code> RPC call to your node. If it returns false, it means that the node is fully synced. If it returns an object of information, it means it is still syncing. Here's how you can interpret that information:</p>
+
+<ul><li><code>{'lastl1blockNum'}</code> specifies what the node sees as the current L1 state</li>
+<li><code>{'blockNum'}</code> is what's the up-to-date L2 block the node is synced to</li>
+<li><code>{'messageOfLastBlock'}</code> is the message number of that block the node is synced to</li>
+<li><code>{'broadcasterQueuedMessagesPos'}</code> specifies the last message number that the feed has broadcasted</li>
+</ul>
+<p></p>
+
+
+
+### **Is there an alternative to docker when running a node?** {#is-there-an-alternative-to-docker-when-running-a-node}
+<p>We recommend running nitro nodes via docker, using the guides provided within our documentation. However, you can try to compile the code directly by following the steps described in the Dockerfile, or following <a href="https://developer.arbitrum.io/node-running/build-nitro-locally">this guide</a> for Debian. </p>
+
+<p></p>
+
+
+
+### **What are the minimum hardware requirements to run a full node?** {#what-are-the-minimum-hardware-requirements-to-run-a-full-node}
+<p>You can see the minimum hardware configuration <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this section</a>.</p>
+
+<p></p>
+
+
+
