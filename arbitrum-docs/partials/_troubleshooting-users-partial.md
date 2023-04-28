@@ -111,3 +111,34 @@ A week is expected to be more than enough time for validators to carry out an in
 
 
 
+### Are there any Fiat on-ramps that support Arbitrum? {#are-there-any-fiat-onramps-that-support-arbitrum}
+<p>Yes, you can find a list of Fiat on-ramps that support Arbitrum <a href="https://portal.arbitrum.io/one?categories=fiat-on-ramp">on our portal</a>.</p>
+
+<p></p>
+
+
+
+### How many blocks are needed for a transaction to be confirmed/finalized in Arbitrum? {#how-many-blocks-are-needed-for-a-transaction-to-be-confirmedfinalized-in-arbitrum}
+<p>There are two levels of finality in a <a href="https://developer.arbitrum.io/tx-lifecycle">transaction lifecycle</a>:</p>
+
+<ul><li>Soft finality: once the Sequencer receives and processes a transaction, it emits a receipt through the Sequencer's feed. At this point, if the Sequencer is trusted, the transaction will not be reordered and the state of the chain after processing the transaction can be determined.</li>
+<li>Hard finality: at this stage, assuming there's at least one well-behaved active Arbitrum validator, the client can treat their transaction's finality as equivalent to an ordinary Ethereum transaction.</li>
+</ul>
+<p></p>
+
+
+
+### Where can I find stats for Arbitrum? {#where-can-i-find-stats-for-arbitrum}
+<p>Although we currently don't maintain any stats dashboard for Arbitrum, you can find many <a href="https://dune.com/browse/dashboards?q=arbitrum">community created dashboards</a> in Dune.</p>
+
+<p></p>
+
+
+
+### Will transactions with a higher "gas price bid" be confirmed first? {#will-transactions-with-a-higher-gas-price-bid-be-confirmed-first}
+<p>There is no notion of mempool on Arbitrum, transactions are processed on a first come first served basis by the Sequencer. Thus, the gas price bid parameter does not influence the order in which a transaction is processed.</p>
+
+<p></p>
+
+
+
