@@ -144,6 +144,16 @@
     }
 }
 
+.medium-table {
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    td {
+        padding: 15px;
+    }
+}
+
 .dark-blue-background {
     background-color: #062455 !important;
 }
@@ -323,6 +333,13 @@ article {
 // #endregion
 
 // #region quickstart styles
+
+[class*="launch-a-chain"] {
+    table {
+        .medium-table;
+    }
+}
+
 
 [class*="quickstart-solidity-hardhat"] {
     table {

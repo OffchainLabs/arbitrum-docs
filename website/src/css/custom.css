@@ -204,6 +204,14 @@
 .small-table td {
   padding: 10px;
 }
+.medium-table {
+  font-size: 13px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+.medium-table td {
+  padding: 15px;
+}
 .dark-blue-background {
   background-color: #062455 !important;
 }
@@ -339,6 +347,14 @@ article .markdown p > code {
   padding: 3px 6px;
   border-radius: 3px;
   background-color: rgba(150, 150, 150, 0.2);
+}
+[class*="launch-a-chain"] table {
+  font-size: 13px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+[class*="launch-a-chain"] table td {
+  padding: 15px;
 }
 [class*="quickstart-solidity-hardhat"] table {
   font-size: 12px;
