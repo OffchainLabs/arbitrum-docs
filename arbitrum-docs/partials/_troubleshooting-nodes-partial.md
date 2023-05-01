@@ -68,13 +68,46 @@
 
 
 ### How can I verify that my node is fully synced? {#how-can-i-verify-that-my-node-is-fully-synced}
-<p>You can make an <code>eth_syncing</code> RPC call to your node. If it returns false, it means that the node is fully synced. If it returns an object of information, it means it is still syncing. Here's how you can interpret that information:</p>
+<p>You can make an <code>eth_syncing</code> RPC call to your node. When a nitro node is fully synced, <code>eth_syncing</code> returns the value <code>fals</code> (just like a normal Geth node).</p>
 
-<ul><li><code>{'lastl1blockNum'}</code> specifies what the node sees as the current L1 state</li>
-<li><code>{'blockNum'}</code> is what's the up-to-date L2 block the node is synced to</li>
-<li><code>{'messageOfLastBlock'}</code> is the message number of that block the node is synced to</li>
-<li><code>{'broadcasterQueuedMessagesPos'}</code> specifies the last message number that the feed has broadcasted</li>
+<p>When a nitro node is still syncing, <code>eth_syncing</code> returns a map of values to help understand why the node is not synced. Nitro execution and bottleneck are different from a normal Geth node, so <code>eth_syncing</code> output is unique to nitro. Here, we provide more details:</p>
+
+<p></p>
+
+<p><strong>Introduction: Messages, Batches, and Blocks:</strong></p>
+
+<p>Nitro node reads <strong>messages </strong>from the parent chain an optionally from the message feed. It executes these messages and produces <strong>blocks.</strong> Each message produces exactly one block (a message may contain multiple transactions). In most nitro chains, message number and block number are the same. However, Arbitrum One chain has pre-nitro blocks, so for that chain message 0 produced block #XXXX, the offset between message and block number is constant in the chain.</p>
+
+<p>On the parent chain, messages appear in batches. The number of messages per batch changes between batches.</p>
+
+<p></p>
+
+<p><strong><code>{'eth_syncing'}</code></strong><strong> Fields:</strong></p>
+
+<p>🔉 Note that the exact output for<code> eth_syncing</code> RPC call of an out-of-sync nitro node is not considered an stable API. It is still being actively developed and modified without notice between versions.</p>
+
+<p></p>
+
+<ul><li><code>{'batchSeen'}</code> is the  last batch number observed on the parent chain</li>
+<li><code>{'batchProcessed'}</code> is the last batch that was processed on the parent chain. Processing means dividing the batch into messages</li>
+<li><code>{'messageOfProcessedBatch'}</code> is the last message in the last processed batch</li>
+<li><code>{'msgCount'}</code> specifies the number of messages known/queued by the nitro node</li>
+<li><code>{'blockNum'}</code>  is the  last block created by the nitro node (up-to-date L2 block the node is synced to)</li>
+<li><code>{'messageOfLastBlock'}</code> is the message that was used to produce the block above</li>
+<li><code>{'broadcasterQueuedMessagesPos'}</code>  If ≠0, this is expected to be > msgCount. This field notes a message that was read from the feed but not processed because earlier messages are still missing</li>
+<li><code>{'lastL1BlockNum'}</code>, <code>lastl1BlockHash</code> The last block number and hash from parent chain that nitro sees. This is used to debug the parent-chain connection<br />
+</li>
 </ul>
+<p>🔉 Note that if the sync process encounters an error while trying to collect the data above (<em>not expected</em>) this error will be added to the response</p>
+
+<p><strong>Expected Stages of Syncing Nodes:</strong></p>
+
+<ul><li><code>{'batchSeen > batchProcessed'}</code> Some batches were still not processed</li>
+<li><code>{'msgCount > messageOfLastBlock'}</code> Some messages were processed but not all relevant blocks were built (usually the longest stage while syncing a new node)</li>
+<li><code>{'broadcasterQueuedMessagesPos > msgCount'}</code> Feed is ahead of last message known to the node  </li>
+</ul>
+<p></p>
+
 <p></p>
 
 
