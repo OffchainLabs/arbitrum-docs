@@ -84,9 +84,7 @@
 
 <p><strong><code>{'eth_syncing'}</code></strong><strong> Fields:</strong></p>
 
-<p>🔉 Note that the exact output for<code> eth_syncing</code> RPC call of an out-of-sync nitro node is not considered an stable API. It is still being actively developed and modified without notice between versions.</p>
-
-<p></p>
+<p>🔉 Note that the exact output for <code>eth_syncing</code> RPC call of an out-of-sync nitro node is not considered an stable API. It is still being actively developed and modified without notice between versions.</p>
 
 <ul><li><code>{'batchSeen'}</code> is the  last batch number observed on the parent chain</li>
 <li><code>{'batchProcessed'}</code> is the last batch that was processed on the parent chain. Processing means dividing the batch into messages</li>
@@ -104,11 +102,7 @@
 
 <ul><li><code>{'batchSeen > batchProcessed'}</code> Some batches were still not processed</li>
 <li><code>{'msgCount > messageOfLastBlock'}</code> Some messages were processed but not all relevant blocks were built (usually the longest stage while syncing a new node)</li>
-<li><code>{'broadcasterQueuedMessagesPos > msgCount'}</code> Feed is ahead of last message known to the node  </li>
-</ul>
-<p></p>
-
-<p></p>
+<li><code>{'broadcasterQueuedMessagesPos > msgCount'}</code> Feed is ahead of last message known to the node  </li></ul>
 
 
 
