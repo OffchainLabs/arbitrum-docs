@@ -68,7 +68,7 @@
 
 
 ### How can I verify that my node is fully synced? {#how-can-i-verify-that-my-node-is-fully-synced}
-<p>You can make an <code>eth_syncing</code> RPC call to your node. When a nitro node is fully synced, <code>eth_syncing</code> returns the value <code>fals</code> (just like a normal Geth node).</p>
+<p>You can make an <code>eth_syncing</code> RPC call to your node. When a nitro node is fully synced, <code>eth_syncing</code> returns the value <code>false</code> (just like a normal Geth node).</p>
 
 <p>When a nitro node is still syncing, <code>eth_syncing</code> returns a map of values to help understand why the node is not synced. Nitro execution and bottleneck are different from a normal Geth node, so <code>eth_syncing</code> output is unique to nitro. Here, we provide more details:</p>
 
