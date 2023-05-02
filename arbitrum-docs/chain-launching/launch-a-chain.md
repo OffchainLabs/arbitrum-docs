@@ -98,9 +98,8 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 | **Scalability**                     | Multiple chains help overcome scaling bottlenecks by dividing activity into opt-in environments with separate resource management.                                                                                                                                                |
 | **Flexible security models**        | Different chains can experiment with various security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees.                                                |
 | **Flexible execution environments** | Different chains can experiment with more-or-less restrictive execution environments that allow for tradeoffs. For example, although Arbitrum chains are fully EVM compatible, Orbit L3 chains can restrict smart contract functionality to optimize for performance or security. |
-| **Flexible permission**             | Orbit L3 chains let you create new Arbitrum chains beholden to governance mechanisms that you determine for your own needs, unlocking a rich, diverse plurality of interoperable Ethereum ecosystems.                                                                             |
+| **Flexible governance**             | Orbit L3 chains let you create new Arbitrum chains beholden to governance mechanisms that you determine for your own needs, unlocking a rich, diverse plurality of interoperable Ethereum ecosystems.                                                                             |
 | **Increased adoption of dApps**     | Orbit's optionality reduces the cost of progressive decentralization for devs, unlocking a new category of decentralized apps that are built under more autonomous, self-managed conditions.                                                                                      |
-
 
 
 :::danger
