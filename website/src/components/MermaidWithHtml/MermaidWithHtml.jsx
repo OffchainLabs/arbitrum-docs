@@ -48,6 +48,7 @@ const Nodes = ({ children }) => {
   useEffect(() => {
     mermaid.init(undefined, containerRef.current);
 
+    // trying to get the "hover & highlight" effect to work, low priority
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
@@ -101,6 +102,7 @@ const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections) 
       usedNodeIds.add(fromHtmlNodeId);
       usedNodeIds.add(toHtmlNodeId);
 
+      // line and arrow types could be configurable too
       return `${fromMermaidNode} -.-> ${toMermaidNode}`;
     })
     .join('\n  ');
