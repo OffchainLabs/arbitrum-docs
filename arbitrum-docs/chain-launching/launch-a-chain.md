@@ -58,9 +58,6 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 - Note that Arbitrum One and Arbitrum Nova implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. Both of these chains (and their underlying protocols) are owned and governed by the Arbitrum DAO. With Orbit L3 chains, you decide how to govern your chain[^2].
 
 
-
-
-
 ### What problem does Orbit solve?
 
 The Ethereum ecosystem is supported by a decentralized network of nodes that each run Ethereum's Layer 1 (L1) client software. This network occasionally becomes congested, resulting in unpredictable gas fees. This negatively affects developers who want to build fast, consistently affordable end-user experiences.
@@ -85,7 +82,7 @@ Some teams aren't yet able to adopt either of these chains because the underlyin
 | **Nitro extensibility**             | Orbit chains that implement the AnyTrust and Rollup protocols will be continuously upgraded as improvements are made, allowing your app chain to apply the same updates that the Arbitrum One and Nova chains receive.                                                                                                                                                                            |
 | **Chain composability**             | DApps built on Orbit L3 chains can submit transactions that settle to Arbitrum L2 chains, but they can also _________.                                                                                                                                                                                                                                                                            |
 | **Decentralization options**        | Arbitrum Rollup is exactly as decentralized and trustless as Ethereum; it introduces no additional trust assumptions. Arbitrum AnyTrust introduces the assumption that you can trust its Data Availability Committee to expedite the settlement of transactions to Ethereum's L1. Orbit L3 chains let you introduce your own additional trust assumptions to meet specific needs, or none at all. |
-| **Low upfront setup costs**         | Orbit L3 AnyTrust and Rollup chains give you a cost-competitive way to minimize setup costs when launching an app chain.                                                                                                                                                                                                                                                                          |
+| **Low upfront setup costs**         | Orbit L3 AnyTrust and Rollup chains can be created quickly and cheaply (todo - support this claim with numbers).                                                                                                                                                                                                                                                                                  |
 | **Security**                        | Orbit chains offer the same level of security as AnyTrust and Rollup chains by default, unless the tech stack is customized.                                                                                                                                                                                                                                                                      |
 | **Flexible technology options**     | Orbit lets you choose between Rollup, AnyTrust, or custom technology stacks. This makes Ethereum and Arbitrum technologies more valuable by allowing you to incorporate only the elements of the technologies that you need.                                                                                                                                                                      |
 | **Permissioned access**             | Orbit lets you enforce transaction submission and contract deployment restrictions, ensuring compliance with relevant rules and regulations.                                                                                                                                                                                                                                                      |
@@ -159,6 +156,8 @@ Use the following table to determine which offering meets your needs:
 
 
 ### What are some caveats and considerations that I should keep in mind as I evaluate Orbit for my project?
+
+*// todo*
 
 - **Licensing**
 - **Scalability**
