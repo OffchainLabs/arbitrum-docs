@@ -1,4 +1,6 @@
-# Troubleshooting: BUIDling on Arbitrum
+---
+title: "Troubleshooting: Building Arbitrum dApps"
+---
 
 import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-building-partial.md';
 

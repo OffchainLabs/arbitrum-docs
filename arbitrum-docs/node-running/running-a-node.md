@@ -7,7 +7,7 @@ reader-task: run a node with minimal effort and maximum understanding
 content-type: quickstart
 ---
 
-Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+🔉 Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 ### Minimum Hardware Configuration
 
@@ -17,7 +17,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   - Storage: Minimum 1.2TB SSD (make sure it is extendable)
   - Estimated Growth Rate: around 3 GB per day
 
-❗️Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
+🔉 Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
 
 ### Required Artifacts
 
@@ -104,3 +104,7 @@ Note: If you’re interested in accessing an Arbitrum chain, but you don’t wan
   - Defaults to `50000000`, cap on computation gas that can be used in `eth_call`/`estimateGas` (0 = no cap)
 - `--node.rpc.tx-fee-cap`
   - Defaults to `1`, cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap)
+- `--ipc.path`
+  - Filename for IPC socket/pipe within the datadir (explicit paths escape it)
+  - 🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
+  - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it

@@ -1,4 +1,6 @@
-# Troubleshooting: Using Arbitrum
+---
+title: "Troubleshooting: Bridge funds using the Arbitrum Bridge"
+---
 
 import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-bridging-partial.md';
 
