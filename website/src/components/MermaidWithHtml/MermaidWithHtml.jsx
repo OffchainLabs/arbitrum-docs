@@ -20,6 +20,7 @@ const NodeDescriptions = ({ children }) => {
   useEffect(() => {
     if (listRef.current) {
       listRef.current.childNodes.forEach((nodeInfo) => {
+        // todo: wire up highlighting here
         nodeInfo.classList.add("node-description");
       });
     }
