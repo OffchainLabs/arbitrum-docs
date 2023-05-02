@@ -2,6 +2,8 @@
 title: "A gentle introduction: Launch an L3 chain with Orbit"
 description: "Launch your own L3 Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
 author: oliviaJ3388
+sidebar_position: 1
+sidebar_label: "A gentle introduction: Arbitrum Orbit"
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
@@ -11,29 +13,52 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 ### In a nutshell:
 
-- **Arbitrum Orbit** is a new product offering that lets you create **your own special-purpose blockchains** that settle to Arbitrum's L2 chains.
-- Orbit L3 chains benefit from **Arbitrum's continuous improvements** to the Nitro codebase, but **you own your Orbit chain(s)** and can **customize their governance**.
-- This means that you can:
-    - Launch a **sovereign Nitro chain** with **dedicated throughput** and **traffic isolation** for increased **gas price reliability**.
-    - Build an app chain that benefits from Nitro's fraud proofs, advanced compression, EVM-compatibility, and EVM-extensibility.
+- Arbitrum Orbit is a new product offering that lets you create your own blockchains that settle to Arbitrum's L2 chains.
+- Orbit L3 chains benefit from Arbitrum's continuous improvements to the Nitro codebase, but **you own your Orbit chain(s)** and can customize their governance[^1].
+- Examples of possibilities that this unlocks:
+    - **Launch a sovereign Nitro chain** that benefits from Nitro's fraud proofs, advanced compression, EVM-compatibility, and EVM-extensibility.
+    - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
     - **Permission access** to control who can read and write chain data, who can deploy smart contracts, etc.
     - **Fork the AnyTrust protocol** and run your own modified version of the Arbitrum Nova chain with your own fee token and data availability committee.
-    - ...and many other things. [See below](#todo) for more detailed examples.
-- While Arbitrum One and Arbitrum Nova are governed by the Arbitrum DAO[^1], **you own your Orbit chain(s)** and can **customize their governance**.
-- Get started by **visiting the Orbit Quickstart**, **exploring the docs**, or **reaching out to the Offchain Labs team** for support and guidance.
+- Get started by **visiting the [Orbit Quickstart](./quickstart-launch-l3-chain.md)**, **exploring the docs**, or **[reaching out to the Offchain Labs team on Discord](#todo)** for support and guidance.
 
 
 ### What's Orbit?
+ 
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
-- **Ethereum Mainnet** is a Layer 1 (L1) chain; Arbitrum One and Arbitrum Nova are Layer 2 (L2) chains; **Arbitrum Orbit** is a new technology that lets you create Layer 3 (L3) chains.
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Orbit (L3)</Node>
+    <Node id="2">Orbit (L3)</Node>
+    <Node id="3">Orbit (L3)</Node>
+    <Node id="4">Orbit (L3)</Node>
+    <Node id="5">One (L2)</Node>
+    <Node id="6">Nova (L2)</Node>
+    <Node id="7">Ethereum (L1)</Node>
+    <Connection from="1" to="5"/>
+    <Connection from="2" to="5"/>
+    <Connection from="3" to="6"/>
+    <Connection from="4" to="6"/>
+    <Connection from="5" to="7"/>
+    <Connection from="6" to="7"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific Layer 3 (L3) chains.<br/><br/>All Orbit L3 chains settle to either Arbitrum One or Arbitrum Nova, which both settle to Ethereum.</NodeDescription>
+    <NodeDescription for='3,4'><strong>Arbitrum One</strong> and <strong>Arbitrum Nova</strong> are public Layer 2 (L2) chains.</NodeDescription>
+    <NodeDescription for='5'><strong>Ethereum Mainnet</strong> is a public Layer 1 (L1) chain.</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
 - In the context of Arbitrum's ecosystem, **L3 chains are those that settle onto Arbitrum's L2 chains**.
 - You can think of Orbit L3 chains as **deployable, configurable forks of Arbitrum's L2 technology stack** that are tightly coupled to Arbitrum's L2 chains.
 - You can also think of them as **app chains** - special-purpose chains that implement only those pieces of the Arbitrum technology stack that you want.
 - This gives you another way to **progressively decentralize** your applications, incrementally adopting the properties and security assumptions of Ethereum's base layer, all while benefiting from Arbitrum's continuous improvements.
-- Note that Arbitrum One and Arbitrum Nova implement the Arbitrum Rollup and AnyTrust protocols, respectively. Both of these chains (and their underlying protocols) are owned and governed by the Arbitrum DAO. With Orbit L3 chains, you decide how to govern your chain[^2].
+- Note that Arbitrum One and Arbitrum Nova implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. Both of these chains (and their underlying protocols) are owned and governed by the Arbitrum DAO. With Orbit L3 chains, you decide how to govern your chain[^2].
 
 
-*// todo: minimum-viable diagram to get to “ah ha!” instantly*
+
 
 
 ### What problem does Orbit solve?
@@ -42,12 +67,10 @@ The Ethereum ecosystem is supported by a decentralized network of nodes that eac
 
 Layer-2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by offloading some of Ethereum Mainnet's work to another “layer” of networked nodes that do the same work in the same way, but on their own chains - Arbitrum One and Arbitrum Nova, respectively. The choice between One and Nova represents a **tradeoff** between decentralization and performance[^3].
 
-Despite the flexibility that One an Nova offer, some teams aren't yet able to adopt public chains because the underlying mechanisms (chain protocols, governance mechanisms, permissioning, etc) don't offer enough flexibility. These teams need a higher degree of configurability, interoperability, and ownership over their chains. This is the problem that Arbitrum Orbit solves.
+Some teams aren't yet able to adopt either of these chains because the underlying mechanisms (chain protocols, governance mechanisms, permissioning, etc) don't offer enough flexibility. These teams need a higher degree of configurability, interoperability, and ownership over their chains. This is the problem that Arbitrum Orbit solves.
 
 
 ### How does Orbit help me build decentralized apps?
-
-Here's a quick overview of the benefits that Orbit offers to developers:
 
 
 | Benefit                             | Description                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -83,54 +106,72 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 
 
 
-### How do I decide between Ethereum (L1) / Arbitrum One (L2) / Arbitrum Nova (L2) / Orbit (L3)?
+:::danger
+
+Content and structure below this line is in rough shape - will be updated soon.
+
+:::
+
+
+### There are a lot of chains to choose from! How do I pick one?
 
 Use the following table to determine which offering meets your needs:
 
-*// todo: rearticulate as needs-oriented, add checkmarks with asterisks as-needed, remove text if possible, consolidating into above table*
+
+| Property                    | Orbit Rollup | Orbit AnyTrust | One    | Nova     | Ethereum |
+| --------------------------- | ------------ | -------------- | ------ | -------- | -------- |
+| Layer                       | 3            | 3              | 2      | 2        | 1        |
+| Protocol                    | Rollup       | AnyTrust       | Rollup | AnyTrust | Ethereum |
+| Underlying tech stack       |              |                |        |          |          |
+| Governance                  |              |                |        |          |          |
+| Data Availability Committee |              |                |        |          |          |
+| Throughput                  |              |                |        |          |          |
+| Licensing                   |              |                |        |          |          |
+| Ownership                   |              |                |        |          |          |
+| Permissioning               |              |                |        |          |          |
+| EVM+ compatibility          |              |                |        |          |          |
+| Configurability             |              |                |        |          |          |
+| Sovereignty                 |              |                |        |          |          |
+| Gas price reliability       |              |                |        |          |          |
+| Fee tokens                  |              |                |        |          |          |
+| Access to liquidity         |              |                |        |          |          |
+| Scalability                 |              |                |        |          |          |
+| Traffic isolation           |              |                |        |          |          |
+| Nitro upgrades              |              |                |        |          |          |
+| Chain composability:        |              |                |        |          |          |
+| Decentralization options    |              |                |        |          |          |
+| Upfront costs               |              |                |        |          |          |
+| Security model              |              |                |        |          |          |
+| Regulatory compliance       |              |                |        |          |          |
 
 
-
-| Need                        | Arbitrum Orbit (L3)                                                                                                                                         | Arbitrum Nova (L2) | Arbitrum One (L2) | Ethereum L1 |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----------------- | ----------- |
-| Protocol                    | AnyTrust or Rollup                                                                                                                                          | AnyTrust           | Rollup            |             |
-| Underlying tech stack       | Nitro, or a fork of Nitro that you manage                                                                                                                   | Nitro              | Nitro             |             |
-| Governance                  |                                                                                                                                                             |                    |                   |             |
-| Data Availability Committee |                                                                                                                                                             |                    |                   |             |
-| Throughput                  | Dedicated. Orbit provides isolated activity from other projects, so there is no need to compete for computation and storage resources.                      |                    |                   |             |
-| Licensing                   |                                                                                                                                                             |                    |                   |             |
-| Ownership                   |                                                                                                                                                             |                    |                   |             |
-| Permissioning               | Orbit allows for permissioning of transaction submissions and contract deployments, which can be useful for compliance with regulatory frameworks.          |                    |                   |             |
-| EVM+ compatibility          | Orbit supports EVM-compatible smart contract code, and with Stylus, it will also support C, C++, and Rust languages.                                        |                    |                   |             |
-| Configurability             | Orbit chains can be customized to meet specific business, technical, and regulatory needs.                                                                  |                    |                   |             |
-| Independence                | Developers can create their own product roadmap, independent of public blockchain roadmaps.                                                                 |                    |                   |             |
-| Gas price reliability       | Orbit chains are isolated from traffic congestion on Arbitrum L2s, ensuring more reliable gas prices.                                                       |                    |                   |             |
-| Fee tokens                  | Developers can choose a custom fee token for their Orbit chain.                                                                                             |                    |                   |             |
-| Access to liquidity         | Orbit chains can access liquidity on Arbitrum One or Nova through fast bridging providers or other liquidity solutions.                                     |                    |                   |             |
-| Scalability                 | Orbit chains offer the ability to customize gas speed limit and gas price floor, providing scalability while maintaining isolation from public blockchains. |                    |                   |             |
-| Traffic isolation           | Orbit chains have traffic isolated from the main chain, ensuring smoother performance.                                                                      |                    |                   |             |
-| Nitro upgrades              | As the Nitro Tech stack is updated, Orbit chains utilizing AnyTrust and Rollup technology will be upgraded.                                                 |                    |                   |             |
-| Chain composability:        | L3-L3 communication is WIP, with L2-L3 communication possible through bridge providers and fast confirmations.                                              |                    |                   |             |
-| Decentralization options    | Developers can allowlist validators and select a data availability committee for their Orbit chain.                                                         |                    |                   |             |
-| Upfront costs               | Orbit chains have lower upfront setup costs for AnyTrust and Rollup compared to customizing the Nitro Tech stack.                                           |                    |                   |             |
-| Security model              | Orbit chains maintain the same trust assumptions as Arbitrum One and Nova, unless the tech stack is customized.                                             |                    |                   |             |
-| Regulatory compliance       | If L1/L2 solutions don't meet regulatory compliance needs, you can permission your Orbit chains to comply with regulatory requirements such as AML/KYC.     |                    |                   |             |
+<!--
+ - Orbit chains offer the ability to customize gas speed limit and gas price floor, providing scalability while maintaining isolation from public blockchains.
+ - Orbit chains can access liquidity on Arbitrum One or Nova through fast bridging providers or other liquidity solutions.
+ - Developers can choose a custom fee token for their Orbit chain.
+ - Orbit chains are isolated from traffic congestion on Arbitrum L2s, ensuring more reliable gas prices.
+ - Dedicated. Orbit provides isolated activity from other projects, so there is no need to compete for computation and storage resources.
+ Developers can allowlist validators and select a data availability committee for their Orbit chain.                                                     
+ Orbit chains have lower upfront setup costs for AnyTrust and Rollup compared to customizing the Nitro Tech stack.                                       
+ Orbit chains maintain the same trust assumptions as Arbitrum One and Nova, unless the tech stack is customized.                                         
+ If L1/L2 solutions don't meet regulatory compliance needs, you can permission your Orbit chains to comply with regulatory requirements such as AML/KYC. 
+-->
 
 
 ### What are some caveats and considerations that I should keep in mind as I evaluate Orbit for my project?
 
-- **Licensing** (intent: provide information)
-- **Scalability** (intent: highlight advantages)
-- **Settlement and Execution** (intent: show customization options)
-- **Trust Assumptions** (intent: compare security aspects)
-- **Permissions** (intent: showcase flexibility)
-- **Transaction Costs and Throughput** (intent: demonstrate performance benefits - caveat - may not be able to provide direction whether transaction costs will go up or down)
-- **Ownership and Extensibility** (intent: underline control and adaptability)
-- **Traffic Isolation and Gas Price Reliability** (intent: emphasize dedicated resources)
-- **Setup and Ongoing Costs** (intent: discuss affordability)
-- **Access to Liquidity and Chain Composability** (intent: explain connectivity)
-- **Configurability and Decentralization** (intent: highlight customization)
-- **Fee Token** (intent: mention customizability)
+- **Licensing**
+- **Scalability**
+- **Settlement and Execution**
+- **Trust Assumptions**
+- **Permissions**
+- **Transaction Costs and Throughput**
+- **Ownership and Extensibility**
+- **Traffic Isolation and Gas Price Reliability**
+- **Setup and Ongoing Costs**
+- **Access to Liquidity and Chain Composability**
+- **Configurability and Decentralization**
+- **Fee Token**
 - **Roadmap**
 
 
@@ -147,18 +188,19 @@ Use the following table to determine which offering meets your needs:
 
 
 
-### If I create an Orbit L3 chain, am I on the hook for hosting and maintenance (of eg chain db, validator nodes, etc)?
+### If I create an Orbit L3 chain, am I on the hook for hosting and maintenance?
 
-*// todo: is it more like IaaS, or does Arbitrum host and maintain the L3 chains under some convenient abstractions, like a PaaS provider?*
 
+*// todo: IaaS vs PaaS; comparisons with other models readers will find familiar*
+
+<!-- 
+- is it more like IaaS, or does Arbitrum host and maintain the L3 chains under some convenient abstractions, like a PaaS provider?
 - What elements of the L3 deployment will be L2 on-chain, vs on off-chain infrastructure?
 - Will I own the smart contracts that bridge between my L3 chain and the L2 chain?
 - Will I need to run my own nodes?
 - Will Offchain host my chain for me?
 - Will Offchain update my chain for me?
-
-
-
+-->
 
 
 ### I'd love to tinker with Orbit! What should I do next?
@@ -168,8 +210,6 @@ Use the following table to determine which offering meets your needs:
     - todo
 - Visit one of our **conceptual documents** for an educational introduction to Orbit's underlying technology:
     - todo
-
-
 
 
 
