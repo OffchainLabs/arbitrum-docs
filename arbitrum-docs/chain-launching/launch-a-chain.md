@@ -51,7 +51,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 </MermaidWithHtml>
 
 
-- In the context of Arbitrum's ecosystem, **L3 chains are those that settle onto Arbitrum's L2 chains**.
+- In the context of Arbitrum's ecosystem, **Orbit L3 chains are those that settle onto Arbitrum's L2 chains**.
 - You can think of Orbit L3 chains as **deployable, configurable forks of Arbitrum's L2 technology stack** that are tightly coupled to Arbitrum's L2 chains.
 - You can also think of them as **app chains** - special-purpose chains that implement only those pieces of the Arbitrum technology stack that you want.
 - This gives you another way to **progressively decentralize** your applications, incrementally adopting the properties and security assumptions of Ethereum's base layer, all while benefiting from Arbitrum's continuous improvements.
@@ -214,5 +214,5 @@ Use the following table to determine which offering meets your needs:
 
 
 [^1]: See [Arbitrum DAO docs](https://docs.arbitrum.foundation/new-arb-chains) for more info on the Arbitrum DAO's role in governing L2s.
-[^2]: Similar to how Arbitrum L2 chains are impacted by decisions made through Ethereum L1's governance mechanisms, Orbit L3 chains are impacted by decisions made through Arbitrum DAO's governance mechanisms. 
+[^2]: Similar to how Arbitrum L2 chains are impacted by decisions made through Ethereum L1's governance mechanisms, Orbit L3 chains are impacted by decisions made through Arbitrum DAO's governance mechanisms. Orbit L3 chains aren't entirely decoupled from Arbitrum L2, but they're effectively sovereign chains that settle to DAO-governed L2 chains.
 [^3]: A game developer may prioritize performance over decentralization while requiring an Ethereum-grade settlement layer. They'd probably select Arbitrum Nova over Arbitrum One because Arbitrum Nova's AnyTrust protocol introduces a small degree of democratically managed centralization that expedites the L2 chain's posting of transaction data back down to Ethereum's L1 chain, reducing time-to-finality. AnyTrust chains trade decentralization for performance, while Rollup chains (like One) maintain Ethereum-grade decentralization.
