@@ -19,8 +19,8 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 - Examples of possibilities that this unlocks:
     - **Launch a sovereign Nitro chain** that benefits from Nitro's fraud proofs, advanced compression, EVM-compatibility, and EVM-extensibility.
     - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
-    - **Permission access** to control who can read and write chain data, who can deploy smart contracts, etc.
-    - **Fork the AnyTrust protocol** and run your own modified version of the Arbitrum Nova chain with your own fee token and data availability committee.
+    - **Permission access** to control who can access your chain's data, and who can deploy smart contracts to your chain.
+    - **Create a custom fee token** and rapidly iterate on novel, domain-specific mechanism designs.
 - Get started by **visiting the [Orbit Quickstart](./quickstart-launch-l3-chain.md)**, **exploring the docs**, or **[reaching out to the Offchain Labs team on Discord](#todo)** for support and guidance.
 
 
