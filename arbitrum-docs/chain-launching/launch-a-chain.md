@@ -70,7 +70,7 @@ Some teams aren't yet able to adopt either of these chains because the underlyin
 
 ### How does Orbit help me build decentralized apps?
 
-*// todo - give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
+*// todo - tighten this up; give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
 
 
 
