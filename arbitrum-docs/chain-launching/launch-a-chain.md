@@ -53,7 +53,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 - In the context of Arbitrum's ecosystem, **Orbit L3 chains are those that settle onto Arbitrum's L2 chains**.
 - You can think of Orbit L3 chains as **deployable, configurable forks of Arbitrum's L2 technology stack** that are tightly coupled to Arbitrum's L2 chains.
-- You can also think of them as **app chains** - special-purpose chains that implement only those pieces of the Arbitrum technology stack that you want.
+- You can also think of them as **app chains** - special-purpose chains that implement only those pieces of the Arbitrum technology stack that your app needs.
 - This gives you another way to **progressively decentralize** your applications, incrementally adopting the properties and security assumptions of Ethereum's base layer, all while benefiting from Arbitrum's continuous improvements.
 - Note that Arbitrum One and Arbitrum Nova implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. Both of these chains (and their underlying protocols) are owned and governed by the Arbitrum DAO. With Orbit L3 chains, you decide how to govern your chain[^2].
 
