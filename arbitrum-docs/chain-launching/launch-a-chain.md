@@ -20,7 +20,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
     - **Launch a sovereign Nitro chain** that benefits from Nitro's fraud proofs, advanced compression, EVM-compatibility, and EVM-extensibility.
     - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
     - **Permission access** to control who can access your chain's data, and who can deploy smart contracts to your chain.
-    - **Create a custom fee token** and rapidly iterate on novel, domain-specific mechanism designs.
+    - **Create a custom fee token** to rapidly iterate on domain-specific mechanism designs and value capture opportunities.
 - Get started by **visiting the [Orbit Quickstart](./quickstart-launch-l3-chain.md)**, **exploring the docs**, or **[reaching out to the Offchain Labs team on Discord](#todo)** for support and guidance.
 
 
