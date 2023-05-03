@@ -13,8 +13,8 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 ### In a nutshell:
 
-- Arbitrum Orbit lets you **create your own blockchains** that settle to Arbitrum's L2 chains.
-- **You own your Orbit chain(s)** and can customize their privacy, permissions, fee tokens, governance[^1], and more.
+- Arbitrum Orbit lets you **create your own blockchain** that settles to Arbitrum's L2 chains.
+- **You own your Orbit chain** and can customize its privacy, permissions, fee token, governance[^1], and more.
 - Examples of possibilities that this unlocks:
     - **Launch a sovereign Nitro chain** that inherits Nitro's fraud proofs, advanced compression, EVM+ compatibility, and continuous improvements.
     - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
