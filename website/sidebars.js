@@ -163,7 +163,7 @@ const sidebars = {
         {
           type: "link",
           label: "Arbitrum SDK",
-          href: "/sdk"
+          href: "/sdk/index"
         },
         {
           type: "link",
