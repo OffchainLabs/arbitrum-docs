@@ -65,7 +65,7 @@ The Ethereum ecosystem is supported by a decentralized network of nodes that eac
 
 Layer-2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by offloading some of Ethereum Mainnet's work to another “layer” of networked nodes that do the same work in the same way, but on their own chains - Arbitrum One and Arbitrum Nova, respectively. The choice between One and Nova represents a **tradeoff** between decentralization and performance[^3].
 
-Some teams aren't yet able to adopt either of these chains because the underlying mechanisms (chain protocols, governance mechanisms, permissioning, etc) don't offer enough flexibility. These teams need a higher degree of configurability, interoperability, and ownership over their chains; they need more tradeoffs to choose from. This is the problem that Arbitrum Orbit solves.
+Some teams aren't yet able to adopt either of these chains because the underlying mechanisms (chain protocols, governance mechanisms, permissioning, etc) don't offer enough flexibility. These teams need a higher degree of configurability, interoperability, and/or ownership over their chains; they need more tradeoffs to choose from. This is the problem that Arbitrum Orbit solves.
 
 
 ### How does Orbit help me build decentralized apps?
