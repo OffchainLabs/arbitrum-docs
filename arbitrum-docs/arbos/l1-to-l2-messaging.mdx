@@ -1,4 +1,5 @@
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
+import RetryablesLifeCycleDiagram from './diagrams/\_deposit-eth.mdx';
 
 # L1 To L2 Messaging
 
@@ -8,9 +9,11 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 
 ## Retryable Tickets Lifecycle
 
-Here we walk through the different stages of the lifecycle of a retryable ticket.
+Here we walk through the different stages of the lifecycle of a retryable ticket, shown in the diagram below.
 
-1. Creating a retryable ticket is initiated with a transaction to the `createRetryableTicket` functiuon of the inbox contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
+<DepositEthDiagram />
+
+1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
 
     - `address to`: The destination L2 contract address
     - `uint256 l2CallValue`: The call value for retryable L2 message
@@ -21,17 +24,12 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     - `uint256 maxFeePerGas`: The Price bid for L2 execution of the ticket
     - `bytes calldata data`: ABI encoded data of L2 message
 
-2. As shown in th chart, the sender's deposit must be enough to make the submission succeed, cover the L1 submission and L2 execution of the ticket.
-3. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (submissionCost +l2CallValue) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
+2. As shown in the diagram above, the sender's deposit must be enough to make the submission succeed (i.e, cover the L1 submission and L2 execution of the ticket).
+3. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
 4. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID`.
-5. It is very important to note that the submission of a tuicket on L1 is separable / asynchronous with its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption.
-Assuming the sender has provided enough gas that can cover the L2 execution/redemption of the ticket on step 1, 
-ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called).
+5. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Assuming the sender has provided enough gas that can cover the L2 execution/redemption of the ticket on step 1,  ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
 
-Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
-
-- If the ticket is sucessfully redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user at L2 (`excessFeeRefundAddress`).
-Note that to ensure successful auto-redeem of the ticket, you could use Arbitrum SDK which provides a [function][https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215] that returns the desired gas parameters when sending L2-L1 messages.
+- If the ticket is sucessfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user at L2 (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, you could use the Arbitrum SDK which provides a [function][https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215] that returns the desired gas parameters when sending L2-L1 messages.
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected at L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (currently one week) and 
 _anyone_ can attempt to redeem it again by calling `ArbRetryableTx`'s redeem precompile method, which donates the call's gas to the next attempt. 
@@ -59,11 +57,15 @@ Note that during redemption of a ticket, attempts to cancel the same ticket, or 
 
 If a ticket with a callvalue is eventually discarded, having never successfully run, the escrowed callvalue will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (step 1).
 
-### Some Important Notes:
-- One can redeem live tickets using the [Arbitrum Retryables tx Panel][https://retryable-tx-panel-nitro.arbitrum.io]
+:::note Important Notes:
+
+- One can redeem live tickets using the [Arbitrum Retryables Transaction Panel][https://retryable-tx-panel-nitro.arbitrum.io]
 - The calldata of a ticket is saved on L2 until it is redeemed or expired 
-- Redeeming cost of a ticket will not increase over time, it only depends on the size of the calldata being kept
+- Redeeming cost of a ticket will not increase over time, it only depends on the size of the calldata being kept on L2
 - The reason a ticket expires after one week is so it frees up the space it is no longer using after that period
+
+:::
+
 
 
 ### Receipts
