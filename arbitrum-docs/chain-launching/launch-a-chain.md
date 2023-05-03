@@ -13,8 +13,9 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 ### In a nutshell:
 
-- Arbitrum Orbit is a new product offering that lets you create your own blockchains that settle to Arbitrum's L2 chains.
-- Orbit L3 chains benefit from Arbitrum's continuous improvements to the Nitro codebase, but **you own your Orbit chain(s)** and can customize their governance[^1].
+- Arbitrum Orbit lets you **create your own blockchains** that settle to Arbitrum's L2 chains.
+- Orbit L3 chains benefit from Arbitrum's continuous improvements to the Nitro codebase.
+- **You own your Orbit chain(s)** and can customize their governance[^1].
 - Examples of possibilities that this unlocks:
     - **Launch a sovereign Nitro chain** that benefits from Nitro's fraud proofs, advanced compression, EVM-compatibility, and EVM-extensibility.
     - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
@@ -46,7 +47,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
   <NodeDescriptions>
     <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific Layer 3 (L3) chains.<br/><br/>All Orbit L3 chains settle to either Arbitrum One or Arbitrum Nova, which both settle to Ethereum.</NodeDescription>
     <NodeDescription for='3,4'><strong>Arbitrum One</strong> and <strong>Arbitrum Nova</strong> are public Layer 2 (L2) chains.</NodeDescription>
-    <NodeDescription for='5'><strong>Ethereum Mainnet</strong> is a public Layer 1 (L1) chain.</NodeDescription>
+    <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
@@ -60,7 +61,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 ### What problem does Orbit solve?
 
-The Ethereum ecosystem is supported by a decentralized network of nodes that each run Ethereum's Layer 1 (L1) client software. This network occasionally becomes congested, resulting in unpredictable gas fees. This negatively affects developers who want to build fast, consistently affordable end-user experiences.
+The Ethereum ecosystem is supported by a decentralized network of nodes that each run Ethereum's Layer 1 (L1) client software. The network occasionally becomes congested, resulting in unpredictable gas fees. This negatively affects developers who want to build fast, consistently affordable end-user experiences.
 
 Layer-2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by offloading some of Ethereum Mainnet's work to another “layer” of networked nodes that do the same work in the same way, but on their own chains - Arbitrum One and Arbitrum Nova, respectively. The choice between One and Nova represents a **tradeoff** between decentralization and performance[^3].
 
