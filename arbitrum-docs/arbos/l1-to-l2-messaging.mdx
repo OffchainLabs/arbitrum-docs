@@ -11,14 +11,14 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 
 Here we walk through the different stages of the lifecycle of a retryable ticket, shown in the diagram below.
 
-<DepositEthDiagram />
+<RetryablesLifeCycleDiagram />
 
 1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
 
     - `address to`: The destination L2 contract address
     - `uint256 l2CallValue`: The callvalue for retryable L2 message
     - `uint256 maxSubmissionCost`: The maximum amount of gas to be paid for submitting the ticket. This amount is deducted from sender's L2 balance and is directly proportional to the size of the retryable’s data  
-    - `address excessFeeRefundAddress`: The L2 address to which the excess fee is creadited (gasLimit x maxFeePerGas - ticket execution cost)
+    - `address excessFeeRefundAddress`: The L2 address to which the excess fee is creadited (gasLimit * maxFeePerGas - ticket execution cost)
     - `address callValueRefundAddress`: The L2 address to which the l2Callvalue if the ticket times out or gets cancelled
     - `uint256 gasLimit`: Maximum amount of  gas deducted from sender's L2 balance to cover L2 execution of the ticket
     - `uint256 maxFeePerGas`: The Price bid for L2 execution of the ticket
