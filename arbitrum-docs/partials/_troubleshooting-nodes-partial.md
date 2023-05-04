@@ -74,7 +74,7 @@
 
 <p></p>
 
-<p><strong>Introduction: Messages, Batches, and Blocks:</strong></p>
+<p><strong>Messages, Batches, and Blocks:</strong></p>
 
 <p>Nitro node reads <strong>messages </strong>from the parent chain an optionally from the message feed. It executes these messages and produces <strong>blocks.</strong> Each message produces exactly one block (a message may contain multiple transactions). In most nitro chains, message number and block number are the same. However, Arbitrum One chain has pre-nitro blocks, so for that chain message 0 produced block #XXXX, the offset between message and block number is constant in the chain.</p>
 
@@ -84,7 +84,11 @@
 
 <p><strong><code>{'eth_syncing'}</code></strong><strong> Fields:</strong></p>
 
-<p>🔉 Note that the exact output for <code>eth_syncing</code> RPC call of an out-of-sync nitro node is not considered an stable API. It is still being actively developed and modified without notice between versions.</p>
+<p></p>
+
+<p>⚠️ <strong>Note that the exact output for </strong><strong><code>eth_syncing</code></strong><strong> RPC call of an out-of-sync nitro node is not considered a stable API. It is still being actively developed and modified  without notice between versions.</strong></p>
+
+<p></p>
 
 <ul><li><code>{'batchSeen'}</code> is the  last batch number observed on the parent chain</li>
 <li><code>{'batchProcessed'}</code> is the last batch that was processed on the parent chain. Processing means dividing the batch into messages</li>
@@ -96,7 +100,7 @@
 <li><code>{'lastL1BlockNum'}</code>, <code>lastl1BlockHash</code> The last block number and hash from parent chain that nitro sees. This is used to debug the parent-chain connection<br />
 </li>
 </ul>
-<p>🔉 Note that if the sync process encounters an error while trying to collect the data above (<em>not expected</em>) this error will be added to the response</p>
+<p>⚠️ <strong>Note that if the sync process encounters an error while trying to collect the data above (</strong><em><strong>not expected</strong></em><strong>) this error will be added to the response</strong></p>
 
 <p><strong>Expected Stages of Syncing Nodes:</strong></p>
 
