@@ -1,5 +1,6 @@
 ---
 sidebar_label: Configure your chain's infrastructure
+sidebar_index: 3
 ---
  
  
