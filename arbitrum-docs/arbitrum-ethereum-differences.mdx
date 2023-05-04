@@ -48,6 +48,11 @@ Comprehensive documentation on all generally available JSON-RPC methods for Ethe
 
 :::
 
+### `eth_syncing` RPC Method
+
+Calling `eth_syncing` returns false if not synchronizing (just like on Ethereum). However, if the node is still syncing, `eth_syncing` returns an object with data about the synchronization status. The returned object is different from what one would get on Ethereum, see [here](https://developer.arbitrum.io/node-running/faq#how-can-i-verify-that-my-node-is-fully-synced) for more details.
+
+
 ### Blocks
 
 When calling `eth_getBlockByHash` or `eth_getBlockByNumber`, Arbitrum includes a few additional fields and leverages some existing fields in different ways than mainnet Ethereum.
