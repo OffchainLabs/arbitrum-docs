@@ -2,6 +2,9 @@
 sidebar_label: Resource isolation
 ---
 
+import UnderConstructionPartial from '../partials/_under-construction-banner-partial.md'; 
+
+<UnderConstructionPartial />
  
  <!--
  - Running your dApp on a custom Orbit chain isolates your dApp's activity from other projects (eg those using Arbitrum L2 chains or Ethereum Mainnet directly)
