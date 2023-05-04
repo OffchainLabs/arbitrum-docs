@@ -43,6 +43,7 @@ If the fixed period (one week) elapses without a successful redeem, the ticket *
 [renew_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L207
 
 
+
 :::caution Avoid Losing Funds!
 
 If a ticket expires after 7 days without being redeemed or re-scheduled to a future date, any value it carries will get lost without possibility of recovering them.
@@ -59,13 +60,14 @@ If a ticket with a callvalue is eventually discarded, having never successfully 
 
 :::note Important Notes:
 
-- One can redeem live tickets using the [Arbitrum Retryables Transaction Panel][https://retryable-tx-panel-nitro.arbitrum.io]
+- One can redeem live tickets using the [Arbitrum Retryables Transaction Panel][retryable_dashboard_link]
 - The calldata of a ticket is saved on L2 until it is redeemed or expired 
 - Redeeming cost of a ticket will not increase over time, it only depends on the size of the calldata being kept on L2
 - The reason a ticket expires after one week is so it frees up the space it is no longer using after that period
 
 :::
 
+[retryable_dashboard_link]: https://retryable-tx-panel-nitro.arbitrum.io
 
 
 ### Receipts
