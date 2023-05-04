@@ -1,5 +1,6 @@
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
-import RetryablesLifeCycleDiagram from '../diagrams/\_retryables-lifecycle.mdx';
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
 
 # L1 To L2 Messaging
 
@@ -11,7 +12,30 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 
 Here we walk through the different stages of the lifecycle of a retryable ticket, shown in the diagram below.
 
-<RetryablesLifeCycleDiagram />
+Ticket submission:
+
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">🧍</Node>
+    <Node id="2">Inbox.createRetryableTicket()</Node>
+    <Node id="3">somethingElse()</Node>
+    <Node id="4">Fail</Node>
+    <Node id="5">Success</Node>
+    <Connection from="1" to="2"/>
+    <Connection from="2" to="3"/>
+    <Connection from="3" to="4"/>
+    <Connection from="3" to="5"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'>The user....</NodeDescription>
+    <NodeDescription for='2'>An asynchronous function that...</NodeDescription>
+    <NodeDescription for='3'>Logic within that determines...</NodeDescription>
+    <NodeDescription for='3'>If success...</NodeDescription>
+    <NodeDescription for='3'>If fail...</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
 
 1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
 
