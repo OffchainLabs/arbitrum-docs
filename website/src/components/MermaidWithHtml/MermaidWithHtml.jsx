@@ -1,3 +1,4 @@
+// see src/pages/mermaid-with-html.md for usage example
 import React, { useEffect, useRef, createContext } from 'react';
 import './MermaidWithHtml.css';
 import mermaid from 'mermaid';
