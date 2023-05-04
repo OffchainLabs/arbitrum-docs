@@ -1,5 +1,5 @@
 ---
-sidebar_label: L3 chain composability
+sidebar_label: Chain composability
 ---
 
 import UnderConstructionPartial from '@site/../arbitrum-docs/partials/_under-construction-banner-partial.md'; 

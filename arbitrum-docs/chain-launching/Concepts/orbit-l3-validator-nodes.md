@@ -1,5 +1,5 @@
 ---
-sidebar_label: L3 validator nodes
+sidebar_label: Validator nodes
 ---
 
 import UnderConstructionPartial from '@site/../arbitrum-docs/partials/_under-construction-banner-partial.md'; 
