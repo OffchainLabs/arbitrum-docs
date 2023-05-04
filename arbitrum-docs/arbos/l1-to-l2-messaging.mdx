@@ -13,6 +13,33 @@ A retryable is submitted via the `Inbox`'s `createRetryableTicket` method. In th
 
 ## Retryable Ticket Lifecycle
 
+Ticket submission:
+
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">🧍</Node>
+    <Node id="2">Inbox.createRetryableTicket()</Node>
+    <Node id="3">somethingElse()</Node>
+    <Node id="4">Fail</Node>
+    <Node id="5">Success</Node>
+    <Connection from="1" to="2"/>
+    <Connection from="2" to="3"/>
+    <Connection from="3" to="4"/>
+    <Connection from="3" to="5"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'>The user....</NodeDescription>
+    <NodeDescription for='2'>An asynchronous function that...</NodeDescription>
+    <NodeDescription for='3'>Logic within that determines...</NodeDescription>
+    <NodeDescription for='3'>If success...</NodeDescription>
+    <NodeDescription for='3'>If fail...</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
+
 See [here](../assets/retryable_flowchart.png) for a flowchart of the lifecycle of a retryable ticket.
 
 ### Submitting a Retryable
