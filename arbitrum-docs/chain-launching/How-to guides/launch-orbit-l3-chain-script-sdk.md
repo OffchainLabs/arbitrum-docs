@@ -1,6 +1,6 @@
 ---
 sidebar_label: Launch a new chain with the Orbit SDK
-sidebar_index: 1
+sidebar_position: 1
 ---
 
 import UnderConstructionPartial from '@site/../arbitrum-docs/partials/_under-construction-banner-partial.md'; 
