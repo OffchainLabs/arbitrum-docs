@@ -100,7 +100,9 @@
 <li><code>{'lastL1BlockNum'}</code>, <code>lastl1BlockHash</code> The last block number and hash from parent chain that nitro sees. This is used to debug the parent-chain connection<br />
 </li>
 </ul>
-<p>⚠️ <strong>Note that if the sync process encounters an error while trying to collect the data above (</strong><em><strong>not expected</strong></em><strong>) this error will be added to the response</strong></p>
+<p>⚠️ <strong>Note that if the sync process encounters an error while trying to collect the data above (</strong><em><strong>not expected</strong></em><strong>) this error will be added to the response.</strong></p>
+
+<p></p>
 
 <p><strong>Expected Stages of Syncing Nodes:</strong></p>
 
