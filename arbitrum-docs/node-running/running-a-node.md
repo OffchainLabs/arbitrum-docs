@@ -21,7 +21,7 @@ content-type: quickstart
 
 ### Required Artifacts
 
-- Latest Docker Image: `offchainlabs/nitro-node:v2.0.13-174496c`
+- Latest Docker Image: `offchainlabs/nitro-node:v2.0.14-2baa834`
 
 - Arbitrum One Nitro Genesis Database Snapshot
 
@@ -58,7 +58,7 @@ content-type: quickstart
   - Note that is important that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.13-174496c --l1.url https://l1-node:8545 --l2.chain-id=<L2ChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.14-2baa834 --l1.url https://l1-node:8545 --l2.chain-id=<L2ChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
   ```
 
   - Note that if you are running L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
@@ -108,3 +108,5 @@ content-type: quickstart
   - Filename for IPC socket/pipe within the datadir (explicit paths escape it)
   - 🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
   - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it
+- `--init.prune`
+  - pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after v2.0.14)
