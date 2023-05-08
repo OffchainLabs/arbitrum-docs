@@ -12,17 +12,35 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 
 Here we walk through the different stages of the lifecycle of a retryable ticket, shown in the diagram below.
 
-Ticket submission:
-
-
+Title: Ticket Submission:
 <MermaidWithHtml>
   <Nodes>
     <Node id="1">🧍</Node>
-    <Node id="2">Inbox.createRetryableTicket()</Node>
-    <Node id="3">msg.value >= maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas</Node>
-    <Node id="4">Fail</Node>
-    <Node id="5">Success</Node>
-    <Node id="6">Sender L2 Balance >= l2Basefee * gasLimit && maxFeePerGas >= l2Basefee</Node>
+    <Node id="2">Initiate an L1-L2 message</Node>
+    <Node id="3">Does the user have enough funds to create a ticket?</Node>
+    <Node id="4">if no- Ticket creation fails</Node>
+    <Node id="5">if yes- Ticket is created</Node>
+    <Connection from="1" to="2"/>
+    <Connection from="2" to="3"/>
+    <Connection from="3" to="4"/>
+    <Connection from="3" to="5"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'>The user who initiates an L1-L2 message</NodeDescription>
+    <NodeDescription for='2'>A call to `inbox.createRetryable` function that puts the message in the L2 inbox that can be re-executed for some fixed amount of time if it reverts</NodeDescription>
+    <NodeDescription for='3'>Logic that checks if the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas`
+                          This determines if the user's deposit alone will make the submission succeed</NodeDescription>
+    <NodeDescription for='4'>Ticket creation fails and no funds are deducted from the user</NodeDescription>
+    <NodeDescription for='5'>A ticket is created and added to the retryable buffer on L2
+                          Funds (`l2CallValue + submissionCost`) are deducted to cover the callvalue from the user and 
+                          placed into escrow (on L2) for later use in redeeming the ticket</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
+
+<!-- 
+ <Node id="6">Sender L2 Balance >= l2Basefee * gasLimit && maxFeePerGas >= l2Basefee</Node>
     <Node id="7">No</Node>
     <Node id="8">Success</Node>
     <Node id="9">Redeem is attempted?</Node>
@@ -34,11 +52,8 @@ Ticket submission:
     <Node id="15">No</Node>
     <Node id="16">Is the ticket redeemed?</Node>
     <Node id="17">Yes</Node>
-    <Node id="18">No</Node>
-    <Connection from="1" to="2"/>
-    <Connection from="2" to="3"/>
-    <Connection from="3" to="4"/>
-    <Connection from="3" to="5"/>
+    <Node id="18">No</Node> 
+
     <Connection from="5" to="6"/>
     <Connection from="6" to="7"/>
     <Connection from="6" to="8"/>
@@ -56,16 +71,10 @@ Ticket submission:
     <Connection from="17" to="11"/>
     <Connection from="17" to="12"/>
     <Connection from="17" to="13"/>
-    <Connection from="17" to="13"/>
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for='1'>The user who initiates an L1-L2 message</NodeDescription>
-    <NodeDescription for='2'>A function that puts the message in the L2 inbox that can be re-executed for some fixed amount of time if it reverts</NodeDescription>
-    <NodeDescription for='3'>Logic that determines the user's deposit alone will make the submission succeed</NodeDescription>
-    <NodeDescription for='5'>If success; a ticket is created and added to the retryable buffer
-                            Funds (l2CallValue + submissionCost) are deducted to cover the callvalue from the user and 
-                            placed into escrow for later use in redeeming the ticket</NodeDescription>
-    <NodeDescription for='4'>If fail; Ticket creation fails and no funds are deducted</NodeDescription>
+    <Connection from="17" to="13"/> 
+
+
+    
     <NodeDescription for='6'>Logic that determines if the ticket will be scheduled for auto-redeem </NodeDescription>
     <NodeDescription for='7'>If not; it waits for the manual redemption of the ticket</NodeDescription>
     <NodeDescription for='8'>blah blah </NodeDescription>
@@ -75,12 +84,8 @@ Ticket submission:
     <NodeDescription for='12'>Logic that determines if the ticket was expired</NodeDescription>
     <NodeDescription for='13'>excessFeeRefundAddress is refunded with the l2CallValue</NodeDescription>
     <NodeDescription for='14'>The ticket gets deleted from the retryable buffer</NodeDescription>
-    <NodeDescription for='16'>Logic that determines if the tikcet is redeemed</NodeDescription>
+    <NodeDescription for='16'>Logic that determines if the tikcet is redeemed</NodeDescription>  -->
     
-  </NodeDescriptions>
-</MermaidWithHtml>
-
-
 1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
 
     - `address to`: The destination L2 contract address
