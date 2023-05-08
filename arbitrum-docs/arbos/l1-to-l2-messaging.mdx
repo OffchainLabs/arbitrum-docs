@@ -19,7 +19,7 @@ Ticket submission:
   <Nodes>
     <Node id="1">🧍</Node>
     <Node id="2">Inbox.createRetryableTicket()</Node>
-    <Node id="3">somethingElse()</Node>
+    <Node id="3">msg.value >= maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas</Node>
     <Node id="4">Fail</Node>
     <Node id="5">Success</Node>
     <Connection from="1" to="2"/>
@@ -28,11 +28,13 @@ Ticket submission:
     <Connection from="3" to="5"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1'>The user....</NodeDescription>
-    <NodeDescription for='2'>An asynchronous function that...</NodeDescription>
-    <NodeDescription for='3'>Logic within that determines...</NodeDescription>
-    <NodeDescription for='3'>If success...</NodeDescription>
-    <NodeDescription for='3'>If fail...</NodeDescription>
+    <NodeDescription for='1'>The user who initiates an L1-L2 message</NodeDescription>
+    <NodeDescription for='2'>A function that puts the message in the L2 inbox that can be re-executed for some fixed amount of time if it reverts</NodeDescription>
+    <NodeDescription for='3'>Logic within that determines the user's deposit alone will make the submission succeed</NodeDescription>
+    <NodeDescription for='3'>If success; a ticket is created and added to the retryable buffer
+                            Funds (l2CallValue + submissionCost) are deducted to cover the callvalue from the user and 
+                            placed into escrow for later use in redeeming the ticket</NodeDescription>
+    <NodeDescription for='3'>If fail; Ticket creation fails and no funds are deducted</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
