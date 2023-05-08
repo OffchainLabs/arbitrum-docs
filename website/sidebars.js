@@ -51,6 +51,11 @@ const sidebars = {
           type: "doc",
           label: "Migrate from Classic to Nitro (state)",
           id: "migration/state-migration"
+        },
+        {
+          type: "doc",
+          label: "Use Oracles in Arbitrum",
+          id: "devs-how-tos/how-to-use-oracles"
         }
       ]
     },
@@ -106,6 +111,11 @@ const sidebars = {
             }
           ]
         },
+        {
+          type: "doc",
+          label: "Oracles",
+          id: "for-devs/concepts/oracles"
+        }
       ]
     },
     {
@@ -159,6 +169,11 @@ const sidebars = {
           type: "doc",
           label: "Debugging tools",
           id: "for-devs/dev-tools-and-resources/debugging-tools"
+        },
+        {
+          type: "doc",
+          label: "Oracles",
+          id: "for-devs/dev-tools-and-resources/oracles"
         },
         {
           type: "link",
