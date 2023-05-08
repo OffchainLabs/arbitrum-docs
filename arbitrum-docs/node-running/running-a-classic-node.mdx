@@ -22,7 +22,7 @@ on pre-Nitro blocks.
 
 ### Required Artifacts
 
-- Latest Docker Image: offchainlabs/arb-node:v1.4.5-e97c1a4
+- Latest Docker Image: <code>@latestClassicNodeImage@</code>
 - Latest classic snapshot for Arbitrum One: https://snapshot.arbitrum.io/mainnet/db.tar
 
 ### Required parameters
@@ -42,7 +42,7 @@ on pre-Nitro blocks.
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
   - Here is an example of how to run arb-node for mainnet (only good for archive requests on pre-Nitro blocks, so probably want to enable archive as well):
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
+  docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestClassicNodeImage@ --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
   ```
 
 ### Note on permissions
