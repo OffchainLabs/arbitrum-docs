@@ -1,11 +1,12 @@
-// see src/pages/mermaid-with-html.md for usage example
+// see /src/pages/mermaid-with-html for a usage demo that renders to https://developer.arbitrum.io/mermaid-with-html
+
 import React, { useEffect, useRef, createContext } from 'react';
 import './MermaidWithHtml.css';
 import mermaid from 'mermaid';
 
 const MermaidContext = createContext(null);
 
-
+// <MermaidWithHtml> is the top-level component that wraps the entire HTML-like diagram specification
 const MermaidWithHtml = ({ children }) => {
   const [todo] = React.useState(null);
   return (
@@ -15,37 +16,71 @@ const MermaidWithHtml = ({ children }) => {
   );
 };
 
-const NodeDescriptions = ({ children }) => {
-  const listRef = useRef(null);
 
-  useEffect(() => {
-    if (listRef.current) {
-      listRef.current.childNodes.forEach((nodeInfo) => {
-        // todo: wire up highlighting here
-        nodeInfo.classList.add("node-description");
-      });
-    }
-  }, []);
+// This is used to generate the mermaid code from the <Node> and <Connection> blocks
+const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, title) => {
 
-  return (
-    <ol className="node-description-list" ref={listRef}>
-      {children}
-    </ol>
-  );
+  // todo: magic string, could make this configurable. TB = top to bottom, LR = left to right, etc.
+  const graphType = 'TB';
+  const usedNodeIds = new Set();
+
+  const graphCode = connections
+    .map((conn) => {
+      const fromHtmlNode = htmlNodes.find((node) => node.props.id === conn.props.from);
+      const toHtmlNode = htmlNodes.find((node) => node.props.id === conn.props.to);
+
+      const fromHtmlNodeId = fromHtmlNode.props.id;
+      const fromHtmlNodeText = fromHtmlNode.props.children;
+      const toHtmlNodeId = toHtmlNode.props.id;
+      const toHtmlNodeText = toHtmlNode.props.children;
+
+      // If the node ID is already used, then we don't need to add the text; applies to both from and to nodes
+      const fromMermaidNode = usedNodeIds.has(fromHtmlNodeId)
+        ? fromHtmlNodeId
+        : `${fromHtmlNodeId}("${fromHtmlNodeText}")`;
+
+      const toMermaidNode = usedNodeIds.has(toHtmlNodeId)
+        ? toHtmlNodeId
+        : `${toHtmlNodeId}("${toHtmlNodeText}")`;
+
+      usedNodeIds.add(fromHtmlNodeId);
+      usedNodeIds.add(toHtmlNodeId);
+
+
+      let mermaidLine;
+
+      // handle connection labels
+      const connectionLabel = conn.props.label;
+
+      if (connectionLabel) {
+        mermaidLine = `${fromMermaidNode} -. ${connectionLabel} .-> ${toMermaidNode}`;
+      } else {
+        mermaidLine = `${fromMermaidNode} -.-> ${toMermaidNode}`;
+      }
+
+      // todo: line and arrow types could be configurable too
+
+      return mermaidLine;
+    })
+    .join('\n  ');
+
+  let mermaidCode = `graph ${graphType}\n${graphCode}`;
+
+  // handle title
+  if (title) {
+    mermaidCode = `---\ntitle: ${title}\n---\n\n${mermaidCode}`;
+  }
+  return mermaidCode;
 };
 
-const NodeDescription = ({ children }) => {
-  const nodeRef = useRef(null);
-  return <div className="node-info" ref={nodeRef}>{children}</div>;
-};
-
-const Nodes = ({ children }) => {
+// <Nodes> is the wrapper around the mermaid diagram itself
+const Nodes = ({ children, title }) => {
   const containerRef = useRef(null);
 
   const htmlNodes = children.filter((child) => child.props.mdxType == "Node");
   const connections = children.filter((child) => child.props.mdxType == "Connection");
 
-  const code = generateMermaidCodeFromHtmlNodesAndConnections(htmlNodes, connections);
+  const code = generateMermaidCodeFromHtmlNodesAndConnections(htmlNodes, connections, title);
 
   useEffect(() => {
     mermaid.init(undefined, containerRef.current);
@@ -75,42 +110,36 @@ const Nodes = ({ children }) => {
   return <div className="mermaid" ref={containerRef}>{code}</div>;
 };
 
+
+const NodeDescriptions = ({ children }) => {
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.childNodes.forEach((nodeInfo) => {
+        // todo: wire up highlighting here
+        nodeInfo.classList.add("node-description");
+      });
+    }
+  }, []);
+
+  return (
+    <ol className="node-description-list" ref={listRef}>
+      {children}
+    </ol>
+  );
+};
+
+const NodeDescription = ({ children }) => {
+  const nodeRef = useRef(null);
+  return <div className="node-info" ref={nodeRef}>{children}</div>;
+};
+
+
+
+
 const Node = ({ id, children }) => <div data-node-id={id}>{children}</div>;
 const Connection = ({ from, to }) => (<div data-connection-from={from} data-connection-to={to}></div>);
 
-const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections) => {
-
-  // todo: magic string, could make this configurable
-  const graphType = 'TB';
-  const usedNodeIds = new Set();
-
-  const graphCode = connections
-    .map((conn) => {
-      const fromHtmlNode = htmlNodes.find((node) => node.props.id === conn.props.from);
-      const toHtmlNode = htmlNodes.find((node) => node.props.id === conn.props.to);
-
-      const fromHtmlNodeId = fromHtmlNode.props.id;
-      const fromHtmlNodeText = fromHtmlNode.props.children;
-      const toHtmlNodeId = toHtmlNode.props.id;
-      const toHtmlNodeText = toHtmlNode.props.children;
-
-      const fromMermaidNode = usedNodeIds.has(fromHtmlNodeId)
-        ? fromHtmlNodeId
-        : `${fromHtmlNodeId}("${fromHtmlNodeText}")`;
-
-      const toMermaidNode = usedNodeIds.has(toHtmlNodeId)
-        ? toHtmlNodeId
-        : `${toHtmlNodeId}("${toHtmlNodeText}")`;
-
-      usedNodeIds.add(fromHtmlNodeId);
-      usedNodeIds.add(toHtmlNodeId);
-
-      // line and arrow types could be configurable too
-      return `${fromMermaidNode} -.-> ${toMermaidNode}`;
-    })
-    .join('\n  ');
-
-  return `graph ${graphType}\n${graphCode}`;
-};
 
 export { MermaidWithHtml, NodeDescription, NodeDescriptions, Nodes, Node, Connection };
