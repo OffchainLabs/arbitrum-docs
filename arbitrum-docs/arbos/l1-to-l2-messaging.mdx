@@ -55,7 +55,7 @@ Title: Automatic Remeption of the Ticket:
     <NodeDescription for='1'>Check if the user's L2 Balance is greater than (or equal to) l2Basefee * gasLimit **and** maxFeePerGas is greater than (or equal to) the l2Basefee</NodeDescription>
     <NodeDescription for='2'>Ticket is executed, the actual submissionFee is refunded to the excessFeeRefundAddress since the ticket was not kept in the buffer on L2</NodeDescription>
     <NodeDescription for='3'>The ticket gets deleted from the L2 retryable buffer</NodeDescription>
-    <NodeDescription for='4'>excessFeeRefundAddress gets refunded with (maxGas - gasUsed) * gasPrice. Note that this amount is capped by gasUsed * baseFee in the auto-reddem</NodeDescription>
+    <NodeDescription for='4'>excessFeeRefundAddress gets refunded with (maxGas - gasUsed) * gasPrice. Note that this amount is capped by gasUsed * baseFee in the auto-redeem</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
@@ -81,6 +81,7 @@ Title: Manual Remeption of the Ticket:
     <NodeDescription for='4'>Logic that determines if the ticket is manually manually redeemed</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
+
 <!-- 
  <Node id="6">Sender L2 Balance >= l2Basefee * gasLimit && maxFeePerGas >= l2Basefee</Node>
     <Node id="7">No</Node>
@@ -116,7 +117,7 @@ Title: Manual Remeption of the Ticket:
     <Connection from="17" to="13"/> 
 
 
-    
+
     <NodeDescription for='6'>Logic that determines if the ticket will be scheduled for auto-redeem </NodeDescription>
     <NodeDescription for='7'>If not; it waits for the manual redemption of the ticket</NodeDescription>
     <NodeDescription for='8'>blah blah </NodeDescription>
