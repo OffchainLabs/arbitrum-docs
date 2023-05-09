@@ -2,16 +2,17 @@
 id: mermaid-with-html
 ---
 
+<!-- this is a "demo page" that renders to https://developer.arbitrum.io/mermaid-with-html -->
 
 import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
 <MermaidWithHtml>
-  <Nodes>
+  <Nodes title="Lorem ipsum">
     <Node id="1">firstInput</Node>
     <Node id="2">secondInput</Node>
     <Node id="3">someFunction(firstInput, secondInput)</Node>
     <Node id="4">someDTO</Node>
-    <Connection from="1" to="3"/>
+    <Connection from="1" to="3" label="foo"/>
     <Connection from="2" to="3"/>
     <Connection from="3" to="4"/>
   </Nodes>
