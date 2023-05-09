@@ -479,9 +479,9 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 #### Optimizations
 
- - example Arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
- - example Arbitrum One contract: 
- - example Arbitrum Nova contract:
+ - example arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
+ - example arbitrum one contract: 
+ - example arbitrum nova contract:
  - next docs to do / upgrade:
    - public chains and addresses
  - concept doc for this -> visualize the components, layers, data structures, information flows, procedure 

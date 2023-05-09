@@ -1,10 +1,3 @@
----
-id: mermaid-with-html
----
-
-
-import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
-
 <MermaidWithHtml>
   <Nodes>
     <Node id="1">firstInput</Node>
