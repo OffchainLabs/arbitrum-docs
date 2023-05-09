@@ -12,123 +12,24 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 
 Here we walk through the different stages of the lifecycle of a retryable ticket, shown in the diagram below.
 
-Title: Ticket Submission:
 <MermaidWithHtml>
-  <Nodes>
-    <Node id="1">🧍</Node>
-    <Node id="2">Initiate an L1-L2 message</Node>
-    <Node id="3">Does the user have enough funds to create a ticket?</Node>
-    <Node id="4">if no- Ticket creation fails</Node>
-    <Node id="5">if yes- Ticket is created</Node>
-    <Connection from="1" to="2"/>
+  <Nodes title="Lorem ipsum">   <!-- new -->
+    <Node id="1">firstInput</Node>
+    <Node id="2">secondInput</Node>
+    <Node id="3">someFunction(firstInput, secondInput)</Node>
+    <Node id="4">someDTO</Node>
+    <Connection from="1" to="3" label="foo"/> <!-- new -->
     <Connection from="2" to="3"/>
     <Connection from="3" to="4"/>
-    <Connection from="3" to="5"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1'>The user who initiates an L1-L2 message</NodeDescription>
-    <NodeDescription for='2'>A call to `inbox.createRetryable` function that puts the message in the L2 inbox that can be re-executed for some fixed amount of time if it reverts</NodeDescription>
-    <NodeDescription for='3'>Logic that checks if the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas`
-                          This determines if the user's deposit alone will make the submission succeed</NodeDescription>
-    <NodeDescription for='4'>Ticket creation fails and no funds are deducted from the user</NodeDescription>
-    <NodeDescription for='5'>A ticket is created and added to the retryable buffer on L2
-                          Funds (`l2CallValue + submissionCost`) are deducted to cover the callvalue from the user and 
-                          placed into escrow (on L2) for later use in redeeming the ticket</NodeDescription>
+    <NodeDescription for='1'><code>firstInput</code> lorem ipsum.</NodeDescription>
+    <NodeDescription for='2'><code>secondInput</code> lorem ipsum.</NodeDescription>
+    <NodeDescription for='2'><code>someFunction</code> lorem ipsum lorem ipsum.</NodeDescription>
+    <NodeDescription for='4'><code>someDTO</code> lorem ipsum.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
-Once the ticket is successfully cretaed, the two following conditions are checked: 1- If the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** 2- if the `maxFeePerGas` (provided by the user in the ticket submission process)  is greater than (or equal to) the `l2Basefee`. If these conditions are both passed successfully, the ticket will be scheduled for the auto-redeem (see Automatic Remeption of the Ticket). Otherwise it'll follow th steps in Manual Redemption of the Ticket.
-
-Title: Automatic Remeption of the Ticket:
-
-<MermaidWithHtml>
-  <Nodes>
-    <Node id="1">Does the auto-redeem succeed?</Node>
-    <Node id="2">If yes- Ticket is executed</Node>
-    <Node id="3">Ticket is deleted</Node>
-    <Node id="4">if no- excessFeeRefundAddress gets refunded</Node>
-    <Connection from="1" to="2"/>
-    <Connection from="2" to="3"/>
-    <Connection from="1" to="4"/>
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for='1'>Check if the user's L2 Balance is greater than (or equal to) l2Basefee * gasLimit **and** maxFeePerGas is greater than (or equal to) the l2Basefee</NodeDescription>
-    <NodeDescription for='2'>Ticket is executed, the actual submissionFee is refunded to the excessFeeRefundAddress since the ticket was not kept in the buffer on L2</NodeDescription>
-    <NodeDescription for='3'>The ticket gets deleted from the L2 retryable buffer</NodeDescription>
-    <NodeDescription for='4'>excessFeeRefundAddress gets refunded with (maxGas - gasUsed) * gasPrice. Note that this amount is capped by gasUsed * baseFee in the auto-redeem</NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
-
-
-Title: Manual Remeption of the Ticket:
-
-<MermaidWithHtml>
-  <Nodes>
-    <Node id="1">Is the ticket manually cancelled or not redeemed within 7 days?</Node>
-    <Node id="2">If yes- excessFeeRefundAddress gets refunded</Node>
-    <Node id="3">Ticket is deleted</Node>
-    <Node id="4">if no- Is the ticket manually redeemed?</Node>
-    <Connection from="1" to="2"/>
-    <Connection from="2" to="3"/>
-    <Connection from="1" to="4"/>
-    <Connection from="4" to="3"/> 
-    <Connection from="4" to="1"/> 
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for='1'>Logic that determines if the ticket is manually cancelledor  not redeemed within 7 days (i.e., is expired)</NodeDescription>
-    <NodeDescription for='2'>excessFeeRefundAddress is refunded with the l2CallValue</NodeDescription>
-    <NodeDescription for='3'>The ticket gets deleted from the L2 retryable buffer</NodeDescription>
-    <NodeDescription for='4'>Logic that determines if the ticket is manually manually redeemed</NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
-
-<!-- 
- <Node id="6">Sender L2 Balance >= l2Basefee * gasLimit && maxFeePerGas >= l2Basefee</Node>
-    <Node id="7">No</Node>
-    <Node id="8">Success</Node>
-    <Node id="9">Redeem is attempted?</Node>
-    <Node id="10">No</Node>
-    <Node id="11">Is the ticket cancelled?</Node>
-    <Node id="12">Is the ticket expired?</Node>
-    <Node id="13">Yes</Node>
-    <Node id="14">Delete the ticket</Node>
-    <Node id="15">No</Node>
-    <Node id="16">Is the ticket redeemed?</Node>
-    <Node id="17">Yes</Node>
-    <Node id="18">No</Node> 
-
-    <Connection from="5" to="6"/>
-    <Connection from="6" to="7"/>
-    <Connection from="6" to="8"/>
-    <Connection from="7" to="9"/>
-    <Connection from="9" to="10"/>
-    <Connection from="10" to="11"/>
-    <Connection from="10" to="12"/>
-    <Connection from="11" to="12"/>
-    <Connection from="11" to="13"/>
-    <Connection from="13" to="14"/>
-    <Connection from="11" to="16"/>
-    <Connection from="12" to="16"/>
-    <Connection from="16" to="17"/>
-    <Connection from="17" to="14"/>
-    <Connection from="17" to="11"/>
-    <Connection from="17" to="12"/>
-    <Connection from="17" to="13"/>
-    <Connection from="17" to="13"/> 
-
-
-
-    <NodeDescription for='6'>Logic that determines if the ticket will be scheduled for auto-redeem </NodeDescription>
-    <NodeDescription for='7'>If not; it waits for the manual redemption of the ticket</NodeDescription>
-    <NodeDescription for='8'>blah blah </NodeDescription>
-    <NodeDescription for='9'>Logic that determines if the ticket is manually redeemed within 7 days</NodeDescription>
-    <NodeDescription for='10'>If not, the ticket was either manually cancelled or expired</NodeDescription>
-    <NodeDescription for='11'>Logic that determines if the ticket was manually cancelled</NodeDescription>
-    <NodeDescription for='12'>Logic that determines if the ticket was expired</NodeDescription>
-    <NodeDescription for='13'>excessFeeRefundAddress is refunded with the l2CallValue</NodeDescription>
-    <NodeDescription for='14'>The ticket gets deleted from the retryable buffer</NodeDescription>
-    <NodeDescription for='16'>Logic that determines if the tikcet is redeemed</NodeDescription>  -->
-    
 1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully:
 
     - `address to`: The destination L2 contract address
