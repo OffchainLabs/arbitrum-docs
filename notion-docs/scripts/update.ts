@@ -7,11 +7,7 @@ import {
   renderGlossary,
   renderSimpleFAQs,
   Record,
-  renderGlossaryJSON
-} from '@offchainlabs/notion-docs-generator'
-import dotenv from 'dotenv'
-
-import type {
+  renderGlossaryJSON,
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
@@ -19,6 +15,7 @@ import type {
 
 import fs from 'fs'
 
+import dotenv from 'dotenv'
 dotenv.config()
 
 const notion = new Client({
@@ -38,11 +35,13 @@ const isValid = (item: KnowledgeItem) => {
   return recordValidity(item) === 'Valid'
 }
 
-
 async function generateFiles() {
   const linkableTerms: LinkableTerms = {}
 
-  const devDocsV2Project = await lookupProject(notion, 'Arbitrum developer docs portal v2.0')
+  const devDocsV2Project = await lookupProject(
+    notion,
+    'Arbitrum developer docs portal v2.0'
+  )
 
   const _definitions = await lookupGlossaryTerms(notion, {
     filter: {
@@ -50,10 +49,9 @@ async function generateFiles() {
       relation: {
         contains: devDocsV2Project,
       },
-    }
+    },
   })
   const validDefs = _definitions.filter(isValid)
-
 
   const getStartedFAQ = await lookupFAQs(notion, {
     filter: {
@@ -75,9 +73,9 @@ async function generateFiles() {
     sorts: [
       {
         property: 'FAQ order index',
-        direction: 'ascending'
-      }
-    ]
+        direction: 'ascending',
+      },
+    ],
   })
 
   const nodeFAQ = await lookupFAQs(notion, {
@@ -100,9 +98,9 @@ async function generateFiles() {
     sorts: [
       {
         property: 'FAQ order index',
-        direction: 'ascending'
-      }
-    ]
+        direction: 'ascending',
+      },
+    ],
   })
 
   const buildFAQ = await lookupFAQs(notion, {
@@ -125,9 +123,9 @@ async function generateFiles() {
     sorts: [
       {
         property: 'FAQ order index',
-        direction: 'ascending'
-      }
-    ]
+        direction: 'ascending',
+      },
+    ],
   })
 
   const bridgeFAQ = await lookupFAQs(notion, {
@@ -150,9 +148,9 @@ async function generateFiles() {
     sorts: [
       {
         property: 'FAQ order index',
-        direction: 'ascending'
-      }
-    ]
+        direction: 'ascending',
+      },
+    ],
   })
 
   const addItems = (items: KnowledgeItem[], page: string) => {
@@ -172,15 +170,11 @@ async function generateFiles() {
   const glossaryJSON = renderGlossaryJSON(validDefs, linkableTerms)
   fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
 
-  const definitionsHTML = `\n\n${renderGlossary(
-    validDefs,
-    linkableTerms
-  )}\n`
-  fs.writeFileSync('../arbitrum-docs/partials/_glossary-partial.md', definitionsHTML)
-
-
-
-
+  const definitionsHTML = `\n\n${renderGlossary(validDefs, linkableTerms)}\n`
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_glossary-partial.md',
+    definitionsHTML
+  )
 
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-users-partial.md',

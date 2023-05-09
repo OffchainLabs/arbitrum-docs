@@ -3,6 +3,7 @@
 
 const lightCodeTheme = require("prism-react-renderer/themes/github");
 const darkCodeTheme = require("prism-react-renderer/themes/dracula");
+const variableInjector = require('./src/remark/variable-injector');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -49,6 +50,14 @@ const config = {
             );
           },
           showLastUpdateTime: true,
+          remarkPlugins: [
+            [
+              variableInjector,
+              {
+                replacements: require("./static/globalVars.js")
+              }
+            ]
+          ]
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css')

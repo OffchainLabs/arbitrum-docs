@@ -35,8 +35,8 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 2. **CPU:** 4+ core CPU
 3. **Storage:** Minimum 2TB SSD (make sure it is extendable)
 4. **Docker images:** We'll specify these in the below commands; you don't need to manually download them.
-   - Latest Docker image for **Arbitrum One**: `offchainlabs/nitro-node:v2.0.14-2baa834`
-   - Latest Docker image for **Arbitrum Classic**: `offchainlabs/arb-node:v1.4.5-e97c1a4`
+   - Latest Docker image for **Arbitrum One**: <code>@latestNitroNodeImage@</code>
+   - Latest Docker image for **Arbitrum Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
    - Arbitrum One Nitro genesis database snapshot
      - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize the Nitro database
@@ -79,15 +79,15 @@ To run both Arbitrum One and Arbitrum Classic in archive mode, follow one of the
 
 - **Arbitrum One archive node**: <!-- todo: when should I choose the first one over the second one? what do they do differently? -->
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.14-2baa834 --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
   ```
 - **Arbitrum One archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/nitro-node:v2.0.11-8e786ec --l1.url https://l1-node:8545 --l2.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --l1.url https://l1-node:8545 --l2.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
   ```
 - **Arbitrum Classic archive node**:
   ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 offchainlabs/arb-node:v1.4.5-e97c1a4 --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
+  docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestClassicNodeImage@ --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
   ```
 
 Note that the above commands both map to port `8547` on their hosts. If you want to run both on the same host, you should edit those mapping to different ports, and specify your Classic node RPC url as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
