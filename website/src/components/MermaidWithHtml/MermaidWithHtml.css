@@ -23,6 +23,12 @@
   stroke: #888 !important;
   stroke-width: 1px !important;
 }
+.mermaid-with-html .edgeLabels .edgeLabel {
+  background: transparent !important;
+  color: #777 !important;
+  font-size: 13px;
+  font-weight: bold;
+}
 .mermaid-with-html .mermaid {
   width: 100%;
   flex: 1;
@@ -43,10 +49,16 @@
   color: white !important;
   fill: white !important;
 }
+.flowchartTitleText {
+  fill: #777 !important;
+}
 .node-description-list {
   flex: 1;
   list-style: none;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .node-description-list .node-description {
   padding: 14px 14px;
