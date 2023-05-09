@@ -37,8 +37,52 @@ Title: Ticket Submission:
   </NodeDescriptions>
 </MermaidWithHtml>
 
+Once the ticket is successfully cretaed, the two following conditions are checked: 1- If the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** 2- if the `maxFeePerGas` (provided by the user in the ticket submission process)  is greater than (or equal to) the `l2Basefee`. If these conditions are both passed successfully, the ticket will be scheduled for the auto-redeem (see Automatic Remeption of the Ticket). Otherwise it'll follow th steps in Manual Redemption of the Ticket.
+
+Title: Automatic Remeption of the Ticket:
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Does the auto-redeem succeed?</Node>
+    <Node id="2">If yes- Ticket is executed</Node>
+    <Node id="3">Ticket is deleted</Node>
+    <Node id="4">if no- excessFeeRefundAddress gets refunded</Node>
+    <Connection from="1" to="2"/>
+    <Connection from="2" to="3"/>
+    <Connection from="1" to="4"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'>Check if the user's L2 Balance is greater than (or equal to) l2Basefee * gasLimit **and** maxFeePerGas is greater than (or equal to) the l2Basefee</NodeDescription>
+    <NodeDescription for='2'>Ticket is executed, the actual submissionFee is refunded to the excessFeeRefundAddress since the ticket was not kept in the buffer on L2</NodeDescription>
+    <NodeDescription for='3'>The ticket gets deleted from the L2 retryable buffer</NodeDescription>
+    <NodeDescription for='4'>excessFeeRefundAddress gets refunded with (maxGas - gasUsed) * gasPrice. Note that this amount is capped by gasUsed * baseFee in the auto-reddem</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
 
 
+Title: Manual Remeption of the Ticket:
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Is the ticket manually cancelled or not redeemed within 7 days?</Node>
+    <Node id="2">If yes- excessFeeRefundAddress gets refunded</Node>
+    <Node id="3">Ticket is deleted</Node>
+    <Node id="4">if no- Is the ticket manually redeemed?</Node>
+    <Connection from="1" to="2"/>
+    <Connection from="2" to="3"/>
+    <Connection from="1" to="4"/>
+    {/* If yes */}
+    <Connection from="4" to="3"/> 
+    {/* If no */}
+    <Connection from="4" to="1"/> 
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'>Logic that determines if the ticket is manually cancelledor  not redeemed within 7 days (i.e., is expired)</NodeDescription>
+    <NodeDescription for='2'>excessFeeRefundAddress is refunded with the l2CallValue</NodeDescription>
+    <NodeDescription for='3'>The ticket gets deleted from the L2 retryable buffer</NodeDescription>
+    <NodeDescription for='4'>Logic that determines if the ticket is manually manually redeemed</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
 <!-- 
  <Node id="6">Sender L2 Balance >= l2Basefee * gasLimit && maxFeePerGas >= l2Basefee</Node>
     <Node id="7">No</Node>
