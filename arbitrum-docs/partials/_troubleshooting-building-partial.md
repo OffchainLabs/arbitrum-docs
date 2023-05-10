@@ -25,12 +25,12 @@
 
 <p>To figure out which error caused your transaction to revert, we recommend using etherscan's Parity VM trace support (Tenderly is generally a very useful debugging tool; however, it can be buggy when it comes to custom Geth errors).</p>
 
-<p>Use the following link to view the Parity VM trace of your failed tx (replacing the tx-hash with your own, and using the appropriate etherscan root url):<br />
+<p>Use the following link to view the Parity VM trace of your failed transaction (replacing the tx-hash with your own, and using the appropriate etherscan root url):<br />
 <br />
 <a href="https://goerli.etherscan.io/vmtrace?txhash=0x382bfef03a7f1185a91582b49837740473591fb8715ce7f15e389f1ade630b09&type=parity#raw">https://goerli.etherscan.io/vmtrace?txhash=0x382bfef03a7f1185a91582b49837740473591fb8715ce7f15e389f1ade630b09&type=parity#raw</a></p>
 
 <p><br />
-To find out the reversion error signature, go to the "Raw Traces" tab, and scroll down to find the last "subtrace" in which your tx is reverted. Then find "output" field of that subtrace.</p>
+To find out the reversion error signature, go to the "Raw Traces" tab, and scroll down to find the last "subtrace" in which your transaction is reverted. Then find "output" field of that subtrace.</p>
 
 <p> (In the above example the desirable "output" is:<br />
 <code>{'0x7040b58c0000000000000000000000000000000000000000000000000001476b081e80000000000000000000000000000000000000000000000000000000000000000000'}</code> )</p>
