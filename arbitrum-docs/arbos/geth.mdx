@@ -1,8 +1,8 @@
 # Geth
 
-Nitro makes minimal modifications to geth in hopes of not violating its assumptions. This document will explore the relationship between geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of geth's basic types.
+Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This document will explore the relationship between geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
 
-We store ArbOS's state at an address inside a geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a transaction's direct state changes to ArbOS are discarded upon a revert.
+We store ArbOS's state at an address inside a Geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a transaction's direct state changes to ArbOS are discarded upon a revert.
 
 **0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF**<br/>
 The fictional account representing ArbOS
@@ -15,7 +15,7 @@ Please note any links on this page may be referencing old releases of Nitro or o
 
 ## Hooks
 
-Arbitrum uses various hooks to modify geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the tx during its lifetime. Transactions are applied using geth's [`ApplyTransaction`][applytransaction_link] function.
+Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the tx during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
 
 Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#EnableArbOS) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
 
@@ -41,7 +41,7 @@ What follows is an overview of each hook, in chronological order.
 
 ### [`ReadyEVMForL2`][readyevmforl2_link]{#ReadyEVMForL2}
 
-A call to [`ReadyEVMForL2`][readyevmforl2_link] installs the other transaction-specific hooks into each geth [`EVM`][evm_link] right before it performs a state transition. Without this call, the state transition will instead use the default [`DefaultTxProcessor`][defaulttxprocessor_link] and get exactly the same results as vanilla geth. A [`TxProcessor`][txprocessor_link] object is what carries these hooks and the associated arbitrum-specific state during the transaction's lifetime.
+A call to [`ReadyEVMForL2`][readyevmforl2_link] installs the other transaction-specific hooks into each geth [`EVM`][evm_link] right before it performs a state transition. Without this call, the state transition will instead use the default [`DefaultTxProcessor`][defaulttxprocessor_link] and get exactly the same results as vanilla Geth. A [`TxProcessor`][txprocessor_link] object is what carries these hooks and the associated arbitrum-specific state during the transaction's lifetime.
 
 ### [`StartTxHook`][starttxhook_link]{#StartTxHook}
 
@@ -55,9 +55,9 @@ The hook returns `true` for both of these transaction types, signifying that the
 
 ### [`GasChargingHook`][gascharginghook_link]{#GasChargingHook}
 
-This fallible hook ensures the user has enough funds to pay their poster's L1 calldata costs. If not, the tx is reverted and the [`EVM`][evm_link] does not start. In the common case that the user can pay, the amount paid for calldata is set aside for later reimbursement of the poster. All other fees go to the network account, as they represent the tx's burden on validators and nodes more generally.
+This fallible hook ensures the user has enough funds to pay their poster's L1 calldata costs. If not, the tx is reverted and the [`EVM`][evm_link] does not start. In the common case that the user can pay, the amount paid for calldata is set aside for later reimbursement of the poster. All other fees go to the network account, as they represent the transaction's burden on validators and nodes more generally.
 
-If the user attempts to purchase compute gas in excess of ArbOS's per-block gas limit, the difference is [set aside][difference_set_aside_link] and [refunded later][refunded_later_link] via [`ForceRefundGas`](#ForceRefundGas) so that only the gas limit is used. Note that the limit observed may not be the same as that seen [at the start of the block][that_seen_link] if ArbOS's larger gas pool falls below the [`MaxPerBlockGasLimit`][max_perblock_limit_link] while processing the block's previous txes.
+If the user attempts to purchase compute gas in excess of ArbOS's per-block gas limit, the difference is [set aside][difference_set_aside_link] and [refunded later][refunded_later_link] via [`ForceRefundGas`](#ForceRefundGas) so that only the gas limit is used. Note that the limit observed may not be the same as that seen [at the start of the block][that_seen_link] if ArbOS's larger gas pool falls below the [`MaxPerBlockGasLimit`][max_perblock_limit_link] while processing the block's previous transactions.
 
 [difference_set_aside_link]: https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L407
 [refunded_later_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_transition.go#L419
@@ -103,21 +103,21 @@ The [`EndTxHook`][endtxhook_link] is called after the [`EVM`][evm_link] has retu
 
 ### [`APIBackend`][apibackend_link]
 
-APIBackend implements the [`ethapi.Bakend`][ethapi.bakend_link] interface, which allows simple integration of the arbitrum chain to existing geth API. Most calls are answered using the Backend member.
+APIBackend implements the [`ethapi.Bakend`][ethapi.bakend_link] interface, which allows simple integration of the Arbitrum chain to existing geth API. Most calls are answered using the Backend member.
 
 [apibackend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34
 [ethapi.bakend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/internal/ethapi/backend.go#L42
 
 ### [`Backend`][backend_link]
 
-This struct was created as an arbitrum equivalent to the [`Ethereum`][ethereum_link] struct. It is mostly glue logic, including a pointer to the ArbInterface interface.
+This struct was created as an Arbitrum equivalent to the [`Ethereum`][ethereum_link] struct. It is mostly glue logic, including a pointer to the ArbInterface interface.
 
 [backend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/backend.go#L15
 [ethereum_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/eth/backend.go#L68
 
 ### [`ArbInterface`][arbinterface_link]
 
-This interface is the main interaction-point between geth-standard APIs and the arbitrum chain. Geth APIs mostly either check status by working on the Blockchain struct retrieved from the [`Blockchain`][blockchain_link] call, or send transactions to arbitrum using the [`PublishTransactions`][publishtransactions_link] call.
+This interface is the main interaction-point between geth-standard APIs and the Arbitrum chain. Geth APIs mostly either check status by working on the Blockchain struct retrieved from the [`Blockchain`][blockchain_link] call, or send transactions to Arbitrum using the [`PublishTransactions`][publishtransactions_link] call.
 
 [arbinterface_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/arbos_interface.go#L10
 [blockchain_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/arbos_interface.go#L12
@@ -240,7 +240,7 @@ Currently does nothing besides indicate that the rollup will access a data avail
 
 ### ABI Gas Margin
 
-Vanilla Geth's abi library submits txes with the exact estimate the node returns, employing no padding. This means a tx may revert should another arriving just before even slightly change the tx's codepath. To account for this, we've added a `GasMargin` field to `bind.TransactOpts` that [pads estimates][pad_estimates_link] by the number of basis points set.
+Vanilla Geth's ABI library submits transactions with the exact estimate the node returns, employing no padding. This means a tx may revert should another arriving just before even slightly change the transaction's codepath. To account for this, we've added a `GasMargin` field to `bind.TransactOpts` that [pads estimates][pad_estimates_link] by the number of basis points set.
 
 ### Conservation of L2 ETH
 
@@ -265,7 +265,7 @@ We created the AdvancedPrecompile interface, which executes and charges gas with
 
 ### WASM build support
 
-The WASM arbitrum executable does not support file operations. We created [`fileutil.go`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/rawdb/fileutil.go) to wrap fileutil calls, stubbing them out when building WASM. [`fake_leveldb.go`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for leveldb. These are not required for the WASM block-replayer.
+The WASM Arbitrum executable does not support file operations. We created [`fileutil.go`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/rawdb/fileutil.go) to wrap fileutil calls, stubbing them out when building WASM. [`fake_leveldb.go`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for leveldb. These are not required for the WASM block-replayer.
 
 ### Types
 
