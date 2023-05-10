@@ -123,7 +123,7 @@ On success, the `To` address keeps the escrowed callvalue, and any unused gas is
 Note that during redemption of a ticket, attempts to cancel the same ticket, or to schedule another redeem of the same ticket, will revert. In this manner retryable tickets are not self-modifying.
 
 
-If a ticket with a callvalue is eventually discarded, having never successfully run, the escrowed callvalue will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (step 1).
+If a ticket with a callvalue is eventually discarded (cancelled or expired), having never successfully run, the escrowed callvalue will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (step 1).
 
 :::note Important Notes:
 
