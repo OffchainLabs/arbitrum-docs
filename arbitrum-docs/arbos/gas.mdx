@@ -5,7 +5,6 @@ There are two parties a user pays when submitting a tx:
 - the poster, if reimbursable, for L1 resources such as the L1 calldata needed to post the tx
 - the network fee account for L2 resources, which include the computation, storage, and other burdens L2 nodes must bare to service the tx
 
-
 The L1 component is the product of the transaction's estimated contribution to its batch's size — computed using Brotli on the transaction by itself — and the L2's view of the L1 data price, a value which dynamically adjusts over time to ensure the batch-poster is ultimately fairly compensated. For details, see [L1 Pricing](l1-pricing).
 
 [The L2 component](gas) consists of the traditional fees Geth would pay to stakers in a vanilla L1 chain, such as the computation and storage charges applying the state transition function entails. ArbOS charges additional fees for executing its L2-specific [precompiles](precompiles.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
@@ -37,7 +36,7 @@ Gas estimation for Retryable submissions is possible via [`NodeInterface.sol`][n
 
 ## NodeInterface.sol
 
-To avoid creating new RPC methods for client-side tooling, nitro geth's [`InterceptRPCMessage`][interceptrpcmessage_link] hook provides an opportunity to swap out the message its handling before deriving a transaction from it. The node [uses this hook][use_hook_link] to detect messages sent to the address `0xc8`, the location of the fictional `NodeInterface` contract specified in [`NodeInterface.sol`][node_interface_link].
+To avoid creating new RPC methods for client-side tooling, nitro Geth's [`InterceptRPCMessage`][interceptrpcmessage_link] hook provides an opportunity to swap out the message its handling before deriving a transaction from it. The node [uses this hook][use_hook_link] to detect messages sent to the address `0xc8`, the location of the fictional `NodeInterface` contract specified in [`NodeInterface.sol`][node_interface_link].
 
 `NodeInterface` isn't deployed on L2 and only exists in the RPC, but it contains methods callable via `0xc8`. Doing so requires setting the `To` field to `0xc8` and supplying calldata for the method. Below is the list of methods.
 

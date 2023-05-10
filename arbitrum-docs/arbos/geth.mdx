@@ -1,6 +1,6 @@
 # Geth
 
-Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This document will explore the relationship between geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
+Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This document will explore the relationship between Geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
 
 We store ArbOS's state at an address inside a Geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a transaction's direct state changes to ArbOS are discarded upon a revert.
 
@@ -17,7 +17,7 @@ Please note any links on this page may be referencing old releases of Nitro or o
 
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
 
-Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#EnableArbOS) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
+Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#EnableArbOS) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
 
 - `core.ApplyTransaction` ⮕ `core.applyTransaction` ⮕ `core.ApplyMessage`
   - `core.NewStateTransition`
@@ -46,7 +46,7 @@ A call to [`ReadyEVMForL2`][readyevmforl2_link] installs the other transaction-s
 
 ### [`StartTxHook`][starttxhook_link]{#StartTxHook}
 
-The [`StartTxHook`][starttxhook_link] is called by geth before a transaction starts executing. This allows ArbOS to handle two arbitrum-specific transaction types.
+The [`StartTxHook`][starttxhook_link] is called by Geth before a transaction starts executing. This allows ArbOS to handle two Arbitrum-specific transaction types.
 
 If the transaction is `ArbitrumDepositTx`, ArbOS adds balance to the destination account. This is safe because the L1 bridge submits such a transaction only after collecting the same amount of funds on L1.
 
@@ -71,7 +71,7 @@ These hooks track the callers within the EVM callstack, pushing and popping as c
 
 ### [`L1BlockHash`][l1blockhash_link]
 
-In arbitrum, the BlockHash and Number operations return data that relies on underlying L1 blocks instead of L2 blocks, to accommodate the normal use-case of these opcodes, which often assume ethereum-like time passes between different blocks. The L1BlockHash and L1BlockNumber hooks have the required data for these operations.
+In Arbitrum, the BlockHash and Number operations return data that relies on underlying L1 blocks instead of L2 blocks, to accommodate the normal use-case of these opcodes, which often assume Ethereum-like time passes between different blocks. The L1BlockHash and L1BlockNumber hooks have the required data for these operations.
 
 ### [`ForceRefundGas`][forcerefundgas_link]{#ForceRefundGas}
 
@@ -241,7 +241,7 @@ Currently does nothing besides indicate that the rollup will access a data avail
 
 ### ABI Gas Margin
 
-Vanilla Geth's ABI library submits transactions with the exact estimate the node returns, employing no padding. This means a tx may revert should another arriving just before even slightly change the transaction's codepath. To account for this, we've added a `GasMargin` field to `bind.TransactOpts` that [pads estimates][pad_estimates_link] by the number of basis points set.
+Vanilla Geth's abi library submits txes with the exact estimate the node returns, employing no padding. This means a transaction may revert should another arriving just before even slightly change the transaction's codepath. To account for this, we've added a `GasMargin` field to `bind.TransactOpts` that [pads estimates][pad_estimates_link] by the number of basis points set.
 
 ### Conservation of L2 ETH
 
