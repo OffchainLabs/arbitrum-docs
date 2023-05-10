@@ -124,6 +124,8 @@ If a ticket with a callvalue is eventually discarded, having never successfully 
 
 :::note Important Notes:
 
+If a redeem is not done at submission or the submission's initial redeem fails, anyone can attempt to redeem the retryable again by calling [`ArbRetryableTx`](precompiles#ArbRetryableTx)'s [`redeem`](./precompiles#ArbRetryableTx) precompile method, which donates the call's gas to the next attempt. ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the transaction that scheduled it. Note that the redeem attempt's gas comes from the call to [`redeem`](./precompiles#ArbRetryableTx), so there's no chance the block's gas limit is reached before execution.
+
 - One can redeem live tickets using the [Arbitrum Retryables Transaction Panel][retryable_dashboard_link]
 - The calldata of a ticket is saved on L2 until it is redeemed or expired 
 - Redeeming cost of a ticket will not increase over time, it only depends on the size of the calldata being kept on L2
