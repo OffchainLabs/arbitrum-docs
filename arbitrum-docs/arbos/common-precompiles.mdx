@@ -41,7 +41,7 @@ Provides insight into the cost of using the chain. These methods have been adjus
 | :--------------------------------------------------------------- | :---------------------------------------------------------------- |
 | [![](../assets/e.png)][gis1] [`getPricesInWei`][gi1]`()`         | Get prices in wei when using the caller's preferred aggregator    |
 | [![](../assets/e.png)][gis3] [`getPricesInArbGas`][gi3]`()`      | Get prices in ArbGas when using the caller's preferred aggregator |
-| [![](../assets/e.png)][gis4] [`getGasAccountingParams`][gi4]`()` | Get the chain speed limit, pool size, and tx gas limit            |
+| [![](../assets/e.png)][gis4] [`getGasAccountingParams`][gi4]`()` | Get the chain speed limit, pool size, and transaction gas limit   |
 | [![](../assets/e.png)][gis11] [`getL1BaseFeeEstimate`][gi11]`()` | Get ArbOS's estimate of the L1 basefee in wei                     |
 
 [gi1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbGasInfo.go#L63
@@ -57,13 +57,13 @@ Provides insight into the cost of using the chain. These methods have been adjus
 
 Provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](arbos#Retryables).
 
-| Methods                                                               |                                                                                    | Nitro changes          |
-| :-------------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :--------------------- |
-| [![](../assets/e.png)][rts0] [`cancel`][rt0]`(ticket)`                | Cancel the ticket and refund its callvalue to its beneficiary                      |                        |
-| [![](../assets/e.png)][rts1] [`getBeneficiary`][rt1]`(ticket)` &nbsp; | Gets the beneficiary of the ticket                                                 |                        |
-| [![](../assets/e.png)][rts3] [`getTimeout`][rt3]`(ticket)`            | Gets the timestamp for when ticket will expire                                     |                        |
-| [![](../assets/e.png)][rts4] [`keepAlive`][rt4]`(ticket)`             | Adds one lifetime period to the ticket's expiry                                    | Doesn't add callvalue  |
-| [![](../assets/e.png)][rts5] [`redeem`][rt5]`(ticket)`                | Schedule an attempt to redeem the retryable, donating all of the call's gas &nbsp; | Happens in a future tx |
+| Methods                                                               |                                                                                    | Nitro changes                   |
+| :-------------------------------------------------------------------- | :--------------------------------------------------------------------------------- | :------------------------------ |
+| [![](../assets/e.png)][rts0] [`cancel`][rt0]`(ticket)`                | Cancel the ticket and refund its callvalue to its beneficiary                      |                                 |
+| [![](../assets/e.png)][rts1] [`getBeneficiary`][rt1]`(ticket)` &nbsp; | Gets the beneficiary of the ticket                                                 |                                 |
+| [![](../assets/e.png)][rts3] [`getTimeout`][rt3]`(ticket)`            | Gets the timestamp for when ticket will expire                                     |                                 |
+| [![](../assets/e.png)][rts4] [`keepAlive`][rt4]`(ticket)`             | Adds one lifetime period to the ticket's expiry                                    | Doesn't add callvalue           |
+| [![](../assets/e.png)][rts5] [`redeem`][rt5]`(ticket)`                | Schedule an attempt to redeem the retryable, donating all of the call's gas &nbsp; | Happens in a future transaction |
 
 [rt0]: https://github.com/OffchainLabs/nitro/blob/704e82bb38ae3ccd70c35e31934c7b45f6c25561/precompiles/ArbRetryableTx.go#L184
 [rt1]: https://github.com/OffchainLabs/nitro/blob/704e82bb38ae3ccd70c35e31934c7b45f6c25561/precompiles/ArbRetryableTx.go#L171

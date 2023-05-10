@@ -86,9 +86,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       fathomAnalytics: {
-        siteId: "DOHOZGJO",
-        // Optional fields.
-        customDomain: "https://twentyone-unreal.arbitrum.io", // Use a custom domain, see https://usefathom.com/support/custom-domains
+        siteId: "DOHOZGJO"
       },
       navbar: {
         title: "Arbitrum Docs",
