@@ -22,7 +22,7 @@ The L2 fees an Arbitrum transaction pays essentially work identically to gas fee
 
 Arbitrum chains support arbitrary L1 to L2 message passing; developers using this functionality should familiarize themselves with how they work (see [L1 to L2 Messaging](./arbos/l1-to-l2-messaging.mdx)). Of particular note:
 
-- The result of a successful initial/"auto"-execution of an L1 to L2 message will be an unsigned L2 tx receipt.
+- The result of a successful initial/"auto"-execution of an L1 to L2 message will be an unsigned L2 transaction receipt.
 - The `msg.sender` of the L2 side of an L1 to L2 message will be not the initiating L1 address, but rather its address alias.
 - Using the special `ethDeposit` method will _not_ result in an L2 contract's fallback function getting triggered.
 
