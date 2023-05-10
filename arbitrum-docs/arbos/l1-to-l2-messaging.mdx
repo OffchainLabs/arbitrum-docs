@@ -36,11 +36,11 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 
-Once the ticket is successfully cretaed, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, the ticket will be scheduled for the auto-redeem (see Automatic Remeption of the Ticket). Otherwise it'll follow th steps in Manual Redemption of the Ticket diagram.
+Once the ticket is successfully cretaed, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, the ticket will be scheduled for the auto-redeem (see Automatic Redemption of the Ticket). Otherwise it'll follow th steps in Manual Redemption of the Ticket diagram.
 
 
 <MermaidWithHtml>
-  <Nodes title="Automatic Remeption of the Ticket">
+  <Nodes title="Automatic Redemption of the Ticket">
     <Node id="1">Does the auto-redeem succeed?</Node>
     <Node id="2">Ticket is executed</Node>
     <Node id="3">Ticket is deleted</Node>
@@ -50,7 +50,7 @@ Once the ticket is successfully cretaed, the two following conditions are checke
     <Connection from="1" to="4" label="no"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1'><code>Does the auto-redeem succeed?</code> Logic that determines if the user's L2 Balance is greater than (or equal to) <code>l2Basefee * gasLimit</code> **and** <code>maxFeePerGas</code> is greater than (or equal to) the <code>l2Basefee</code></NodeDescription>
+    <NodeDescription for='1'><code>Does the auto-redeem succeed?</code> Logic that determines if the user's L2 Balance is greater than (or equal to) <code>l2Basefee * gasLimit</code> && <code>maxFeePerGas</code> is greater than (or equal to) the <code>l2Basefee</code></NodeDescription>
     <NodeDescription for='2'><code>Ticket is executed</code> Ticket is executed, the actual  <code>submissionFee</code> is refunded to the  <code>excessFeeRefundAddress</code> since the ticket was not kept in the buffer on L2</NodeDescription>
     <NodeDescription for='3'><code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer</NodeDescription>
     <NodeDescription for='4'><code>excessFeeRefundAddress gets refunded</code> <code>excessFeeRefundAddress</code> gets refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by <code>gasUsed * baseFee</code> in the auto-reddem</NodeDescription>
@@ -58,7 +58,7 @@ Once the ticket is successfully cretaed, the two following conditions are checke
 </MermaidWithHtml>
 
 <MermaidWithHtml>
-  <Nodes title="Manual Remeption of the Ticket">
+  <Nodes title="Manual Redemption of the Ticket">
     <Node id="1">Is the ticket manually cancelled or not redeemed within 7 days?</Node>
     <Node id="2"><code>excessFeeRefundAddress</code> gets refunded</Node>
     <Node id="3">Ticket is deleted</Node>
@@ -71,7 +71,7 @@ Once the ticket is successfully cretaed, the two following conditions are checke
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for='1'><code>Is the ticket manually cancelled or not redeemed within 7 days?</code> Logic that determines if the ticket is manually cancelled or not redeemed within 7 days (i.e., is expired)</NodeDescription>
-    <NodeDescription for='2'><code><code>excessFeeRefundAddress</code> gets refunded</code> excessFeeRefundAddress is refunded with the <code>l2CallValue</code></NodeDescription>
+    <NodeDescription for='2'><code>excessFeeRefundAddress gets refunded</code> excessFeeRefundAddress is refunded with the <code>l2CallValue</code></NodeDescription>
     <NodeDescription for='3'><code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer</NodeDescription>
     <NodeDescription for='4'><code>Is the ticket manually redeemed</code> Logic that determines if the ticket is manually redeemed</NodeDescription>
   </NodeDescriptions>
