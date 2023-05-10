@@ -54,6 +54,8 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
   </NodeDescriptions>
 </MermaidWithHtml>
 
+### Automatic Redemption
+
 5. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. 
 Once the ticket is successfully cretaed, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`.
 If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called). 
@@ -81,6 +83,8 @@ Depending on how much gas the sender has provided in step 1, ticket's redemption
     <NodeDescription for='4'><code>excessFeeRefundAddress gets refunded</code> <code>excessFeeRefundAddress</code> gets refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by <code>gasUsed * baseFee</code> in the auto-reddem</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
+
+### Manual Redemption
 
 At this point, _anyone_ can attempt to manually redeem the ticket again by calling `ArbRetryableTx`'s redeem precompile method, which donates the call's gas to the next attempt. 
 ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. 
@@ -112,16 +116,6 @@ If the fixed period (one week) elapses without a successful redeem, the ticket *
     <NodeDescription for='4'><code>Is the ticket manually redeemed</code> Logic that determines if the ticket is manually redeemed</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
-
-
-    
-
-
-
-
-
-
-
 
 
 :::caution Avoid Losing Funds!
