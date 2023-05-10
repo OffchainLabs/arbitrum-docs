@@ -1,7 +1,7 @@
 ---
-title: "How to use Oracles in Arbitrum"
-sidebar_label: Use Oracles in Arbitrum
-description: Learn how to integrate Oracles into your dapp
+title: "How to use oracles in Arbitrum"
+sidebar_label: Use oracles in Arbitrum
+description: Learn how to integrate oracles into your dapp
 reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: how-to
 ---
@@ -12,7 +12,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 Oracles are web services that provide a connection between smart contracts and the outside world. They let decentralized apps (dApps) interact with off-chain data and services.
 
-Familiarity with [Oracles](../for-devs/concepts/oracles.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](../for-devs/quickstart-solidity-hardhat) before proceeding.
+Familiarity with [oracles](../for-devs/concepts/oracles.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](../for-devs/quickstart-solidity-hardhat) before proceeding.
 
 ## Chainlink
 
@@ -211,7 +211,7 @@ Refer to [API3’s documentation](https://docs.api3.org/) for more examples of q
 
 ### Querying the price of $ETH through Tellor
 
-Here’s an example on how to use a Tellor data feed to query the current price of $ETH on-chain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the Oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found in the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
+Here’s an example on how to use a Tellor data feed to query the current price of $ETH on-chain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found in the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
 
 Tellor provides an npm package with the contracts needed to query the contract. We first install that package in our project:
 
@@ -219,7 +219,7 @@ Tellor provides an npm package with the contracts needed to query the contract. 
 npm install usingtellor
 ```
 
-Our function will just wrap the call to the Oracle contract with the query we are interested in. In this case we want to obtain the “SpotPrice” of “eth” against “usd”. We will request this information to the Arbitrum oracle contract `0xD9157453E2668B2fc45b7A803D3FEF3642430cC0`. We’ll use this example contract:
+Our function will just wrap the call to the oracle contract with the query we are interested in. In this case we want to obtain the “SpotPrice” of “eth” against “usd”. We will request this information to the Arbitrum oracle contract `0xD9157453E2668B2fc45b7A803D3FEF3642430cC0`. We’ll use this example contract:
 
 ```solidity
 contract ARBPriceConsumer is UsingTellor {
@@ -247,7 +247,7 @@ contract ARBPriceConsumer is UsingTellor {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the Oracle contract in that network**. Remember we have a [Quickstart](../for-devs/quickstart-solidity-hardhat) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the oracle contract in that network**. Remember we have a [Quickstart](../for-devs/quickstart-solidity-hardhat) available that goes through the process of compiling and deploying a contract.
 
 ### More examples
 

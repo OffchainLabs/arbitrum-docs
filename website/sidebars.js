@@ -54,7 +54,7 @@ const sidebars = {
         },
         {
           type: "doc",
-          label: "Use Oracles in Arbitrum",
+          label: "Use oracles in Arbitrum",
           id: "devs-how-tos/how-to-use-oracles"
         }
       ]
