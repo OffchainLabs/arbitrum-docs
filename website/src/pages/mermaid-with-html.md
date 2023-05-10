@@ -2,6 +2,7 @@
 id: mermaid-with-html
 ---
 
+<!-- this is a "demo page" that renders to https://developer.arbitrum.io/mermaid-with-html -->
 
 import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
