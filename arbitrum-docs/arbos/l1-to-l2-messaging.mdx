@@ -13,6 +13,24 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 Here we walk through the different stages of the lifecycle of a retryable ticket; (1) submission, (2) auto-redemption, and (3) manual redemption.
 
 
+### Submission
+
+1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully. 
+Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
+
+    - `address to`: The destination L2 contract address
+    - `uint256 l2CallValue`: The callvalue for retryable L2 message
+    - `uint256 maxSubmissionCost`: The maximum amount of gas to be paid for submitting the ticket. This amount is deducted from sender's L2 balance and is directly proportional to the size of the retryable’s data  
+    - `address excessFeeRefundAddress`: The L2 address to which the excess fee is credited (gasLimit * maxFeePerGas - ticket execution cost)
+    - `address callValueRefundAddress`: The L2 address to which the l2Callvalue is credited if the ticket times out or gets cancelled
+    - `uint256 gasLimit`: Maximum amount of  gas deducted from sender's L2 balance to cover L2 execution of the ticket
+    - `uint256 maxFeePerGas`: The Price bid for L2 execution of the ticket
+    - `bytes calldata data`: ABI encoded data of L2 message
+
+2. As shown in the Ticket Submission diagram, the sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_.
+3. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
+4. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
+
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
     <Node id="1">🧍</Node>
@@ -36,7 +54,14 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 
-Once the ticket is successfully cretaed, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, the ticket will be scheduled for the auto-redeem (see Automatic Redemption of the Ticket). Otherwise it'll follow th steps in Manual Redemption of the Ticket diagram.
+5. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. 
+Once the ticket is successfully cretaed, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `l2Basefee * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`.
+If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called). 
+Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
+
+- If the ticket is sucessfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user on L2 (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, one could use the Arbitrum SDK which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending L2-L1 messages.
+
+- If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week).
 
 
 <MermaidWithHtml>
@@ -56,6 +81,16 @@ Once the ticket is successfully cretaed, the two following conditions are checke
     <NodeDescription for='4'><code>excessFeeRefundAddress gets refunded</code> <code>excessFeeRefundAddress</code> gets refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by <code>gasUsed * baseFee</code> in the auto-reddem</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
+
+At this point, _anyone_ can attempt to manually redeem the ticket again by calling `ArbRetryableTx`'s redeem precompile method, which donates the call's gas to the next attempt. 
+ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. 
+Note that the redeem attempt's gas comes from the call to redeem, so there's no chance the block's gas limit is reached before execution.
+If the fixed period (one week) elapses without a successful redeem, the ticket **expires** and will be [automatically **discarded**][discard_link], unless some party has paid a fee to [**renew**][renew_link] the ticket for another full period. A ticket can live indefinitely as long as it is renewed each time before it expires.
+
+[enqueue_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245
+[exhaust_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L135
+[discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
+[renew_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L207
 
 
 <MermaidWithHtml>
@@ -80,35 +115,12 @@ Once the ticket is successfully cretaed, the two following conditions are checke
 
 
     
-1. Creating a retryable ticket is initiated with a transaction call to the `createRetryableTicket` function of the `inbox` contract. This function has a set of parameters which lead to a succesfull creation (and redemption) of the ticket if set carefully. 
-Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
 
-    - `address to`: The destination L2 contract address
-    - `uint256 l2CallValue`: The callvalue for retryable L2 message
-    - `uint256 maxSubmissionCost`: The maximum amount of gas to be paid for submitting the ticket. This amount is deducted from sender's L2 balance and is directly proportional to the size of the retryable’s data  
-    - `address excessFeeRefundAddress`: The L2 address to which the excess fee is credited (gasLimit * maxFeePerGas - ticket execution cost)
-    - `address callValueRefundAddress`: The L2 address to which the l2Callvalue is credited if the ticket times out or gets cancelled
-    - `uint256 gasLimit`: Maximum amount of  gas deducted from sender's L2 balance to cover L2 execution of the ticket
-    - `uint256 maxFeePerGas`: The Price bid for L2 execution of the ticket
-    - `bytes calldata data`: ABI encoded data of L2 message
 
-2. As shown in the diagram above, the sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_.
-3. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
-4. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
-5. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Assuming the sender has provided enough gas that can cover the L2 execution/redemption of the ticket on step 1,  ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
 
-- If the ticket is sucessfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user on L2 (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, one could use the Arbitrum SDK which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending L2-L1 messages.
 
-- If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week).
-At this point, _anyone_ can attempt to redeem the ticket again by calling `ArbRetryableTx`'s redeem precompile method, which donates the call's gas to the next attempt. 
-ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. 
-Note that the redeem attempt's gas comes from the call to redeem, so there's no chance the block's gas limit is reached before execution.
-If the fixed period (one week) elapses without a successful redeem, the ticket **expires** and will be [automatically **discarded**][discard_link], unless some party has paid a fee to [**renew**][renew_link] the ticket for another full period. A ticket can live indefinitely as long as it is renewed each time before it expires.
 
-[enqueue_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245
-[exhaust_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L135
-[discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
-[renew_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L207
+
 
 
 
