@@ -44,7 +44,7 @@ Once the ticket is successfully cretaed, the two following conditions are checke
     <Node id="1">Does the auto-redeem succeed?</Node>
     <Node id="2">Ticket is executed</Node>
     <Node id="3">Ticket is deleted</Node>
-    <Node id="4"><code>excessFeeRefundAddress</code> gets refunded</Node>
+    <Node id="4">excessFeeRefundAddress gets refunded</Node>
     <Connection from="1" to="2" label="yes"/>
     <Connection from="2" to="3"/>
     <Connection from="1" to="4" label="no"/>
@@ -57,10 +57,11 @@ Once the ticket is successfully cretaed, the two following conditions are checke
   </NodeDescriptions>
 </MermaidWithHtml>
 
+
 <MermaidWithHtml>
   <Nodes title="Manual Redemption of the Ticket">
     <Node id="1">Is the ticket manually cancelled or not redeemed within 7 days?</Node>
-    <Node id="2"><code>excessFeeRefundAddress</code> gets refunded</Node>
+    <Node id="2">excessFeeRefundAddress gets refunded</Node>
     <Node id="3">Ticket is deleted</Node>
     <Node id="4">Is the ticket manually redeemed?</Node>
     <Connection from="1" to="2" label="yes"/>
