@@ -1,6 +1,7 @@
 @lines-and-arrows-color: #888;
 @inline-span-border-color: #888;
 @node-background-color: #4c7d9e;
+@label-color: #777;
 
 .mermaid-with-html {
     display: flex;
@@ -32,6 +33,15 @@
         }
     }
 
+    .edgeLabels {
+        .edgeLabel {
+            background: transparent !important;
+            color: @label-color !important;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    }
+
     .mermaid {
         width: 100%;
         flex: 1;
@@ -58,10 +68,17 @@
     }
 }
 
+.flowchartTitleText {
+    fill: @label-color !important;
+}
+
 .node-description-list {
     flex: 1;
     list-style: none;
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .node-description {
         padding: 14px 14px;
