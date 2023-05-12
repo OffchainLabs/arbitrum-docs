@@ -39,11 +39,11 @@ The minimum storage requirements will change over time as the Nitro chain grows 
    - Latest Docker image for **Arbitrum Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
    - Arbitrum One Nitro genesis database snapshot
-     - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize the Nitro database
+     - Use the parameter <code>--init.url="@arbOneNitroGenesisSnapshot@"</code> on first startup to initialize the Nitro database
      - SHA256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
      - Size: 33.5573504 GB
    - Arbitrum One Classic database snapshot
-     - Download the latest Arbitrum One Classic database snapshot `"https://snapshot.arbitrum.io/mainnet/db.tar"` and put it to the mounted point directory.
+     - Download the latest Arbitrum One Classic database snapshot at [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@) and put it to the mounted point directory.
 
 Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
 

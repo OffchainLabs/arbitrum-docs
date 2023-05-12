@@ -25,9 +25,9 @@ content-type: quickstart
 
 - Arbitrum One Nitro Genesis Database Snapshot
 
-  - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize Nitro database
-  - If running more than one node, easiest to manually download image from https://snapshot.arbitrum.io/mainnet/nitro.tar and host it locally for your nodes
-  - Or use `--init.url="file:///path/to/snapshot/in/container/nitro.tar"` to use a local snapshot archive
+  - Use the parameter <code>--init.url="@arbOneNitroGenesisSnapshot@"</code> on first startup to initialize Nitro database
+  - If running more than one node, easiest to manually download image from [@arbOneNitroGenesisSnapshot@](@arbOneNitroGenesisSnapshot@) and host it locally for your nodes
+  - Or use `--init.url="file:///path/to/snapshot/in/container/nitro-genesis.tar"` to use a local snapshot archive
   - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
   - size: 33.5573504 GB
 
@@ -79,7 +79,8 @@ content-type: quickstart
 
 ### Optional parameters
 
-- `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
+<!--- Variables do not get injected when starting the list item with the code tag. We render zero-width space to force the injection -->
+- &ZeroWidthSpace;<code>--init.url="@arbOneNitroGenesisSnapshot@"</code>
   - URL to download genesis database from. Only needed when starting Arbitrum One without database
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
