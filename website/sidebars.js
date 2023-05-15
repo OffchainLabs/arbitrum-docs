@@ -300,33 +300,6 @@ const sidebars = {
         }
       ]
     },
-    {
-      type: "category",
-      label: "Concepts",
-      collapsed: true,
-      items: [
-        {
-          type: "doc",
-          id: "node-running/concepts/arbitrum-nodes-networks",
-          label: "Nodes and networks"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/feed-relay",
-          label: "Feed relay"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/sequencer",
-          label: "Sequencer"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/l1-inbox",
-          label: "L1 inbox"
-        }
-      ]
-    },
     /*
     {
       type: "doc",
