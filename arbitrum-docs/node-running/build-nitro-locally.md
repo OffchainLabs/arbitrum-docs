@@ -1,5 +1,5 @@
 ---
-title: "How to build Nitro locally (Docker, Debian)"
+title: "Build Nitro locally (Docker, Debian)"
 sidebar_label: Build Nitro locally (Docker, Debian)
 description: This how-to will help you build Nitro locally using Docker on Debian.
 author: amsanghi
@@ -12,7 +12,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso).
 
-### 1. Configure prerequisites
+### 1. Configure Prerequisites
 
   ```bash
   apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13
@@ -68,7 +68,7 @@ This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-
   gvm use 1.19.5 --default
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
   ```
-### 6. Start build
+### 6. Start Build
 
   ```bash
   make
