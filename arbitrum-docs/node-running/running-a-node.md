@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: Run a Full Node (Nitro)"
+title: "Quickstart: Run a full node (Nitro)"
 description: Learn how to run an Arbitrum node on your local machine.
 author-objective: build a quickstart that helps readers understand how to run an Arbitrum node, and why they might want to
 reader-audience: moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
