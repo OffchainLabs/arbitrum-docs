@@ -1,5 +1,5 @@
 ---
-title: 'Run an Archive Node'
+title: 'How to run an Archive node'
 description: Learn how to run an Arbitrum archive node on your local machine.
 author: jason-wanxt
 content-type: how-to
@@ -9,7 +9,7 @@ An Arbitrum **archive node** is a full node that maintains an archive of histori
 
 ⚠️ Note that **most users won't need to configure an archive node**. This type of node is great for a small number of use-cases - for example, if you need to process historical data.
 
-### Before We Begin
+### Before we begin
 
 Before the Nitro upgrade happened, Arbitrum One was running on the Classic stack for about one year (before block height 2207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state (see [state migration](../migration/state-migration.mdx)), **the Nitro stack can't serve archive requests for pre-Nitro blocks**.
 
@@ -23,7 +23,7 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Send **pre-Nitro** archive requests                                              | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](./running-a-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                         | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                  |
 
-### System Requirements
+### System requirements
 
 :::caution
 
@@ -47,7 +47,7 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 
 Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
 
-### Review and Configure Ports
+### Review and configure ports
 
 <!-- todo: explain why these ports are important and what action needs to be taken - do rules need to be configured? -->
 <!-- todo: format into a table  -->
@@ -56,7 +56,7 @@ Note that other chains don't have Classic blocks, and thus don't require an init
 - Sequencer Feed: `9642`
 - WebSocket: `8548`
 
-### Review and Configure Parameters
+### Review and configure parameters
 
 | Parameter                                   | Description                                                                                                                                     |
 | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -66,7 +66,7 @@ Note that other chains don't have Classic blocks, and thus don't require an init
 | `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache. |
 | `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum Classic** archival node.                                                                                     |
 
-### Run the Docker Image(s)
+### Run the docker image(s)
 
 <!-- this is the procedure part, so we can focus on steps to take, and move "conceptual information" into a dedicated concept doc -->
 <!-- Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks. -->
@@ -92,7 +92,7 @@ To run both Arbitrum One and Arbitrum Classic in archive mode, follow one of the
 
 Note that the above commands both map to port `8547` on their hosts. If you want to run both on the same host, you should edit those mapping to different ports, and specify your Classic node RPC url as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
 
-#### A Note on Permissions
+#### A note on permissions
 
 The Docker image is configured to run as non-root `UID 1000`. If you're running in Linux and you're getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders, replacing `arbitrum-mainnet` as needed:
 

@@ -296,7 +296,7 @@ const sidebars = {
         {
           type: "doc",
           id: "das/daserver-instructions",
-          label: "Run a Data Availability Server"
+          label: "Run a Data Availability Server",
         }
       ]
     },

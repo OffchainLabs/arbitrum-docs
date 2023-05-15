@@ -1,4 +1,10 @@
-# Run a Data Availability Server
+---
+title: "Run a Data Availability Server"
+description: This how-to will help you run a data availability server.
+author: amsanghi
+content-type: how-to
+---
+
 
 ## Description
 
@@ -30,7 +36,7 @@ Please give us feedback if there are other storage backends you would like suppo
 
 An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests.
 
-### Synchronizing State
+### Synchronizing state
 
 `daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to L1) can automatically repair gaps in data they store, and how mirrors can sync. A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
 
@@ -117,9 +123,9 @@ Options for producing Prometheus metrics:
 
 Some options are not shown because they are only used by nodes, or they are experimental/advanced. A complete list of options can be found by running `daserver --help`
 
-## Sample Deployments
+## Sample deployments
 
-### Sample Committee Member
+### Sample committee member
 
 Using `daserver` as a committee member requires:
 
@@ -131,7 +137,7 @@ Using `daserver` as a committee member requires:
 
 Once the DAS is set up, the local public key in `das_bls.pub` should be communicated out-of-band to the operator of the chain, along with a protocol (http/https), host, and port of the RPC server that can be reached by the sequencer, so that it can be added to the committee keyset.
 
-#### Set up Persistent Volume
+#### Set up persistent volume
 
 This is the persistent volume for storing the DAS database and BLS keypair.
 
@@ -149,7 +155,7 @@ spec:
   storageClassName: gp2
 ```
 
-#### Generate Key
+#### Generate key
 
 The BLS keypair must be generated using the `datool keygen` utility. It can be passed to the `dasever` executable by file or on the command line.
 
@@ -199,7 +205,7 @@ spec:
           claimName: das-server
 ```
 
-#### Create Committee Member DAS deployment
+#### Create committee member DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -268,7 +274,7 @@ spec:
           claimName: das-server
 ```
 
-### Sample Mirror
+### Sample mirror
 
 Using `daserver` as a mirror requires:
 
@@ -281,7 +287,7 @@ The mirror does not require a BLS key since it will not be accepting store reque
 
 Once the mirror is set up, please communicate a URL to reach it to the chain operator so they can add it to the public mirror list.
 
-#### Set up Persistent Volume
+#### Set up persistent volume
 
 This is the persistent volume for storing the DAS database.
 
@@ -299,7 +305,7 @@ spec:
   storageClassName: gp2
 ```
 
-#### Create Mirror DAS deployment
+#### Create mirror DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -366,7 +372,7 @@ spec:
           claimName: das-mirror
 ```
 
-#### Create IPFS Mirror DAS deployment
+#### Create IPFS mirror DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -439,7 +445,7 @@ spec:
 
 ### Testing
 
-#### Basic Validation: Health Check Data is Present
+#### Basic validation: health check data is present
 
 In the docker image there is the `datool` utility that can be used to Store and Retrieve messages from a DAS. We will take advantage of a data hash that will always be present if the the health check is enabled.
 
@@ -463,7 +469,7 @@ $ curl  https://<HOST>/<PATH>/get-by-hash/8b248e2bd8f75bf1334fe7f0da75cc7c1a34e0
 {"data":"VGVzdC1EYXRh"}
 ```
 
-#### Further Validation: Using Store Interface Directly
+#### Further validation: using store interface directly
 
 The Store interface of `daserver` validates that requests to store data are signed by the the Batch Poster's ECDSA key, identified via a call to the Sequencer Inbox contract on L1. It can also be configured to accept Store requests signed with another ECDSA key of your chosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure. Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
 
@@ -506,7 +512,7 @@ The retention period defaults to 24h but can be configured for `datool client rp
 --das-retention-period
 ```
 
-### Deployment Recommendations
+### Deployment recommendations
 
 The REST interface is cacheable, consider using a CDN or caching proxy in front of your REST endpoint.
 

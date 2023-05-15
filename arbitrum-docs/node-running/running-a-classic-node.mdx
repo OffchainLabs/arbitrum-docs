@@ -1,10 +1,14 @@
-# Run a Classic Node
+---
+title: 'How to run a classic node'
+description: Learn how to run an classic node on your local machine.
+content-type: how-to
+---
 
 ⚠️ Note: If you’re interested in accessing the Arbitrum network but you don’t want to setup your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider
 
-### Do You Need To Run A Classic Node?
+### Do you need to run a classic node?
 
-Arbitrum One has both been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack.
+Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack.
 The Nitro node databases have the raw data of all blocks, including pre-Nitro
 blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks.
 
@@ -20,7 +24,7 @@ on pre-Nitro blocks.
 - `eth_getTransactionCount`
 - `eth_getStorageAt`
 
-### Required Artifacts
+### Required artifacts
 
 - Latest Docker Image: <code>@latestClassicNodeImage@</code>
 - Latest classic snapshot for Arbitrum One: https://snapshot.arbitrum.io/mainnet/db.tar
@@ -73,6 +77,6 @@ on pre-Nitro blocks.
   - Only `trace` type is supported. `vmTrace` and `stateDiff` types are not supported
   - The self-destruct opcode is not included in the trace. To get the list of self-destructed contracts, you can provide the `deletedContracts` parameter to the method
 
-### Feed Relay
+### Feed relay
 
 - Arbitrum classic does not communicate with Nitro sequencer, so classic relay is no longer used.
