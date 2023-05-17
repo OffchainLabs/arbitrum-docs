@@ -147,10 +147,26 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 
 
-### Is there any testnet or devnet available on Arbitrum? {#is-there-any-testnet-or-devnet-available-on-arbitrum}
+### What is a testnet or a devnet? {#what-is-a-testnet-or-a-devnet}
+<p>Testnets (or devnets) primarily serve developers who want to test out the applications they're building without having to use any real mainnet funds.</p>
+
+<p>Arbitrum testnets have the same full feature-set as the mainnet networks. They are also "true" L2s that run on top of public testnet Layer 1s, using their underlying networks for security and settlement.</p>
+
+<p>Users can bridge any asset from the underlying testnet L1 into an Arbitrum testnet (and back!), using the official <a href="https://bridge.arbitrum.io">bridge</a>.</p>
+
+<p></p>
+
+
+
+### Is there any testnet available on Arbitrum? {#is-there-any-testnet-available-on-arbitrum}
 <p>Yes, there's a Goerli Rollup Testnet (421613) that uses the Nitro rollup tech stack, running on top of Ethereum Goerli. You can find more information <a href="https://developer.arbitrum.io/public-chains">here</a>.</p>
 
 <p></p>
+
+
+
+### When was Arbitrum One upgraded from Classic to Nitro? {#when-was-arbitrum-one-upgraded-from-classic-to-nitro}
+<p>Arbitrum One <a href="https://medium.com/offchainlabs/its-nitro-time-86944693bf29">was upgraded</a> on August 31st, 2022, from the Classic stack to the improved <a href="https://developer.arbitrum.io/inside-arbitrum-nitro/">Nitro</a> tech stack, maintaining the same state.</p>
 
 
 
