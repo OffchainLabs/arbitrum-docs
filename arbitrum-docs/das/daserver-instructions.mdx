@@ -1,5 +1,5 @@
 ---
-title: "Run a Data Availability Server"
+title: "How to run a data availability server (DAS)"
 description: This how-to will help you run a data availability server.
 author: amsanghi
 content-type: how-to
@@ -445,7 +445,7 @@ spec:
 
 ### Testing
 
-#### Basic validation: health check data is present
+#### Basic validation: Health check data is present
 
 In the docker image there is the `datool` utility that can be used to Store and Retrieve messages from a DAS. We will take advantage of a data hash that will always be present if the the health check is enabled.
 
@@ -469,7 +469,7 @@ $ curl  https://<HOST>/<PATH>/get-by-hash/8b248e2bd8f75bf1334fe7f0da75cc7c1a34e0
 {"data":"VGVzdC1EYXRh"}
 ```
 
-#### Further validation: using store interface directly
+#### Further validation: Using store interface directly
 
 The Store interface of `daserver` validates that requests to store data are signed by the the Batch Poster's ECDSA key, identified via a call to the Sequencer Inbox contract on L1. It can also be configured to accept Store requests signed with another ECDSA key of your chosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure. Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
 

@@ -1,5 +1,5 @@
 ---
-title: "How to Read the Sequencer Feed?"
+title: "How to read the Sequencer feed"
 todos:
   - Follow convention and style guide
   - Communicate "who this is for" and "under which scenarios this is useful".

@@ -24,7 +24,7 @@ Here we describe different types of validators and provide instructions on how t
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
 
-### Running watchtower validator
+### Running Watchtower validator
 
 - Running a validator in `Watchtower` mode is the same as running a Nitro node with `--node.staker.enable --node.staker.strategy=Watchtower`
 - Here is an example of how to run a watchtower validator for Arbitrum One:

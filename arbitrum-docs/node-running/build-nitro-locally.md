@@ -1,5 +1,5 @@
 ---
-title: "Build nitro locally (Docker, Debian)"
+title: "How to build Nitro locally (Docker, Debian)"
 sidebar_label: Build Nitro locally (Docker, Debian)
 description: This how-to will help you build Nitro locally using Docker on Debian.
 author: amsanghi
@@ -21,7 +21,7 @@ This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-
   ```
 
 
-### 2. Configure nitro
+### 2. Configure Nitro
 
   ```bash
   git clone https://github.com/OffchainLabs/nitro.git
