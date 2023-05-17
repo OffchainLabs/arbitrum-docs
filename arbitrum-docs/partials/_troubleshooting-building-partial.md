@@ -147,8 +147,19 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 
 
-### Is there any testnet or devnet available on Arbitrum? {#is-there-any-testnet-or-devnet-available-on-arbitrum}
-<p>Yes, there's a Goerli Rollup Testnet (421613) that uses the Nitro rollup tech stack, running on top of Ethereum Goerli. You can find more information <a href="https://developer.arbitrum.io/for-devs/concepts/public-chains">here</a>.</p>
+### What is a testnet or a devnet? {#what-is-a-testnet-or-a-devnet}
+<p>Testnets (or devnets) primarily serve developers who want to test out the applications they're building without having to use any real mainnet funds.</p>
+
+<p>Arbitrum's Nitro Goerli Rollup testnet has the same full feature-set as the mainnet networks. It is also a "true" L2 that runs on top of the Goerli testnet (L1), using it for security and settlement.</p>
+
+<p>Users can bridge any asset from the Goerli testnet (L1) into the Nitro Goerli Rollup testnet (and back!), using the official <a href="https://bridge.arbitrum.io">bridge</a>.</p>
+
+<p></p>
+
+
+
+### Is there any testnet available on Arbitrum? {#is-there-any-testnet-available-on-arbitrum}
+<p>Yes, there's a Goerli Rollup testnet (421613) that uses the Nitro rollup tech stack, running on top of Ethereum Goerli. You can find more information <a href="https://developer.arbitrum.io/for-devs/concepts/public-chains">here</a>.</p>
 
 <p></p>
 
