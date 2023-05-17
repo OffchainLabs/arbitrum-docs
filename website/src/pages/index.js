@@ -12,21 +12,21 @@ const oldPathToNewPath = {
   "/arb-specific-things": "/arbitrum-ethereum-differences",
   "/docs/mainnet": "/mainnet-beta",
   "/migration/dapp-migration": "/migration/dapp_migration",
-  "/docs/public_chains": "/public-chains",
+  "/docs/public_chains": "/for-devs/concepts/public-chains",
   "/docs/inside_arbitrum": "/inside-arbitrum-nitro",
   "/docs/l1_l2_messages": "/arbos/l1-to-l2-messaging",
   "/docs/bridging_assets": "/asset-bridging",
   "/docs/glossary": "/intro/glossary",
   "/docs/anytrust": "/inside-anytrust",
   "/docs/node_providers": "/node-running/node-providers",
-  "/docs/useful_addresses": "/useful-addresses",
+  "/docs/useful_addresses": "/for-devs/useful-addresses",
   "/docs/running_node": "/node-running/running-a-node",
   "/docs/running_nitro_node": "/node-running/running-a-node",
   "/docs/running_goerli_nitro_node": "/node-running/running-a-node",
   "/docs/running_rinkeby_nitro_node": "/node-running/running-a-node",
-  "/docs/public_testnet": "/public-chains",
-  "/docs/public_nitro_testnet": "/public-chains",
-  "/docs/public_nitro_devnet": "/public-chains",
+  "/docs/public_testnet": "/for-devs/concepts/public-chains",
+  "/docs/public_nitro_testnet": "/for-devs/concepts/public-chains",
+  "/docs/public_nitro_devnet": "/for-devs/concepts/public-chains",
   "/docs/developer_quickstart": "/",
   "/docs/installation": "/node-running/running-a-node",
   "/docs/rollup_basics": "/intro",
@@ -56,6 +56,10 @@ const oldPathToNewPath = {
   "/faqs/seq-or-val": "/faqs/protocol-faqs#q-seq-vs-val",
   "/faqs/beta-status": "/mainnet-beta",
   "/faqs/the-merge": "/",
+
+  // File relocations
+  "/public-chains": "/for-devs/concepts/public-chains",
+  "/useful-addresses": "/for-devs/useful-addresses",
 };
 
 const getNewPath = (_path) => {

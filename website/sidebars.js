@@ -65,6 +65,11 @@ const sidebars = {
       collapsed: false,
       items: [
         {
+          type: "doc",
+          label: "Arbitrum chains",
+          id: "for-devs/concepts/public-chains"
+        },
+        {
           type: "category",
           label: "Arbitrum/Ethereum differences",
           items: [
@@ -120,23 +125,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Arbitrum resources",
-      collapsed: false,
-      items: [
-        {
-          type: "doc",
-          label: "Chains",
-          id: "public-chains"
-        },
-        {
-          type: "doc",
-          label: "Useful addresses",
-          id: "useful-addresses"
-        },
-      ]
-    },
-    {
-      type: "category",
       label: "Developer tools and resources",
       collapsed: false,
       items: [
@@ -144,6 +132,11 @@ const sidebars = {
           type: "doc",
           label: "Overview",
           id: "for-devs/dev-tools-and-resources/overview"
+        },
+        {
+          type: "doc",
+          label: "Arbitrum chains and smart contract addresses",
+          id: "for-devs/useful-addresses"
         },
         {
           type: "doc",
@@ -192,39 +185,6 @@ const sidebars = {
       label: "Troubleshooting: Building dApps",
       id: "for-devs/troubleshooting-building"
     },
-    /*
-    {
-      type: "doc",
-      label: "Public chains",
-      id: "public-chains"
-    },
-    {
-      type: "doc",
-      label: "Useful addresses",
-      id: "useful-addresses"
-    },
-    {
-      type: "category",
-      label: "Resources",
-      items: [
-        {
-          type: "link",
-          label: "Tutorials",
-          href: "https://github.com/OffchainLabs/arbitrum-tutorials"
-        },
-        {
-          type: "link",
-          label: "SDK",
-          href: "/sdk"
-        },
-        {
-          type: "link",
-          label: "Github",
-          href: "https://github.com/OffchainLabs"
-        }
-      ]
-    }
-    */
   ],
   bridgeTokensSidebar: [
     {

@@ -30,7 +30,7 @@ export const AddressExplorerLink = (props: {
 
   return (
     <a href={`${rootUrl}/${address}`} target="_blank">
-      {address}
+      {address.slice(0, 6)}...{address.slice(-4)}
     </a>
   );
 };
