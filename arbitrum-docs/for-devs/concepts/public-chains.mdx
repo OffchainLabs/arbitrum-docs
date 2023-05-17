@@ -6,17 +6,17 @@ reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: concept
 ---
 
-Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, designed to increase scalability and reduce costs. In this conceptual overview, we’ll learn about the different Arbitrum chains and how they relate to each other. We’ll describe the available Arbitrum production and testnet chains, their differences, and the technology stacks that these chains use. We will finally list the current validators in each chain, as well as the members of the data availability committee (DAC) in Arbitrum Nova.
+Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, designed to increase scalability and reduce transaction costs. In this conceptual overview, we’ll learn about the different Arbitrum chains and how they relate to each other. We’ll describe the available Arbitrum production and testnet chains, their differences, and the technology stacks that these chains use. We will finally list the current validators in each chain, as well as the members of the data availability committee (DAC) in Arbitrum Nova.
 
 ## What Arbitrum production chains are available?
 
 ### Arbitrum One
 
-**Arbitrum One** is the flagship Arbitrum mainnet chain, an optimistic rollup chain running on top of Ethereum mainnet. It offers a unique combination of benefits including trustless security, compatibility with Ethereum, scalability, and minimum cost. It uses the [Nitro](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx) technology stack, which is a major upgrade of the technology, improving over the "Classic" stack in several ways such as advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more.
+**Arbitrum One** is the flagship Arbitrum mainnet chain, an optimistic rollup chain running on top of the Ethereum mainnet. It offers a unique combination of benefits including trustless security, compatibility with Ethereum, scalability, and minimum transaction costs. It uses the [Nitro](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx) technology stack, which is a major upgrade of the technology, improving over the "Classic" stack in several ways such as advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more.
 
 ### Arbitrum Nova
 
-**Arbitrum Nova** is another production chain that uses the AnyTrust technology stack, a variant use case of the Nitro technology. In general, AnyTrust lowers costs by accepting a mild trust assumption. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external Data Availability Committee to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1.
+**Arbitrum Nova** is another production chain that uses the AnyTrust technology stack, a variant use case of the Nitro technology. In general, AnyTrust lowers transaction costs by accepting a mild trust assumption. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external data availability committee to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1.
 
 ## What Arbitrum testnet chains are available?
 
@@ -50,7 +50,7 @@ The Classic technology stack is the original version of Arbitrum. It has been de
 
 ## Whitelisted validators
 
-Following are the lists of whitelisted validators for all public Arbitrum chains (more information in **["state of progressive decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)**):
+These are the whitelisted validators for every public Arbitrum chain (more information in **["state of progressive decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)**):
 
 ### Arbitrum One
 
@@ -79,7 +79,7 @@ Following are the lists of whitelisted validators for all public Arbitrum chains
 - [0xDfB23DFE9De7dcC974467195C8B7D5cd21C9d7cB](https://etherscan.io/address/0xDfB23DFE9De7dcC974467195C8B7D5cd21C9d7cB)
 - [0xE27d4Ed355e5273A3D4855c8e11BC4a8d3e39b87](https://etherscan.io/address/0xE27d4Ed355e5273A3D4855c8e11BC4a8d3e39b87)
 
-### Nitro Goerli Rollup testnet
+### Arbitrum Goerli (testnet)
 
 - [0x3EABe7e5e3fcDdFB8fb8c5972EB151bF4fddf2ce](https://goerli.etherscan.io/address/0x3EABe7e5e3fcDdFB8fb8c5972EB151bF4fddf2ce)
 - [0x9549263185294a7FB24bf357b0050252d3653C74](https://goerli.etherscan.io/address/0x9549263185294a7FB24bf357b0050252d3653C74)
@@ -88,7 +88,7 @@ Following are the lists of whitelisted validators for all public Arbitrum chains
 
 ## Data Availability Committee members
 
-Following are the members of the 6-of-7 data availability committee (DAC) in Arbitrum Nova:
+These are the members of the 6-of-7 data availability committee (DAC) in Arbitrum Nova:
 
 - Consensys
 - Google Cloud
