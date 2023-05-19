@@ -10,15 +10,17 @@ content_type: concept
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
 import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
+
 <a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a> are Layer 2 (L2) chains that continuously exchange information with Ethereum's Layer 1 (L1) chain. This concept doc explains when and how information is sent from Ethereum's L1 chain to Arbitrum's L2 chains.
+
 
 This is a complex topic, so this is a lengthy concept doc that progressively discloses technical complexity. Here's what we'll cover:
 
-1. **Why this information is important**
+1. **Why this information is important**.
 2. **The conceptual primitives** that work together to enable L1-to-L2 messaging on Arbitrum.
 3. **An example smart contract** that exposes two functions.
 4. **Properties across deployment scenarios** in terms of our conceptual primitives and example smart contract.
-5. **Tying it all together** through an elaboration upon each of the conceptual primitives, when you should care about them, and how they relate to one another.
+5. **Tying it all together** through an elaboration upon each of the conceptual primitives and how they relate to one another in the context of cross-layer messaging.
 
 Although this doc doesn't assume prior knowledge, it does assume that you're comfortable exploring the supporting documentation linked throughout, as needed. Let's dive in!
 
