@@ -340,15 +340,18 @@ article .markdown p > code {
   border-radius: 3px;
   background-color: rgba(150, 150, 150, 0.2);
 }
-[class*="quickstart-solidity-hardhat"] table {
+[class*="quickstart-solidity-hardhat"] table,
+[class*="l1-to-l2-messaging"] table {
   font-size: 12px;
   margin-top: 20px;
   margin-bottom: 30px;
 }
-[class*="quickstart-solidity-hardhat"] table td {
+[class*="quickstart-solidity-hardhat"] table td,
+[class*="l1-to-l2-messaging"] table td {
   padding: 10px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine {
+[class*="quickstart-solidity-hardhat"] .vending-machine,
+[class*="l1-to-l2-messaging"] .vending-machine {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
@@ -364,13 +367,15 @@ article .markdown p > code {
   background-color: rgba(150, 150, 150, 0.2);
   position: relative;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine h4 {
+[class*="quickstart-solidity-hardhat"] .vending-machine h4,
+[class*="l1-to-l2-messaging"] .vending-machine h4 {
   text-transform: uppercase;
   color: var(--ifm-color-content);
   margin: 0;
   font-family: monospace;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine .subheader {
+[class*="quickstart-solidity-hardhat"] .vending-machine .subheader,
+[class*="l1-to-l2-messaging"] .vending-machine .subheader {
   font-family: monospace;
   text-transform: uppercase;
   color: #828282;
@@ -378,7 +383,8 @@ article .markdown p > code {
   font-weight: 800;
   margin-bottom: 20px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine label {
+[class*="quickstart-solidity-hardhat"] .vending-machine label,
+[class*="l1-to-l2-messaging"] .vending-machine label {
   font-family: monospace;
   text-transform: uppercase;
   color: #828282;
@@ -388,19 +394,22 @@ article .markdown p > code {
   display: block;
   text-align: left;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine input {
+[class*="quickstart-solidity-hardhat"] .vending-machine input,
+[class*="l1-to-l2-messaging"] .vending-machine input {
   padding: 10px;
   width: 90%;
   margin-bottom: 5px;
   font-size: 11px;
   font-family: monospace;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake {
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake,
+[class*="l1-to-l2-messaging"] .vending-machine #cupcake {
   display: block;
   font-size: 30px;
   margin-bottom: 10px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please {
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please,
+[class*="l1-to-l2-messaging"] .vending-machine #cupcake-please {
   color: white;
   background-color: #007bdd;
   padding: 10px 20px;
@@ -409,31 +418,38 @@ article .markdown p > code {
   margin-top: 20px;
   margin-bottom: 10px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please:hover {
+[class*="quickstart-solidity-hardhat"] .vending-machine #cupcake-please:hover,
+[class*="l1-to-l2-messaging"] .vending-machine #cupcake-please:hover {
   cursor: pointer;
   opacity: 0.9;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance {
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance,
+[class*="l1-to-l2-messaging"] .vending-machine #refresh-balance {
   font-size: 11px;
   display: block;
   margin-bottom: 10px;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance:hover {
+[class*="quickstart-solidity-hardhat"] .vending-machine #refresh-balance:hover,
+[class*="l1-to-l2-messaging"] .vending-machine #refresh-balance:hover {
   cursor: pointer;
   opacity: 0.9;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper {
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper,
+[class*="l1-to-l2-messaging"] .vending-machine #balance-wrapper {
   padding: 10px 0px;
   font-size: 11px;
   margin: 0;
   font-family: monospace;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
+[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child,
+[class*="l1-to-l2-messaging"] .vending-machine #balance-wrapper > span:first-child {
   font-weight: 600;
   padding-right: 5px;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator,
-[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+[class*="l1-to-l2-messaging"] .vending-machine #error-indicator,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator,
+[class*="l1-to-l2-messaging"] .vending-machine #success-indicator {
   background: #aa0000;
   width: 10px;
   height: 10px;
@@ -444,14 +460,18 @@ article .markdown p > code {
   display: none;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator.visible,
-[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator.visible {
+[class*="l1-to-l2-messaging"] .vending-machine #error-indicator.visible,
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator.visible,
+[class*="l1-to-l2-messaging"] .vending-machine #success-indicator.visible {
   display: block;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
+[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator,
+[class*="l1-to-l2-messaging"] .vending-machine #success-indicator {
   background: #00a400;
   display: block;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine .hidden {
+[class*="quickstart-solidity-hardhat"] .vending-machine .hidden,
+[class*="l1-to-l2-messaging"] .vending-machine .hidden {
   display: none;
 }
 .hero--primary .hero__title {

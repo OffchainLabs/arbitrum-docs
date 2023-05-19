@@ -1,21 +1,184 @@
+---
+title: "L1-to-L2 messaging on Arbitrum: A conceptual overview"
+sidebar_label: "L1-to-L2 messaging"
+description: "Learn how Arbitrum's Layer 2 (L2) chains communicate with Ethereum's Layer 1 (L1) chain using retryable tickets."
+author: mahsamoosavi
+reader_audience: new developers who want to build Arbitrum dApps
+content_type: concept
+---
+
+<!-- 
+
+### EDITOR NOTES
+
+ 1. Introduced frontmatter (see frontmatter guidance in our patterns guide).
+ 2. Sentence-cased section titles (see style guidance in our patterns guide).
+ 3. "L1-to-L2" to maintain consistency with L2-to-L1 doc.
+ 4. Update the introduction to set reader expectations, and to connect explicitly to their need ("build dApps on Arbitrum")
+ 5. Use our cupcake vending machine smart contract. Reasons:
+    - "construct understanding" using familiar concepts and experiences
+    - promote awareness of our investments elsewhere
+    - IP reuse to save energy
+    - using our cupcake example as a canonical education primitive
+ 6. Use a table to compare properties across deployment scenarios
+ 7. Identified areas where content can move elsewhere 
+
+TODOS:
+
+  1. Fact check
+  2. Ensure that it's ok to refer to creation<>submission interchangeably, in terms of developer expectations
+  3. If (2) is a yes, refer to it as submission throughout
+  4. If (2) is a no, elaborate on the difference between creation and submission
+  5. Vibe-check the numbered sections
+  6. Vibe-check the table
+  7. Vibe-check the flow
+  8. Finish editing
+
+-->
+
+
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
 import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
+<a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a> are Layer 2 (L2) chains that continuously exchange information with Ethereum's Layer 1 (L1) chain. This concept doc explains when and how information is sent from Ethereum's L1 chain to Arbitrum's L2 chains.
 
-# L1 To L2 Messaging
+This is a complex topic, so this is a lengthy concept doc that progressively discloses technical complexity. Here's what we'll cover:
 
-## Retryable Tickets
+1. **Why this information is important**
+2. **The conceptual primitives** that work together to enable L1-to-L2 messaging on Arbitrum.
+3. **An example smart contract** that exposes two functions.
+4. **Properties across deployment scenarios** in terms of our conceptual primitives and example smart contract.
+5. **Tying it all together** through an elaboration upon each of the conceptual primitives, when you should care about them, and how they relate to one another.
 
-Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages, i.e., L1 transactions that initiate a message to be executed on L2. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at L1; its _submission_ on L1 is separable / asynchronous with its _execution_ on L2. Retryables provide atomicity between the cross chain operations; if the L1 transaction to request submission succeeds (i.e. does not revert) then the execution of the Retryable on L2 has a strong guarantee to ultimately succeed as well.
-
-## Retryable Tickets Lifecycle
-
-Here we walk through the different stages of the lifecycle of a retryable ticket; (1) submission, (2) auto-redemption, and (3) manual redemption.
+Although this doc doesn't assume prior knowledge, it does assume that you're comfortable exploring the supporting documentation linked throughout, as needed. Let's dive in!
 
 
-### Submission
+## 1: Why this information is important
 
-1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract][inbox_link]. A ticket is guaranteed to be created if this call succeeds. Here, we describe parameters that need to be carefully set.
+Cross-layer communication is a core feature of Arbitrum's L2 chains. From the perspective of decentralized application (dApp) development, it enables two key capabilities:
+
+ 1. **L1-to-L2 messaging**: L1 contracts can send messages to L2 contracts, which can trigger the execution of L2-hosted smart contracts.
+ 2. **L2-to-L1 messaging**: L2 contracts can send messages to L1 contracts, which can trigger the execution of L1-hosted smart contracts.
+
+Without cross-layer messaging, it would be impossible to build dApps that interact with both layers. The ability to deploy smart contracts that can be executed and invoked by nodes on both layers is a key enabler of Arbitrum's L2 chains' scalability and interoperability with Ethereum's L1 chain.
+
+
+## 2: The conceptual primitives
+
+Let's start with some definitions - we'll connect the dots as we go:
+
+ 1. **Layers**: We'll focus on the first two: L1 (Ethereum's chains) and L2 (Arbitrum's chains). Both layers host multiple chains; each chain is supported by its own decentralized network of nodes.
+ 2. **Nodes**: Computers running p2p client software that implements a particular chain's protocol. The protocol tells the nodes how to execute transactions, manage state, and exchange information. 
+ 3. **State**: A distributed record of Ethereum's "world state" - the canonical, trustworthy representation of transaction history, account balances, token ownership, and other contract data.
+ 4. **Smart contracts**: Programs that can be deployed to a layer and whose code is hosted and executed by nodes on that layer.
+ 5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
+ 6. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
+ 7. **Retryable tickets**: Special messages sent from L1 nodes to L2 nodes in order to trigger the execution of an L2-hosted smart contract.
+ 8. **Outbox contracts**: Smart contracts that are deployed to L1 and are responsible for transmitting retryable tickets to L2's inbox contracts.
+ 9.  **Inbox contracts**: Smart contracts that are deployed to L2 and are responsible for receiving retryable tickets from L1's outbox contracts.
+ 10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers.
+ 
+
+
+## 3: An example smart contract
+
+In *[Quickstart: Build a decentralized app with Arbitrum](/for-devs/quickstart-solidity-hardhat.md)*, we deploy a cupcake vending machine to an Arbitrum L2 chain. The vending machine's business logic is encapsulated within a smart contract that increases the `cupcakeBalance` associated with your Ethereum address when you click a button. This smart contract exposes two functions:
+
+ 1. `giveCupcakeTo(address userAddress)`: increases the specified address's `cupcakeBalance` by 1
+ 2. `getCupcakeBalanceFor(address userAddress)`: returns the number of cupcakes associated with the specified address
+
+
+Don't worry about the guts of the contract - its interface is all we need to understand for now. We'll refer to this contract as the **cupcake contract** throughout the rest of this doc.
+
+
+## 4: Properties across deployment scenarios
+
+Let's compare a number of properties across **two deployment scenarios**: 
+
+1. The contract is deployed straight to **Ethereum L1**
+2. The contract is deployed straight to **Arbitrum L2**
+
+<br />
+
+Each of the below questions are asked within the context of our cupcake contract deployment. We'll reference our **conceptual primitives** and **contract functions** in our answers:
+
+<br />
+
+<!-- todo -->
+
+|                                                                            | Straight to L1 | Stright to L2 |
+| -------------------------------------------------------------------------- | -------------- | ------------- |
+| **Where is the contract deployed?**                                        | Ethereum L1    | Arbitrum L2   |
+| **Where is the executable code hosted?**                                   |                |               |
+| **Can the contract code be executed by L1 nodes?**                         |                |               |
+| **Can the contract code be executed by L2 nodes?**                         |                |               |
+| **Can the contract state be read from L1 nodes?**                          |                |               |
+| **Can the contract state be read from L2 nodes?**                          |                |               |
+| **To what degree is state mirrored between L1 and L2 nodes?**              |                |               |
+| **Where is the contract's state stored?**                                  |                |               |
+| **How does the contract deployment impact L1's physical state?**           |                |               |
+| **How does the contract deployment impact L2's physical state?**           |                |               |
+| **When is gas paid?**                                                      |                |               |
+| **Where is gas paid?**                                                     |                |               |
+| **Who pays gas?**                                                          |                |               |
+| **Can another L1 contract call the deployed contract's methods directly?** |                |               |
+| **Can another L2 contract call the deployed contract's methods directly?** |                |               |
+| **When is information sent from L1 to L2?**                                |                |               |
+| **When is information sent from L2 to L1?**                                |                |               |
+| **What primitives are involved with L1-L2 messages?**                      |                |               |
+| **What primitives are involved with L2-L1 messages?**                      |                |               |
+| **When does L1's state change?**                                           |                |               |
+| **When does L2's state change?**                                           |                |               |
+| **Can I query L1 state via L2?**                                           |                |               |
+| **Can I query L2 state via L1?**                                           |                |               |
+| **When are retryable tickets involved?**                                   |                |               |
+| **How are retryable tickets involved?**                                    |                |               |
+| **When are outbox contracts involved?**                                    |                |               |
+| **How are outbox contracts involved?**                                     |                |               |
+| **When are inbox contracts involved?**                                     |                |               |
+| **How are inbox contracts involved?**                                      |                |               |
+| **When are bridge contracts involved?**                                    |                |               |
+| **How are bridge contracts involved?**                                     |                |               |
+| **How are gateway contracts involved?**                                    |                |               |
+
+
+<br />
+
+## 5: Breaking down the details
+
+Let's now elaborate upon each of our conceptual primitives by defining them more precisely and exploring how they relate to one another in the context of cross-layer communication.
+
+### 5.1: Messages
+
+ - A **message** is a data structure that contains information about a transaction that was initiated on L1, but that needs to be executed on L2. Messages are sent from L1 to L2, and they're used to trigger contract calls on L2.
+ - This primitive is important to understand if you're building a dApp that... <!-- todo -->
+ - Here's how **messages** relate to some of the other primitives we started with:
+   - **Retryable tickets**: Retryable tickets are a type of message. They're used to send information from L1 to L2.
+   - todo
+
+
+### 5.2: Retryable tickets
+
+ - Retryable tickets (retryables) are the canonical data structure that Arbitrum uses to facilitate L1-to-L2 messages. 
+ - Using our cupcake vending machine example, a retryable could be used to solve the following problem: The cupcake contract was deployed to Arbitrum L2, but Alice is an L1 user who isn't comfortable with L2. She wants to give a cupcake to Bob, who is an L2 user. Retryable tickets allow Alice to initiate the transaction on L1, without knowing about L2, and then have the transaction executed on L2.
+ - The retryable ticket lifecycle in a nutshell:
+   1. **Submission**: The ticket is submitted to Arbitrum's canonical inbox contract on L2
+   2. **Execution**: The ticket is executed by a sequencer on L2
+      1. **Automatic redemption**: If the ticket is executed successfully, it's automatically redeemed. This is the happy path.
+      2. **Manual redemption**: If the ticket fails to execute, it can be redeemed manually.
+      3. **Expiration**: If the ticket isn't redeemed within a certain timeframe, it expires.
+ - One of the most important properties of retryables is that **they logically separate submission from execution**. In other words, they ensure that these operations are atomic but related: if the L1 transaction that requests the submission of a retryable ticket succeeds, then the execution of the retryable on L2 has a strong guarantee to ultimately succeed as well.
+ - This atomicity is important because it means that the L1 transaction that requests the **submission** of a retryable ticket can be submitted for a fixed cost, which is a function of its calldata size, and is usually paid by end-users at L1. The cost of **executing** the retryable's transaction on L2 is paid by the sequencer, and is a function of the transaction's gas usage (as opposed to calldata size).
+ - This separation of concerns is one of the many ingredients that makes Arbitrum's gas efficiency and strong security guarantees possible.
+
+Let's now take a breezy walk through the different stages of a retryable ticket's lifecycle.
+
+#### 5.2.1: Retryable ticket lifecycle: Submission
+
+
+
+<!-- todo: move this to procedural guidance (how-to):
+
 Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
 
     - `l1CallValue (also referred to as deposit)`: Not a real function parameter, it is rather the callValue that is sent along with the transaction
@@ -28,10 +191,15 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
     - `uint256 maxFeePerGas`: The gas price bid for L2 execution of the ticket that is supplied within the deposit (l1CallValue)
     - `bytes calldata data`: The calldata to the destination L2 address
 
-2. Sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
-3. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
+
+
+1. Sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
+2. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
 
 [inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol
+-->
+
+
 
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
@@ -56,9 +224,22 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
   </NodeDescriptions>
 </MermaidWithHtml>
 
-### Automatic Redemption
 
-4. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. 
+ - Retryable ticket submissions are initiated by calling the `createRetryableTicket` function of the L2 [`inbox` contract](inbox_link). 
+ - A retryable is guaranteed to be submitted if this call succeeds.
+ - For step-by-step instructions and code snippets that walk you through this process, see [How to submit an L1-to-L2 retryable ticket](#todo).
+
+
+:::caution Editing paused here
+
+See inline HTML comments below the frontmatter of this document for **edit notes**.
+
+:::
+
+
+#### 5.2.2: Retryable ticket lifecycle: Automatic redemption
+
+The submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. 
 Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`.
 If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the [`redeem`](./precompiles#ArbRetryableTx) method of the ArbRetryableTx precompile had been called). 
 Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
@@ -196,4 +377,28 @@ modifier onlyFromMyL1Contract() override {
     require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
     _;
 }
+
+
+
+
+
+
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Arbitrum One (L2)</Node>
+    <Node id="2">Arbitrum Nova (L2)</Node>
+    <Node id="3">Ethereum (L1)</Node>
+    <Connection from="1" to="3" arrows="none"/>
+    <Connection from="2" to="3" arrows="none"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='1'><code>🧍</code> The user who initiates an L1-L2 message</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
+
+
+
 

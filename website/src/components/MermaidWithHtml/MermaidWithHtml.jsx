@@ -58,6 +58,13 @@ const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, 
         mermaidLine = `${fromMermaidNode} -.-> ${toMermaidNode}`;
       }
 
+      // handle arrows - for now, magic strings
+      let arrowsPropValue = conn.props.arrows;
+      if (arrowsPropValue == "none") {
+        // replace -> with -
+        mermaidLine = mermaidLine.replace(/->/g, '-');
+      }
+
       // todo: line and arrow types could be configurable too
 
       return mermaidLine;
