@@ -376,28 +376,3 @@ modifier onlyFromMyL1Contract() override {
     require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
     _;
 }
-
-
-
-
-
-
-
-<MermaidWithHtml>
-  <Nodes>
-    <Node id="1">Arbitrum One (L2)</Node>
-    <Node id="2">Arbitrum Nova (L2)</Node>
-    <Node id="3">Ethereum (L1)</Node>
-    <Connection from="1" to="3" arrows="none"/>
-    <Connection from="2" to="3" arrows="none"/>
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for='1'><code>🧍</code> The user who initiates an L1-L2 message</NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
-
-
-
-
-
-
