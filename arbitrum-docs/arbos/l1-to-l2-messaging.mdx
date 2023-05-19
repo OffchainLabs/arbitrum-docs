@@ -7,36 +7,6 @@ reader_audience: new developers who want to build Arbitrum dApps
 content_type: concept
 ---
 
-<!-- 
-
-### EDITOR NOTES
-
- 1. Introduced frontmatter (see frontmatter guidance in our patterns guide).
- 2. Sentence-cased section titles (see style guidance in our patterns guide).
- 3. "L1-to-L2" to maintain consistency with L2-to-L1 doc.
- 4. Update the introduction to set reader expectations, and to connect explicitly to their need ("build dApps on Arbitrum")
- 5. Use our cupcake vending machine smart contract. Reasons:
-    - "construct understanding" using familiar concepts and experiences
-    - promote awareness of our investments elsewhere
-    - IP reuse to save energy
-    - using our cupcake example as a canonical education primitive
- 6. Use a table to compare properties across deployment scenarios
- 7. Identified areas where content can move elsewhere 
-
-TODOS:
-
-  1. Fact check
-  2. Ensure that it's ok to refer to creation<>submission interchangeably, in terms of developer expectations
-  3. If (2) is a yes, refer to it as submission throughout
-  4. If (2) is a no, elaborate on the difference between creation and submission
-  5. Vibe-check the numbered sections
-  6. Vibe-check the table
-  7. Vibe-check the flow
-  8. Finish editing
-
--->
-
-
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper'
 import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
@@ -62,6 +32,12 @@ Cross-layer communication is a core feature of Arbitrum's L2 chains. From the pe
 
 Without cross-layer messaging, it would be impossible to build dApps that interact with both layers. The ability to deploy smart contracts that can be executed and invoked by nodes on both layers is a key enabler of Arbitrum's L2 chains' scalability and interoperability with Ethereum's L1 chain.
 
+:::caution Editor note
+
+This could be improved through more concrete examples
+
+:::
+
 
 ## 2: The conceptual primitives
 
@@ -78,6 +54,13 @@ Let's start with some definitions - we'll connect the dots as we go:
  9.  **Inbox contracts**: Smart contracts that are deployed to L2 and are responsible for receiving retryable tickets from L1's outbox contracts.
  10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers.
  
+
+:::caution Editor note
+
+ - We could trim this list down to the most important concepts, using quicklooks to offer just-in-case elaborations inline
+ - We could illustrate the relationship between these core primitives with a diagram
+
+:::
 
 
 ## 3: An example smart contract
@@ -104,7 +87,12 @@ Each of the below questions are asked within the context of our cupcake contract
 
 <br />
 
-<!-- todo -->
+:::caution Editor note
+
+ - If we feel like this table is a value-add, we can fill it in, partialize it, and refer to it elsewhere
+ - We could implement it as an expandable table that only reveals the first n rows by default
+
+:::
 
 |                                                                            | Straight to L1 | Stright to L2 |
 | -------------------------------------------------------------------------- | -------------- | ------------- |
@@ -152,9 +140,14 @@ Let's now elaborate upon each of our conceptual primitives by defining them more
 
  - A **message** is a data structure that contains information about a transaction that was initiated on L1, but that needs to be executed on L2. Messages are sent from L1 to L2, and they're used to trigger contract calls on L2.
  - This primitive is important to understand if you're building a dApp that... <!-- todo -->
- - Here's how **messages** relate to some of the other primitives we started with:
-   - **Retryable tickets**: Retryable tickets are a type of message. They're used to send information from L1 to L2.
-   - todo
+
+
+:::caution Editor note
+
+ - Unsure about whether or not these things apply only to L1-to-L2 messages, or if they apply to L2-to-L1 messages as well
+ - We could evaluate consolidating cross-layer messaging into this single concept doc
+
+:::
 
 
 ### 5.2: Retryable tickets
@@ -175,9 +168,15 @@ Let's now take a breezy walk through the different stages of a retryable ticket'
 
 #### 5.2.1: Retryable ticket lifecycle: Submission
 
+:::caution Editor note
 
+ - Procedural instructions are hidden below this banner, intent is to move it into a dedicated procedural doc (how-to)
 
-<!-- todo: move this to procedural guidance (how-to):
+:::
+
+<!-- todo: move this to procedural guidance (how-to), consider what the blockers are to relying on auto-generated API/SDK docs for the bulleted information -->
+
+<!--
 
 Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
 
@@ -197,8 +196,8 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
 2. Ticket creation causes the [`ArbRetryableTx`](./precompiles#ArbRetryableTx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
 
 [inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol
--->
 
+-->
 
 
 <MermaidWithHtml>
@@ -230,9 +229,9 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
  - For step-by-step instructions and code snippets that walk you through this process, see [How to submit an L1-to-L2 retryable ticket](#todo).
 
 
-:::caution Editing paused here
+:::caution Editor note: Editing paused here
 
-See inline HTML comments below the frontmatter of this document for **edit notes**.
+See [PR description](https://github.com/OffchainLabs/arbitrum-docs/pull/286) for **full edit notes**.
 
 :::
 
