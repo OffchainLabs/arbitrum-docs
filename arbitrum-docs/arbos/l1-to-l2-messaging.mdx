@@ -53,10 +53,18 @@ Let's start with some definitions - we'll connect the dots as we go:
  5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
  6. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
  7. **Retryable tickets**: Special messages sent from L1 nodes to L2 nodes in order to trigger the execution of an L2-hosted smart contract.
- 8. **Outbox contracts**: Smart contracts that are deployed to L1 and are responsible for transmitting retryable tickets to L2's inbox contracts.
- 9.  **Inbox contracts**: Smart contracts that are deployed to L2 and are responsible for receiving retryable tickets from L1's outbox contracts.
- 10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers.
- 
+ 8. **Outbox contracts**: Smart contracts that are deployed to L1 and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
+ 9.  **Inbox contracts**: Smart contracts that are deployed to L2 and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
+ 10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers. The Arbitrum DAO owns these, but you can create your own.
+
+
+:::caution Editor note
+
+ - Low-confidence about the claims in 8/9/10
+ - Each of these could use a dedicated concept doc
+
+:::
+
 
 :::caution Editor note
 
