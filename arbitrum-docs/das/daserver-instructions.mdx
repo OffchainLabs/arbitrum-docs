@@ -1,4 +1,10 @@
-# Data Availability Server Instructions
+---
+title: "How to run a data availability server (DAS)"
+description: This how-to will help you run a data availability server.
+author: amsanghi
+content-type: how-to
+---
+
 
 ## Description
 
@@ -117,9 +123,9 @@ Options for producing Prometheus metrics:
 
 Some options are not shown because they are only used by nodes, or they are experimental/advanced. A complete list of options can be found by running `daserver --help`
 
-## Sample Deployments
+## Sample deployments
 
-### Sample Committee Member
+### Sample committee member
 
 Using `daserver` as a committee member requires:
 
@@ -199,7 +205,7 @@ spec:
           claimName: das-server
 ```
 
-#### Create Committee Member DAS deployment
+#### Create committee member DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -268,7 +274,7 @@ spec:
           claimName: das-server
 ```
 
-### Sample Mirror
+### Sample mirror
 
 Using `daserver` as a mirror requires:
 
@@ -299,7 +305,7 @@ spec:
   storageClassName: gp2
 ```
 
-#### Create Mirror DAS deployment
+#### Create mirror DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -366,7 +372,7 @@ spec:
           claimName: das-mirror
 ```
 
-#### Create IPFS Mirror DAS deployment
+#### Create IPFS mirror DAS deployment
 
 This deployment sets up a DAS server using the Arbitrum Nova Mainnet. It uses the L1 inbox contract at 0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b. For the Arbitrum Nova Mainnet you must specify a Mainnet Ethereum L1 RPC endpoint.
 
@@ -439,7 +445,7 @@ spec:
 
 ### Testing
 
-#### Basic validation: health check data is present
+#### Basic validation: Health check data is present
 
 In the docker image there is the `datool` utility that can be used to Store and Retrieve messages from a DAS. We will take advantage of a data hash that will always be present if the the health check is enabled.
 
@@ -463,7 +469,7 @@ $ curl  https://<HOST>/<PATH>/get-by-hash/8b248e2bd8f75bf1334fe7f0da75cc7c1a34e0
 {"data":"VGVzdC1EYXRh"}
 ```
 
-#### Further validation: using Store interface directly
+#### Further validation: Using store interface directly
 
 The Store interface of `daserver` validates that requests to store data are signed by the the Batch Poster's ECDSA key, identified via a call to the Sequencer Inbox contract on L1. It can also be configured to accept Store requests signed with another ECDSA key of your chosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure. Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
 

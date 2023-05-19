@@ -56,6 +56,13 @@ const oldPathToNewPath = {
   "/faqs/seq-or-val": "/faqs/protocol-faqs#q-seq-vs-val",
   "/faqs/beta-status": "/mainnet-beta",
   "/faqs/the-merge": "/",
+  "/node-running/running-a-classic-node": "/node-running/how-tos/running-a-classic-node",
+  "/node-running/running-an-archive-node": "/node-running/how-tos/running-an-archive-node",
+  "/node-running/local-dev-node": "/node-running/how-tos/local-dev-node",
+  "/node-running/running-a-feed-relay": "/node-running/how-tos/running-a-feed-relay",
+  "/node-running/running-a-validator": "/node-running/how-tos/running-a-validator",
+  "/node-running/read-sequencer-feed": "/node-running/how-tos/read-sequencer-feed",
+  "/node-running/build-nitro-locally": "/node-running/how-tos/build-nitro-locally",
 };
 
 const getNewPath = (_path) => {
