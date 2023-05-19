@@ -334,7 +334,8 @@ article .markdown .footnotes:before {
 article .markdown .footnotes hr {
   display: none;
 }
-article .markdown p > code {
+article .markdown p > code,
+article .markdown li code {
   font-size: 13px;
   padding: 3px 6px;
   border-radius: 3px;
