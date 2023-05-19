@@ -14,5 +14,5 @@ Here, you can find resources that help you run different types of Arbitrum nodes
 
 - Step-by-step instructions for running different Arbitrum nodes, including [full Nitro node](./running-a-node.md), [full Classic node](./how-tos/running-a-classic-node.mdx), [local dev node](./how-tos/local-dev-node.mdx), [feed relay](./how-tos/running-a-feed-relay.mdx), and [validator](./how-tos/running-a-validator.mdx)
 - Step-by-step instructions for how to [read the sequencer feed](./how-tos/read-sequencer-feed.md), [build the Nitro locally](./how-tos/build-nitro-locally.md), and [run a DAS](../das/daserver-instructions.mdx)
-- Troubleshooting page
-- Frequently asked questions
+- [Troubleshooting page](./troubleshooting-running-nodes.md)
+- [Frequently asked questions](./faq.md)

@@ -57,7 +57,7 @@
 ### Blockchain {#blockchain}
 <p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols. </p>
 
-### CAP Finance {#cap-finance}
+### 🧢 CAP Finance {#cap-finance}
 <p>Widely considered the most degen community on Arbitrum.<br />
 <br />
 <a href="https://cap.finance/">CAP</a> is a decentralized trading protocol. It's designed to be fast and easy to use by anyone.</p>
@@ -111,7 +111,7 @@
 ### Dissection {#dissection}
 <p>A step in the <a href="/intro/glossary#challenge-protocol">Challenge protocol</a>  in which two challenging parties interactively narrow down their disagreement until they reach a <a href="/intro/glossary#one-step-proof">One Step Proof</a>.</p>
 
-### Dopex {#dopex}
+### 💎 Dopex {#dopex}
 <p>A shiny gem in the Arbitrum community.<br />
 <br />
 Commonly associated with the esteemed Diamond Pepe's NFT and Dopex community. Dopex is a decentralized options exchange protocol on Arbitrum.</p>
@@ -146,7 +146,7 @@ Commonly associated with the esteemed Diamond Pepe's NFT and Dopex community. Do
 ### Geth {#geth}
 <p>An execution-layer client that defines the Ethereum state transition function and handles network-layer logic like transaction memory pooling. <a href="/intro/glossary#arbitrum-nitro">Arbitrum Nitro</a> utilizes a fork of Geth to implement Arbitrum's state transition function.</p>
 
-### GMX {#gmx}
+### 🫐 GMX {#gmx}
 <p>If you've seen some blueberries wandering around on crypto Twitter, you might wonder .. where did they come from?<br />
 <br />
 The iconic blueberries come from the community of the decentralized exchange, GMX.</p>
@@ -172,7 +172,7 @@ The iconic blueberries come from the community of the decentralized exchange, GM
 ### Outbox {#outbox}
 <p>An L1 contract responsible for tracking <a href="/intro/glossary#l2-to-l1-message">L2 to L1 Message</a>s, including withdrawals, which can be executed once they are confirmed. The outbox stores a Merkle Root of all outgoing messages.</p>
 
-### Pirate Nation {#pirate-nation}
+### 🏴‍☠️ Pirate Nation {#pirate-nation}
 <p>If you sail in the deep blue seas of Arbitrum, you may encounter some ships with pirate flags along the way ARRGG!<br />
 <br />
 The pirate flag originates from the Pirate Nation community. Pirate Nation is a game filled with high seas adventure, treasure, fun, and unexpected surprises.</p>
@@ -201,7 +201,7 @@ The pirate flag originates from the Pirate Nation community. Pirate Nation is a 
 ### Smart Contract {#smart-contract}
 <p>A computer program whose operations are defined and executed within a blockchain consensus protocol.</p>
 
-### Smolverse {#smolverse}
+### 🐵 Smolverse {#smolverse}
 <p>Near the core of Arbitrum community is Smolverse, a world filled with Smol Brains and Smol Bodies.<br />
 <br />
 If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" in the Arbitrum community, you've encounted the Smol Brains and Smol Bodies. </p>
@@ -224,12 +224,12 @@ If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" i
 ### Stylus {#stylus}
 <p>Upcoming upgrade to the the <a href="/intro/glossary#arbitrum-nitro">Arbitrum Nitro</a> virtual machine that will allow smart contract support for languages like Rust and C++ by taking advantage of Nitro's use of WASM (<a href="https://offchain.medium.com/hello-stylus-6b18fecc3a22">read more</a>).</p>
 
-### Tales of Elleria {#tales-of-elleria}
+### 🏹 Tales of Elleria {#tales-of-elleria}
 <p>The bow and arrow are commonly associated with the Hero's of Tales of Elleria.<br />
 <br />
 Jump into the world of Elleria and go on adventures.</p>
 
-### Toadstoolz {#toadstoolz}
+### 🐸 Toadstoolz {#toadstoolz}
 <p>Hidden in the Croakshire, you will find the friendly Toadstoolz. <br />
 <br />
 The iconic Toads of Arbitrum love to hunt BUGZ <br />
@@ -238,7 +238,7 @@ The iconic Toads of Arbitrum love to hunt BUGZ <br />
 ### Token Gateway {#token-gateway}
 <p>A pair of contracts in the token bridge — one on L1, one on L2 — that provide a particular mechanism for handling the transfer of tokens between layers. Token gateways currently active in the bridge include the <a href="/intro/glossary#standarderc20-gateway">StandardERC20 gateway</a> , the <a href="/intro/glossary#genericcustom-gateway">Generic-Custom Gateway</a> , and the <a href="/intro/glossary#weth-gateway">WETH Gateway</a>.</p>
 
-### TownStory  {#townstory-}
+### 🏡 TownStory  {#townstory-}
 <p>If you see some homes along your road trip in the Arbitrum ecosystem, you've made it to TownStory.<br />
 <br />
 Build a warm and prosperous town with friends in TownStory.</p>
@@ -246,7 +246,7 @@ Build a warm and prosperous town with friends in TownStory.</p>
 ### Transaction {#transaction}
 <p>A user-initiated interaction with a Blockchain. Transactions are typically signed by users via wallets and are paid for via transaction fees. </p>
 
-### Treasure DAO {#treasure-dao}
+### ✨ Treasure DAO {#treasure-dao}
 <p>While exploring the Arbitrum ecosystem, you may see some shining stars.<br />
 <br />
 The iconic stars symbolize the magic of Treasure DAO. Treasure DAO is the decentralized gaming ecosystem connecting games and players on Arbitrum.</p>
@@ -269,7 +269,7 @@ This is achieved through the use of cryptographic techniques and decentralized c
 ### WETH Gateway {#weth-gateway}
 <p><a href="/intro/glossary#token-gateway">Token Gateway</a> for handing the bridging of wrapped Ether (WETH). WETH is upwraped on L1 and rewrapped on L1 upon depositing (and vice-versa upon withdrawing), ensuring WETH on L2 always remains collatoralized. </p>
 
-### Zeeverse {#zeeverse}
+### 👺 Zeeverse {#zeeverse}
 <p>As you're exploring the Arbitrum world, you may bump into a world filled with monsters and Zee's.<br />
 <br />
 Explore a mythical Spirit Realm as a young Shaman and take part in strategic turn-based battles to help protect Zeeverse from the looming corrupted forces.</p>
