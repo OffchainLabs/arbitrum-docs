@@ -58,9 +58,9 @@ Let's start with some definitions - we'll connect the dots as we go:
  4. **Smart contracts**: Programs that can be deployed to a chain and whose code is hosted and executed by nodes on that chain.
  5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
  6. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
- 7. **Retryable tickets**: Special messages sent from L1 nodes to L2 nodes in order to trigger the execution of an L2-hosted smart contract.
- 8. **Outbox contracts**: Smart contracts that are deployed to L1 and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
- 9.  **Inbox contracts**: Smart contracts that are deployed to L2 and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
+ 7. **Retryable tickets**: Special messages sent from L1 chains to L2 chains in order to trigger the execution of an L2-hosted smart contract.
+ 8. **Outbox contracts**: Smart contracts that are deployed to L1 chains and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
+ 9.  **Inbox contracts**: Smart contracts that are deployed to L2 chains and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
  10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers. The Arbitrum DAO owns these, but you can create your own.
 
 
@@ -92,8 +92,8 @@ Don't worry about the guts of the contract - its interface is all we need to und
 
 Let's compare a number of properties across **two deployment scenarios**: 
 
-1. The contract is deployed straight to **Ethereum L1**
-2. The contract is deployed straight to **Arbitrum L2**
+1. The cupcake contract is deployed straight to **Ethereum L1**
+2. The cupcake contract is deployed straight to **Arbitrum L2**
 
 <br />
 
@@ -103,9 +103,9 @@ Each of the below questions are asked within the context of our cupcake contract
 
 :::caution Editor note
 
- - If we feel like this table is a value-add, we can fill it in, partialize it, and refer to it elsewhere
- - We could implement it as an expandable table that only reveals the first n rows by default
- - If there are better questions to ask, we can swap them in
+ - If we feel like this table is a value-add, we can fill it in, partialize it, and embed it elsewhere
+ - We could implement it as an expandable table that only reveals the first *n* rows by default
+ - If there are better questions to ask, we can swap them in, and trim/consolidate the low-value rows
 
 :::
 
