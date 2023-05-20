@@ -221,27 +221,27 @@ const sidebars = {
       items: [
         {
           type: "doc",
-          id: "node-running/running-a-classic-node",
+          id: "node-running/how-tos/running-a-classic-node",
           label: "Run a full node (Classic, pre-Nitro)"
         },
         {
           type: "doc",
-          id: "node-running/running-an-archive-node",
+          id: "node-running/how-tos/running-an-archive-node",
           label: "Run an archive node"
         },
         {
           type: "doc",
-          id: "node-running/local-dev-node",
+          id: "node-running/how-tos/local-dev-node",
           label: "Run a local dev node"
         },
         {
           type: "doc",
-          id: "node-running/running-a-feed-relay",
+          id: "node-running/how-tos/running-a-feed-relay",
           label: "Run a feed relay"
         },
         {
           type: "doc",
-          id: "node-running/running-a-validator",
+          id: "node-running/how-tos/running-a-validator",
           label: "Run a validator",
         },
         {
@@ -251,39 +251,12 @@ const sidebars = {
         },
         {
           type: "doc",
-          id: "node-running/build-nitro-locally",
+          id: "node-running/how-tos/build-nitro-locally",
         },
         {
           type: "doc",
           id: "das/daserver-instructions",
-          label: "Run a Data Availability Server"
-        }
-      ]
-    },
-    {
-      type: "category",
-      label: "Concepts",
-      collapsed: true,
-      items: [
-        {
-          type: "doc",
-          id: "node-running/concepts/arbitrum-nodes-networks",
-          label: "Nodes and networks"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/feed-relay",
-          label: "Feed relay"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/sequencer",
-          label: "Sequencer"
-        },
-        {
-          type: "doc",
-          id: "node-running/concepts/l1-inbox",
-          label: "L1 inbox"
+          label: "Run a Data Availability Server",
         }
       ]
     },

@@ -7,7 +7,7 @@ reader-task: run a node with minimal effort and maximum understanding
 content-type: quickstart
 ---
 
-🔉 Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 ### Minimum Hardware Configuration
 
@@ -17,7 +17,7 @@ content-type: quickstart
   - Storage: Minimum 1.2TB SSD (make sure it is extendable)
   - Estimated Growth Rate: around 3 GB per day
 
-🔉 Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
+⚠️ Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
 
 ### Required Artifacts
 

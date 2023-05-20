@@ -165,3 +165,8 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 
 
+### When was Arbitrum One upgraded from Classic to Nitro? {#when-was-arbitrum-one-upgraded-from-classic-to-nitro}
+<p>Arbitrum One <a href="https://medium.com/offchainlabs/its-nitro-time-86944693bf29">was upgraded</a> on August 31st, 2022, from the Classic stack to the improved <a href="https://developer.arbitrum.io/inside-arbitrum-nitro/">Nitro</a> tech stack, maintaining the same state.</p>
+
+
+
