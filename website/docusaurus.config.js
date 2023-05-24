@@ -66,7 +66,7 @@ const config = {
     ],
   ],
   plugins: [
-    // See below - this gets modified if you're running locally on windows
+    // See below hack - this gets modified if you're running locally on windows
     [
       "@docusaurus/plugin-content-docs",
       {
