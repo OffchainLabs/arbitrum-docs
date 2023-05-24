@@ -239,6 +239,7 @@ const config = {
 const isRunningLocally = process.env.NODE_ENV === 'development';
 const isRunningOnWindows = process.platform === 'win32';
 if (isRunningLocally && isRunningOnWindows) {
+  // removes the arbitrum-sdk docs plugin
   config.plugins = [
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
