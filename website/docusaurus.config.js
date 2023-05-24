@@ -65,6 +65,20 @@ const config = {
       }),
     ],
   ],
+  plugins: [
+    // See below - this gets modified if you're running locally on windows
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "arbitrum-sdk",
+        path: "../arbitrum-sdk/docs",
+        routeBasePath: "sdk",
+        // ... other options
+      },
+    ],
+    require.resolve("docusaurus-plugin-fathom"),
+    require.resolve("docusaurus-lunr-search"),
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -217,23 +231,15 @@ const config = {
     }),
 };
 
-const isRunningLocally = process.env.NODE_ENV === 'development';
 
-if (!isRunningLocally) {
+// HACK
+// this was originally included above
+// it broke local builds on Windows, not sure why yet. Works fine on Mac
+// `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
+const isRunningLocally = process.env.NODE_ENV === 'development';
+const isRunningOnWindows = process.platform === 'win32';
+if (isRunningLocally && isRunningOnWindows) {
   config.plugins = [
-    // HACK
-    // this was originally included above
-    // it broke local builds on Windows, not sure why yet. Works fine on Mac
-    // `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ];
