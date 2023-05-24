@@ -34,12 +34,24 @@ This document doesn't assume any prior knowledge beyond familiarity with the fol
 
 ## 1: Why this information is important
 
-Cross-layer communication is a core feature of Arbitrum's L2 chains. From the perspective of decentralized application (dApp) development, it enables two key capabilities:
+Cross-layer communication is a core feature of Arbitrum's L2 chains. From the perspective of decentralized application (dApp) development, it enables two key capabilities: **L2-to-L1 messaging**, and **L1-to-L2 messaging**:
 
- 1. **L1-to-L2 messaging**: L1 contracts can send messages to L2 contracts, which can trigger the execution of L2-hosted smart contracts.
- 2. **L2-to-L1 messaging**: L2 contracts can send messages to L1 contracts, which can trigger the execution of L1-hosted smart contracts.
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Decentralized apps (dApps)</Node>
+    <Node id="2">Layer 2 (L2 - Arbitrum)</Node>
+    <Node id="3">Layer 1 (L1 - Ethereum)</Node>
+    <Connection from="1" to="2" arrows="none"/>
+    <Connection from="2" to="3" label="L2-to-L1 messaging"/>
+    <Connection from="3" to="2" label="L1-to-L2 messaging"/>
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for='2'>L2 contracts can send messages to L1 contracts, which can trigger the execution of L1-hosted smart contracts.</NodeDescription>
+    <NodeDescription for='1'>L1 contracts can send messages to L2 contracts, which can trigger the execution of L2-hosted smart contracts.</NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
 
-Without cross-layer messaging, it would be impossible to build dApps that interact with both layers, which would severely limit the value and reach of your dApps.
+Without bidirectional cross-layer messaging, it would be impossible to build dApps that interact with both layers, which would severely limit the value and reach of your dApps.
 
 :::caution Editor note
 
