@@ -19,9 +19,8 @@ Cross-layer messaging is a complex topic, so this is a lengthy concept doc that 
 
 1. **Why this information is important**.
 2. **The conceptual primitives** that work together to enable L1-to-L2 messaging on Arbitrum.
-3. **An example smart contract** that exposes two functions.
-4. **Properties across deployment scenarios** in terms of our conceptual primitives and example smart contract.
-5. **Tying it all together** through an elaboration upon each of the conceptual primitives and how they relate to one another in the context of cross-layer messaging.
+3. **Elaborating on our conceptual primitives** by exploring how each of the conceptual primitives relate to one another in the context of cross-layer messaging.
+4. **Learning with an example smart contract** that exposes two functions. We'll compare a number of properties across deployment scenarios to test our understanding of the conceptual primitives.
 
 
 :::caution Editor note
@@ -31,9 +30,6 @@ Cross-layer messaging is a complex topic, so this is a lengthy concept doc that 
 :::
 
 Although this doc doesn't assume prior knowledge, it does assume that you're comfortable exploring the supporting documentation linked throughout, as needed. Let's dive in!
-
-
-
 
 ## 1: Why this information is important
 
@@ -46,30 +42,34 @@ Without cross-layer messaging, it would be impossible to build dApps that intera
 
 :::caution Editor note
 
- - This could be improved through more concrete / compelling examples
+ - Low-confidence intro - this could be improved through more concrete / compelling examples. A "For example..." could help identify relatable situations in which these capabilities become critical. 
 
 :::
 
 
 ## 2: The conceptual primitives
 
-Let's start with some definitions - we'll connect the dots as we go:
+This document assumes that you're familiar with the following terms:
 
  1. **Layers**: We'll focus on the first two: L1 (Ethereum's chains) and L2 (Arbitrum's chains). Both layers host multiple chains; each chain is supported by its own decentralized network of nodes.
  2. **Nodes**: Computers running p2p client software that implements a particular chain's protocol. The protocol tells the nodes how to execute transactions, manage state, and exchange information. 
  3. **State**: A distributed record of Ethereum's "world state" - the canonical, trustworthy representation of transaction history, account balances, token ownership, and other contract data.
  4. **Smart contracts**: Programs that can be deployed to a chain and whose code is hosted and executed by nodes on that chain.
  5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
- 6. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
- 7. **Retryable tickets**: A type of message sent from L1 chains to L2 chains in order to trigger the execution of an L2-hosted smart contract. Think of these as special-purpose DTOs (data transfer objects) that encapsulate the information needed to execute a smart contract: the contract's address, the function to call, the function's arguments, etc.
- 8. **Outbox contracts**: Smart contracts that are deployed to L1 chains and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
- 9.  **Inbox contracts**: Smart contracts that are deployed to L2 chains and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
- 10. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers. The Arbitrum DAO owns these, but you can create your own.
+
+
+The rest of this document focuses on "constructing an understanding" of the following **conceptual primitives**:
+
+ 1. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
+ 2. **Retryable tickets**: A type of message sent from L1 chains to L2 chains in order to trigger the execution of an L2-hosted smart contract. Think of these as special-purpose DTOs (data transfer objects) that encapsulate the information needed to execute a smart contract: the contract's address, the function to call, the function's arguments, etc.
+ 3. **Outbox contracts**: Smart contracts that are deployed to L1 chains and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
+ 4. **Inbox contracts**: Smart contracts that are deployed to L2 chains and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
+ 5. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers. The Arbitrum DAO owns these, but you can create your own.
 
 
 :::caution Editor note
 
- - Low-confidence about the claims in 8/9/10
+ - Low-confidence about the claims in 3/4/5
  - Each of these could use a dedicated concept doc
  - We could hide this list behind a hidden-by-default toggle that says "Click to expand for a list of conceptual primitives that will help you flow through this doc"
  - We could trim this list down to the most important concepts, using quicklooks to offer just-in-case elaborations inline
@@ -79,82 +79,12 @@ Let's start with some definitions - we'll connect the dots as we go:
 :::
 
 
+## 3: Elaborating on our conceptual primitives
 
-## 3: An example smart contract
-
-In *[Quickstart: Build a decentralized app with Arbitrum](/for-devs/quickstart-solidity-hardhat.md)*, we deploy a cupcake vending machine to an Arbitrum L2 chain. The vending machine's business logic is encapsulated within a smart contract that increases the `cupcakeBalance` associated with your Ethereum address when you click a button. This smart contract exposes two functions:
-
- 1. `giveCupcakeTo(address userAddress)`: increases the specified address's `cupcakeBalance` by 1
- 2. `getCupcakeBalanceFor(address userAddress)`: returns the number of cupcakes associated with the specified address
+Let's explore how each of these primitives relate to one another in the context of cross-layer communication.
 
 
-Don't worry about the guts of the contract - its interface is all we need to understand for now. We'll refer to this contract as the **cupcake contract** throughout the rest of this doc.
-
-
-## 4: Properties across deployment scenarios
-
-Let's compare a number of properties across **two deployment scenarios**: 
-
-1. The cupcake contract is deployed straight to **Ethereum L1**
-2. The cupcake contract is deployed straight to **Arbitrum L2**
-
-<br />
-
-Each of the below questions are asked within the context of our cupcake contract deployment. We'll reference our **conceptual primitives** and **contract functions** in our answers:
-
-<br />
-
-:::caution Editor note
-
- - If we feel like this table is a value-add, we can add more technical precision, partialize it, and embed it elsewhere
- - We could implement it as an expandable table that only reveals the first *n* rows by default
- - If there are better questions to ask, we can swap them in, and trim/consolidate the low-value rows
-
-:::
-
-|                                                                            | Cupcake contract deployed straight to L1                                                                                                            | Cupcake contract deployed straight to L2                                                                                                                      |
-| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Where is the contract deployed?**                                        | Ethereum L1                                                                                                                                         | Arbitrum L2 (One or Nova)                                                                                                                                     |
-| **Where is the executable code hosted?**                                   | • On L1 nodes<br />• Available for execution by every full Ethereum node                                                                            | • On L2 nodes<br />• Available for execution by every full Arbitrum node                                                                                      |
-| **Can the contract code be executed by L1 nodes?**                         | • Yes<br />• Any Ethereum node can execute the contract code                                                                                        | • No<br />• Ethereum nodes cannot directly execute L2 contracts<br />• But can indirectly interact via Retryable Tickets                                      |
-| **Can the contract code be executed by L2 nodes?**                         | • No<br />• L2 nodes cannot execute L1 contracts directly<br />• But can indirectly interact via Outbox mechanism                                   | • Yes<br />• Any Arbitrum node can execute the contract code                                                                                                  |
-| **Can the contract state be read from L1 nodes?**                          | • Yes<br />• L1 nodes maintain the full state of L1 contracts                                                                                       | • No<br />• L1 nodes cannot read L2 state directly<br />• But state changes can be inferred from finalized Outbox messages                                    |
-| **Can the contract state be read from L2 nodes?**                          | • No<br />• L2 nodes cannot read L1 state directly<br />• But state changes can be inferred from incoming Retryable Tickets                         | • Yes<br />• L2 nodes maintain the full state of L2 contracts                                                                                                 |
-| **To what degree is state mirrored between L1 and L2 nodes?**              | • No direct state mirroring<br />• L1 nodes maintain the root hash of L2 state as part of optimistic rollup mechanism                               | • No direct state mirroring<br />• L2 state changes are represented in L1 via root hash updates                                                               |
-| **Where is the contract's state stored?**                                  | • On L1 nodes<br />• Each Ethereum node stores the full state                                                                                       | • On L2 nodes<br />• Each Arbitrum node stores the full state                                                                                                 |
-| **How does the contract deployment impact L1's physical state?**           | • Increases storage size<br />• Changes account balances as per the contract deployment cost                                                        | • Indirectly, by generating a commitment on L1<br />• The contract's bytecode, deployed on L2, results in a Merkle proof on L1                                |
-| **How does the contract deployment impact L2's physical state?**           | • Indirectly, if the L1 contract interacts with L2<br />• Changes in L1 contracts could be relayed to L2 via Retryable Tickets                      | • Increases storage size<br />• Changes account balances as per the contract deployment cost                                                                  |
-| **When is gas paid?**                                                      | • During contract deployment<br />• During contract execution                                                                                       | • During contract deployment<br />• During contract execution                                                                                                 |
-| **Where is gas paid?**                                                     | • On Ethereum L1<br />• Paid to Ethereum validators                                                                                                 | • On Arbitrum L2<br />• Paid to Arbitrum validators                                                                                                           |
-| **Who pays gas?**                                                          | • Contract deployer<br />• Transaction initiator                                                                                                    | • Contract deployer<br />• Transaction initiator                                                                                                              |
-| **Can another L1 contract call the deployed contract's methods directly?** | • Yes<br />• Direct interaction between L1 contracts is possible                                                                                    | • No<br />• L1 contracts can't directly call methods of L2 contracts<br />• But can interact via Gateway contracts and Retryable Tickets                      |
-| **Can another L2 contract call the deployed contract's methods directly?** | • No<br />• L2 contracts can't directly call methods of L1 contracts<br />• But can interact via Gateway contracts and Outbox mechanism             | • Yes<br />• Direct interaction between L2 contracts is possible                                                                                              |
-| **When is information sent from L1 to L2?**                                | • When a L1 contract sends a message via a Gateway contract<br />• When a L1 contract creates a Retryable Ticket for L2                             | • When the contract is deployed on L2<br />• When a L1 contract sends a message via a Gateway contract or creates a Retryable Ticket                          |
-| **When is information sent from L2 to L1?**                                | • When a L2 contract sends a message via Outbox mechanism<br />• When the contract state on L2 changes (state updates are hashed and stored on L1)  | • When the contract is deployed on L2<br />• When a L2 contract sends a message via Outbox mechanism                                                          |
-| **What primitives are involved with L1-L2 messages?**                      | • Gateway contracts<br />• Retryable Tickets                                                                                                        | • Gateway contracts<br />• Retryable Tickets                                                                                                                  |
-| **What primitives are involved with L2-L1 messages?**                      | • Gateway contracts<br />• Outbox mechanism<br />• Merkle proofs of L2 state updates                                                                | • Gateway contracts<br />• Outbox mechanism<br />• Merkle proofs of L2 state updates                                                                          |
-| **When does L1's state change?**                                           | • When the contract is deployed<br />• When contract state is modified<br />• When the contract sends a message to L2 (creates a Retryable Ticket)  | • Indirectly, when a message is sent from L2 via Outbox mechanism<br />• When a L2 state root hash update is confirmed on L1                                  |
-| **When does L2's state change?**                                           | • Indirectly, when a message is sent from L1 via a Gateway contract or a Retryable Ticket                                                           | • When the contract is deployed<br />• When contract state is modified<br />• When a message is received from L1 via a Gateway contract or a Retryable Ticket |
-| **Can I query L1 state via L2?**                                           | • No direct querying<br />• But can infer L1 state changes from incoming Retryable Tickets                                                          | • No direct querying<br />• But can infer L1 state changes from incoming Retryable Tickets                                                                    |
-| **Can I query L2 state via L1?**                                           | • No direct querying<br />• But can infer L2 state changes from Outbox messages and confirmed L2 state root hash                                    | • Yes<br />• Can query state directly from L2 nodes<br />• Can also infer L2 state changes from Outbox messages and confirmed L2 state root hash              |
-| **When are retryable tickets involved?**                                   | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                      | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                                |
-| **How are retryable tickets involved?**                                    | • Retryable Tickets encapsulate L1 messages for L2<br />• These tickets can be retried if not immediately executed                                  | • Retryable Tickets encapsulate L1 messages for L2<br />• These tickets can be retried if not immediately executed                                            |
-| **When are outbox contracts involved?**                                    | • When L2 contracts send messages to L1<br />• During cross-layer interactions                                                                      | • When L2 contracts send messages to L1<br />• During cross-layer interactions                                                                                |
-| **How are outbox contracts involved?**                                     | • Outbox contracts encapsulate L2 messages for L1<br />• They help in updating the L2 state root hash on L1                                         | • Outbox contracts encapsulate L2 messages for L1<br />• They help in updating the L2 state root hash on L1                                                   |
-| **When are inbox contracts involved?**                                     | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                      | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                                |
-| **How are inbox contracts involved?**                                      | • Inbox contracts receive Retryable Tickets from L1<br />• They help in updating the L2 state                                                       | • Inbox contracts receive Retryable Tickets from L1<br />• They help in updating the L2 state                                                                 |
-| **When are bridge contracts involved?**                                    | • During cross-layer interactions<br />• When there is a need for synchronizing state between L1 and L2                                             | • During cross-layer interactions<br />• When there is a need for synchronizing state between L1 and L2                                                       |
-| **How are bridge contracts involved?**                                     | • Bridge contracts handle message passing and state synchronization between L1 and L2<br />• They use Retryable Tickets, Outbox and Inbox contracts | • Bridge contracts handle message passing and state synchronization between L1 and L2<br />• They use Retryable Tickets, Outbox and Inbox contracts           |
-| **How are gateway contracts involved?**                                    | • Gateway contracts enable communication between L1 and L2<br />• They wrap messages into Retryable Tickets or pass them to Outbox contracts        | • Gateway contracts enable communication between L1 and L2<br />• They wrap messages into Retryable Tickets or pass them to Outbox contracts                  |
-
-
-<br />
-
-## 5: Tying it all together
-
-Let's now elaborate upon each of our conceptual primitives by defining them more precisely and exploring how they relate to one another in the context of cross-layer communication.
-
-### 5.1: Messages
+### 3.1: Messages
 
  - A **message** is a data structure that contains information about a transaction that was initiated on L1, but that needs to be executed on L2. Messages are sent from L1 to L2, and they're used to trigger contract calls on L2.
  - This primitive is important to understand if you're building a dApp that... <!-- todo -->
@@ -169,7 +99,7 @@ Let's now elaborate upon each of our conceptual primitives by defining them more
 :::
 
 
-### 5.2: Retryable tickets
+### 3.2: Retryable tickets
 
  - Retryable tickets (retryables) are the canonical data structure that Arbitrum uses to facilitate L1-to-L2 messages. 
  - Using our cupcake vending machine example, a retryable could be used to solve the following problem: The cupcake contract was deployed to Arbitrum L2, but Alice is an L1 user who isn't comfortable with L2. She wants to give a cupcake to Bob, who is an L2 user. Retryable tickets allow Alice to initiate the transaction on L1, without knowing about L2, and then have the transaction executed on L2.
@@ -185,7 +115,7 @@ Let's now elaborate upon each of our conceptual primitives by defining them more
 
 Let's now take a breezy walk through the different stages of a retryable ticket's lifecycle.
 
-#### 5.2.1: Retryable ticket lifecycle: Submission
+#### 3.2.1: Retryable ticket lifecycle: Submission
 
 :::caution Editor note
 
@@ -255,7 +185,7 @@ See [PR description](https://github.com/OffchainLabs/arbitrum-docs/pull/286) for
 :::
 
 
-#### 5.2.2: Retryable ticket lifecycle: Automatic redemption
+#### 3.2.2: Retryable ticket lifecycle: Automatic redemption
 
 The submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. 
 Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`.
@@ -285,7 +215,7 @@ Depending on how much gas the sender has provided in step 1, ticket's redemption
   </NodeDescriptions>
 </MermaidWithHtml>
 
-### Manual Redemption
+#### 3.2.3: Retryable ticket lifecycle: Manual redemption
 
 5. At this point, _anyone_ can attempt to manually redeem the ticket again by calling `ArbRetryableTx`'s redeem precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is NOT limited by the original gasLimit set during the ticket creation.
 ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. 
@@ -395,3 +325,77 @@ modifier onlyFromMyL1Contract() override {
     require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
     _;
 }
+```
+
+
+
+
+## 3: An example smart contract
+
+In *[Quickstart: Build a decentralized app with Arbitrum](/for-devs/quickstart-solidity-hardhat.md)*, we deploy a cupcake vending machine to an Arbitrum L2 chain. The vending machine's business logic is encapsulated within a smart contract that increases the `cupcakeBalance` associated with your Ethereum address when you click a button. This smart contract exposes two functions:
+
+ 1. `giveCupcakeTo(address userAddress)`: increases the specified address's `cupcakeBalance` by 1
+ 2. `getCupcakeBalanceFor(address userAddress)`: returns the number of cupcakes associated with the specified address
+
+
+Don't worry about the guts of the contract - its interface is all we need to understand for now. We'll refer to this contract as the **cupcake contract** throughout the rest of this doc.
+
+
+## 4: Properties across deployment scenarios
+
+Let's compare a number of properties across **two deployment scenarios** in order to 
+
+1. The cupcake contract is deployed straight to **Ethereum L1**
+2. The cupcake contract is deployed straight to **Arbitrum L2**
+
+<br />
+
+Each of the below questions are asked within the context of our cupcake contract deployment. We'll reference our **conceptual primitives** and **contract functions** in our answers:
+
+<br /> 
+
+:::caution Editor note
+
+ - If we feel like this table is a value-add, we can add more technical precision, partialize it, and embed it elsewhere
+ - We could implement it as an expandable table that only reveals the first *n* rows by default
+ - If there are better questions to ask, we can swap them in, and trim/consolidate the low-value rows
+
+:::
+
+|                                                                            | Cupcake contract deployed straight to L1                                                                                                            | Cupcake contract deployed straight to L2                                                                                                                      |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Where is the contract deployed?**                                        | Ethereum L1                                                                                                                                         | Arbitrum L2 (One or Nova)                                                                                                                                     |
+| **Where is the executable code hosted?**                                   | • On L1 nodes<br />• Available for execution by every full Ethereum node                                                                            | • On L2 nodes<br />• Available for execution by every full Arbitrum node                                                                                      |
+| **Can the contract code be executed by L1 nodes?**                         | • Yes<br />• Any Ethereum node can execute the contract code                                                                                        | • No<br />• Ethereum nodes cannot directly execute L2 contracts<br />• But can indirectly interact via Retryable Tickets                                      |
+| **Can the contract code be executed by L2 nodes?**                         | • No<br />• L2 nodes cannot execute L1 contracts directly<br />• But can indirectly interact via Outbox mechanism                                   | • Yes<br />• Any Arbitrum node can execute the contract code                                                                                                  |
+| **Can the contract state be read from L1 nodes?**                          | • Yes<br />• L1 nodes maintain the full state of L1 contracts                                                                                       | • No<br />• L1 nodes cannot read L2 state directly<br />• But state changes can be inferred from finalized Outbox messages                                    |
+| **Can the contract state be read from L2 nodes?**                          | • No<br />• L2 nodes cannot read L1 state directly<br />• But state changes can be inferred from incoming Retryable Tickets                         | • Yes<br />• L2 nodes maintain the full state of L2 contracts                                                                                                 |
+| **To what degree is state mirrored between L1 and L2 nodes?**              | • No direct state mirroring<br />• L1 nodes maintain the root hash of L2 state as part of optimistic rollup mechanism                               | • No direct state mirroring<br />• L2 state changes are represented in L1 via root hash updates                                                               |
+| **Where is the contract's state stored?**                                  | • On L1 nodes<br />• Each Ethereum node stores the full state                                                                                       | • On L2 nodes<br />• Each Arbitrum node stores the full state                                                                                                 |
+| **How does the contract deployment impact L1's physical state?**           | • Increases storage size<br />• Changes account balances as per the contract deployment cost                                                        | • Indirectly, by generating a commitment on L1<br />• The contract's bytecode, deployed on L2, results in a Merkle proof on L1                                |
+| **How does the contract deployment impact L2's physical state?**           | • Indirectly, if the L1 contract interacts with L2<br />• Changes in L1 contracts could be relayed to L2 via Retryable Tickets                      | • Increases storage size<br />• Changes account balances as per the contract deployment cost                                                                  |
+| **When is gas paid?**                                                      | • During contract deployment<br />• During contract execution                                                                                       | • During contract deployment<br />• During contract execution                                                                                                 |
+| **Where is gas paid?**                                                     | • On Ethereum L1<br />• Paid to Ethereum validators                                                                                                 | • On Arbitrum L2<br />• Paid to Arbitrum validators                                                                                                           |
+| **Who pays gas?**                                                          | • Contract deployer<br />• Transaction initiator                                                                                                    | • Contract deployer<br />• Transaction initiator                                                                                                              |
+| **Can another L1 contract call the deployed contract's methods directly?** | • Yes<br />• Direct interaction between L1 contracts is possible                                                                                    | • No<br />• L1 contracts can't directly call methods of L2 contracts<br />• But can interact via Gateway contracts and Retryable Tickets                      |
+| **Can another L2 contract call the deployed contract's methods directly?** | • No<br />• L2 contracts can't directly call methods of L1 contracts<br />• But can interact via Gateway contracts and Outbox mechanism             | • Yes<br />• Direct interaction between L2 contracts is possible                                                                                              |
+| **When is information sent from L1 to L2?**                                | • When a L1 contract sends a message via a Gateway contract<br />• When a L1 contract creates a Retryable Ticket for L2                             | • When the contract is deployed on L2<br />• When a L1 contract sends a message via a Gateway contract or creates a Retryable Ticket                          |
+| **When is information sent from L2 to L1?**                                | • When a L2 contract sends a message via Outbox mechanism<br />• When the contract state on L2 changes (state updates are hashed and stored on L1)  | • When the contract is deployed on L2<br />• When a L2 contract sends a message via Outbox mechanism                                                          |
+| **What primitives are involved with L1-L2 messages?**                      | • Gateway contracts<br />• Retryable Tickets                                                                                                        | • Gateway contracts<br />• Retryable Tickets                                                                                                                  |
+| **What primitives are involved with L2-L1 messages?**                      | • Gateway contracts<br />• Outbox mechanism<br />• Merkle proofs of L2 state updates                                                                | • Gateway contracts<br />• Outbox mechanism<br />• Merkle proofs of L2 state updates                                                                          |
+| **When does L1's state change?**                                           | • When the contract is deployed<br />• When contract state is modified<br />• When the contract sends a message to L2 (creates a Retryable Ticket)  | • Indirectly, when a message is sent from L2 via Outbox mechanism<br />• When a L2 state root hash update is confirmed on L1                                  |
+| **When does L2's state change?**                                           | • Indirectly, when a message is sent from L1 via a Gateway contract or a Retryable Ticket                                                           | • When the contract is deployed<br />• When contract state is modified<br />• When a message is received from L1 via a Gateway contract or a Retryable Ticket |
+| **Can I query L1 state via L2?**                                           | • No direct querying<br />• But can infer L1 state changes from incoming Retryable Tickets                                                          | • No direct querying<br />• But can infer L1 state changes from incoming Retryable Tickets                                                                    |
+| **Can I query L2 state via L1?**                                           | • No direct querying<br />• But can infer L2 state changes from Outbox messages and confirmed L2 state root hash                                    | • Yes<br />• Can query state directly from L2 nodes<br />• Can also infer L2 state changes from Outbox messages and confirmed L2 state root hash              |
+| **When are retryable tickets involved?**                                   | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                      | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                                |
+| **How are retryable tickets involved?**                                    | • Retryable Tickets encapsulate L1 messages for L2<br />• These tickets can be retried if not immediately executed                                  | • Retryable Tickets encapsulate L1 messages for L2<br />• These tickets can be retried if not immediately executed                                            |
+| **When are outbox contracts involved?**                                    | • When L2 contracts send messages to L1<br />• During cross-layer interactions                                                                      | • When L2 contracts send messages to L1<br />• During cross-layer interactions                                                                                |
+| **How are outbox contracts involved?**                                     | • Outbox contracts encapsulate L2 messages for L1<br />• They help in updating the L2 state root hash on L1                                         | • Outbox contracts encapsulate L2 messages for L1<br />• They help in updating the L2 state root hash on L1                                                   |
+| **When are inbox contracts involved?**                                     | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                      | • When L1 contracts send messages to L2<br />• During cross-layer interactions                                                                                |
+| **How are inbox contracts involved?**                                      | • Inbox contracts receive Retryable Tickets from L1<br />• They help in updating the L2 state                                                       | • Inbox contracts receive Retryable Tickets from L1<br />• They help in updating the L2 state                                                                 |
+| **When are bridge contracts involved?**                                    | • During cross-layer interactions<br />• When there is a need for synchronizing state between L1 and L2                                             | • During cross-layer interactions<br />• When there is a need for synchronizing state between L1 and L2                                                       |
+| **How are bridge contracts involved?**                                     | • Bridge contracts handle message passing and state synchronization between L1 and L2<br />• They use Retryable Tickets, Outbox and Inbox contracts | • Bridge contracts handle message passing and state synchronization between L1 and L2<br />• They use Retryable Tickets, Outbox and Inbox contracts           |
+| **How are gateway contracts involved?**                                    | • Gateway contracts enable communication between L1 and L2<br />• They wrap messages into Retryable Tickets or pass them to Outbox contracts        | • Gateway contracts enable communication between L1 and L2<br />• They wrap messages into Retryable Tickets or pass them to Outbox contracts                  |
+
+
+<br />
