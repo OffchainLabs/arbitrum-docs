@@ -103,7 +103,7 @@ Let's explore how each of these primitives relate to one another in the context 
       2. **Manual redemption**: If the ticket fails to execute, it can be redeemed manually.
       3. **Expiration**: If the ticket isn't redeemed within a certain timeframe, it expires.
  - One of the most important properties of retryables is that **they logically separate submission from execution**. In other words, they ensure that these operations are atomic but related: if the L1 transaction that requests the submission of a retryable ticket succeeds, then the execution of the retryable on L2 has a strong guarantee to ultimately succeed as well.
- - This atomicity is important because it means that the L1 transaction that requests the **submission** of a retryable ticket can be submitted for a fixed cost, which is a function of its calldata size, and is usually paid by end-users at L1. The cost of **executing** the retryable's transaction on L2 is paid by the sequencer (todo - learn/clarify), and is a function of the transaction's gas usage (as opposed to calldata size).
+ - This atomicity is important because it means that the L1 transaction that requests the **submission** of a retryable ticket can be submitted for a fixed cost (which is a function of its calldata size). The cost of **executing** the retryable's transaction on L2 is... (todo, need to better my understanding of this from vCurrent, and communicate the value of atomicity as clearly as possible)
  - This separation of concerns is one of the many ingredients that makes Arbitrum's gas efficiency and strong security guarantees possible.
 
 Let's now take a breezy walk through the different stages of a retryable ticket's lifecycle.
