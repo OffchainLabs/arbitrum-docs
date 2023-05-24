@@ -17,19 +17,20 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 Cross-layer messaging is a complex topic, so this is a lengthy concept doc that progressively discloses technical complexity. Here's what we'll cover:
 
-1. **Why this information is important**.
-2. **The conceptual primitives** that work together to enable L1-to-L2 messaging on Arbitrum.
-3. **Elaborating on our conceptual primitives** by exploring how each of the conceptual primitives relate to one another in the context of cross-layer messaging.
-4. **Learning with an example smart contract** that exposes two functions. We'll compare a number of properties across deployment scenarios to test our understanding of the conceptual primitives.
+  1. **[Why this information is important](#1-why-this-information-is-important)**.
+  2. **[The conceptual primitives](#2-the-conceptual-primitives)** that work together to enable L1-to-L2 messaging on Arbitrum.
+  3. **[Elaborating on the conceptual primitives](#3-elaborating-on-the-conceptual-primitives)** by exploring how each of the conceptual primitives relate to one another in the context of cross-layer messaging.
+  4. **[Learning by example](#4-learning-by-example)** with a minimal smart contract that exposes two functions. We'll compare the contract's behavior across two across deployment scenarios to test our understanding of the conceptual primitives.
 
 
-:::caution Editor note
+This document doesn't assume any prior knowledge beyond familiarity with the following terms:
 
- - We can link to the individual sections from these keys
+ 1. **Layers**: We'll focus on the first two: L1 (Ethereum's chains) and L2 (Arbitrum's chains). Both layers host multiple chains; each chain is supported by its own decentralized network of nodes.
+ 2. **Nodes**: Computers running peer-to-peer client software that implements a particular chain's protocol. The protocol tells the nodes how to execute transactions, manage state, and exchange information. 
+ 3. **State**: A distributed record of Ethereum's "world state" - the canonical, trustworthy representation of transaction history, account balances, token ownership, and other contract data.
+ 4. **Smart contracts**: Programs that can be deployed to a chain and whose code is hosted and executed by nodes on that chain.
+ 5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
 
-:::
-
-Although this doc doesn't assume prior knowledge, it does assume that you're comfortable exploring the supporting documentation linked throughout, as needed. Let's dive in!
 
 ## 1: Why this information is important
 
@@ -49,37 +50,16 @@ Without cross-layer messaging, it would be impossible to build dApps that intera
 
 ## 2: The conceptual primitives
 
-This document assumes that you're familiar with the following terms:
-
- 1. **Layers**: We'll focus on the first two: L1 (Ethereum's chains) and L2 (Arbitrum's chains). Both layers host multiple chains; each chain is supported by its own decentralized network of nodes.
- 2. **Nodes**: Computers running p2p client software that implements a particular chain's protocol. The protocol tells the nodes how to execute transactions, manage state, and exchange information. 
- 3. **State**: A distributed record of Ethereum's "world state" - the canonical, trustworthy representation of transaction history, account balances, token ownership, and other contract data.
- 4. **Smart contracts**: Programs that can be deployed to a chain and whose code is hosted and executed by nodes on that chain.
- 5. **Contract execution**: The process of executing a smart contract's code and updating the state of the layer(s) on which the contract is deployed.
-
-
-The rest of this document focuses on "constructing an understanding" of the following **conceptual primitives**:
+The rest of this concept document focuses on constructing an understanding of L1-to-L2 messaging through the following **conceptual primitives**:
 
  1. **Messages**: Pieces of information that are sent from one contract to another, and/or one layer to another.
  2. **Retryable tickets**: A type of message sent from L1 chains to L2 chains in order to trigger the execution of an L2-hosted smart contract. Think of these as special-purpose DTOs (data transfer objects) that encapsulate the information needed to execute a smart contract: the contract's address, the function to call, the function's arguments, etc.
- 3. **Outbox contracts**: Smart contracts that are deployed to L1 chains and are responsible for transmitting retryable tickets to L2's inbox contracts. The Arbitrum DAO owns these.
- 4. **Inbox contracts**: Smart contracts that are deployed to L2 chains and are responsible for receiving retryable tickets from L1's outbox contracts. The Arbitrum DAO owns these.
- 5. **Gateway contracts**: Smart contracts that are deployed to both L1 and L2 and are responsible for managing the flow of information between the two layers. The Arbitrum DAO owns these, but you can create your own.
+ 3. **Receipts**: todo
+ 4. **ETH deposits**: todo
+ 5. **Delayed Inbox**: todo
 
 
-:::caution Editor note
-
- - Low-confidence about the claims in 3/4/5
- - Each of these could use a dedicated concept doc
- - We could hide this list behind a hidden-by-default toggle that says "Click to expand for a list of conceptual primitives that will help you flow through this doc"
- - We could trim this list down to the most important concepts, using quicklooks to offer just-in-case elaborations inline
- - We could illustrate the relationship between these core primitives with a diagram
- - We could attach quicklooks to each, and/or link to supporting docs
-  
-:::
-
-
-## 3: Elaborating on our conceptual primitives
+## 3: Elaborating on the conceptual primitives
 
 Let's explore how each of these primitives relate to one another in the context of cross-layer communication.
 
@@ -180,7 +160,8 @@ Note that, this function forces the sender to provide a _reasonable_ amount of f
 
 :::caution Editor note: Editing paused here
 
-See [PR description](https://github.com/OffchainLabs/arbitrum-docs/pull/286) for **full edit notes**.
+ - See [PR description](https://github.com/OffchainLabs/arbitrum-docs/pull/286) for **full edit notes**.
+ - Once aligned on the direction of this structural edit, editing will resume here.
 
 :::
 
@@ -275,7 +256,12 @@ If a redeem is not done at submission or the submission's initial redeem fails, 
 [retryable_dashboard_link]: https://retryable-dashboard.arbitrum.io/tx
 
 
-### Receipts
+#### 3.2.4: Alternative "unsafe" retryable ticket creation
+
+The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to ther address alias (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
+
+
+### 3.3: Receipts
 
 In the lifecycle of a retryable ticket, two types of L2 transaction receipts will be emitted:
 
@@ -283,11 +269,7 @@ In the lifecycle of a retryable ticket, two types of L2 transaction receipts wil
 - **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted L2 execution of a ticket, i.e, success / failure of that specific redeem attempt. It includes a `RedeemScheduled` event from [`ArbRetryableTx`](./precompiles#ArbRetryableTx), with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided L2 gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
 
 
-### Alternative "unsafe" Retryable Ticket Creation
-
-The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to ther address alias (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
-
-## Eth deposits
+### 3.4: ETH deposits
 
 A special message type exists for simple Eth deposits; i.e., sending Eth from L1 to L2. Eth can be deposited via a call to the `Inbox`'s `depositEth` method. If the L1 caller is EOA, the Eth will be deposited to the same EOA address on L2; the L1 caller is a contract, the funds will deposited to the contract's aliased address (see below).
 
@@ -295,11 +277,11 @@ Note that depositing Eth via `depositEth` into a contract on L2 will _not_ trigg
 
 In principle, retryable tickets can alternatively be used to deposit Ether; this could be preferable to the special eth-deposit message type if, e.g., more flexibility for the destination address is needed, or if one wants to trigger the fallback function on the L2 side.
 
-## Transacting via the Delayed Inbox
+### 3.5: Transacting via the Delayed Inbox
 
 While retryables and Eth deposits _must_ be submitted through the delayed inbox, in principle, _any_ message can be included this way; this is a necessary recourse to ensure the Arbitrum chain preserves censorship resistance even if the Sequencer misbehaves (see [The Sequencer and Censorship Resistance](../sequencer.mdx)). However, under ordinary/happy circumstances, the expectation/recommendation is that clients use the delayed inbox only for Retryables and Eth deposits, and transact via the Sequencer for all other messages.
 
-## Address Aliasing
+### 3.6: Address aliasing
 
 All messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these unsigned messages are executed on L2, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the L1 address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111`:
 
@@ -328,9 +310,9 @@ modifier onlyFromMyL1Contract() override {
 ```
 
 
+## 4: Learning by example
 
-
-## 3: An example smart contract
+### 4.1: The cupcake contract
 
 In *[Quickstart: Build a decentralized app with Arbitrum](/for-devs/quickstart-solidity-hardhat.md)*, we deploy a cupcake vending machine to an Arbitrum L2 chain. The vending machine's business logic is encapsulated within a smart contract that increases the `cupcakeBalance` associated with your Ethereum address when you click a button. This smart contract exposes two functions:
 
@@ -341,12 +323,12 @@ In *[Quickstart: Build a decentralized app with Arbitrum](/for-devs/quickstart-s
 Don't worry about the guts of the contract - its interface is all we need to understand for now. We'll refer to this contract as the **cupcake contract** throughout the rest of this doc.
 
 
-## 4: Properties across deployment scenarios
+### 4.2: Properties across deployment scenarios
 
-Let's compare a number of properties across **two deployment scenarios** in order to 
+Let's compare **the way that our contract behaves** across **two deployment scenarios**:
 
-1. The cupcake contract is deployed straight to **Ethereum L1**
-2. The cupcake contract is deployed straight to **Arbitrum L2**
+1. The contract is deployed straight to **Ethereum L1**
+2. The contract is deployed straight to **Arbitrum L2**
 
 <br />
 
