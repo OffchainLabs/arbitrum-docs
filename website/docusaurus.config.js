@@ -239,11 +239,12 @@ const config = {
 const isRunningLocally = process.env.NODE_ENV === 'development';
 const isRunningOnWindows = process.platform === 'win32';
 if (isRunningLocally && isRunningOnWindows) {
-  // removes the arbitrum-sdk docs plugin
-  config.plugins = [
-    require.resolve("docusaurus-plugin-fathom"),
-    require.resolve("docusaurus-lunr-search"),
-  ];
+  config.plugins = config.plugins.filter(plugin => {
+    if (Array.isArray(plugin) && plugin[0] === "@docusaurus/plugin-content-docs") {
+      return false;  // remove the offending plugin config
+    }
+    return true;  // keep everything else
+  });
 }
 
 module.exports = config;
