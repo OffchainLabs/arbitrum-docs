@@ -46,8 +46,9 @@ Cross-layer communication is a core feature of Arbitrum's L2 chains. From the pe
     <Connection from="3" to="2" label="L1-to-L2 messaging"/>
   </Nodes>
   <NodeDescriptions>
+    <NodeDescription for='1'>Decentralized apps may need to read and write state to both layers, to know that their L2 transactions are settling to Ethereum L1, to expose functionality to users on both layers, to enjoy guarantees of bidirectional state synchronization between layers.</NodeDescription>
     <NodeDescription for='2'>L2 contracts can send messages to L1 contracts, which can trigger the execution of L1-hosted smart contracts.</NodeDescription>
-    <NodeDescription for='1'>L1 contracts can send messages to L2 contracts, which can trigger the execution of L2-hosted smart contracts.</NodeDescription>
+    <NodeDescription for='3'>L1 contracts can send messages to L2 contracts, which can trigger the execution of L2-hosted smart contracts.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
