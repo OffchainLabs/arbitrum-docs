@@ -65,23 +65,6 @@ const config = {
       }),
     ],
   ],
-  plugins: [
-    // todo: this breaks local builds on Windows
-    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
-    // ideally would be able to get `arbitrum-sdk/docs` generating on windows
-    // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
-    [
-      "@docusaurus/plugin-content-docs",
-      {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
-      },
-    ],
-    require.resolve("docusaurus-plugin-fathom"),
-    require.resolve("docusaurus-lunr-search"),
-  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -233,5 +216,27 @@ const config = {
       }
     }),
 };
+
+const isRunningLocally = process.env.NODE_ENV === 'development';
+
+if (!isRunningLocally) {
+  config.plugins = [
+    // HACK
+    // this was originally included above
+    // it broke local builds on Windows, not sure why yet. Works fine on Mac
+    // `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
+    [
+      "@docusaurus/plugin-content-docs",
+      {
+        id: "arbitrum-sdk",
+        path: "../arbitrum-sdk/docs",
+        routeBasePath: "sdk",
+        // ... other options
+      },
+    ],
+    require.resolve("docusaurus-plugin-fathom"),
+    require.resolve("docusaurus-lunr-search"),
+  ];
+}
 
 module.exports = config;
