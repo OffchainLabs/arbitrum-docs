@@ -8,7 +8,7 @@ todos:
   - Align on what we want to treat as proper nouns vs common nouns
 ---
 
-Running an Arbitrum relay locally as a Feed Relay lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions off-chain. 
+[Running an Arbitrum relay locally as a feed relay](/node-running/how-tos/running-a-feed-relay.mdx) lets you subscribe to the sequencer feed for real-time data as the sequencer accepts and orders transactions off-chain. 
 
 When connected to websocket port `9642` of the local relay, you'll receive feed data that looks something like this:
 
