@@ -88,6 +88,9 @@ const config = {
       fathomAnalytics: {
         siteId: "DOHOZGJO"
       },
+      "posthog-docusaurus": {
+        apiKey: "phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL"
+      },
       navbar: {
         title: "Arbitrum Docs",
         logo: {

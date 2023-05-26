@@ -30,7 +30,7 @@
 
 
 
-### Can I run an Arbitrum Node in p2p mode? {#can-i-run-an-arbitrum-node-in-p2p-mode}
+### Can I run an Arbitrum node in p2p mode? {#can-i-run-an-arbitrum-node-in-p2p-mode}
 <p>Arbitrum doesn't have a consensus mechanism, so "p2p mode" doesn't apply. For nodes to sync to the latest chain state, they connect to an L1 node to sync the chain's history that's been posted in calldata and connect to the Sequencer feed for the transactions that have yet to be posted in batches. In no case do nodes need to peer up and sync with each other.</p>
 
 
@@ -38,10 +38,12 @@
 ### How do I read messages from the Sequencer feed? {#how-do-i-read-messages-from-the-sequencer-feed}
 <p>Running an Arbitrum relay locally as a <a href="https://developer.offchainlabs.com/node-running/running-a-node#feed-relay">Feed Relay</a> lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions off-chain. Visit <a href='/node-running/how-tos/read-sequencer-feed'><em>How to read the sequencer feed</em></a> for a detailed how-to.</p>
 
+<p></p>
+
 
 
 ### How do I run a node locally for development? {#how-do-i-run-a-node-locally-for-development}
-<p>See instructions <a href="https://developer.arbitrum.io/node-running/local-dev-node">here</a>.</p>
+<p>See instructions <a href="https://developer.arbitrum.io/node-running/how-tos/local-dev-node">here</a>.</p>
 
 <p>We recommend running nitro nodes via docker; to compile directly / run without docker, you can follow the steps in this file then run the executable directly.</p>
 
@@ -49,10 +51,12 @@
 
 <p></p>
 
+<p></p>
 
 
-### **Is there any way to retrieve pre-nitro archive data from a nitro node?** {#is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node}
-<p>The pre-nitro stack is also referred to as a "classic" stack. Full nitro nodes start with a database that contains the information from the "classic" era. However, it is not possible for a nitro node to query archive information contained in "classic" blocks right away. To do that, you need to also run a classic node (<a href="https://developer.arbitrum.io/node-running/running-a-classic-node">instructions here</a>) and set the parameter <code>—node.rpc.classic-redirect=your-classic-node-RPC</code>.</p>
+
+### **Is there any way to retrieve pre-Nitro archive data from a Nitro node?** {#is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node}
+<p>The pre-nitro stack is also referred to as a "classic" stack. Full nitro nodes start with a database that contains the information from the "classic" era. However, it is not possible for a nitro node to query archive information contained in "classic" blocks right away. To do that, you need to also run a classic node (<a href="https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node">instructions here</a>) and set the parameter <code>—node.rpc.classic-redirect=your-classic-node-RPC</code>.</p>
 
 <p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova and Arbitrum Goerli nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
 
@@ -113,7 +117,7 @@
 
 
 ### **Is there an alternative to docker when running a node?** {#is-there-an-alternative-to-docker-when-running-a-node}
-<p>We recommend running nitro nodes via docker, using the guides provided within our documentation. However, you can try to compile the code directly by following the steps described in the Dockerfile, or following <a href="https://developer.arbitrum.io/node-running/build-nitro-locally">this guide</a> for Debian. </p>
+<p>We recommend running nitro nodes via docker, using the guides provided within our documentation. However, you can try to compile the code directly by following the steps described in the Dockerfile, or following <a href="https://developer.arbitrum.io/node-running/how-tos/build-nitro-locally">this guide</a> for Debian. </p>
 
 <p></p>
 
