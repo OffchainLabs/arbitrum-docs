@@ -10,7 +10,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso).
+This how-to is based on [debian-11.6.0-arm64](https://archive.org/download/debian-11.6.0-amd64-netinst/debian-11.6.0-amd64-netinst.iso).
 
 ### 1. Configure prerequisites
 
