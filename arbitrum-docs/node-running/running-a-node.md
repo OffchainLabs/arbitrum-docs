@@ -110,4 +110,4 @@ content-type: quickstart
   - 🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
   - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it
 - `--init.prune`
-  - Pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after v2.0.14)
+  - Pruning for a given use: `full` for full nodes serving RPC requests, or `validator` for validators (Only works after v2.0.14)
