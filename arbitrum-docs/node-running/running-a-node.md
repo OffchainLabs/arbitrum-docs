@@ -7,7 +7,7 @@ reader-task: run a node with minimal effort and maximum understanding
 content-type: quickstart
 ---
 
-🔉 Note: If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 ### Minimum Hardware Configuration
 
@@ -17,7 +17,7 @@ content-type: quickstart
   - Storage: Minimum 1.2TB SSD (make sure it is extendable)
   - Estimated Growth Rate: around 3 GB per day
 
-🔉 Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
+⚠️ Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
 
 ### Required Artifacts
 
@@ -96,7 +96,8 @@ content-type: quickstart
 - `--node.caching.archive`
   - Retain past block state
 - `--node.feed.input.url=<feed address>`
-  - Defaults to `wss://<chainName>.arbitrum.io/feed`. If running more than a couple nodes, you will want to provide one feed relay per datacenter, see further instructions below
+  - Defaults to `wss://<chainName>.arbitrum.io/feed`.
+  - ⚠️ When running more than one node, it is strongly suggested to provide one feed relay per datacenter. See further instructions in [How to run a feed relay](/node-running/how-tos/running-a-feed-relay.mdx).
 - `--node.forwarding-target=<sequencer RPC>`
   - Defaults to appropriate L2 Sequencer RPC depending on L1 and L2 chain IDs provided
 - `--node.rpc.evm-timeout`
