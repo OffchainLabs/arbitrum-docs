@@ -245,7 +245,7 @@ const config = {
 // `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
 const isRunningLocally = process.env.NODE_ENV === 'development';
 const isRunningOnWindows = process.platform === 'win32';
-if (isRunningLocally && isRunningOnWindows) {
+if (isRunningLocally && isRunningOnWindows && config.plugins) {
   config.plugins = config.plugins.filter(plugin => {
     if (Array.isArray(plugin) && plugin[0] === "@docusaurus/plugin-content-docs") {
       return false;  // remove the offending plugin config
