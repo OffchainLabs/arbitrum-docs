@@ -1,12 +1,11 @@
 ---
 id: migrate-nfts-arbitrum
-title: "How to migrate NFTs to Arbitrum"
-sidebar_label: "Migrate NFTs to Arbitrum"
-description: Learn how to migrate NFTs and entire NFT collections to Arbitrum through the Arbitrum Bridge, third-party bridges, and DIY bridging solutions.
+title: "How to migrate your NFT collection to Arbitrum (developers)"
+sidebar_label: "Migrate your NFT collection to Arbitrum (developers)"
+description: Learn how to migrate your NFT collection to Arbitrum through third-party bridges and DIY bridging solutions.
 author: amarrazza
 content-type: how-to
-reader_audience: Developers who want to migrate NFT collections to Arbitrum
-displayed_sidebar: buildDecentralizedAppsSidebar
+reader_audience: Developers who want to migrate their NFT collections to Arbitrum
 ---
 
 
@@ -14,47 +13,39 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
+This how-to is for **developers** who want to migrate existing NFT collections from Ethereum mainnet to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. This applies to NFT collections that support decentralized apps (dApps) and collections that don't.
 
-This how-to is for **developers** who want to migrate existing NFTs and NFT collections onto one of Arbitrum's layer-2 (L2) chains.
 
 ## Why migrate NFTs to Arbitrum?
 
-There are two main reasons to migrate NFTs to Arbitrum:
+There are two main reasons to migrate your dApp's NFTs to Arbitrum:
 
- 1. **Lower fees**. Arbitrum's gas fees are significantly lower than Ethereum's, meaning that you can mint, transfer, and trade NFTs without having to pay as much.
+ 1. **Lower fees**. Arbitrum's gas fees are significantly lower than Ethereum's, meaning that NFTs can be minted, transfered, and traded at a much lower cost.
  2. **Fast transactions**. From the end-user's perspective, transactions on Arbitrum's rollup chains are processed more quickly than they are on Ethereum mainnet. This lets you build NFT-powered experiences that feel just about as fast as traditional web apps.
 
 <!-- todo: when shouldn't you? Risks to call out? -->
 
-
 ## NFT token-types and bridges
 
-Before we begin, let's align on the various types of tokens that can be used as NFTs, and how they can be migrated to Arbitrum.
+Before we begin, let's align on the various types of tokens that can be used as NFTs:
 
-| Token type   | Description                                                             | Migration options                                                                                                                                                  |
-| ------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **ERC-20**   | Fungible tokens[^1] that can be transferred between users.              | - [Native token bridge](https://bridge.arbitrum.io/) <br/> - [Third-party bridge](#third-party-nft-bridging-solutions) <br/> - [DIY](#do-it-yourself-diy-bridging) |
-| **ERC-721**  | Non-fungible tokens that represent ownership of a unique asset.         | - [Third-party bridge](#third-party-nft-bridging-solutions) <br/> - [DIY](#do-it-yourself-diy-bridging)                                                            |
-| **ERC-1155** | A newer standard that allows for more flexibility in how NFTs are used. | - [Third-party bridge](#third-party-nft-bridging-solutions)  <br/> - [DIY](#do-it-yourself-diy-bridging)                                                           |
+| Token type   | Description                                                             |
+| ------------ | ----------------------------------------------------------------------- |
+| **ERC-721**  | Non-fungible tokens that represent ownership of a unique asset.         |
+| **ERC-1155** | A newer standard that allows for more flexibility in how NFTs are used. |
+
+Both of these token-types can be migrated to Arbitrum One and Nova through the use of **third-party NFT bridging solutions** and **DIY bridging solutions**.
 
 :::caution
 
-It's very important to understand that **the [Arbitrum Bridge](https://bridge.arbitrum.io/) does not support ERC-721 or ERC-1155 token transfers**; it supports transfers of **ERC-20 tokens** and **plain-old ETH** between Ethereum and Arbitrum's two chains.
+Although ERC-20 tokens can technically be used as NFTs[^1], this how-to assumes that your NFTs are one of the above token-types.
 
 :::
-
-<!-- todo: fact check -->
-
-## Migrate NFTs using the native token bridge
-
-This option is suitable for **users** who want to independently migrate **ERC-20 tokens** to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. It's *not* the right option if you're trying to migrate other types of tokens, or if you're a developer who wants to batch-migrate all of your projects' tokens to Arbitrum. <!-- todo: is this true? -->
-
-To use the bridge, visit the [Arbitrum Bridge portal](https://bridge.arbitrum.io/) and follow the instructions.
 
 
 ## Migrate NFTs using third-party NFT bridging solutions
  
-This option is suitable for **developers** who want to migrate **ERC-20** and **non-ERC-20 tokens** (e.g. ERC-721 or ERC-1155 tokens) to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> as quickly as possible.
+This option is ideal if you want to migrate your NFT collection to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> as quickly as possible.
 
 There are many things to consider before using a third-party bridging solution, including:
 
@@ -64,7 +55,9 @@ There are many things to consider before using a third-party bridging solution, 
  - Representational clashes if multiple bridges are used for the same collection
  - etc
 
-One of the most notable considerations is that **using a third-party bridging solution may introduce new trust assumptions**, forcing you to compromise with properties of permissionlessness and/or trustlessness. Consider these tradeoffs carefully when deciding to use any of the below solutions, and proceed with caution. This list is presented in alphabetical order, and does not represent an endorsement or recommendation; it's simply a list of options that are available, shared with the expectation that you'll **do your own research before using them**:
+One of the most notable considerations is that **using a third-party bridging solution may introduce new trust assumptions**. Consider your tradeoffs carefully when deciding to use any of the below solutions, and proceed with caution.
+
+This list does not represent an endorsement or recommendation; it's simply a list of options that are available, shared with the expectation that you'll **do your own research before using them**:
 
 - [Axelar](https://axelar.network/)
     - Currently live on Arbitrum One for ERC721 and ERC1155
@@ -78,7 +71,7 @@ One of the most notable considerations is that **using a third-party bridging so
 
 ### Other third-party solutions
 
-There are some solutions that give you the best of both worlds: **canonical representation of foundational NFTs on their original chain**, *and* **Arbitrum's scaling capabilities to facilitate fast and cheap experiences**:
+There are some third-party solutions that give you the best of both worlds: **canonical representation of foundational NFTs on their original chain**, *and* **Arbitrum's scaling capabilities to facilitate fast and cheap experiences**:
 
  - **Pirate Nation** has implemented a solution they coined as **[mirroring](https://piratenation.medium.com/mirroring-trade-on-l1-play-on-l2-3f53068a6a44)**, which allows users to trade NFTs on Ethereum and play with the mirrored versions of those NFTs on Arbitrum Nova. The NFTs on Nova's L2 chain can be transferred by a custodial central entity, but the NFTs on L1 remain fully self-custodial. This solution entirely avoids the need for bridging.
  - **0xEssential**'s [NFT Global Entry](https://docs.0xessential.com/0xessential/guides/nft-global-entry) offers a similar solution by hosting a public oracle that generates ownership proofs; these proofs can be easily consumed and used by their SDK.
@@ -86,7 +79,9 @@ There are some solutions that give you the best of both worlds: **canonical repr
 
 ## Migrate NFTs using do-it-yourself (DIY) bridging
 
-This option is suitable for **developers** who want to migrate **ERC-20 tokens** and **non-ERC-20 tokens** to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. There are four main options in this category:
+This option is ideal if you want to migrate your NFT collection to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> without introducing new third-party trust assumptions. 
+
+There are four main options in this category:
 
 1. **Set up cross-chain messaging between an old NFT contract to a new one on Arbitrum.** High engineering cost; seamless and unobtrusive UX for end-users.
 2. **Mint a new collection on Arbitrum and distribute NFTs to existing holders.** No engineering cost; requires users to claim their NFTs on Arbitrum; carries assumptions about your intended use-case.
