@@ -15,7 +15,7 @@ It's very important to understand that **the [Arbitrum Bridge](https://bridge.ar
 
 :::
 
-## Tokens and bridges
+## NFT token-types and bridges
 
 Before we begin, let's align on the various types of tokens that can be used as NFTs, and how they can be migrated to Arbitrum.
 
@@ -28,14 +28,14 @@ Before we begin, let's align on the various types of tokens that can be used as 
 
 <!-- todo: fact check -->
 
-## Native token bridge
+## Migrate NFTs using the native token bridge
 
 This option is suitable for **end-users** who want to independently migrate their **ERC-20 tokens** to Arbitrum. It's *not* the right option if you're trying to migrate other types of tokens, or if you're a developer who wants to batch-migrate all of your projects' user-owned tokens to Arbitrum. <!-- todo: is this true? -->
 
 The [Arbitrum token bridge](https://bridge.arbitrum.io/) is a trustless, permissionless bridge that allows users to transfer **ERC-20 tokens** (not ERC-721 or ERC-1115 tokens) between Ethereum and <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Nova</a> chains. To use the bridge, visit the [Arbitrum Bridge portal](https://bridge.arbitrum.io/) and follow the instructions.
 
 
-## Third-party NFT bridging solutions
+## Migrate NFTs using third-party NFT bridging solutions
  
 This option is suitable for **end-users** and **developers** who want to migrate **non-ERC-20 tokens** (e.g. ERC-721 or ERC-1155 tokens) to one of Arbitrum's chains. There are many things to consider before using a third-party bridging solution, including:
 
@@ -65,7 +65,7 @@ There are some solutions that give you the best of both worlds: **canonical repr
  - **0xEssential**'s [NFT Global Entry](https://docs.0xessential.com/0xessential/guides/nft-global-entry) offers a similar solution by hosting a public oracle that generates ownership proofs; these proofs can be easily consumed and used by their SDK.
 
 
-## Do-it-yourself (DIY) bridging
+## Migrate NFTs using do-it-yourself (DIY) bridging
 
 This option is suitable for **developers** and project owners who want to migrate **non-ERC-20 tokens** and/or entire collections of tokens that have already been minted and distributed to users on Ethereum's L1 chain. There are four main options in this category:
 
@@ -74,7 +74,7 @@ This option is suitable for **developers** and project owners who want to migrat
 3. **Build contracts on Arbitrum that depend on NFT ownership from other EVM chains.** Low engineering cost; carries assumptions about your intended use-case.
 4. **Building your own NFT Bridge.** High engineering cost; high flexibility.
 
-### Building your own NFT Bridge
+### Build your own NFT bridge
 
 The below workshop was hosted by a blockchain engineer at Offchain Labs, and walks you through the process of building a trustless ERC-721 bridge.
 
