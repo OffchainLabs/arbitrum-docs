@@ -1,6 +1,14 @@
-# Running a Feed Relay
+---
+title: 'How to run a feed relay'
+description: Learn how to run an Arbitrum feed relay on your local machine.
+content-type: how-to
+---
 
-When running more than one node, you want to run a single feed relay per datacenter, which will reduce ingress fees and improve stability. The feed relay is in the same docker image.
+⚠️ If running a single node, there is no need to run a feed relay. When running more that one node, it is strongly suggested to run a single feed relay per datacenter, which will reduce ingress fees and improve stability.
+
+⚠️ Feed endpoints will soon require compression with a custom dictionary, so if connecting to feed with anything other than a standard node, it is strongly suggested to run a local feed relay which will provide an uncompressed feed by default.
+
+The feed relay is in the same docker image as the Nitro node.
 
 - Here is an example of how to run the feed relay for Arbitrum One:
   ```shell

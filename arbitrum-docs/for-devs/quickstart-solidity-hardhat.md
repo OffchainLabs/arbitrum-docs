@@ -392,7 +392,7 @@ Note that we're adding a private key to a config file. This is **not** a best pr
 :::
 
 
-Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum's Goerli testnet by issuing the following command:
+Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum One Mainnet by issuing the following command:
 
 ```bash
 yarn hardhat run scripts/deploy.js --network arbitrumOne

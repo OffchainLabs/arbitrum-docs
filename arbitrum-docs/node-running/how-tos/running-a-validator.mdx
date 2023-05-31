@@ -1,10 +1,14 @@
-# Running a Validator
+---
+title: 'How to run a validator'
+description: Learn how to run an Arbitrum feed relay on your local machine.
+content-type: how-to
+---
 
 Some Arbitrum nodes will choose to act as validators. This means that they watch the progress of the rollup protocol and perhaps also participate in that protocol to advance the state of the chain securely.
 Not all nodes will choose to do this. Because the rollup protocol doesn’t decide what the chain will do but merely confirms the correct behavior that is fully determined by the inbox messages, a node can ignore the rollup protocol and simply compute for itself the correct behavior.
 Here we describe different types of validators and provide instructions on how to run them.
 
-### Types of Validators
+### Types of validators
 
 - Currently, the ability to post assertions on-chain for mainnet Arbitrum chains is whitelisted. However, anyone can run a validator in `Watchtower` mode which will immediately log an error if an on-chain assertion deviates from the locally computed chain state
 - Full list of validator strategies:
@@ -20,7 +24,7 @@ Here we describe different types of validators and provide instructions on how t
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
 
-### Running Watchtower Validator
+### Running Watchtower validator
 
 - Running a validator in `Watchtower` mode is the same as running a Nitro node with `--node.staker.enable --node.staker.strategy=Watchtower`
 - Here is an example of how to run a watchtower validator for Arbitrum One:
@@ -36,7 +40,7 @@ Here we describe different types of validators and provide instructions on how t
   - The log line `validation succeeded` shows that the L2 block validator is working
   - The log line `found correct assertion` shows that the L1 validator is working
 
-### Creating Wallet for Whitelisted Validator
+### Creating wallet for whitelisted validator
 
 - Watchtower validators never need a wallet, because they never post on-chain
 - Defensive validators need a wallet configured, but the wallet does not need to be funded until it logs that an assertion has been found
@@ -47,7 +51,7 @@ Here we describe different types of validators and provide instructions on how t
   ```
 - Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova. Be sure to backup the wallet, it will be the only way to withdraw stake when desired
 
-### Running Whitelisted Defensive Validator
+### Running whitelisted defensive validator
 
 - A defensive validator requires that a wallet has already been created using the above steps
 - Defensive validator wallets do not need to be funded initially
