@@ -245,18 +245,7 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting: Bridge tokens",
       id: "for-users/troubleshooting-users"
-    },
-    {
-      type: "category",
-      label: "How-to guides",
-      collapsed: false,
-      items: [
-        {
-          type: "doc",
-          id: "bridge-tokens/how-tos/migrate-nfts-arbitrum",
-        }
-      ]
-    },
+    }
   ],
   runNodesSidebar: [
     {
