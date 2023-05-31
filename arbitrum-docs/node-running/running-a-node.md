@@ -82,7 +82,7 @@ content-type: quickstart
 ### Optional parameters
 
 - `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run archive node, should use the url in [running an archive node](./how-tos/running-an-archive-node.mdx).
+  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./how-tos/running-an-archive-node.mdx).
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
