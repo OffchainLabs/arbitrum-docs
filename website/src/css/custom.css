@@ -340,6 +340,14 @@ article .markdown p > code {
   border-radius: 3px;
   background-color: rgba(150, 150, 150, 0.2);
 }
+[class*="migrate-nfts-arbitrum"] table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+[class*="migrate-nfts-arbitrum"] table td {
+  padding: 10px;
+}
 [class*="quickstart-solidity-hardhat"] table {
   font-size: 12px;
   margin-top: 20px;

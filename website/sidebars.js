@@ -54,6 +54,10 @@ const sidebars = {
         },
         {
           type: "doc",
+          id: "build-decentralized-apps/how-tos/migrate-nfts-arbitrum",
+        },
+        {
+          type: "doc",
           label: "Use oracles in Arbitrum",
           id: "devs-how-tos/how-to-use-oracles"
         }
@@ -241,6 +245,17 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting: Bridge tokens",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "category",
+      label: "How-to guides",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          id: "bridge-tokens/how-tos/migrate-nfts-arbitrum",
+        }
+      ]
     },
   ],
   runNodesSidebar: [
