@@ -38,10 +38,8 @@ The minimum storage requirements will change over time as the Nitro chain grows 
    - Latest Docker image for **Arbitrum One**: <code>@latestNitroNodeImage@</code>
    - Latest Docker image for **Arbitrum Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
-   - Arbitrum One Nitro genesis database snapshot
-     - Use the parameter <code>--init.url="@arbOneNitroGenesisSnapshot@"</code> on first startup to initialize the Nitro database
-     - SHA256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
-     - Size: 33.5573504 GB
+   - Nitro database snapshot
+     - Use the parameter `--init.url=` on first startup to initialize the Nitro database (you can find a list of snapshots [here](#snapshots-available)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code> 
    - Arbitrum One Classic database snapshot
      - Download the latest Arbitrum One Classic database snapshot at [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@) and put it to the mounted point directory.
 
@@ -106,3 +104,33 @@ chmod -fR 777 /some/local/dir/arbitrum-mainnet
 ### Troubleshooting
 
 If you run into any issues, visit the [Node-running Troubleshooting guide](../troubleshooting-running-nodes).
+
+### Snapshots available
+
+Here's a list of the database snapshots available to use with the `--init.url` parameter when first initializing your archive node:
+
+- Arbitrum One:
+  - Latest Nitro archive snapshot
+    - URL: [@arbOneNitroArchiveSnapshot@](@arbOneNitroArchiveSnapshot@)
+    - Size: 
+    - SHA5 checksum: 
+  - Genesis Nitro snapshot (from Nitro's genesis block: 22207818)
+    - URL: [@arbOneNitroGenesisSnapshot@](@arbOneNitroGenesisSnapshot@)
+    - Size: 33.5573504 GB
+    - SHA5 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
+  - Classic archive snapshot (do not use with `--init.url`; download and place it in the mounted directory instead)
+    - URL: [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@)
+    - Size:
+    - SHA5 checksum:
+
+- Arbitrum Nova:
+  - Latest archive snapshot
+    - URL: [@arbNovaArchiveSnapshot@](@arbNovaArchiveSnapshot@)
+    - Size: 
+    - SHA5 checksum: 
+
+- Arbitrum Goerli:
+  - Latest archive snapshot
+    - URL: [@arbGoerliArchiveSnapshot@](@arbGoerliArchiveSnapshot@)
+    - Size: 
+    - SHA5 checksum: 

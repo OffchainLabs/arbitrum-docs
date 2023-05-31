@@ -23,15 +23,11 @@ content-type: quickstart
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
-- Arbitrum One Nitro Genesis Database Snapshot
+- Database snapshot (required for Arbitrum One)
 
-  - Use the parameter <code>--init.url="@arbOneNitroGenesisSnapshot@"</code> on first startup to initialize Nitro database
-  - If running more than one node, easiest to manually download image from [@arbOneNitroGenesisSnapshot@](@arbOneNitroGenesisSnapshot@) and host it locally for your nodes
-  - Or use `--init.url="file:///path/to/snapshot/in/container/nitro-genesis.tar"` to use a local snapshot archive
-  - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
-  - size: 33.5573504 GB
-
-- Other chains do not have classic blocks, and do not require an initial genesis database
+  - Use the parameter `--init.url` on first startup to initialize the Nitro database (you can find a list of snapshots [here](#snapshots-available)). Example: <code>--init.url="@arbOneNitroPrunedSnapshot@"</code>
+  - When running more than one node, it's easier to manually download the image of the snapshot and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it
+- This parameter is **required** when running an Arbitrum One node, because the chain has _classic_ blocks. For Arbitrum Nova and Arbitrum Goerli this parameter is optional
 
 ### Required parameter
 
@@ -79,9 +75,8 @@ content-type: quickstart
 
 ### Optional parameters
 
-<!--- Variables do not get injected when starting the list item with the code tag. We render zero-width space to force the injection -->
-- &ZeroWidthSpace;<code>--init.url="@arbOneNitroGenesisSnapshot@"</code>
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database
+- `--init.url="<snapshot file>"`
+  - URL to download the genesis database from. Only required when starting and Arbitrum One for the first time. You can find a list of snapshots [here](#snapshots-available).
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
@@ -112,3 +107,33 @@ content-type: quickstart
   - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it
 - `--init.prune`
   - Pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after v2.0.14)
+
+### Snapshots available
+
+Here's a list of the database snapshots available to use with the `--init.url` parameter when first initializing your node:
+
+- Arbitrum One:
+  - Latest Nitro pruned snapshot
+    - URL: [@arbOneNitroPrunedSnapshot@](@arbOneNitroPrunedSnapshot@)
+    - Size: 
+    - SHA5 checksum: 
+  - Genesis Nitro snapshot (from Nitro's genesis block: 22207818)
+    - URL: [@arbOneNitroGenesisSnapshot@](@arbOneNitroGenesisSnapshot@)
+    - Size: 33.5573504 GB
+    - SHA5 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
+  - Classic snapshot (do not use with `--init.url`; download and place it in the mounted directory instead)
+    - URL: [@arbOneClassicSnapshot@](@arbOneClassicSnapshot@)
+    - Size:
+    - SHA5 checksum:
+
+- Arbitrum Nova:
+  - Latest pruned snapshot
+    - URL: [@arbNovaPrunedSnapshot@](@arbNovaPrunedSnapshot@)
+    - Size: 
+    - SHA5 checksum: 
+
+- Arbitrum Goerli:
+  - Latest pruned snapshot
+    - URL: [@arbGoerliPrunedSnapshot@](@arbGoerliPrunedSnapshot@)
+    - Size: 
+    - SHA5 checksum: 
