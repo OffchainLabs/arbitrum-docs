@@ -40,7 +40,7 @@ There are three main reasons to migrate your your project's NFTs to Arbitrum:
 
  1. **Low fees**. NFTs hosted by one of Arbitrum's chains can be minted, transfered, and traded at a much lower cost compared to Ethereum mainnet.
  2. **Fast transactions**. From the end-user's perspective, transactions on Arbitrum's chains are processed more quickly than they are on Ethereum mainnet. This lets you build NFT-powered experiences that feel just about as fast as traditional apps and games.
- 3. **Interoperability with the Ethereum ecosystem**. If you're migrating your project's NFTs from other non-Ethereum chains, migration to Arbitrum will let your users freely carry their NFTs across application boundaries within the Ethereum ecosystem.
+ 3. **Interoperability with the Ethereum and Arbitrum ecosystems**. If you're migrating your project's NFTs from a non-EVM chain, migration to Arbitrum will let your users freely roam between Ethereum dApps, carrying their NFTs along with them. More precisely, this means that your users' NFTs will be usable across dApp boundaries, as long as those dApps's smart contracts are hosted by EVM-compatible chains.
 
 <!-- todo: when shouldn't you? Risks to call out? -->
 
@@ -49,7 +49,7 @@ There are three main reasons to migrate your your project's NFTs to Arbitrum:
 
 There are a number of options to choose from, each with its own tradeoffs:
 
-1. **Set up cross-chain messaging between an old NFT contract to a new one on Arbitrum.** (todo - summary of tradeoffs - eg high engineering cost; seamless and unobtrusive UX for end-users)
+1. **Set up cross-chain messaging between an old NFT contract to a new one on Arbitrum.** (todo - summary of tradeoffs - eg high engineering cost; seamless and unobtrusive UX for end-users; doesn't work if you're coming from a non-EVM chain, etc)
 2. **Mint a new collection on Arbitrum and distribute NFTs to existing holders.** (todo)
 3. **Build contracts on Arbitrum that depend on NFT ownership from other EVM chains.** (todo)
 4. **Building your own NFT Bridge.** (todo)
