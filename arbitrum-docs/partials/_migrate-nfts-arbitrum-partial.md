@@ -1,4 +1,4 @@
-This how-to is for **users** and **developers** who want to migrate (or "bridge") existing NFTs and NFT collections onto one of Arbitrum's layer-2 (L2) chains.
+This how-to is for **users** and **developers** who want to migrate existing NFTs and NFT collections onto one of Arbitrum's layer-2 (L2) chains.
 
 ## Why migrate NFTs to Arbitrum?
 
@@ -9,11 +9,6 @@ There are two main reasons to migrate NFTs to Arbitrum:
 
 <!-- todo: when shouldn't you? Risks to call out? -->
 
-:::caution
-
-It's very important to understand that **the [Arbitrum Bridge](https://bridge.arbitrum.io/) does not support ERC-721 or ERC-1155 token transfers**; it supports transfers of **ERC-20 tokens** and **plain-old ETH** between Ethereum and Arbitrum's two chains.
-
-:::
 
 ## NFT token-types and bridges
 
@@ -25,6 +20,11 @@ Before we begin, let's align on the various types of tokens that can be used as 
 | **ERC-721**  | Non-fungible tokens that represent ownership of a unique asset.         | - [Third-party bridge](#third-party-nft-bridging-solutions) <br/> - [DIY](#do-it-yourself-diy-bridging)                                                            |
 | **ERC-1155** | A newer standard that allows for more flexibility in how NFTs are used. | - [Third-party bridge](#third-party-nft-bridging-solutions)  <br/> - [DIY](#do-it-yourself-diy-bridging)                                                           |
 
+:::caution
+
+It's very important to understand that **the [Arbitrum Bridge](https://bridge.arbitrum.io/) does not support ERC-721 or ERC-1155 token transfers**; it supports transfers of **ERC-20 tokens** and **plain-old ETH** between Ethereum and Arbitrum's two chains.
+
+:::
 
 <!-- todo: fact check -->
 
