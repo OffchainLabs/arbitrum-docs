@@ -5,7 +5,7 @@ sidebar_label: "Migrate your NFT collection to Arbitrum"
 description: Learn how to migrate your NFT collection to Arbitrum through third-party bridges and DIY bridging solutions.
 author: amarrazza
 content-type: how-to
-reader_audience: Developers who want to migrate their NFT collections to Arbitrum
+reader_audience: Developers who want to migrate their NFT collections to Arbitrum from either Ethereum mainnet or other non-EVM chains.
 ---
 
 
@@ -13,12 +13,14 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-This how-to is for **developers** who want to migrate existing <a data-quicklook-from="non-fungible-tokens-nfts">NFT</a> collections from Ethereum mainnet to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. This guidance applies to NFT collections that support web3 games, decentralized apps (dApps), and other use-cases.
+This how-to is for **developers** who want to migrate existing <a data-quicklook-from="non-fungible-tokens-nfts">NFT</a> collections to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> from EVM-compatible chains and non-EVM chains.
+
+This guidance applies to NFT collections used within web3 games, decentralized apps (dApps), and other use-cases.
 
 ### Prerequisites
 
- - An NFT collection that's minted and managed by smart contracts on Ethereum mainnet. (todo - align on whether we want to include non-EVM chains here)
- - NFTs that are implemented using the ERC-721 or ERC-1155 token standards[^1].
+ - An NFT collection that's minted and managed by smart contracts on either an **EVM-compatible** chain (like Ethereum mainnet) or a supported **non-EVM** chain[^1].
+ - NFTs that are implemented using the ERC-721 or ERC-1155 token standards[^2].
 
 
 :::info
@@ -126,4 +128,7 @@ There are some third-party solutions that entirely avoid the need for bridging w
  - **0xEssential**'s [NFT Global Entry](https://docs.0xessential.com/0xessential/guides/nft-global-entry) offers a similar solution by hosting a public oracle that generates ownership proofs; these proofs can be easily consumed and used by their SDK.
 
 
-[^1]: Although ERC-20 tokens are fungible (mutually exchangeable with no expectation of uniqueness between tokens), they can *technically* be (and have been) used to represent ownership of unique digital assets. For example, CryptoKitties and CryptoPunks were originally implemented as ERC-20 tokens with additional code that made each token uniquely identifiable. This use-case demonstrated a new way to extend the ERC-20 spec, and eventually led to the [ERC-721](https://ethereum.org/en/developers/docs/standards/tokens/erc-721/) standard, which now offers protocol-canonical support for NFTs.
+
+[^1]: The guidance in this document is applicable to EVM-compatible chains and the following non-EVM chains: todo
+
+[^2]: Although ERC-20 tokens are fungible (mutually exchangeable with no expectation of uniqueness between tokens), they can *technically* be (and have been) used to represent ownership of unique digital assets. For example, CryptoKitties and CryptoPunks were originally implemented as ERC-20 tokens with additional code that made each token uniquely identifiable. This use-case demonstrated a new way to extend the ERC-20 spec, and eventually led to the [ERC-721](https://ethereum.org/en/developers/docs/standards/tokens/erc-721/) standard, which now offers protocol-canonical support for NFTs.
