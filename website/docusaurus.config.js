@@ -81,7 +81,9 @@ const config = {
       {
         apiKey: "phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL",
         appUrl: "https://app.posthog.com",
-        enableInDevelopment: false, 
+        enableInDevelopment: false,
+        persistence: "memory",
+        disable_session_recording: true
       },
     ],
     require.resolve("docusaurus-plugin-fathom"),
