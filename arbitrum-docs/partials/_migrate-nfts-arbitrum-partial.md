@@ -1,4 +1,4 @@
-This how-to is for **users** and **developers** who want to migrate (or "bridge") existing NFT collections onto Arbitrum.
+This how-to is for **users** and **developers** who want to migrate (or "bridge") existing NFTs and NFT collections onto one of Arbitrum's layer-2 (L2) chains.
 
 ## Why migrate NFTs to Arbitrum?
 
@@ -36,7 +36,7 @@ The [Arbitrum token bridge](https://bridge.arbitrum.io/) is a trustless, permiss
 
 
 ## Third-party NFT bridging solutions
-
+ 
 This option is suitable for **end-users** and **developers** who want to migrate **non-ERC-20 tokens** (e.g. ERC-721 or ERC-1155 tokens) to one of Arbitrum's chains. There are many things to consider before using a third-party bridging solution, including:
 
  - Token metadata
