@@ -96,8 +96,6 @@ The code in this workshop is provided for educational purposes only; it hasn't b
 
 ## Migrate NFTs using third-party NFT bridging solutions
  
-This option is ideal if you want to migrate your NFT collection to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> as quickly as possible.
-
 There are many things to consider before using a third-party bridging solution, including:
 
  - Token metadata
@@ -122,11 +120,10 @@ This list does not represent an endorsement or recommendation; it's simply a lis
 
 ### Other third-party solutions
 
-There are some third-party solutions that give you the best of both worlds: **canonical representation of foundational NFTs on their original chain**, *and* **Arbitrum's scaling capabilities to facilitate fast and cheap experiences**:
+There are some third-party solutions that entirely avoid the need for bridging while still leveraging Arbitrum's scaling capabilities to facilitate fast and cheap experiences:
 
- - **Pirate Nation** has implemented a solution they coined as **[mirroring](https://piratenation.medium.com/mirroring-trade-on-l1-play-on-l2-3f53068a6a44)**, which allows users to trade NFTs on Ethereum and play with the mirrored versions of those NFTs on Arbitrum Nova. The NFTs on Nova's L2 chain can be transferred by a custodial central entity, but the NFTs on L1 remain fully self-custodial. This solution entirely avoids the need for bridging.
+ - **Pirate Nation** has implemented a solution they coined as **[mirroring](https://piratenation.medium.com/mirroring-trade-on-l1-play-on-l2-3f53068a6a44)**, which allows users to trade NFTs on Ethereum and play with the mirrored versions of those NFTs on Arbitrum Nova. The NFTs on Nova's L2 chain can be transferred by a custodial central entity, but the NFTs on L1 remain fully self-custodial.
  - **0xEssential**'s [NFT Global Entry](https://docs.0xessential.com/0xessential/guides/nft-global-entry) offers a similar solution by hosting a public oracle that generates ownership proofs; these proofs can be easily consumed and used by their SDK.
-
 
 
 [^1]: Although ERC-20 tokens are fungible (mutually exchangeable with no expectation of uniqueness between tokens), they can *technically* be (and have been) used to represent ownership of unique digital assets. For example, CryptoKitties and CryptoPunks were originally implemented as ERC-20 tokens with additional code that made each token uniquely identifiable. This use-case demonstrated a new way to extend the ERC-20 spec, and eventually led to the [ERC-721](https://ethereum.org/en/developers/docs/standards/tokens/erc-721/) standard, which now offers protocol-canonical support for NFTs.
