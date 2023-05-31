@@ -95,7 +95,8 @@ content-type: quickstart
 - `--node.caching.archive`
   - Retain past block state
 - `--node.feed.input.url=<feed address>`
-  - Defaults to `wss://<chainName>.arbitrum.io/feed`. If running more than a couple nodes, you will want to provide one feed relay per datacenter, see further instructions below
+  - Defaults to `wss://<chainName>.arbitrum.io/feed`.
+  - ⚠️ When running more than one node, it is strongly suggested to provide one feed relay per datacenter. See further instructions in [How to run a feed relay](/node-running/how-tos/running-a-feed-relay.mdx).
 - `--node.forwarding-target=<sequencer RPC>`
   - Defaults to appropriate L2 Sequencer RPC depending on L1 and L2 chain IDs provided
 - `--node.rpc.evm-timeout`

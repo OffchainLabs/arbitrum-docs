@@ -66,10 +66,7 @@ const config = {
     ],
   ],
   plugins: [
-    // todo: this breaks local builds on Windows
-    // could detect env and auto-disable when local + windows so I don't need to manually disable / remember to re-enable;
-    // ideally would be able to get `arbitrum-sdk/docs` generating on windows
-    // oddly `generate_sdk_docs` runs fine, just not seeing the docs folder appear. need to investigate
+    // See below hack - this gets modified if you're running locally on windows
     [
       "@docusaurus/plugin-content-docs",
       {
@@ -238,5 +235,21 @@ const config = {
       }
     }),
 };
+
+
+// HACK
+// this was originally included above
+// it broke local builds on Windows, not sure why yet. Works fine on Mac
+// `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
+const isRunningLocally = process.env.NODE_ENV === 'development';
+const isRunningOnWindows = process.platform === 'win32';
+if (isRunningLocally && isRunningOnWindows) {
+  config.plugins = config.plugins.filter(plugin => {
+    if (Array.isArray(plugin) && plugin[0] === "@docusaurus/plugin-content-docs") {
+      return false;  // remove the offending plugin config
+    }
+    return true;  // keep everything else
+  });
+}
 
 module.exports = config;
