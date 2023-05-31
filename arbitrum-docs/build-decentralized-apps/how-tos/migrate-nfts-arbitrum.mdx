@@ -13,27 +13,27 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-This how-to is for **developers** who want to migrate existing NFT collections from Ethereum mainnet to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. This applies to NFT collections that support decentralized apps (dApps) and collections that don't.
+This how-to is for **developers** who want to migrate existing NFT collections from Ethereum mainnet to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a>. This guidance applies to NFT collections that support web3 games, decentralized apps (dApps), and other use-cases. If your NFTs are minted and managed by smart contracts on Ethereum mainnet, this how-to is for you.
 
 :::caution
 
-[bridge.arbitrum.io](https://bridge.arbitrum.io/) does not support NFTs.
+[bridge.arbitrum.io](https://bridge.arbitrum.io/) **does not support NFTs.** You can migrate NFTs from Ethereum mainnet to Arbitrum chains using one of two approaches: **third-party bridges** and **DIY bridging solutions**. Both are detailed below.
 
 :::
 
 
 ## Why migrate NFTs to Arbitrum?
 
-There are two main reasons to migrate your dApp's NFTs to Arbitrum:
+There are two main reasons to migrate your your project's NFTs to Arbitrum:
 
  1. **Lower fees**. Arbitrum's gas fees are significantly lower than Ethereum's, meaning that NFTs can be minted, transfered, and traded at a much lower cost.
- 2. **Fast transactions**. From the end-user's perspective, transactions on Arbitrum's rollup chains are processed more quickly than they are on Ethereum mainnet. This lets you build NFT-powered experiences that feel just about as fast as traditional web apps.
+ 2. **Fast transactions**. From the end-user's perspective, transactions on Arbitrum's rollup chains are processed more quickly than they are on Ethereum mainnet. This lets you build NFT-powered experiences that feel just about as fast as traditional apps and games.
 
 <!-- todo: when shouldn't you? Risks to call out? -->
 
-## NFT token-types and bridges
+## NFT token-types and bridging solutions
 
-Before we begin, let's align on the various types of tokens that can be used as NFTs:
+The following types of tokens can be used to represent NFTs:
 
 | Token type   | Description                                                             |
 | ------------ | ----------------------------------------------------------------------- |
@@ -85,7 +85,7 @@ There are some third-party solutions that give you the best of both worlds: **ca
 
 ## Migrate NFTs using do-it-yourself (DIY) bridging
 
-This option is ideal if you want to migrate your NFT collection to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> without introducing new third-party trust assumptions. 
+This option is ideal if you want to migrate your NFT collection to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or <a data-quicklook-from="arbitrum-nova">Nova</a> without introducing additional third-party trust assumptions. 
 
 There are four main options in this category:
 
