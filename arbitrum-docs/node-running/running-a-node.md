@@ -33,6 +33,8 @@ content-type: quickstart
 
 - Other chains do not have classic blocks, and do not require an initial genesis database
 
+- Snapshot list: "https://snapshot.arbitrum.foundation/index.html"
+
 ### Required parameter
 
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
@@ -80,7 +82,7 @@ content-type: quickstart
 ### Optional parameters
 
 - `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database
+  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./how-tos/running-an-archive-node.mdx).
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
@@ -95,7 +97,8 @@ content-type: quickstart
 - `--node.caching.archive`
   - Retain past block state
 - `--node.feed.input.url=<feed address>`
-  - Defaults to `wss://<chainName>.arbitrum.io/feed`. If running more than a couple nodes, you will want to provide one feed relay per datacenter, see further instructions below
+  - Defaults to `wss://<chainName>.arbitrum.io/feed`.
+  - ⚠️ When running more than one node, it is strongly suggested to provide one feed relay per datacenter. See further instructions in [How to run a feed relay](/node-running/how-tos/running-a-feed-relay.mdx).
 - `--node.forwarding-target=<sequencer RPC>`
   - Defaults to appropriate L2 Sequencer RPC depending on L1 and L2 chain IDs provided
 - `--node.rpc.evm-timeout`
