@@ -53,6 +53,33 @@ const sidebars = {
           id: "migration/state-migration"
         },
         {
+          type: "category",
+          label: "Bridge tokens",
+          collapsed: false,
+          items: [
+            {
+              type: "doc",
+              label: "Overview",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview"
+            },
+            {
+              type: "doc",
+              label: "Standard gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard"
+            },
+            {
+              type: "doc",
+              label: "Custom generic gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic"
+            },
+            {
+              type: "doc",
+              label: "Custom gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway"
+            },
+          ]
+        },
+        {
           type: "doc",
           label: "Use oracles in Arbitrum",
           id: "devs-how-tos/how-to-use-oracles"
