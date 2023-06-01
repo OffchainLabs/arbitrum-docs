@@ -23,7 +23,7 @@ As stated in the [token bridge conceptual page](/asset-bridging.mdx#the-arbitrum
 First of all, the **L1 counterpart of the token**, must conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface. This means that:
 
 - It must have a `isArbitrumEnabled` method that returns `0xb1`
-- It must have a method that makes an external call to `L1CustomGateway.registerCustomL2Token` specifying the address of the L2 contract, and to `L1GatewayRouter.setGateway` specifying the address of the Custom Gateway. These calls should be made only once to configure the gateway.
+- It must have a method that makes an external call to `L1CustomGateway.registerCustomL2Token` specifying the address of the L2 contract, and to `L1GatewayRouter.setGateway` specifying the address of the custom gateway. These calls should be made only once to configure the gateway.
 
 These methods are needed to register the token via the gateway contract. If your L1 contract does not include these methods and it is not upgradeable, registration could alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal. Keep in mind that this registration can only be done once.
 
@@ -32,7 +32,7 @@ Also, the **L2 counterpart of the token**, must conform to the [IArbToken](https
 - It must have`bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract
 - It must have an `l1Address` view method that returns the address of the token in L1
 
-## Step 1: Create a token and deploy on L1
+## Step 1: Create a token and deploy it on L1
 
 We‘ll begin the process by creating and deploying on L1 a sample token to bridge. If you already have a token contract on L1, you don’t need to perform this step.
 
@@ -203,7 +203,7 @@ main()
   })
 ```
 
-## Step 2: Create a token and deploy on L2
+## Step 2: Create a token and deploy it on L2
 
 We’ll now create and deploy on L2 the counterpart of the token we created on L1.
 
@@ -355,7 +355,7 @@ console.log(
 )
 ```
 
-## Conclussion
+## Conclusion
 
 Once this step is done, your L1 and L2 tokens will be connected through the custom generic gateway.
 
@@ -367,7 +367,7 @@ If you want to see an example of bridging a token from L1 to L2 using Arbitrum�
 
 ### Can I run the same register token process multiple times for the same L1 token?
 
-No, you can only register once an L2 token for the same L1 token. After that, the call to registerTokenToL2 will revert if run again.
+No, you can only register once an L2 token for the same L1 token. After that, the call to `registerTokenToL2` will revert if run again.
 
 ### What can I do if my L1 token is not upgradable?
 

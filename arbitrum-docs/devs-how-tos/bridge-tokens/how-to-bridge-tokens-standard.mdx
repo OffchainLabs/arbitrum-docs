@@ -16,7 +16,7 @@ Familiarity with [Arbitrum’s token bridge system](/asset-bridging.mdx), smart 
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit) that encapsulates the entire process.
 
-## Step 1: Create a token and deploy on L1
+## Step 1: Create a token and deploy it on L1
 
 We‘ll begin the process by creating and deploying on L1 a sample token to bridge. If you already have a token contract on L1, you don’t need to perform this step.
 
@@ -79,7 +79,7 @@ main()
   })
 ```
 
-## Step 2: Identify the bridge contracts to call (Concepts summary)
+## Step 2: Identify the bridge contracts to call (concepts summary)
 
 As stated in the [token bridge conceptual page](/asset-bridging.mdx#default-standard-bridging), when using Arbitrum’s standard ERC20 gateway, you don’t need to do any pre-configuration process. Your token will be “bridgeable” out of the box. 
 
@@ -140,7 +140,7 @@ As mentioned before, you can also call the `approve` method of the token and sen
 
 After allowing the gateway contract to transfer the tokens, we can now start the bridging process.
 
-You can use Arbitrum’s SDK to abstract this process, by calling the method [deposit](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger#deposit) of the  [ERC20Bridger](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger) class, which will estimate the gas parameters (_maxGas, _gasPriceBid and maxSubmissionCost, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
+You can use Arbitrum’s SDK to abstract this process, by calling the method [deposit](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger#deposit) of the [ERC20Bridger](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger) class, which will estimate the gas parameters (_maxGas, _gasPriceBid and maxSubmissionCost, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
 
 - `amount`: Amount of tokens to bridge
 - `erc20L1Address`: L1 address of the ERC20 token being bridged
@@ -178,11 +178,11 @@ As mentioned before, you can also call the method `outboundTransferCustomRefund`
     - uint256 `maxSubmissionCost`: Max gas deducted from user's L2 balance to cover base submission fee
     - bytes `extraData`: “0x”
 
-## Step 5: Wait for execution in L2
+## Step 5: Wait for execution on L2
 
-After calling the deposit method (or the outboundTransferCustomRefund, if you’re going the manual way), you’ll have to wait a bit until the message is executed in L2. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page, to know more about [L1-to-L2 messages, also known as retryables](/arbos/l1-to-l2-messaging.mdx).
+After calling the deposit method (or the `outboundTransferCustomRefund`, if you’re choosing the manual way), you’ll have to wait a bit until the message is executed on L2. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page, to know more about [L1-to-L2 messages, also known as retryables](/arbos/l1-to-l2-messaging.mdx).
 
-You can programmatically wait for the execution of the transaction in L2 using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the L2 transaction.
+You can programmatically wait for the execution of the transaction on L2 using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the L2 transaction.
 
 ```tsx
 /**
@@ -203,13 +203,13 @@ l2Result.complete
     )
 ```
 
-If you’re going the manual way, you can verify if the message has been executed in L2 through the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/). Just paste the hash of transaction submitted to the router contract and the tool will tell you whether it’s been redeemed or not.
+If you’re going the manual way, you can verify if the message has been executed on L2 through the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/). Just paste the hash of transaction submitted to the router contract and the tool will tell you whether it’s been redeemed or not.
 
-## Step 6: Check the new token contract created in L2
+## Step 6: Check the new token contract created on L2
 
-Finally, let’s find the token contract that has been created in L2. 
+Finally, let’s find the token contract that has been created on L2. 
 
-Using Arbitrum’s SDK, you can call method [getL2ERC20Address](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger#getl2erc20address) of the  [ERC20Bridger](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger) class, which will return the address of the token contract in L2 which corresponds to the L1 token contract send as parameter.
+Using Arbitrum’s SDK, you can call method [getL2ERC20Address](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger#getl2erc20address) of the  [ERC20Bridger](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger) class, which will return the address of the token contract in L2 that corresponds to the L1 token contract sent as parameter.
 
 ```tsx
 /**
@@ -227,7 +227,7 @@ To do this operation manually, you can call method `calculateL2TokenAddress` of 
 
 If you visit that address in [Arbiscan](https://arbiscan.io/), you’ll notice that it is a copy of the contract [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol). This is the standard contract that is automatically created the first time a token that doesn’t exist in Arbitrum is bridged. [The token bridge conceptual page](/asset-bridging.mdx#default-standard-bridging) has more information about this contract.
 
-## Conclussion
+## Conclusion
 
 After finishing this process, you’ll now have a counterpart token contract automatically created on L2. You can bridge tokens between L1 and L2 using the original token contract on L1 and the standard created contract on L2, along with the router and gateway contracts from each layer.
 
