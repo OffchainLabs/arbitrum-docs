@@ -40,7 +40,7 @@ content-type: quickstart
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
 - `--l2.chain-id=<L2 Chain ID>`
-  - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
+  - See [public chains](/for-devs/concepts/public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
 
 ### Important ports
 
