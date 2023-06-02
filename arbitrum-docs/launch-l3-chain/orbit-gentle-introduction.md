@@ -71,7 +71,7 @@ Some teams aren't yet able to adopt either of these chains because the underlyin
 
 
 <!-- 
-*// todo - tighten this up; give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
+todo - tighten this up; give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
 -->
 
 
@@ -166,7 +166,8 @@ Use the following table to determine which offering meets your needs:
 
 ### What are some caveats and considerations that I should keep in mind as I evaluate Orbit for my project?
 
-*// todo*
+
+// todo
 
 - **Licensing**
 - **Scalability**
@@ -185,13 +186,13 @@ Use the following table to determine which offering meets your needs:
 
 ### How are decisions about Orbit's product development (scope, roadmap, priority) made? Are they DAO decisions?
 
-*// todo*
+// todo
 
 
 
 ### Why should I choose Orbit over alternative solutions?
 
-*// todo - comparison table highlighting most compelling contrasts*
+// todo - comparison table highlighting most compelling contrasts
 
 
 
@@ -199,7 +200,7 @@ Use the following table to determine which offering meets your needs:
 ### If I create an Orbit L3 chain, am I on the hook for hosting and maintenance?
 
 
-*// todo: IaaS vs PaaS; comparisons with other models readers will find familiar*
+// todo: IaaS vs PaaS; comparisons with other models readers will find familiar
 
 -->
 
