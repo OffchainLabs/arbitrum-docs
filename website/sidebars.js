@@ -83,6 +83,11 @@ const sidebars = {
           type: "doc",
           label: "Use oracles in Arbitrum",
           id: "devs-how-tos/how-to-use-oracles"
+        },
+        {
+          type: "doc",
+          label: "Use Verifiable Random Numbers (VRFs) in Arbitrum",
+          id: "devs-how-tos/how-to-use-vrfs"
         }
       ]
     },
@@ -147,6 +152,11 @@ const sidebars = {
           type: "doc",
           label: "Oracles",
           id: "for-devs/concepts/oracles"
+        },
+        {
+          type: "doc",
+          label: "Verifiable Random Functions (VRF)",
+          id: "for-devs/concepts/verifiable-random-functions"
         }
       ]
     },
