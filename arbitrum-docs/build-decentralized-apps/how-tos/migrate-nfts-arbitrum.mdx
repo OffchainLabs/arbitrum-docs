@@ -20,7 +20,7 @@ This guidance applies to NFT collections used within web3 games, decentralized a
 ### Prerequisites
 
  - An NFT collection that's minted and managed by smart contracts on either an **EVM-compatible** chain (like Ethereum mainnet) or a supported **non-EVM** chain[^1].
- - NFTs that are implemented using the ERC-721 or ERC-1155 token standards[^2]. (todo - clarify how this prereq can be satisfied for non-EVM chains)
+ - NFTs that are implemented using the ERC-721 or ERC-1155 token standards. (todo - clarify how this prereq can be satisfied for non-EVM chains)
 
 
 :::info
@@ -133,5 +133,3 @@ There are some third-party solutions that entirely avoid the need for bridging w
 
 
 [^1]: The guidance in this document is applicable to EVM-compatible chains and the following non-EVM chains: todo
-
-[^2]: Although ERC-20 tokens are fungible (mutually exchangeable with no expectation of uniqueness between tokens), they can *technically* be (and have been) used to represent ownership of unique digital assets. For example, CryptoKitties and CryptoPunks were originally implemented as ERC-20 tokens with additional code that made each token uniquely identifiable. This use-case demonstrated a new way to extend the ERC-20 spec, and eventually led to the [ERC-721](https://ethereum.org/en/developers/docs/standards/tokens/erc-721/) standard, which now offers protocol-canonical support for NFTs.
