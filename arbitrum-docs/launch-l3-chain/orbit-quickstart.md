@@ -90,12 +90,11 @@ Note that you'll have to fund this address with enough ETH to cover the gas cost
 
 Click `Deploy rollup`. This will submit a transaction to Arbitrum One, so you'll have to pay a little gas. Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
 
-Before we configure our validators, let's briefly review what just happened.
+Before we configure our validators, let's briefly review what just happened, your L3 chain's underlying L2 chain.
 
- - You submitted a deployment transaction to Arbitrum One.
- - This deployment transaction was processed by a smart contract.
- - This smart contract initialized your L3 chain's foundation contracts with values that you specified in the previous step.
- - And then it deployed these contracts to Arbitrum One, your L3 chain's underlying L2 chain.
+ - You submitted a deployment transaction to an Orbit smart contract on Arbitrum One.
+ - This smart contract initialized your Orbit L3 chain's foundation contracts with values that you specified in the previous step.
+ - It then deployed these contracts to Arbitrum One.
 
 Your L3 chain's foundation contracts are responsible for facilitating the exchange of information between your L3 chain and the underlying L2 chain. This includes the batch posting of transactions to the underlying L2 chain, the staking of tokens by your chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
