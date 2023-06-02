@@ -8,9 +8,9 @@ sidebar_label: "Quickstart: Launch an L3 devnet chain"
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
 
-<!-- import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
 
-<PublicPreviewBannerPartial /> -->
+<PublicPreviewBannerPartial />
 
 This quickstart is for developers who want to launch their own sovereign Layer-3 (L3) rollup chain using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected.
 
@@ -105,16 +105,18 @@ Ok, on to the validators.
 
 Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain in the form of RBlocks. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
-The first address is randomly generated and can't be changed. Any additional addresses that you specify here will be recorded in one of your L3 chain's foundation contracts on L2. This lets the specified addresses stake and participate in your L3 chain's consensus mechanism.
+The first address is randomly generated and can't be changed. Its private key will be available later on.
+
+Each of the addresses specified in this step will be added to an allow-list in one of your L3 chain's foundation contracts. This lets each of the specified addresses **stake** and serve your chain's users.
 
 Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's batch poster.
 
 
 ## Step 4: Configure your L3 chain's batch poster
 
-When users submit transactions to your L3 chain, those transactions are deterministically batched and sequenced within RBlocks that get posted to the underlying L2 chain through your L3 chain's foundation contracts. Your batch poster address is the address that's responsible for submitting these RBlocks to your L3 chain's foundation contracts on L2.
+Your L3 chain's user-submitted transactions are deterministically batched and sequenced within RBlocks that get posted to Arbitrum One through your L3 chain's foundation contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your foundation contracts on L2.
 
-Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users.
+Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum One, and thus, Ethereum mainnet.
 
 
 ## Step 5: Generate config and run your L3 chain's node(s)
