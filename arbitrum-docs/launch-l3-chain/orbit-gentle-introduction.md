@@ -1,9 +1,9 @@
 ---
-title: "A gentle introduction: Launch an L3 chain with Orbit"
+title: "A gentle introduction: Orbit L3 chains"
+sidebar_label: "A gentle introduction: Orbit L3 chains"
 description: "Launch your own L3 Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
 author: oliviaJ3388
 sidebar_position: 1
-sidebar_label: "A gentle introduction: Arbitrum Orbit"
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
@@ -16,7 +16,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 - Arbitrum Orbit lets you **create your own blockchain** that settles to Arbitrum's L2 chains.
 - **You own your Orbit chain** and can customize its privacy, permissions, fee token, governance[^1], and more.
 - Examples of possibilities that this unlocks:
-    - **Launch a sovereign Nitro chain** that inherits Nitro's fraud proofs, advanced compression, EVM+ compatibility, and continuous improvements.
+    - **Launch a sovereign rollup chain** that inherits <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, EVM+ compatibility, and continuous improvements.
     - **Build a special-purpose app chain** with dedicated throughput and traffic isolation for increased gas price reliability.
     - **Permission access** to control who can access your chain's data, and who can deploy smart contracts to your chain.
     - **Create a custom fee token** to rapidly iterate on domain-specific mechanism designs and value capture opportunities.

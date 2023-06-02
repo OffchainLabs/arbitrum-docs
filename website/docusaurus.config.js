@@ -1,8 +1,6 @@
-// @ts-check
+// @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const variableInjector = require('./src/remark/variable-injector');
 
 /** @type {import('@docusaurus/types').Config} */
@@ -122,7 +120,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "chain-launching/launch-a-chain",
+            docId: "launch-l3-chain/orbit-gentle-introduction",
             position: "left",
             label: "Launch an L3",
           },
@@ -211,8 +209,6 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
         additionalLanguages: ["solidity"],
       },
       announcementBar: {
@@ -252,6 +248,10 @@ if (isRunningLocally && isRunningOnWindows) {
     }
     return true;  // keep everything else
   });
+} else {
+  // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
+  config.themeConfig.prism.theme = require("prism-react-renderer/themes/github");
+  config.themeConfig.prism.darkTheme = require("prism-react-renderer/themes/dracula");
 }
 
 module.exports = config;

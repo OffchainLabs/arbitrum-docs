@@ -356,6 +356,14 @@ article .markdown p > code {
 [class*="launch-a-chain"] table td {
   padding: 15px;
 }
+[class*="orbit-quickstart"] table {
+  font-size: 12px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+[class*="orbit-quickstart"] table td {
+  padding: 10px;
+}
 [class*="quickstart-solidity-hardhat"] table {
   font-size: 12px;
   margin-top: 20px;
