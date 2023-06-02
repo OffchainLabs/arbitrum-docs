@@ -12,7 +12,9 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 
 <PublicPreviewBannerPartial /> -->
 
-This quickstart is for developers who want to launch their own sovereign Layer-3 (L3) rollup chain using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding.
+This quickstart is for developers who want to launch their own sovereign Layer-3 (L3) rollup chain using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected.
+
+<!-- If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding. -->
 
 By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to Arbitrum L2.
 
@@ -27,7 +29,7 @@ If you have any questions, feature requests, or configurability requests, **plea
 
 ## Step 1: Configure your L3 chain
 
-Visit the [Orbit launchpad](#todo). There, you'll see a form that looks like this:
+An Orbit L3 chain launchpad portal will soon be available. There, you'll see a form that looks like this:
 
 <PlaceholderForm id="foo" inputs="Chain ID, Challenge period, Staking token (0x... address), Base stake" />
 
