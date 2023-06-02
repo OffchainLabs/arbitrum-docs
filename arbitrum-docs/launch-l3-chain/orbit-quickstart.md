@@ -31,14 +31,15 @@ If you have any questions, feature requests, or configurability requests, **plea
 
 An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see a form that looks like this:
 
-<PlaceholderForm id="foo" inputs="Chain ID, Challenge period, Staking token (0x... address), Base stake" />
+<PlaceholderForm id="foo" inputs="Chain ID, Challenge period (blocks), Staking token (0x... address), Base stake" />
 
-- **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). This number is entirely inconsequential at this point.
-- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain.
+- **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). This number is currently inconsequential.
+- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain. Each block takes 12 seconds.
 - **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an <a data-quicklook-from='erc-20-token'>ERC20</a> token contract address that lives on the L2 chain that your L3 chain is settling to.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
 
-Let's briefly review each of these parameters, how they affect your users, and how to evaluate tradeoffs when configuring them.
+Let's briefly review each of these parameters, how to evaluate tradeoffs when configuring them, and what to set if you're not sure.
+
 
 ### Chain ID
 
