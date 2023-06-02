@@ -66,30 +66,40 @@ If you're not sure what to put here, use the default value of `0x000..000`. This
 
 While the `Stake token` parameter specifies the type of **token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** that your chain's nodes must deposit in order to begin proposing batches of transactions from your L3 chain to your L2 chain. This is specified using an integer value.
 
-Lower base stakes translate to lower barriers to entry for your chain's nodes, but they also translate to lower security by reducing the cost of certain attacks. For example, an L3 chain with a base stake of 0.01 ETH could be halted by an attacker who can afford to deploy sacrificial nodes that maliciously challenges every submitted RBlock. Every malicious challenge would delay the chain's posting of transactions to the underlying L2 chain by the configured challenge period, and this could continue indefinitely.
+If your base stake is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
+
+For example, an L3 chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial nodes that maliciously challenge every RBlock that your chain's honest nodes submit. The malicious challenges would be slashed, but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
 A higher base stake incentivizes honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's nodes. This is another tradeoff to consider.
 
-If you're not sure what to put here, use the default value of `1`, which translates to 1 ETH assuming that your chain's `Stake token` is set to `0x000..000`.
+If you're not sure what to put here, use the default value of `1`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
 
 
 #### Owner
 
-This address represents the `sudo` address of your entire chain responsible for deploying your chain's foundation contracts to the underlying L2 chain, among other things. 
+This address represents the `sudo` address of your entire chain. It's responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, among other things. 
 
 In production scenarios, this address would likely be controlled by a DAO's governance protocol or multisig that's responsible for managing the chain's configuration.
 
-For your L3 devnet chain, think of this as a service account. You'll have to fund this address with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
+For your L3 devnet chain, think of this as a low-stakes service account.
+
+Note that you'll have to fund this address with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
 
 
 ## Step 2: Deploy your L3 chain's foundation contracts to L2
 
 Click `Deploy rollup`. This will submit a transaction to Arbitrum One, so you'll have to pay a little gas. Once this transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
 
-This transaction is responsible for deploying your L3 chain's foundation contracts to the underlying L2 chain. These contracts are responsible for facilitating the exchange of information between your L3 chain and the underlying L2 chain. This includes the batch posting of transactions to the underlying L2 chain, the staking of tokens by your chain's validators, the challenge mechanism, bridging mechanisms, and more.
+Before we configure our validators, let's briefly review what just happened.
 
-Once this transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
+ - You submitted a deployment transaction to Arbitrum One.
+ - This deployment transaction was processed by a smart contract.
+ - This smart contract initialized your L3 chain's foundation contracts with values that you specified in the previous step.
+ - And then it deployed these contracts to Arbitrum One, your L3 chain's underlying L2 chain.
 
+Your L3 chain's foundation contracts are responsible for facilitating the exchange of information between your L3 chain and the underlying L2 chain. This includes the batch posting of transactions to the underlying L2 chain, the staking of tokens by your chain's validators, the challenge mechanism, bridging mechanisms, and more.
+
+Ok, on to the validators.
 
 ## Step 3: Configure your L3 chain's validators
 
