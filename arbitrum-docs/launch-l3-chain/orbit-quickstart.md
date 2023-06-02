@@ -33,7 +33,7 @@ An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see
 
 <PlaceholderForm id="foo" inputs="Chain ID, Challenge period (blocks), Staking token (0x... address), Base stake" />
 
-- **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). This number is currently inconsequential.
+- **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
 - **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain. Each block takes 12 seconds.
 - **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an <a data-quicklook-from='erc-20-token'>ERC20</a> token contract address that lives on the L2 chain that your L3 chain is settling to.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
