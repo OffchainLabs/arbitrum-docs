@@ -1,7 +1,0 @@
----
-sidebar_label: L3 sequencer nodes
----
-
-import UnderConstructionPartial from '@site/../arbitrum-docs/partials/_under-construction-banner-partial.md'; 
-
-<UnderConstructionPartial />
