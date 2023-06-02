@@ -33,12 +33,14 @@ content-type: quickstart
 
 - Other chains do not have classic blocks, and do not require an initial genesis database
 
+- Snapshot list: "https://snapshot.arbitrum.foundation/index.html"
+
 ### Required parameter
 
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
 - `--l2.chain-id=<L2 Chain ID>`
-  - See [public chains](../public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
+  - See [public chains](/for-devs/concepts/public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
 
 ### Important ports
 
@@ -80,7 +82,7 @@ content-type: quickstart
 ### Optional parameters
 
 - `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database
+  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./how-tos/running-an-archive-node.mdx).
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
