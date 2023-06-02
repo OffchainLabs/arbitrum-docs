@@ -1,9 +1,9 @@
 ---
-title: "Quickstart: Launch an L3 chain (Experimental)"
-description: "Launch your own L3 Arbitrum chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
+title: "Quickstart: Launch an L3 devnet chain with Orbit (Experimental)"
+description: "Launch your own L3 devnet chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
 sidebar_position: 2
 author: oliviaJ3388
-sidebar_label: "Quickstart: Launch an L3 Orbit chain"
+sidebar_label: "Quickstart: Launch an L3 devnet chain"
 ---
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
@@ -12,9 +12,9 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 
 <PublicPreviewBannerPartial /> -->
 
-This quickstart is for developers who want to launch their own sovereign <a data-quicklook-from="layer-3">Layer-3</a> (L3) <a data-quicklook-from="rollup-chain">rollup chain</a> using <a data-quicklook-from='arbitrum-orbit'>Arbitrum Orbit</a>. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding.
+This quickstart is for developers who want to launch their own sovereign Layer-3 (L3) rollup chain using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding.
 
-By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to the underlying Arbitrum L2 chain.
+By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to Arbitrum L2.
 
 :::caution NOT FOR PRODUCTION SCENARIOS
 
@@ -38,12 +38,12 @@ Visit the [Orbit launchpad](#todo). There, you'll see a form that looks like thi
 
 Let's briefly review each of these parameters, how they affect your users, and how to evaluate tradeoffs when configuring them.
 
-#### Chain ID
+### Chain ID
 
 Don't worry about this; it's inconsequential for devnets. For production scenarios, you'll want to use a unique integer identifier that represents your L3 chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 
-#### Challenge period (blocks)
+### Challenge period (blocks)
 
 Transactions submitted to your L3 chain are placed within a queue before being confirmed and finalized (settled to the L2 chain). The `Challenge period (blocks)` parameter determines the amount of time that must pass before the transactions can move out of this queue and into the underlying L2. While in this queue, transactions can be disputed by your chain's nodes.
 
@@ -52,14 +52,14 @@ A longer challenge period means that your chain's nodes will have more time to d
 Note that the challenge period is measured in blocks on the L2 chain, not the L3 chain.
 
 
-#### Stake token
+### Stake token
 
 Your L3 devnet chain will be supported by at least one node. In production scenarios, your chain may be supported by a decentralized network of nodes. In order for your chain's nodes to recored transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to**.
 
 If you're not sure what to put here, use the default value of `0x000..000`. This will configure your chain to use ETH as a stake token.
 
 
-#### Base stake
+### Base stake
 
 While the `Stake token` parameter specifies the type of token that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the amount of this token that your chain's nodes must deposit in order to begin proposing batches of transactions to your L3 chain. This is specified using an integer value.
 
