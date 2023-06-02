@@ -75,7 +75,7 @@ A higher base stake incentivizes honest participation by making it more expensiv
 If you're not sure what to put here, use the default value of `1`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
 
 
-#### Owner
+### Owner
 
 This address represents the `sudo` address of your entire chain. It's responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, among other things. 
 
