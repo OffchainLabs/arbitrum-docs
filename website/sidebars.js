@@ -316,6 +316,11 @@ const sidebars = {
       type: "doc",
       label: "Frequently asked questions: Run a node",
       id: "node-running/faq"
+    },
+    {
+      type: "doc",
+      id: "node-running/command-line-options",
+      label: "Command-line options"
     }
   ],
   launchAnL3ChainSidebar: [
