@@ -77,9 +77,9 @@ If you're not sure what to put here, use the default value of `1`, which transla
 
 ### Owner
 
-This address represents the `sudo` address of your entire chain. It's responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, among other things. 
+This address represents the `sudo` address of your entire chain. It's responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration. 
 
-In production scenarios, this address would likely be controlled by a DAO's governance protocol or multisig that's responsible for managing the chain's configuration.
+In production scenarios, this address is often controlled by a DAO's governance protocol or multisig.
 
 For your L3 devnet chain, think of this as a low-stakes service account.
 
