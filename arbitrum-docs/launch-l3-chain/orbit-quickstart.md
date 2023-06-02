@@ -29,7 +29,7 @@ If you have any questions, feature requests, or configurability requests, **plea
 
 ## Step 1: Configure your L3 chain
 
-An Orbit L3 chain launchpad portal will soon be available. There, you'll see a form that looks like this:
+An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see a form that looks like this:
 
 <PlaceholderForm id="foo" inputs="Chain ID, Challenge period, Staking token (0x... address), Base stake" />
 
