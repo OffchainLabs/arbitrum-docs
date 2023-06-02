@@ -102,9 +102,9 @@ Once this transaction is confirmed, you'll see a new form appear that allows you
 
 ## Step 4: Configure your L3 chain's batch poster
 
-When your end users submit transactions to your L3 chain, those transactions are deterministically batched, sequenced, and hashed into RBlocks that get posted to the underlying L2 chain through your L3 chain's foundation contracts. Your batch poster is the address that's responsible for submitting these RBlocks to your L3 chain's foundation contracts on L2.
+When users submit transactions to your L3 chain, those transactions are deterministically batched, sequenced, and hashed into RBlocks that get posted to the underlying L2 chain through your L3 chain's foundation contracts. Your batch poster is the address that's responsible for submitting these RBlocks to your L3 chain's foundation contracts on L2.
 
-Once this transaction is confirmed, you'll be ready to run your L3 chain's node(s) and start accepting transactions from your end users.
+Once this transaction is confirmed, you'll be ready to run your L3 chain's node(s) and start accepting transactions from your users.
 
 
 ## Step 5: Generate config and run your L3 chain's node(s)
