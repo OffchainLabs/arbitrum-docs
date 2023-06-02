@@ -59,12 +59,12 @@ Note that the challenge period is measured in blocks on the L2 chain, not the L3
 
 Your L3 devnet chain will be supported by at least one node. In production scenarios, your chain may be supported by a decentralized network of nodes. In order for your chain's nodes to recored transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to**.
 
-If you're not sure what to put here, use the default value of `0x000..000`. This will configure your chain to use ETH as a stake token.
+If you're not sure what to put here, use the default value of `0x000..000`. This tells Orbit to set your chain's stake token to plain-old ETH.
 
 
 ### Base stake
 
-While the `Stake token` parameter specifies the type of token that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the amount of this token that your chain's nodes must deposit in order to begin proposing batches of transactions to your L3 chain. This is specified using an integer value.
+While the `Stake token` parameter specifies the type of **token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** that your chain's nodes must deposit in order to begin proposing batches of transactions from your L3 chain to your L2 chain. This is specified using an integer value.
 
 Lower base stakes translate to lower barriers to entry for your chain's nodes, but they also translate to lower security by reducing the cost of certain attacks. For example, an L3 chain with a base stake of 0.01 ETH could be halted by an attacker who can afford to deploy sacrificial nodes that maliciously challenges every submitted RBlock. Every malicious challenge would delay the chain's posting of transactions to the underlying L2 chain by the configured challenge period, and this could continue indefinitely.
 
