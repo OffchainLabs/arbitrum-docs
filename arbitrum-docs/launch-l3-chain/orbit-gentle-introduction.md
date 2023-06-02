@@ -69,27 +69,30 @@ Some teams aren't yet able to adopt either of these chains because the underlyin
 
 ### How does Orbit help me build decentralized apps?
 
+
+<!-- 
 *// todo - tighten this up; give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
+-->
 
 
 
 | Benefit                             | Description                                                                                                                                                                                                                                                                                                                                                                                       |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Dedicated throughput**            | You may need dedicated throughput if your dApp demands high-performance or consistent resource availability. Running your dApp on its own Orbit chain significantly increases resource availability, so you don’t need to compete for computation and storage resources.                                                                                                                          |
-| **EVM+ compatibility**              | Like Arbitrum One and Nova, Orbit L3 chains benefit from EVM+ compatibility. This means that you can deploy EVM-compatible smart contracts using Solidity, C, C++, and Rust (possible footnote RE private beta).                                                                                                                                                                                  |
-| **Independent product roadmap**     | If you want to decouple your app chain's roadmap from that of Ethereum and/or Arbitrum, Orbit makes this possible.                                                                                                                                                                                                                                                                                |
-| **Increased gas price reliability** | Many types of dApps rely on predictable transaction costs. Because Orbit chains are isolated from Arbitrum L2 and Ethereum L1 traffic, using Orbit L3 chains means that you can guarantee reliable gas prices for your dApp's users.                                                                                                                                                              |
+| **EVM+ compatibility**              | Like Arbitrum One and Nova, Orbit L3 chains benefit from EVM+ compatibility. This means that you can deploy EVM-compatible smart contracts using Solidity and - with the upcoming launch of Stylus - C, C++, and Rust.                                                                                                                                                                            |
+| **Independent product roadmap**     | If you want to decouple your app chain's roadmap from that of Ethereum and/or Arbitrum, Orbit makes this possible. This lets you implement cutting-edge features like account abstraction ahead of projects following Ethereum's public roadmap.                                                                                                                                                  |
+| **Increased gas price reliability** | Many types of dApps rely on predictable transaction costs. Because Orbit chains are isolated from Arbitrum L2 and Ethereum L1 traffic, using Orbit L3 chains means that you won't be affected by other apps' on-chain activity, allowing your dApp's users to enjoy more reliable gas prices.                                                                                                     |
 | **Account abstraction**             | Predictable gas prices make alternative cost models more feasible, such as fee subsidization. This makes it easier to further abstract the technical complexity of decentralization away, allowing you to deliver familiar experiences to nontechnical audiences.                                                                                                                                 |
 | **Customizable fee token**          | Orbit chains can use a custom fee token, or even an existing token as a fee token, facilitating seamless integration with your dApp's ecosystem.                                                                                                                                                                                                                                                  |
 | **Customizable protocol logic**     | You may need to modify the logic of your chain's settlement, execution, or governance protocols in order to meet specific requirements. Orbit's L3 chains let you do this, while settling to Ethereum L1, through Arbitrum's DAO-governed L2 chains.                                                                                                                                              |
 | **Nitro extensibility**             | Orbit chains that implement the AnyTrust and Rollup protocols will be continuously upgraded as improvements are made, allowing your app chain to apply the same updates that the Arbitrum One and Nova chains receive.                                                                                                                                                                            |
-| **Chain composability**             | DApps built on Orbit L3 chains can submit transactions that settle to Arbitrum L2 chains, but they can also _________.                                                                                                                                                                                                                                                                            |
 | **Decentralization options**        | Arbitrum Rollup is exactly as decentralized and trustless as Ethereum; it introduces no additional trust assumptions. Arbitrum AnyTrust introduces the assumption that you can trust its Data Availability Committee to expedite the settlement of transactions to Ethereum's L1. Orbit L3 chains let you introduce your own additional trust assumptions to meet specific needs, or none at all. |
-| **Low upfront setup costs**         | Orbit L3 AnyTrust and Rollup chains can be created quickly and cheaply (todo - support this claim with numbers).                                                                                                                                                                                                                                                                                  |
+| **Low upfront setup costs**         | Orbit L3 AnyTrust and Rollup chains can be created in five steps. See the [Orbit Quickstart](./orbit-quickstart.md).                                                                                                                                                                                                                                                                              |
 | **Security**                        | Orbit chains offer the same level of security as AnyTrust and Rollup chains by default, unless the tech stack is customized.                                                                                                                                                                                                                                                                      |
 | **Flexible technology options**     | Orbit lets you choose between Rollup, AnyTrust, or custom technology stacks. This makes Ethereum and Arbitrum technologies more valuable by allowing you to incorporate only the elements of the technologies that you need.                                                                                                                                                                      |
 | **Permissioned access**             | Orbit lets you enforce transaction submission and contract deployment restrictions, ensuring compliance with relevant rules and regulations.                                                                                                                                                                                                                                                      |
 
+<!-- | **Chain composability**             | DApps built on Orbit L3 chains can submit transactions that settle to Arbitrum L2 chains, but they can also _________.                                                                                                                                                                                                                                                                            | -->
 
 
 ### How does Orbit help the Ethereum ecosystem?
@@ -99,11 +102,13 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 | Value add                           | Description                                                                                                                                                                                                                                                                       |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Scalability**                     | Multiple chains help overcome scaling bottlenecks by dividing activity into opt-in environments with separate resource management.                                                                                                                                                |
-| **Flexible security models**        | Different chains can experiment with various security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees.                                                |
+| **Flexible security models**        | Different chains can experiment with different security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees.                                              |
 | **Flexible execution environments** | Different chains can experiment with more-or-less restrictive execution environments that allow for tradeoffs. For example, although Arbitrum chains are fully EVM compatible, Orbit L3 chains can restrict smart contract functionality to optimize for performance or security. |
 | **Flexible governance**             | Orbit L3 chains let you create new Arbitrum chains beholden to governance mechanisms that you determine for your own needs, unlocking a rich, diverse plurality of interoperable Ethereum ecosystems.                                                                             |
 | **Increased adoption of dApps**     | Orbit's optionality reduces the cost of progressive decentralization for devs, unlocking a new category of decentralized apps that are built under more autonomous, self-managed conditions.                                                                                      |
 
+
+<!--
 
 :::danger
 
@@ -143,6 +148,7 @@ Use the following table to determine which offering meets your needs:
 | Security model              |              |                |        |          |          |
 | Regulatory compliance       |              |                |        |          |          |
 
+-->
 
 <!--
  - Orbit chains offer the ability to customize gas speed limit and gas price floor, providing scalability while maintaining isolation from public blockchains.
@@ -156,6 +162,7 @@ Use the following table to determine which offering meets your needs:
  If L1/L2 solutions don't meet regulatory compliance needs, you can permission your Orbit chains to comply with regulatory requirements such as AML/KYC. 
 -->
 
+<!--
 
 ### What are some caveats and considerations that I should keep in mind as I evaluate Orbit for my project?
 
@@ -194,6 +201,8 @@ Use the following table to determine which offering meets your needs:
 
 *// todo: IaaS vs PaaS; comparisons with other models readers will find familiar*
 
+-->
+
 <!-- 
 - is it more like IaaS, or does Arbitrum host and maintain the L3 chains under some convenient abstractions, like a PaaS provider?
 - What elements of the L3 deployment will be L2 on-chain, vs on off-chain infrastructure?
@@ -204,14 +213,11 @@ Use the following table to determine which offering meets your needs:
 -->
 
 
+
+
 ### I'd love to tinker with Orbit! What should I do next?
 
-- Visit the **Orbit Quickstart** to get started.
-- Visit one of our **how-tos** for procedural guidance that walks you through specific tasks with your Orbit deployment:
-    - todo
-- Visit one of our **conceptual documents** for an educational introduction to Orbit's underlying technology:
-    - todo
-
+- Visit the [Orbit Quickstart](./orbit-quickstart.md) to get started.
 
 
 [^1]: See [Arbitrum DAO docs](https://docs.arbitrum.foundation/new-arb-chains) for more info on the Arbitrum DAO's role in governing L2s.

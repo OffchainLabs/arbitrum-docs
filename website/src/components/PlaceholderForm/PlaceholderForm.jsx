@@ -12,7 +12,7 @@ const PlaceholderForm = ({ id, inputs }) => {
                     <label htmlFor={`${id}-${inputName.trim()}`}>
                         {inputName.trim()}
                     </label>
-                    <input id={`${id}-${inputName.trim()}`} />
+                    <input disabled id={`${id}-${inputName.trim()}`} />
                 </div>
             ))}
         </form>
