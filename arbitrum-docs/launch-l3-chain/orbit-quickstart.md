@@ -88,7 +88,7 @@ Note that you'll have to fund this address with enough ETH to cover the gas cost
 
 ## Step 2: Deploy your L3 chain's foundation contracts to L2
 
-Click `Deploy rollup`. This will submit a transaction to Arbitrum One, so you'll have to pay a little gas. Once this transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
+Click `Deploy rollup`. This will submit a transaction to Arbitrum One, so you'll have to pay a little gas. Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
 
 Before we configure our validators, let's briefly review what just happened.
 
@@ -103,18 +103,18 @@ Ok, on to the validators.
 
 ## Step 3: Configure your L3 chain's validators
 
-Your L3 chain's validators are responsible for proposing batches of transactions to your L3 chain. These batches are then posted to the underlying L2 chain. In production scenarios, your L3 chain's validators would likely be a decentralized network of nodes. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
+Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain in the form of RBlocks. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
-The addresses that you specify here will be submitted to one of your L3 chain's foundation contracts on L2. This effectively allowlists the validator addresses, allowing them to stake tokens and participate in your L3 chain's consensus mechanism.
+The first address is randomly generated and can't be changed. Any additional addresses that you specify here will be recorded in one of your L3 chain's foundation contracts on L2. This lets the specified addresses stake and participate in your L3 chain's consensus mechanism.
 
-Once this transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's batch poster.
+Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's batch poster.
 
 
 ## Step 4: Configure your L3 chain's batch poster
 
-When users submit transactions to your L3 chain, those transactions are deterministically batched, sequenced, and hashed into RBlocks that get posted to the underlying L2 chain through your L3 chain's foundation contracts. Your batch poster is the address that's responsible for submitting these RBlocks to your L3 chain's foundation contracts on L2.
+When users submit transactions to your L3 chain, those transactions are deterministically batched and sequenced within RBlocks that get posted to the underlying L2 chain through your L3 chain's foundation contracts. Your batch poster address is the address that's responsible for submitting these RBlocks to your L3 chain's foundation contracts on L2.
 
-Once this transaction is confirmed, you'll be ready to run your L3 chain's node(s) and start accepting transactions from your users.
+Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users.
 
 
 ## Step 5: Generate config and run your L3 chain's node(s)
