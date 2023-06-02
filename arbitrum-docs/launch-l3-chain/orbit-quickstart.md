@@ -109,4 +109,8 @@ Once this transaction is confirmed, you'll be ready to run your L3 chain's node(
 
 ## Step 5: Generate config and run your L3 chain's node(s)
 
-TODO
+:::info coming soon
+
+These steps are a work-in-progress. Thanks for your patience, check back soon!
+
+:::
