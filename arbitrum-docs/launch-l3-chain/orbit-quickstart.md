@@ -115,7 +115,7 @@ Once this form-submission transaction is confirmed, you'll see a new form appear
 
 Your L3 chain's user-submitted transactions are deterministically batched and sequenced within RBlocks that get posted to Arbitrum One through your L3 chain's foundation contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your foundation contracts on L2.
 
-Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Ethereum mainnet by way of Arbitrum One.
+Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum One and then Ethereum mainnet.
 
 
 ## Step 5: Generate config and run your L3 chain's node(s)
