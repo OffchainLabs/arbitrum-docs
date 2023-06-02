@@ -16,8 +16,9 @@ const chainIDToExplorerUrlRoot: {
 export const AddressExplorerLink = (props: {
   address: string;
   chainID: ChainID;
+  shortenAddress?: boolean
 }) => {
-  const { address, chainID } = props;
+  const { address, chainID, shortenAddress } = props;
   const rootUrl = chainIDToExplorerUrlRoot[chainID];
   if (!rootUrl)
     throw new Error(`Error: no root url set for chain id ${chainID} `);
@@ -28,9 +29,11 @@ export const AddressExplorerLink = (props: {
       `Error: ${address} has invalid checksum; should be ${getAddress(address)}`
     );
 
+  const addressLabel = shortenAddress? address.slice(0, 6) + "..." + address.slice(-4) : address;
+
   return (
     <a href={`${rootUrl}/${address}`} target="_blank">
-      {address}
+      {addressLabel}
     </a>
   );
 };
