@@ -2,7 +2,7 @@
 title: "Command-line options"
 ---
 
-Arbitrum node can be configured using flags. This document provides a comprehensive list of all available flags and their descriptions. The flag descriptions that you see in this document are generated from code comments within the latest Nitro/Classic release.
+Arbitrum nodes can be configured using flags. This document provides a comprehensive list of all available flags and their descriptions. The flag descriptions that you see in this document are generated from code comments within the latest Nitro/Classic release.
 
 ### Nitro Node flags
 This is for Arbitrum Nitro Node:
