@@ -33,7 +33,7 @@ content-type: quickstart
 
 - Other chains do not have classic blocks, and do not require an initial genesis database
 
-- Snapshot list: "https://snapshot.arbitrum.foundation/index.html"
+- Snapshot list: "[https://snapshot.arbitrum.foundation/index.html](https://snapshot.arbitrum.foundation/index.html)"
 
 ### Required parameter
 
