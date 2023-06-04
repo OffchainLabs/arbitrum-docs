@@ -43,7 +43,7 @@
 <p>An <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a> that implements the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a>.</p>
 
 ### Arbitrum Rollup Protocol {#arbitrum-rollup-protocol}
-<p>A trustless, permissionless Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> protocol that uses it's underlying base layer (i.e., Ethereum) for data availability and inherits its security. This protocol is implemented by our <a href="/intro/glossary#arbitrum-one">Arbitrum One</a> chain. </p>
+<p>A trustless, permissionless Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> protocol that uses its underlying base layer (i.e., Ethereum) for data availability and inherits its security. This protocol is implemented by our <a href="/intro/glossary#arbitrum-one">Arbitrum One</a> chain. </p>
 
 ### ArbOS {#arbos}
 <p>Layer 2 "operating system" that trustlessly handles system-level operations; includes the ability to emulate the EVM.</p>
