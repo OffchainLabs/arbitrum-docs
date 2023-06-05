@@ -16,13 +16,13 @@ This quickstart is for developers who want to launch their own sovereign Layer-3
 
 <!-- If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding. -->
 
-By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to Arbitrum L2.
+By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, a Layer-2 (L2) rollup chain that settles to Ethereum's mainnet chain.
 
 :::caution NOT FOR PRODUCTION SCENARIOS
 
 Your Orbit chain **is not intended to be used in production scenarios**; it's meant for prototyping, experimentation, and discovery. We're excited to see what you build, and we're eager to learn how we can improve Orbit to better support your needs.
 
-If you have any questions, feature requests, or configurability requests, **please reach out to our team directly** by (TODO). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out!
+If you have any questions or feature requests as you begin to tinker, **please reach out to our team directly** through [this form](http://bit.ly/3yy6EUK). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out!
 
 :::
 
@@ -34,11 +34,11 @@ An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see
 <PlaceholderForm id="foo" inputs="Chain ID, Challenge period (blocks), Staking token (0x... address), Base stake" />
 
 - **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
-- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain. Each block takes 12 seconds.
+- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain (Arbitrum One).
 - **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an ERC20 token contract address on Arbitrum One.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
 
-Let's briefly review each of these parameters, how to evaluate tradeoffs when configuring them, and what to set if you're not sure.
+Let's briefly review each of these parameters, how to evaluate tradeoffs when configuring them.
 
 
 ### Chain ID
@@ -50,7 +50,9 @@ Don't worry about this; it's inconsequential for devnets. For production scenari
 
 Transactions submitted to your L3 chain are placed within a queue before being confirmed and finalized (settled to the L2 chain). The `Challenge period (blocks)` parameter determines the amount of time that must pass before the transactions can move out of this queue and into the underlying L2. While in this queue, transactions can be disputed by your chain's nodes.
 
-A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to settle to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your L3 chain. If you're not sure what to put here, use the default value of `10080` (7 days).
+A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to settle to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your L3 chain.
+
+If you're not sure what to put here, use the default value of `10080`, which translates to roughly 7 days.
 
 Note that the challenge period is measured in blocks on the L2 chain, not the L3 chain.
 
@@ -77,11 +79,11 @@ If you're not sure what to put here, use the default value of `1`, which transla
 
 ### Owner
 
-This address represents the `sudo` address of your entire chain. It's responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration. 
+This address is responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration.
 
 In production scenarios, this address is often controlled by a DAO's governance protocol or multisig.
 
-For your L3 devnet chain, think of this as a low-stakes service account.
+For your L3 devnet chain, think of this as a low-stakes administrative service account.
 
 Note that you'll have to fund this address with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
 
