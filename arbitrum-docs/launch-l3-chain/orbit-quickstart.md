@@ -59,7 +59,7 @@ Note that the challenge period is measured in blocks on the L2 chain, not the L3
 
 ### Stake token
 
-Your L3 devnet chain will be supported by at least one node. In production scenarios, your chain may be supported by a decentralized network of nodes. In order for your chain's nodes to recored transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to**.
+Your L3 devnet chain will be supported by at least one node. In production scenarios, your chain may be supported by a decentralized network of nodes. In order for your chain's nodes to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to**.
 
 If you're not sure what to put here, use the default value of `0x000..000`. This tells Orbit to set your chain's stake token to plain-old ETH.
 
