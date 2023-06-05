@@ -79,7 +79,7 @@ If you're not sure what to put here, use the default value of `1`, which transla
 
 ### Owner
 
-This address is responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration.
+This address is responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration after it's been deployed.
 
 In production scenarios, this address is often controlled by a DAO's governance protocol or multisig. For your L3 devnet chain, think of this as a low-stakes administrative service account.
 
