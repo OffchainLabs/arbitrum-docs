@@ -81,11 +81,9 @@ If you're not sure what to put here, use the default value of `1`, which transla
 
 This address is responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration.
 
-In production scenarios, this address is often controlled by a DAO's governance protocol or multisig.
+In production scenarios, this address is often controlled by a DAO's governance protocol or multisig. For your L3 devnet chain, think of this as a low-stakes administrative service account.
 
-For your L3 devnet chain, think of this as a low-stakes administrative service account.
-
-Note that you'll have to fund this address with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
+Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
 
 
 ## Step 2: Deploy your L3 chain's foundation contracts to L2
