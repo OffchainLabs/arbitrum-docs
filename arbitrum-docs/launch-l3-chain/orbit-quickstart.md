@@ -70,9 +70,9 @@ While the `Stake token` parameter specifies the **type of token** that your chai
 
 If your base stake is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
-For example, an L3 chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial nodes that maliciously challenge every RBlock that your chain's honest nodes submit. The malicious challenges would be slashed, but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
+For example, an L3 chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial nodes that maliciously challenge every RBlock that your chain's honest nodes submit. The malicious challenges would result in slashed nodes (one slashed node per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
-A higher base stake incentivizes honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's nodes. This is another tradeoff to consider.
+A higher base stake incentivizes honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's node operators. This is another tradeoff to consider.
 
 If you're not sure what to put here, use the default value of `1`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
 
