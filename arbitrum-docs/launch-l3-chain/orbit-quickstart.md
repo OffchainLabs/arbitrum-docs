@@ -16,7 +16,7 @@ This quickstart is for developers who want to launch their own sovereign Layer-3
 
 <!-- If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding. -->
 
-By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, a Layer-2 (L2) rollup chain that settles to Ethereum's mainnet chain.
+By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>.
 
 :::caution NOT FOR PRODUCTION SCENARIOS
 
