@@ -296,6 +296,11 @@ const sidebars = {
     */
     {
       type: "doc",
+      id: "node-running/command-line-options",
+      label: "Command-line options"
+    },
+    {
+      type: "doc",
       id: "node-running/troubleshooting-running-nodes",
       label: "Troubleshooting: Run a node",
     },
