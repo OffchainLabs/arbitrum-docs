@@ -38,7 +38,7 @@ An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see
 - **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an ERC20 token contract address on Arbitrum One.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
 
-Let's briefly review each of these parameters, how to evaluate tradeoffs when configuring them.
+Let's briefly review each of these parameters, and how to evaluate various tradeoffs when configuring them.
 
 
 ### Chain ID
