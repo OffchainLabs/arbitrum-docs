@@ -66,7 +66,7 @@ If you're not sure what to put here, use the default value of `0x000..000`. This
 
 ### Base stake
 
-While the `Stake token` parameter specifies the type of **token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** that your chain's nodes must deposit in order to begin proposing batches of transactions from your L3 chain to your L2 chain. This is specified using an integer value.
+While the `Stake token` parameter specifies the **type of token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** that your chain's nodes must deposit in order to begin proposing batches of transactions from your L3 chain to your L2 chain. This is specified using an integer value.
 
 If your base stake is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
