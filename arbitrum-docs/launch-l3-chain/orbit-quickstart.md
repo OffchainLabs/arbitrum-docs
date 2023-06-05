@@ -104,7 +104,7 @@ Ok, on to the validators.
 
 Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain in the form of RBlocks. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
-The first address is randomly generated and can't be changed. Its private key will be available later on.
+The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
 
 Each of the addresses specified in this step will be added to an allow-list in one of your L3 chain's foundation contracts. This lets each of the specified addresses **stake** and serve your chain's users.
 
