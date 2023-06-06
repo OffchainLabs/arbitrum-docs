@@ -1,5 +1,5 @@
 ### How do I run a node? {#how-do-i-run-a-node}
-<p>See instructions <a href="https://developer.arbitrum.io/node-running/running-a-node">here</a>! </p>
+<p>See instructions <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node">here</a>! </p>
 
 <p></p>
 

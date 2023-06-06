@@ -30,7 +30,7 @@ For a detailed instruction of how to run an Arbitrum full node , see [here](./ho
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node , see [here](./how-tos/running-an-archive-node.mdx).
 
-### Considerations for running afeed relay
+### Considerations for running a feed relay
 
 If you are running a single node, there is no requirement to set up a feed relay. However, if you have multiple nodes, it is highly recommended to have a single feed relay per datacenter. This setup offers several advantages such as reducing ingress fees and enhancing stability within the network.
 
