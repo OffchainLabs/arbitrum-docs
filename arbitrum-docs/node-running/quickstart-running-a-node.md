@@ -14,7 +14,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 This quickstart is for who users/developers who want to start running any type of Arbitrum nodes. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with command lime expected. 
 
 
-When it comes to ointercating with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
+When it comes to intercating with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
 
 ### Considerations running an Arbitrum full node
 
@@ -26,7 +26,7 @@ When it comes to ointercating with the Arbitrum network, users have the option t
 
 For a detailed instruction of how to run an Arbitrum full node , see [here](./how-tos/running-a-full-node.mdx).
 
-### Considerations for running an Archive node
+### Considerations for running an archive node
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node , see [here](./how-tos/running-an-archive-node.mdx).
 
