@@ -65,9 +65,7 @@
 
 
 ### How can I verify that my node is syncing at a desirable speed? {#how-can-i-verify-that-my-node-is-syncing-at-a-desirable-speed}
-<p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
-
-<p></p>
+<p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
 
 
 
@@ -124,7 +122,7 @@
 
 
 ### **What are the minimum hardware requirements to run a full node?** {#what-are-the-minimum-hardware-requirements-to-run-a-full-node}
-<p>You can see the minimum hardware configuration <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this section</a>.</p>
+<p>You can see the minimum hardware configuration <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration">in this section</a>.</p>
 
 <p></p>
 
