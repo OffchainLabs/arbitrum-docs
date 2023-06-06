@@ -26,7 +26,7 @@ When it comes to intercating with the Arbitrum network, users have the option to
 
 For a detailed instruction of how to run an Arbitrum full node , see [here](./how-tos/running-a-full-node.mdx).
 
-### Considerations for running an archive node
+### Considerations for running an Arbitrum archive node
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node , see [here](./how-tos/running-an-archive-node.mdx).
 
