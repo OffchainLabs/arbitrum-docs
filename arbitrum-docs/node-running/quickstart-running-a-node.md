@@ -36,4 +36,4 @@ If you are running a single node, there is no requirement to set up a feed relay
 
 In the near future, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
-For a detailed instruction of how to run an Arbitrum full node , see [here](./how-tos/running-a-feed-relay.mdx).
+For a detailed instruction of how to run a feed relay, see [here](./how-tos/running-a-feed-relay.mdx).
