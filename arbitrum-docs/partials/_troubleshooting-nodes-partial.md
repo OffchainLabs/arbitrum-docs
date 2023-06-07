@@ -1,5 +1,5 @@
 ### How do I run a node? {#how-do-i-run-a-node}
-<p>See instructions <a href="https://developer.arbitrum.io/node-running/running-a-node">here</a>! </p>
+<p>See instructions <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node">here</a>! </p>
 
 <p></p>
 
@@ -36,7 +36,7 @@
 
 
 ### How do I read messages from the Sequencer feed? {#how-do-i-read-messages-from-the-sequencer-feed}
-<p>Running an Arbitrum relay locally as a <a href="https://developer.offchainlabs.com/node-running/running-a-node#feed-relay">Feed Relay</a> lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions off-chain. Visit <a href='/node-running/how-tos/read-sequencer-feed'><em>How to read the sequencer feed</em></a> for a detailed how-to.</p>
+<p>Running an Arbitrum relay locally as a <a href="https://developer.offchainlabs.com/node-running/how-tos/running-a-full-node#feed-relay">Feed Relay</a> lets you subscribe to the Sequencer feed for real-time data as the Sequencer accepts and orders transactions off-chain. Visit <a href='/node-running/how-tos/read-sequencer-feed'><em>How to read the sequencer feed</em></a> for a detailed how-to.</p>
 
 <p></p>
 
@@ -65,9 +65,7 @@
 
 
 ### How can I verify that my node is syncing at a desirable speed? {#how-can-i-verify-that-my-node-is-syncing-at-a-desirable-speed}
-<p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
-
-<p></p>
+<p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
 
 
 
@@ -124,7 +122,7 @@
 
 
 ### **What are the minimum hardware requirements to run a full node?** {#what-are-the-minimum-hardware-requirements-to-run-a-full-node}
-<p>You can see the minimum hardware configuration <a href="https://developer.arbitrum.io/node-running/running-a-node#minimum-hardware-configuration">in this section</a>.</p>
+<p>You can see the minimum hardware configuration <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration">in this section</a>.</p>
 
 <p></p>
 

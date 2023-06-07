@@ -20,15 +20,15 @@ const oldPathToNewPath = {
   "/docs/anytrust": "/inside-anytrust",
   "/docs/node_providers": "/node-running/node-providers",
   "/docs/useful_addresses": "/for-devs/useful-addresses",
-  "/docs/running_node": "/node-running/running-a-node",
-  "/docs/running_nitro_node": "/node-running/running-a-node",
-  "/docs/running_goerli_nitro_node": "/node-running/running-a-node",
-  "/docs/running_rinkeby_nitro_node": "/node-running/running-a-node",
+  "/docs/running_node": "/node-running/how-tos/running-a-full-node",
+  "/docs/running_nitro_node": "/node-running/how-tos/running-a-full-node",
+  "/docs/running_goerli_nitro_node": "/node-running/how-tos/running-a-full-node",
+  "/docs/running_rinkeby_nitro_node": "/node-running/how-tos/running-a-full-node",
   "/docs/public_testnet": "/for-devs/concepts/public-chains",
   "/docs/public_nitro_testnet": "/for-devs/concepts/public-chains",
   "/docs/public_nitro_devnet": "/for-devs/concepts/public-chains",
   "/docs/developer_quickstart": "/",
-  "/docs/installation": "/node-running/running-a-node",
+  "/docs/installation": "/node-running/how-tos/running-a-full-node",
   "/docs/rollup_basics": "/intro",
   "/docs/tutorials": "/getting-started-devs",
   "/docs/security_considerations": "/arbitrum-ethereum-differences",
@@ -67,6 +67,7 @@ const oldPathToNewPath = {
   "/node-running/running-a-validator": "/node-running/how-tos/running-a-validator",
   "/node-running/read-sequencer-feed": "/node-running/how-tos/read-sequencer-feed",
   "/node-running/build-nitro-locally": "/node-running/how-tos/build-nitro-locally",
+  "node-running/running-a-node": "/node-running/how-tos/running-a-full-node",
 };
 
 const getNewPath = (_path) => {

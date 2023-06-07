@@ -1,5 +1,5 @@
 ---
-title: 'How to run an Archive node'
+title: 'How to run an archive node'
 description: Learn how to run an Arbitrum archive node on your local machine.
 author: jason-wanxt
 content-type: how-to
@@ -18,12 +18,12 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Use case                                                                         | Required node type(s)                                     | Docs                                                                        |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Access the **Arbitrum network** without running your own node                    | Fully managed by third-parties, exposed via RPC endpoints | [Node Providers](../node-providers.mdx)                                     |
-| Run an **archive node** for **Arbitrum Goerli (testnet)** or **Arbitrum Nova**   | Full node (Nitro)                                         | [How to run a full node (Nitro)](../running-a-node.md)                      |
-| Send **post-Nitro** archive requests                                             | Full node (Nitro)                                         | [How to run a full node (Nitro)](../running-a-node.md)                      |
+| Run an **archive node** for **Arbitrum Goerli (testnet)** or **Arbitrum Nova**   | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                                     |
+| Send **post-Nitro** archive requests                                             | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                     |
 | Send **pre-Nitro** archive requests                                              | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](./running-a-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                         | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                  |
 
-### System requirements
+### System requirements 
 
 :::caution
 
@@ -104,4 +104,4 @@ chmod -fR 777 /some/local/dir/arbitrum-mainnet
 
 ### Troubleshooting
 
-If you run into any issues, visit the [Node-running Troubleshooting guide](../troubleshooting-running-nodes).
+If you run into any issues, visit the [node-running troubleshooting guide](../troubleshooting-running-nodes).
