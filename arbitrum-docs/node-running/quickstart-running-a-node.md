@@ -21,11 +21,11 @@ When it comes to intercating with the Arbitrum network, users have the option to
 - Reduced trust requirements: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
 - Lower resource requirements: Compared to archive nodes, full nodes generally require fewer resources such as storage and computational power. This makes them more accessible to users with limited hardware capabilities or those operating on resource-constrained environments.
 
-For a detailed instruction of how to run an Arbitrum full node , see [here](./how-tos/running-a-full-node.mdx).
+For a detailed instruction of how to run an Arbitrum full node, see [here](./how-tos/running-a-full-node.mdx).
 
 ### Considerations for running an Arbitrum archive node
 
-While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node , see [here](./how-tos/running-an-archive-node.mdx).
+While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node, see [here](./how-tos/running-an-archive-node.mdx).
 
 ### Considerations for running a feed relay
 
@@ -33,4 +33,4 @@ If you are running a single node, there is no requirement to set up a feed relay
 
 In the near future, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
-For a detailed instruction of how to run an Arbitrum full node , see [here](./how-tos/running-a-feed-relay.mdx).
+For a detailed instruction of how to run a feed relay, see [here](./how-tos/running-a-feed-relay.mdx).
