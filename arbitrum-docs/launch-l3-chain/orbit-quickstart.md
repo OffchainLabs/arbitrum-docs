@@ -21,7 +21,7 @@ By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain*
 
 :::caution NOT A MAINNET; NOT FOR PRODUCTION SCENARIOS
 
-Your Orbit devnet chain **is not a mainnet or production chain**, and it's **not intended to be used in production scenarios**; it's meant for prototyping, experimentation, and discovery. We'll provide guidance for mainnet / production chains in the future.
+Your Orbit devnet chain **is not a mainnet or production chain**, and it's **not intended to be used in production scenarios**; it's for prototyping, experimentation, and discovery. We'll provide guidance for mainnet / production chains in the future.
 
 If you have any questions or feature requests as you begin to tinker, **please reach out to our team directly** through [this form](http://bit.ly/3yy6EUK). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out! We're eager to learn how we can improve Orbit to better support your needs :).
 
