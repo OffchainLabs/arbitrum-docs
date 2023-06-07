@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: Run different types of Arbitrum nodes"
+title: "Quickstart: Run a node"
 description: Learn more about what type of ARb node one needs to run.
 author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
@@ -10,9 +10,6 @@ content-type: quickstart
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
 
 <PublicPreviewBannerPartial />
-
-This quickstart is for who users/developers who want to start running any type of Arbitrum nodes. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with command lime expected. 
-
 
 When it comes to intercating with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
 
