@@ -4,39 +4,57 @@ description: Learn how to run an Arbitrum local dev node on your local machine.
 content-type: how-to
 ---
 
-### 1. Install
+### 1. Install prerequisites
 
-- Install [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/)
-- Clone and `cd` into [nitro repo](https://github.com/OffchainLabs/nitro)
-- Run
-  ```bash
-  git submodule update --init --recursive
-  ```
-- Run
-  ```bash
-  ./test-node.bash --init
-  ```
-  This will build and launch the node.
+You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
 
-### 2. Launch node
+### 2. Clone the [nitro repo](https://github.com/OffchainLabs/nitro)
 
-- To relaunch node, run
+```bash
+git clone https://github.com/OffchainLabs/nitro.git
+cd nitro
+```
 
-  ```bash
-  ./test-node.bash
-  ```
+### 3. Checkout the latest release
 
-  (⚠️ Note that running with the --init flag will clear all chain data and redeploy!)
+```bash
+git checkout tags/@latestNitroVersionTag@ -b @latestNitroVersionTag@
+```
 
-  The L1 Geth devnet will be running at http://localhost:8545 and the L2 Nitro devnet at http://localhost:8547.
+### 4. Install submodules
 
-  The following accounts will be prefunded with Ether:
+```bash
+git submodule update --init --recursive
+```
 
-  - _L2 Nitro devnet_: `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2`
+### 5. Run your node
 
-  - _both networks_: `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
+```bash
+./test-node.bash --init
+```
 
-### Get core contracts
+### 6. Successive runs
+
+To relaunch the node after the first installation, run the following command.
+
+```bash
+./test-node.bash
+```
+
+⚠️ Note that running with the --init flag will clear all chain data and redeploy!
+
+### Default endpoints and addresses
+
+The L1 Geth devnet will be running at http://localhost:8545 and the L2 Nitro devnet at http://localhost:8547.
+
+The following accounts will be prefunded with Ether:
+
+- _L2 Nitro devnet_: `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2`
+
+- _both networks_: `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
+
+
+### How to get core contracts
 
 For addresses of the deployed core protocol contracts, run
 
@@ -91,3 +109,13 @@ Some default addresses can be found here:
     }
 }
 ```
+
+### How to access Blockscout
+
+Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explorer. To access it, add the param `--blockscout` when running your node.
+
+```bash
+./test-node.bash --blockscout
+```
+
+The block explorer will be available at http://localhost:4000
