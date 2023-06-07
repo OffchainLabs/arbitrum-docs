@@ -1,6 +1,6 @@
 ---
 title: "Quickstart: Launch an L3 devnet chain with Orbit (Experimental)"
-description: "Launch your own L3 devnet chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3. Stay tuned for more information."
+description: "Launch your own L3 devnet chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your L3. Modify the Nitro codebase freely for your L3."
 sidebar_position: 2
 author: oliviaJ3388
 sidebar_label: "Quickstart: Launch an L3 devnet chain"
