@@ -162,13 +162,13 @@ const sidebars = {
         },
         {
           type: "doc",
-          label: "Arbitrum chains and smart contract addresses",
-          id: "for-devs/useful-addresses"
+          id: "node-running/node-providers",
+          label: "RPC endpoints and providers"
         },
         {
           type: "doc",
-          id: "node-running/node-providers",
-          label: "RPC providers / Node infrastructure"
+          label: "Smart contract addresses",
+          id: "for-devs/useful-addresses"
         },
         {
           type: "doc",
