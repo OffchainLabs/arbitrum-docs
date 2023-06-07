@@ -114,7 +114,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "node-running/running-a-node",
+            docId: "node-running/quickstart-running-a-node",
             label: "Run a node",
             position: "left",
           },

@@ -162,13 +162,13 @@ const sidebars = {
         },
         {
           type: "doc",
-          label: "Arbitrum chains and smart contract addresses",
-          id: "for-devs/useful-addresses"
+          id: "node-running/node-providers",
+          label: "RPC endpoints and providers"
         },
         {
           type: "doc",
-          id: "node-running/node-providers",
-          label: "RPC providers / Node infrastructure"
+          label: "Smart contract addresses",
+          id: "for-devs/useful-addresses"
         },
         {
           type: "doc",
@@ -238,14 +238,19 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "node-running/running-a-node",
-      label: "Quickstart: Run a full node (Nitro)"
+      id: "node-running/quickstart-running-a-node",
+      label: "Quickstart: Run Arbitrum nodes"
     },
     {
       type: "category",
       label: "How-to guides",
       collapsed: false,
       items: [
+        {
+          type: "doc",
+          id: "node-running/how-tos/running-a-full-node",
+          label: "Run a full node (Nitro)"
+        },
         {
           type: "doc",
           id: "node-running/how-tos/running-a-classic-node",
@@ -294,6 +299,11 @@ const sidebars = {
       label: "Third-party node providers"
     },
     */
+    {
+      type: "doc",
+      id: "node-running/command-line-options",
+      label: "Command-line options"
+    },
     {
       type: "doc",
       id: "node-running/troubleshooting-running-nodes",
