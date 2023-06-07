@@ -13,7 +13,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 When it comes to intercating with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
 
-### Considerations running an Arbitrum full node
+### Considerations for running an Arbitrum full node
 
 ⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
