@@ -32,7 +32,7 @@ If you have any questions or feature requests as you begin to tinker, **please r
 
 An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see a form that looks like this:
 
-<PlaceholderForm id="foo" inputs="Chain ID, Chain name, Challenge period (blocks), Staking token (0x... address), Base stake, owner" />
+<PlaceholderForm id="foo" inputs="Chain ID, Chain name, Challenge period (blocks), Staking token (0x... address), Base stake, Owner" />
 
 - **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
 - **Chain name**: A human-readable way to distinguish your blockchain from another. Users, developers and the wider community will refer to and recognize your blockchain by this name.
