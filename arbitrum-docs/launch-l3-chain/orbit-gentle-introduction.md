@@ -15,7 +15,7 @@ This document is currently in **public preview** and may change significantly as
 
 :::warning Editor's note
 
-We'll tighten this copy up after we freeze the docs, just before publishing them. Docs generally flow through outline -> draft -> edit -> publish; we're currently drafting. So don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
+Docs generally flow through outline -> draft -> edit -> publish; we're currently drafting. Don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex. We'll tighten the copy up after "feedback freezing" the docs, just before publishing.
 
 :::
 
