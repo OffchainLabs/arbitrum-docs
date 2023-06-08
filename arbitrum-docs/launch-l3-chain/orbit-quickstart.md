@@ -19,9 +19,9 @@ This quickstart is for developers who want to launch their own Layer-3 (L3) roll
 By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to **Arbitrum Goerli**.
 
 
-:::caution NOT A MAINNET; NOT FOR PRODUCTION SCENARIOS
+:::caution NOT A MAINNET CHAIN; NOT FOR PRODUCTION SCENARIOS
 
-Your Orbit devnet chain **is not a mainnet or production chain**, and it's **not intended to be used in production scenarios**; it's for prototyping, experimentation, and discovery. We'll provide guidance for mainnet / production chains in the future.
+Your Orbit devnet chain **settles to Arbitrum Goerli, not a mainnet chain**; it's **not intended to be used in production scenarios**; it's for prototyping, experimentation, and discovery. We'll provide guidance for production chains (those that settle to mainnet chains) in the future.
 
 If you have any questions or feature requests as you begin to tinker, **please reach out to our team directly** through [this form](http://bit.ly/3yy6EUK). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out! We're eager to learn how we can improve Orbit to better support your needs :).
 
@@ -30,16 +30,16 @@ If you have any questions or feature requests as you begin to tinker, **please r
 
 ## Step 1: Configure your L3 chain
 
-An **Orbit L3 chain launchpad portal** will soon be available. There, you'll see a form that looks like this:
+Visit the [Orbit L3 chain deployment portal](https://orbit.arbitrum.io/deployment). There, you'll see a form that looks like this:
 
-<PlaceholderForm id="foo" inputs="Chain ID, Chain name, Challenge period (blocks), Staking token (0x... address), Base stake, Owner" />
+<PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Staking token (0x... address), Base stake, Owner" />
 
 - **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
-- **Chain name**: A human-readable way to distinguish your blockchain from another. Users, developers and the wider community will refer to and recognize your blockchain by this name.
-- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain (Arbitrum One).
-- **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an ERC20 token contract address on Arbitrum One.
+- **Chain name**: A human-readable way to distinguish your L3 chain from others. Users, developers and the wider community will refer to and recognize your chain by this name.
+- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain (Arbitrum Goerli).
+- **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an ERC-20 token contract address on Arbitrum Goerli.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
-- **Owner**: The `sudo` / administrative address of your entire chain. It's responsible for deploying your chain's foundation contracts to the underlying L2 chain, and it has the power to change your chain's configuration.
+- **Owner**: The `sudo` / administrative address of your entire L3 chain. It's responsible for deploying your chain's L2 contracts to the underlying L2 chain, and it has the power to change your chain's configuration.
 
 
 Let's briefly review each of these parameters and the tradeoffs that you should consider when configuring them.
