@@ -39,7 +39,7 @@ Visit the [Orbit L3 chain deployment portal](https://orbit.arbitrum.io/deploymen
 
 - **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
 - **Chain name**: A human-readable way to distinguish your L3 chain from others. Users, developers and the wider community will refer to and recognize your chain by this name.
-- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain (Arbitrum Goerli).
+- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) in the underlying L2 chain (Arbitrum Goerli).
 - **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. You can select either Goerli-ETH, or a custom ERC-20 token contract address on Arbitrum Goerli.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
 - **Owner**: A `sudo` / administrative address responsible for deploying your chain's L2 contracts to the underlying L2 chain, with the power to change your L3 chain's configuration post-deployment.
@@ -60,7 +60,7 @@ This name provides a way to identify and distinguish your L3 chain from others. 
 
 ### Challenge period (blocks)
 
-Transactions submitted to your L3 chain are placed within a queue before being batched and posted to the underlying L2 chain. The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the integrity of transactions posted to the underlying L2 chain (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet).
+The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the integrity of transactions posted to the underlying L2 chain (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet).
 
 A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to settle to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your L3 chain.
 
@@ -114,7 +114,7 @@ Ok, on to the validators.
 
 ## Step 3: Configure your L3 chain's validators
 
-Your L3 chain's validators are responsible for validating the integrity of the transactions and the way that they've been posted to the underlying L2 chain. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
+Your L3 chain's validators are responsible for validating the integrity of transactions and posting assertions of the current state of the to the underlying L2. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
 The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
 
