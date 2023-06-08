@@ -35,8 +35,8 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
     <Node id="2">Appchain</Node>
     <Node id="3">Appchain</Node>
     <Node id="4">Appchain</Node>
-    <Node id="5">One (L2)</Node>
-    <Node id="6">Nova (L2)</Node>
+    <Node id="5">Arbitrum One (L2)</Node>
+    <Node id="6">Arbitrum Nova (L2)</Node>
     <Node id="7">Ethereum (L1)</Node>
     <Connection from="1" to="5"/>
     <Connection from="2" to="5"/>
@@ -46,7 +46,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
     <Connection from="6" to="7"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains.<br/><br/>All Orbit chains settle to either Arbitrum Goerli, Arbitrum One, or Arbitrum Nova.</NodeDescription>
+    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum Goerli, Arbitrum One, or Arbitrum Nova.</NodeDescription>
     <NodeDescription for='3,4'><strong>Arbitrum One</strong> and <strong>Arbitrum Nova</strong> are public Layer 2 (L2) chains.</NodeDescription>
     <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
