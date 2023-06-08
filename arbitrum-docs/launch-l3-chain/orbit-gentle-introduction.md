@@ -50,7 +50,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for='1,2,3'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum One, Arbitrum Nova, or Arbitrum Goerli.</NodeDescription>
-    <NodeDescription for='4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains. Note that currently, Orbit chains are local devnets that settle to Arbitrum Goerli.</NodeDescription>
+    <NodeDescription for='4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains.</NodeDescription>
     <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
