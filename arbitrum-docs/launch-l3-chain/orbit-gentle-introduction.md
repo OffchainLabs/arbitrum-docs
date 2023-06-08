@@ -31,10 +31,10 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 <MermaidWithHtml>
   <Nodes>
-    <Node id="1">Orbit chain</Node>
-    <Node id="2">Orbit chain</Node>
-    <Node id="3">Orbit chain</Node>
-    <Node id="4">Orbit chain</Node>
+    <Node id="1">Orbit appchain</Node>
+    <Node id="2">Orbit appchain</Node>
+    <Node id="3">Orbit appchain</Node>
+    <Node id="4">Orbit appchain</Node>
     <Node id="5">One (L2)</Node>
     <Node id="6">Nova (L2)</Node>
     <Node id="7">Ethereum (L1)</Node>
@@ -76,12 +76,6 @@ You can think of an Orbit chain as a dedicated priority lane on Ethereum. And ea
 
 
 ### How does Orbit help me build decentralized apps?
-
-
-<!-- 
-todo - tighten this up; give examples of app chains like Ronin; highlight engineering LOE; frame this as a battle-tested framework / abstraction / easy button*
--->
-
 
 
 | Benefit                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
