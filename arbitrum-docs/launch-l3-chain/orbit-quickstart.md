@@ -26,6 +26,10 @@ If you have any questions or feature requests as you begin to tinker, **please r
 
 :::
 
+## Prerequisites
+
+ - [Docker](https://docs.docker.com/get-docker/)
+
 
 ## Step 1: Configure your L3 chain
 
@@ -67,7 +71,7 @@ Note that the challenge period is measured in blocks on the L2 chain, not the L3
 
 ### Stake token
 
-Your L3 devnet chain will be supported by at least one node. In production scenarios, your chain may be supported by a decentralized network of nodes. In order for your chain's nodes to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to - Arbitrum Goerli**.
+Your L3 devnet chain will be supported by at least one node. In order for your chain's nodes to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your L3 chain is settling to - Arbitrum Goerli**.
 
 If you're not sure what to put here, use the default value of `0x000..000`. This tells Orbit to set your chain's stake token to plain-old ETH.
 
@@ -125,15 +129,32 @@ Your L3 chain's user-submitted transactions are deterministically batched and se
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
-## Step 5: Generate config files and download them
+
+::: Editor's note
+
+Content **below** this banner is still being drafted; content **above** this banner is ready for pre-publishing review and SME signoff.
+
+:::
+
+
+## Step 5: Generate and download your L3 chain's configuration files
+
+This step will generate two JSON configuration files - one for your **nodes**; another for your **core contracts**.
+
+ 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file contains the configuration for your L3 chain's validator(s) and batch poster. It also contains the private key for your L3 chain's batch poster, which is used to sign transactions that post RBlocks to your L3 chain's core contracts on L2.
+ 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your L3 chain's core contracts. It also contains the private key for your L3 chain's owner address, which is used to deploy your L3 chain's core contracts to L2.
+
+
+<!-- prev
 
 In this last step you can download two configuration files in JSON format. By clicking on **Download Rollup JSON**, a file named **nodeConfig.json** will be downloaded. This config file would be used to run Orbit node, which will be discussed later.
 
 Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptConfig.json** will be downloaded. This config file would be consumed later by Orbit setup script later in order to setup final steps of running Orbit chain.
 
-## Step 6: Move nodeConfig.json file and run your Orbit chain's node(s)
+-->
 
-On this step, we aim to show how to run an L3 node. As a prerequisite you need to have Docker installed and run on your computer. If not please visit [this page](https://docs.docker.com/get-docker/) to download and run it.
+
+## Step 6: Move nodeConfig.json file and run your Orbit chain's node(s)
 
 - Having the Docker up and running, you can create a folder in a desired path like ```/some/local/dir/arbitrum```
 - Move the **nodeConfig.json** file that you downloaded into the newly generated folder with the path ```/some/local/dir/arbitrum``` 
