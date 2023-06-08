@@ -125,7 +125,7 @@ Once this form-submission transaction is confirmed, you'll see a new form appear
 
 ## Step 4: Configure your L3 chain's batch poster
 
-Your L3 chain's user-submitted transactions are deterministically sequenced and batched before being posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these batches from your L3 to your core contracts on L2.
+Your L3 chain's user-submitted transactions are deterministically sequenced, batched, compressed, and posted to the underlying L2 (Arbitrum Goerli). Your batch poster address is the L3 address that's responsible for posting these batches of transactions from your L3 to your core contracts on L2.
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
