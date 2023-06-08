@@ -4,12 +4,8 @@ description: "Launch your own L3 Arbitrum chain with the Arbitrum Nitro codebase
 author: dzgoldman
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+::: info
 
-<PublicPreviewBannerPartial />
+The latest Gentle Introduction is being staged in a separate branch [here](https://github.com/OffchainLabs/arbitrum-docs/pull/318). Preview [here](https://nitro-docs-git-orbit-docs-vnext-gentle-intro-offchain-labs.vercel.app/launch-l3-chain/orbit-gentle-introduction).
 
-The [Arbitrum Nitro codebase's](https://github.com/OffchainLabs/nitro) license now allows anybody to launch their own "L3" Arbitrum chain, a chain that runs on top of one of Arbitrum's L2s (currently Arbitrum One or Nova), settling via bridge contracts deployed on its underlying L2 chain. Developers don't need permission from the Arbitrum DAO, Offchain Labs, or anyone else to create their own L3s; they are also free to modify the Nitro codebase for their L3 however they chose.
-
-Come back soon for a guide on deploying a new L3; in the mean time, if you're interested, feel to [reach out to us for more info](http://bit.ly/3yy6EUK).
-
-See [Arbitrum DAO docs](https://docs.arbitrum.foundation/new-arb-chains) for more info on the Arbitrum DAO's role in governing L2s.
+:::
