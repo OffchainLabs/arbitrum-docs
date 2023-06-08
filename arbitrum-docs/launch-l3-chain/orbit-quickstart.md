@@ -18,10 +18,9 @@ This quickstart is for developers who want to launch their own Layer-3 (L3) roll
 
 By the end of this quickstart, you'll have a functional **L3 Orbit devnet chain** that accepts transactions and settles them to **Arbitrum Goerli**.
 
-
 :::caution NOT A MAINNET CHAIN; NOT FOR PRODUCTION SCENARIOS
 
-Your Orbit devnet chain **settles to Arbitrum Goerli, not a mainnet chain**; it's **not intended to be used in production scenarios**; it's for prototyping, experimentation, and discovery. We'll provide guidance for production chains (those that settle to mainnet chains) in the future.
+Your Orbit devnet chain **settles to Arbitrum Goerli, not a mainnet L2 chain**; it's **not intended to be used in production scenarios**; it's for prototyping, experimentation, and discovery. We'll provide guidance for production chains (those that settle to mainnet chains) in the future.
 
 If you have any questions or feature requests as you begin to tinker, **please reach out to our team directly** through [this form](http://bit.ly/3yy6EUK). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out! We're eager to learn how we can improve Orbit to better support your needs :).
 
@@ -47,12 +46,12 @@ Let's briefly review each of these parameters and the tradeoffs that you should 
 
 ### Chain ID
 
-Don't worry about this; it's inconsequential for devnets. For production scenarios, you'll want to use a unique integer identifier that represents your L3 chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
+Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your L3 chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 
 ### Chain Name
 
-This name provides a way to identify and distinguish your blockchain from others. You’ll want to make this a name that you can easily remember.
+This name provides a way to identify and distinguish your L3 chain from others. You’ll want to make this a name that you can easily remember.
 
 
 ### Challenge period (blocks)
