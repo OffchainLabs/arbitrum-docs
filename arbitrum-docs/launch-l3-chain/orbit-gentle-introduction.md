@@ -4,7 +4,7 @@ description: "Launch your own L3 Arbitrum chain with the Arbitrum Nitro codebase
 author: dzgoldman
 ---
 
-::: info
+:::info
 
 The latest Gentle Introduction is being staged in a separate branch [here](https://github.com/OffchainLabs/arbitrum-docs/pull/318). Preview [here](https://nitro-docs-git-orbit-docs-vnext-gentle-intro-offchain-labs.vercel.app/launch-l3-chain/orbit-gentle-introduction).
 
