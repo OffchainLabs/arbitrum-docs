@@ -40,9 +40,9 @@ Visit the [Orbit L3 chain deployment portal](https://orbit.arbitrum.io/deploymen
 - **Chain ID**: A unique integer identifier that represents your L3 chain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
 - **Chain name**: A human-readable way to distinguish your L3 chain from others. Users, developers and the wider community will refer to and recognize your chain by this name.
 - **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute transactions before they're confirmed and posted to the underlying L2 chain (Arbitrum Goerli).
-- **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. This token must be an ERC-20 token contract address on Arbitrum Goerli.
+- **Staking token**: The token that your chain's validators must stake in order to participate in your L3 chain. You can select either Goerli-ETH, or a custom ERC-20 token contract address on Arbitrum Goerli.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your L3 chain. This number must be greater than 0.
-- **Owner**: The `sudo` / administrative address of your entire L3 chain. It's responsible for deploying your chain's L2 contracts to the underlying L2 chain, and it has the power to change your chain's configuration.
+- **Owner**: A `sudo` / administrative address responsible for deploying your chain's L2 contracts to the underlying L2 chain, with the power to change your L3 chain's configuration post-deployment.
 
 
 Let's briefly review each of these parameters and the tradeoffs that you should consider when configuring them.
@@ -55,7 +55,7 @@ Don't worry about this; it's inconsequential for devnets. In production scenario
 
 ### Chain Name
 
-This name provides a way to identify and distinguish your L3 chain from others. You’ll want to make this a name that you can easily remember.
+This name provides a way to identify and distinguish your L3 chain from others. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.
 
 
 ### Challenge period (blocks)
@@ -114,7 +114,7 @@ Ok, on to the validators.
 
 ## Step 3: Configure your L3 chain's validators
 
-Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
+Your L3 chain's validators are responsible for validating the integrity of the transactions and the way that they've been posted to the underlying L2 chain. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
 The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
 
@@ -125,7 +125,7 @@ Once this form-submission transaction is confirmed, you'll see a new form appear
 
 ## Step 4: Configure your L3 chain's batch poster
 
-Your L3 chain's user-submitted transactions are deterministically sequenced and batched within RBlocks that get posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your core contracts on L2.
+Your L3 chain's user-submitted transactions are deterministically sequenced and batched before being posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these batches from your L3 to your core contracts on L2.
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
