@@ -15,13 +15,13 @@ This document is currently in **public preview** and may change significantly as
 
 ### In a nutshell:
 
-- Arbitrum Orbit lets you **create your own application-specific chain (appchain)** that settles to Arbitrum's L2 chains (<a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>).
-- **You own your Orbit chain** and can customize its privacy, permissions, fee token, governance[^1], and more.
+- Arbitrum Orbit lets you **create your own special-purpose, application-specific chain (appchain)** that settles to Arbitrum's L2 chains (<a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>).
+- **You own your Orbit appchain** and can customize its privacy, permissions, fee token, governance[^1], and more.
 - Examples of possibilities that this unlocks:
-    - **Launch a rollup chain that you own** which inherits <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, EVM+ compatibility, and continuous improvements.
-    - **Build an appchain** with dedicated throughput and traffic isolation for increased gas price reliability.
-    - **Permission access** to control who can access your chain's data, and who can deploy smart contracts to your chain. Your chain can be completely permissionless like Ethereum and Arbitrum One, or you can add your own custom permissions policy.
-    - **Collect fees using a token of choice** to rapidly iterate on domain-specific mechanism designs and value capture opportunities.
+    - **Launch an appchain that you own** which inherits <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, EVM+ compatibility, and continuous improvements.
+    - **Offer gas price reliability** to your end-users thanks to the dedicated throughput and traffic isolation that Orbit appchains offer by default.
+    - **Permission access** to control who can access your appchain's data, and who can deploy smart contracts to your chain. Your appchain can be completely permissionless like Ethereum and Arbitrum One, or you can add your own custom permissions policy.
+    - **Collect fees using a token that you choose** to rapidly iterate on domain-specific mechanism designs and value capture opportunities.
 - Get started by **visiting the [Orbit Quickstart](./orbit-quickstart.md)**, **exploring the docs**, or **[reaching out to the Offchain Labs team on Discord](#todo)** for support and guidance.
 
 
