@@ -38,23 +38,19 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 <MermaidWithHtml>
   <Nodes>
-    <Node id="1">Appchain</Node>
-    <Node id="2">Appchain</Node>
-    <Node id="3">Appchain</Node>
-    <Node id="4">Appchain</Node>
-    <Node id="5">Arbitrum Goerli (L2)</Node>
-    <Node id="6">Arbitrum One & Nova (L2)</Node>
-    <Node id="7">Ethereum (L1)</Node>
-    <Connection from="1" to="5"/>
-    <Connection from="2" to="5"/>
-    <Connection from="3" to="6"/>
-    <Connection from="4" to="6"/>
-    <Connection from="5" to="7"/>
-    <Connection from="6" to="7"/>
+    <Node id="1">Orbit appchain</Node>
+    <Node id="2">Orbit appchain</Node>
+    <Node id="3">Orbit appchain</Node>
+    <Node id="4">Arbitrum (L2 - Goerli, One, Nova)</Node>
+    <Node id="5">Ethereum (L1 - Goerli, Mainnet)</Node>
+    <Connection from="1" to="4"/>
+    <Connection from="2" to="4"/>
+    <Connection from="3" to="4"/>
+    <Connection from="4" to="5"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum One, Arbitrum Nova, or Arbitrum Goerli.</NodeDescription>
-    <NodeDescription for='3,4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains. Note that currently, Orbit chains are local devnets that settle to Arbitrum Goerli.</NodeDescription>
+    <NodeDescription for='1,2,3'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum One, Arbitrum Nova, or Arbitrum Goerli.</NodeDescription>
+    <NodeDescription for='4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains. Note that currently, Orbit chains are local devnets that settle to Arbitrum Goerli.</NodeDescription>
     <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
