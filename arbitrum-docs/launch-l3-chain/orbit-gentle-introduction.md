@@ -68,9 +68,9 @@ The Ethereum ecosystem is supported by a decentralized network of nodes that eac
 
 Layer 2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by optimizing their use of Ethereum. They put just enough data on Ethereum to inherit its security but move a lot of the heavy lifting off-chain.
 
-While both Rollups and AnyTrust offload lots of transaction data from Ethereum, they have important differences. Rollups put all of the raw transaction data on Ethereum, whereas AnyTrust chains settle on Ethereum but utilize a data-availability committee (DAC) to store raw transaction data. The choice between Rollups and AnyTrust represents a tradeoff between decentralization and performance; Arbitrum One is a Rollup chain and Arbitrum Nova is an AnyTrust chain.
+While both Rollups and AnyTrust offload lots of transaction data from Ethereum, they have important differences. Rollups put all of the raw transaction data on Ethereum, whereas AnyTrust chains settle on Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup and AnyTrust represents a tradeoff between decentralization and performance; Arbitrum One is a Rollup chain and Arbitrum Nova is an AnyTrust chain.
 
-While Arbitrum One and Nova provide excellent environments for scaling most applications — and are home to thousands of apps and millions of users, shared public chains are not for everyone. Some projects can benefit from their own high-security low-cost chain.
+While Arbitrum One and Nova provide excellent environments for scaling most applications — and are home to thousands of apps and millions of users — shared public chains are not for everyone. Some projects can benefit from their own high-security low-cost chain.
 
 You can think of an Orbit chain as a dedicated priority lane on Ethereum. And each of these priority lanes has many times the capacity of Ethereum, but piggyback on Ethereum for security.
 
