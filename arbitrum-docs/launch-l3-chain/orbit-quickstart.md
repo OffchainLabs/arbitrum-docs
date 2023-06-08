@@ -88,24 +88,24 @@ If you're not sure what to put here, use the default value of `1`, which transla
 
 ### Owner
 
-This address is responsible for deploying your chain's **foundation contracts** to the underlying L2 chain, and it has the power to change your chain's configuration after it's been deployed.
+This address is responsible for deploying your chain's **core contracts** to the underlying L2 chain, and it has the power to change your chain's configuration after it's been deployed.
 
 In production scenarios, this is a high-stakes address that's often controlled by a DAO's governance protocol or multisig. For your L3 devnet chain, think of this as a low-stakes administrative service account.
 
-Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your foundation contracts to L2.
+Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
 
 
-## Step 2: Deploy your L3 chain's foundation contracts to L2
+## Step 2: Deploy your L3 chain's core contracts to L2
 
 Click `Deploy rollup`. This will submit a transaction to Arbitrum Goerli, so you'll have to pay a little gas. Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's validators.
 
 Before configuring your validators, let's briefly review what just happened:
 
  - You submitted a deployment transaction to an Orbit smart contract on Arbitrum Goerli, the L2 chain that your L3 chain will settle transactions to.
- - This smart contract initialized your Orbit L3 chain's foundation contracts with values that you specified in the previous step.
+ - This smart contract initialized your Orbit L3 chain's core contracts with values that you specified in the previous step.
  - It then deployed these contracts to Arbitrum Goerli.
 
-Your L3 chain's foundation contracts are responsible for facilitating the exchange of information between your L3 chain and the underlying L2 chain. This includes the batch posting of transactions to the underlying L2 chain, the staking of tokens by your chain's validators, the challenge mechanism, bridging mechanisms, and more.
+Your L3 chain's core contracts are responsible for facilitating the exchange of information between your L3 chain and the underlying L2 chain. This includes the batch posting of transactions to the underlying L2 chain, the staking of tokens by your chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
 Ok, on to the validators.
 
@@ -115,39 +115,39 @@ Your L3 chain's validators are responsible for sending batches of transactions t
 
 The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
 
-Each of the addresses specified in this step will be added to an allow-list in one of your L3 chain's foundation contracts. This lets each of the specified addresses **stake** and serve your chain's users.
+Each of the addresses specified in this step will be added to an allow-list in one of your L3 chain's core contracts. This lets each of the specified addresses **stake** and serve your chain's users.
 
 Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your L3 chain's batch poster.
 
 
 ## Step 4: Configure your L3 chain's batch poster
 
-Your L3 chain's user-submitted transactions are deterministically batched and sequenced within RBlocks that get posted to Arbitrum Goerli through your L3 chain's foundation contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your foundation contracts on L2.
+Your L3 chain's user-submitted transactions are deterministically batched and sequenced within RBlocks that get posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your core contracts on L2.
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
 ## Step 5: Generate config files and download them
 
-In this last step you can download two configuration files in JSON format. By clicking on **Download Rollup JSON**, a file named **config.json** will be downloaded. This config file would be used to run Orbit node, which will be discussed later.
+In this last step you can download two configuration files in JSON format. By clicking on **Download Rollup JSON**, a file named **nodeConfig.json** will be downloaded. This config file would be used to run Orbit node, which will be discussed later.
 
-Also by clicking on **Download L3Config JSON**, a file named **l3Config.json** will be downloaded. This config file would be consumed later by Orbit setup script later in order to setup final steps of running Orbit chain.
+Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptConfig.json** will be downloaded. This config file would be consumed later by Orbit setup script later in order to setup final steps of running Orbit chain.
 
-## Step 6: Move config.json file and run your Orbit chain's node(s)
+## Step 6: Move nodeConfig.json file and run your Orbit chain's node(s)
 
 On this step, we aim to show how to run an L3 node. As a prerequisite you need to have Docker installed and run on your computer. If not please visit [this page](https://docs.docker.com/get-docker/) to download and run it.
 
 - Having the Docker up and running, you can create a folder in a desired path like ```/some/local/dir/arbitrum```
-- Move the **config.json** file that you downloaded into the newly generated folder with the path ```/some/local/dir/arbitrum``` 
+- Move the **nodeConfig.json** file that you downloaded into the newly generated folder with the path ```/some/local/dir/arbitrum``` 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be ```/home/user/.arbitrum```
 - Here is the command you can run in the ```/some/local/dir/arbitrum``` folder to run your Orbit node:
   
    ```shell
-   docker run -p 8449:8449 --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.1.0-beta.1-03a2aea --conf.file /home/user/.arbitrum/config.json
+   docker run -p 8449:8449 --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.1.0-beta.2-58a23c8 --conf.file /home/user/.arbitrum/nodeConfig.json
    ```
 
 Congrats! Your run your Orbit chain node! 🎉
 
-## Step 7: Move l3Config.json file and run Orbit setup script
+## Step 7: Move orbitSetupScriptConfig.json file and run Orbit setup script
 
 Now that the orbit chain is up and running, you need to take some other steps to set things up completely. These steps would be:
 
@@ -159,7 +159,7 @@ Now that the orbit chain is up and running, you need to take some other steps to
 Don't worry about all the things discussed above. We wrote a hardhat script which you can use and it'll do all the things for you. Just follow the below steps:
 
 - Clone the repository of [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) from our github.
-- There is a folder named **config**.You need to move the **l3Config.json** file you downloaded on the previous step to this folder
+- There is a folder named **config**.You need to move the **orbitSetupScriptConfig.json** file you downloaded on the previous step to this folder
 - Set the values shown in ```.env-sample ``` as environmental variables. To copy it into a .env file:
 
    ```shell
@@ -172,7 +172,7 @@ Don't worry about all the things discussed above. We wrote a hardhat script whic
     L2_RPC_URL=https://goerli-rollup.arbitrum.io/rpc
     L3_RPC_URL=http://localhost:8449
     ```
-- To install all dependecies for this script, you need to run:
+- To install all dependencies for this script, you need to run:
 
    ```shell
     yarn install
@@ -185,4 +185,4 @@ Don't worry about all the things discussed above. We wrote a hardhat script whic
     ```
 Congratulations! 🎉🎉🎉
 
-Your Orbit Chain is completely set up and configured. You can find foundation contract addresses on ```config.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
+Your Orbit Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
