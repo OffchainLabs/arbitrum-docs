@@ -130,9 +130,9 @@ Your appchain's user-submitted transactions are deterministically sequenced, bat
 Once this form-submission transaction is confirmed, you'll be ready to run your appchain's validator(s) and batch poster. Your appchain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
 
-::: Editor's note
+:::warning Editor's note
 
-Content **below** this banner is still being drafted; content **above** this banner is ready for pre-publishing review and SME signoff.
+Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing.
 
 :::
 
