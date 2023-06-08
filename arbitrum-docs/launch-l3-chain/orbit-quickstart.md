@@ -126,10 +126,63 @@ Your L3 chain's user-submitted transactions are deterministically batched and se
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
-## Step 5: Generate config and run your L3 chain's node(s)
+## Step 5: Generate config files and download them
 
-:::info coming soon
+In this last step you can download two configuration files in JSON format. By clicking on **Download Rollup JSON**, a file named **config.json** will be downloaded. This config file would be used to run Orbit node, which will be discussed later.
 
-These steps are a work-in-progress. Thanks for your patience, check back soon!
+Also by clicking on **Download L3Config JSON**, a file named **l3Config.json** will be downloaded. This config file would be consumed later by Orbit setup script later in order to setup final steps of running Orbit chain.
 
-:::
+## Step 6: Move config.json file and run your Orbit chain's node(s)
+
+On this step, we aim to show how to run an L3 node. As a prerequisite you need to have Docker installed and run on your computer. If not please visit [this page](https://docs.docker.com/get-docker/) to download and run it.
+
+- Having the Docker up and running, you can create a folder in a desired path like ```/some/local/dir/arbitrum```
+- Move the **config.json** file that you downloaded into the newly generated folder with the path ```/some/local/dir/arbitrum``` 
+- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be ```/home/user/.arbitrum```
+- Here is the command you can run in the ```/some/local/dir/arbitrum``` folder to run your Orbit node:
+  
+   ```shell
+   docker run -p 8449:8449 --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.1.0-beta.1-03a2aea --conf.file /home/user/.arbitrum/config.json
+   ```
+
+Congrats! Your run your Orbit chain node! 🎉
+
+## Step 7: Move l3Config.json file and run Orbit setup script
+
+Now that the orbit chain is up and running, you need to take some other steps to set things up completely. These steps would be:
+
+1. Funding **batch-poster** and **staker** accounts.
+2. Depositing ETH into your account on L3 using your Orbit chain's newly deployed bridge (to be able to send transactions on L3) 
+3. Deploying Token Bridge Contracts on both L2 and L3 chains. For more info on what/why/how is Token Bridge, please visit our docs.
+4. Configuring parameters on L3.
+
+Don't worry about all the things discussed above. We wrote a hardhat script which you can use and it'll do all the things for you. Just follow the below steps:
+
+- Clone the repository of [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) from our github.
+- There is a folder named **config**.You need to move the **l3Config.json** file you downloaded on the previous step to this folder
+- Set the values shown in ```.env-sample ``` as environmental variables. To copy it into a .env file:
+
+   ```shell
+    cp .env-sample .env
+    ```
+- You just need to put the chain owner private key on the .env file, and not modifying other two env variables:
+
+   ```shell
+    PRIVATE_KEY="0xChainOwnerPrivateKey"
+    L2_RPC_URL=https://goerli-rollup.arbitrum.io/rpc
+    L3_RPC_URL=http://localhost:8449
+    ```
+- To install all dependecies for this script, you need to run:
+
+   ```shell
+    yarn install
+    ```
+
+- Now all things are set, and it's time to run the script. For running the script you can use this command:
+
+   ```shell
+    npx hardhat run scripts/setup.ts 
+    ```
+Congratulations! 🎉🎉🎉
+
+Your Orbit Chain is completely set up and configured. You can find foundation contract addresses on ```config.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
