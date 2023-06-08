@@ -1,7 +1,7 @@
 ---
-title: "A gentle introduction: Orbit chains"
-sidebar_label: "A gentle introduction: Orbit chains"
-description: "Launch your own Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One or Nova soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your Orbit chain."
+title: "A gentle introduction: Orbit appchains"
+sidebar_label: "A gentle introduction: Orbit appchains"
+description: "Launch your own Arbitrum Orbit appchain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One or Nova soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit appchain. Modify the Nitro codebase freely for your Orbit appchain."
 author: oliviaJ3388
 sidebar_position: 1
 ---
