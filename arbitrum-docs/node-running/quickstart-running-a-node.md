@@ -25,7 +25,15 @@ For a detailed instruction of how to run an Arbitrum full node, see [here](./how
 
 ### Considerations for running an Arbitrum archive node
 
-While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. For a detailed instruction of how to run an Arbitrum archive node, see [here](./how-tos/running-an-archive-node.mdx).
+While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. 
+
+For a detailed instruction of how to run an Arbitrum archive node, see [here](./how-tos/running-an-archive-node.mdx).
+
+### Considerations for running an Arbitrum classic node
+
+The significance of running an Arbitrum classic node is mainly applicable to individuals with specific needs for an archive node and access to classic-related commands. More details can be found [here](./how-tos/running-an-archive-node.mdx).
+
+For a detailed instruction of how to run an Arbitrum classic node, see [here](./how-tos/running-a-classic-node.mdx).
 
 ### Considerations for running a feed relay
 
