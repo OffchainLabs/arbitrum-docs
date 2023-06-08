@@ -60,7 +60,7 @@ This name provides a way to identify and distinguish your L3 chain from others. 
 
 ### Challenge period (blocks)
 
-Transactions submitted to your L3 chain are placed within a queue before being confirmed and finalized (settled to the L2 chain). The `Challenge period (blocks)` parameter determines the amount of time that must pass before the transactions can move out of this queue and into the underlying L2 (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet). While in this queue, transactions can be disputed by your chain's nodes.
+Transactions submitted to your L3 chain are placed within a queue before being batched and posted to the underlying L2 chain. The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the integrity of transactions posted to the underlying L2 chain (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet).
 
 A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to settle to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your L3 chain.
 
@@ -114,7 +114,7 @@ Ok, on to the validators.
 
 ## Step 3: Configure your L3 chain's validators
 
-Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain in the form of RBlocks. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
+Your L3 chain's validators are responsible for sending batches of transactions to your L2 chain. In production scenarios, your L3 chain would likely be hosted by a decentralized network of validator nodes working together. For your L3 devnet chain, you'll be configuring a single validator by default, with the option to add more.
 
 The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
 
@@ -125,7 +125,7 @@ Once this form-submission transaction is confirmed, you'll see a new form appear
 
 ## Step 4: Configure your L3 chain's batch poster
 
-Your L3 chain's user-submitted transactions are deterministically batched and sequenced within RBlocks that get posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your core contracts on L2.
+Your L3 chain's user-submitted transactions are deterministically sequenced and batched within RBlocks that get posted to Arbitrum Goerli through your L3 chain's core contracts. Your batch poster address is the L3 address that's responsible for posting these RBlocks from your L3 to your core contracts on L2.
 
 Once this form-submission transaction is confirmed, you'll be ready to run your L3 chain's validator(s) and batch poster. Your L3 chain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
 
