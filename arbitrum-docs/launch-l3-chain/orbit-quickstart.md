@@ -16,7 +16,7 @@ This quickstart is for developers who want to launch their own application-speci
 
 <!-- If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding. -->
 
-By the end of this quickstart, you'll have a **local Orbit devnet appchain** that accepts transactions and settles them to the public **Arbitrum Goerli testnet**.
+By the end of this quickstart, you'll have a **local devnet** that accepts transactions and settles them to the public **Arbitrum Goerli testnet**.
 
 :::caution THIS IS A LOCAL DEVNET
 
