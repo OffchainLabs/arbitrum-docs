@@ -20,7 +20,9 @@ By the end of this quickstart, you'll have a **local Orbit devnet appchain** tha
 
 :::caution THIS IS A LOCAL DEVNET
 
-Your Orbit appchain **is a local devnet that settles to Arbitrum Goerli, not a mainnet L2 chain**. We recommend using it to prototype and experiment. While you're building solutions on your local devnet, we'll be building out the tech and docs that help you move from "local devnet that settles to Arbitrum Goerli" to "public production-ready appchain that settles to Arbitrum One or Arbitrum Nova".
+Your Orbit appchain **is a local devnet that settles to Arbitrum Goerli, not a mainnet L2 chain**. We recommend using it to prototype and experiment.
+
+While you're building solutions on your local devnet, we'll be building out the tech and docs that help you move from "local devnet that settles to Arbitrum Goerli" to "public production-ready appchain that settles to Arbitrum One or Arbitrum Nova".
 
 If you have any questions or feature requests as you begin to tinker, **please reach out to our team directly** through [this form](http://bit.ly/3yy6EUK). Your feedback will determine how this capability evolves over time, so please don't hesitate to reach out! We're eager to learn how we can improve Orbit to better support your needs :).
 
