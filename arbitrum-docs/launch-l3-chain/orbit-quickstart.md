@@ -6,7 +6,7 @@ author: oliviaJ3388
 sidebar_label: "Quickstart: Launch an L3 devnet chain"
 ---
 
-::: info
+:::info
 
 The latest quickstart is being staged in a separate branch [here](https://github.com/OffchainLabs/arbitrum-docs/pull/256). Preview [here](https://nitro-docs-git-orbit-docs-vnext-offchain-labs.vercel.app/launch-l3-chain/orbit-quickstart).
 
