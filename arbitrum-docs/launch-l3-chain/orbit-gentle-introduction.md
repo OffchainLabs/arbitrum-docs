@@ -97,6 +97,13 @@ You can think of an Orbit chain as a dedicated priority lane on Ethereum. And ea
 
 ### How does Orbit help the Ethereum ecosystem?
 
+:::warning Editor's note
+
+There was some feedback RE the below table being repetitive. There was also feedback on its content. Its purpose is to communicate, as a contrast to the above table which focuses on value-for-devs, how Orbit provides value to the broader Ethereum ecosystem. We can cut if anyone feels strongly about it (there's a big fuzzy line between repetition and reinforcement).
+
+:::
+
+
 Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for the following reasons:
 
 | Value add                           | Description                                                                                                                                                                                                                                                                                                               |
