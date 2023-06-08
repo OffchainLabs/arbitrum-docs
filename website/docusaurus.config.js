@@ -122,7 +122,7 @@ const config = {
             type: "doc",
             docId: "launch-l3-chain/orbit-gentle-introduction",
             position: "left",
-            label: "Launch an L3",
+            label: "Launch an appchain",
           },
           {
             type: "doc",
