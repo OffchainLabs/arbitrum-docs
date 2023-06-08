@@ -13,6 +13,13 @@ This document is currently in **public preview** and may change significantly as
 :::
 
 
+:::warning Editor's note
+
+We'll tighten this copy up after we freeze the docs, just before publishing them. Docs generally flow through outline -> draft -> edit -> publish; we're currently drafting. So don't worry too much about the finer details; feedback on the core messaging and devex is most helpful at this stage.
+
+:::
+
+
 ### In a nutshell:
 
 - Arbitrum Orbit lets you **create your own special-purpose, application-specific chain (appchain)** that settles to Arbitrum's L2 chains (<a data-quicklook-from='arbitrum-one'>Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>).
