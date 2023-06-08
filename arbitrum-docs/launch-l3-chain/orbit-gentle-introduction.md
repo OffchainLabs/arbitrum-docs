@@ -109,7 +109,7 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 
 
 
-### What should I know about Orbit's licencing?
+### What should I know about Orbit's licensing?
 
 Arbitrum Orbit chains can be built on top of Arbitrum One or Arbitrum Nova, and developers are granted full permission to modify and adapt the Arbitrum Nitro codebase to meet their custom needs. Moreover, the license granted for Arbitrum Nova chains is both **perpetual** and **recursive**: 
 
