@@ -35,8 +35,8 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
     <Node id="2">Appchain</Node>
     <Node id="3">Appchain</Node>
     <Node id="4">Appchain</Node>
-    <Node id="5">Arbitrum One (L2)</Node>
-    <Node id="6">Arbitrum Nova (L2)</Node>
+    <Node id="5">Arbitrum Goerli (L2)</Node>
+    <Node id="6">Arbitrum One & Nova (L2)</Node>
     <Node id="7">Ethereum (L1)</Node>
     <Connection from="1" to="5"/>
     <Connection from="2" to="5"/>
@@ -46,15 +46,15 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
     <Connection from="6" to="7"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum Goerli, Arbitrum One, or Arbitrum Nova.</NodeDescription>
-    <NodeDescription for='3,4'><strong>Arbitrum One</strong> and <strong>Arbitrum Nova</strong> are public Layer 2 (L2) chains.</NodeDescription>
+    <NodeDescription for='1,2'><strong>Arbitrum Orbit</strong> is a new technology that lets you create public or private application-specific chains (appchains).<br/><br/>All Orbit appchains settle to either Arbitrum One, Arbitrum Nova, or Arbitrum Goerli.</NodeDescription>
+    <NodeDescription for='3,4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and Arbitrum Goerli are public Layer 2 (L2) chains. Note that currently, Orbit chains are local devnets that settle to Arbitrum Goerli.</NodeDescription>
     <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
 
 
-- In the context of Arbitrum's ecosystem, **Orbit chains are those that settle onto Arbitrum's L2 chains**.
-- You can think of Orbit chains as **deployable, configurable forks of Arbitrum's L2 technology stack** that are tightly coupled to Arbitrum's L2 chains.
+- In the context of Arbitrum's ecosystem, **Orbit appchains are those that settle to one of Arbitrum's L2 chains**.
+- You can think of Orbit chains as **deployable, configurable forks of Arbitrum's L2 Nitro technology stack** that are tightly coupled to Arbitrum's L2 chains.
 - You can also think of them as **app-specific chains** - special-purpose chains that implement only those pieces of the Arbitrum technology stack that your app needs.
 - This gives you another way to **progressively decentralize** your applications, incrementally adopting the properties and security assumptions of Ethereum's base layer.
 - It also lets you continuously integrate improvements made to the Arbitrum Nitro stack (the code that powers the nodes that power Arbitrum's L2 and Orbit chains).
