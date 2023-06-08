@@ -64,15 +64,15 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 
 ### What problem does Orbit solve?
 
-The Ethereum ecosystem is supported by a decentralized network of nodes that each run Ethereum's Layer 1 (L1) client software. While Ethereum is the most decentralized and secure smart contract platform, it’s block space is in high demand, and fees often price out users or applications.
+The Ethereum ecosystem is supported by a decentralized network of nodes that each run Ethereum's Layer 1 (L1) client software. Its block space is in high demand, so users and apps are often stuck waiting for the network to become less congested (and thus, less expensive).
 
 Layer 2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by optimizing their use of Ethereum. They put just enough data on Ethereum to inherit its security but move a lot of the heavy lifting off-chain.
 
-While both Rollups and AnyTrust offload lots of transaction data from Ethereum, they have important differences. Rollups put all of the raw transaction data on Ethereum, whereas AnyTrust chains settle on Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup and AnyTrust represents a tradeoff between decentralization and performance; Arbitrum One is a Rollup chain and Arbitrum Nova is an AnyTrust chain.
+While both Rollup and AnyTrust protocols offload lots of transaction data from Ethereum, there are important differences. Rollup chains put all of the raw transaction data on Ethereum, while AnyTrust chains settle to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup (Arbitrum One implements this one) and AnyTrust (Arbitrum Nova implements this one) represents a tradeoff between decentralization and performance.
 
-While Arbitrum One and Nova provide excellent environments for scaling most applications — and are home to thousands of apps and millions of users — shared public chains are not for everyone. Some projects can benefit from their own high-security low-cost chain.
+While Arbitrum One and Nova can help most applications scale on top of Ethereum — and are home to thousands of apps and millions of users — shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance.
 
-You can think of an Orbit chain as a dedicated priority lane on Ethereum. And each of these priority lanes has many times the capacity of Ethereum, but piggyback on Ethereum for security.
+You can think of an Orbit appchain as a **dedicated priority lane on Ethereum that you manage**. Each of these priority lanes have many times the capacity of Ethereum, but piggyback on Ethereum for security.
 
 
 ### How does Orbit help me build decentralized apps?
