@@ -12,6 +12,17 @@ This is for Arbitrum Nitro Node:
       --auth.jwtsecret string                                                                           Path to file holding JWT secret (32B hex)
       --auth.origins strings                                                                            Origins from which to accept AUTH requests (default [localhost])
       --auth.port int                                                                                   AUTH-RPC server listening port (default 8549)
+      --chain.dev-wallet.account string                                                                 account to use (default is first account in keystore)
+      --chain.dev-wallet.only-create-key                                                                if true, creates new key then exits
+      --chain.dev-wallet.password string                                                                wallet passphrase (default "PASSWORD_NOT_SET")
+      --chain.dev-wallet.pathname string                                                                pathname for wallet
+      --chain.dev-wallet.private-key string                                                             private key for wallet
+      --chain.id uint                                                                                   L2 chain ID (determines Arbitrum network)
+      --chain.info-files strings                                                                        L2 chain info json files
+      --chain.info-ipfs-download-path string                                                            path to save temp downloaded file (default "/tmp/")
+      --chain.info-ipfs-url string                                                                      url to download chain info file
+      --chain.info-json string                                                                          L2 chain info in json string format
+      --chain.name string                                                                               L2 chain name (determines Arbitrum network)
       --conf.dump                                                                                       print out currently active configuration file
       --conf.env-prefix string                                                                          environment variables with given prefix will be loaded as configuration values
       --conf.file strings                                                                               name of configuration file
@@ -57,27 +68,6 @@ This is for Arbitrum Nitro Node:
       --init.then-quit                                                                                  quit after init is done
       --init.url string                                                                                 url to download initializtion data - will poll if download fails
       --ipc.path string                                                                                 Requested location to place the IPC endpoint. An empty path disables IPC.
-      --l1.chain-id uint                                                                                if set other than 0, will be used to validate database and L1 connection
-      --l1.connection-attempts int                                                                      layer 1 RPC connection attempts (spaced out at least 1 second per attempt, 0 to retry infinitely) (default 15)
-      --l1.rollup.bridge string                                                                         the bridge contract address
-      --l1.rollup.deployed-at uint                                                                      the block number at which the rollup was deployed
-      --l1.rollup.inbox string                                                                          the inbox contract address
-      --l1.rollup.rollup string                                                                         the rollup contract address
-      --l1.rollup.sequencer-inbox string                                                                the sequencer inbox contract address
-      --l1.rollup.validator-utils string                                                                the validator utils contract address
-      --l1.rollup.validator-wallet-creator string                                                       the validator wallet creator contract address
-      --l1.url string                                                                                   layer 1 ethereum node RPC URL
-      --l1.wallet.account string                                                                        account to use (default is first account in keystore)
-      --l1.wallet.only-create-key                                                                       if true, creates new key then exits
-      --l1.wallet.password string                                                                       wallet passphrase (default "PASSWORD_NOT_SET")
-      --l1.wallet.pathname string                                                                       pathname for wallet (default "wallet")
-      --l1.wallet.private-key string                                                                    private key for wallet
-      --l2.chain-id uint                                                                                L2 chain ID (determines Arbitrum network)
-      --l2.dev-wallet.account string                                                                    account to use (default is first account in keystore)
-      --l2.dev-wallet.only-create-key                                                                   if true, creates new key then exits
-      --l2.dev-wallet.password string                                                                   wallet passphrase (default "PASSWORD_NOT_SET")
-      --l2.dev-wallet.pathname string                                                                   pathname for wallet
-      --l2.dev-wallet.private-key string                                                                private key for wallet
       --log-level int                                                                                   log level (default 3)
       --log-type string                                                                                 log type (plaintext or json) (default "plaintext")
       --metrics                                                                                         enable metrics
@@ -89,7 +79,7 @@ This is for Arbitrum Nitro Node:
       --node.batch-poster.compression-level int                                                         batch compression level (default 11)
       --node.batch-poster.das-retention-period duration                                                 In AnyTrust mode, the period which DASes are requested to retain the stored batches. (default 360h0m0s)
       --node.batch-poster.data-poster.max-mempool-transactions uint                                     the maximum number of transactions to have queued in the mempool at once (0 = unlimited) (default 64)
-      --node.batch-poster.data-poster.max-queued-transactions uint                                      the maximum number of unconfirmed transactions to track at once (0 = unlimited)
+      --node.batch-poster.data-poster.max-queued-transactions int                                       the maximum number of unconfirmed transactions to track at once (0 = unlimited)
       --node.batch-poster.data-poster.min-fee-cap-gwei float                                            the minimum fee cap to post transactions at
       --node.batch-poster.data-poster.min-tip-cap-gwei float                                            the minimum tip cap to post transactions at (default 0.05)
       --node.batch-poster.data-poster.redis-signer.dangerous.disable-signature-verification             disable message signature verification
@@ -106,6 +96,11 @@ This is for Arbitrum Nitro Node:
       --node.batch-poster.gas-refunder-address string                                                   The gas refunder contract address (optional)
       --node.batch-poster.max-delay duration                                                            maximum batch posting delay (default 1h0m0s)
       --node.batch-poster.max-size int                                                                  maximum batch size (default 100000)
+      --node.batch-poster.parent-chain-wallet.account string                                            account to use (default is first account in keystore)
+      --node.batch-poster.parent-chain-wallet.only-create-key                                           if true, creates new key then exits
+      --node.batch-poster.parent-chain-wallet.password string                                           wallet passphrase (default "PASSWORD_NOT_SET")
+      --node.batch-poster.parent-chain-wallet.pathname string                                           pathname for wallet (default "batch-poster-wallet")
+      --node.batch-poster.parent-chain-wallet.private-key string                                        private key for wallet
       --node.batch-poster.poll-delay duration                                                           how long to delay after successfully posting batch (default 10s)
       --node.batch-poster.redis-lock.background-lock                                                    should node always try grabing lock in background
       --node.batch-poster.redis-lock.key string                                                         key for lock (default "node.batch-poster.redis-lock.simple-lock-key")
@@ -120,10 +115,15 @@ This is for Arbitrum Nitro Node:
       --node.block-validator.enable                                                                     enable block-by-block validation
       --node.block-validator.failure-is-fatal                                                           failing a validation is treated as a fatal error (default true)
       --node.block-validator.forward-blocks uint                                                        prepare entries for up to that many blocks ahead of validation (small footprint) (default 1024)
-      --node.block-validator.jwtsecret string                                                           path to file with jwtsecret for validation - empty disables jwt, 'self' uses the server's jwt (default "self")
       --node.block-validator.pending-upgrade-module-root string                                         pending upgrade wasm module root to additionally validate (hash, 'latest' or empty) (default "latest")
       --node.block-validator.prerecorded-blocks uint                                                    record that many blocks ahead of validation (larger footprint) (default 128)
-      --node.block-validator.url string                                                                 url for valiation (default "ws://127.0.0.1:8549/")
+      --node.block-validator.validation-server.arg-log-limit uint                                       limit size of arguments in log entries (default 2048)
+      --node.block-validator.validation-server.connection-wait duration                                 how long to wait for initial connection
+      --node.block-validator.validation-server.jwtsecret string                                         path to file with jwtsecret for validation - ignored if url is self or self-auth
+      --node.block-validator.validation-server.retries uint                                             number of retries in case of failure(0 mean one attempt)
+      --node.block-validator.validation-server.retry-errors string                                      Errors matching this regular expression are automatically retried
+      --node.block-validator.validation-server.timeout duration                                         per-response timeout (0-disabled)
+      --node.block-validator.validation-server.url string                                               url of server, use self for loopback websocket, self-auth for loopback with authentication (default "self-auth")
       --node.caching.archive                                                                            retain past block state
       --node.caching.block-age duration                                                                 minimum age a block must be to be pruned (default 30m0s)
       --node.caching.block-count uint                                                                   minimum number of recent blocks to keep in memory (default 128)
@@ -143,9 +143,9 @@ This is for Arbitrum Nitro Node:
       --node.data-availability.ipfs-storage.profiles string                                             comma separated list of IPFS profiles to use, see https://docs.ipfs.tech/how-to/default-profile
       --node.data-availability.ipfs-storage.read-timeout duration                                       timeout for IPFS reads, since by default it will wait forever. Treat timeout as not found (default 1m0s)
       --node.data-availability.ipfs-storage.repo-dir string                                             directory to use to store the local IPFS repo
-      --node.data-availability.l1-connection-attempts int                                               layer 1 RPC connection attempts (spaced out at least 1 second per attempt, 0 to retry infinitely), only used in standalone daserver; when running as part of a node that node's L1 configuration is used (default 15)
-      --node.data-availability.l1-node-url string                                                       URL for L1 node, only used in standalone daserver; when running as part of a node that node's L1 configuration is used
       --node.data-availability.panic-on-error                                                           whether the Data Availability Service should fail immediately on errors (not recommended)
+      --node.data-availability.parent-chain-connection-attempts int                                     layer 1 RPC connection attempts (spaced out at least 1 second per attempt, 0 to retry infinitely), only used in standalone daserver; when running as part of a node that node's L1 configuration is used (default 15)
+      --node.data-availability.parent-chain-node-url string                                             URL for L1 node, only used in standalone daserver; when running as part of a node that node's L1 configuration is used
       --node.data-availability.request-timeout duration                                                 Data Availability Service timeout duration for Store requests (default 5s)
       --node.data-availability.rest-aggregator.enable                                                   enable retrieval of sequencer batch data from a list of remote REST endpoints; if other DAS storage types are enabled, this mode is used as a fallback
       --node.data-availability.rest-aggregator.max-per-endpoint-stats int                               number of stats entries (latency and success rate) to keep for each REST endpoint; controls whether strategy is faster or slower to respond to changing conditions (default 20)
@@ -160,7 +160,7 @@ This is for Arbitrum Nitro Node:
       --node.data-availability.rest-aggregator.sync-to-storage.eager                                    eagerly sync batch data to this DAS's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily
       --node.data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state
       --node.data-availability.rest-aggregator.sync-to-storage.ignore-write-errors                      log only on failures to write when syncing; otherwise treat it as an error (default true)
-      --node.data-availability.rest-aggregator.sync-to-storage.l1-blocks-per-read uint                  when eagerly syncing, max l1 blocks to read per poll (default 100)
+      --node.data-availability.rest-aggregator.sync-to-storage.parent-chain-blocks-per-read uint        when eagerly syncing, max l1 blocks to read per poll (default 100)
       --node.data-availability.rest-aggregator.sync-to-storage.retention-period duration                period to retain synced data (defaults to forever) (default 2562047h47m16.854775807s)
       --node.data-availability.rest-aggregator.sync-to-storage.state-dir string                         directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time
       --node.data-availability.rest-aggregator.urls strings                                             list of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints; additive with the online-url-list option
@@ -223,13 +223,13 @@ This is for Arbitrum Nitro Node:
       --node.inbox-reader.max-blocks-to-read uint                                                       if adjust-blocks-to-read is enabled, the maximum number of blocks to read at once (default 2000)
       --node.inbox-reader.min-blocks-to-read uint                                                       the minimum number of blocks to read at once (when caught up lowers load on L1) (default 1)
       --node.inbox-reader.target-messages-read uint                                                     if adjust-blocks-to-read is enabled, the target number of messages to read at once (default 500)
-      --node.l1-reader.enable                                                                           enable reader connection (default true)
-      --node.l1-reader.old-header-timeout duration                                                      warns if the latest l1 block is at least this old (default 5m0s)
-      --node.l1-reader.poll-interval duration                                                           interval when polling endpoint (default 15s)
-      --node.l1-reader.poll-only                                                                        do not attempt to subscribe to header events
-      --node.l1-reader.tx-timeout duration                                                              timeout when waiting for a transaction (default 5m0s)
-      --node.l1-reader.use-finality-data                                                                use l1 data about finalized/safe blocks (default true)
       --node.maintenance.time-of-day string                                                             UTC 24-hour time of day to run maintenance (currently only db compaction) at (e.g. 15:00)
+      --node.parent-chain-reader.enable                                                                 enable reader connection (default true)
+      --node.parent-chain-reader.old-header-timeout duration                                            warns if the latest l1 block is at least this old (default 5m0s)
+      --node.parent-chain-reader.poll-interval duration                                                 interval when polling endpoint (default 15s)
+      --node.parent-chain-reader.poll-only                                                              do not attempt to subscribe to header events
+      --node.parent-chain-reader.tx-timeout duration                                                    timeout when waiting for a transaction (default 5m0s)
+      --node.parent-chain-reader.use-finality-data                                                      use l1 data about finalized/safe blocks (default true)
       --node.rpc.arbdebug.block-range-bound uint                                                        bounds the number of blocks arbdebug calls may return (default 256)
       --node.rpc.arbdebug.timeout-queue-bound uint                                                      bounds the length of timeout queues arbdebug calls may return (default 512)
       --node.rpc.bloom-bits-blocks uint                                                                 number of blocks a single bloom bit section vector holds (default 16384)
@@ -288,6 +288,11 @@ This is for Arbitrum Nitro Node:
       --node.staker.gas-refunder-address string                                                         The gas refunder contract address (optional)
       --node.staker.make-assertion-interval duration                                                    if configured with the makeNodes strategy, how often to create new assertions (bypassed in case of a dispute) (default 1h0m0s)
       --node.staker.only-create-wallet-contract                                                         only create smart wallet contract and exit
+      --node.staker.parent-chain-wallet.account string                                                  account to use (default is first account in keystore)
+      --node.staker.parent-chain-wallet.only-create-key                                                 if true, creates new key then exits
+      --node.staker.parent-chain-wallet.password string                                                 wallet passphrase (default "PASSWORD_NOT_SET")
+      --node.staker.parent-chain-wallet.pathname string                                                 pathname for wallet (default "validator-wallet")
+      --node.staker.parent-chain-wallet.private-key string                                              private key for wallet
       --node.staker.posting-strategy.high-gas-delay-blocks int                                          high gas delay blocks
       --node.staker.posting-strategy.high-gas-threshold float                                           high gas threshold
       --node.staker.staker-interval duration                                                            how often the L1 validator should check the status of the L1 rollup and maybe take action with its stake (default 1m0s)
@@ -304,6 +309,19 @@ This is for Arbitrum Nitro Node:
       --node.tx-pre-checker.required-state-age int                                                      how long ago should the storage conditions from eth_SendRawTransactionConditional be true, 0 = don't check old state (default 2)
       --node.tx-pre-checker.required-state-max-blocks uint                                              maximum number of blocks to look back while looking for the <required-state-age> seconds old state, 0 = don't limit the search (default 4)
       --node.tx-pre-checker.strictness uint                                                             how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed
+      --parent-chain.connection.arg-log-limit uint                                                      limit size of arguments in log entries
+      --parent-chain.connection.connection-wait duration                                                how long to wait for initial connection (default 1m0s)
+      --parent-chain.connection.jwtsecret string                                                        path to file with jwtsecret for validation - ignored if url is self or self-auth
+      --parent-chain.connection.retries uint                                                            number of retries in case of failure(0 mean one attempt) (default 2)
+      --parent-chain.connection.retry-errors string                                                     Errors matching this regular expression are automatically retried
+      --parent-chain.connection.timeout duration                                                        per-response timeout (0-disabled) (default 1m0s)
+      --parent-chain.connection.url string                                                              url of server, use self for loopback websocket, self-auth for loopback with authentication
+      --parent-chain.id uint                                                                            if set other than 0, will be used to validate database and L1 connection
+      --parent-chain.wallet.account string                                                              account to use (default is first account in keystore)
+      --parent-chain.wallet.only-create-key                                                             if true, creates new key then exits
+      --parent-chain.wallet.password string                                                             wallet passphrase (default "PASSWORD_NOT_SET")
+      --parent-chain.wallet.pathname string                                                             pathname for wallet (default "wallet")
+      --parent-chain.wallet.private-key string                                                          private key for wallet
       --persistent.ancient string                                                                       directory of ancient where the chain freezer can be opened
       --persistent.chain string                                                                         directory to store chain state
       --persistent.global-config string                                                                 directory to store global config (default ".arbitrum")
@@ -326,7 +344,6 @@ This is for Arbitrum Nitro Node:
       --ws.origins strings                                                                              Origins from which to accept websockets requests
       --ws.port int                                                                                     WS-RPC server listening port (default 8548)
       --ws.rpcprefix string                                                                             WS path path prefix on which JSON-RPC is served. Use '/' to serve on all paths
-Version: v2.0.14-2baa834
 ```
 
 ### Classic Node
