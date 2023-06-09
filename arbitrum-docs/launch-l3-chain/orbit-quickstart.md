@@ -149,9 +149,8 @@ Content **below** this banner is still being drafted; content **above** this ban
 
 This step will generate two JSON configuration files - one for your **nodes**; another for your **core contracts**.
 
- 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file contains the configuration for your appchain's validator(s) and batch poster. It also contains the private key for your appchain's batch poster, which is used to sign transactions that post RBlocks to your appchain's core contracts on L2.
- 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your appchain's core contracts. It also contains the private key for your appchain's owner address, which is used to deploy your appchain's core contracts to L2.
-
+ 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file will be consumed as the configuration for your appchain's node, contains validator(s) and batch poster setup. It also contains the private key for your appchain's batch poster, which is used to sign transactions that post RBlocks to your appchain's core contracts on L2.
+ 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your appchain. It'll be consumed to setup your appchain parameters.
 
 <!-- prev
 
@@ -161,33 +160,10 @@ Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptC
 
 -->
 
+## Step 6: Clone Orbit setup script repository
+Clone the repository of [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) from our github. This script will handle running node, and also setting up your appchain.
 
-## Step 6: Move nodeConfig.json file and run your Orbit chain's node(s)
-
-- Having the Docker up and running, you can create a folder in a desired path like ```/some/local/dir/arbitrum```
-- Move the **nodeConfig.json** file that you downloaded into the newly generated folder with the path ```/some/local/dir/arbitrum``` 
-- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be ```/home/user/.arbitrum```
-- Here is the command you can run in the ```/some/local/dir/arbitrum``` folder to run your Orbit node:
-  
-   ```shell
-   docker run -p 8449:8449 --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum offchainlabs/nitro-node:v2.1.0-beta.2-58a23c8 --conf.file /home/user/.arbitrum/nodeConfig.json
-   ```
-
-Congrats! Your run your Orbit chain node! 🎉
-
-## Step 7: Move orbitSetupScriptConfig.json file and run Orbit setup script
-
-Now that the orbit chain is up and running, you need to take some other steps to set things up completely. These steps would be:
-
-1. Funding **batch-poster** and **staker** accounts.
-2. Depositing ETH into your account on L3 using your Orbit chain's newly deployed bridge (to be able to send transactions on L3) 
-3. Deploying Token Bridge Contracts on both L2 and appchains. For more info on what/why/how is Token Bridge, please visit our docs.
-4. Configuring parameters on L3.
-
-Don't worry about all the things discussed above. We wrote a hardhat script which you can use and it'll do all the things for you. Just follow the below steps:
-
-- Clone the repository of [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) from our github.
-- There is a folder named **config**.You need to move the **orbitSetupScriptConfig.json** file you downloaded on the previous step to this folder
+After cloning you need to:
 - Set the values shown in ```.env-sample ``` as environmental variables. To copy it into a .env file:
 
    ```shell
@@ -200,17 +176,63 @@ Don't worry about all the things discussed above. We wrote a hardhat script whic
     L2_RPC_URL=https://goerli-rollup.arbitrum.io/rpc
     L3_RPC_URL=http://localhost:8449
     ```
+Note: The private key MUST be the chain owner private key, otherwise you cannot setup the appchain.
+
 - To install all dependencies for this script, you need to run:
 
    ```shell
     yarn install
     ```
 
-- Now all things are set, and it's time to run the script. For running the script you can use this command:
+
+   
+
+## Step 7: Move nodeConfig.json and orbitSetupScriptConfig.json files to orbit setup script folder
+
+- Move the **nodeConfig.json** file that you downloaded into the  ```chain``` directory, where you have cloned the orbit setup script.
+   
+- Also move the **orbitSetupScriptConfig.json** file you downloaded into ```config``` directory of the path.
+  
+
+## Step 8: Running appchain node
+
+To run the node, in the base directory run:
+
+   ```shell
+      docker-compose up -d 
+   ```
+Note that you need Docker up and running, before running the command.
+
+By running this command:
+- A Nitro node will be run for your appchain
+- A BlockScout explorer instance would be run for your appchain, which you can find it from [http://localhost:4000/](http://localhost:4000/)
+
+
+## Step 9: appchain setup phase
+
+Now that your appchain is up and running, you need to take some other steps to set things up completely. These steps would be:
+
+1. Funding **batch-poster** and **staker** accounts.
+2. Depositing ETH into your account on the appchain using your appchain's newly deployed bridge
+3. Deploying Token Bridge Contracts on both L2 and appchains. For more info on what/why/how is Token Bridge, please visit our docs.
+4. Configuring parameters on the appchain.
+
+Don't worry about all the things discussed above. We wrote a hardhat script which you already cloned it, and it'll do all the things for you. To run the script use this command on the base directory of the script:
+
 
    ```shell
     npx hardhat run scripts/setup.ts 
-    ```
-Congratulations! 🎉🎉🎉
+   ```
 
 Your Orbit Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
+
+## Step 10 (optional): logs of the node
+
+This step is completely optional. If you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:
+
+   ```shell
+   docker-compose logs -f nitro
+   ```
+
+
+Congratulations! Your appchain is up and configured 🎉🎉🎉
