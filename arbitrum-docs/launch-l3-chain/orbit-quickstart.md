@@ -131,7 +131,9 @@ Once this form-submission transaction is confirmed, you'll be ready to run your 
 
 :::warning Editor's note
 
-Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing. (Mehdi did some changes on the above parts. So please double check it)
+Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing.
+
+ - **6/12**: Mehdi recently updated some of the above content, aligning it with the latest version of the UI. Feel free to give it another skim!
 
 :::
 
