@@ -14,7 +14,11 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 :::warning Editor's note
 
-We'll tighten this copy up after we "feedback freeze" the docs, just before publishing them. Docs generally flow through outline -> draft -> edit -> publish; we're currently drafting. So don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
+ - We'll tighten this copy up after we "feedback freeze" the docs, just before publishing them.
+ - Docs generally flow through `outline` -> `draft` -> `edit` -> `publish`; we're currently `drafting`.
+ - Don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
+ - As of 6/12, this draft contains 4-5 different voices, many typos, and lots of inconsistency. The purpose of the `edit` step is to address this.
+ - Before shifting from `draft` to `edit`, we need 1) signoff on the technical procedure's alignment with the UI/devex, and 2) product signoff on broad theme and terminology conventions.
 
 :::
 
@@ -127,15 +131,6 @@ Once this form-submission transaction is confirmed, you'll see a new form appear
 Your appchain's user-submitted transactions are deterministically sequenced, batched, compressed, and posted to the underlying L2 (Arbitrum Goerli). Your batch poster address is the appchain address that's responsible for posting these batches of transactions from your appchain to your core contracts on L2.
 
 Once this form-submission transaction is confirmed, you'll be ready to run your appchain's validator(s) and batch poster. Your appchain can then begin accepting transactions from users and settling them to Arbitrum Goerli (and, by extension, Ethereum's L1 Goerli network).
-
-
-:::warning Editor's note
-
-Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing.
-
- - **6/12**: Mehdi recently updated some of the above content, aligning it with the latest version of the UI. Feel free to give it another skim!
-
-:::
 
 
 ## Step 5: Generate and download your appchain's configuration files
