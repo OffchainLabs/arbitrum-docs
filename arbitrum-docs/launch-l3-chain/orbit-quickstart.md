@@ -45,9 +45,9 @@ Visit the [Orbit appchain deployment portal](https://orbit.arbitrum.io/deploymen
 
 <PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Staking token (0x... address), Base stake, Owner" />
 
-- **Chain ID**: A unique integer identifier that represents your appchain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is hardcoded to a default value - don't worry about it for now.
-- **Chain name**: A human-readable way to distinguish your appchain from others. Users, developers and the wider community will refer to and recognize your chain by this name.
-- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) in the underlying L2 chain (Arbitrum Goerli).
+- **Chain ID**: A unique integer identifier that represents your appchain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.
+- **Chain name**: A human-readable way to distinguish your appchain from others. Users, developers and the wider community will refer to and recognize your chain by this name and also the chain ID for the chain.
+- **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) in the underlying L2 chain (Arbitrum Goerli). Note that block number here refers to ``` Underlying L1 Block Number ``` and not L2 block number.
 - **Staking token**: The token that your chain's validators must stake in order to participate in your appchain. You can select either Goerli-ETH, or a custom ERC-20 token contract address on Arbitrum Goerli.
 - **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your appchain. This number must be greater than 0.
 - **Owner**: A `sudo` / administrative address responsible for deploying your chain's L2 contracts to the underlying L2 chain, with the power to change your appchain's configuration post-deployment.
@@ -70,41 +70,42 @@ This name provides a way to identify and distinguish your appchain from others. 
 
 The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the integrity of transactions posted to the underlying L2 chain (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet).
 
-A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to settle to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your appchain.
+A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their withdrawal transactions from appchain back to the underlying L2 chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your appchain.
 
-If you're not sure what to put here, use the default value of `10080`, which translates to roughly 7 days.
+If you're not sure what to put here, use the default value of `150`, which translates to roughly 30 minutes.
 
-Note that the challenge period is measured in blocks on the L2 chain, not the appchain.
-
+Note that the challenge period is measured in blocks on the ``` Underlying L1 Block Number ```. So if you run your appchain on top of Arbitrum Goerli, the challenge window would be number of **Challenge period (blocks)** you specified times the Goerli Block time (~ 12 seconds). It's currently defaulted as 150 blocks which is almost 30 minutes.
 
 ### Stake token
 
-Your devnet appchain will be supported by at least one node. In order for your chain's nodes to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your appchain is settling to - Arbitrum Goerli**.
+Your devnet appchain will be supported by at least one node. In order for your chain's validator to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your appchain is settling to - Arbitrum Goerli**.
 
 If you're not sure what to put here, use the default value of `0x000..000`. This tells Orbit to set your chain's stake token to plain-old ETH.
 
 
 ### Base stake
 
-While the `Stake token` parameter specifies the **type of token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** that your chain's nodes must deposit in order to begin proposing batches of transactions from your appchain to your L2 chain. This is specified using an integer value.
+While the `Stake token` parameter specifies the **type of token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** (in decimals) that your chain's validator must deposit in order to begin proposing batches of transactions from your appchain to your L2 chain. This is specified using an integer value.
 
 If your base stake is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
-For example, an appchain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial nodes that maliciously challenge every RBlock that your chain's honest nodes submit. The malicious challenges would result in slashed nodes (one slashed node per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
+For example, an appchain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial validators that maliciously challenge every RBlock that your chain's honest validator submitted. The malicious challenges would result in slashed validators (one slashed validator per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
-A higher base stake incentivizes honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's node operators. This is another tradeoff to consider.
+A higher base stake incentivize honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's node operators. This is another tradeoff to consider.
 
-If you're not sure what to put here, use the default value of `1`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
+If you're not sure what to put here, use the default value of `1000000000000000000`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
+Note that if you are using another ERC-20 token as `Stake token`, then this number would represent the number of tokens on **decimal**. For instance, if the token you are setting as `Stake token` has 8 digits of decimal, then `100000000` represents 1 token as base stake.
 
 
 ### Owner
 
-This address is responsible for deploying your chain's **core contracts** to the underlying L2 chain, and it has the power to change your chain's configuration after it's been deployed.
+This account address is responsible for managing your chain's **core contracts** on the underlying L2 chain--**rollup owner**, and also it has been used as **chain owner** which has power to change your appchain's configuration after it's been deployed.
 
 In production scenarios, this is a high-stakes address that's often controlled by a DAO's governance protocol or multisig. For your devnet appchain, think of this as a low-stakes administrative service account.
 
-Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
+Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2. (Note to self: add an approximate amount)
 
+**Important Note:** This address must be an EOA on the deployment. So be certain that the address you are providing is not an smart contract/contract wallet.
 
 ## Step 2: Deploy your appchain's core contracts to L2
 
@@ -122,11 +123,11 @@ Ok, on to the validators.
 
 ## Step 3: Configure your appchain's validators
 
-Your appchain's validators are responsible for validating the integrity of transactions and posting assertions of the current state of the to the underlying L2. In production scenarios, your appchain would likely be hosted by a decentralized network of validator nodes working together. For your devnet appchain, you'll be configuring a single validator by default, with the option to add more.
+Your appchain's validators are responsible for validating the integrity of transactions and posting assertions of the current state of the to the underlying L2. In production scenarios, your appchain would likely be hosted by a decentralized network of validator nodes working together. For your devnet appchain, you'll be configuring a single validator by default, with the option to add more. We call this validator ```Staker account ```, because this validator would be responsible to create new RBlocks and stake on them.
 
-The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file that we'll generate in Step 5 below.
+The first address is randomly generated and can't be changed. Its private key will be stored in the JSON configuration file with name **staker**, that we'll generate in Step 5 below.
 
-Each of the addresses specified in this step will be added to an allow-list in one of your appchain's core contracts. This lets each of the specified addresses **stake** and serve your chain's users.
+Each of the addresses specified in this step will be added to an allow-list in one of your appchain's core contracts. This lets each of the specified addresses **stake** and serve your chain's users, or even challenges staker of a specific RBlock.
 
 Once this form-submission transaction is confirmed, you'll see a new form appear that allows you to configure your appchain's batch poster.
 
@@ -140,7 +141,7 @@ Once this form-submission transaction is confirmed, you'll be ready to run your 
 
 :::warning Editor's note
 
-Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing.
+Content **below** this banner is still being drafted; content **above** this banner is ready for SME signoff. Don't worry, we'll do a final edit pass on the whole doc before publishing. (Mehdi did some changes on the above parts. So please double check it)
 
 :::
 
@@ -228,7 +229,7 @@ Your Orbit Chain is completely set up and configured. You can find core contract
 
 ## Step 10 (optional): logs of the node
 
-This step is completely optional. If you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:
+This step is completely optional. If you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:`
 
    ```shell
    docker-compose logs -f nitro
