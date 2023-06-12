@@ -93,7 +93,7 @@ For example, an appchain with a base stake of 0.01 ETH could be halted by an adv
 
 A higher base stake incentivize honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's node operators. This is another tradeoff to consider.
 
-If you're not sure what to put here, use the default value of `1000000000000000000`, which translates to 1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
+If you're not sure what to put here, use the default value of `100000000000000000`, which translates to 0.1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
 Note that if you are using another ERC-20 token as `Stake token`, then this number would represent the number of tokens on **decimal**. For instance, if the token you are setting as `Stake token` has 8 digits of decimal, then `100000000` represents 1 token as base stake.
 
 
