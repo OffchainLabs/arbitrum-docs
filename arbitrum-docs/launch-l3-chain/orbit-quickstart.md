@@ -48,8 +48,7 @@ Visit the [Orbit appchain deployment portal](https://orbit.arbitrum.io/deploymen
 - **Chain ID**: A unique integer identifier that represents your appchain's network. This chain ID can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.
 - **Chain name**: A human-readable way to distinguish your appchain from others. Users, developers and the wider community will refer to and recognize your chain by this name and also the chain ID for the chain.
 - **Challenge period (blocks)**: The amount of time that your chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) in the underlying L2 chain (Arbitrum Goerli). Note that block number here refers to ``` Underlying L1 Block Number ``` and not L2 block number.
-- **Staking token**: The token that your chain's validators must stake in order to participate in your appchain. You can select either Goerli-ETH, or a custom ERC-20 token contract address on Arbitrum Goerli.
-- **Base stake**: The number of staking tokens that your chain's validators must stake in order to participate in your appchain. This number must be greater than 0.
+- **Base stake**: The number that specifies amount of ETH that your chain's validators must stake in order to participate in your appchain. This number must be greater than 0.
 - **Owner**: A `sudo` / administrative address responsible for deploying your chain's L2 contracts to the underlying L2 chain, with the power to change your appchain's configuration post-deployment.
 
 
@@ -76,16 +75,9 @@ If you're not sure what to put here, use the default value of `150`, which trans
 
 Note that the challenge period is measured in blocks on the ``` Underlying L1 Block Number ```. So if you run your appchain on top of Arbitrum Goerli, the challenge window would be number of **Challenge period (blocks)** you specified times the Goerli Block time (~ 12 seconds). It's currently defaulted as 150 blocks which is almost 30 minutes.
 
-### Stake token
-
-Your devnet appchain will be supported by at least one node. In order for your chain's validator to record transactions, they need to stake value in a smart contract that's used to incentivize honest participation. This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your appchain is settling to - Arbitrum Goerli**.
-
-If you're not sure what to put here, use the default value of `0x000..000`. This tells Orbit to set your chain's stake token to plain-old ETH.
-
-
 ### Base stake
 
-While the `Stake token` parameter specifies the **type of token** that your chain's nodes must deposit into the staking contract, the `Base stake` parameter specifies the **amount of this token** (in decimals) that your chain's validator must deposit in order to begin proposing batches of transactions from your appchain to your L2 chain. This is specified using an integer value.
+The `Base stake` parameter specifies the **amount of ETH** that your chain's validator must deposit in order to begin proposing batches of transactions from your appchain to your L2 chain. This is specified using a float value.
 
 If your base stake is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
@@ -93,9 +85,7 @@ For example, an appchain with a base stake of 0.01 ETH could be halted by an adv
 
 A higher base stake incentivize honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's node operators. This is another tradeoff to consider.
 
-If you're not sure what to put here, use the default value of `100000000000000000`, which translates to 0.1 ETH (assuming that your chain's `Stake token` is set to `0x000..000`).
-Note that if you are using another ERC-20 token as `Stake token`, then this number would represent the number of tokens on **decimal**. For instance, if the token you are setting as `Stake token` has 8 digits of decimal, then `100000000` represents 1 token as base stake.
-
+If you're not sure what to put here, use the default value of `0.1` Ethers.
 
 ### Owner
 
