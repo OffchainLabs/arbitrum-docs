@@ -148,10 +148,10 @@ Content **below** this banner is still being drafted; content **above** this ban
 
 ## Step 5: Generate and download your appchain's configuration files
 
-This step will generate two JSON configuration files - one for your **nodes**; another for your **core contracts**.
+This step will generate two JSON configuration files - one for your **nodes**; another for setting up your **appchain configurations**
 
- 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file will be consumed as the configuration for your appchain's node, contains validator(s) and batch poster setup. It also contains the private key for your appchain's batch poster, which is used to sign transactions that post RBlocks to your appchain's core contracts on L2.
- 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your appchain. It'll be consumed to setup your appchain parameters.
+ 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file will be consumed as the configuration for your appchain's node, contains validator (staker) and batch poster setup. It also contains the private key for your appchain's batch poster, which is used to send the batched transaction and also private key for your appchain's staker, which is used to sign transactions that post RBlocks to your appchain's core contracts on L2.
+ 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your appchain. It'll be consumed to setup your appchain parameters and also setting up your **Token Bridge Contract**.
 
 <!-- prev
 
@@ -161,23 +161,14 @@ Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptC
 
 -->
 
-## Step 6: Clone Orbit setup script repository
+## Step 6: Clone "Orbit setup script" repository and Moving config files
 Clone the repository of [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) from our github. This script will handle running node, and also setting up your appchain.
 
 After cloning you need to:
-- Set the values shown in ```.env-sample ``` as environmental variables. To copy it into a .env file:
 
-   ```shell
-    cp .env-sample .env
-    ```
-- You just need to put the chain owner private key on the .env file, and not modifying other two env variables:
-
-   ```shell
-    PRIVATE_KEY="0xChainOwnerPrivateKey"
-    L2_RPC_URL=https://goerli-rollup.arbitrum.io/rpc
-    L3_RPC_URL=http://localhost:8449
-    ```
-Note: The private key MUST be the chain owner private key, otherwise you cannot setup the appchain.
+- Move the **nodeConfig.json** file that you downloaded into the  ```chain``` directory, where you have cloned the orbit setup script.
+   
+- Also move the **orbitSetupScriptConfig.json** file you downloaded into ```config``` directory of the path.
 
 - To install all dependencies for this script, you need to run:
 
@@ -186,16 +177,7 @@ Note: The private key MUST be the chain owner private key, otherwise you cannot 
     ```
 
 
-   
-
-## Step 7: Move nodeConfig.json and orbitSetupScriptConfig.json files to orbit setup script folder
-
-- Move the **nodeConfig.json** file that you downloaded into the  ```chain``` directory, where you have cloned the orbit setup script.
-   
-- Also move the **orbitSetupScriptConfig.json** file you downloaded into ```config``` directory of the path.
-  
-
-## Step 8: Running appchain node
+## Step 7: Running appchain node
 
 To run the node, in the base directory run:
 
@@ -209,31 +191,39 @@ By running this command:
 - A BlockScout explorer instance would be run for your appchain, which you can find it from [http://localhost:4000/](http://localhost:4000/)
 
 
-## Step 9: appchain setup phase
+## Step 8: appchain setup phase
 
-Now that your appchain is up and running, you need to take some other steps to set things up completely. These steps would be:
+Now that your appchain node is up and running, you need to take some other steps to set things up completely. These steps would be:
 
-1. Funding **batch-poster** and **staker** accounts.
+1. Funding **batch-poster** and **staker** accounts on underlying L2 chain.
 2. Depositing ETH into your account on the appchain using your appchain's newly deployed bridge
 3. Deploying Token Bridge Contracts on both L2 and appchains. For more info on what/why/how is Token Bridge, please visit our docs.
 4. Configuring parameters on the appchain.
 
-Don't worry about all the things discussed above. We wrote a hardhat script which you already cloned it, and it'll do all the things for you. To run the script use this command on the base directory of the script:
+Don't worry about all the things discussed above. We wrote a hardhat script which you already cloned it, and it'll do all the things for you. To run the script just **put your private key** in the command below and run it on the base directory of the script:
 
 
    ```shell
-    npx hardhat run scripts/setup.ts 
+    PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" yarn run setup
+ 
    ```
 
-Your Orbit Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
+Note: The private key MUST be the chain owner private key, otherwise you cannot setup the appchain.
 
-## Step 10 (optional): logs of the node
+## Step 9 LFG!! 
 
-This step is completely optional. If you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:`
+Congratulations! 🎉🎉🎉
+
+Your Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
+
+
+Also if you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:`
 
    ```shell
    docker-compose logs -f nitro
    ```
 
 
-Congratulations! Your appchain is up and configured 🎉🎉🎉
+**Note** that this step is completely ```optional```.
+
+**Note:** When you first start up the node, you may see "error getting latest batch count" on the logs (if you run the log for nodes) because the core contracts deployment is not finalized on the underlying L1 yet. It may take 15-20 minutes for the finalization. Worths mentioning that you can do all with the chain and it won't affect the functionalities.
