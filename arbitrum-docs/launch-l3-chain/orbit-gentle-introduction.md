@@ -19,7 +19,7 @@ This document is currently in **public preview** and may change significantly as
  - Docs generally flow through `outline` -> `draft` -> `edit` -> `publish`; we're currently `drafting`.
  - Don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
  - As of 6/12, this draft contains multiple voices and messaging that's inconsistent with the quickstart. The purpose of the `edit` step is to address this.
- - Before shifting this doc from `draft` to `edit`, we need product to 1) reconcile conflicting feedback in the metadocs, and 2) sign off on broad theme and terminology conventions.
+ - Before shifting this doc from `draft` to `edit`, we need product to 1) reconcile conflicting product-messaging feedback in the metadoc, and 2) sign off on broad theme and terminology conventions.
 
 :::
 
