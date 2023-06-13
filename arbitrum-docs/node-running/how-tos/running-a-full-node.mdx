@@ -1,15 +1,12 @@
 ---
-title: "Quickstart: Run a full node (Nitro)"
+title: "How to run a full node (Nitro)"
 description: Learn how to run an Arbitrum node on your local machine.
-author-objective: build a quickstart that helps readers understand how to run an Arbitrum node, and why they might want to
-reader-audience: moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
-reader-task: run a node with minimal effort and maximum understanding
-content-type: quickstart
+content-type: how-to
 ---
 
-⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](./node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [Node Providers](../node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
-### Minimum Hardware Configuration
+### Minimum hardware configuration
 
 - Followings specify the minimum hardware configuration required to setup a Nitro full node (not archival):
   - RAM: 4-8 GB
@@ -19,7 +16,7 @@ content-type: quickstart
 
 ⚠️ Note: The minimum storage requirements will change over time as the Nitro chain grows. It is recommended to use more than the minimum requirements to run a robust full node.
 
-### Required Artifacts
+### Required artifacts
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
@@ -82,11 +79,11 @@ content-type: quickstart
 ### Optional parameters
 
 - `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./how-tos/running-an-archive-node.mdx).
+  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./running-an-archive-node.mdx).
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
-  - APIs offered over the HTTP-RPC interface (default `net,web3,eth`)
+  - APIs offered over the HTTP-RPC interface (default `net,web3,eth,arb`)
   - Add `debug` to enable tracing
 - `--http.corsdomain`
   - Comma separated list of domains from which to accept cross origin requests (browser enforced)
