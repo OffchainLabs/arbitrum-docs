@@ -201,7 +201,7 @@ Note: The private key MUST be the chain owner private key, otherwise you cannot 
 
 Congratulations! 🎉🎉🎉
 
-Your Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
+Your Chain is completely set up and configured. You can find core contract addresses on ```orbitSetupScriptConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
 
 
 ### optional:
