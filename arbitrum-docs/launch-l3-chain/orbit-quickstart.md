@@ -193,7 +193,6 @@ Don't worry about all the things discussed above. We wrote a hardhat script whic
 
    ```shell
     PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" yarn run setup
- 
    ```
 
 Note: The private key MUST be the chain owner private key, otherwise you cannot setup the appchain.
@@ -205,13 +204,21 @@ Congratulations! 🎉🎉🎉
 Your Chain is completely set up and configured. You can find core contract addresses on ```nodeConfig.json``` file you've downloaded and the token bridge contract address on ```tokenAddresses.json``` in the script folder!
 
 
-Also if you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:`
+### optional:
+
+- If you want to track and have view of all logs of your node, you can just run this command on the main directory of the orbit setup script:`
 
    ```shell
    docker-compose logs -f nitro
    ```
 
+- If you run out of ETH on your account on the appchain, you can easily deposit more ETH from your account on Arbitrum Goerli into your account on the appchain by running this command on the base directory of the setup script:
 
-**Note** that this step is completely ```optional```.
+   ```shell
+    PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" AMOUNT="Put your desired amount of ETH here" yarn run deposit
+   ```
+   **Note:** Don't forget to replace your private key and also the amount you want to deposit on corresponding places on the command above.
+
+**Note** that as mentioned, this step is completely ```optional```.
 
 **Note:** When you first start up the node, you may see "error getting latest batch count" on the logs (if you run the log for nodes) because the core contracts deployment is not finalized on the underlying L1 yet. It may take 15-20 minutes for the finalization. Worths mentioning that you can do all with the chain and it won't affect the functionalities.
