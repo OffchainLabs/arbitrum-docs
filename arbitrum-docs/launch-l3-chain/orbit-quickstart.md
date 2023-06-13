@@ -17,8 +17,8 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
  - We'll tighten this copy up after we "feedback freeze" the docs, just before publishing them.
  - Docs generally flow through `outline` -> `draft` -> `edit` -> `publish`; we're currently `drafting`.
  - Don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
- - As of 6/12, this draft contains 4-5 different voices, many typos, and lots of inconsistency. The purpose of the `edit` step is to address this.
- - Before shifting from `draft` to `edit`, we need 1) eng signoff on the technical procedure's alignment with the UI/devex, and 2) product signoff on broad theme and terminology conventions.
+ - As of 6/12, this draft contains multiple voices/typos/inconsistency. The purpose of the `edit` step is to address this.
+ - Before shifting from `draft` to `edit`, we need 1) eng signoff on the technical procedure's alignment with the UI/devex, and 2) product signoff on broad theme and terminology/branding conventions.
 
 :::
 
