@@ -41,6 +41,7 @@ If you have any questions or feature requests as you begin to tinker, **please r
 ## Prerequisites
 
  - [Docker](https://docs.docker.com/get-docker/)
+ - You need to have at least ```1.2 ETH``` on your wallet on Arbitrum Goerli chain. Note that this may varries due to changes on base fee on Goerli testnet.
 
 
 ## Step 1: Configure your Orbit appchain
