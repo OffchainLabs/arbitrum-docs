@@ -74,7 +74,7 @@ When running a Docker image, an external volume should be mounted to persist the
 
 <!-- todo: does the user need to do anything to configure the mount point, or is this handled by the below docker commands? -->
 
-To run both Arbitrum Nitro and Arbitrum Classic in archive mode, follow one of the below examples:
+To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one or more of the below examples:
 
 - **Arbitrum Nitro archive node**: <!-- todo: when should I choose the first one over the second one? what do they do differently? -->
   ```shell
@@ -86,7 +86,7 @@ To run both Arbitrum Nitro and Arbitrum Classic in archive mode, follow one of t
   docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestClassicNodeImage@ --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
   ```
 
-- **Arbitrum Nitro archive node for both pre and post Nitro requests**:
+- **Arbitrum One Nitro archive node with forwarding classic execution support**:
   ```shell
   docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --node.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
   ```
