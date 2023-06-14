@@ -169,9 +169,8 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
  - Blending the header title into the general flow
  - Reduce unfamiliar jargon (is "arbosphere" a canonical term? if so, does it belong in this document?)
  - Relating this content to the previous section's content, so it doesn't feel like it was authored in isolation
- - Tie into "isolated compute and storage"
  - Explain in a form that's consistent with editorial norms (may not be better or worse - consistency is the objective)
- - Reduce information that doesn't help us answer the question for the reader
+ - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs if we want to convey that information - but that seems unrelated to interop IMO - could be misunderstanding)
  - Reduce promises
  - Reduce bold claims, keep it objective and 
  - I'd recommend maintaining an editorial separation of concerns between marketing collateral and docs - gentle intros have a particular purpose, staying power, target audience, structure, reader assumptions, style, etc that will become difficult to maintain if we combine marketing language with the developer docs language. Happy to discuss if we're feeling any strong pushback - one option is to place this marketing language in a marketing blog post targeted at readers who vibe with that language. This document is being built under the assumption that its target readers prefer more succinct, objective, friendly product onboarding vs bold promises, predictions, persuasion, and the like.
