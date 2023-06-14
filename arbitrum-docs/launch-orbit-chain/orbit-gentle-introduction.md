@@ -70,7 +70,7 @@ The Ethereum ecosystem is supported by a **decentralized network of nodes** that
 
   - attempting to enhance brevity/clarity/precision while building upon the language/concepts in the section's introduction.
   - note that meaning has changed; this edit is destructive and re-introduces some of the original draft's language
-  - this language was deliberately selected in an attempt to articulate the value prop in a way that's accessible to members of the target reader audience - technical decision-makers who are familiar with web3/ethereum, but who may not know what "raw transaction data" means, and who are evaluating Orbit on behalf of their organizations
+  - this language was deliberately selected in an attempt to articulate the value prop in a way that's accessible to members of the target reader audience - technical decision-makers who are familiar with web3/ethereum, but who may not be highly technical, and who are evaluating Orbit on behalf of their organizations, and would appreciate breezy onboarding
   - happy to revert 
 
 ~~
