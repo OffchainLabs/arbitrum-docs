@@ -98,7 +98,7 @@ Arbitrum One and Nova will meet most projects' needs. In fact, they're already h
 
 Orbit chains solve *this* problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain / priority lane is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption. 
 
-While One and Nova unlocked two more deployment options that scale Ethereum, Orbit chains unlock an [infinite garden](https://ethereum.foundation/infinitegarden) of options, each tailored precisely to its owner's needs.
+Simply said: One and Nova unlocked **two more deployment options** that scale Ethereum for a variety of general-purpose use-cases. Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of options**, with each individual chain being tailored precisely to its owner's needs.
 
 
 ### How does Orbit help me build decentralized apps?
