@@ -7,7 +7,7 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
-This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit chains**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust">AnyTrust</a> chains. 
+This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit chains**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains. 
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
