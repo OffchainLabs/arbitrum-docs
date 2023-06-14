@@ -46,7 +46,7 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
     <Connection from="4" to="5"/>
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1,2,3'><strong>Arbitrum Orbit</strong> is a new product offering that lets you create public or private blockchain networks that settle to one of Arbitrum's public Layer 2 (L2) chains.</NodeDescription>
+    <NodeDescription for='1,2,3'><strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own chain that settles to one of Arbitrum's public Layer 2 (L2) chains.</NodeDescription>
     <NodeDescription for='4'><strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains that settle to Ethereum.</NodeDescription>
     <NodeDescription for='5'><strong>Ethereum</strong> is a public Layer 1 (L1) chain.</NodeDescription>
   </NodeDescriptions>
