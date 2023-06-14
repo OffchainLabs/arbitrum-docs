@@ -120,9 +120,9 @@ const config = {
           },
           {
             type: "doc",
-            docId: "launch-l3-chain/orbit-quickstart",
+            docId: "launch-orbit-chain/orbit-gentle-introduction",
             position: "left",
-            label: "Launch an appchain",
+            label: "Launch an Orbit chain",
           },
           {
             type: "doc",

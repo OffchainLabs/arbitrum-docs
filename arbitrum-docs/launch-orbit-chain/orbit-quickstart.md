@@ -1,14 +1,14 @@
 ---
-title: "Quickstart: Launch an Orbit appchain (Experimental)"
-description: "Launch your own Orbit appchain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your appchain. Modify the Nitro codebase freely for your appchain."
+title: "Quickstart: Launch an Orbit chain"
+description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your appchain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
 author: oliviaJ3388
-sidebar_label: "Quickstart: Launch an Orbit appchain"
+sidebar_label: "Quickstart: Launch an Orbit chain"
 ---
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md'; 
 
 <PublicPreviewBannerPartial />
 
@@ -22,9 +22,8 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 :::
 
-This quickstart is for developers who want to launch their own application-specific chain (appchain) using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected.
+This quickstart is for developers who want to launch their own application-specific chain (appchain) using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
 
-<!-- If you're new to Arbitrum or Arbitrum Orbit, consider reviewing [A gentle introduction to Arbitrum Orbit](./orbit-gentle-introduction.md) before proceeding. -->
 
 By the end of this quickstart, you'll have a **local devnet** that accepts transactions and settles them to the public **Arbitrum Goerli testnet**.
 
@@ -222,3 +221,12 @@ Your Chain is completely set up and configured. You can find all information you
 **Note** that as mentioned, this step is completely ```optional```.
 
 **Note:** When you first start up the node, you may see "error getting latest batch count" on the logs (if you run the log for nodes) because the core contracts deployment is not finalized on the underlying L1 yet. It may take 15-20 minutes for the finalization. Worths mentioning that you can do all with the chain and it won't affect the functionalities.
+
+
+:::warning Editor's note
+
+TODOs:
+
+ - Discord channel link up top says "Reid invited you to join"
+
+:::
