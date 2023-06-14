@@ -179,7 +179,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
 ### Can my Orbit chain talk to other Orbit chains?
 
-Yes! Your Orbit chain **retains the same underlying protocol** (AnyTrust or Rollup) that tells all other Orbit chains how to process transactions[^2].
+Yes! Your Orbit chain **retains the same underlying protocol** (AnyTrust or Rollup) that tells all other Orbit chains how to process transactions, and how to settle to the configured base chain[^2].
 
 This means that your Orbit chain **isn't a completely isolated blockchain network**. By launching an Orbit chain, you’re joining an ecosystem of interconnected Orbit chains that each use the same cutting-edge blockchain scaling technology - <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>.
 
