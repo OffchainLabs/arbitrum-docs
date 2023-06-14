@@ -85,9 +85,9 @@ You can think of an Orbit appchain as a **dedicated priority lane on Ethereum th
 
 -->
 
-Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> chains, respectively.
+Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
 
-These L2 chains give you **two more ways** to deploy Ethereum-compatible smart contracts:
+These chains give you **two more ways** to deploy Ethereum-compatible smart contracts:
 
  - <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> chains (like Arbitrum One) store raw transaction data on Ethereum, while
  - <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> chains (like Arbitrum Nova) use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The DAC then stores hashes of this raw data to Ethereum L1. This introduces a new trust assumption, but significantly enhances performance and reduces costs.
@@ -96,7 +96,7 @@ These L2 chains give you **two more ways** to deploy Ethereum-compatible smart c
 
 Arbitrum One and Nova will meet most projects' needs. In fact, they're already home to thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from having their own dedicated L2 chain that affords the same security as Arbitrum's public L2 chains, but with a higher degree of control over the chain's infrastructure, features, and governance.
 
-Orbit chains solve *this* problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain / priority lane is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption. 
+Orbit chains solve *this* problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption.
 
 Simply said:
 
