@@ -230,7 +230,7 @@ Note that the Arbitrum Orbit license doesn't automatically include chains that s
 
 ### I'd love to tinker with Orbit! What should I do next?
 
-- Visit the [Orbit Quickstart](./orbit-quickstart.md) to get started.
+Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
 
 
 :::warning Editor's notes
