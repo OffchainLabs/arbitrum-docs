@@ -87,7 +87,7 @@ You can think of an Orbit appchain as a **dedicated priority lane on Ethereum th
 
 Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> chains, respectively.
 
-These L2 chains give you **two more ways** to deploy Ethereum-compatible smart contracts in a performance-optimized manner:
+These L2 chains give you **two more ways** to deploy Ethereum-compatible smart contracts:
 
  - <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> chains (like Arbitrum One) store raw transaction data on Ethereum, while
  - <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> chains (like Arbitrum Nova) use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The DAC then stores hashes of this raw data to Ethereum L1. This introduces a new trust assumption, but significantly enhances performance and reduces costs.
