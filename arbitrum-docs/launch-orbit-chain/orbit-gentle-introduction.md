@@ -200,7 +200,7 @@ Because all Orbit chains share a common **all transactions settle to L2-then-L1*
 
 By launching an Orbit chain, you’re joining an ecosystem of interconnected Orbit chains that each use the same cutting-edge Ethereum blockchain scaling technology - <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>.
 
-In terms of how you can go about implementing interop between Orbit chains - right now, that's up to you, dear developer. Our small-but-mighty team is hard at work developing tools and patterns that make it easy to build natively interoperable Orbit chains. Interop guidance isn't available yet, but let us know if you need it - we'd like to learn from you as this offering matures.
+In terms of how you can go about implementing interop between Orbit chains - right now, that's up to you, dear developer. Our small-but-mighty team is hard at work developing tools and patterns that make it easy to build natively interoperable Orbit chains. Interop guidance isn't available yet, but let us know if you need it - we'd like to learn from you as this capability matures.
 
 Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one with an abundance of end-user experiences that make it easy for users to carry their skins, swords, spells, art, tokens, and other digital assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
 
