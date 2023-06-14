@@ -174,9 +174,9 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
  - Explain in a style that's consistent with editorial norms (may not be better or worse - consistency is the objective)
 
- - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs if we want to convey that information - but that seems unrelated to interop IMO - could be misunderstanding)
+ - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs if we want to convey that information in the gentle intro - but that seems unrelated to interop IMO - could be misunderstanding)
 
- - Reduce promises
+ - Reduce promises, focus on intent, engagement with our audience
 
  - Reduce bold claims, keep it objective-yet-friendly
 
