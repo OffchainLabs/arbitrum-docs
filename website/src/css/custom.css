@@ -197,7 +197,7 @@
   text-overflow: ellipsis;
 }
 .small-table {
-  font-size: 12px;
+  font-size: 12.5px;
   margin-top: 20px;
   margin-bottom: 30px;
 }
@@ -358,7 +358,7 @@ article .markdown p > code {
 }
 [class*="orbit-quickstart"] table,
 [class*="orbit-gentle-introduction"] table {
-  font-size: 12px;
+  font-size: 12.5px;
   margin-top: 20px;
   margin-bottom: 30px;
 }
@@ -367,7 +367,7 @@ article .markdown p > code {
   padding: 10px;
 }
 [class*="quickstart-solidity-hardhat"] table {
-  font-size: 12px;
+  font-size: 12.5px;
   margin-top: 20px;
   margin-bottom: 30px;
 }
