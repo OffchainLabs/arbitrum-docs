@@ -94,7 +94,7 @@ These L2 chains give you **two more ways** to deploy Ethereum-compatible smart c
 
 <!-- todo: is this technically / precisely true? -->
 
-Arbitrum One and Nova will meet most projects' needs. In fact, they're already home to thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from having their own dedicated L2 chain that affords the same security as Arbirtum's public L2 chains, but with a higher degree of control over the chain's infrastructure, features, and governance.
+Arbitrum One and Nova will meet most projects' needs. In fact, they're already home to thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from having their own dedicated L2 chain that affords the same security as Arbitrum's public L2 chains, but with a higher degree of control over the chain's infrastructure, features, and governance.
 
 Orbit chains solve *this* problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain / priority lane is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption.
 
