@@ -171,7 +171,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
  - Explain in a style that's consistent with editorial norms (may not be better or worse - consistency is the objective)
 
- - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs if we want to convey that information in the gentle intro - but that seems unrelated to interop IMO - could be misunderstanding)
+ - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs, developer reach, etc if we want to convey that information in the gentle intro - but that seems unrelated to interop IMO - could be misunderstanding)
 
  - Reduce promises, focus on intent, engagement with our audience
 
@@ -183,16 +183,16 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
  - This document is being built under the assumption that its target readers prefer more succinct, objective, no-nonsense, matter-of-fact product onboarding vs bold promises, predictions, persuasion, and the like.
 
+ - It might be nice to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at it below, but we might want to iterate on this a bit more.
+
  -->
 
 
 ### Can my Orbit chain talk to other Orbit chains?
 
-Yes! All Orbit chains are powered by self-managed nodes running <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2]. 
+Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2].
 
-All Orbit chains settle to an L2 chain, and each L2 chain settles to Ethereum L1, so your Orbit chain **isn't a completely isolated blockchain network**. You can think of it instead as a self-governed "branch" sprouting from an Arbitrum-DAO-governed "branch", which grew out of Ethereum's socially-governed "trunk".
-
-By launching an Orbit chain, you’re joining an ecosystem of connected chains that can exchange information with each other either directly, through a shared L2 "branch", or through the root L1 "trunk".
+This means that your Orbit chain **isn't a completely isolated blockchain network**. When you launch an Orbit chain, you’re joining an ecosystem of connected chains that can share state with one another.
 
 Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Orbit chains. Interop guidance isn't available quite yet, but let us know if you need it - we'd like to learn from you as this capability matures.
 
