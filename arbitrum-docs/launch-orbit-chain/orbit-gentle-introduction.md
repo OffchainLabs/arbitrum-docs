@@ -194,7 +194,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
 ### Can my Orbit chain talk to other Orbit chains?
 
-Yes! All Orbit chains are powered by nodes running <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2]. 
+Yes! All Orbit chains are powered by self-managed nodes running <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2]. 
 
 All Orbit chains settle to an L2 chain, and each L2 chain settles to Ethereum L1, so your Orbit chain **isn't a completely isolated blockchain network**. You can think of it instead as a self-governed "branch" sprouting from an Arbitrum-DAO-governed "branch", which grew out of Ethereum's socially-governed "trunk".
 
