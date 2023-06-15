@@ -87,7 +87,7 @@ Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a d
 There are important differences between these chains. The choice between Rollup and AnyTrust represents a **tradeoff** between decentralization and performance:
 
  - **Arbitrum One** implements the Rollup protocol, which stores raw transaction data on Ethereum L1, while 
- - **Arbitrum Nova** implements the AnyTrust protocol, which settles to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data, expediting the settlement of transactions and reducing costs by introducing a security assumption.
+ - **Arbitrum Nova** implements the AnyTrust protocol, which settles to Ethereum but uses a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data, expediting settlement and reducing costs by introducing a security assumption.
 
 **These two public chains will meet most projects' needs** - they already support thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance (remember, these chains and their protocols are governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance)).
 
