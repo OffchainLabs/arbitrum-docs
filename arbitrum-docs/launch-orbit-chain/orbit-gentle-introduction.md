@@ -202,7 +202,7 @@ By launching an Orbit chain, you’re joining an ecosystem of connected chains t
 
 Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Orbit chains. Interop guidance isn't available quite yet, but let us know if you need it - we'd like to learn from you as this capability matures.
 
-Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
+Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, devex friction, or UX friction.
 
 
 ### What should I know about Orbit's licensing?
