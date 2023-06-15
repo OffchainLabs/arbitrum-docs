@@ -15,7 +15,6 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 This quickstart is for developers who want to launch their own application-specific chain (appchain) using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
 
-
 By the end of this quickstart, you'll have a **local devnet** that accepts transactions and settles them to the public **Arbitrum Goerli testnet**.
 
 :::caution THIS IS A LOCAL DEVNET
