@@ -194,15 +194,15 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
 ### Can my Orbit chain talk to other Orbit chains?
 
-Yes! Your Orbit chain **uses the same underlying protocol** (AnyTrust or Rollup) that other Orbit chains use. This protocol tells your chain's node(s) how to process transactions, and how to settle them to the configured base chain[^2].
+Yes! All Orbit chains are powered by nodes running <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2]. 
 
-Because all Orbit chains share a common **all transactions settle to L2-then-L1** protocol by default, your Orbit chain isn't a completely isolated blockchain network. You can think of it instead as a self-governed twig sprouting from an Arbitrum-DAO-governed branch, which grew out of Ethereum's socially-governed trunk.
+All Orbit chains settle to an L2 chain, and each L2 chain settles to Ethereum L1, so your Orbit chain **isn't a completely isolated blockchain network**. You can think of it instead as a self-governed "branch" sprouting from an Arbitrum-DAO-governed "branch", which grew out of Ethereum's socially-governed "trunk".
 
-By launching an Orbit chain, you’re joining an ecosystem of interconnected Orbit chains that each use the same cutting-edge Ethereum blockchain scaling technology - <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>.
+By launching an Orbit chain, you’re joining an ecosystem of connected chains that can exchange information with each other either directly, through a shared L2 "branch", or through the root L1 "trunk".
 
-In terms of how you can go about implementing interop between Orbit chains - right now, that's up to you, dear developer. Our small-but-mighty team is hard at work developing tools and patterns that make it easy to build natively interoperable Orbit chains. Interop guidance isn't available yet, but let us know if you need it - we'd like to learn from you as this capability matures.
+Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Orbit chains. Interop guidance isn't available quite yet, but let us know if you need it - we'd like to learn from you as this capability matures.
 
-Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one with an abundance of end-user experiences that make it easy for users to carry their skins, swords, spells, art, tokens, and other digital assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
+Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
 
 
 ### What should I know about Orbit's licensing?
