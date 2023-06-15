@@ -184,7 +184,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
  - This document is being built under the assumption that its target readers prefer more succinct, objective, no-nonsense, matter-of-fact product onboarding vs bold promises, predictions, persuasion, and the like.
 
- - It might be fruitful to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at a revision below, but we might want to iterate on this a bit more.
+ - It might be fruitful to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at a revision below, but we might want to iterate / collaborate on this a bit more.
 
  -->
 
@@ -202,7 +202,7 @@ Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentrali
 
 ### What should I know about Orbit's licensing?
 
-<!-- v.prev - note that this is a destructive edit
+<!-- v.prev - note that this is a destructive edit - is the change from "Nova chains" -> "Orbit chains" correct? If not, may want to align on what we mean by Nova chains precisely, and why One chains are excluded.
 
 Arbitrum Orbit chains can be built on top of Arbitrum One or Arbitrum Nova, and developers are granted full permission to modify and adapt the Arbitrum Nitro codebase to meet their custom needs. Moreover, the license granted for Arbitrum Nova chains is both perpetual and recursive:
 
