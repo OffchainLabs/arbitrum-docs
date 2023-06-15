@@ -1,6 +1,6 @@
 ---
 title: "Quickstart: Launch an Orbit chain"
-description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your appchain. Modify the Nitro codebase freely for your chain."
+description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
 author: oliviaJ3388
 sidebar_label: "Quickstart: Launch an Orbit chain"
@@ -11,16 +11,6 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md'; 
 
 <PublicPreviewBannerPartial />
-
-:::warning Editor's note
-
- - We'll tighten this copy up after we "feedback freeze" the docs, just before publishing them.
- - Docs generally flow through `outline` -> `draft` -> `edit` -> `publish`; we're currently `drafting`.
- - Don't worry too much about the finer editorial details; the most useful feedback at this point will focus on technical truth, product truth, core messaging, and devex.
- - As of 6/12, this draft contains multiple voices/typos/inconsistency. The purpose of the `edit` step is to address this.
- - Before shifting from `draft` to `edit`, we need 1) eng signoff on the technical procedure's alignment with the UI/devex, and 2) product signoff on broad theme and terminology/branding conventions.
-
-:::
 
 This quickstart is for developers who want to launch their own application-specific chain (appchain) using Arbitrum Orbit. Familiarity with Ethereum, Arbitrum, and Solidity is expected. If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
 
