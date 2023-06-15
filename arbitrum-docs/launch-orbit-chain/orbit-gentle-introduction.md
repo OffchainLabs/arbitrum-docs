@@ -101,7 +101,7 @@ Orbit chains solve *this* problem by giving you a **self-managed priority lane o
 Simply said:
 
  - One and Nova unlocked **two shared, DAO-managed, general-purpose contract deployment options** that scale Ethereum and meet most projects' needs.
- - Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options**, with each individual Orbit chain being tailored precisely to its owner's needs.
+ - Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
 
 
 ### How does Orbit help me build decentralized apps?
