@@ -68,11 +68,10 @@ The Ethereum ecosystem is supported by a **decentralized network of nodes** that
 
 <!-- v.previous
 
-  - attempting to enhance brevity/clarity/precision while building upon the language/concepts in the section's introduction.
-  - note that meaning has changed; this edit is destructive and re-introduces some of the original draft's language
-  - this language was deliberately selected in an attempt to articulate the value prop in a way that's accessible to members of the target reader audience - technical decision-makers who are familiar with web3/ethereum, but who may not be highly technical, and who are evaluating Orbit on behalf of their organizations, and would appreciate breezy onboarding
-  - happy to revert 
-
+  - attempting to enhance clarity/precision while building more explicitly upon the section's introduction.
+  - would love to spend more time iterating on this section, but we may be at diminishing returns.
+  - happy to revert
+  
 ~~
 
 Layer 2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by optimizing their use of Ethereum. They put just enough data on Ethereum to inherit its security but move a lot of the heavy lifting off-chain.
@@ -87,18 +86,13 @@ You can think of an Orbit appchain as a **dedicated priority lane on Ethereum th
 
 Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
 
-These chains give you **two more ways** to deploy Ethereum-compatible smart contracts:
+While both Rollup and AnyTrust protocols offload lots of transaction data from Ethereum, there are important differences. Rollup chains put all of the raw transaction data on Ethereum, while AnyTrust chains settle to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup (Arbitrum One implements this one) and AnyTrust (Arbitrum Nova implements this one) represents a tradeoff between decentralization and performance.
 
- - <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> chains (like Arbitrum One) store raw transaction data on Ethereum, while
- - <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> chains (like Arbitrum Nova) use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The DAC then stores hashes of this raw data to Ethereum L1. This introduces a new trust assumption, but significantly enhances performance and reduces costs.
+While Arbitrum One and Nova can help most applications scale on top of Ethereum — and are home to thousands of apps and millions of users — shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance.
 
-<!-- todo: is this technically / precisely true? -->
+Orbit chains solve this problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption.
 
-Arbitrum One and Nova will meet most projects' needs. In fact, they're already home to thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from having their own dedicated L2 chain that affords the same security as Arbitrum's public L2 chains, but with a higher degree of control over the chain's infrastructure, features, and governance.
-
-Orbit chains solve *this* problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption.
-
-Simply said:
+In summary:
 
  - One and Nova unlocked **two shared, DAO-managed, general-purpose contract deployment options** that scale Ethereum and meet most projects' needs.
  - Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
