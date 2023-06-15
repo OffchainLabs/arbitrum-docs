@@ -11,8 +11,6 @@ This document is for developers and decision-makers who want to learn more about
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
-
-
 import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md'; 
 
 <PublicPreviewBannerPartial />
@@ -20,7 +18,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 ### In a nutshell:
 
-- Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains (<a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, or **Arbitrum Goerli**).
+- Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains: <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, or **Arbitrum Goerli**.
 - **You own your Orbit chain** and can customize its privacy, permissions, fee token, governance, and more.
 - Examples of possibilities that this unlocks:
     - **Launch a Nitro-powered blockchain network that you own**, and that benefits from <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://offchain.medium.com/hello-stylus-6b18fecc3a22), and continuous improvements.
@@ -57,8 +55,8 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 - You can also think of them as **tailored chains** - chains tailored precisely to **your exact use-case and business needs**.
 - This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of Ethereum's base layer.
 - It also lets you continuously integrate improvements made to the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack (the code that powers the nodes that support Arbitrum's L2 and Orbit chains).
-- Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. An Orbit chain can similarly be configured in either Rollup mode or AnyTrust mode — it’s your choice![^1]
-- Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Orbit chains, you decide how to govern your chain (and whether or not your chain even needs to be governable).
+- Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. Every Orbit chain can be configured to use either Rollup or AnyTrust — it's your choice![^1]
+- Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Orbit chains, *you* determine the way that your chain is governed. 
   - The [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao) owns and governs the L2 chains that your Orbit chain can settle to. Refer to the [Arbitrum DAO docs](https://docs.arbitrum.foundation/new-arb-chains) to learn more about the Arbitrum DAO's purpose, protocols, and role with regard to Orbit chains.
 
 
@@ -86,15 +84,18 @@ You can think of an Orbit appchain as a **dedicated priority lane on Ethereum th
 
 Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
 
-While both Rollup and AnyTrust protocols offload lots of transaction data from Ethereum, there are important differences. Rollup chains put all of the raw transaction data on Ethereum, while AnyTrust chains settle to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup (Arbitrum One implements this one) and AnyTrust (Arbitrum Nova implements this one) represents a tradeoff between decentralization and performance.
+There are important differences between these chains. The choice between Rollup and AnyTrust represents a **tradeoff** between decentralization and performance:
 
-While Arbitrum One and Nova can help most applications scale on top of Ethereum — and are home to thousands of apps and millions of users — shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance.
+ - **Arbitrum One** implements the Rollup protocol, which stores raw transaction data on Ethereum L1, while 
+ - **Arbitrum Nova** implements the AnyTrust protocol chains settle to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data, expediting the settlement of transactions and reducing costs by introducing a security assumption.
 
-Orbit chains solve this problem by giving you a **self-managed priority lane on Ethereum**. Each Orbit chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security and developer adoption.
+**These two public chains will meet most projects' needs** - they already support thousands of apps and millions of users! But shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance (remember, these chains and their protocols are governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance)).
 
-In summary:
+Orbit chains give you the ability to create your own AnyTrust and Rollup chains using your own infrastructure. You can think of your Orbit chain as a **self-managed priority lane on Ethereum**. Each Orbit chain is capable of supporting many times the capacity of Ethereum, all while benefitting directly from Ethereum's security.
 
- - One and Nova unlocked **two shared, DAO-managed, general-purpose contract deployment options** that scale Ethereum and meet most projects' needs.
+Said simply:
+
+ - One and Nova unlocked **two public, DAO-managed contract deployment options** that scale Ethereum and meet most projects' needs.
  - Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
 
 
@@ -136,7 +137,7 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 It depends on your definition of "app chain". Orbit chains aren't *just* for decentralized apps (dApps):
 
  - You can use your Orbit chain to host the smart contracts that support one dApp, two dApps, an ecosystem of dApps, or no dApps at all.
- - You can use your Orbit chain to host a private, centralized app's arbitrary EVM contracts.
+ - You can use your Orbit chain to host a private, centralized service's arbitrary EVM contracts.
  - Your Orbit chain can be special-purpose, general-purpose, and everything in-between.
  - You could even build a dApp that uses multiple Orbit chains to support strange new forms of redundancy, high availability, and trustlessness.
 
@@ -183,7 +184,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
  - This document is being built under the assumption that its target readers prefer more succinct, objective, no-nonsense, matter-of-fact product onboarding vs bold promises, predictions, persuasion, and the like.
 
- - It might be nice to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at it below, but we might want to iterate on this a bit more.
+ - It might be fruitful to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at a revision below, but we might want to iterate on this a bit more.
 
  -->
 
@@ -192,7 +193,7 @@ The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scali
 
 Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both the AnyTrust and Rollup protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2].
 
-This means that your Orbit chain **isn't a completely isolated blockchain network**. When you launch an Orbit chain, you’re joining an ecosystem of connected chains that can share state with one another.
+This means that your Orbit chain **isn't a completely isolated blockchain network**. When you launch an Orbit chain, you’re joining an ecosystem of connected chains that can exchange information.
 
 Our small-but-mighty team is hard at work developing tools and patterns that make it easy to launch natively interoperable Orbit chains. Interop guidance isn't available quite yet, but let us know if you need it - we'd like to learn from you as this capability matures.
 
