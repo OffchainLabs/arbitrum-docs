@@ -95,8 +95,8 @@ Orbit chains give you the ability to create your own AnyTrust and Rollup chains 
 
 Said simply:
 
- - One and Nova unlocked **two public, DAO-managed contract deployment options** that scale Ethereum and meet most projects' needs.
- - Orbit chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
+ - **Arbitrum One** and **Arbitrum Nova** chains unlocked **two public, DAO-managed contract deployment options** that scale Ethereum and meet most projects' needs.
+ - **Arbitrum Orbit** chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
 
 
 ### How does Orbit help me build decentralized apps?
