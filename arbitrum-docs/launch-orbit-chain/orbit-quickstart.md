@@ -232,4 +232,4 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc
 
 ### Appendix C: Troubleshooting
 
-You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually displayed because your chain's contract deployment isn't yet finalized on the L1 chain. This can take 15-20 minutes, but it doesn't affect your chain's functionality.
+ - You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually safe to ignore. It's usually displayed when your Orbit chain's base contract deployment isn't yet finalized on the L1 chain. This finalization can take 15-20 minutes, but don't worry - the deployment doesn't need to be L1-finalized in order for your chain to function properly.
