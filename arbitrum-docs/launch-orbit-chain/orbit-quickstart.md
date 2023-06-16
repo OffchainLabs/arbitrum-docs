@@ -176,38 +176,31 @@ Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptC
 -->
 
 
-## Step 7: Clone "Orbit setup script" repository and Moving config files
+## Step 7: Clone the setup script repository and add your configuration files
 
- 1. Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository.
+ 1. Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
  2. Move the `nodeConfig.json` file that you downloaded into the  `chain` directory, located in the root of the `orbit-setup-script` repository.
  3. Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory, located in the root of the `orbit-setup-script` repository.
-
-To install all dependencies for this script, run the following command from the root of the `orbit-setup-script` repository:
-
-```shell
-yarn install
-```
+ 4. Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
 
 ## Step 8: Run your chain's node and block explorer
 
-Run Docker, and then issue the following command:
+Run Docker, then run `docker-compose up -d ` from the root of the `orbit-setup-script` repository.
 
-```shell
-docker-compose up -d 
-```
-
-A Nitro node and BlockScout explorer instance will be started, which you can access via [http://localhost:4000/](http://localhost:4000/).
+A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
 
 ## Step 9: Finish setting up your chain
+
+We've provided a Hardhat script that handles the following tasks:
 
 1. Fund the **batch-poster** and **validator** (staker) accounts on your underlying L2 chain.
 2. Deposit ETH into your account on the chain using your chain's newly deployed bridge.
 3. Deploy your Token Bridge Contracts on both L2 and chains.
 4. Configure parameters on the chain.
 
-We've provided a Hardhat script to make these steps easier. To run the script, issue the following command, replacing `OxYourPrivateKey` with the private key of the `Owner` account you used to deploy your chain's contracts, and replacing `http://localhost:8449` with the RPC URL of your chain's node.
+To run this script, issue the following command from the root of the `orbit-setup-script` repository, replacing `OxYourPrivateKey` with the private key of the `Owner` account you used to deploy your chain's contracts, and replacing `http://localhost:8449` with the RPC URL of your chain's node.
 
 
 ```shell
