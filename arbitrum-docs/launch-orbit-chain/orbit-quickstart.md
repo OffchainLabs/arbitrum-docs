@@ -144,13 +144,16 @@ Click `Submit` to issue the final Arbitrum Goerli transaction that configures th
 
 Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **Download your chain's config files**.
 
-## Step 6: Download your chain's configuration files and launch your chain
+<br />
 
 :::caution UNDER CONSTRUCTION
 
-The remaining steps are under construction and will be updated with more information soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more information soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
 
 :::
+
+
+## Step 6: Download your chain's configuration files and launch your chain
 
 You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
 
