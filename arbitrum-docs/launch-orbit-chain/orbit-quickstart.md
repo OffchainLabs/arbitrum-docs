@@ -219,7 +219,7 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc
 Your local Orbit chain is now running. You'll see an `outputInfo.json` file in the main directory of your script folder - this contains more information about your chain, including the addresses of your chain's base contracts.
 
 
-## Appendix A: Logging
+### Appendix A: Logging
 
 Run this command in the root directory of your cloned orbit setup script repo to view your chain's logs:
 
@@ -227,7 +227,7 @@ Run this command in the root directory of your cloned orbit setup script repo to
 docker-compose logs -f nitro
 ```
 
-## Appendix B: Depositing ETH
+### Appendix B: Depositing ETH
 
 If you need to deposit more ETH into either your validator or batch poster addresses, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` and `<AMOUNT>`:
 
@@ -238,6 +238,6 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc
 ```
 
 
-## Appendix C: Troubleshooting
+### Appendix C: Troubleshooting
 
 You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually displayed because your chain's contract deployment isn't yet finalized on the L1 chain. This can take 15-20 minutes, but it doesn't affect your chain's functionality.
