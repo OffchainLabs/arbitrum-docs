@@ -146,20 +146,18 @@ Once this transaction is confirmed, you should see a `Batch poster changed!` not
 
 ## Step 6: Download your chain's configuration files and launch your chain
 
+:::caution UNDER CONSTRUCTION
+
+The remaining steps are under construction and will be updated with more information soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+
+:::
+
 You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
 
 
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
 <!-- todo: instructions become fragmented between UI <> docs at this point. Recommend sticking to one or the other for subsequent steps, so as to minimize fragmentation/friction/confusion for devs. Will likely need to align on this. -->
-
-<!-- editing stopped here -->
-
-:::caution UNDER CONSTRUCTION
-
-This document is under construction and will be updated soon. Stay tuned for more detailed instructions!
-
-:::
 
 
  1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file will be consumed as the configuration for your chain's node. it contains validator (staker) and batch poster setup. It also contains the private key for your chain's batch poster and validator (staker), which is used to sign transactions that post RBlocks to your chain's core contracts on L2.
