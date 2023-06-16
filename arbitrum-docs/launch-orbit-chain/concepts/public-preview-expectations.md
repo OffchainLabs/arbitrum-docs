@@ -26,7 +26,7 @@ This banner's purpose is to set expectations while inviting readers like you to 
 
 As you tinker and provide feedback, we'll be listening. Sometimes, we'll learn something non-obvious that will result in a significant change. More commonly, you'll experience incremental improvements to the developer experience as the offering grows out of its **public preview** status, towards **stable** status.
 
-Public preview offerings are evolving rapidly, so don't expect the degree of release notes discipline that you'd expect from a stable offering. Keep your eyes open on *TODO* for notifications regarding patch, minor, and major changes, along with corresponding relnotes that highlight breaking changes and new capabilities.
+Public preview offerings are evolving rapidly, so don't expect the degree of release notes discipline that you'd expect from a stable offering. Keep your eyes open for notifications regarding patch, minor, and major changes, along with corresponding relnotes that highlight breaking changes and new capabilities.
 
 
 ### How to provide feedback
@@ -48,17 +48,3 @@ Our ability to respond to feedback is determined by our ever-evolving capacity a
 ### Thank you!
 
 Thanks for helping us build things that meet your needs! We're excited to engage with OGs and newcomers alike; please don't hesitate to reach out.
-
-
-<br/>
-<br/>
-<br/>
-
-
-:::warning Editor's note
-
-TODOs:
-
- - CTAs for communicating breaking changes, release notes, capability updates, etc.
-
-:::
