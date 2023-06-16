@@ -226,8 +226,6 @@ docker-compose logs -f nitro
 If you need to deposit more ETH into either your validator or batch poster addresses, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` and `<AMOUNT>`:
 
 ```shell
-
-```shell
 PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" AMOUNT="<AMOUNT>" yarn run deposit
 ```
 
