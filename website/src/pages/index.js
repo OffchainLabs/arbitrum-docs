@@ -9,7 +9,7 @@ import { useLocation, Redirect } from "@docusaurus/router";
 import styles from "./index.module.css";
 
 const oldPathToNewPath = {
-  "/arb-specific-things": "/arbitrum-ethereum-differences",
+  // "/arb-specific-things": "/arbitrum-ethereum-differences",
   "/docs/mainnet": "/mainnet-beta",
   "/migration/dapp-migration": "/migration/dapp_migration",
   "/docs/public_chains": "/for-devs/concepts/public-chains",
