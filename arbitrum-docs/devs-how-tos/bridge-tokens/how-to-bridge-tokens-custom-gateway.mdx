@@ -49,7 +49,7 @@ On the other hand, the **L2 counterpart of the gateway**, must conform to the [I
 
 If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx).
 
-## Step 1: Create a gateway and deploy on L1
+## Step 1: Create a gateway and deploy it on L1
 
 :::caution This code is for testing purposes
 
@@ -419,7 +419,7 @@ main()
   })
 ```
 
-## Step 2: Create a gateway and deploy on L2
+## Step 2: Create a gateway and deploy it on L2
 
 We’ll now create the counterpart of the gateway we created on L1 and deploy it on L2. A good example of a custom gateway on L2 is [Arbitrum’s custom generic gateway on L2](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/gateway/L2CustomGateway.sol). 
 
@@ -519,9 +519,8 @@ contract L2CustomGateway is IL2CustomGateway, L2CrosschainMessenger, Ownable {
         // Burns L2 tokens in order to release escrowed L1 tokens
         IArbToken(l2CustomToken).bridgeBurn(from, amount);
 
-        // Current exit number for this operation, after
-        // incrementing the exit number for future withdrawals
-        uint256 currExitNum = ++exitNum;
+        // Current exit number for this operation
+        uint256 currExitNum = exitNum++;
 
         // We override the res field to save on the stack
         res = getOutboundCalldata(l1Token, from, to, amount, extraData);
