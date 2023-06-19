@@ -125,7 +125,7 @@ Next, run `yarn hardhat` to configure Hardhat. Select `Create a JavaScript proje
 At this point, you should see the following items (among others) in your `decentralized-cupcakes` project directory:
 
 | Item                | Description                                                                                               |
-|---------------------|-----------------------------------------------------------------------------------------------------------|
+| ------------------- | --------------------------------------------------------------------------------------------------------- |
 | `contracts/`        | Contains your smart contracts. You should see the `Lock.sol` contract here.                               |
 | `scripts/`          | Contains scripts that you can use to interact with your smart contracts. You should see `deploy.js` here. |
 | `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
@@ -306,7 +306,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2` (the first one)                                                                  | `WEB3-LOCALHOST` (the latest one)                                                          | `WEB3-ARB-GOERLI` (the next one)                                                       | `WEB3-ARB-MAINNET` (the final one)                                                        |
-|-----------------------|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).        | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).    | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | <- same                                                                                    | <- same                                                                                | <- same                                                                                   |
@@ -392,7 +392,7 @@ Note that we're adding a private key to a config file. This is **not** a best pr
 :::
 
 
-Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum's Goerli testnet by issuing the following command:
+Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum One Mainnet by issuing the following command:
 
 ```bash
 yarn hardhat run scripts/deploy.js --network arbitrumOne
@@ -430,7 +430,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 <!--todo: figure out what next steps they're actually looking for by performing content tests -->
 
  - Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
- - Visit [Public chains](../public-chains.mdx) for a list of public chains that you can deploy your smart contracts to.
+ - Visit [Public chains](/for-devs/concepts/public-chains.mdx) for a list of public chains that you can deploy your smart contracts to.
    
 
 

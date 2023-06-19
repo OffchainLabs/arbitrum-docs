@@ -76,6 +76,16 @@ const config = {
         // ... other options
       },
     ],
+    [
+      "posthog-docusaurus",
+      {
+        apiKey: "phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL",
+        appUrl: "https://app.posthog.com",
+        enableInDevelopment: false,
+        persistence: "memory",
+        disable_session_recording: true
+      },
+    ],
     require.resolve("docusaurus-plugin-fathom"),
     require.resolve("docusaurus-lunr-search"),
   ],
@@ -84,9 +94,6 @@ const config = {
     ({
       fathomAnalytics: {
         siteId: "DOHOZGJO"
-      },
-      "posthog-docusaurus": {
-        apiKey: "phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL"
       },
       navbar: {
         title: "Arbitrum Docs",
@@ -109,7 +116,7 @@ const config = {
           },
           {
             type: "doc",
-            docId: "node-running/running-a-node",
+            docId: "node-running/quickstart-running-a-node",
             label: "Run a node",
             position: "left",
           },

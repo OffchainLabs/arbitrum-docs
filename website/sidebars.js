@@ -53,6 +53,33 @@ const sidebars = {
           id: "migration/state-migration"
         },
         {
+          type: "category",
+          label: "Bridge tokens",
+          collapsed: false,
+          items: [
+            {
+              type: "doc",
+              label: "Overview",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview"
+            },
+            {
+              type: "doc",
+              label: "Standard gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard"
+            },
+            {
+              type: "doc",
+              label: "Custom generic gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic"
+            },
+            {
+              type: "doc",
+              label: "Custom gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway"
+            },
+          ]
+        },
+        {
           type: "doc",
           label: "Use oracles in Arbitrum",
           id: "devs-how-tos/how-to-use-oracles"
@@ -64,6 +91,11 @@ const sidebars = {
       label: "Concepts",
       collapsed: false,
       items: [
+        {
+          type: "doc",
+          label: "Arbitrum chains",
+          id: "for-devs/concepts/public-chains"
+        },
         {
           type: "category",
           label: "Arbitrum/Ethereum differences",
@@ -120,23 +152,6 @@ const sidebars = {
     },
     {
       type: "category",
-      label: "Arbitrum resources",
-      collapsed: false,
-      items: [
-        {
-          type: "doc",
-          label: "Chains",
-          id: "public-chains"
-        },
-        {
-          type: "doc",
-          label: "Useful addresses",
-          id: "useful-addresses"
-        },
-      ]
-    },
-    {
-      type: "category",
       label: "Developer tools and resources",
       collapsed: false,
       items: [
@@ -148,7 +163,12 @@ const sidebars = {
         {
           type: "doc",
           id: "node-running/node-providers",
-          label: "RPC providers / Node infrastructure"
+          label: "RPC endpoints and providers"
+        },
+        {
+          type: "doc",
+          label: "Smart contract addresses",
+          id: "for-devs/useful-addresses"
         },
         {
           type: "doc",
@@ -192,39 +212,6 @@ const sidebars = {
       label: "Troubleshooting: Building dApps",
       id: "for-devs/troubleshooting-building"
     },
-    /*
-    {
-      type: "doc",
-      label: "Public chains",
-      id: "public-chains"
-    },
-    {
-      type: "doc",
-      label: "Useful addresses",
-      id: "useful-addresses"
-    },
-    {
-      type: "category",
-      label: "Resources",
-      items: [
-        {
-          type: "link",
-          label: "Tutorials",
-          href: "https://github.com/OffchainLabs/arbitrum-tutorials"
-        },
-        {
-          type: "link",
-          label: "SDK",
-          href: "/sdk"
-        },
-        {
-          type: "link",
-          label: "Github",
-          href: "https://github.com/OffchainLabs"
-        }
-      ]
-    }
-    */
   ],
   bridgeTokensSidebar: [
     {
@@ -251,14 +238,19 @@ const sidebars = {
     },
     {
       type: "doc",
-      id: "node-running/running-a-node",
-      label: "Quickstart: Run a full node (Nitro)"
+      id: "node-running/quickstart-running-a-node",
+      label: "Quickstart: Run Arbitrum nodes"
     },
     {
       type: "category",
       label: "How-to guides",
       collapsed: false,
       items: [
+        {
+          type: "doc",
+          id: "node-running/how-tos/running-a-full-node",
+          label: "Run a full node (Nitro)"
+        },
         {
           type: "doc",
           id: "node-running/how-tos/running-a-classic-node",
@@ -307,6 +299,11 @@ const sidebars = {
       label: "Third-party node providers"
     },
     */
+    {
+      type: "doc",
+      id: "node-running/command-line-options",
+      label: "Command-line options"
+    },
     {
       type: "doc",
       id: "node-running/troubleshooting-running-nodes",
