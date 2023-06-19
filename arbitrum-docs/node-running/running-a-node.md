@@ -23,11 +23,15 @@ content-type: quickstart
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
-- Database snapshot (required for Arbitrum One)
+- Arbitrum One Nitro Genesis Database Snapshot
 
-  - Use the parameter `--init.url` on first startup to initialize the Nitro database (you can find a list of snapshots [here](#snapshots-available)). Example: <code>--init.url="@arbOneNitroPrunedSnapshot@"</code>
-  - When running more than one node, it's easier to manually download the image of the snapshot and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it
-- This parameter is **required** when running an Arbitrum One node, because the chain has _classic_ blocks. For Arbitrum Nova and Arbitrum Goerli this parameter is optional
+  - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize Nitro database
+  - If running more than one node, easiest to manually download image from https://snapshot.arbitrum.io/mainnet/nitro.tar and host it locally for your nodes
+  - Or use `--init.url="file:///path/to/snapshot/in/container/nitro.tar"` to use a local snapshot archive
+  - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
+  - size: 33.5573504 GB
+
+- Other chains do not have classic blocks, and do not require an initial genesis database
 
 ### Required parameter
 
@@ -75,8 +79,8 @@ content-type: quickstart
 
 ### Optional parameters
 
-- `--init.url="<snapshot file>"`
-  - URL to download the genesis database from. Only required when starting and Arbitrum One for the first time. You can find a list of snapshots [here](#snapshots-available).
+- `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
+  - URL to download genesis database from. Only needed when starting Arbitrum One without database
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
