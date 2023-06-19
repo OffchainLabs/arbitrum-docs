@@ -17,9 +17,9 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 
 | Use case                                                                         | Required node type(s)                                     | Docs                                                                        |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Access the **Arbitrum network** without running your own node                    | Fully managed by third-parties, exposed via RPC endpoints | [Node Providers](../node-providers.mdx)                                     |
-| Run an **archive node** for **Arbitrum Goerli (testnet)** or **Arbitrum Nova**   | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                                     |
-| Send **post-Nitro** archive requests                                             | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                     |
+| Access the **Arbitrum network** without running your own node                    | Fully managed by third-parties, exposed via RPC endpoints | [RPC endpoints and providers](/node-running/node-providers.mdx)             |
+| Run an **archive node** for **Arbitrum Goerli (testnet)** or **Arbitrum Nova**   | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                 |
+| Send **post-Nitro** archive requests                                             | Full node (Nitro)                                         | [How to run a full node (Nitro)](./running-a-full-node.mdx)                 |
 | Send **pre-Nitro** archive requests                                              | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](./running-a-classic-node.mdx) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                         | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                  |
 
@@ -35,8 +35,8 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 2. **CPU:** 4+ core CPU
 3. **Storage:** Minimum 2TB SSD (make sure it is extendable)
 4. **Docker images:** We'll specify these in the below commands; you don't need to manually download them.
-    - Latest Docker image for **Arbitrum One**: <code>@latestNitroNodeImage@</code>
-    - Latest Docker image for **Arbitrum Classic**: <code>@latestClassicNodeImage@</code>
+    - Latest Docker image for **Arbitrum One Nitro**: <code>@latestNitroNodeImage@</code>
+    - Latest Docker image for **Arbitrum One Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
     - Nitro database snapshot
       - Use the parameter `--init.url=` on first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code>
@@ -55,13 +55,13 @@ The minimum storage requirements will change over time as the Nitro chain grows 
 
 ### Review and configure parameters
 
-| Parameter                                   | Description                                                                                                                                      |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [Node Providers](../node-providers.mdx)) |
-| `--l2.chain-id=<L2 Chain ID>`               | See [public chains](/for-devs/concepts/public-chains.mdx) for a list of Arbitrum chains and the respective L2 chain IDs                          |
-| `--node.caching.archive`                    | Required for running an **Arbitrum One** archival node and retains past block state                                                              |
-| `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache.  |
-| `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum Classic** archival node.                                                                                      |
+| Parameter                                   | Description                                                                                                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--l1.url=<Layer 1 Ethereum RPC URL>`       | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/node-running/node-providers.mdx) ) |
+| `--l2.chain-id=<L2 Chain ID>`               | See [public chains](/for-devs/concepts/public-chains.mdx) for a list of Arbitrum chains and the respective L2 chain IDs                                                   |
+| `--node.caching.archive`                    | Required for running an **Arbitrum One Nitro** archival node and retains past block state                                                                                 |
+| `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum One Classic** archival node. When this option is present, will load old blocks from disk if not in memory cache.                       |
+| `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum One Classic** archival node.                                                                                                           |
 
 ### Run the Docker image(s)
 
@@ -72,19 +72,19 @@ When running a Docker image, an external volume should be mounted to persist the
 
 <!-- todo: does the user need to do anything to configure the mount point, or is this handled by the below docker commands? -->
 
-To run both Arbitrum One and Arbitrum Classic in archive mode, follow one of the below examples:
+To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one or more of the below examples:
 
-- **Arbitrum One archive node**: <!-- todo: when should I choose the first one over the second one? what do they do differently? -->
+- **Arbitrum One Nitro archive node**:
   ```shell
   docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --l1.url https://l1-node:8545 --l2.chain-id= --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
   ```
-- **Arbitrum One archive node**:
-  ```shell
-  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --l1.url https://l1-node:8545 --l2.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
-  ```
-- **Arbitrum Classic archive node**:
+- **Arbitrum One Classic archive node**:
   ```shell
   docker run --rm -it -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestClassicNodeImage@ --l1.url=https://l1-node:8545/ --node.chain-id=42161 --l2.disable-upstream --node.cache.allow-slow-lookup --core.checkpoint-gas-frequency=156250000
+  ```
+- **Arbitrum One Nitro archive node with forwarding classic execution support**:
+  ```shell
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --l1.url https://l1-node:8545 --l2.chain-id=42161 --node.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.caching.archive
   ```
 
 Note that the above commands both map to port `8547` on their hosts. If you want to run both on the same host, you should edit those mapping to different ports, and specify your Classic node RPC url as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).

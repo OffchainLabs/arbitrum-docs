@@ -69,6 +69,10 @@ content-type: how-to
   chmod -fR 777 /data/arbitrum
   ```
 
+## Watchtower mode
+- By default, the full node will work in Watchtower mode. This means that the node watches the on-chain assertions and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`.
+- You can deactivate this mode by using the parameter `--node.staker.enable=false`.
+
 ### Optional parameters
 
 - `--init.url="<snapshot file>"`
@@ -85,7 +89,7 @@ content-type: how-to
 - `--http.addr`
   - Address to bind RPC to. May need to be set to `0.0.0.0` for docker networking to work properly
 - `--node.caching.archive`
-  - Retain past block state
+  - Retain past block state (for archive nodes)
 - `--node.feed.input.url=<feed address>`
   - Defaults to `wss://<chainName>.arbitrum.io/feed`.
   - ⚠️ When running more than one node, it is strongly suggested to provide one feed relay per datacenter. See further instructions in [How to run a feed relay](/node-running/how-tos/running-a-feed-relay.mdx).
@@ -102,4 +106,4 @@ content-type: how-to
   - 🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
   - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it
 - `--init.prune`
-  - Pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after v2.0.14)
+  - Pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after `v2.0.14`)
