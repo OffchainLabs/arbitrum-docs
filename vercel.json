@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    {
-      "source": "/arb-specific-things",
-      "destination": "/arbitrum-ethereum-differences",
-      "permanent": false
-    }
-  ]
-}
