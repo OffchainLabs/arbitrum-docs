@@ -29,7 +29,7 @@ Let's briefly review each of the deployment configuration parameters, the ration
 Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 
-### Chain Name
+### Chain name
 
 This name provides a way for people to distinguish your Orbit chain from other Orbit chains. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.
 
