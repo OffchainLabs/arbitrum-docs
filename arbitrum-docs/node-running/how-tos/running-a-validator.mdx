@@ -22,7 +22,20 @@ Here we describe different strategies that validators follow and provide instruc
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
   
-- There's one more validation strategy that is not allowlisted and is available for both validators and full nodes: `Watchtower`. A node in `Watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action on-chain. This strategy is enabled by default in all nodes.
+- There's one more validation strategy that is not allowlisted and is available for all types of node: `Watchtower`. A node in `Watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action on-chain. This strategy is enabled by default in all nodes (full and archive).
+
+### Running a Watchtower validator
+
+- By default, all nodes (full and archive) will run in `Watchtower` mode.
+- If a deviation is detected, a validator in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
+- To verify that the Watchtower mode is enabled, this line should appear in the logs:
+  ```shell
+  INFO [09-28|18:43:49.367] running as validator                     txSender=nil actingAsWallet=nil whitelisted=false strategy=Watchtower
+  ```
+  - `strategy` should be `Watchtower`
+  - The log line `validation succeeded` shows that the L2 block validator is working
+  - The log line `found correct assertion` shows that the L1 validator is working
+- Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode by using the parameter `--node.staker.enable=false`.
 
 ### Creating a wallet for an allowlisted validator
 
