@@ -27,7 +27,7 @@ Here we describe different strategies that validators follow and provide instruc
 ### Running a Watchtower validator
 
 - By default, all nodes (full and archive) will run in `Watchtower` mode.
-- If a deviation is detected, a validator in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
+- If a deviation is detected, a node running in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
 - To verify that the Watchtower mode is enabled, this line should appear in the logs:
   ```shell
   INFO [09-28|18:43:49.367] running as validator                     txSender=nil actingAsWallet=nil whitelisted=false strategy=Watchtower
