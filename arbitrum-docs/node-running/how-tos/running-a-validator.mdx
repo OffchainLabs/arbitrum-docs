@@ -23,7 +23,6 @@ Here we describe different types of validators and provide instructions on how t
   - `MakeNodes` (Whitelist required)
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
-  
 
 ### Running Watchtower validator
 
