@@ -175,7 +175,7 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 
 ## Step 8: Run your chain's node and block explorer
 
-Run Docker, then run `docker-compose up -d ` from the root of the `orbit-setup-script` repository.
+Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
