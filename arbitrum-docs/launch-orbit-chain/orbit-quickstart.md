@@ -12,7 +12,7 @@ By the end of this quickstart, you'll have a **local devnet chain** that hosts E
 
 If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
