@@ -116,14 +116,12 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 
 ### Are Orbit chains the same thing as "app chains"?
 
-It depends on your definition of "app chain". Orbit chains aren't *just* for decentralized apps (dApps):
+It depends on your definition of "app chain". Orbit chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute and storage resources away from Arbitrum's public L2 chains**, while **settling to one L2 chain in particular** based on your unique needs.
 
  - You can use your Orbit chain to host the smart contracts that support one dApp, two dApps, an ecosystem of dApps, or no dApps at all.
  - You can use your Orbit chain to host a private, centralized service's arbitrary EVM contracts.
  - Your Orbit chain can be special-purpose, general-purpose, and everything in-between.
  - You could even build a dApp that uses multiple Orbit chains to support strange new forms of redundancy, high availability, and trustlessness.
-
-Orbit chains can be used as application-specific chains (often referred to as "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute and storage resources away from Arbitrum's public L2 chains**, while **settling to one L2 chain in particular** based on your unique needs.
 
 
 ### Can my Orbit chain talk to other Orbit chains?
