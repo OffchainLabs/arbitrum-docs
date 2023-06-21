@@ -11,7 +11,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 <PublicPreviewBannerPartial />
 
-This quickstart is for developers who want to launch their own Arbitrum Orbit chain.
+This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment).
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Goerli testnet**. Familiarity with Ethereum, Ethereum's Goerli testnet, and Arbitrum is expected.
 
