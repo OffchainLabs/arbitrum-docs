@@ -165,15 +165,6 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 
 
 
-<!-- prev
-
-In this last step you can download two configuration files in JSON format. By clicking on **Download Rollup JSON**, a file named **nodeConfig.json** will be downloaded. This config file would be used to run Orbit node, which will be discussed later.
-
-Also by clicking on **Download L3Config JSON**, a file named **orbitSetupScriptConfig.json** will be downloaded. This config file would be consumed later by Orbit setup script later in order to setup final steps of running Orbit chain.
-
--->
-
-
 ## Step 7: Clone the setup script repository and add your configuration files
 
  1. Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
