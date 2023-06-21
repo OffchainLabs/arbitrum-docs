@@ -161,7 +161,7 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
  1. **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
- 2. **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, and is responsible for setting up your **Token Bridge Contract**.
+ 2. **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
 
 
