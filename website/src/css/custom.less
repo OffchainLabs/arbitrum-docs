@@ -135,12 +135,22 @@
 }
 
 .small-table {
-    font-size: 12px;
+    font-size: 12.5px;
     margin-top: 20px;
     margin-bottom: 30px;
 
     td {
         padding: 10px;
+    }
+}
+
+.medium-table {
+    font-size: 13px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    td {
+        padding: 15px;
     }
 }
 
@@ -323,6 +333,20 @@ article {
 // #endregion
 
 // #region quickstart styles
+
+[class*="launch-a-chain"] {
+    table {
+        .medium-table;
+    }
+}
+
+[class*="orbit-quickstart"],
+[class*="orbit-gentle-introduction"] {
+    table {
+        .small-table;
+    }
+}
+
 
 [class*="quickstart-solidity-hardhat"] {
     table {
