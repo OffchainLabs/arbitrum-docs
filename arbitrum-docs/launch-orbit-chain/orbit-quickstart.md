@@ -6,7 +6,6 @@ target_audience: developers who want to create their own self-managed AnyTrust o
 sidebar_label: "Quickstart: Launch an Orbit chain"
 ---
 
-
 This quickstart is for developers who want to launch their own Arbitrum Orbit chain.
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Goerli testnet**. Familiarity with Ethereum, Ethereum's Goerli testnet, and Arbitrum is expected.
