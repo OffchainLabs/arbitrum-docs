@@ -42,7 +42,7 @@ While you're tinkering locally, we'll be building the tech and docs that help yo
 
 :::info $AGOR IS SHORTHAND
 
-"$AGOR" isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
+"$AGOR" isn't a canonical term. It's just shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
 
 :::
 

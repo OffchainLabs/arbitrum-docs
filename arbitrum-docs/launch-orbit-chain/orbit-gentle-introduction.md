@@ -7,7 +7,7 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
-This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit chains**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains. 
+This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains. 
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
@@ -63,24 +63,6 @@ import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescrip
 ### What problem does Orbit solve?
 
 The Ethereum ecosystem is supported by a **decentralized network of nodes** that each run Ethereum's Layer 1 (L1) client software. Ethereum's block space is in high demand, so users are often stuck waiting for the network to become less congested (and thus, less expensive).
-
-<!-- v.previous
-
-  - attempting to enhance clarity/precision while building more explicitly upon the section's introduction.
-  - would love to spend more time iterating on this section, but we may be at diminishing returns.
-  - happy to revert
-  
-~~
-
-Layer 2 (L2) scaling solutions like Arbitrum Rollup and AnyTrust solve this problem by optimizing their use of Ethereum. They put just enough data on Ethereum to inherit its security but move a lot of the heavy lifting off-chain.
-
-While both Rollup and AnyTrust protocols offload lots of transaction data from Ethereum, there are important differences. Rollup chains put all of the raw transaction data on Ethereum, while AnyTrust chains settle to Ethereum but use a <a data-quicklook-from='data-availability-committee-dac'>data availability committee (DAC)</a> to store raw transaction data. The choice between Rollup (Arbitrum One implements this one) and AnyTrust (Arbitrum Nova implements this one) represents a tradeoff between decentralization and performance.
-
-While Arbitrum One and Nova can help most applications scale on top of Ethereum — and are home to thousands of apps and millions of users — shared public chains aren't for everyone. Some projects can benefit from their own AnyTrust or Rollup chains that afford the same security, but with a higher degree of control over the chain's features and governance.
-
-You can think of an Orbit appchain as a **dedicated priority lane on Ethereum that you manage**. Each of these priority lanes have many times the capacity of Ethereum, but piggyback on Ethereum for security.
-
--->
 
 Arbitrum's <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> protocols address this challenge by offloading some of the Ethereum network's heavy lifting to **another decentralized network of nodes** that support the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> L2 chains, respectively.
 
@@ -144,51 +126,6 @@ It depends on your definition of "app chain". Orbit chains aren't *just* for dec
 Orbit chains can be used as application-specific chains (often referred to as "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute and storage resources away from Arbitrum's public L2 chains**, while **settling to one L2 chain in particular** based on your unique needs.
 
 
-<!-- v.original
-
-### How will Orbit chains interact with each other?
-
-By launching an Orbit chain into the Arbosphere, you’re not launching an isolated blockchain; you’re joining a growing ecosystem of interconnected Arbitrum Orbit chains, all of which are running the most advanced technology available today to scale blockchain infrastructure. 
-
-Orbit developers have full access to the Arbitrum Nitro stack today, allowing them to choose from either of Arbitrum’s market-leading scaling technologies — Arbitrum Rollup and Arbitrum Anytrust. Both of these technologies run on the Arbitrum Nitro stack meaning that they have full EVM-equivalence and application developers will have the same EVM experience as on  Ethereum or any other Arbitrum chain, and you’ll be able to directly tap into Ethereum’s and Arbitrum’s existing developer communities and resources. 
-
-Orbit developers can customize their chain however they’d like. Moreover, with exciting new developments in the pipeline, Orbit chains have access to not only the Arbitrum Nitro stack today, but also to future improvements. Looking forward a few months, Arbitrum Stylus will allow application developers to augment the EVM experience with smart contracts in other programming languages (Rust, C, and C++ to start), and this powerful technology will be fully available to all Orbit chains. 
-
-When it comes to interoperability tech, Orbit will lead the way in offering the most advanced and secure technology on the market. We’re actively working on fundamental research and development to build the most interconnected experience for Orbit chains with the overarching goal of creating a user experience that allow for seamless integration between Orbit chains, allowing users to quickly and securely move assets between Orbit chains and build secure and intuitive cross-chain experiences. 
-
-As always, all features we ship will come fully-baked with security proofs enabled. That’s the Arbitrum difference. Over the coming months, the process of launching these chains, and building connections between them will become more robust, and natively integrated (for a sneak peak, you can read about fast confirmations in the table below) and we’re excited to share more details around these developments as they’re ready.
-
-The Arbitrum Nitro stack is the most advanced, secure, and mature Ethereum scaling technology to date. It already powers Ethereum’s leading L2 chains, and with Orbit this technology is now available to power your chain as well. Welcome to the Arbosphere **🚀**
-
--->
-
-<!-- v.edited - happy to revert
-
- - Blending the header title into the general flow
-
- - Reduce unfamiliar jargon (is "arbosphere" a canonical term? if so, does it belong in this document? The (current) established purpose of gentle intros is to onboard, not to sell - although this can change!)
-
- - Relating this content to the previous section's content, so it doesn't feel like it was authored in isolation
-
- - Explain in a style that's consistent with editorial norms (may not be better or worse - consistency is the objective)
-
- - Reduce information that doesn't help us answer the question for the reader (we can add another section to address things like security proofs, developer reach, etc if we want to convey that information in the gentle intro - but that seems unrelated to interop IMO - could be misunderstanding)
-
- - Reduce promises, focus on intent, engagement with our audience
-
- - Reduce bold claims, keep it objective-yet-friendly
-
- - I'd recommend maintaining an editorial separation of concerns between marketing collateral and docs - gentle intros have a particular purpose, staying power, target audience, structure, reader assumptions, style, voice, etc that will become difficult to maintain if we combine marketing language with the developer docs language. Happy to discuss if we're feeling any strong pushback 
-
-  - one option is to reframe the original version (containing marketing language) within a marketing blog post a la stylus - targeted at readers who vibe with that language, directing traffic to the gentle intro and quickstart via marketing channels. 
-
- - This document is being built under the assumption that its target readers prefer more succinct, objective, no-nonsense, matter-of-fact product onboarding vs bold promises, predictions, persuasion, and the like.
-
- - It might be fruitful to align on our interop story, what concrete developer capabilities we're aiming at, etc. This would be the "align" step of content production. I took a stab at a revision below, but we might want to iterate / collaborate on this a bit more.
-
- -->
-
-
 ### Can my Orbit chain talk to other Orbit chains?
 
 Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both **AnyTrust** and **Rollup** protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2].
@@ -201,17 +138,6 @@ Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentrali
 
 
 ### What should I know about Orbit's licensing?
-
-<!-- v.prev - note that this is a destructive edit - is the change from "Nova chains" -> "Orbit chains" correct? If not, may want to align on what we mean by Nova chains precisely, and why One chains are excluded.
-
-Arbitrum Orbit chains can be built on top of Arbitrum One or Arbitrum Nova, and developers are granted full permission to modify and adapt the Arbitrum Nitro codebase to meet their custom needs. Moreover, the license granted for Arbitrum Nova chains is both perpetual and recursive:
-
-- perpetual — so nobody can ever take the software license away from you.
-- recursive — so your Arbitrum Orbit chains can itself host Arbitrum chains on top of it.
-
-The Arbitrum Orbit program does not automatically include chains that settle to non Arbitrum DAO-governed chain. So if you want to launch an Arbitrum Nitro chain as an independent L2 on Ethereum, you’ll need to get a custom license, for which there are two options. Offchain Labs, as the initial developer of the Arbitrum Nitro codebase, is the licensor of the software, and can grant custom licenses. With the launch of the Arbitrum DAO, the DAO was also given co-licensor rights to approve additional L2s on Ethereum that do not settle to a DAO-governed chain. To utilize this mechanism, you’ll need to submit a proposal to the Arbitrum DAO, and it’s at the DAO’s discretion whether it would like to grant the license for an additional L2 chain.
-
--->
 
 You're granted full permission to modify and adapt the Arbitrum Nitro codebase to meet your needs. The license granted for Orbit chains is both **perpetual** and **recursive**:
 
