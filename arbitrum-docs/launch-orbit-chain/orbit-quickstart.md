@@ -148,7 +148,7 @@ Once this transaction is confirmed, you should see a `Batch poster changed!` not
 
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more information soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
 
 :::
 
@@ -160,11 +160,8 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
-<!-- todo: instructions become fragmented between UI <> docs at this point. Recommend sticking to one or the other for subsequent steps, so as to minimize fragmentation/friction/confusion for devs. Will likely need to align on this. -->
-
-
- 1. Clicking **Download Rollup JSON** will generate `nodeConfig.json`: This file will be consumed as the configuration for your chain's node. It contains validator (staker) and batch poster configuration details; it also contains the private key for your chain's batch poster and validator (staker), which is used to sign transactions that post RBlocks to your chain's base contracts on L2.
- 2. Clicking **Download L3Config JSON** will generate `orbitSetupScriptConfig.json`: This file contains the configuration for your chain. It'll be consumed to setup your chain parameters and also setting up your **Token Bridge Contract**.
+ 1. **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. This includes validator (staker) and batch poster configuration details, in addition to their private keys, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
+ 2. **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, and is responsible for setting up your **Token Bridge Contract**.
 
 
 
