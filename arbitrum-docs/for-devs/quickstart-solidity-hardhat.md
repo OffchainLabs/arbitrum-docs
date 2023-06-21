@@ -323,7 +323,7 @@ We were able to deploy to a local testnet for free because we were using [Hardha
 
 :::info $AGOR IS SHORTHAND
 
-"$AGOR" isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use to make this section of the quickstart more readable.
+"$AGOR" isn't a canonical term. It's just shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
 
 :::
 
