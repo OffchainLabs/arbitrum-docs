@@ -1,123 +1,138 @@
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsj.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj62UUsj.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Space Grotesk';
+  font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/spacegrotesk/v15/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf)
+    format("truetype");
 }
 .spacefont {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: italic;
   font-weight: 400;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBSosxkw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBSosxkw.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: italic;
   font-weight: 500;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBeIsxkw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBeIsxkw.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: italic;
   font-weight: 600;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBlIwxkw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBlIwxkw.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: italic;
   font-weight: 700;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBrYwxkw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKBrYwxkw.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: italic;
   font-weight: 800;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKByowxkw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memUYa2wxmKQyNkiV50dulWP7s95AqZTzZHcVdxWI9WH-pKByowxkw.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: normal;
   font-weight: 400;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA71rCosg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA71rCosg.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: normal;
   font-weight: 500;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA72jCosg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA72jCosg.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: normal;
   font-weight: 600;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA74TFosg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA74TFosg.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: normal;
   font-weight: 700;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA773Fosg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA773Fosg.ttf)
+    format("truetype");
 }
 @font-face {
-  font-family: 'Saira';
+  font-family: "Saira";
   font-style: normal;
   font-weight: 800;
   font-stretch: normal;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA79rFosg.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/saira/v14/memWYa2wxmKQyPMrZX79wwYZQMhsyuShhKMjjbU9uXuA79rFosg.ttf)
+    format("truetype");
 }
 .sairafont {
-  font-family: 'Saira', sans-serif;
+  font-family: "Saira", sans-serif;
 }
 :root {
   --ifm-color-primary: #007bdd;
@@ -139,8 +154,9 @@
   --tab-active-color: #3578e5;
   --tab-active-color-hover: hsl(217, 58%, 36%);
   --tab-gray: #ddd;
+  --ifm-navbar-item-padding-horizontal: 0.6rem;
 }
-[data-theme='dark'] {
+[data-theme="dark"] {
   --ifm-color-primary: #28a0f0;
   --ifm-color-primary-dark: #2182af;
   --ifm-color-primary-darker: #1f7fa5;
@@ -153,22 +169,22 @@
   --prysm-pink: var(--prysm-pink-light);
   --tab-gray: #aaa;
 }
-[data-theme='dark'] .dynamic-content-tabs .tabs__item:first-child {
+[data-theme="dark"] .dynamic-content-tabs .tabs__item:first-child {
   color: #eee;
 }
-[data-theme='dark'] .dynamic-content-tabs .tabs__item:first-child:hover {
+[data-theme="dark"] .dynamic-content-tabs .tabs__item:first-child:hover {
   background-color: transparent !important;
 }
-[data-theme='dark'] .troubleshooting-report-area > span {
+[data-theme="dark"] .troubleshooting-report-area > span {
   color: #ddd !important;
 }
-[data-theme='dark'] .checklist .task .input-container input:checked + .done {
+[data-theme="dark"] .checklist .task .input-container input:checked + .done {
   background-color: #002862;
 }
-[data-theme='dark'] .checklist .task .guidance-container label {
+[data-theme="dark"] .checklist .task .guidance-container label {
   color: white;
 }
-[data-theme='dark'] .checklist .task .guidance-container > p {
+[data-theme="dark"] .checklist .task .guidance-container > p {
   color: white;
 }
 /* MIXINS */
@@ -454,7 +470,10 @@ article .markdown p > code {
   margin: 0;
   font-family: monospace;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #balance-wrapper > span:first-child {
+[class*="quickstart-solidity-hardhat"]
+  .vending-machine
+  #balance-wrapper
+  > span:first-child {
   font-weight: 600;
   padding-right: 5px;
 }
@@ -469,8 +488,12 @@ article .markdown p > code {
   right: 15px;
   display: none;
 }
-[class*="quickstart-solidity-hardhat"] .vending-machine #error-indicator.visible,
-[class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator.visible {
+[class*="quickstart-solidity-hardhat"]
+  .vending-machine
+  #error-indicator.visible,
+[class*="quickstart-solidity-hardhat"]
+  .vending-machine
+  #success-indicator.visible {
   display: block;
 }
 [class*="quickstart-solidity-hardhat"] .vending-machine #success-indicator {
@@ -605,7 +628,8 @@ article .markdown p > code {
   /* for Firefox */
   overflow-x: scroll;
   padding: 15px;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   background-color: #f6f6f6;
   color: #444 !important;
   text-align: left;
@@ -661,7 +685,8 @@ rows .troubleshooting-report-area > textarea::placeholder {
   min-width: 100%;
   font-size: 12px;
   padding: 20px;
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
   background-color: #292929;
   color: white;
   text-align: left;
@@ -749,14 +774,15 @@ h2.anchor {
 }
 [class*="announcementBar_node_modules-@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module"],
 .announcementBar_mb4j {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   color: white !important;
   background-color: #2c374b !important;
   font-size: 14px !important;
 }
-[class*="announcementBar_node_modules-@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module"] a,
+[class*="announcementBar_node_modules-@docusaurus-theme-classic-lib-theme-AnnouncementBar-styles-module"]
+  a,
 .announcementBar_mb4j a {
-  color: #00E5FF !important;
+  color: #00e5ff !important;
   text-decoration: none !important;
 }
 .prism-code {
@@ -788,4 +814,8 @@ article a:not([data-quicklook-from]):not(.footnote-ref) {
 .docusaurus-mermaid-container {
   display: flex;
   justify-content: center;
+}
+.navbar__item {
+  font-size: clamp(0.8rem, 1.25vw, 1rem);
+  line-height: 1.5;
 }
