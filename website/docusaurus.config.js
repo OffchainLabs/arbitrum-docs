@@ -52,7 +52,7 @@ const config = {
             [
               variableInjector,
               {
-                replacements: require("./static/globalVars.js")
+                replacements: require("./src/resources/globalVars.js")
               }
             ]
           ]
