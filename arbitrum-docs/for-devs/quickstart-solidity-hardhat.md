@@ -319,9 +319,11 @@ Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goe
 
 We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Arbitrum's Goerli testnet is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Goerli testnet's token, $AGOR.
 
+<!-- todo: partialize this - duplicated in Orbit quickstart -->
+
 :::info $AGOR IS SHORTHAND
 
-"$AGOR" isn't a canonical term. It's just convenient shorthand for "Arbitrum Goerli testnet $ETH" that we use to make this section of the quickstart more readable.
+"$AGOR" isn't a canonical term. It's just shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
 
 :::
 
@@ -340,6 +342,8 @@ accounts: [GOERLI_TESTNET_PRIVATE_KEY] // <- uncomment this line
 Note that we're adding a private key to a config file. This is **not** a best practice; we're doing it here for convenience. Consider using environment variables when working on a real project.
 
 :::
+
+<!-- todo: partialize this - duplicated in Orbit quickstart -->
 
 Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network:
 
