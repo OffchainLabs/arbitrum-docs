@@ -818,4 +818,6 @@ article a:not([data-quicklook-from]):not(.footnote-ref) {
 .navbar__item {
   font-size: clamp(0.8rem, 1.25vw, 1rem);
   line-height: 1.5;
+  padding-top: 0;
+  padding-bottom: 0;
 }
