@@ -8,17 +8,11 @@ content-type: how-to
 
 You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
 
-### 2. Clone the [nitro repo](https://github.com/OffchainLabs/nitro)
+### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 ```bash
-git clone https://github.com/OffchainLabs/nitro.git
-cd nitro
-```
-
-### 3. Checkout the latest release
-
-```bash
-git checkout tags/@latestNitroVersionTag@ -b @latestNitroVersionTag@
+git clone https://github.com/OffchainLabs/nitro-testnode.git
+cd nitro-testnode
 ```
 
 ### 4. Install submodules
@@ -45,13 +39,13 @@ To relaunch the node after the first installation, run the following command.
 
 ### Default endpoints and addresses
 
-The L1 Geth devnet will be running at http://localhost:8545 and the L2 Nitro devnet at http://localhost:8547.
+The L1 Geth devnet will be running at `http://localhost:8545` and the L2 Nitro devnet at `http://localhost:8547`.
 
 The following accounts will be prefunded with Ether:
 
-- _L2 Nitro devnet_: `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2`
+- L2 Nitro devnet: `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2`
 
-- _both networks_: `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
+- Both networks (L1 and L2): `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
 
 
 ### How to get core contracts
@@ -59,7 +53,7 @@ The following accounts will be prefunded with Ether:
 For addresses of the deployed core protocol contracts, run
 
 ```bash
-docker exec nitro-sequencer-1  cat /config/deployment.json
+docker exec nitro-testnode_sequencer_1  cat /config/deployment.json
 ```
 
 For the outbox address, run (replace "PUT_THE_ROLLUP_ADDRESS_HERE" with rollup address):
@@ -118,4 +112,4 @@ Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explore
 ./test-node.bash --blockscout
 ```
 
-The block explorer will be available at http://localhost:4000
+The block explorer will be available at `http://localhost:4000`
