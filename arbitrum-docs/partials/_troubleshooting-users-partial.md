@@ -142,3 +142,17 @@ A week is expected to be more than enough time for validators to carry out an in
 
 
 
+### Where can I find a list of the current validators of the Arbitrum chains? {#where-can-i-find-a-list-of-the-current-validators-of-the-arbitrum-chains}
+<p>Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators">here</a></strong>. Governance currently has the power to change this status.</p>
+
+<p></p>
+
+
+
+### Where can I find the current Data Availability Committee members? {#where-can-i-find-the-current-data-availability-committee-members}
+<p>The Arbitrum Nova chain has a 7-party DAC, whose members can be seen <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members">here</a></strong>. Governance has the ability to remove or add members to the committee.</p>
+
+<p></p>
+
+
+
