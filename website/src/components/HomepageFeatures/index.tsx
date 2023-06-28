@@ -49,7 +49,7 @@ const FeatureList: FeatureItem[] = [
     title: "Quickstart: Launch an Orbit chain",
     Svg: require("@site/static/img/orbit-galaxy.svg").default,
     href: "/launch-orbit-chain/orbit-quickstart",
-    description: <>Learn how to launch a local orbit chain that settles to the public Arbitrum Goerli testnet.</>,
+    description: <>Learn how to launch a local Orbit chain that settles to the public Arbitrum Goerli testnet.</>,
   }
 ];
 
