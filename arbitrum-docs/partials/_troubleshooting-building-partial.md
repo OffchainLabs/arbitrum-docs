@@ -110,7 +110,7 @@ To let's find out which is custom error this signature represents, we can use th
 
 
 ### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs? {#why-am-i-getting-error-429-too-many-requests-when-using-one-of-offchain-labs-public-rpcs}
-<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you are hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/running-a-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
+<p>Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing. Hitting the rate limit could come from your request frequency and/or the resources required to process the requests. If you are hitting our rate limit, we recommend <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node">running your own node</a> or <a href="https://developer.arbitrum.io/node-running/node-providers">using a third party node provider</a>.</p>
 
 <p></p>
 
@@ -152,7 +152,7 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 <p>Arbitrum Goerli testnet has the same full feature-set as the mainnet networks. It is also a "true" L2 that runs on top of the Goerli testnet (L1), using it for security and settlement.</p>
 
-<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io">bridge</a>.</p>
+<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
 
 <p></p>
 

@@ -10,7 +10,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s custom generic gateway](/asset-bridging.mdx#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview for token bridging](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview.mdx).
+In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s custom generic gateway](/asset-bridging.mdx#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/asset-bridging.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/for-devs/quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -25,7 +25,11 @@ First of all, the **L1 counterpart of the token**, must conform to the [ICustomT
 - It must have a `isArbitrumEnabled` method that returns `0xb1`
 - It must have a method that makes an external call to `L1CustomGateway.registerCustomL2Token` specifying the address of the L2 contract, and to `L1GatewayRouter.setGateway` specifying the address of the custom gateway. These calls should be made only once to configure the gateway.
 
-These methods are needed to register the token via the gateway contract. If your L1 contract does not include these methods and it is not upgradeable, registration could alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal. Keep in mind that this registration can only be done once.
+These methods are needed to register the token via the gateway contract. If your L1 contract does not include these methods and it is not upgradeable, registration could alternatively be performed in one of these ways:
+- As a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
+- By wrapping your L1 token and registering the wrapped version of your token.
+
+Keep in mind that this registration can only be done once.
 
 Also, the **L2 counterpart of the token**, must conform to the [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
 
@@ -381,4 +385,4 @@ Yes, if your token has a standard ERC20 counterpart on L2, you can go through th
 
 1. [Concept page: Token Bridge](/asset-bridging.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
-3. [Token bridge contract addresses](/useful-addresses.mdx)
+3. [Token bridge contract addresses](/for-devs/useful-addresses.mdx)
