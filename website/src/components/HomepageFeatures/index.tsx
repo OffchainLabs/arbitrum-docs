@@ -46,10 +46,10 @@ const FeatureList: FeatureItem[] = [
     animate: true,
   },
   {
-    title: "Troubleshoot your node",
-    Svg: require("@site/static/img/node.svg").default,
-    href: "/node-running/troubleshooting-running-nodes",
-    description: <>Use this interactive troubleshooting guide to quickly diagnose your node issues.</>,
+    title: "Quickstart: Launch an Orbit chain",
+    Svg: require("@site/static/img/orbit-galaxy.svg").default,
+    href: "/launch-orbit-chain/orbit-quickstart",
+    description: <>Learn how to launch a local orbit chain that settles to the public Arbitrum Goerli testnet.</>,
   }
 ];
 
