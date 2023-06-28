@@ -29,8 +29,8 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Quickstart: Run a node",
     Svg: require("@site/static/img/node.svg").default,
-    href: "/node-running/running-a-node",
-    description: <>Learn how to run a full node (Nitro) on your local machine.</>,
+    href: "/node-running/quickstart-running-a-node",
+    description: <>Learn how to run a node to interact with any Arbitrum network.</>,
   },
   {
     title: "Quickstart: Bridge tokens",
