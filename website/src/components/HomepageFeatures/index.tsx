@@ -29,8 +29,8 @@ const FeatureList: FeatureItem[] = [
   {
     title: "Quickstart: Run a node",
     Svg: require("@site/static/img/node.svg").default,
-    href: "/node-running/running-a-node",
-    description: <>Learn how to run a full node (Nitro) on your local machine.</>,
+    href: "/node-running/quickstart-running-a-node",
+    description: <>Learn how to run a node to interact with any Arbitrum network.</>,
   },
   {
     title: "Quickstart: Bridge tokens",
@@ -46,10 +46,10 @@ const FeatureList: FeatureItem[] = [
     animate: true,
   },
   {
-    title: "Troubleshoot your node",
-    Svg: require("@site/static/img/node.svg").default,
-    href: "/node-running/troubleshooting-running-nodes",
-    description: <>Use this interactive troubleshooting guide to quickly diagnose your node issues.</>,
+    title: "Quickstart: Launch an Orbit chain",
+    Svg: require("@site/static/img/orbit-galaxy.svg").default,
+    href: "/launch-orbit-chain/orbit-quickstart",
+    description: <>Learn how to launch a local Orbit chain that settles to the public Arbitrum Goerli testnet.</>,
   }
 ];
 
