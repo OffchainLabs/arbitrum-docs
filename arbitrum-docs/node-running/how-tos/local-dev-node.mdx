@@ -13,23 +13,17 @@ You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](h
 ### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 ```bash
-git clone https://github.com/OffchainLabs/nitro-testnode.git
+git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git
 cd nitro-testnode
 ```
 
-### 3. Install submodules
-
-```bash
-git submodule update --init --recursive
-```
-
-### 4. Run your node
+### 3. Run your node
 
 ```bash
 ./test-node.bash --init
 ```
 
-### 5. Successive runs
+### 4. Successive runs
 
 To relaunch the node after the first installation, run the following command.
 
