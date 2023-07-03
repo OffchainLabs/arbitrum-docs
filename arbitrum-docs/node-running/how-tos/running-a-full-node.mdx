@@ -78,6 +78,8 @@ content-type: how-to
 
 - `--init.url="<snapshot file>"`
   - URL to download the genesis database from. Only required when starting an Arbitrum One node for the first time. You can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html). If you want to run an archive node, use the url in [running an archive node](./running-an-archive-node.mdx).
+- `--init.download-path="</path/to/directory>"`
+  - Location to temporarily save the downloaded database snapshot (it defaults to "/tmp/"). It is used together with `--init.url` when needed.
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
