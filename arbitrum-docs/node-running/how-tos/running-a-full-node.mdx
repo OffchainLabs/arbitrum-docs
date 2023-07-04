@@ -74,6 +74,12 @@ content-type: how-to
 - By default, the full node will run in Watchtower mode. This means that the node watches the on-chain assertions and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`.
 - Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode by using the parameter `--node.staker.enable=false`.
 
+### Pruning
+
+Pruning a full node refers to the process of removing older, unnecessary data from the local copy of the blockchain that the node maintains, in order to save disk space and slightly improve the efficiency of the node. Pruning will remove all states from blocks older than the latest 128.
+
+You can activate pruning by using the parameter `--init.prune` and using "full" or "validator" as the value (depending on the type of node you are running). Keep in mind that this process will happen upon starting the node and it will not serve RPC requests while pruning.
+
 ### Optional parameters
 
 - `--init.url="<snapshot file>"`
