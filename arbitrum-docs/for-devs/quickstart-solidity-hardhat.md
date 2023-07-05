@@ -434,7 +434,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 <!--todo: figure out what next steps they're actually looking for by performing content tests -->
 
  - Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
- - Visit [Public chains](/for-devs/concepts/public-chains.mdx) for a list of public chains that you can deploy your smart contracts to.
+ - Visit [RPC endpoints and providers](/node-running/node-providers.mdx#rpc-endpoints) for a list of public chains that you can deploy your smart contracts to.
    
 
 
