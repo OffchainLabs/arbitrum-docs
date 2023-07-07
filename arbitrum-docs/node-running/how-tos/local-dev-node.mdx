@@ -55,6 +55,12 @@ If you want to see information of a particular script, you can add the name of t
 ./test-node.bash script send-l1 --help
 ```
 
+Here's an example of how to run the script that funds an address on L2. Replace `0x11223344556677889900` with the address you want to fund.
+
+```bash
+./test-node.bash script send-l2 --to address_0x11223344556677889900 --ethamount 5
+```
+
 ### Blockscout
 
 Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explorer. To access it, add the param `--blockscout` when running your node.
