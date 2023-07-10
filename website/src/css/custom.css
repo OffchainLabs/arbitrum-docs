@@ -154,10 +154,10 @@
   --prysm-pink: var(--prysm-pink-light);
   --tab-gray: #aaa;
 }
-[data-theme="dark"] .dynamic-content-tabs .tabs__item:first-child {
+[data-theme="dark"] .dynamic-content-tabs .tabgroup-with-label .tabs__item:first-child {
   color: #eee;
 }
-[data-theme="dark"] .dynamic-content-tabs .tabs__item:first-child:hover {
+[data-theme="dark"] .dynamic-content-tabs .tabgroup-with-label .tabs__item:first-child:hover {
   background-color: transparent !important;
 }
 [data-theme="dark"] .troubleshooting-report-area > span {
@@ -598,6 +598,9 @@ article .markdown p > code {
   margin-top: 0;
   font-size: 13px;
   color: #333;
+}
+.troubleshooting-report-area > code {
+  font-size: 13px;
 }
 .troubleshooting-report-area > textarea {
   -ms-overflow-style: none;

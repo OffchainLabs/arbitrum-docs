@@ -49,12 +49,14 @@
   --tab-gray: #aaa;
 
   .dynamic-content-tabs {
-    .tabs__item {
-      &:first-child {
-        color: #eee;
+    .tabgroup-with-label {
+      .tabs__item {
+        &:first-child {
+          color: #eee;
 
-        &:hover {
-          background-color: transparent !important;
+          &:hover {
+            background-color: transparent !important;
+          }
         }
       }
     }
@@ -622,6 +624,10 @@ article {
     margin-top: 0;
     font-size: 13px;
     color: #333;
+  }
+
+  > code {
+    font-size: 13px;
   }
 
   > textarea {

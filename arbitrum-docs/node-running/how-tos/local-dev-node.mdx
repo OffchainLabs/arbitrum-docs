@@ -4,6 +4,8 @@ description: Learn how to run an Arbitrum local dev node on your local machine.
 content-type: how-to
 ---
 
+A local Arbitrum Nitro dev node can help you deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of deploying and running a full development environment on your local machine that includes a Nitro dev node, a dev-mode geth L1, and multiple instances with different roles.
+
 ### 1. Install prerequisites
 
 You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
@@ -11,23 +13,17 @@ You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](h
 ### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 ```bash
-git clone https://github.com/OffchainLabs/nitro-testnode.git
+git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git
 cd nitro-testnode
 ```
 
-### 4. Install submodules
-
-```bash
-git submodule update --init --recursive
-```
-
-### 5. Run your node
+### 3. Run your node
 
 ```bash
 ./test-node.bash --init
 ```
 
-### 6. Successive runs
+### 4. Successive runs
 
 To relaunch the node after the first installation, run the following command.
 
@@ -37,9 +33,47 @@ To relaunch the node after the first installation, run the following command.
 
 ⚠️ Note that running with the --init flag will clear all chain data and redeploy!
 
+### Additional arguments
+
+You can find a list of additional arguments to use with `test-node.bash` by using `--help`.
+
+```bash
+./test-node.bash --help
+```
+
+### Helper scripts
+
+The repository includes a set of helper scripts for basic actions like funding accounts or bridging funds. You can see a list of the available scripts by running:
+
+```bash
+./test-node.bash script --help
+```
+
+If you want to see information of a particular script, you can add the name of the script to the help command.
+
+```bash
+./test-node.bash script send-l1 --help
+```
+
+Here's an example of how to run the script that funds an address on L2. Replace `0x11223344556677889900` with the address you want to fund.
+
+```bash
+./test-node.bash script send-l2 --to address_0x11223344556677889900 --ethamount 5
+```
+
+### Blockscout
+
+Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explorer. To access it, add the param `--blockscout` when running your node.
+
+```bash
+./test-node.bash --blockscout
+```
+
+The block explorer will be available at `http://localhost:4000`
+
 ### Default endpoints and addresses
 
-The L1 Geth devnet will be running at `http://localhost:8545` and the L2 Nitro devnet at `http://localhost:8547`.
+The L1 Geth devnet will be running at `http://localhost:8545` and the L2 Nitro devnet at `http://localhost:8547` and `ws://localhost:8548`.
 
 The following accounts will be prefunded with Ether:
 
@@ -47,7 +81,9 @@ The following accounts will be prefunded with Ether:
 
 - Both networks (L1 and L2): `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
 
-### How to get core contracts
+You can fund other addresses by using the scripts `send-l1` and `send-l2` as explained [here](#helper-scripts).
+
+### How to get the core contracts
 
 For addresses of the deployed core protocol contracts, run
 
@@ -102,13 +138,3 @@ Some default addresses can be found here:
     }
 }
 ```
-
-### How to access Blockscout
-
-Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explorer. To access it, add the param `--blockscout` when running your node.
-
-```bash
-./test-node.bash --blockscout
-```
-
-The block explorer will be available at `http://localhost:4000`
