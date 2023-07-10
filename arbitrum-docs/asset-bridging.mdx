@@ -1,4 +1,4 @@
-import DepositEthDiagram from './diagrams/\_deposit-eth.mdx';
+import DepositEthDiagram from './diagrams/_deposit-eth.mdx';
 
 # Token Bridging
 
@@ -13,6 +13,7 @@ function depositEth(address destAddr) external payable override returns (uint256
 ```
 
 As far as Ethereum knows, all deposited funds are held by Arbitrum's Bridge contract.
+
 <DepositEthDiagram />
 
 Withdrawing ether can be done using the [ArbSys](./arbos/precompiles#ArbSys) withdrawEth method:

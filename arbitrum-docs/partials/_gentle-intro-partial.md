@@ -68,6 +68,6 @@ For applications that require high transaction throughput and don’t require th
 
 Yep! The fact that multiple chains can run in parallel is a crucial perk to off-chain scaling technology. Currently, on Ethereum mainnet, there are 2 Arbitrum chains: one Arbitrum Rollup chain, called ["Arbitrum One,"](https://portal.arbitrum.one/) and one AnyTrust chain, called ["Nova"](https://nova.arbitrum.io/); users and developers can pick whatever suits their security / transaction cost needs.
 
-
 #### Q: Who makes decisions about the future of Arbitrum One and Arbitrum Nova?
+
 The Arbitrum One and Nova chains are owned by the Governance system; to learn more, see the [Arbitrum Governance docs](https://docs.arbitrum.foundation/).
