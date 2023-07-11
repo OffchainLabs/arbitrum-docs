@@ -6,11 +6,11 @@ author: symbolpunk
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
-import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md'; 
+import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md';
 
 <UnderConstructionPartial />
 
@@ -28,11 +28,9 @@ Let's briefly review each of the deployment configuration parameters, the ration
 
 Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
-
 ### Chain name
 
 This name provides a way for people to distinguish your Orbit chain from other Orbit chains. You’ll want to make this a name that you can easily remember, and that your users and developers will recognize.
-
 
 ### Challenge period (blocks)
 
@@ -44,13 +42,11 @@ Note that the challenge period is measured in blocks on the underlying L1 chain,
 
 <!-- todo: revisit and discuss defaults -->
 
-
 ### Stake token
 
-Your Orbit chain will be supported by at least one node. In order for your chain's nodes to record transactions, they're required to stake some value as a way to incentivize honest participation. 
+Your Orbit chain will be supported by at least one node. In order for your chain's nodes to record transactions, they're required to stake some value as a way to incentivize honest participation.
 
 This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your chain is settling to - Arbitrum Goerli**.
-
 
 ### Base stake
 

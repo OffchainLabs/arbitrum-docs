@@ -1,5 +1,5 @@
 ---
-title: "How to read the Sequencer feed"
+title: 'How to read the Sequencer feed'
 todos:
   - Follow convention and style guide
   - Communicate "who this is for" and "under which scenarios this is useful".
@@ -37,7 +37,6 @@ When connected to websocket port `9642` of the local relay, you'll receive feed 
 ```
 
 Breaking this down a bit: the top-level data structure is defined by the [BroadcastMessage struct](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/broadcaster/broadcaster.go#L42):
-
 
 ```
 type BroadcastMessage struct {
@@ -79,7 +78,6 @@ type L1IncomingMessage struct {
 ```
 
 In [this file](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/arbos/incomingmessage.go#L227), we can find a `ParseL2Transactions` function, which you can use this to decode the message.
-
 
 ### Using the feed relay, you can also calculate the corresponding `L2 block number` of a message:
 

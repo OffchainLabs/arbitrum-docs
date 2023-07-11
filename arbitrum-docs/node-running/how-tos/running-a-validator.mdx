@@ -21,7 +21,6 @@ Here we describe different strategies that validators follow and provide instruc
   - `MakeNodes` (allowlist required)
     - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
     - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
-  
 - There's one more validation strategy that is not allowlisted and is available for all types of node: `Watchtower`. A node in `Watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action on-chain. This strategy is enabled by default in all nodes (full and archive).
 
 ### Running a Watchtower validator

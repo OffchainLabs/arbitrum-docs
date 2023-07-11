@@ -1,5 +1,5 @@
 ---
-title: "Quickstart: Run a node"
+title: 'Quickstart: Run a node'
 description: Learn more about what type of ARb node one needs to run.
 author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
@@ -7,7 +7,7 @@ reader-task: Run a node with minimal effort and maximum understanding
 content-type: quickstart
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -25,7 +25,7 @@ For a detailed instruction of how to run an Arbitrum full node, see [here](./how
 
 ### Considerations for running an Arbitrum archive node
 
-While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power. 
+While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
 For a detailed instruction of how to run an Arbitrum archive node, see [here](./how-tos/running-an-archive-node.mdx).
 
