@@ -2,6 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const variableInjector = require('./src/remark/variable-injector');
+const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -69,9 +70,9 @@ const config = {
       "@docusaurus/plugin-content-docs",
       {
         id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
+        path: "./sdk-docs",
         routeBasePath: "sdk",
-        // ... other options
+        sidebarItemsGenerator: sdkSidebarGenerator,
       },
     ],
     [
