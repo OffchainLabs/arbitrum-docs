@@ -1,1 +1,0 @@
-This commit is intended to trigger the CLA check.
