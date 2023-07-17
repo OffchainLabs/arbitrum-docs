@@ -55,7 +55,7 @@ const sidebars = {
         {
           type: "category",
           label: "Bridge tokens",
-          collapsed: false,
+          collapsed: true,
           items: [
             {
               type: "doc",
@@ -89,7 +89,7 @@ const sidebars = {
     {
       type: "category",
       label: "Concepts",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "doc",
@@ -153,7 +153,7 @@ const sidebars = {
     {
       type: "category",
       label: "Developer tools and resources",
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: "doc",
@@ -211,6 +211,11 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting: Building dApps",
       id: "for-devs/troubleshooting-building"
+    },
+    {
+      type: "doc",
+      label: "Contribute",
+      id: "for-devs/contribute"
     },
   ],
   bridgeTokensSidebar: [
