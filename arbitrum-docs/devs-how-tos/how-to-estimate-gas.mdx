@@ -10,7 +10,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-This how-to is intended for users and developers who want to understand how gas is calculated in Arbitrum, and how it can be estimated before submitting transactions. More information about the theory behind these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/arbos/gas) page. 
+This how-to is intended for users and developers who want to understand how gas is calculated in Arbitrum, and how it can be estimated before submitting transactions. More information about the theory behind these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/arbos/gas.mdx) page. 
 
 We'll first break down the formula mentioned in the Medium article, moving then to where to get the information of each variable, and finally seeing an example of how to apply the formula in your code as well as other practical ways of estimating gas costs.
 
@@ -24,7 +24,7 @@ As explained in the Medium article, the transaction fees to pay at any given mom
 Transaction fees (TXFEES) = L2 Gas Price (P) * Gas Limit (G)
 ```
 
-This Gas Limit includes the gas of the L2 computation and an additional buffer to cover the L1 gas to be paid by the Sequencer when [posting the batch including this transaction on L1](/inside-arbitrum-nitro/#how-the-sequencer-publishes-the-sequence).
+This Gas Limit includes the gas of the L2 computation and an additional buffer to cover the L1 gas to be paid by the Sequencer when [posting the batch including this transaction on L1](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#how-the-sequencer-publishes-the-sequence).
 
 ```
 Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
@@ -34,7 +34,7 @@ This buffer takes into account the cost of posting the transaction, batched and 
 - L1S, which estimates the amount of data the transaction will take up in the batch by compressing the transaction with Brotli.
 - L1P, which is the L2's estimated view of the current L1's price of data (per byte), which the L2 dynamically adjusts over time.
 
-More information is available [in this page](/arbos/l1-pricing).
+More information is available [in this page](/arbos/l1-pricing.mdx).
 
 ```
 L1 Estimated Cost (L1C) = L1 price per byte of data (L1P) * Size of data to be posted in bytes (L1S)
@@ -54,42 +54,37 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We'll use two resources available in Arbitrum: the [ArbGasInfo](https://arbiscan.io/address/0x000000000000000000000000000000000000006c) precompile and the [NodeInterface](/arbos/gas#nodeinterfacesol).
+We'll use one resource available in Arbitrum: the [NodeInterface](/arbos/gas.mdx#nodeinterfacesol). 
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at 0.1 gwei on Arbitrum One (0.01 gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
-    - Call `ArbGasInfo.getPricesInWei()` and get the sixth element.
+    - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
 - L2G (Gas used on L2) ⇒ Gas used to compute the transaction on L2. This does not include the “*posting on L1”* part of the calculations. The value of L2G will depend on the transaction itself, but having the data of the transaction, we can calculate it as follows:
     - Call `NodeInterface.GasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`, which estimates the L1 part of the fees) from the first (`gasEstimate`, which includes both the L1 and the L2 parts).
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on L1:
-    - Call `ArbGasInfo.getPricesInWei()` and get the second element.
-- L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on L1 (140 bytes).
+    - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
+- L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on L1 (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.GasEstimateComponents()` take the first element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
     - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate is posted on L1, [as explained here](/inside-anytrust#data-availability-certificates).
 
 ## An example of how to apply this formula in your code
 
-Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We'll use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to `ArbGasInfo` and `NodeInterface`.
+Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We'll use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to the `NodeInterface`.
 
-We first instantiate a factory object for ArbGasInfo and NodeInterface, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the L2 network we are using, and both `ARB_GAS_INFO` and `NODE_INTERFACE_ADDRESS` are the addresses of the precompiles in said network.
+We first instantiate a factory object for the NodeInterface, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the L2 network we are using, and `NODE_INTERFACE_ADDRESS` is the addresses that we need to call to access NodeInterface methods in said network.
 
 ```ts
-const { ArbGasInfo__factory } = require("@arbitrum/sdk/dist/lib/abi/factories/ArbGasInfo__factory");
 const { NodeInterface__factory } = require("@arbitrum/sdk/dist/lib/abi/factories/NodeInterface__factory");
-const { ARB_GAS_INFO, NODE_INTERFACE_ADDRESS } = require("@arbitrum/sdk/dist/lib/dataEntities/constants");
+const { NODE_INTERFACE_ADDRESS } = require("@arbitrum/sdk/dist/lib/dataEntities/constants");
 
 ...
 
-// Instantiation the ArbGasInfo and NodeInterface objects
-const arbGasInfo = ArbGasInfo__factory.connect(
-    ARB_GAS_INFO,
-    l2Provider
-);
+// Instantiation of the NodeInterface object
 const nodeInterface = NodeInterface__factory.connect(
     NODE_INTERFACE_ADDRESS,
-    l2Provider
+    baseL2Provider
 );
 ```
 
-For this example, we'll use the method `ArbGasInfo.getPricesInWei()` and `NodeInterface.gasEstimateComponents()` to get the information we need. For the `gasEstimateComponents()` call, we'll pass a `destinationAddress` (this can be any address) and the data we want to send, to get results as accurate as possible.
+For this example, we'll use the method `NodeInterface.gasEstimateComponents()` to get the information we need. For the `gasEstimateComponents()` call, we'll pass a `destinationAddress` (this should be the address that you intend to call in your transaction) and the data we want to send, to get results as accurate as possible. You can also specify a different block number (in hex) in the object passed as the last parameter.
 
 ```ts
 // Getting the gas prices from ArbGasInfo.getPricesInWei()
@@ -99,18 +94,34 @@ const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
 const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
     destinationAddress,
     false,
-    txData
+    txData,
+    {
+        blockTag: "latest"
+    }
 );
 ```
 
 With this, we can now get the values of the 4 variables we'll use in our formula:
 
 ```ts
-// Setting the variables of the formula
-const P = gasComponents[5];
-const L2G = gasEstimateComponents[0].sub(gasEstimateComponents[1]);
-const L1P = gasComponents[1];
-const L1S = 140 + txDataLengthInBytes;
+// Getting useful values for calculating the formula
+const l1GasEstimated = gasEstimateComponents.gasEstimateForL1;
+const l2GasUsed = gasEstimateComponents.gasEstimate.sub(gasEstimateComponents.gasEstimateForL1);
+const l2EstimatedPrice = gasEstimateComponents.baseFee;
+const l1EstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
+
+// Calculating some extra values to be able to apply all variables of the formula
+// -------------------------------------------------------------------------------
+// NOTE: This one might be a bit confusing, but l1GasEstimated (B in the formula) is calculated based on l2 gas fees
+const l1Cost = l1GasEstimated.mul(l2EstimatedPrice);
+// NOTE: This is similar to 140 + utils.hexDataLength(txData);
+const l1Size = l1Cost.div(l1EstimatedPrice);
+
+// Setting the basic variables of the formula
+const P = l2EstimatedPrice;
+const L2G = l2GasUsed;
+const L1P = l1EstimatedPrice;
+const L1S = l1Size;
 ```
 
 And finally, we estimate the transaction fees applying the formula described in the beginning.
@@ -135,8 +146,9 @@ Refer to [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tut
 
 Instead of going through the formula, we can also use the following methods to easily estimate gas costs:
 
+- We can call `NodeInterface.gasEstimateComponents()` and obtain the first result, `gasEstimate`, to get the gas limit of the transaction. We would then need to multiply that amount by the L2 gas price, which we can get in the third result, `baseFee`.
 - We can call an Arbitrum node’s `eth_estimateGas` to get the gas limit of the transaction. We would then need to multiply that amount by the L2 gas price, which we can get by calling `eth_gasPrice`.
-- When working with L1 to L2 messages (also known as [Retryable tickets](/arbos/l1-to-l2-messaging)), we can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/nitro/blob/master/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send the transaction.
+- When working with L1 to L2 messages (also known as [Retryable tickets](/arbos/l1-to-l2-messaging.mdx)), we can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/nitro/blob/master/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send the transaction.
 
 ## Final note
 

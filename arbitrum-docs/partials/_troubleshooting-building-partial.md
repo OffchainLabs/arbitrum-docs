@@ -152,7 +152,7 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 <p>Arbitrum Goerli testnet has the same full feature-set as the mainnet networks. It is also a "true" L2 that runs on top of the Goerli testnet (L1), using it for security and settlement.</p>
 
-<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io">bridge</a>.</p>
+<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
 
 <p></p>
 

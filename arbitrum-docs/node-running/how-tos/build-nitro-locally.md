@@ -10,7 +10,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-This how-to is based on [debian-11.6.0-arm64](https://cdimage.debian.org/debian-cd/current/arm64/iso-cd/debian-11.6.0-arm64-netinst.iso).
+This how-to is based on [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/arm64/iso-cd/debian-11.7.0-arm64-netinst.iso) and [Ubuntu 22.04 (amd64)](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso).
 
 ### 1. Configure prerequisites
 

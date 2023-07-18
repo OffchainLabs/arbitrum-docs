@@ -153,9 +153,9 @@ import {GenerateTroubleshootingReportWidget} from '@site/src/components/Generate
 
 <div className='troubleshooting-report-area'>
     <p>Node startup command</p>
-    <textarea id="vn-cmd" rows="3" placeholder='Optional. Paste something like "{example command}" (or Docker config) here...'></textarea>
+    <textarea id="vn-cmd" rows="3" placeholder='Paste here the command you use to run your node: "docker run ..."'></textarea>
     <p>Unexpected output</p>
-    <span><strong>Tip:</strong> Paste the ~100 lines of output <strong>before and including</strong> the unexpected output you're asking about.</span>
+    <span><strong>Tip:</strong> Paste the ~100 lines of output <strong>before and including</strong> the unexpected output you're asking about. You can use the following command to get the logs: </span><code>docker logs --tail 100 YOUR_CONTAINER_ID</code>
     <textarea id="output" rows="3" placeholder='Paste your unexpected output here...'></textarea>
     <a id='generate-report' className='generate-report'>Generate troubleshooting report</a>
     <div id='generated-report' className='generated-report'>Complete the checklist above before generating...</div>
