@@ -58,29 +58,30 @@ You can mark your pull request as `Draft` while you draft your content. **Includ
 
 ### "Third-party docs" protocol
 
-**Third-party docs** are documents that help readers use *other* products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum's products.
+**Third-party docs** are documents authored by partner teams that help readers of Arbitrum docs use partners' products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
 
 The protocol for creating new third-party docs is the same as that of [Creating new core documents](#creating-new-third-party-documents), with the following additions:
 
  1. **Eligibility**
     - For now, you can only add third-party docs if your project is listed in the [Arbitrum portal](https://portal.arbitrum.io/).
     - To submit your project to the Arbitrum portal, [apply using this Google form](https://docs.google.com/forms/d/e/1FAIpQLSezhBlPgKIKKWgXKUz4MmlJPdHyfmPQlxUtS48HlRoi0e14_Q/viewform).
- 1. **Purpose**
+ 2. **Purpose**
     - The purpose of our `Third-party docs` sections is to ***meet Arbitrum developer (or user) demand for guidance that helps them use non-Arbitrum products with Arbitrum products***.
-    - It's *not* meant to drive traffic to your product (although that may happen); it's meant to solve problems that our readers are actually facing.
- 2. **Maintenance expectations**
+    - It's *not* meant to drive traffic to your product (although that may happen); it's meant to solve problems that our readers are actually facing, which are directly related to Arbitrum products.
+    - Supporting Arbitrum products isn't enough; we need to be able to prove to ourselves that our readers actually need the proposed third-party content.
+ 3. **Maintenance expectations**
     - Offchain Labs can't commit to maintaining third-party docs, but we make it easy for you to maintain them.
     - Ensure that your document's YAML frontmatter contains a `third_party_content_owner` property, with the Github username of the designated maintainer. This person will be assigned to your document's issues and PRs, and will be expected to resolve them in a timely manner.
- 3. **Organization**
+ 4. **Organization**
     - Third-party docs are organized within the `Third-party content` node located at the bottom of each documentation section’s sidebar.
     - This node’s content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
- 4. **Limited document types**
+ 5. **Limited document types**
     - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***.
- 5. **One document at a time, starting with a quickstart or how-to**
+ 6. **One document at a time, starting with a quickstart or how-to**
     - Third-party document PRs should contain at most one new document. Your first contribution should be a quickstart or how-to.
     - Additional documents will be merged only if we can verify that Arbitrum developers are deriving value from your initial Quickstart contribution.
     - The way that we do this isn't yet firmly established, and it isn't publicly disclosed. Our current approach combines a number of objective and subjective measures.
- 6. **Policy acknowledgment**
+ 7. **Policy acknowledgment**
     - Before merging third-party documentation PRs, we ask contributors to acknowledge that they've read, understood, and agree with the following policies. 
       1. **Content ownership**: As the author, you retain ownership of and responsibility for the content you contribute. You're free to use your content in any way you see fit outside of Arbitrum's docs. Remember that when contributing content to our documentation, you must ensure you have the necessary rights to do so, and that the content doesn't infringe on the intellectual property rights of others.
       2. **License for use**: By contributing your content to our documentation, you grant Offchain Labs a non-exclusive, royalty-free license to use, reproduce, adapt, translate, distribute, and display the content in our documentation. This allows us to integrate your content into our docs and make it available to all users.
