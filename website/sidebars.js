@@ -214,7 +214,6 @@ const sidebars = {
     },
     {
       type: "doc",
-      label: "Contribute",
       id: "for-devs/contribute"
     },
   ],
@@ -233,6 +232,10 @@ const sidebars = {
       type: "doc",
       label: "Troubleshooting: Bridge tokens",
       id: "for-users/troubleshooting-users"
+    },
+    {
+      type: "doc",
+      id: "for-users/contribute"
     },
   ],
   runNodesSidebar: [
@@ -318,7 +321,11 @@ const sidebars = {
       type: "doc",
       label: "Frequently asked questions: Run a node",
       id: "node-running/faq"
-    }
+    },
+    {
+      type: "doc",
+      id: "node-running/contribute"
+    },
   ],
   launchAnOrbitChainSidebar: [
     {
@@ -485,7 +492,11 @@ const sidebars = {
       type: "doc",
       label: "Audit reports",
       id: "audit-reports"
-    }
+    },
+    {
+      type: "doc",
+      id: "learn-more/contribute"
+    },
   ],
 };
 
