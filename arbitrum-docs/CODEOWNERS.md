@@ -1,9 +1,13 @@
 # Learn more here: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# @symbolpunk "owns" all files within the partner-content directory
-# this assignment applies to all files in all partner-content directories within this repo, including all files in all subdirectories
-**/partner-content/  @symbolpunk
+# recursively assign ownership of all files within all `third-party-docs` directories to @symbolpunk
+**/third-party-docs/  @symbolpunk
 
-/for-devs/contribute.md
+# assign all contribute.md files to @symbolpunk
+**/contribute.md @symbolpunk
 
-.sidebars.js @symbolpunk
+# assign all files within `partial` folders to @symbolpunk
+**/partials/
+
+# assign ownership of `sidebars.js` to @symbolpunk
+./sidebars.js @symbolpunk
