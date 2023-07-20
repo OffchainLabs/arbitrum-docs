@@ -297,7 +297,7 @@ Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional
 
 ![Architecture diagram](assets/quickstart-vending-machine-architecture.png)
 
-The `WEB3-LOCALHOST` architecture is similar to to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers.
+The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers.
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
