@@ -18,7 +18,7 @@ When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/dep
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
 
-<PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner" />
+<PlaceholderForm inputs='Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner' />
 
 This form will be prefilled with default values that usually don't need to be changed. However, there are some cases where you may want to customize the configuration values. This how-to explains how and when to modify these default values.
 
