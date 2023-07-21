@@ -1,21 +1,26 @@
 ---
-title: 'Native USDC on Arbitrum One: An overview'
-sidebar_label: "Native USDC on Arbitrum One"
-description: "Learn more about the diffrent types of USDC, Native USDC and Bridged USDC, on Arbitrum One"
+title: 'USDC on Arbitrum One: A conceptual overview'
+sidebar_label: "USDC on Arbitrum One"
+description: "Learn about the two different types of USDC supported by Arbitrum One: Arbitrum-Native USDC and Bridged (from Ethereum) USDC"
 author: amarrazza
-target_audience: end users who are not familiar with the different types of USDC
+target_audience: End-users who are not familiar with the different types of USDC
 sidebar_position: 4
 ---
 
-This overview is for users who want to learn about the different types of USDC on Arbitrum One.
+Arbitrum One supports two different types of USDC:
 
-import PublicPreviewBannerPartial from './partials/_public-preview-banner-partial.md';
+ 1. **Arbitrum-native USDC (USDC)**: USDC tokens native to the Arbitrum One chain.
+ 2. **Bridged USDC (USDC.e)**: Ethereum-native USDC tokens that have been bridged to Arbitrum One.
+
+This concept doc describes the differences between these two types of USDC, along with relevant historical context.
+
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
-As of June 8th, there is “Arbitrum-native USDC” and “Bridged USDC” on Arbitrum One. Both tokens will operate normally in perpetuity. Below are more details about the two tokens:
+### Differences
 
-<table>
+<table className='small-table'>
   <tr>
     <th></th>
     <th>Arbitrum-native USDC</th>
@@ -45,6 +50,6 @@ As of June 8th, there is “Arbitrum-native USDC” and “Bridged USDC” on Ar
 
 The Arbitrum Bridge will continue to facilitate transfers of all USDC tokens. When depositing Ethereum-native USDC, the option exists to receive Bridged USDC using Arbitrum's bridge or Arbitrum-native USDC using Circle’s [Cross-Chain Transfer Protocol](https://www.circle.com/en/cross-chain-transfer-protocol).
 
-## Historical Context
+## Historical context
 
 Arbitrum One has supported Bridged USDC since conception, with over a billion Bridged USDC currently in circulation. On June 8th, Circle added support for the Cross-Chain Transfer Protocol and launched Arbitrum-native USDC, which enables direct minting and burning of Arbitrum-Native USDC on Arbitrum One. Due to this, the Bridged USDC token symbol was renamed from USDC to USDC.e to accommodate Arbitrum-native USDC. Although most platforms have better support for Bridged USDC, the expectation is that this will change over time. At a later date, there will be incentives implemented to help facilitate the conversion of Bridged USDC to Arbitrum-native USDC.
