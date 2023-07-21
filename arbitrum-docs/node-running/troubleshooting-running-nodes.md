@@ -25,29 +25,29 @@ At the end of this troubleshooting guide, you'll find a "Generate troubleshootin
 
 If you're running into unexpected outputs or errors, the following checklist may help you independently resolve your issue.
 
-<div className='hide-tabs'>
-  <div className='checklist'>
-    <div className='task'>
-      <div className='input-container'>
-        <input id='tc-1' type='checkbox' />
-        <span className='done'></span>
+<div className="hide-tabs">
+  <div className="checklist">
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-1" type="checkbox" />
+        <span className="done"></span>
       </div>
-      <div className='guidance-container'>
-        <label htmlFor='tc-1'>1. Select an Operating system, Network, and Node type above</label>
+      <div className="guidance-container">
+        <label htmlFor="tc-1">1. Select an Operating system, Network, and Node type above</label>
         <p>The guidance displayed on this page will change based on your selected configuration.</p>
       </div>
     </div>
-    <div className='task'>
-      <div className='input-container'>
-        <input id='tc-2' type='checkbox' />
-        <span className='done'></span>
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-2" type="checkbox" />
+        <span className="done"></span>
       </div>
-      <div className='guidance-container'>
-        <label htmlFor='tc-2'>2. Review the docs</label>
+      <div className="guidance-container">
+        <label htmlFor="tc-2">2. Review the docs</label>
         <Tabs
-          className='tabgroup-with-label node-type-tabgroup'
-          groupId='node-type'
-          defaultValue='full-node'
+          className="tabgroup-with-label node-type-tabgroup"
+          groupId="node-type"
+          defaultValue="full-node"
           values={[
             { label: 'Node type:', value: 'label' },
             { label: 'Full node', value: 'full-node' },
@@ -55,12 +55,12 @@ If you're running into unexpected outputs or errors, the following checklist may
             { label: 'Validator node', value: 'validator-node' },
           ]}
         >
-          <TabItem className='unclickable-element' value='label'></TabItem>
-          <TabItem value='full-node'>
+          <TabItem className="unclickable-element" value="label"></TabItem>
+          <TabItem value="full-node">
             <Tabs
-              className='tabgroup-with-label network-tabgroup'
-              groupId='network'
-              defaultValue='arb-one-nitro'
+              className="tabgroup-with-label network-tabgroup"
+              groupId="network"
+              defaultValue="arb-one-nitro"
               values={[
                 { label: 'Network:', value: 'label' },
                 { label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro' },
@@ -70,75 +70,75 @@ If you're running into unexpected outputs or errors, the following checklist may
                 { label: 'Localhost', value: 'localhost' },
               ]}
             >
-              <TabItem className='unclickable-element' value='label'></TabItem>
-              <TabItem value='arb-one-nitro'>
+              <TabItem className="unclickable-element" value="label"></TabItem>
+              <TabItem value="arb-one-nitro">
                 <p>
                   The{' '}
-                  <a href='/node-running/how-tos/running-a-full-node'>
+                  <a href="/node-running/how-tos/running-a-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
-              <TabItem value='arb-one-classic'>
+              <TabItem value="arb-one-classic">
                 <p>
-                  <a href='/node-running/how-tos/running-a-classic-node'>
+                  <a href="/node-running/how-tos/running-a-classic-node">
                     How to run a full node (Classic, pre-Nitro)
                   </a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
-              <TabItem value='arb-nova'>
+              <TabItem value="arb-nova">
                 <p>
                   The{' '}
-                  <a href='/node-running/how-tos/running-a-full-node'>
+                  <a href="/node-running/how-tos/running-a-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
-              <TabItem value='arb-goerli'>
+              <TabItem value="arb-goerli">
                 <p>
                   The{' '}
-                  <a href='/node-running/how-tos/running-a-full-node'>
+                  <a href="/node-running/how-tos/running-a-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
-              <TabItem value='localhost'>
+              <TabItem value="localhost">
                 <p>
-                  The <a href='/node-running/how-tos/local-dev-node'>How to run a local dev node</a>{' '}
+                  The <a href="/node-running/how-tos/local-dev-node">How to run a local dev node</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
             </Tabs>
           </TabItem>
-          <TabItem value='archive-node'>
+          <TabItem value="archive-node">
             <p>
-              <a href='/node-running/how-tos/running-an-archive-node'>How to run an archive node</a>{' '}
+              <a href="/node-running/how-tos/running-an-archive-node">How to run an archive node</a>{' '}
               may address your issue.
             </p>
           </TabItem>
-          <TabItem value='validator-node'>
+          <TabItem value="validator-node">
             <p>
-              <a href='/node-running/how-tos/running-a-validator'>How to run a validator</a> may
+              <a href="/node-running/how-tos/running-a-validator">How to run a validator</a> may
               address your issue.
             </p>
           </TabItem>
         </Tabs>
       </div>
     </div>
-    <div className='task'>
-      <div className='input-container'>
-        <input id='tc-3' type='checkbox' />
-        <span className='done'></span>
+    <div className="task">
+      <div className="input-container">
+        <input id="tc-3" type="checkbox" />
+        <span className="done"></span>
       </div>
-      <div className='guidance-container'>
-        <label htmlFor='tc-3'>3. Review the FAQ</label>
+      <div className="guidance-container">
+        <label htmlFor="tc-3">3. Review the FAQ</label>
         <p>
           Answers to frequently asked questions can be found in{' '}
-          <a href='/node-running/faq'>Frequently asked questions: Run a node</a>.
+          <a href="/node-running/faq">Frequently asked questions: Run a node</a>.
         </p>
       </div>
     </div>
@@ -149,7 +149,7 @@ If you're running into unexpected outputs or errors, the following checklist may
 
 Common troubleshooting scenarios and solutions are detailed below.
 
-<table className='small-table'>
+<table className="small-table">
   <tbody>
     <tr>
       <th style={{ minWidth: 180 + 'px' }}>Scenario</th>
@@ -246,11 +246,11 @@ import { GenerateTroubleshootingReportWidget } from '@site/src/components/Genera
 
 <GenerateTroubleshootingReportWidget />
 
-<div className='troubleshooting-report-area'>
+<div className="troubleshooting-report-area">
   <p>Node startup command</p>
   <textarea
-    id='vn-cmd'
-    rows='3'
+    id="vn-cmd"
+    rows="3"
     placeholder='Paste here the command you use to run your node: "docker run ..."'
   ></textarea>
   <p>Unexpected output</p>
@@ -259,11 +259,11 @@ import { GenerateTroubleshootingReportWidget } from '@site/src/components/Genera
     unexpected output you're asking about. You can use the following command to get the logs:{' '}
   </span>
   <code>docker logs --tail 100 YOUR_CONTAINER_ID</code>
-  <textarea id='output' rows='3' placeholder='Paste your unexpected output here...'></textarea>
-  <a id='generate-report' className='generate-report'>
+  <textarea id="output" rows="3" placeholder="Paste your unexpected output here..."></textarea>
+  <a id="generate-report" className="generate-report">
     Generate troubleshooting report
   </a>
-  <div id='generated-report' className='generated-report'>
+  <div id="generated-report" className="generated-report">
     Complete the checklist above before generating...
   </div>
 </div>
