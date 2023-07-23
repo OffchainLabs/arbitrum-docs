@@ -54,7 +54,7 @@ Similarly, Arbitrum to Ethereum transfers are initiated via the router contract 
 
 For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
-## The standard ERC-20 gateway
+## The standard ERC-20 gateway {#default-standard-bridging}
 
 By default, any ERC-20 token on L1 that isn't registered to a gateway can be permissionlessly bridged through the `StandardERC20Gateway`.
 
