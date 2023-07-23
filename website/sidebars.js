@@ -235,6 +235,17 @@ const sidebars = {
       label: "Troubleshooting: Bridge tokens",
       id: "for-users/troubleshooting-users"
     },
+    {
+      type: "category",
+      label: "Concepts",
+      collapsed: false,
+      items: [
+        {
+          type: "doc",
+          id: "bridge-tokens/concepts/usdc-concept"
+        }
+      ]
+    }
   ],
   runNodesSidebar: [
     {
