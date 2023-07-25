@@ -7,13 +7,13 @@ content-type: concept
 sidebar_position: 3
 ---
 
-The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "Canonical Bridge," which Offchain Labs implemented, and which should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (the Layer 1, or L1) and Arbitrum (the Layer 2, or L2) that leverages Arbitrum's [cross-chain message passing system](/for-devs/cross-chain-messsaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
+The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (the Layer 1, or L1) and Arbitrum (the Layer 2, or L2) that leverages Arbitrum's [cross-chain message passing system](/for-devs/cross-chain-messsaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
 
 ## Design rationale
 
 In our token bridge design, we use the term "gateway" as per [this proposal](https://ethereum-magicians.org/t/outlining-a-standard-interface-for-cross-domain-erc20-transfers/6151); i.e., one of a pair of contracts on two different domains (i.e., Ethereum and an Arbitrum chain), used to facilitate cross-domain asset transfers.
 
-We describe now some core goals that motivated the design of our bridging system.
+We now describe some core goals that motivated the design of our bridging system.
 
 ### Custom gateway functionality
 
@@ -38,7 +38,7 @@ With this in mind, we provide an overview of our token bridging architecture.
 
 Our architecture consists of three types of contracts:
 
-1. **Asset contracts**: these are the token contracts themselves, i.e., an ERC-20 on L1 and it's counterpart on Arbitrum.
+1. **Asset contracts**: These are the token contracts themselves, i.e., an ERC-20 on L1 and it's counterpart on Arbitrum.
 2. **Gateways**: Pairs of contracts (one on L1, one on L2) that implement a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on L1, one on L2) that route each asset to its designated gateway.
 
@@ -86,7 +86,7 @@ Note that arbSomeERC20Token is an instance of [StandardArbERC20](https://github.
 
 Just because a token has requirements beyond what are offered via the standard ERC-20 gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
 
-**If your custom token has the ability to increase its supply (i.e, mint) directly on the L2, and you want the L2-minted tokens be withdrawable back to L1 and recognized by the L1 contract, it will probably require its own special gateway. Otherwise, the generic-custom gateway is likely the right solution for you!**
+**If your custom token has the ability to increase its supply (i.e., mint) directly on the L2, and you want the L2-minted tokens be withdrawable back to L1 and recognized by the L1 contract, it will probably require its own special gateway. Otherwise, the generic-custom gateway is likely the right solution for you!**
 
 Some examples of token features suitable for the generic-custom gateway:
 
