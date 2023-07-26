@@ -11,7 +11,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 The [`developer.arbitrum.io`](https://developer.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain's product portfolio. This includes documentation for:
 
-1. [Building dApps](./quickstart-solidity-hardhat.md) with Arbitrum’s chains.
+1. [Building dApps](/quickstart-solidity-hardhat) with Arbitrum’s chains.
 2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum’s chains.
 3. [Running an Arbitrum node](../node-running/quickstart-running-a-node.md).
 4. [Launching a self-managed chain](../launch-orbit-chain/orbit-quickstart.md) using Arbitrum Orbit.
@@ -19,7 +19,7 @@ The [`developer.arbitrum.io`](https://developer.arbitrum.io/) docs portal is the
 
 Contributions to each of these content areas are welcome from the entire Ethereum community.
 
-This document provides an overview of the **protocols** and **content conventions** that we use to craft, organize, and publish documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document provides an overview of the **protocols** and **content conventions** that we use to craft, organize, and publish documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
 
 
 ## Protocols
@@ -28,33 +28,22 @@ Just as Arbitrum and Ethereum nodes follow a peer-to-peer protocol, Arbitrum’s
 
 ### "Core docs" protocol
 
-**Core docs** are documents that aren't third-party content. These docs help readers use Arbitrum products directly. If the document isn't in a `Third-party content` folder in the sidebar, it's a core document.
+**Core docs** are documents that help readers use Arbitrum products directly. If a document isn't in a `Third-party content` folder in the sidebar, it's a core document.
 
-Begin by creating a branch of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs). Issue a pull request from your branch into `master`. Pull requests into `master` generate a preview of your changes via a branch-specific Docusaurus deployment; this preview will update as you push commits to your remote branch.
+Although Offchain Labs is responsible for producing and maintaining core docs, contributions are welcome from all. To contribute a new core doc:
 
-You can mark your pull request as `Draft` while you draft your content. **Include answers to the following questions in your PR description**:
-
-```markdown
- 1. Audience: Who am I writing for?
-    - < Your answer here >
- 2. Problem: What specific problem are they trying to solve?
-    - < Your answer here > 
- 3. Discovery: How are they looking for a solution to this problem?
-    - Are they coming from search? If so, what search terms are they using?
-    - Are they coming from another document? If so, which one(s)?
-    - < Your answer here >
- 4. Document type: Which [document type](#document-types) is most suitable?
-    - < Your answer here >
- 5. Validated demand: How do we prove to ourselves that this documentation is actually needed?
-    - < Your answer here >
- 6. (Third-party docs only) Acknowledgment of Contribution guidelines and policies
-    - < Your acknowledgment here >
-```
-
- - To begin outlining and drafting your content, refer to the [Document types](#document-types) table below, and select one of the corresponding `Example(s) to refer to` based on your answer to **question #4**.
- - Refer to this example as you outline and draft your document, using the [Style guidance below](#style) to craft a solution to the target problem (**question #2**) for your target audience (**question #1**).
- - Your answer to **question #3** will inform the way that you title your document, and how you should link to it from other documents.
- - Mark your PR as `Open` when it's ready for review.
+ 1. Begin by creating a branch of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
+ 2. Issue a `Draft` pull request from your branch into `master`. Pull requests into `master` generate a preview of your changes via a branch-specific Docusaurus deployment; this preview will update as you push commits to your remote branch.
+ 3. Include answers to the following questions in your PR description:
+      ```markdown
+      1. Audience: Who am I writing for?
+      2. Problem: What specific problem are they trying to solve?
+      3. Discovery: How are they looking for a solution to this problem? What search terms are they using?
+      4. Document type: Which document type is most suitable?
+      5. Validated demand: How do we know that this documentation is actually needed?
+      ```
+ 4. Refer to the [document types](#document-type-conventions) and [Style guidance](#style-conventions) below as you craft your contribution.
+ 5. Mark your PR as `Open` when it's ready for review.
 
 ### "Third-party docs" protocol
 
@@ -77,16 +66,15 @@ The protocol for creating new third-party docs is the same as that of [Creating 
     - This node’s content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
  5. **Limited document types**
     - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***.
- 6. **One document at a time, starting with a quickstart or how-to**
-    - Third-party document PRs should contain at most one new document. Your first contribution should be a quickstart or how-to.
-    - Additional documents will be merged only if we can verify that Arbitrum developers are deriving value from your initial Quickstart contribution.
-    - The way that we do this isn't yet firmly established, and it isn't publicly disclosed. Our current approach combines a number of objective and subjective measures.
+ 6. **New third-party product docs should begin with a quickstart or how-to contribution**
+    - Third-party document PRs should contain at most one new document. Any given product's initial docs contribution should be a quickstart or how-to.
+    - Additional documents will be merged only if we can verify that Arbitrum developers are deriving value from your initial contribution.
+    - The way that we verify this isn't yet firmly established, and it isn't publicly disclosed. Our current approach combines a number of objective and subjective measures.
  7. **Policy acknowledgment**
     - Before merging third-party documentation PRs, we ask contributors to acknowledge that they've read, understood, and agree with the following policies. 
       1. **Content ownership**: As the author, you retain ownership of and responsibility for the content you contribute. You're free to use your content in any way you see fit outside of Arbitrum's docs. Remember that when contributing content to our documentation, you must ensure you have the necessary rights to do so, and that the content doesn't infringe on the intellectual property rights of others.
       2. **License for use**: By contributing your content to our documentation, you grant Offchain Labs a non-exclusive, royalty-free license to use, reproduce, adapt, translate, distribute, and display the content in our documentation. This allows us to integrate your content into our docs and make it available to all users.
       3. **Right to modify or remove**: Offchain Labs reserves the right to modify or remove third-party content from our documentation at any time. This might be necessary due to a range of reasons, such as content becoming outdated, receiving very low pageviews over an extended period, or misalignments with our guidelines or goals.
-
 
 ## Content conventions
 
@@ -99,7 +87,7 @@ Every document should be a specific *type* of document. Each type of document ha
 | Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                                                                                           |
 | ------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md) <br/> [A gentle introduction to Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance) |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](./quickstart-solidity-hardhat.md)                                                                                                                                      |
+| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/quickstart-solidity-hardhat)                                                                                                                                          |
 | How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                                                                                        |
 | Concept             | Explain what things are and how they work                                          | [Token bridging](../asset-bridging.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks)                                                                     |
 | FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                                                                                        |
@@ -111,7 +99,7 @@ Every document should be a specific *type* of document. Each type of document ha
 This isn't an exhaustive list, but it lists the most common document types that we use.
 
 
-### Style conventions
+### Style conventions 
 
 The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
 
