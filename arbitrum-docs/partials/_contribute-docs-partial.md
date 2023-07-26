@@ -42,7 +42,7 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
       4. Document type: Which document type is most suitable?
       5. Validated demand: How do we know that this documentation is actually needed?
       ```
- 4. Refer to the [document types](#document-type-conventions) and [Style guidance](#style-conventions) below as you craft your contribution.
+ 4. As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
  5. Mark your PR as `Open` when it's ready for review.
 
 ### "Third-party docs" protocol
@@ -181,6 +181,27 @@ The following steps are under construction and will be updated with more detaile
 ```
 
 
+#### Community member contribution banner
+
+Example:
+
+:::info Community member contribution
+
+The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
+
+:::
+
+
+Usage:
+
+```
+:::info Community member contribution
+
+The following document was contributed by @todo-twitter-handle. Give them a shoutout if you find it useful!
+
+:::
+```
+
 
 
 ### Organization conventions
@@ -218,9 +239,9 @@ Our published docs are generally organized like this in the sidebar:
 
 ## Frequently asked questions
 
-#### Can I add links to my product from core docs? For example - my organization offers an RPC endpoint, can I add that to your [RPC endpoints and providers](/node-running/node-providers) page?
+#### Can I add links to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](/node-running/node-providers) page?
 
-Absolutely feel free to submit these types of PRs. They're evaluated on a case-by-case basis for now. Generally speaking, the contribution will be approved if it's helping our readers, and if it's pointing to resources that would qualify as "trustworthy and battle-tested" under a reasonable amount of scrutiny.
+Absolutely feel free to submit these types of PRs. They're evaluated on a case-by-case basis. Generally speaking, the contribution will be approved only if it's pointing to resources that would qualify as "**trustworthy and battle-tested by Arbitrum developers**" under a reasonable amount of scrutiny.
 
 #### Can I use AI-generated content?
 
