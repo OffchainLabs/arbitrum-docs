@@ -49,7 +49,13 @@ At the time of this quickstart's writing, the easiest way to acquire $AGOR is to
 1.  Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
 2.  Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-## Step 2: Configure your Orbit chain's deployment
+## Step 2: Choose your chain type: AnyTrust or Rollup chain
+
+Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety.
+
+By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. Visit our FAQ docs to learn more: https://developer.arbitrum.io/faqs/protocol-faqs
+
+## Step 3: Configure your Orbit chain's deployment
 
 <!-- https://orbit-deployment-ui.vercel.app/ -->
 
@@ -74,7 +80,7 @@ The below table provides a brief description of each of these configuration para
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
 
-## Step 3: Deploy your chain's base contracts to Arbitrum Goerli
+## Step 4: Deploy your chain's base contracts to Arbitrum Goerli
 
 <!-- todo: label-casing alignment - could sentence-case in UI -->
 
@@ -99,7 +105,7 @@ Your Orbit chain's base contracts are responsible for facilitating the exchange 
 
 Click `Next` to proceed to the next step: **validator configuration**.
 
-## Step 4: Configure your chain's validator(s)
+## Step 5: Configure your chain's validator(s)
 
 You should see a `Configure Validators` section appear, with a form that looks like this:
 
@@ -123,7 +129,7 @@ Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists you
 
 Once this transaction is confirmed, you should see a `Validator set changed!` notification appear in the portal UI. Click `Next` to proceed the next step: **batch poster configuration**.
 
-## Step 5: Configure your chain's batch poster
+## Step 6: Configure your chain's batch poster
 
 You should see a `Configure Batch Poster` section appear, with a form that looks like this:
 
@@ -143,7 +149,17 @@ The following steps are under construction and will be updated with more detaile
 
 :::
 
-## Step 6: Download your chain's configuration files and launch your chain
+## Step 7: Review & Deploy AnyTrust (NEED TO FILL IN HERE) 
+
+## Step 8: Configure Keyset 
+
+For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the SequencerInbox contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the SetValidKeyset method on the SequencerInbox contract. 
+
+In this developmental network iteration, we have opted for a single Data Availability Server (DAS), assigning a null value to its private key, and generating a keyset accordingly. 
+
+As part of this transaction process, you will assign the predetermined keyset to your recently generated SequencerInbox contract.
+
+## Step 9: Download your chain's configuration files and launch your chain
 
 You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
 
@@ -152,20 +168,20 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
 2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
-## Step 7: Clone the setup script repository and add your configuration files
+## Step 8: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
 2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
-## Step 8: Run your chain's node and block explorer
+## Step 9: Run your chain's node and block explorer
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
-## Step 9: Finish setting up your chain
+## Step 10: Finish setting up your chain
 
 We've provided a Hardhat script that handles the following tasks:
 
