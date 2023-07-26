@@ -31,7 +31,7 @@ ArbOS and the Sequencer are responsible for delineating when one Arbitrum block 
 A client that queries an Arbitrum node's RPC interface (for, ie., transaction receipts) will receive the transaction's Arbitrum block number as the standard block number field. The L1 block number will also be included in the added `l1BlockNumber field`.
 
 ```ts
-const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...')
+const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 /** 
     txnReceipt.blockNumber => Arbitrum block number
     txnReceipt.l1BlockNumber => L1 block number ("ish")

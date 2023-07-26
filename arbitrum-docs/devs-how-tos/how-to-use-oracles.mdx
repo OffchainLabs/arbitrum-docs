@@ -1,5 +1,5 @@
 ---
-title: "How to use oracles in Arbitrum"
+title: 'How to use oracles in Arbitrum'
 sidebar_label: Use oracles in Arbitrum
 description: Learn how to integrate oracles into your dapp
 reader-audience: developers who want to build on Ethereum/Arbitrum
@@ -95,7 +95,7 @@ To use a data feed, we retrieve the information through the specific proxy addre
 import "@api3/contracts/v0.8/interfaces/IProxy.sol";
 ```
 
-In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the address of the proxy that will provide that information. We will search the feed on the API3 Market, connect our wallet and click on `Get Proxy`. The ARB/USD proxy address is `0x0cB281EC7DFB8497d07196Dc0f86D2eFD21066A5`. 
+In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the address of the proxy that will provide that information. We will search the feed on the API3 Market, connect our wallet and click on `Get Proxy`. The ARB/USD proxy address is `0x0cB281EC7DFB8497d07196Dc0f86D2eFD21066A5`.
 
 We can now build the function to get the latest price of $ARB. We’ll use this example contract:
 
@@ -111,7 +111,7 @@ contract ARBPriceConsumer {
     /**
      * Returns the latest price.
      */
-    function getLatestPrice() 
+    function getLatestPrice()
         external
         view
         returns (int224 value, uint256 timestamp)
@@ -191,9 +191,9 @@ contract QrngRequester is RrpRequesterV0 {
         );
         waitingFulfillment[requestId] = false;
         uint256 qrngUint256 = abi.decode(data, (uint256));
-        
+
         // Use `qrngUint256` here...
-        
+
         emit ReceivedUint256(requestId, qrngUint256);
     }
 }
@@ -237,7 +237,7 @@ contract ARBPriceConsumer is UsingTellor {
     function getLatestPrice() public view returns (uint256) {
         bytes memory _queryData = abi.encode("SpotPrice", abi.encode("eth", "usd"));
         bytes32 _queryId = keccak256(_queryData);
-        
+
         (bytes memory _value, uint256 _timestampRetrieved) =
             getDataBefore(_queryId, block.timestamp - 20 minutes);
         if (_timestampRetrieved == 0) return 0;

@@ -1,5 +1,5 @@
 ---
-title: "ArbOS precompiles"
+title: 'ArbOS precompiles'
 ---
 
 ArbOS provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. This reference exhaustively documents the specific calls ArbOS makes available. For more details on the infrastructure that makes this possible, please refer to the [ArbOS documentation](arbos.mdx). For an abbreviated reference on the precompiles we expect users to most often use, please see the [common precompiles documentation](common-precompiles.mdx).
@@ -71,16 +71,16 @@ From the perspective of user applications, precompiles live as contracts at the 
 
 Compression ratios are measured in basis points. Methods that are checkmarked are access-controlled and will revert if not called by the aggregator, its fee collector, or a chain owner.
 
-| Methods                                                                             |                                                         |      |
-| :---------------------------------------------------------------------------------- | :------------------------------------------------------ | :--- |
-| [![](../assets/e.png)][as0] [`getPreferredAggregator`][a0]`(account)`               | Gets an account's preferred aggregator                  |      |
-| [![](../assets/e.png)][as1] [`setPreferredAggregator`][a1]`(aggregator)`            | Sets the caller's preferred aggregator to that provided |      |
-| [![](../assets/e.png)][as2] [`getDefaultAggregator`][a2]`()`                        | Gets the chain's default aggregator                     |      |
-| [![](../assets/e.png)][as3] [`setDefaultAggregator`][a3]`(default)`                 | Sets the chain's default aggregator                     | ✔️    |
-| [![](../assets/e.png)][as4] [`getCompressionRatio`][a4]`(aggregator)`               | Gets the aggregator's compression ratio                 |      |
-| [![](../assets/e.png)][as5] [`setCompressionRatio`][a5]`(aggregator, ratio)`        | Set the aggregator's compression ratio                  | ✔️    |
-| [![](../assets/e.png)][as6] [`getFeeCollector`][a6]`(aggregator)`                   | Gets an aggregator's fee collector                      |      |
-| [![](../assets/e.png)][as7] [`setFeeCollector`][a7]`(aggregator, collector)` &nbsp; | Sets an aggregator's fee collector                      | ✔️    |
+| Methods                                                                             |                                                         |     |
+| :---------------------------------------------------------------------------------- | :------------------------------------------------------ | :-- |
+| [![](../assets/e.png)][as0] [`getPreferredAggregator`][a0]`(account)`               | Gets an account's preferred aggregator                  |     |
+| [![](../assets/e.png)][as1] [`setPreferredAggregator`][a1]`(aggregator)`            | Sets the caller's preferred aggregator to that provided |     |
+| [![](../assets/e.png)][as2] [`getDefaultAggregator`][a2]`()`                        | Gets the chain's default aggregator                     |     |
+| [![](../assets/e.png)][as3] [`setDefaultAggregator`][a3]`(default)`                 | Sets the chain's default aggregator                     | ✔️  |
+| [![](../assets/e.png)][as4] [`getCompressionRatio`][a4]`(aggregator)`               | Gets the aggregator's compression ratio                 |     |
+| [![](../assets/e.png)][as5] [`setCompressionRatio`][a5]`(aggregator, ratio)`        | Set the aggregator's compression ratio                  | ✔️  |
+| [![](../assets/e.png)][as6] [`getFeeCollector`][a6]`(aggregator)`                   | Gets an aggregator's fee collector                      |     |
+| [![](../assets/e.png)][as7] [`setFeeCollector`][a7]`(aggregator, collector)` &nbsp; | Sets an aggregator's fee collector                      | ✔️  |
 
 [a0]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L25
 [a1]: https://github.com/OffchainLabs/nitro/blob/ba3a86afb2e7057bdc3cce54b28be4c1c0579180/precompiles/ArbAggregator.go#L42
@@ -289,7 +289,7 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 | [`setSpeedLimit`][o7]`(limit)`                                | Sets the computational speed limit for the chain                                |
 | [`setMaxTxGasLimit`][o8]`(limit)`                             | Sets the maximum size a transaction (and block) can be                          |
 | [`setL2GasPricingInertia`][o9]`(sec)`                         | Sets the L2 gas pricing inertia                                                 |
-| [`setL2GasBacklogTolerance`][o10]`(sec)`                      | Sets the the L2 gas backlog tolerance                                           |
+| [`setL2GasBacklogTolerance`][o10]`(sec)`                      | Sets the L2 gas backlog tolerance                                               |
 | [`getNetworkFeeAccount`][o11]`()`                             | Gets the network fee collector                                                  |
 | [`getInfraFeeAccount`][o12]`()`                               | Gets the infrastructure fee collector                                           |
 | [`setNetworkFeeAccount`][o13]`(newNetworkFeeAccount)`         | Sets the network fee collector to the new network fee account                   |

@@ -48,7 +48,7 @@
 
 
 ### Can I use a smart contract wallet in the bridge? {#can-i-use-a-smart-contract-wallet-in-the-bridge}
-<p>Support for Smart Contract Wallets is currently limited to token depositing and withdrawal. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the <strong><a href="https://bridge.arbitrum.io">bridge</a></strong><strong> </strong>(unless you also control that address on L1). In that case, you can use the <strong><a href="https://retryable-dashboard.arbitrum.io/tx">cross-chain dashboard</a></strong> to claim your funds on L1.</p>
+<p>Support for Smart Contract Wallets is currently limited to token depositing and withdrawal. Keep in mind that when withdrawing funds, you won't be able to claim them on L1 using the <a href="https://bridge.arbitrum.io/">bridge</a> (unless you also control that address on L1). In that case, you can use the <a href="https://retryable-dashboard.arbitrum.io/tx">cross-chain dashboard</a> to claim your funds on L1.</p>
 
 <p>ETH deposits and withdrawals using a Smart Contract Wallet are currently not supported, but will soon be available.</p>
 
