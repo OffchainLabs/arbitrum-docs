@@ -1,11 +1,12 @@
 module.exports = {
   ...require('@offchainlabs/prettier-config'),
   // override here
-  "overrides": [
+  overrides: [
     {
-      "files": "*.{md,mdx}",
-      "options": {
-        "parser": "mdx"
+      files: "*.{md,mdx}",
+      options: {
+        parser: "mdx",
+        jsxSingleQuote: true
       }
     },
   ]
