@@ -218,6 +218,10 @@ Our published docs are generally organized like this in the sidebar:
 
 ## Frequently asked questions
 
+#### Can I add links to my product from core docs? For example - my organization offers an RPC endpoint, can I add that to your [RPC endpoints and providers](/node-running/node-providers) page?
+
+Absolutely feel free to submit these types of PRs. They're evaluated on a case-by-case basis for now. Generally speaking, the contribution will be approved if it's helping our readers, and if it's pointing to resources that would qualify as "trustworthy and battle-tested" under a reasonable amount of scrutiny.
+
 #### Can I use AI-generated content?
 
 "No". By issuing PRs into our docs repo, you're acknowledging that your content has been produced organically. Content produced under the influence of AI/ML tooling, such as ChatGPT, is "strictly not allowed".
