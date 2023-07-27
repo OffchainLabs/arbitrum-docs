@@ -30,19 +30,16 @@ While you're tinkering locally, we'll be building the tech and docs that help yo
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
 - At least 1.5 Goerli ETH
 
-## Step 1: Acquire Arbitrum Goerli $ETH ($AGOR)
+## Step 1: Acquire Arbitrum Goerli $ETH
 
 <!-- note: this is a convention, currently used both here and in the OG quickstart. -->
 
 <!-- todo: partialize / quicklookify these bits - duplicated in OG quickstart -->
 
-:::info $AGOR IS SHORTHAND
-
-"$AGOR" isn't a canonical term. It's just shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
 
 :::
 
-You'll need at least 1.5 $AGOR to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli).
+You'll need at least 1.5 Goerli ETH $ETH to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli).
 
 At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network:
 
