@@ -243,7 +243,7 @@ Our published docs are generally organized like this in the sidebar:
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
-You can open these types of PRs, but they probably won't be merged, unless it's obvious that the resource is "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable amount of scrutiny.
+Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable amount of scrutiny.
 
 #### Can I use AI-generated content?
 
