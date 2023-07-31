@@ -1,9 +1,9 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
-import classnames from "classnames";
-import { useHistory } from "@docusaurus/router";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import { usePluginData } from "@docusaurus/useGlobalData";
-import useIsBrowser from "@docusaurus/useIsBrowser";
+import React, { useRef, useCallback, useState, useEffect } from 'react';
+import classnames from 'classnames';
+import { useHistory } from '@docusaurus/router';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { usePluginData } from '@docusaurus/useGlobalData';
+import useIsBrowser from '@docusaurus/useIsBrowser';
 const Search = (props) => {
   const initialized = useRef(false);
   const searchBarRef = useRef(null);
@@ -17,14 +17,14 @@ const Search = (props) => {
       searchDocs,
       searchIndex,
       baseUrl,
-      inputSelector: "#search_input_react",
+      inputSelector: '#search_input_react',
       // Override algolia's default selection event, allowing us to do client-side
       // navigation and avoiding a full page refresh.
       handleSelected: (_input, _event, suggestion) => {
-        const url = suggestion.url || "/";
+        const url = suggestion.url || '/';
         // Use an anchor tag to parse the absolute url into a relative url
         // Alternatively, we can use new URL(suggestion.url) but its not supported in IE
-        const a = document.createElement("a");
+        const a = document.createElement('a');
         a.href = url;
         // Algolia use closest parent element id #__docusaurus when a h1 page title does not have an id
         // So, we can safely remove it. See https://github.com/facebook/docusaurus/issues/1828 for more details.
@@ -34,19 +34,15 @@ const Search = (props) => {
     });
   };
 
-  const pluginData = usePluginData("docusaurus-lunr-search");
+  const pluginData = usePluginData('docusaurus-lunr-search');
   const getSearchDoc = () =>
-    process.env.NODE_ENV === "production"
-      ? fetch(`${baseUrl}${pluginData.fileNames.searchDoc}`).then((content) =>
-          content.json()
-        )
+    process.env.NODE_ENV === 'production'
+      ? fetch(`${baseUrl}${pluginData.fileNames.searchDoc}`).then((content) => content.json())
       : Promise.resolve([]);
 
   const getLunrIndex = () =>
-    process.env.NODE_ENV === "production"
-      ? fetch(`${baseUrl}${pluginData.fileNames.lunrIndex}`).then((content) =>
-          content.json()
-        )
+    process.env.NODE_ENV === 'production'
+      ? fetch(`${baseUrl}${pluginData.fileNames.lunrIndex}`).then((content) => content.json())
       : Promise.resolve([]);
 
   const loadAlgolia = () => {
@@ -54,8 +50,8 @@ const Search = (props) => {
       Promise.all([
         getSearchDoc(),
         getLunrIndex(),
-        import("./DocSearch"),
-        import("./algolia.css"),
+        import('./DocSearch'),
+        import('./algolia.css'),
       ]).then(([searchDocs, searchIndex, { default: DocSearch }]) => {
         if (searchDocs.length === 0) {
           return;
@@ -73,10 +69,9 @@ const Search = (props) => {
         searchBarRef.current.focus();
       }
 
-      props.handleSearchBarToggle &&
-        props.handleSearchBarToggle(!props.isSearchBarExpanded);
+      props.handleSearchBarToggle && props.handleSearchBarToggle(!props.isSearchBarExpanded);
     },
-    [props.isSearchBarExpanded]
+    [props.isSearchBarExpanded],
   );
 
   if (isBrowser) {
@@ -87,7 +82,7 @@ const Search = (props) => {
     searchBarRef.current.click();
 
     function onkeydown(e) {
-      if ((e.ctrlKey && e.key == "k") || (e.metaKey && e.key == "k")) {
+      if ((e.ctrlKey && e.key == 'k') || (e.metaKey && e.key == 'k')) {
         searchBarRef.current.focus();
 
         // By default, using Ctrl + K in Chrome will open the location bar, so disable this
@@ -98,7 +93,7 @@ const Search = (props) => {
     window.onkeydown = onkeydown;
 
     return () => {
-      window.removeEventListener("onkeydown", onkeydown);
+      window.removeEventListener('onkeydown', onkeydown);
     };
   }, []);
 
@@ -107,8 +102,8 @@ const Search = (props) => {
       <span
         aria-label="expand searchbar"
         role="button"
-        className={classnames("search-icon", {
-          "search-icon-hidden": props.isSearchBarExpanded,
+        className={classnames('search-icon', {
+          'search-icon-hidden': props.isSearchBarExpanded,
         })}
         onClick={toggleSearchIconClick}
         onKeyDown={toggleSearchIconClick}
@@ -117,12 +112,12 @@ const Search = (props) => {
       <input
         id="search_input_react"
         type="search"
-        placeholder={indexReady ? "Search" : "Loading..."}
+        placeholder={indexReady ? 'Search' : 'Loading...'}
         aria-label="Search"
         className={classnames(
-          "navbar__search-input",
-          { "search-bar-expanded": props.isSearchBarExpanded },
-          { "search-bar": !props.isSearchBarExpanded }
+          'navbar__search-input',
+          { 'search-bar-expanded': props.isSearchBarExpanded },
+          { 'search-bar': !props.isSearchBarExpanded },
         )}
         onClick={loadAlgolia}
         onMouseOver={loadAlgolia}
