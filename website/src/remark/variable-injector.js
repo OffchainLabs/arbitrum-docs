@@ -14,9 +14,8 @@
 
 const visit = require('unist-util-visit');
 
-const plugin = ((options) => {
-  return (async (ast) => {
-
+const plugin = (options) => {
+  return async (ast) => {
     // visit() will match all nodes form the AST that have one of the types specified
     // in the second argument.
     // In those nodes, we want to inject variables in different fields:
@@ -24,13 +23,13 @@ const plugin = ((options) => {
     //    - For 'link' nodes, we'll look in the "url" property
     visit(ast, ['text', 'code', 'link'], (node) => {
       let value;
-      switch(node.type) {
-        case "link":
+      switch (node.type) {
+        case 'link':
           value = node.url;
           break;
-        
-        case "text":
-        case "code":
+
+        case 'text':
+        case 'code':
           value = node.value;
           break;
       }
@@ -48,17 +47,17 @@ const plugin = ((options) => {
       });
 
       switch (node.type) {
-        case "link":
+        case 'link':
           node.url = value;
           break;
 
-        case "text":
-        case "code":
+        case 'text':
+        case 'code':
           node.value = value;
           break;
       }
     });
-  });
-});
+  };
+};
 
 module.exports = plugin;

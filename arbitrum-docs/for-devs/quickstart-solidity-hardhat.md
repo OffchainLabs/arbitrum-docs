@@ -26,7 +26,7 @@ Here's our vending machine implemented with Javascript:
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
-<VendingMachine id='dumb-cupcakes' type='web2' />
+<VendingMachine id="dumb-cupcakes" type="web2" />
 
 Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
 
@@ -52,7 +52,7 @@ We'll install the rest of our dependencies as we go.
 - **Ethereum**
   - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
   - The data within Ethereum's blockchain data structure changes one transaction at a time.
-  - <a data-quicklook-from='smart-contract'>Smart contracts</a> are small programs that execute transactions
+  - <a data-quicklook-from="smart-contract">Smart contracts</a> are small programs that execute transactions
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
   - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
   - DApps let users carry their data and identity between applications without having to trust centralized service providers.
@@ -60,7 +60,7 @@ We'll install the rest of our dependencies as we go.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
-  - <a data-quicklook-from='arbitrum-one'>Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from='arbitrum-rollup'>
+  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from="arbitrum-rollup">
       Arbitrum Rollup
     </a> protocol.
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
@@ -289,7 +289,7 @@ From another terminal instance, run `yarn hardhat run scripts/deploy.js --networ
 
 Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
-<VendingMachine id='smart-local-cupcakes' type='web3-localhost' />
+<VendingMachine id="smart-local-cupcakes" type="web3-localhost" />
 
 ### What's going on here?
 
@@ -365,7 +365,7 @@ To view your smart contract in a blockchain explorer, visit `https://goerli.arbi
 
 Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
-<VendingMachine id='smart-goerli-cupcakes' type='web3-arb-goerli' />
+<VendingMachine id="smart-goerli-cupcakes" type="web3-arb-goerli" />
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
@@ -409,7 +409,7 @@ To view your smart contract in a blockchain explorer, visit `https://arbiscan.io
 
 Select `Arbitrum One` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you an immutable cupcake.
 
-<VendingMachine id='smart-mainnet-cupcakes' type='web3-arb-one' />
+<VendingMachine id="smart-mainnet-cupcakes" type="web3-arb-one" />
 
 ### Summary
 
