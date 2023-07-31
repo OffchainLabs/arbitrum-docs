@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Address } from "@arbitrum/sdk";
+import React, { useEffect, useState } from 'react';
+import { Address } from '@arbitrum/sdk';
 
 export const AddressAliasHelper = () => {
-  const [l1Address, setL1Address] = useState("");
-  const [l2Address, setL2Address] = useState("");
+  const [l1Address, setL1Address] = useState('');
+  const [l2Address, setL2Address] = useState('');
   const [error, setError] = useState();
   useEffect(() => {
     if (!l1Address) {
@@ -23,10 +23,10 @@ export const AddressAliasHelper = () => {
     <>
       <input
         style={{
-          width: "100%",
-          fontSize: "16px",
-          padding: "var(--space-m) var(--space-l)",
-          marginBottom: "var(--space-xs)",
+          width: '100%',
+          fontSize: '16px',
+          padding: 'var(--space-m) var(--space-l)',
+          marginBottom: 'var(--space-xs)',
         }}
         placeholder="Paste an L1 Contract Address"
         value={l1Address}
@@ -40,9 +40,9 @@ export const AddressAliasHelper = () => {
       {error && (
         <div
           style={{
-            backgroundColor: "var(--red-light)",
-            padding: "var(--space-s)",
-            borderRadius: "var(--border-radius-s)",
+            backgroundColor: 'var(--red-light)',
+            padding: 'var(--space-s)',
+            borderRadius: 'var(--border-radius-s)',
           }}
         >
           <strong>Error:</strong> <span>{error}</span>

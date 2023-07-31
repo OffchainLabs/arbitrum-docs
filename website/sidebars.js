@@ -19,215 +19,221 @@ const sidebars = {
   // But you can create a sidebar manually
   buildDecentralizedAppsSidebar: [
     {
-      type: "doc",
-      id: "for-devs/gentle-introduction-dapps",
-      label: "A gentle introduction: Building dApps"
+      type: 'doc',
+      id: 'for-devs/gentle-introduction-dapps',
+      label: 'A gentle introduction: Building dApps',
     },
     {
-      type: "doc",
-      id: "for-devs/quickstart-solidity-hardhat",
+      type: 'doc',
+      id: 'for-devs/quickstart-solidity-hardhat',
     },
     {
-      type: "category",
-      label: "How-to guides",
+      type: 'category',
+      label: 'How-to guides',
       collapsed: false,
       items: [
         {
-          type: "doc",
-          label: "Start building",
-          id: "getting-started-devs"
+          type: 'doc',
+          label: 'Start building',
+          id: 'getting-started-devs',
         },
         {
-          type: "doc",
-          label: "Estimate gas",
-          id: "devs-how-tos/how-to-estimate-gas"
+          type: 'doc',
+          label: 'Estimate gas',
+          id: 'devs-how-tos/how-to-estimate-gas',
         },
         {
-          type: "doc",
-          label: "Migrate from Classic to Nitro (architecture, contracts)",
-          id: "migration/dapp_migration"
+          type: 'doc',
+          label: 'Migrate from Classic to Nitro (architecture, contracts)',
+          id: 'migration/dapp_migration',
         },
         {
-          type: "doc",
-          label: "Migrate from Classic to Nitro (state)",
-          id: "migration/state-migration"
+          type: 'doc',
+          label: 'Migrate from Classic to Nitro (state)',
+          id: 'migration/state-migration',
         },
         {
           type: "category",
           label: "Bridge tokens",
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview',
+            },
+            {
+              type: 'doc',
+              label: 'Standard gateway',
+              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard',
+            },
+            {
+              type: "doc",
+              label: "Generic-custom gateway",
+              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom"
+            },
+            {
+              type: 'doc',
+              label: 'Custom gateway',
+              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          label: 'Use oracles in Arbitrum',
+          id: 'devs-how-tos/how-to-use-oracles',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          label: 'Arbitrum chains',
+          id: 'for-devs/concepts/public-chains',
+        },
+        {
+          type: 'category',
+          label: 'Arbitrum/Ethereum differences',
+          items: [
+            {
+              type: 'doc',
+              label: 'Arbitrum vs. Ethereum',
+              id: 'arbitrum-ethereum-differences',
+            },
+            {
+              type: 'doc',
+              label: 'Solidity support',
+              id: 'solidity-support',
+            },
+            {
+              type: 'doc',
+              label: 'Block numbers and time',
+              id: 'time',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          label: 'Cross-chain messaging',
+          id: 'for-devs/cross-chain-messsaging',
+        },
+        {
+          type: "category",
+          label: "Token bridge",
           collapsed: false,
           items: [
             {
-              type: "doc",
-              label: "Overview",
-              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview"
-            },
-            {
-              type: "doc",
-              label: "Standard gateway",
-              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard"
-            },
-            {
-              type: "doc",
-              label: "Custom generic gateway",
-              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic"
-            },
-            {
-              type: "doc",
-              label: "Custom gateway",
-              id: "devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway"
-            },
-          ]
-        },
-        {
-          type: "doc",
-          label: "Use oracles in Arbitrum",
-          id: "devs-how-tos/how-to-use-oracles"
-        }
-      ]
-    },
-    {
-      type: "category",
-      label: "Concepts",
-      collapsed: false,
-      items: [
-        {
-          type: "doc",
-          label: "Arbitrum chains",
-          id: "for-devs/concepts/public-chains"
-        },
-        {
-          type: "category",
-          label: "Arbitrum/Ethereum differences",
-          items: [
-            {
-              type: "doc",
-              label: "Arbitrum vs. Ethereum",
-              id: "arbitrum-ethereum-differences"
-            },
-            {
-              type: "doc",
-              label: "Solidity support",
-              id: "solidity-support"
-            },
-            {
-              type: "doc",
-              label: "Block numbers and time",
-              id: "time"
+              type: "autogenerated",
+              dirName: "for-devs/concepts/token-bridge"
             }
           ]
         },
         {
-          type: "doc",
-          label: "Cross-chain messaging",
-          id: "for-devs/cross-chain-messsaging"
-        },
-        {
-          type: "doc",
-          label: "Token bridge",
-          id: "asset-bridging"
-        },
-        {
-          type: "category",
-          label: "Precompiles",
+          type: 'category',
+          label: 'Precompiles',
           items: [
             {
-              type: "doc",
-              label: "Common precompiles",
-              id: "arbos/common-precompiles"
+              type: 'doc',
+              label: 'Common precompiles',
+              id: 'arbos/common-precompiles',
             },
             {
-              type: "doc",
-              label: "Precompiles",
-              id: "arbos/precompiles"
-            }
-          ]
+              type: 'doc',
+              label: 'Precompiles',
+              id: 'arbos/precompiles',
+            },
+          ],
         },
         {
-          type: "doc",
-          label: "Oracles",
-          id: "for-devs/concepts/oracles"
-        }
-      ]
+          type: 'doc',
+          label: 'Oracles',
+          id: 'for-devs/concepts/oracles',
+        },
+      ],
     },
     {
-      type: "category",
-      label: "Developer tools and resources",
+      type: 'category',
+      label: 'Developer tools and resources',
       collapsed: false,
       items: [
         {
-          type: "doc",
-          label: "Overview",
-          id: "for-devs/dev-tools-and-resources/overview"
+          type: 'doc',
+          label: 'Overview',
+          id: 'for-devs/dev-tools-and-resources/overview',
         },
         {
-          type: "doc",
-          id: "node-running/node-providers",
-          label: "RPC endpoints and providers"
+          type: 'doc',
+          id: 'node-running/node-providers',
+          label: 'RPC endpoints and providers',
         },
         {
-          type: "doc",
-          label: "Smart contract addresses",
-          id: "for-devs/useful-addresses"
+          type: 'doc',
+          label: 'Smart contract addresses',
+          id: 'for-devs/useful-addresses',
         },
         {
-          type: "doc",
-          label: "Development frameworks",
-          id: "for-devs/dev-tools-and-resources/development-frameworks"
+          type: 'doc',
+          label: 'Development frameworks',
+          id: 'for-devs/dev-tools-and-resources/development-frameworks',
         },
         {
-          type: "doc",
-          label: "Web3 libraries and tools",
-          id: "for-devs/dev-tools-and-resources/web3-libraries-tools"
+          type: 'doc',
+          label: 'Web3 libraries and tools',
+          id: 'for-devs/dev-tools-and-resources/web3-libraries-tools',
         },
         {
-          type: "doc",
-          label: "Monitoring tools and block explorers",
-          id: "for-devs/dev-tools-and-resources/monitoring-tools-block-explorers"
+          type: 'doc',
+          label: 'Monitoring tools and block explorers',
+          id: 'for-devs/dev-tools-and-resources/monitoring-tools-block-explorers',
         },
         {
-          type: "doc",
-          label: "Debugging tools",
-          id: "for-devs/dev-tools-and-resources/debugging-tools"
+          type: 'doc',
+          label: 'Debugging tools',
+          id: 'for-devs/dev-tools-and-resources/debugging-tools',
         },
         {
-          type: "doc",
-          label: "Oracles",
-          id: "for-devs/dev-tools-and-resources/oracles"
+          type: 'doc',
+          label: 'Oracles',
+          id: 'for-devs/dev-tools-and-resources/oracles',
         },
         {
-          type: "link",
-          label: "Arbitrum SDK",
-          href: "/sdk"
+          type: 'link',
+          label: 'Arbitrum SDK',
+          href: '/sdk',
         },
         {
-          type: "link",
-          label: "Tutorials",
-          href: "https://github.com/OffchainLabs/arbitrum-tutorials"
+          type: 'link',
+          label: 'Tutorials',
+          href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
         },
-      ]
+      ],
     },
     {
-      type: "doc",
-      label: "Troubleshooting: Building dApps",
-      id: "for-devs/troubleshooting-building"
+      type: 'doc',
+      label: 'Troubleshooting: Building dApps',
+      id: 'for-devs/troubleshooting-building',
     },
   ],
   bridgeTokensSidebar: [
     {
-      type: "doc",
-      id: "bridge-tokens/gentle-introduction-bridge",
-      label: "A gentle introduction: Arbitrum Bridge"
+      type: 'doc',
+      id: 'bridge-tokens/gentle-introduction-bridge',
+      label: 'A gentle introduction: Arbitrum Bridge',
     },
     {
-      type: "doc",
-      id: "getting-started-users",
-      label: "Quickstart: Bridge tokens"
+      type: 'doc',
+      id: 'getting-started-users',
+      label: 'Quickstart: Bridge tokens',
     },
     {
-      type: "doc",
-      label: "Troubleshooting: Bridge tokens",
-      id: "for-users/troubleshooting-users"
+      type: 'doc',
+      label: 'Troubleshooting: Bridge tokens',
+      id: 'for-users/troubleshooting-users',
     },
     {
       type: "category",
@@ -243,65 +249,65 @@ const sidebars = {
   ],
   runNodesSidebar: [
     {
-      type: "doc",
-      id: "node-running/gentle-introduction-run-node",
-      label: "A gentle introduction: Arbitrum nodes"
+      type: 'doc',
+      id: 'node-running/gentle-introduction-run-node',
+      label: 'A gentle introduction: Arbitrum nodes',
     },
     {
-      type: "doc",
-      id: "node-running/quickstart-running-a-node",
-      label: "Quickstart: Run Arbitrum nodes"
+      type: 'doc',
+      id: 'node-running/quickstart-running-a-node',
+      label: 'Quickstart: Run Arbitrum nodes',
     },
     {
-      type: "category",
-      label: "How-to guides",
+      type: 'category',
+      label: 'How-to guides',
       collapsed: false,
       items: [
         {
-          type: "doc",
-          id: "node-running/how-tos/running-a-full-node",
-          label: "Run a full node (Nitro)"
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-full-node',
+          label: 'Run a full node (Nitro)',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/running-a-classic-node",
-          label: "Run a full node (Classic, pre-Nitro)"
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-classic-node',
+          label: 'Run a full node (Classic, pre-Nitro)',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/running-an-archive-node",
-          label: "Run an archive node"
+          type: 'doc',
+          id: 'node-running/how-tos/running-an-archive-node',
+          label: 'Run an archive node',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/local-dev-node",
-          label: "Run a local dev node"
+          type: 'doc',
+          id: 'node-running/how-tos/local-dev-node',
+          label: 'Run a local dev node',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/running-a-feed-relay",
-          label: "Run a feed relay"
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-feed-relay',
+          label: 'Run a feed relay',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/running-a-validator",
-          label: "Run a validator",
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-validator',
+          label: 'Run a validator',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/read-sequencer-feed",
-          label: "Read the sequencer feed",
+          type: 'doc',
+          id: 'node-running/how-tos/read-sequencer-feed',
+          label: 'Read the sequencer feed',
         },
         {
-          type: "doc",
-          id: "node-running/how-tos/build-nitro-locally",
+          type: 'doc',
+          id: 'node-running/how-tos/build-nitro-locally',
         },
         {
-          type: "doc",
-          id: "das/daserver-instructions",
-          label: "Run a Data Availability Server",
-        }
-      ]
+          type: 'doc',
+          id: 'das/daserver-instructions',
+          label: 'Run a Data Availability Server',
+        },
+      ],
     },
     /*
     {
@@ -311,187 +317,186 @@ const sidebars = {
     },
     */
     {
-      type: "doc",
-      id: "node-running/command-line-options",
-      label: "Command-line options"
+      type: 'doc',
+      id: 'node-running/command-line-options',
+      label: 'Command-line options',
     },
     {
-      type: "doc",
-      id: "node-running/troubleshooting-running-nodes",
-      label: "Troubleshooting: Run a node",
+      type: 'doc',
+      id: 'node-running/troubleshooting-running-nodes',
+      label: 'Troubleshooting: Run a node',
     },
     {
-      type: "doc",
-      label: "Frequently asked questions: Run a node",
-      id: "node-running/faq"
-    }
+      type: 'doc',
+      label: 'Frequently asked questions: Run a node',
+      id: 'node-running/faq',
+    },
   ],
   launchAnOrbitChainSidebar: [
     {
-      type: "autogenerated",
-      dirName: "launch-orbit-chain"
-    }
+      type: 'autogenerated',
+      dirName: 'launch-orbit-chain',
+    },
   ],
   learnMoreSidebar: [
     {
-      type: "doc",
-      id: "intro/intro",
-      label: "A gentle introduction: Arbitrum",
+      type: 'doc',
+      id: 'intro/intro',
+      label: 'A gentle introduction: Arbitrum',
     },
     {
-      type: "category",
-      label: "Introductory concepts",
+      type: 'category',
+      label: 'Introductory concepts',
       collapsed: false,
       items: [
         {
-          type: "doc",
-          id: "why-nitro",
-          label: "Why Nitro?"
+          type: 'doc',
+          id: 'why-nitro',
+          label: 'Why Nitro?',
         },
         {
-          type: "doc",
-          id: "tx-lifecycle",
-          label: "Overview: Transaction lifecycle"
+          type: 'doc',
+          id: 'tx-lifecycle',
+          label: 'Overview: Transaction lifecycle',
         },
         {
-          type: "doc",
-          id: "sequencer",
-          label: "Sequencer"
+          type: 'doc',
+          id: 'sequencer',
+          label: 'Sequencer',
         },
         {
-          type: "category",
-          label: "Gas / fees",
+          type: 'category',
+          label: 'Gas / fees',
           items: [
             {
-              type: "doc",
-              id: "arbos/gas",
-              label: "L2 gas"
+              type: 'doc',
+              id: 'arbos/gas',
+              label: 'L2 gas',
             },
             {
-              type: "doc",
-              id: "arbos/l1-pricing",
-              label: "L1 pricing"
-            }
-          ]
+              type: 'doc',
+              id: 'arbos/l1-pricing',
+              label: 'L1 pricing',
+            },
+          ],
         },
         {
-          type: "doc",
-          id: "inside-anytrust",
-          label: "AnyTrust protocol"
+          type: 'doc',
+          id: 'inside-anytrust',
+          label: 'AnyTrust protocol',
         },
-      ]
+      ],
     },
     {
-      type: "category",
-      label: "Advanced concepts",
+      type: 'category',
+      label: 'Advanced concepts',
       collapsed: true,
       items: [
         {
-          type: "doc",
-          id: "inside-arbitrum-nitro/inside-arbitrum-nitro",
-          label: "Deep dive: Inside arbitrum"
+          type: 'doc',
+          id: 'inside-arbitrum-nitro/inside-arbitrum-nitro',
+          label: 'Deep dive: Inside arbitrum',
         },
         {
-          type: "doc",
-          id: "assertion-tree",
-          label: "Assertion tree"
+          type: 'doc',
+          id: 'assertion-tree',
+          label: 'Assertion tree',
         },
         {
-          type: "category",
-          label: "Cross-chain messaging",
+          type: 'category',
+          label: 'Cross-chain messaging',
           items: [
             {
-              type: "doc",
-              id: "arbos/l1-to-l2-messaging",
-              label: "L1-to-L2 messaging"
+              type: 'doc',
+              id: 'arbos/l1-to-l2-messaging',
+              label: 'L1-to-L2 messaging',
             },
             {
-              type: "doc",
-              id: "arbos/l2-to-l1-messaging",
-              label: "L2-to-L1 messaging"
-            }
-          ]
+              type: 'doc',
+              id: 'arbos/l2-to-l1-messaging',
+              label: 'L2-to-L1 messaging',
+            },
+          ],
         },
         {
-          type: "category",
-          label: "ArbOS",
+          type: 'category',
+          label: 'ArbOS',
           items: [
             {
-              type: "doc",
-              id: "arbos/arbos",
-              label: "ArbOS"
+              type: 'doc',
+              id: 'arbos/arbos',
+              label: 'ArbOS',
             },
             {
-              type: "doc",
-              id: "arbos/geth",
-              label: "Geth"
+              type: 'doc',
+              id: 'arbos/geth',
+              label: 'Geth',
             },
             {
-              type: "doc",
-              label: "All precompiles",
-              id: "arbos/precompiles"
-            }
-          ]
+              type: 'doc',
+              label: 'All precompiles',
+              id: 'arbos/precompiles',
+            },
+          ],
         },
         {
-          type: "category",
-          label: "Fraud Proofs",
+          type: 'category',
+          label: 'Fraud Proofs',
           items: [
             {
-              type: "doc",
-              id: "proving/challenge-manager",
-              label: "Interactive challenges"
+              type: 'doc',
+              id: 'proving/challenge-manager',
+              label: 'Interactive challenges',
             },
             {
-              type: "doc",
-              id: "proving/wasm-to-wavm",
-              label: "Wasm To WAVM"
+              type: 'doc',
+              id: 'proving/wasm-to-wavm',
+              label: 'Wasm To WAVM',
             },
             {
-              type: "doc",
-              id: "proving/wavm-custom-opcodes",
-              label: "Custom WAVM opcodes"
+              type: 'doc',
+              id: 'proving/wavm-custom-opcodes',
+              label: 'Custom WAVM opcodes',
             },
             {
-              type: "doc",
-              id: "proving/wavm-floats",
-              label: "WAVM floats"
+              type: 'doc',
+              id: 'proving/wavm-floats',
+              label: 'WAVM floats',
             },
             {
-              type: "doc",
-              id: "proving/wavm-modules",
-              label: "WAVM modules"
-            }
-          ]
+              type: 'doc',
+              id: 'proving/wavm-modules',
+              label: 'WAVM modules',
+            },
+          ],
         },
-      ]
+      ],
     },
     {
-      type: "doc",
-      id: "learn-more/faq",
-      label: "Frequently asked questions: Get started"
+      type: 'doc',
+      id: 'learn-more/faq',
+      label: 'Frequently asked questions: Get started',
     },
     {
-      type: "doc",
-      id: "intro/glossary",
-      label: "Glossary"
+      type: 'doc',
+      id: 'intro/glossary',
+      label: 'Glossary',
     },
     {
-      type: "doc",
-      id: "mainnet-beta",
-      label: "Mainnet Beta status"
+      type: 'doc',
+      id: 'mainnet-beta',
+      label: 'Mainnet Beta status',
     },
     {
-      type: "link",
-      href:
-        "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
-      label: "Deeper dive: Whitepaper"
+      type: 'link',
+      href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+      label: 'Deeper dive: Whitepaper',
     },
     {
-      type: "doc",
-      label: "Audit reports",
-      id: "audit-reports"
-    }
+      type: 'doc',
+      label: 'Audit reports',
+      id: 'audit-reports',
+    },
   ],
 };
 

@@ -14,8 +14,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "format": "yarn prettier:format:docs && yarn prettier:format:app",
-    "format:app": "prettier --write \"src/**/*.{tsx,ts,scss,md,json,js}\"",
+    "format": "yarn format:docs && yarn format:app",
+    "format:app": "prettier --write --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\"",
     "format:docs": "prettier \"../arbitrum-docs/**/*.{md,mdx}\" --write --config \"./.prettierrc.js\"",
     "typecheck": "tsc"
   },

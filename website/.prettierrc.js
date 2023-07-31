@@ -3,11 +3,10 @@ module.exports = {
   // override here
   overrides: [
     {
-      files: "*.{md,mdx}",
+      files: '*.{md,mdx}',
       options: {
-        parser: "mdx",
-        jsxSingleQuote: true
-      }
+        parser: 'mdx',
+      },
     },
-  ]
+  ],
 };
