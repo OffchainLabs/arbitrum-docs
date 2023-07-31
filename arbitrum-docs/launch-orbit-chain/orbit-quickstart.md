@@ -53,7 +53,7 @@ At the time of this quickstart's writing, the easiest way to acquire $AGOR is to
 
 Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety.
 
-By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. Visit our FAQ docs to learn more: https://developer.arbitrum.io/faqs/protocol-faqs
+By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external Data Availability Committee to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1. Visit our FAQ docs to learn more: https://developer.arbitrum.io/faqs/protocol-faqs
 
 ## Step 3: Configure your Orbit chain's deployment
 
