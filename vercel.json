@@ -32,7 +32,17 @@
         },
         {
             "source": "/docs/bridging_assets",
-            "destination": "/asset-bridging",
+            "destination": "/for-devs/concepts/token-bridge/token-bridge-erc20",
+            "permanent": false
+        },
+        {
+            "source": "/asset-bridging",
+            "destination": "/for-devs/concepts/token-bridge/token-bridge-erc20",
+            "permanent": false
+        },
+        {
+            "source": "/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic",
+            "destination": "/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom",
             "permanent": false
         },
         {

@@ -7,7 +7,7 @@ Arbitrum Nitro chains are Ethereum compatible, and therefore allow you to trustl
 Although Arbitrum supports Solidity code, there are differences in the effects of a few operations, including language features that don't make much sense in the Layer 2 context:
 
 - `blockhash(x)` returns a cryptographically insecure, pseudo-random hash for `x` within the range `block.number - 256 <= x < block.number`. If `x` is outside of this range, `blockhash(x)` will return `0`. This includes `blockhash(block.number)`, which always returns `0` just like on Ethereum. The hashes returned do not come from L1.
-- `block.coinbase` returns the designated internal address 0xA4b000000000000000000073657175656e636572 if the message was posted by a Sequencer. It it's a delayed message, it returns the address of the delayed message's poster (Note: the handling of delayed message's `block.coinbase` will likely be changed in ArbOS v11). 
+- `block.coinbase` returns the designated internal address 0xA4b000000000000000000073657175656e636572 if the message was posted by a Sequencer. It it's a delayed message, it returns the address of the delayed message's poster (Note: the handling of delayed message's `block.coinbase` will likely be changed in ArbOS v11).
 - `block.difficulty` and `block.prevrandao` returns the constant 1
 - `block.number` return an "estimate" of the L1 block number at which the Sequencer received the transaction (see [Block Numbers and Time](./time.mdx))
 - `msg.sender` works the same way it does on Ethereum for normal L2-to-L2 transactions; for L1-to-L2 "retryable ticket" transactions, it will return the L2 address alias of the L1 contract that triggered the message. See [retryable ticket address aliasing](./arbos/l1-to-l2-messaging#address-aliasing) for more.
