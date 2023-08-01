@@ -18,6 +18,7 @@ jobs:
         uses: OffchainLabs/actions/node-modules/install@main
         with:
           install-command: cd website && yarn install --frozen-lockfile
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
   
   check-formatting:
     name: "Check Formatting"
@@ -29,6 +30,8 @@ jobs:
 
       - name: Restore node_modules
         uses: OffchainLabs/actions/node-modules/restore@main
+        with:
+          cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Check formatting with Prettier
         working-directory: ./website
