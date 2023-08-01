@@ -66,10 +66,11 @@ The protocol for creating new third-party docs is the same as that of [Creating 
     - This node’s content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
  5. **Limited document types**
     - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***. See [document types](#document-type-conventions) below for guidance.
- 6. **New third-party product docs should begin with a quickstart or how-to contribution**
-    - Third-party document PRs should contain at most one new document. Any given product's initial docs contribution should be a quickstart or how-to.
-    - Additional documents will be merged only if we can verify that Arbitrum developers are deriving value from your initial contribution.
-    - The way that we verify this isn't yet firmly established, and it isn't publicly disclosed. Our current approach combines a number of objective and subjective measures.
+ 6. **Incremental contributions: One document at a time, procedures first**
+    - Third-party document PRs should contain at most one new document.
+    - Any given product's first docs contribution should be a ***Quickstart*** or ***How-to***.
+    - Additional documents will be merged only if we can verify that our readers are deriving value from your initial contribution.
+    - The way that we verify this isn't yet formally established, and it isn't publicly disclosed. Our current approach combines a number of objective and subjective measures.
  7. **Policy acknowledgment**
     - Before merging third-party documentation PRs, we ask contributors to acknowledge that they've read, understood, and agree with the following policies. 
       1. **Content ownership**: As the author, you retain ownership of and responsibility for the content you contribute. You're free to use your content in any way you see fit outside of Arbitrum's docs. Remember that when contributing content to our documentation, you must ensure you have the necessary rights to do so, and that the content doesn't infringe on the intellectual property rights of others.
