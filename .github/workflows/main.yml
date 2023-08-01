@@ -7,16 +7,28 @@ on:
       - master
 
 jobs:
-  check-formatting:
-    name: "Check Formatting"
+  install:
+    name: "Install"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout files
         uses: actions/checkout@v3
 
       - name: Install node_modules
-        working-directory: ./website
-        run: yarn install
+        uses: OffchainLabs/actions/node-modules/install@main
+        with:
+          install-command: cd website && yarn install --frozen-lockfile
+  
+  check-formatting:
+    name: "Check Formatting"
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v3
+
+      - name: Restore node_modules
+        uses: OffchainLabs/actions/node-modules/restore@main
 
       - name: Check formatting with Prettier
         working-directory: ./website
