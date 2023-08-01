@@ -75,7 +75,7 @@ The protocol for creating new third-party docs is the same as that of [Creating 
     - Before merging third-party documentation PRs, we ask contributors to acknowledge that they've read, understood, and agree with the following policies: 
       1. **Content ownership**: As the author, you retain ownership of and responsibility for the content you contribute. You're free to use your content in any way you see fit outside of Arbitrum's docs. Remember that when contributing content to our documentation, you must ensure you have the necessary rights to do so, and that the content doesn't infringe on the intellectual property rights of others.
       2. **License for use**: By contributing your content to our documentation, you grant Offchain Labs a non-exclusive, royalty-free license to use, reproduce, adapt, translate, distribute, and display the content in our documentation. This allows us to integrate your content into our docs and make it available to all users.
-      3. **Right to modify or remove**: Offchain Labs reserves the right to modify or remove third-party content from our documentation at any time. This might be necessary due to a range of reasons, such as content becoming outdated, receiving very low pageviews over an extended period, or misalignments with our guidelines or goals.
+      3. **Right to modify or remove**: Offchain Labs reserves the right to modify or remove third-party content from our documentation at any time. This might be necessary due to a range of reasons, such as content becoming outdated, receiving very low pageviews over an extended period, or misalignment with our guidelines or goals.
 
 ## Content conventions
 
