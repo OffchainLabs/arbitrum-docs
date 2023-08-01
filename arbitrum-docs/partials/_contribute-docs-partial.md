@@ -181,6 +181,7 @@ The following steps are under construction and will be updated with more detaile
 :::
 ```
 
+<br/>
 
 #### Community member contribution banner
 
