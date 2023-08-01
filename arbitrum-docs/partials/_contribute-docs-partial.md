@@ -10,7 +10,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. This includes documentation for:
 
-1. [Building dApps](/quickstart-solidity-hardhat) with Arbitrum's chains.
+1. [Building dApps](/for-devs/quickstart-solidity-hardhat.md) with Arbitrum's chains.
 2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum's chains.
 3. [Running an Arbitrum node](../node-running/quickstart-running-a-node.md).
 4. [Launching a self-managed chain](../launch-orbit-chain/orbit-quickstart.md) using Arbitrum Orbit.
@@ -88,15 +88,15 @@ Offchain Labs supports [Arbitrum docs](/) and [Prysm docs](https://docs.prylabs.
 
 Every document should be a specific _type_ of document. Each type of document has its own purpose:
 
-| Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                       |
-| ------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md)                                         |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/quickstart-solidity-hardhat)                                                                      |
-| How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                    |
-| Concept             | Explain what things are and how they work                                          | [Token bridging](../asset-bridging.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
-| FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                    |
-| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](../node-running/troubleshooting-running-nodes.md)                                              |
-| Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](../node-running/node-providers.mdx)                                                            |
+| Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md)                                                                            |
+| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/for-devs/quickstart-solidity-hardhat.md)                                                                                                         |
+| How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                                                       |
+| Concept             | Explain what things are and how they work                                          | [Token bridging](../for-devs/concepts/token-bridge/token-bridge-erc20.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
+| FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                                                       |
+| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](../node-running/troubleshooting-running-nodes.md)                                                                                 |
+| Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](../node-running/node-providers.mdx)                                                                                               |
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
 
