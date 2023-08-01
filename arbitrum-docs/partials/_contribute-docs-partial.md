@@ -47,7 +47,7 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
 
 ### "Third-party docs" protocol
 
-**Third-party docs** are documents authored by partner teams that help readers of Arbitrum docs use partners' products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
+**Third-party docs** are documents that help readers of Arbitrum docs use partners' products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products. These are generally authored by partner teams, but can be authored by anyone.
 
 The protocol for creating new third-party docs is the same as that of [Creating new core documents](#creating-new-third-party-documents), with the following additions:
 
