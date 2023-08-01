@@ -1,12 +1,12 @@
-import React from "react";
-import clsx from "clsx";
-import styles from "./styles.module.css";
-import Link from "@docusaurus/Link";
-import { useColorMode } from "@docusaurus/theme-common";
+import React from 'react';
+import clsx from 'clsx';
+import styles from './styles.module.css';
+import Link from '@docusaurus/Link';
+import { useColorMode } from '@docusaurus/theme-common';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<"svg">>;
+  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
   description: JSX.Element;
   href?: string;
   addBackground?: boolean;
@@ -15,66 +15,75 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "A gentle introduction",
-    Svg: require("@site/static/img/welcome.svg").default,
-    href: "/intro",
+    title: 'A gentle introduction',
+    Svg: require('@site/static/img/welcome.svg').default,
+    href: '/intro',
     description: <> Learn about Arbitrum's core technologies and product portfolio.</>,
   },
   {
-    title: "Quickstart: Build a dApp",
-    Svg: require("@site/static/img/cupcake.svg").default,
-    href: "/for-devs/quickstart-solidity-hardhat",
-    description: <>Deploy a cupcake vending machine contract locally, then to Arbitrum Goerli, then to Arbitrum Mainnet.</>,
+    title: 'Quickstart: Build a dApp',
+    Svg: require('@site/static/img/cupcake.svg').default,
+    href: '/for-devs/quickstart-solidity-hardhat',
+    description: (
+      <>
+        Deploy a cupcake vending machine contract locally, then to Arbitrum Goerli, then to Arbitrum
+        Mainnet.
+      </>
+    ),
   },
   {
-    title: "Quickstart: Run a node",
-    Svg: require("@site/static/img/node.svg").default,
-    href: "/node-running/quickstart-running-a-node",
+    title: 'Quickstart: Run a node',
+    Svg: require('@site/static/img/node.svg').default,
+    href: '/node-running/quickstart-running-a-node',
     description: <>Learn how to run a node to interact with any Arbitrum network.</>,
   },
   {
-    title: "Quickstart: Bridge tokens",
-    Svg: require("@site/static/img/layer-up.svg").default,
-    href: "/getting-started-users",
-    description: <>Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using Arbitrum Bridge.</>,
+    title: 'Quickstart: Bridge tokens',
+    Svg: require('@site/static/img/layer-up.svg').default,
+    href: '/getting-started-users',
+    description: (
+      <>
+        Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using
+        Arbitrum Bridge.
+      </>
+    ),
   },
   {
-    title: "The Arbitrum DAO",
-    Svg: require("@site/static/img/logo.svg").default,
-    href: "https://docs.arbitrum.foundation/",
-    description: <>Learn about the decentralized organization that governs the One and Nova chains.</>,
+    title: 'The Arbitrum DAO',
+    Svg: require('@site/static/img/logo.svg').default,
+    href: 'https://docs.arbitrum.foundation/',
+    description: (
+      <>Learn about the decentralized organization that governs the One and Nova chains.</>
+    ),
     animate: true,
   },
   {
-    title: "Quickstart: Launch an Orbit chain",
-    Svg: require("@site/static/img/orbit-galaxy.svg").default,
-    href: "/launch-orbit-chain/orbit-quickstart",
-    description: <>Learn how to launch a local Orbit chain that settles to the public Arbitrum Goerli testnet.</>,
-  }
+    title: 'Quickstart: Launch an Orbit chain',
+    Svg: require('@site/static/img/orbit-galaxy.svg').default,
+    href: '/launch-orbit-chain/orbit-quickstart',
+    description: (
+      <>
+        Learn how to launch a local Orbit chain that settles to the public Arbitrum Goerli testnet.
+      </>
+    ),
+  },
 ];
 
-function Feature({
-  title,
-  Svg,
-  description,
-  href,
-  addBackground,
-  animate,
-}: FeatureItem) {
+function Feature({ title, Svg, description, href, addBackground, animate }: FeatureItem) {
   const { colorMode } = useColorMode();
-  const isDarkTheme = colorMode === "dark";
-  const textStyle = { color: isDarkTheme ? "white" : "black" };
+  const isDarkTheme = colorMode === 'dark';
+  const textStyle = { color: isDarkTheme ? 'white' : 'black' };
   return (
-    <div className={clsx("col col--4")} id={animate && styles.animate}>
+    <div className={clsx('col col--4')} id={animate && styles.animate}>
       <Link className={styles.landingPageLink} href={href}>
         <div className="text--center">
           <Svg
             style={
               isDarkTheme && addBackground
                 ? {
-                  backgroundColor: "lightblue",
-                  borderRadius: "25%",
-                }
+                    backgroundColor: 'lightblue',
+                    borderRadius: '25%',
+                  }
                 : {}
             }
             className={styles.featureSvg}

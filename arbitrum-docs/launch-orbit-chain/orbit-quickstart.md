@@ -59,7 +59,7 @@ The deployment portal will then display a form that looks like this:
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
 
-<PlaceholderForm inputs='Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner' />
+<PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner" />
 
 The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](./how-tos/customize-deployment-configuration.md):
 
@@ -103,7 +103,7 @@ Click `Next` to proceed to the next step: **validator configuration**.
 
 You should see a `Configure Validators` section appear, with a form that looks like this:
 
-<PlaceholderForm inputs='Number of Validators, Validator 1 (0x...), [...], Validator n (0x...)' />
+<PlaceholderForm inputs="Number of Validators, Validator 1 (0x...), [...], Validator n (0x...)" />
 
 The first input field is an integer value that determines **the number of validators that will support your initial deployment**. Subsequent fields allow you to specify each of these validators' addresses.
 
@@ -127,7 +127,7 @@ Once this transaction is confirmed, you should see a `Validator set changed!` no
 
 You should see a `Configure Batch Poster` section appear, with a form that looks like this:
 
-<PlaceholderForm inputs='Batch Poster Address' />
+<PlaceholderForm inputs="Batch Poster Address" />
 
 Your batch poster address is responsible for posting batches of transactions from your Orbit chain to its base contracts on its base chain. An address will automatically be generated for you; its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
 

@@ -1,4 +1,4 @@
-import $ from "autocomplete.js/zepto";
+import $ from 'autocomplete.js/zepto';
 
 const utils = {
   /*
@@ -26,7 +26,7 @@ const utils = {
     if (object[property] === undefined) {
       return object;
     }
-    if (typeof object[property] !== "object") {
+    if (typeof object[property] !== 'object') {
       return object;
     }
     const newObject = $.extend({}, object, object[property]);
@@ -71,7 +71,7 @@ const utils = {
         throw new Error(`[groupBy]: Object has no key ${property}`);
       }
       let key = item[property];
-      if (typeof key === "string") {
+      if (typeof key === 'string') {
         key = key.toLowerCase();
       }
       // fix #171 the given data type of docsearch hits might be conflict with the properties of the native Object,
@@ -156,7 +156,7 @@ const utils = {
         // eslint-disable-next-line no-param-reassign
         item[flag] = index === 0;
         return item;
-      })
+      }),
     );
     return this.flatten(values);
   },
@@ -203,7 +203,7 @@ const utils = {
       object._highlightResult.hierarchy_camel &&
       object._highlightResult.hierarchy_camel[property] &&
       object._highlightResult.hierarchy_camel[property].matchLevel &&
-      object._highlightResult.hierarchy_camel[property].matchLevel !== "none" &&
+      object._highlightResult.hierarchy_camel[property].matchLevel !== 'none' &&
       object._highlightResult.hierarchy_camel[property].value
     ) {
       return object._highlightResult.hierarchy_camel[property].value;
@@ -251,7 +251,7 @@ const utils = {
     if (snippet[0] !== snippet[0].toUpperCase()) {
       snippet = `…${snippet}`;
     }
-    if ([".", "!", "?"].indexOf(snippet[snippet.length - 1]) === -1) {
+    if (['.', '!', '?'].indexOf(snippet[snippet.length - 1]) === -1) {
       snippet = `${snippet}…`;
     }
     return snippet;
