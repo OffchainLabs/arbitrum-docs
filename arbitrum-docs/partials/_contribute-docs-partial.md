@@ -41,6 +41,7 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
       3. Discovery: How are they looking for a solution to this problem? What search terms are they using?
       4. Document type: Which document type is most suitable?
       5. Validated demand: How do we know that this documentation is actually needed?
+      6. Policy acknowledgment (Third-party docs only): Do you agree to the third-party content policy outlined within "Contribute docs"?
       ```
  4. As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
  5. Mark your PR as `Open` when it's ready for review.
