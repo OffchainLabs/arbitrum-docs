@@ -97,7 +97,7 @@ Every document should be a specific *type* of document. Each type of document ha
 | Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](../node-running/node-providers.mdx)                                                                                                                                |
 
 
-This isn't an exhaustive list, but it lists the most common document types that we use.
+This isn't an exhaustive list, but it includes most of the document types that we use.
 
 
 ### Style conventions 
