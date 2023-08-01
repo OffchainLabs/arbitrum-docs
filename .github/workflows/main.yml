@@ -1,5 +1,5 @@
-name: Format and check broken links
-run-name: Checking format and broken links
+name: Check format
+run-name: Checking format
 
 on:
   pull_request:
