@@ -155,7 +155,7 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 ## Step 7: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
-2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
+2.  Move the `nodeConfig.json` file that you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
