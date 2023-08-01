@@ -14,8 +14,10 @@ jobs:
       - name: Checkout files
         uses: actions/checkout@v3
 
+      - name: Move to working directory
+        run: cd website
+
       - name: Install node_modules
-        working-directory: ./website
         uses: OffchainLabs/actions/node-modules/install@main
   
   check-formatting:
@@ -26,10 +28,11 @@ jobs:
       - name: Checkout files
         uses: actions/checkout@v3
 
+      - name: Move to working directory
+        run: cd website
+
       - name: Restore node_modules
-        working-directory: ./website
         uses: OffchainLabs/actions/node-modules/restore@main
 
       - name: Check formatting with Prettier
-        working-directory: ./website
         run: yarn format:check
