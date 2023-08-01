@@ -80,22 +80,21 @@ The protocol for creating new third-party docs is the same as that of [Creating 
 
 ## Content conventions
 
-Offchain Labs supports [Arbitrum docs](/), [Prysm docs](https://docs.prylabs.network/docs/getting-started), and the [Arbitrum DAO's governance docs](https://docs.arbitrum.foundation/gentle-intro-dao-governance). The following **content conventions** help us maintain consistency across these documentation sets.
+Offchain Labs supports [Arbitrum docs](/) and [Prysm docs](https://docs.prylabs.network/docs/getting-started). The following **content conventions** help us maintain consistency across these documentation sets:
 
 ### Document type conventions
 
 Every document should be a specific *type* of document. Each type of document has its own purpose:
 
-| Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                                                                                           |
-| ------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md) <br/> [A gentle introduction to Arbitrum DAO](https://docs.arbitrum.foundation/gentle-intro-dao-governance) |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/quickstart-solidity-hardhat)                                                                                                                                          |
-| How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                                                                                        |
-| Concept             | Explain what things are and how they work                                          | [Token bridging](../asset-bridging.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks)                                                                     |
-| FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                                                                                        |
-| Glossary            | Provide terms and definitions                                                      | [Arbitrum DAO: Glossary](https://docs.arbitrum.foundation/dao-glossary)                                                                                                                          |
-| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](../node-running/troubleshooting-running-nodes.md)                                                                                                                  |
-| Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](../node-running/node-providers.mdx)                                                                                                                                |
+| Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                       |
+| ------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md)                                         |
+| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/quickstart-solidity-hardhat)                                                                      |
+| How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                    |
+| Concept             | Explain what things are and how they work                                          | [Token bridging](../asset-bridging.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
+| FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                    |
+| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](../node-running/troubleshooting-running-nodes.md)                                              |
+| Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](../node-running/node-providers.mdx)                                                            |
 
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
