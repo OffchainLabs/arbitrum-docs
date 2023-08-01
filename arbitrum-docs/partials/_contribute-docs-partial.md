@@ -65,7 +65,7 @@ The protocol for creating new third-party docs is the same as that of [Creating 
     - Third-party docs are organized within the `Third-party content` node located at the bottom of each documentation section’s sidebar.
     - This node’s content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
  5. **Limited document types**
-    - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***.
+    - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***. See [document types](#document-type-conventions) below for guidance.
  6. **New third-party product docs should begin with a quickstart or how-to contribution**
     - Third-party document PRs should contain at most one new document. Any given product's initial docs contribution should be a quickstart or how-to.
     - Additional documents will be merged only if we can verify that Arbitrum developers are deriving value from your initial contribution.
