@@ -9,7 +9,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-The [`developer.arbitrum.io`](https://developer.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain's product portfolio. This includes documentation for:
+The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. This includes documentation for:
 
 1. [Building dApps](/quickstart-solidity-hardhat) with Arbitrum’s chains.
 2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum’s chains.
