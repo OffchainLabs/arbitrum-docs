@@ -7,8 +7,8 @@ on:
       - master
 
 jobs:
-  check-formatting:
-    name: "Check Formatting"
+  install:
+    name: "Install"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,6 +20,19 @@ jobs:
       - name: Install node_modules
         uses: OffchainLabs/actions/node-modules/install@main
 
-      - name: Check formatting with Prettier
+  check-formatting:
+    name: "Check Formatting"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
         working-directory: ./website
+    needs: install
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v3
+
+      - name: Restore node_modules
+        uses: OffchainLabs/actions/node-modules/restore@main
+
+      - name: Check formatting with Prettier
         run: yarn format:check
