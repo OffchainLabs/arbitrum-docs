@@ -11,8 +11,8 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 The [`developer.arbitrum.io`](https://developer.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain's product portfolio. This includes documentation for:
 
-1. [Building dApps](/quickstart-solidity-hardhat) with Arbitrum’s chains.
-2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum’s chains.
+1. [Building dApps](/quickstart-solidity-hardhat) with Arbitrum's chains.
+2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum's chains.
 3. [Running an Arbitrum node](../node-running/quickstart-running-a-node.md).
 4. [Launching a self-managed chain](../launch-orbit-chain/orbit-quickstart.md) using Arbitrum Orbit.
 5. [Educational materials](../intro) that explain how these technologies work.
@@ -24,7 +24,7 @@ This document provides an overview of the **protocols** and **content convention
 
 ## Protocols
 
-Just as Arbitrum and Ethereum nodes follow a peer-to-peer protocol, Arbitrum’s content contributors are encouraged to adopt one of the following content collaboration protocols:
+The following protocols help us process content contributions efficiently:
 
 ### "Core docs" protocol
 
@@ -63,8 +63,8 @@ The protocol for creating new third-party docs is the same as that of [Creating 
     - Offchain Labs can't commit to maintaining third-party docs, but we make it easy for you to maintain them.
     - Ensure that your document's YAML frontmatter contains a `third_party_content_owner` property, with the Github username of the designated maintainer. This person will be assigned to your document's issues and PRs, and will be expected to resolve them in a timely manner.
  4. **Organization**
-    - Third-party docs are organized within the `Third-party content` node located at the bottom of each documentation section’s sidebar.
-    - This node’s content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
+    - Third-party docs are organized within the `Third-party content` node located at the bottom of each documentation section's sidebar.
+    - This node's content is grouped by third-party product. If/when this becomes unwieldy, we'll begin grouping products by [portal](https://portal.arbitrum.io/) category.
  5. **Limited document types**
     - To manage our team's limited capacity, third-party documents must be either ***Quickstarts***, ***How-tos***, or ***Concepts***. See [document types](#document-type-conventions) below for guidance.
  6. **Incremental contributions: One document at a time, procedures first**
