@@ -24,9 +24,9 @@ This document provides an overview of the **protocols** and **content convention
 
 ## Protocols
 
-The following protocols help us process content contributions efficiently:
+The following protocols help us process contributions efficiently:
 
-### "Core docs" protocol
+### New "core docs" protocol
 
 **Core docs** are documents that help readers use Arbitrum products directly. If a document isn't in a `Third-party content` folder in the sidebar, it's a core document.
 
@@ -46,7 +46,7 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
  4. As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
  5. Mark your PR as `Open` when it's ready for review.
 
-### "Third-party docs" protocol
+### New "third-party docs" protocol
 
 **Third-party docs** are documents that help readers of Arbitrum docs use partners' products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products. These are generally authored by partner teams, but can be authored by anyone.
 
@@ -77,6 +77,12 @@ The protocol for creating new third-party docs is the same as that of [Creating 
       1. **Content ownership**: As the author, you retain ownership of and responsibility for the content you contribute. You're free to use your content in any way you see fit outside of Arbitrum's docs. Remember that when contributing content to our documentation, you must ensure you have the necessary rights to do so, and that the content doesn't infringe on the intellectual property rights of others.
       2. **License for use**: By contributing your content to our documentation, you grant Offchain Labs a non-exclusive, royalty-free license to use, reproduce, adapt, translate, distribute, and display the content in our documentation. This allows us to integrate your content into our docs and make it available to all users.
       3. **Right to modify or remove**: Offchain Labs reserves the right to modify or remove third-party content from our documentation at any time. This might be necessary due to a range of reasons, such as content becoming outdated, receiving very low pageviews over an extended period, or misalignment with our guidelines or goals.
+
+
+### Update request protocol
+
+If you'd like to request an update or share a suggestion related to an existing document without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+
 
 ## Content conventions
 
