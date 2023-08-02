@@ -87,9 +87,9 @@ const sidebars = {
       ],
     },
     {
-      type: 'category',
-      label: 'Concepts',
-      collapsed: false,
+      type: "category",
+      label: "Concepts",
+      collapsed: true,
       items: [
         {
           type: 'doc',
@@ -157,9 +157,9 @@ const sidebars = {
       ],
     },
     {
-      type: 'category',
-      label: 'Developer tools and resources',
-      collapsed: false,
+      type: "category",
+      label: "Developer tools and resources",
+      collapsed: true,
       items: [
         {
           type: 'doc',
@@ -218,6 +218,10 @@ const sidebars = {
       label: 'Troubleshooting: Building dApps',
       id: 'for-devs/troubleshooting-building',
     },
+    {
+      type: "doc",
+      id: "for-devs/contribute"
+    },
   ],
   bridgeTokensSidebar: [
     {
@@ -235,7 +239,7 @@ const sidebars = {
       label: 'Troubleshooting: Bridge tokens',
       id: 'for-users/troubleshooting-users',
     },
-    {
+    { 
       type: "category",
       label: "Concepts",
       collapsed: false,
@@ -245,6 +249,10 @@ const sidebars = {
           id: "bridge-tokens/concepts/usdc-concept"
         }
       ]
+    },
+    {
+      type: "doc",
+      id: "for-users/contribute"
     }
   ],
   runNodesSidebar: [
@@ -327,9 +335,13 @@ const sidebars = {
       label: 'Troubleshooting: Run a node',
     },
     {
-      type: 'doc',
-      label: 'Frequently asked questions: Run a node',
-      id: 'node-running/faq',
+      type: "doc",
+      label: "Frequently asked questions: Run a node",
+      id: "node-running/faq"
+    },
+    {
+      type: "doc",
+      id: "node-running/contribute"
     },
   ],
   launchAnOrbitChainSidebar: [
@@ -493,9 +505,13 @@ const sidebars = {
       label: 'Deeper dive: Whitepaper',
     },
     {
-      type: 'doc',
-      label: 'Audit reports',
-      id: 'audit-reports',
+      type: "doc",
+      label: "Audit reports",
+      id: "audit-reports"
+    },
+    {
+      type: "doc",
+      id: "learn-more/contribute"
     },
   ],
 };
