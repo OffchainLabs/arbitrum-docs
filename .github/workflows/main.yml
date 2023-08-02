@@ -10,14 +10,15 @@ jobs:
   check-formatting:
     name: "Check Formatting"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./website
     steps:
       - name: Checkout files
         uses: actions/checkout@v3
 
       - name: Install node_modules
-        working-directory: ./website
-        run: yarn install
+        uses: OffchainLabs/actions/node-modules/install@main
 
       - name: Check formatting with Prettier
-        working-directory: ./website
         run: yarn format:check
