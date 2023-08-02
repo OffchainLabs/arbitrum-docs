@@ -21,4 +21,5 @@ jobs:
         uses: OffchainLabs/actions/node-modules/install@main
 
       - name: Check formatting with Prettier
+        working-directory: ./website
         run: yarn format:check
