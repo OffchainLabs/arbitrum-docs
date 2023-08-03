@@ -1,8 +1,8 @@
-import lunr from "@generated/lunr.client";
+import lunr from '@generated/lunr.client';
 lunr.tokenizer.separator = /[\s\-/]+/;
 
 class LunrSearchAdapter {
-  constructor(searchDocs, searchIndex, baseUrl = "/") {
+  constructor(searchDocs, searchIndex, baseUrl = '/') {
     this.searchDocs = searchDocs;
     this.lunrIndex = lunr.Index.load(searchIndex);
     this.baseUrl = baseUrl;
@@ -31,7 +31,7 @@ class LunrSearchAdapter {
         ? {
             content: {
               value: formattedContent,
-              matchLevel: "full",
+              matchLevel: 'full',
             },
           }
         : null,
@@ -57,7 +57,7 @@ class LunrSearchAdapter {
       doc.title.substring(0, start) +
       '<span class="algolia-docsearch-suggestion--highlight">' +
       doc.title.substring(start, end) +
-      "</span>" +
+      '</span>' +
       doc.title.substring(end, doc.title.length);
     return this.getHit(doc, formattedTitle);
   }
@@ -67,13 +67,13 @@ class LunrSearchAdapter {
     const end = position[0] + length;
     let formattedTitle =
       doc.title +
-      "<br /><i>Keywords: " +
+      '<br /><i>Keywords: ' +
       doc.keywords.substring(0, start) +
       '<span class="algolia-docsearch-suggestion--highlight">' +
       doc.keywords.substring(start, end) +
-      "</span>" +
+      '</span>' +
       doc.keywords.substring(end, doc.keywords.length) +
-      "</i>";
+      '</i>';
     return this.getHit(doc, formattedTitle);
   }
 
@@ -85,8 +85,8 @@ class LunrSearchAdapter {
     let ellipsesBefore = true;
     let ellipsesAfter = true;
     for (let k = 0; k < 3; k++) {
-      const nextSpace = doc.content.lastIndexOf(" ", previewStart - 2);
-      const nextDot = doc.content.lastIndexOf(".", previewStart - 2);
+      const nextSpace = doc.content.lastIndexOf(' ', previewStart - 2);
+      const nextDot = doc.content.lastIndexOf('.', previewStart - 2);
       if (nextDot > 0 && nextDot > nextSpace) {
         previewStart = nextDot + 1;
         ellipsesBefore = false;
@@ -100,8 +100,8 @@ class LunrSearchAdapter {
       previewStart = nextSpace + 1;
     }
     for (let k = 0; k < 10; k++) {
-      const nextSpace = doc.content.indexOf(" ", previewEnd + 1);
-      const nextDot = doc.content.indexOf(".", previewEnd + 1);
+      const nextSpace = doc.content.indexOf(' ', previewEnd + 1);
+      const nextDot = doc.content.indexOf('.', previewEnd + 1);
       if (nextDot > 0 && nextDot < nextSpace) {
         previewEnd = nextDot;
         ellipsesAfter = false;
@@ -116,15 +116,15 @@ class LunrSearchAdapter {
     }
     let preview = doc.content.substring(previewStart, start);
     if (ellipsesBefore) {
-      preview = "... " + preview;
+      preview = '... ' + preview;
     }
     preview +=
       '<span class="algolia-docsearch-suggestion--highlight">' +
       doc.content.substring(start, end) +
-      "</span>";
+      '</span>';
     preview += doc.content.substring(end, previewEnd);
     if (ellipsesAfter) {
-      preview += " ...";
+      preview += ' ...';
     }
     return this.getHit(doc, null, preview);
   }

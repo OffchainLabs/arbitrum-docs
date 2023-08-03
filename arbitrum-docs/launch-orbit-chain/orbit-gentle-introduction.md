@@ -38,26 +38,26 @@ import {
 
 <MermaidWithHtml>
   <Nodes>
-    <Node id='1'>Orbit chain</Node>
-    <Node id='2'>Orbit chain</Node>
-    <Node id='3'>Orbit chain</Node>
-    <Node id='4'>Arbitrum (L2 - Goerli, One, Nova)</Node>
-    <Node id='5'>Ethereum (L1 - Goerli, Mainnet)</Node>
-    <Connection from='1' to='4' />
-    <Connection from='2' to='4' />
-    <Connection from='3' to='4' />
-    <Connection from='4' to='5' />
+    <Node id="1">Orbit chain</Node>
+    <Node id="2">Orbit chain</Node>
+    <Node id="3">Orbit chain</Node>
+    <Node id="4">Arbitrum (L2 - Goerli, One, Nova)</Node>
+    <Node id="5">Ethereum (L1 - Goerli, Mainnet)</Node>
+    <Connection from="1" to="4" />
+    <Connection from="2" to="4" />
+    <Connection from="3" to="4" />
+    <Connection from="4" to="5" />
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for='1,2,3'>
+    <NodeDescription for="1,2,3">
       <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own chain
       that settles to one of Arbitrum's public Layer 2 (L2) chains.
     </NodeDescription>
-    <NodeDescription for='4'>
+    <NodeDescription for="4">
       <strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>, and{' '}
       <strong>Arbitrum Goerli</strong> are public Layer 2 (L2) chains that settle to Ethereum.
     </NodeDescription>
-    <NodeDescription for='5'>
+    <NodeDescription for="5">
       <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
     </NodeDescription>
   </NodeDescriptions>
@@ -157,5 +157,4 @@ Note that the Arbitrum Orbit license doesn't automatically include chains that s
 Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
 
 [^1]: Although your Orbit chain will be able to exchange information with other Orbit chains (and the L2 chain that it settles to) by default, you're free to modify your Orbit chain's code as much as you'd like. You can even intentionally make your Orbit chain _incompatible_ with other Orbit chains and L2s.
-
 [^2]: Note that Orbit chains can settle to **one** of either Arbitrum Goerli, Arbitrum One, or Arbitrum Nova. This selection is usually made pre-deployment, while you're initially configuring your Orbit chain on the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment). Orbit chains aren't really meant to "hot swap" between networks; changing the L2 chain that your Orbit chain settles to post-deployment isn't explicitly supported. But you can totally experiment with this use-case.

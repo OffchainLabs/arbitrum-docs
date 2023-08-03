@@ -1,9 +1,9 @@
-import Hogan from "hogan.js";
-import LunrSearchAdapter from "./lunar-search";
-import autocomplete from "autocomplete.js";
-import templates from "./templates";
-import utils from "./utils";
-import $ from "autocomplete.js/zepto";
+import Hogan from 'hogan.js';
+import LunrSearchAdapter from './lunar-search';
+import autocomplete from 'autocomplete.js';
+import templates from './templates';
+import utils from './utils';
+import $ from 'autocomplete.js/zepto';
 
 class DocSearch {
   constructor({
@@ -11,7 +11,7 @@ class DocSearch {
     searchIndex,
     inputSelector,
     debug = false,
-    baseUrl = "/",
+    baseUrl = '/',
     queryDataCallback = null,
     autocompleteOptions = {
       debug: false,
@@ -22,29 +22,23 @@ class DocSearch {
     queryHook = false,
     handleSelected = false,
     enhancedSearchInput = false,
-    layout = "collumns",
+    layout = 'collumns',
   }) {
     this.input = DocSearch.getInputFromSelector(inputSelector);
     this.queryDataCallback = queryDataCallback || null;
     const autocompleteOptionsDebug =
-      autocompleteOptions && autocompleteOptions.debug
-        ? autocompleteOptions.debug
-        : false;
+      autocompleteOptions && autocompleteOptions.debug ? autocompleteOptions.debug : false;
     // eslint-disable-next-line no-param-reassign
     autocompleteOptions.debug = debug || autocompleteOptionsDebug;
     this.autocompleteOptions = autocompleteOptions;
-    this.autocompleteOptions.cssClasses =
-      this.autocompleteOptions.cssClasses || {};
-    this.autocompleteOptions.cssClasses.prefix =
-      this.autocompleteOptions.cssClasses.prefix || "ds";
+    this.autocompleteOptions.cssClasses = this.autocompleteOptions.cssClasses || {};
+    this.autocompleteOptions.cssClasses.prefix = this.autocompleteOptions.cssClasses.prefix || 'ds';
     const inputAriaLabel =
-      this.input &&
-      typeof this.input.attr === "function" &&
-      this.input.attr("aria-label");
+      this.input && typeof this.input.attr === 'function' && this.input.attr('aria-label');
     this.autocompleteOptions.ariaLabel =
-      this.autocompleteOptions.ariaLabel || inputAriaLabel || "search input";
+      this.autocompleteOptions.ariaLabel || inputAriaLabel || 'search input';
 
-    this.isSimpleLayout = layout === "simple";
+    this.isSimpleLayout = layout === 'simple';
 
     this.client = new LunrSearchAdapter(searchDocs, searchIndex, baseUrl);
 
@@ -67,20 +61,17 @@ class DocSearch {
 
     // We prevent default link clicking if a custom handleSelected is defined
     if (customHandleSelected) {
-      $(".algolia-autocomplete").on("click", ".ds-suggestions a", (event) => {
+      $('.algolia-autocomplete').on('click', '.ds-suggestions a', (event) => {
         event.preventDefault();
       });
     }
 
     this.autocomplete.on(
-      "autocomplete:selected",
-      this.handleSelected.bind(null, this.autocomplete.autocomplete)
+      'autocomplete:selected',
+      this.handleSelected.bind(null, this.autocomplete.autocomplete),
     );
 
-    this.autocomplete.on(
-      "autocomplete:shown",
-      this.handleShown.bind(null, this.input)
-    );
+    this.autocomplete.on('autocomplete:shown', this.handleShown.bind(null, this.input));
 
     if (enhancedSearchInput) {
       DocSearch.bindSearchBoxEvent();
@@ -89,24 +80,24 @@ class DocSearch {
 
   static injectSearchBox(input) {
     input.before(templates.searchBox);
-    const newInput = input.prev().prev().find("input");
+    const newInput = input.prev().prev().find('input');
     input.remove();
     return newInput;
   }
 
   static bindSearchBoxEvent() {
-    $('.searchbox [type="reset"]').on("click", function () {
-      $("input#docsearch").focus();
-      $(this).addClass("hide");
-      autocomplete.autocomplete.setVal("");
+    $('.searchbox [type="reset"]').on('click', function () {
+      $('input#docsearch').focus();
+      $(this).addClass('hide');
+      autocomplete.autocomplete.setVal('');
     });
 
-    $("input#docsearch").on("keyup", () => {
-      const searchbox = document.querySelector("input#docsearch");
+    $('input#docsearch').on('keyup', () => {
+      const searchbox = document.querySelector('input#docsearch');
       const reset = document.querySelector('.searchbox [type="reset"]');
-      reset.className = "searchbox__reset";
+      reset.className = 'searchbox__reset';
       if (searchbox.value.length === 0) {
-        reset.className += " hide";
+        reset.className += ' hide';
       }
     });
   }
@@ -119,7 +110,7 @@ class DocSearch {
    * @returns {void}
    */
   static getInputFromSelector(selector) {
-    const input = $(selector).filter("input");
+    const input = $(selector).filter('input');
     return input.length ? $(input[0]) : null;
   }
 
@@ -139,10 +130,7 @@ class DocSearch {
         query = queryHook(query) || query;
       }
       this.client.search(query).then((hits) => {
-        if (
-          this.queryDataCallback &&
-          typeof this.queryDataCallback == "function"
-        ) {
+        if (this.queryDataCallback && typeof this.queryDataCallback == 'function') {
           this.queryDataCallback(hits);
         }
         if (transformData) {
@@ -160,55 +148,40 @@ class DocSearch {
     const hits = clonedHits.map((hit) => {
       if (hit._highlightResult) {
         // eslint-disable-next-line no-param-reassign
-        hit._highlightResult = utils.mergeKeyWithParent(
-          hit._highlightResult,
-          "hierarchy"
-        );
+        hit._highlightResult = utils.mergeKeyWithParent(hit._highlightResult, 'hierarchy');
       }
-      return utils.mergeKeyWithParent(hit, "hierarchy");
+      return utils.mergeKeyWithParent(hit, 'hierarchy');
     });
 
     // Group hits by category / subcategory
-    let groupedHits = utils.groupBy(hits, "lvl0");
+    let groupedHits = utils.groupBy(hits, 'lvl0');
     $.each(groupedHits, (level, collection) => {
-      const groupedHitsByLvl1 = utils.groupBy(collection, "lvl1");
-      const flattenedHits = utils.flattenAndFlagFirst(
-        groupedHitsByLvl1,
-        "isSubCategoryHeader"
-      );
+      const groupedHitsByLvl1 = utils.groupBy(collection, 'lvl1');
+      const flattenedHits = utils.flattenAndFlagFirst(groupedHitsByLvl1, 'isSubCategoryHeader');
       groupedHits[level] = flattenedHits;
     });
-    groupedHits = utils.flattenAndFlagFirst(groupedHits, "isCategoryHeader");
+    groupedHits = utils.flattenAndFlagFirst(groupedHits, 'isCategoryHeader');
 
     // Translate hits into smaller objects to be send to the template
     return groupedHits.map((hit) => {
       const url = DocSearch.formatURL(hit);
-      const category = utils.getHighlightedValue(hit, "lvl0");
-      const subcategory = utils.getHighlightedValue(hit, "lvl1") || category;
+      const category = utils.getHighlightedValue(hit, 'lvl0');
+      const subcategory = utils.getHighlightedValue(hit, 'lvl1') || category;
       const displayTitle = utils
         .compact([
-          utils.getHighlightedValue(hit, "lvl2") || subcategory,
-          utils.getHighlightedValue(hit, "lvl3"),
-          utils.getHighlightedValue(hit, "lvl4"),
-          utils.getHighlightedValue(hit, "lvl5"),
-          utils.getHighlightedValue(hit, "lvl6"),
+          utils.getHighlightedValue(hit, 'lvl2') || subcategory,
+          utils.getHighlightedValue(hit, 'lvl3'),
+          utils.getHighlightedValue(hit, 'lvl4'),
+          utils.getHighlightedValue(hit, 'lvl5'),
+          utils.getHighlightedValue(hit, 'lvl6'),
         ])
-        .join(
-          '<span class="aa-suggestion-title-separator" aria-hidden="true"> › </span>'
-        );
-      const text = utils.getSnippetedValue(hit, "content");
+        .join('<span class="aa-suggestion-title-separator" aria-hidden="true"> › </span>');
+      const text = utils.getSnippetedValue(hit, 'content');
       const isTextOrSubcategoryNonEmpty =
-        (subcategory && subcategory !== "") ||
-        (displayTitle && displayTitle !== "");
-      const isLvl1EmptyOrDuplicate =
-        !subcategory || subcategory === "" || subcategory === category;
-      const isLvl2 =
-        displayTitle && displayTitle !== "" && displayTitle !== subcategory;
-      const isLvl1 =
-        !isLvl2 &&
-        subcategory &&
-        subcategory !== "" &&
-        subcategory !== category;
+        (subcategory && subcategory !== '') || (displayTitle && displayTitle !== '');
+      const isLvl1EmptyOrDuplicate = !subcategory || subcategory === '' || subcategory === category;
+      const isLvl2 = displayTitle && displayTitle !== '' && displayTitle !== subcategory;
+      const isLvl1 = !isLvl2 && subcategory && subcategory !== '' && subcategory !== category;
       const isLvl0 = !isLvl1 && !isLvl2;
 
       return {
@@ -231,13 +204,13 @@ class DocSearch {
   static formatURL(hit) {
     const { url, anchor } = hit;
     if (url) {
-      const containsAnchor = url.indexOf("#") !== -1;
+      const containsAnchor = url.indexOf('#') !== -1;
       if (containsAnchor) return url;
       else if (anchor) return `${hit.url}#${hit.anchor}`;
       return url;
     } else if (anchor) return `#${hit.anchor}`;
     /* eslint-disable */
-    console.warn("no anchor nor url for : ", JSON.stringify(hit));
+    console.warn('no anchor nor url for : ', JSON.stringify(hit));
     /* eslint-enable */
     return null;
   }
@@ -247,9 +220,7 @@ class DocSearch {
   }
 
   static getSuggestionTemplate(isSimpleLayout) {
-    const stringTemplate = isSimpleLayout
-      ? templates.suggestionSimple
-      : templates.suggestion;
+    const stringTemplate = isSimpleLayout ? templates.suggestionSimple : templates.suggestion;
     const template = Hogan.compile(stringTemplate);
     return (suggestion) => template.render(suggestion);
   }
@@ -258,11 +229,11 @@ class DocSearch {
     // Do nothing if click on the suggestion, as it's already a <a href>, the
     // browser will take care of it. This allow Ctrl-Clicking on results and not
     // having the main window being redirected as well
-    if (context.selectionMethod === "click") {
+    if (context.selectionMethod === 'click') {
       return;
     }
 
-    input.setVal("");
+    input.setVal('');
     window.location.assign(suggestion.url);
   }
 
@@ -276,13 +247,13 @@ class DocSearch {
 
     const alignClass =
       middleOfInput - middleOfWindow >= 0
-        ? "algolia-autocomplete-right"
-        : "algolia-autocomplete-left";
+        ? 'algolia-autocomplete-right'
+        : 'algolia-autocomplete-left';
     const otherAlignClass =
       middleOfInput - middleOfWindow < 0
-        ? "algolia-autocomplete-right"
-        : "algolia-autocomplete-left";
-    const autocompleteWrapper = $(".algolia-autocomplete");
+        ? 'algolia-autocomplete-right'
+        : 'algolia-autocomplete-left';
+    const autocompleteWrapper = $('.algolia-autocomplete');
     if (!autocompleteWrapper.hasClass(alignClass)) {
       autocompleteWrapper.addClass(alignClass);
     }
