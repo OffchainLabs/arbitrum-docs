@@ -1,2 +1,7 @@
 # Generated files from notion tables
-../arbitrum-docs/partials/*-partial*
+../arbitrum-docs/partials/_glossary-partial.md
+../arbitrum-docs/partials/_troubleshooting-bridging-partial.md
+../arbitrum-docs/partials/_troubleshooting-building-partial.md
+../arbitrum-docs/partials/_troubleshooting-nodes-partial.md
+../arbitrum-docs/partials/_troubleshooting-users-partial.md
+../arbitrum-docs/CODEOWNERS.md
