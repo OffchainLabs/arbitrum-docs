@@ -69,9 +69,9 @@ const config = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: "arbitrum-sdk",
-        path: "./sdk-docs",
-        routeBasePath: "sdk",
+        id: 'arbitrum-sdk',
+        path: './sdk-docs',
+        routeBasePath: 'sdk',
         sidebarItemsGenerator: sdkSidebarGenerator,
       },
     ],
