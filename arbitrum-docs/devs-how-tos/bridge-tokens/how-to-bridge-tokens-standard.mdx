@@ -137,7 +137,7 @@ As mentioned before, you can also call the `approve` method of the token and sen
 
 After allowing the gateway contract to transfer the tokens, we can now start the bridging process.
 
-You can use Arbitrum’s SDK to abstract this process, by calling the method [deposit](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger#deposit) of the [ERC20Bridger](/sdk/classes/assetBridger_erc20Bridger.Erc20Bridger) class, which will estimate the gas parameters (\_maxGas, \_gasPriceBid and maxSubmissionCost, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
+You can use Arbitrum’s SDK to abstract this process, by calling the method [deposit](/sdk/assetBridger_erc20Bridger#deposit) of the [ERC20Bridger](/sdk/assetBridger_erc20Bridger) class, which will estimate the gas parameters (\_maxGas, \_gasPriceBid and maxSubmissionCost, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
 
 - `amount`: Amount of tokens to bridge
 - `erc20L1Address`: L1 address of the ERC20 token being bridged
