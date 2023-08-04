@@ -17,7 +17,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "format": "yarn format:docs && yarn format:app",
     "format:app": "prettier --write --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\"",
-    "format:docs": "prettier \"../arbitrum-docs/**/*.{md,mdx}\" --write --config \"./.prettierrc.js\"",
+    "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"../arbitrum-docs/**/*.{md,mdx}\"",
+    "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"../arbitrum-docs/**/*.{md,mdx}\"",
     "typecheck": "tsc"
   },
   "dependencies": {
