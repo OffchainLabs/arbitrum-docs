@@ -1,7 +1,7 @@
 ---
 title: 'USDC on Arbitrum One: A conceptual overview'
-sidebar_label: "USDC on Arbitrum One"
-description: "Learn about the two different types of USDC supported by Arbitrum One: Arbitrum-Native USDC and Bridged (from Ethereum) USDC"
+sidebar_label: 'USDC on Arbitrum One'
+description: 'Learn about the two different types of USDC supported by Arbitrum One: Arbitrum-Native USDC and Bridged (from Ethereum) USDC'
 author: amarrazza
 target_audience: End-users who are not familiar with the different types of USDC
 sidebar_position: 4
@@ -9,8 +9,8 @@ sidebar_position: 4
 
 Arbitrum One supports two different types of USDC:
 
- 1. **Arbitrum-native USDC (USDC)**: USDC tokens native to the Arbitrum One chain.
- 2. **Bridged USDC (USDC.e)**: Ethereum-native USDC tokens that have been bridged to Arbitrum One.
+1.  **Arbitrum-native USDC (USDC)**: USDC tokens native to the Arbitrum One chain.
+2.  **Bridged USDC (USDC.e)**: Ethereum-native USDC tokens that have been bridged to Arbitrum One.
 
 This concept doc describes the differences between these two types of USDC, along with relevant historical context.
 
@@ -20,7 +20,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 ### Differences
 
-<table className='small-table'>
+<table className="small-table">
   <tr>
     <th></th>
     <th>Arbitrum-native USDC</th>
@@ -38,8 +38,16 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
   </tr>
   <tr>
     <td>Token Address</td>
-    <td><a href="https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831">0xaf88d065e77c8cC2239327C5EDb3A432268e5831</a></td>
-    <td><a href="https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8">0xff970a61a04b1ca14834a43f5de4533ebddb5cc8</a></td>
+    <td>
+      <a href="https://arbiscan.io/token/0xaf88d065e77c8cC2239327C5EDb3A432268e5831">
+        0xaf88d065e77c8cC2239327C5EDb3A432268e5831
+      </a>
+    </td>
+    <td>
+      <a href="https://arbiscan.io/token/0xff970a61a04b1ca14834a43f5de4533ebddb5cc8">
+        0xff970a61a04b1ca14834a43f5de4533ebddb5cc8
+      </a>
+    </td>
   </tr>
   <tr>
     <td>Benefits</td>
