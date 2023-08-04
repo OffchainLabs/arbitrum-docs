@@ -1,9 +1,9 @@
 ---
-title: "Quickstart: Launch an Orbit chain"
+title: 'Quickstart: Launch an Orbit chain'
 description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
 target_audience: developers who want to create their own self-managed AnyTrust or One chain
-sidebar_label: "Quickstart: Launch an Orbit chain"
+sidebar_label: 'Quickstart: Launch an Orbit chain'
 ---
 
 This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment).
@@ -24,13 +24,11 @@ While you're tinkering locally, we'll be building the tech and docs that help yo
 
 :::
 
-
 ## Prerequisites
 
- - [Docker](https://docs.docker.com/get-docker/)
- - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
- - At least 1.5 Goerli ETH
-
+- [Docker](https://docs.docker.com/get-docker/)
+- A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
+- At least 1.5 Goerli ETH
 
 ## Step 1: Acquire Arbitrum Goerli $ETH ($AGOR)
 
@@ -44,13 +42,12 @@ While you're tinkering locally, we'll be building the tech and docs that help yo
 
 :::
 
-You'll need at least 1.5 $AGOR to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli). 
+You'll need at least 1.5 $AGOR to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli).
 
 At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network:
 
- 1. Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
- 2. Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
-
+1.  Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
+2.  Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
 ## Step 2: Configure your Orbit chain's deployment
 
@@ -68,7 +65,6 @@ The below table provides a brief description of each of these configuration para
 
 <!-- todo: determine whether or not we want to align the UI with docs section-casing and param-casing patterns; align docs to UI if needed -->
 
-
 | Parameter                     | Description                                                                                                                                                                                                                                                                                                                               |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Chain ID**                  | A unique integer identifier that represents your chain's network. Your `Chain ID` can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.                                                                               |
@@ -77,7 +73,6 @@ The below table provides a brief description of each of these configuration para
 | **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                             |
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
-
 
 ## Step 3: Deploy your chain's base contracts to Arbitrum Goerli
 
@@ -97,14 +92,12 @@ When we say "base contracts" and "base chain", we're referring to your Orbit cha
 
 Before proceeding, let's briefly review what just happened:
 
- - You submitted a deployment transaction to an Orbit "factory" smart contract on Arbitrum Goerli, the public L2 chain that your local Orbit chain will settle transactions to.
- - This Orbit smart contract then initialized your Orbit chain's base contracts with the values that you specified in the previous step, and deployed these base contracts to Arbitrum Goerli.
-
+- You submitted a deployment transaction to an Orbit "factory" smart contract on Arbitrum Goerli, the public L2 chain that your local Orbit chain will settle transactions to.
+- This Orbit smart contract then initialized your Orbit chain's base contracts with the values that you specified in the previous step, and deployed these base contracts to Arbitrum Goerli.
 
 Your Orbit chain's base contracts are responsible for facilitating the exchange of information between your chain's node(s) and its base chain's nodes. This includes the batch posting of transactions from your Orbit chain to its base chain, the staking of tokens by your Orbit chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
-Click `Next` to proceed to the next step: **validator configuration**. 
-
+Click `Next` to proceed to the next step: **validator configuration**.
 
 ## Step 4: Configure your chain's validator(s)
 
@@ -126,7 +119,7 @@ Each of the validator addresses specified in this step will be added to an allow
 
 <!-- possible cut (meaning is unclear): or even challenges staker of a specific RBlock. -->
 
-Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists your configured validator addresses within your Orbit chain's base contracts. 
+Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists your configured validator addresses within your Orbit chain's base contracts.
 
 Once this transaction is confirmed, you should see a `Validator set changed!` notification appear in the portal UI. Click `Next` to proceed the next step: **batch poster configuration**.
 
@@ -150,33 +143,27 @@ The following steps are under construction and will be updated with more detaile
 
 :::
 
-
 ## Step 6: Download your chain's configuration files and launch your chain
 
 You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
 
-
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
- 1. **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
- 2. **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
-
-
+1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
+2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
 ## Step 7: Clone the setup script repository and add your configuration files
 
- 1. Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
- 2. Move the `nodeConfig.json` file that you downloaded into the  `chain` directory in the root of your cloned `orbit-setup-script` repository.
- 3. Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
- 4. Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
-
+1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
+2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
+3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
+4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
 ## Step 8: Run your chain's node and block explorer
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
-
 
 ## Step 9: Finish setting up your chain
 
@@ -189,7 +176,6 @@ We've provided a Hardhat script that handles the following tasks:
 
 To run this script, issue the following command from the root of the `orbit-setup-script` repository, replacing `OxYourPrivateKey` with the private key of the `Owner` account you used to deploy your chain's contracts, and replacing `http://localhost:8449` with the RPC URL of your chain's node.
 
-
 ```shell
 PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" yarn run setup
 ```
@@ -197,7 +183,6 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc
 ## Congratulations!
 
 Your local Orbit chain is now running. You'll see an `outputInfo.json` file in the main directory of your script folder - this contains more information about your chain, including the addresses of your chain's base contracts.
-
 
 ### Appendix A: Logging
 
@@ -215,7 +200,6 @@ If you need to deposit more ETH into either your validator or batch poster addre
 PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" AMOUNT="<AMOUNT>" yarn run deposit
 ```
 
-
 ### Appendix C: Troubleshooting
 
- - You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually safe to ignore. It's usually displayed when your Orbit chain's base contract deployment isn't yet finalized on the L1 chain. This finalization can take 15-20 minutes, but don't worry - the deployment doesn't need to be L1-finalized in order for your chain to function properly.
+- You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually safe to ignore. It's usually displayed when your Orbit chain's base contract deployment isn't yet finalized on the L1 chain. This finalization can take 15-20 minutes, but don't worry - the deployment doesn't need to be L1-finalized in order for your chain to function properly.

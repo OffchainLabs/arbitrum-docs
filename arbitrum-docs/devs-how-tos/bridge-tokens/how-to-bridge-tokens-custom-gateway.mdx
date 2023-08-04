@@ -1,30 +1,30 @@
 ---
-title: "How to bridge tokens via a custom gateway"
+title: 'How to bridge tokens via a custom gateway'
 sidebar_label: Custom gateway
 description: Learn how to set up a custom gateway using Arbitrum's Token Bridge to bridge tokens programmatically
 reader_audience: developers who want to build on Ethereum/Arbitrum and bridge tokens between layers
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md'; 
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
 :::caution Do you really need a custom gateway?
 
-Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard.mdx) and the [custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard.mdx) and the [generic-custom gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 :::
 
 In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview.mdx).
 
-Familiarity with [Arbitrum’s token bridge system](/asset-bridging.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/for-devs/quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
+Familiarity with [Arbitrum’s token bridge system](/for-devs/concepts/token-bridge/token-bridge-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/for-devs/quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging) that encapsulates the entire process.
 
 ## Step 0: Review the prerequisites (a.k.a. do I really need a custom gateway?)
 
-Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard.mdx) and the [custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard.mdx) and the [generic-custom gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 Having said that, there are multiple prerequisites to keep in mind when deploying your own custom gateway.
 
@@ -36,18 +36,18 @@ First of all, the **L1 counterpart of the gateway**, must conform to the [IL1Arb
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [L1ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
 
-Furthermore, if you plan on having permissionless registration of tokens in your gateway, your L1 gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [custom generic gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
+Furthermore, if you plan on having permissionless registration of tokens in your gateway, your L1 gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
 
 On the other hand, the **L2 counterpart of the gateway**, must conform to the [ITokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interface. This means that it must have, at least:
 
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
 - A method `finalizeInboundTransfer`, to handle messages coming ONLY from L1’s gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
-- Methods to send cross-chain messages through the [ArbSys precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbSys.sol). An example implementation can be found in  `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
+- Methods to send cross-chain messages through the [ArbSys precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbSys.sol). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
 ### What about my custom tokens?
 
-If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx).
+If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom.mdx).
 
 ## Step 1: Create a gateway and deploy it on L1
 
@@ -57,7 +57,7 @@ The code contained within the following sections is meant for testing purposes o
 
 :::
 
-We‘ll begin the process by creating our custom gateway and deploying it on L1. A good example of a custom gateway is [Arbitrum’s custom generic gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol). It includes all methods required plus some more to support the wide variety of tokens that can be bridged through it.
+We‘ll begin the process by creating our custom gateway and deploying it on L1. A good example of a custom gateway is [Arbitrum’s generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol). It includes all methods required plus some more to support the wide variety of tokens that can be bridged through it.
 
 In this case, we’ll use a simpler approach. We’ll create a gateway that supports only one token and has the ability to be disabled/enabled by the owner of the contract. It will also implement all necessary methods. To simplify the deployment process even further, we won’t worry about setting the addresses of the counterpart gateway and the custom tokens at deployment time. Instead, we will use a function `setTokenBridgeInformation` that will be called by the owner of the contract to initialize the gateway.
 
@@ -76,7 +76,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * and simplify the test
  */
 contract L1CustomGateway is IL1CustomGateway, L1CrosschainMessenger, Ownable {
-    
+
     // Token bridge state variables
     address public l1CustomToken;
     address public l2CustomToken;
@@ -367,61 +367,58 @@ abstract contract L1CrosschainMessenger {
 We now deploy that gateway to L1.
 
 ```tsx
-const { ethers } = require('hardhat')
-const { providers, Wallet, BigNumber } = require('ethers')
-const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk')
+const { ethers } = require('hardhat');
+const { providers, Wallet, BigNumber } = require('ethers');
+const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk');
 const {
   AdminErc20Bridger,
   Erc20Bridger,
-} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger')
-require('dotenv').config()
+} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger');
+require('dotenv').config();
 
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers
  */
-const walletPrivateKey = process.env.DEVNET_PRIVKEY
-const l1Provider = new providers.JsonRpcProvider(process.env.L1RPC)
-const l2Provider = new providers.JsonRpcProvider(process.env.L2RPC)
-const l1Wallet = new Wallet(walletPrivateKey, l1Provider)
-const l2Wallet = new Wallet(walletPrivateKey, l2Provider)
+const walletPrivateKey = process.env.DEVNET_PRIVKEY;
+const l1Provider = new providers.JsonRpcProvider(process.env.L1RPC);
+const l2Provider = new providers.JsonRpcProvider(process.env.L2RPC);
+const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
+const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
 const main = async () => {
-	/**
+  /**
    * Use l2Network to create an Arbitrum SDK AdminErc20Bridger instance
    * We'll use AdminErc20Bridger for its convenience methods around registering tokens to a custom gateway
    */
-  const l2Network = await getL2Network(l2Provider)
-  const erc20Bridger = new Erc20Bridger(l2Network)
-  const adminTokenBridger = new AdminErc20Bridger(l2Network)
-  const l1Router = l2Network.tokenBridge.l1GatewayRouter
-  const l2Router = l2Network.tokenBridge.l2GatewayRouter
-  const inbox = l2Network.ethBridge.inbox
+  const l2Network = await getL2Network(l2Provider);
+  const erc20Bridger = new Erc20Bridger(l2Network);
+  const adminTokenBridger = new AdminErc20Bridger(l2Network);
+  const l1Router = l2Network.tokenBridge.l1GatewayRouter;
+  const l2Router = l2Network.tokenBridge.l2GatewayRouter;
+  const inbox = l2Network.ethBridge.inbox;
 
   /**
    * Deploy our custom gateway to L1
    */
-  const L1CustomGateway = await await ethers.getContractFactory(
-    'L1CustomGateway',
-    l1Wallet
-  )
-  console.log('Deploying custom gateway to L1')
-  const l1CustomGateway = await L1CustomGateway.deploy(l1Router, inbox)
-  await l1CustomGateway.deployed()
-  console.log(`Custom gateway is deployed to L1 at ${l1CustomGateway.address}`)
-  const l1CustomGatewayAddress = l1CustomGateway.address
-}
+  const L1CustomGateway = await await ethers.getContractFactory('L1CustomGateway', l1Wallet);
+  console.log('Deploying custom gateway to L1');
+  const l1CustomGateway = await L1CustomGateway.deploy(l1Router, inbox);
+  await l1CustomGateway.deployed();
+  console.log(`Custom gateway is deployed to L1 at ${l1CustomGateway.address}`);
+  const l1CustomGatewayAddress = l1CustomGateway.address;
+};
 
 main()
   .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error)
-    process.exit(1)
-  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 ```
 
 ## Step 2: Create a gateway and deploy it on L2
 
-We’ll now create the counterpart of the gateway we created on L1 and deploy it on L2. A good example of a custom gateway on L2 is [Arbitrum’s custom generic gateway on L2](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/gateway/L2CustomGateway.sol). 
+We’ll now create the counterpart of the gateway we created on L1 and deploy it on L2. A good example of a custom gateway on L2 is [Arbitrum’s generic-custom gateway on L2](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/gateway/L2CustomGateway.sol).
 
 As we did with the L1 gateway, we’ll use a simpler approach with the same characteristics of that in L1: supports only one token and has the ability to be disabled/enabled by the owner of the contract. It will also have a `setTokenBridgeInformation` to be called by the owner of the contract to initialize the gateway.
 
@@ -507,7 +504,7 @@ contract L2CustomGateway is IL2CustomGateway, L2CrosschainMessenger, Ownable {
         // The function is marked as payable to conform to the inheritance setup
         // This particular code path shouldn't have a msg.value > 0
         require(msg.value == 0, "NO_VALUE");
-        
+
         // Only allow the custom token to be bridged through this gateway
         require(l1Token == l1CustomToken, "Token is not allowed through this gateway");
 
@@ -585,7 +582,7 @@ contract L2CustomGateway is IL2CustomGateway, L2CrosschainMessenger, Ownable {
         if (l1Token == l1CustomToken) {
             return l2CustomToken;
         }
-        
+
         return address(0);
     }
 
@@ -692,63 +689,60 @@ abstract contract L2CrosschainMessenger {
 We now deploy that gateway to L2.
 
 ```tsx
-const { ethers } = require('hardhat')
-const { providers, Wallet, BigNumber } = require('ethers')
-const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk')
+const { ethers } = require('hardhat');
+const { providers, Wallet, BigNumber } = require('ethers');
+const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk');
 const {
   AdminErc20Bridger,
   Erc20Bridger,
-} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger')
-require('dotenv').config()
+} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger');
+require('dotenv').config();
 
 /**
  * Set up: instantiate L1 / L2 wallets connected to providers
  */
-const walletPrivateKey = process.env.DEVNET_PRIVKEY
-const l1Provider = new providers.JsonRpcProvider(process.env.L1RPC)
-const l2Provider = new providers.JsonRpcProvider(process.env.L2RPC)
-const l1Wallet = new Wallet(walletPrivateKey, l1Provider)
-const l2Wallet = new Wallet(walletPrivateKey, l2Provider)
+const walletPrivateKey = process.env.DEVNET_PRIVKEY;
+const l1Provider = new providers.JsonRpcProvider(process.env.L1RPC);
+const l2Provider = new providers.JsonRpcProvider(process.env.L2RPC);
+const l1Wallet = new Wallet(walletPrivateKey, l1Provider);
+const l2Wallet = new Wallet(walletPrivateKey, l2Provider);
 
 const main = async () => {
-	/**
+  /**
    * Use l2Network to create an Arbitrum SDK AdminErc20Bridger instance
    * We'll use AdminErc20Bridger for its convenience methods around registering tokens to a custom gateway
    */
-  const l2Network = await getL2Network(l2Provider)
-  const erc20Bridger = new Erc20Bridger(l2Network)
-  const adminTokenBridger = new AdminErc20Bridger(l2Network)
-  const l1Router = l2Network.tokenBridge.l1GatewayRouter
-  const l2Router = l2Network.tokenBridge.l2GatewayRouter
-  const inbox = l2Network.ethBridge.inbox
+  const l2Network = await getL2Network(l2Provider);
+  const erc20Bridger = new Erc20Bridger(l2Network);
+  const adminTokenBridger = new AdminErc20Bridger(l2Network);
+  const l1Router = l2Network.tokenBridge.l1GatewayRouter;
+  const l2Router = l2Network.tokenBridge.l2GatewayRouter;
+  const inbox = l2Network.ethBridge.inbox;
 
   /**
    * Deploy our custom gateway to L2
    */
-  const L2CustomGateway = await await ethers.getContractFactory(
-    'L2CustomGateway',
-    l2Wallet
-  )
-  console.log('Deploying custom gateway to L2')
-  const l2CustomGateway = await L2CustomGateway.deploy(l2Router)
-  await l2CustomGateway.deployed()
-  console.log(`Custom gateway is deployed to L2 at ${l2CustomGateway.address}`)
-  const l2CustomGatewayAddress = l2CustomGateway.address
-}
+  const L2CustomGateway = await await ethers.getContractFactory('L2CustomGateway', l2Wallet);
+  console.log('Deploying custom gateway to L2');
+  const l2CustomGateway = await L2CustomGateway.deploy(l2Router);
+  await l2CustomGateway.deployed();
+  console.log(`Custom gateway is deployed to L2 at ${l2CustomGateway.address}`);
+  const l2CustomGatewayAddress = l2CustomGateway.address;
+};
 
 main()
   .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error)
-    process.exit(1)
-  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 ```
 
 ## Step 3: Deploy the custom tokens on L1 and L2
 
 This step will depend on your setup. In this case, as our simplified gateway supports only one token, we will deploy those on L1 and L2 to be able to call the `setTokenBridgeInformation` method on both gateways afterwards.
 
-We won’t go through the process of deploying custom tokens in this How-to, but you can see a detailed explanation of the steps to take in the page [How to bridge tokens via Arbitrum’s custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx)
+We won’t go through the process of deploying custom tokens in this How-to, but you can see a detailed explanation of the steps to take in the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom.mdx)
 
 ## Step 4: Configure your custom tokens on your gateways
 
@@ -761,38 +755,36 @@ This step will also depend on your setup. In this case, our simplified gateway r
  * functions on the custom gateways to set the token bridge addresses in a second step. This could be
  * avoided if you are using proxies or the opcode CREATE2 for example)
  */
-console.log('Setting token bridge information on L1CustomGateway:')
-const setTokenBridgeInfoOnL1 =
-  await l1CustomGateway.setTokenBridgeInformation(
-    l1CustomToken.address,
-    l2CustomToken.address,
-    l2CustomGatewayAddress
-  )
+console.log('Setting token bridge information on L1CustomGateway:');
+const setTokenBridgeInfoOnL1 = await l1CustomGateway.setTokenBridgeInformation(
+  l1CustomToken.address,
+  l2CustomToken.address,
+  l2CustomGatewayAddress,
+);
 
-const setTokenBridgeInfoOnL1Rec = await setTokenBridgeInfoOnL1.wait()
+const setTokenBridgeInfoOnL1Rec = await setTokenBridgeInfoOnL1.wait();
 console.log(
-  `Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`
-)
+  `Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`,
+);
 
-console.log('Setting token bridge information on L2CustomGateway:')
-const setTokenBridgeInfoOnL2 =
-  await l2CustomGateway.setTokenBridgeInformation(
-    l1CustomToken.address,
-    l2CustomToken.address,
-    l1CustomGatewayAddress
-  )
+console.log('Setting token bridge information on L2CustomGateway:');
+const setTokenBridgeInfoOnL2 = await l2CustomGateway.setTokenBridgeInformation(
+  l1CustomToken.address,
+  l2CustomToken.address,
+  l1CustomGatewayAddress,
+);
 
-const setTokenBridgeInfoOnL2Rec = await setTokenBridgeInfoOnL2.wait()
+const setTokenBridgeInfoOnL2Rec = await setTokenBridgeInfoOnL2.wait();
 console.log(
-  `Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`
-)
+  `Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`,
+);
 ```
 
 ## Step 5: Register the custom token to your custom gateway
 
 Once all contracts are deployed on their respective chains, and they all have the information of the gateways and tokens, it’s time to register the token in your custom gateway.
 
-As mentioned in [How to bridge tokens via Arbitrum’s custom generic gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic.mdx), this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom.mdx), this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 In this case, when using this function only one action will be performed:
 
@@ -804,43 +796,39 @@ To simplify the process, we’ll use Arbitrum’s SDK and call the method [regis
 /**
  * Register the custom gateway as the gateway of our custom token
  */
-console.log('Registering custom token on L2:')
+console.log('Registering custom token on L2:');
 const registerTokenTx = await adminTokenBridger.registerCustomToken(
   l1CustomToken.address,
   l2CustomToken.address,
   l1Wallet,
-  l2Provider
-)
+  l2Provider,
+);
 
-const registerTokenRec = await registerTokenTx.wait()
+const registerTokenRec = await registerTokenTx.wait();
 console.log(
-  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`
-)
+  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`,
+);
 console.log(
-  `Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`
-)
+  `Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`,
+);
 
 /**
  * The L1 side is confirmed; now we listen and wait for the L2 side to be executed; we can do this by computing the expected txn hash of the L2 transaction.
  * To compute this txn hash, we need our message's "sequence numbers", unique identifiers of each L1 to L2 message.
  * We'll fetch them from the event logs with a helper method.
  */
-const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider)
+const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider);
 
 /**
  * In this case, the registerTokenOnL2 method creates 1 L1-to-L2 messages to set the L1 token to the Custom Gateway via the Router
  * Here, We check if that message is redeemed on L2
  */
-expect(l1ToL2Msgs.length, 'Should be 1 message.').to.eq(1)
+expect(l1ToL2Msgs.length, 'Should be 1 message.').to.eq(1);
 
-const setGateways = await l1ToL2Msgs[0].waitForStatus()
-expect(setGateways.status, 'Set gateways not redeemed.').to.eq(
-  L1ToL2MessageStatus.REDEEMED
-)
+const setGateways = await l1ToL2Msgs[0].waitForStatus();
+expect(setGateways.status, 'Set gateways not redeemed.').to.eq(L1ToL2MessageStatus.REDEEMED);
 
-console.log(
-  'Your custom token and gateways are now registered on the token bridge 🥳!'
-)
+console.log('Your custom token and gateways are now registered on the token bridge 🥳!');
 ```
 
 ## Conclusion
@@ -855,6 +843,6 @@ The full code of this how-to and a more extensive deployment and testing script 
 
 ## Resources
 
-1. [Concept page: Token Bridge](/asset-bridging.mdx)
+1. [Concept page: Token Bridge](/for-devs/concepts/token-bridge/token-bridge-overview.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 3. [Token bridge contract addresses](/for-devs/useful-addresses.mdx)
