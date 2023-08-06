@@ -1,5 +1,5 @@
 [submodule "arbitrum-sdk"]
 	path = arbitrum-sdk
 	url = https://github.com/OffchainLabs/arbitrum-sdk
-	branch = main
+	branch = test-tsdocs
 
