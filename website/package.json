@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
+    "install_sdk_dependencies": "cd ../arbitrum-sdk && yarn install && cd ../website",
+    "generate_sdk_docs": "yarn install_sdk_dependencies && typedoc && node ./src/scripts/sdk-post-process-docs.js",
     "start": "yarn generate_sdk_docs && yarn start_nitro_docs",
-    "generate_sdk_docs": "cd ../arbitrum-sdk && yarn && yarn generate_docs",
-    "start_nitro_docs": "cd ../website && docusaurus start",
-    "build": "cd ../arbitrum-sdk && yarn && yarn generate_docs && cd ../website && docusaurus build",
+    "start_nitro_docs": "docusaurus start",
+    "build": "yarn generate_sdk_docs && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
@@ -16,7 +17,8 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "format": "yarn format:docs && yarn format:app",
     "format:app": "prettier --write --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\"",
-    "format:docs": "prettier \"../arbitrum-docs/**/*.{md,mdx}\" --write --config \"./.prettierrc.js\"",
+    "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"../arbitrum-docs/**/*.{md,mdx}\"",
+    "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"../arbitrum-docs/**/*.{md,mdx}\"",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -43,6 +45,9 @@
     "@offchainlabs/prettier-config": "0.2.1",
     "@tsconfig/docusaurus": "^1.0.6",
     "prettier": "^2.8.3",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-frontmatter": "^0.0.2",
+    "typedoc-plugin-markdown": "4.0.0-next.17",
     "typescript": "^4.7.4"
   },
   "browserslist": {
