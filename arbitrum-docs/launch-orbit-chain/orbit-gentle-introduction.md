@@ -147,7 +147,7 @@ You're granted full permission to modify and adapt the Arbitrum Nitro codebase t
 - **Perpetual** — nobody can ever take the software license away from you
 - **Recursive** — your Orbit chain can itself host other chains governed by the same license
 
-Note that the Arbitrum Orbit license doesn't automatically include chains that settle to a non-Arbitrum-DAO-governed chain. So if you want to launch an Arbitrum Nitro chain as an independent L2 on Ethereum, you'll need to get a custom license. There are two options for this:
+Note that the Arbitrum Nitro license doesn't automatically include chains that settle to a non-Arbitrum-DAO-governed chain. So if you want to launch an Arbitrum Nitro chain as an independent L2 on Ethereum, you'll need to get a custom license. There are two options for this:
 
 1.  **Ask Offchain Labs**: Offchain Labs, as the initial developer of the Arbitrum Nitro codebase, is the licensor of the software, and can grant custom licenses.
 2.  **Propose to the Arbitrum DAO**: With the launch of the Arbitrum DAO, the DAO was also given co-licensor rights to approve additional L2s on Ethereum that do not settle to a DAO-governed chain. To utilize this mechanism, you’ll need to [submit a proposal to the Arbitrum DAO](https://docs.arbitrum.foundation/how-tos/create-submit-dao-proposal), and the DAO will democratically decide whether or not to grant the license for your proposed L2 chain.
