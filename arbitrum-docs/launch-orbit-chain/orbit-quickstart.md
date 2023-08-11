@@ -49,7 +49,7 @@ At the time of this quickstart's writing, the easiest way to acquire $AGOR is to
 1.  Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
 2.  Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-## Step 2: Choose your chain type: AnyTrust or Rollup chain
+## Step 2: Choose your chain type: AnyTrust or Rollup 
 
 Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety.
 
