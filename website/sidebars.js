@@ -496,8 +496,8 @@ const sidebars = {
     },
     {
       type: 'doc',
-      id: 'mainnet-beta',
-      label: 'Mainnet Beta status',
+      id: 'mainnet-risks',
+      label: 'Mainnet risks',
     },
     {
       type: 'link',
