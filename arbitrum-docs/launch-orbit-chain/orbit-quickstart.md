@@ -149,7 +149,7 @@ The following steps are under construction and will be updated with more detaile
 
 :::
 
-## Step 7: Review & Deploy AnyTrust (NEED TO FILL IN HERE) 
+## Step 7: Review & Deploy AnyTrust 
 
 ## Step 8: Configure Keyset 
 
@@ -168,20 +168,20 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
 2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
-## Step 8: Clone the setup script repository and add your configuration files
+## Step 10: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
 2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
-## Step 9: Run your chain's node and block explorer
+## Step 11: Run your chain's node and block explorer
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
-## Step 10: Finish setting up your chain
+## Step 12: Finish setting up your chain
 
 We've provided a Hardhat script that handles the following tasks:
 
