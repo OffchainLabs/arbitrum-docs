@@ -49,7 +49,7 @@ At the time of this quickstart's writing, the easiest way to acquire $AGOR is to
 1.  Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
 2.  Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-## Step 2: Choose your chain type: AnyTrust or Rollup chain
+## Step 2: Choose your chain type: AnyTrust or Rollup
 
 <!-- when we start a line with HTML (such as quicklook <a></a> anchors), the markdown -> HTML rendering doesn't render the line into a <p></p> tag, which removes the vertical margin between paragraphs. We fix this by manually reintroducing the <p></p> tag whenever we need to begin a line with an HTML element. -->
 
@@ -160,9 +160,9 @@ The following steps are under construction and will be updated with more detaile
 
 :::
 
-## Step 7: Review & Deploy AnyTrust (NEED TO FILL IN HERE)
+## Step 7: Review & deploy AnyTrust (NEED TO FILL IN HERE)
 
-## Step 8: Configure Keyset
+## Step 8: Configure keyset
 
 For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the `SequencerInbox` contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the `SetValidKeyset` method on the `SequencerInbox` contract.
 
