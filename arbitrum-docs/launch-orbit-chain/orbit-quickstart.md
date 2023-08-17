@@ -156,9 +156,15 @@ Before proceeding, let's briefly review what just happened:
 
 Your Orbit chain's base contracts are responsible for facilitating the exchange of information between your chain's node(s) and its base chain's nodes. This includes the batch posting of transactions from your Orbit chain to its base chain, the staking of tokens by your Orbit chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
-Click `Next` to proceed to the next step: **validator configuration**.
+Click `Next` to proceed to the next step: **keyset and validator configuration**.
 
-## Step 7: Configure keyset [THIS STEP IS ONLY FOR ANYTRUST DEPLOYMENT]
+## Step 7: Configure keyset (AnyTrust chains only)
+
+:::info Not applicable to Rollup chains
+
+Skip this step if you're deploying a Rollup chain.
+
+:::
 
 For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the `SequencerInbox` contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the `SetValidKeyset` method on the `SequencerInbox` contract.
 
