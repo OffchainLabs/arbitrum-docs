@@ -133,9 +133,8 @@ Your batch poster address is responsible for posting batches of transactions fro
 
 Click `Submit` to issue the final Arbitrum Goerli transaction that configures the specified batch poster address within your Orbit chain's base contracts.
 
-Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **Download your chain's config files**.
+Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **review & deploy your Orbit chain**.
 
-<br />
 
 ## Step 6: Review & Deploy your Orbit chain
 
@@ -167,6 +166,8 @@ Skip this step if you're deploying a Rollup chain.
 For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the `SequencerInbox` contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the `SetValidKeyset` method on the `SequencerInbox` contract.
 
 The current version of Orbit AnyTrust chains uses a single Data Availability Server and assigns a null value to its private key in order to generate an initial keyset. As part of this transaction process, you'll assign this initial keyset to your recently generated `SequencerInbox` contract.
+
+<!-- todo: help the reader understand "what to do", not just "how it works" - the "how it works" information can be moved into explanatory conceptual guidance as this content matures, while this can focus primarily on procedural guidance. -->
 
 ## Step 8: Download your chain's configuration files and launch your chain
 
