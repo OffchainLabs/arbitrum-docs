@@ -91,7 +91,6 @@ The below table provides a brief description of each of these configuration para
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
 
-
 ## Step 4: Configure your chain's validator(s)
 
 You should see a `Configure Validators` section appear, with a form that looks like this:
@@ -132,7 +131,7 @@ Once this transaction is confirmed, you should see a `Batch poster changed!` not
 
 :::
 
-## Step 6: Review & Deploy your Orbit chain 
+## Step 6: Review & Deploy your Orbit chain
 
 Deploy your chain's base contracts to Arbitrum Goerli
 
@@ -158,7 +157,6 @@ Before proceeding, let's briefly review what just happened:
 Your Orbit chain's base contracts are responsible for facilitating the exchange of information between your chain's node(s) and its base chain's nodes. This includes the batch posting of transactions from your Orbit chain to its base chain, the staking of tokens by your Orbit chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
 Click `Next` to proceed to the next step: **validator configuration**.
-
 
 ## Step 7: Configure keyset [THIS STEP IS ONLY FOR ANYTRUST DEPLOYMENT]
 
