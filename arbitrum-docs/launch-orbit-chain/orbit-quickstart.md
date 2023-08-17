@@ -91,7 +91,49 @@ The below table provides a brief description of each of these configuration para
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
 
-## Step 4: Deploy your chain's base contracts to Arbitrum Goerli
+## Step 4: Configure your chain's validator(s)
+
+You should see a `Configure Validators` section appear, with a form that looks like this:
+
+<PlaceholderForm inputs="Number of Validators, Validator 1 (0x...), [...], Validator n (0x...)" />
+
+The first input field is an integer value that determines **the number of validators that will support your initial deployment**. Subsequent fields allow you to specify each of these validators' addresses.
+
+The first validator address is randomly generated and can't be changed. Its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
+
+<!-- possible cut (we can provide this information when it's needed): a `Staker` JSON property that you'll find in the -->
+
+Your chain's validators are responsible for validating the integrity of transactions and posting assertions of the current state of your Orbit chain to its base chain. In production scenarios, your Orbit chain would likely be hosted by a network of validator nodes working together. For your local Orbit chain, you can stick to the auto-generated single validator address.
+
+<!-- possible cut (relevance is unclear): We call this validator ```Staker account ```, because this validator would be responsible to create new RBlocks and stake on them. -->
+
+Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's base contracts, allowing them each to **stake** and validate transactions submitted to your Orbit chain.
+
+<!-- possible cut (meaning is unclear): or even challenges staker of a specific RBlock. -->
+
+Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists your configured validator addresses within your Orbit chain's base contracts.
+
+Once this transaction is confirmed, you should see a `Validator set changed!` notification appear in the portal UI. Click `Next` to proceed the next step: **batch poster configuration**.
+
+## Step 5: Configure your chain's batch poster
+
+You should see a `Configure Batch Poster` section appear, with a form that looks like this:
+
+<PlaceholderForm inputs="Batch Poster Address" />
+
+Your batch poster address is responsible for posting batches of transactions from your Orbit chain to its base contracts on its base chain. An address will automatically be generated for you; its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
+
+Click `Submit` to issue the final Arbitrum Goerli transaction that configures the specified batch poster address within your Orbit chain's base contracts.
+
+Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **Download your chain's config files**.
+
+<br />
+
+:::
+
+## Step 6: Review & Deploy your Orbit chain
+
+Deploy your chain's base contracts to Arbitrum Goerli
 
 <!-- todo: label-casing alignment - could sentence-case in UI -->
 
@@ -116,59 +158,13 @@ Your Orbit chain's base contracts are responsible for facilitating the exchange 
 
 Click `Next` to proceed to the next step: **validator configuration**.
 
-## Step 5: Configure your chain's validator(s)
-
-You should see a `Configure Validators` section appear, with a form that looks like this:
-
-<PlaceholderForm inputs="Number of Validators, Validator 1 (0x...), [...], Validator n (0x...)" />
-
-The first input field is an integer value that determines **the number of validators that will support your initial deployment**. Subsequent fields allow you to specify each of these validators' addresses.
-
-The first validator address is randomly generated and can't be changed. Its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
-
-<!-- possible cut (we can provide this information when it's needed): a `Staker` JSON property that you'll find in the -->
-
-Your chain's validators are responsible for validating the integrity of transactions and posting assertions of the current state of your Orbit chain to its base chain. In production scenarios, your Orbit chain would likely be hosted by a network of validator nodes working together. For your local Orbit chain, you can stick to the auto-generated single validator address.
-
-<!-- possible cut (relevance is unclear): We call this validator ```Staker account ```, because this validator would be responsible to create new RBlocks and stake on them. -->
-
-Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's base contracts, allowing them each to **stake** and validate transactions submitted to your Orbit chain.
-
-<!-- possible cut (meaning is unclear): or even challenges staker of a specific RBlock. -->
-
-Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists your configured validator addresses within your Orbit chain's base contracts.
-
-Once this transaction is confirmed, you should see a `Validator set changed!` notification appear in the portal UI. Click `Next` to proceed the next step: **batch poster configuration**.
-
-## Step 6: Configure your chain's batch poster
-
-You should see a `Configure Batch Poster` section appear, with a form that looks like this:
-
-<PlaceholderForm inputs="Batch Poster Address" />
-
-Your batch poster address is responsible for posting batches of transactions from your Orbit chain to its base contracts on its base chain. An address will automatically be generated for you; its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
-
-Click `Submit` to issue the final Arbitrum Goerli transaction that configures the specified batch poster address within your Orbit chain's base contracts.
-
-Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **Download your chain's config files**.
-
-<br />
-
-:::caution UNDER CONSTRUCTION
-
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
-
-:::
-
-## Step 7: Review & deploy AnyTrust (NEED TO FILL IN HERE)
-
-## Step 8: Configure keyset
+## Step 7: Configure keyset [THIS STEP IS ONLY FOR ANYTRUST DEPLOYMENT]
 
 For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the `SequencerInbox` contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the `SetValidKeyset` method on the `SequencerInbox` contract.
 
 The current version of Orbit AnyTrust chains uses a single Data Availability Server and assigns a null value to its private key in order to generate an initial keyset. As part of this transaction process, you'll assign this initial keyset to your recently generated `SequencerInbox` contract.
 
-## Step 9: Download your chain's configuration files and launch your chain
+## Step 8: Download your chain's configuration files and launch your chain
 
 You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
 
@@ -177,20 +173,20 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
 2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
-## Step 10: Clone the setup script repository and add your configuration files
+## Step 9: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
 2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
-## Step 11: Run your chain's node and block explorer
+## Step 10: Run your chain's node and block explorer
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
-## Step 12: Finish setting up your chain
+## Step 11: Finish setting up your chain
 
 We've provided a Hardhat script that handles the following tasks:
 
