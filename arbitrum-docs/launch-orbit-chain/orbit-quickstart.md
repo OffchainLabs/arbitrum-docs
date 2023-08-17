@@ -119,9 +119,7 @@ When we say "base contracts" and "base chain", we're referring to your Orbit cha
 
 <!-- possible cut (meaning is unclear): or even challenges staker of a specific RBlock. -->
 
-Click `Submit` to issue another Arbitrum Goerli transaction that allow-lists your configured validator addresses within your Orbit chain's base contracts.
-
-Once this transaction is confirmed, you should see a `Validator set changed!` notification appear in the portal UI. Click `Next` to proceed the next step: **batch poster configuration**.
+Once your validator addresses are configured, click `Next` to proceed the next step: **batch poster configuration**.
 
 ## Step 5: Configure your chain's batch poster
 
@@ -131,9 +129,7 @@ You should see a `Configure Batch Poster` section appear, with a form that looks
 
 Your batch poster address is responsible for posting batches of transactions from your Orbit chain to its base contracts on its base chain. An address will automatically be generated for you; its private key will be automatically generated and stored within one of the JSON configuration files that will be generated in a moment.
 
-Click `Submit` to issue the final Arbitrum Goerli transaction that configures the specified batch poster address within your Orbit chain's base contracts.
-
-Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **review & deploy your Orbit chain**.
+Once your batch poster address is configured, click `Next` to proceed to the next step: **review & deploy your Orbit chain**.
 
 ## Step 6: Review & Deploy your Orbit chain
 
@@ -141,9 +137,7 @@ Deploy your chain's base contracts to Arbitrum Goerli
 
 <!-- todo: label-casing alignment - could sentence-case in UI -->
 
-Click the `Deploy Rollup` button located below the config form. Your wallet should prompt you to submit a transaction to Arbitrum Goerli. You'll have to pay a little gas; your wallet may denominate this in $ETH; as long as you see `Arbitrum Goerli` in the transaction details, this gas fee will be paid in $AGOR.
-
-Once this form-submission transaction is confirmed, you'll see a number of contract addresses appear below your `Deployment Summary`. These are your Orbit chain's **base contracts**, deployed to its **base chain** (Arbitrum Goerli).
+Click the `Deploy` button located below the config form. Your wallet should prompt you to submit a transaction to Arbitrum Goerli. You'll have to pay a little gas; your wallet may denominate this in $ETH; as long as you see `Arbitrum Goerli` in the transaction details, this gas fee will be paid in $AGOR.
 
 Before proceeding, let's briefly review what just happened:
 
@@ -152,7 +146,7 @@ Before proceeding, let's briefly review what just happened:
 
 Your Orbit chain's base contracts are responsible for facilitating the exchange of information between your chain's node(s) and its base chain's nodes. This includes the batch posting of transactions from your Orbit chain to its base chain, the staking of tokens by your Orbit chain's validators, the challenge mechanism, bridging mechanisms, and more.
 
-Click `Next` to proceed to the next step: **keyset and validator configuration**.
+Once your transaction is complete, if you deployed an AnyTrust chain, you'll next be asked to configure your keyset. Otherwise, continue to [Step 8](#step-8-download-your-chains-configuration-files-and-launch-your-chain) to download your chain's configuration files and launch your chain.
 
 ## Step 7: Configure keyset (AnyTrust chains only)
 
@@ -166,11 +160,13 @@ For the Batch Poster to function correctly, it's essential that the keyset corre
 
 The current version of Orbit AnyTrust chains uses a single Data Availability Server and assigns a null value to its private key in order to generate an initial keyset. As part of this transaction process, you'll assign this initial keyset to your recently generated `SequencerInbox` contract.
 
-<!-- todo: help the reader understand "what to do", not just "how it works" - the "how it works" information can be moved into explanatory conceptual guidance as this content matures, while this can focus primarily on procedural guidance. -->
+Click the `Deploy` button located below the Deployment Summary. Again, your wallet should prompt you to submit a transaction to Arbitrum Goerli. Gas fees will be handled similarly to the previous transaction.
+
+Once the transaction completes, you'll be directed to the download page to continue your chain deployment.
 
 ## Step 8: Download your chain's configuration files and launch your chain
 
-You should see two buttons appear: `Download Rollup JSON` and `Download L3Config JSON`. Follow the instructions in the UI to download your configuration files and deploy your Orbit chain locally using Docker.
+You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Config`. Use the download buttons at the top right of each code block to save it locally.
 
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
