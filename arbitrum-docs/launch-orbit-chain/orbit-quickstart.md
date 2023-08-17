@@ -107,7 +107,15 @@ Your chain's validators are responsible for validating the integrity of transact
 
 <!-- possible cut (relevance is unclear): We call this validator ```Staker account ```, because this validator would be responsible to create new RBlocks and stake on them. -->
 
-Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's base contracts, allowing them each to **stake** and validate transactions submitted to your Orbit chain.
+Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's **base contracts**, allowing them each to **stake** and validate transactions submitted to your Orbit chain.
+
+<!-- todo: triple-check that "base contracts" is the term we want to use - previously signed off in pattern guide -->
+
+:::info NEW TERMINOLOGY
+
+When we say "base contracts" and "base chain", we're referring to your Orbit chain's L2 contracts and the L2 chain that they're deployed to, respectively. We'll use these terms throughout the rest of this guide.
+
+:::
 
 <!-- possible cut (meaning is unclear): or even challenges staker of a specific RBlock. -->
 
@@ -129,8 +137,6 @@ Once this transaction is confirmed, you should see a `Batch poster changed!` not
 
 <br />
 
-:::
-
 ## Step 6: Review & Deploy your Orbit chain
 
 Deploy your chain's base contracts to Arbitrum Goerli
@@ -140,14 +146,6 @@ Deploy your chain's base contracts to Arbitrum Goerli
 Click the `Deploy Rollup` button located below the config form. Your wallet should prompt you to submit a transaction to Arbitrum Goerli. You'll have to pay a little gas; your wallet may denominate this in $ETH; as long as you see `Arbitrum Goerli` in the transaction details, this gas fee will be paid in $AGOR.
 
 Once this form-submission transaction is confirmed, you'll see a number of contract addresses appear below your `Deployment Summary`. These are your Orbit chain's **base contracts**, deployed to its **base chain** (Arbitrum Goerli).
-
-<!-- todo: triple-check that "base contracts" is the term we want to use - previously signed off in pattern guide -->
-
-:::info NEW TERMINOLOGY
-
-When we say "base contracts" and "base chain", we're referring to your Orbit chain's L2 contracts and the L2 chain that they're deployed to, respectively. We'll use these terms throughout the rest of this guide.
-
-:::
 
 Before proceeding, let's briefly review what just happened:
 
