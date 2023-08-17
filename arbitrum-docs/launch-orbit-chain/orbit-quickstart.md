@@ -51,9 +51,20 @@ At the time of this quickstart's writing, the easiest way to acquire $AGOR is to
 
 ## Step 2: Choose your chain type: AnyTrust or Rollup chain
 
-Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety.
+<!-- when we start a line with HTML (such as quicklook <a></a> anchors), the markdown -> HTML rendering doesn't render the line into a <p></p> tag, which removes the vertical margin between paragraphs. We fix this by manually reintroducing the <p></p> tag whenever we need to begin a line with an HTML element. -->
 
-By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external Data Availability Committee to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1. Visit our FAQ docs to learn more: https://developer.arbitrum.io/faqs/protocol-faqs
+<p>
+  <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> is an Optimistic Rollup
+  protocol; it's <a data-quicklook-from="trustless">trustless</a> and permissionless. These
+  properties are achieved by requiring all chain data to be posted on Ethereum's "Layer 1" (L1)
+  chain. This means the availability of this data follows directly from the security properties of
+  Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring
+  its safety.
+</p>
+
+By contrast, <a data-quicklook-from='arbitrum-anytrust-protocol'>Arbitrum AnyTrust</a> introduces a trust assumption in exchange for lower fees. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee</a> to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1. Visit our [FAQ docs](../learn-more/faq) to learn more.
+
+We generally recommend using Rollup chains for use-cases that demand the highest level of security (like decentralized exchanges and other DeFi dApps). AnyTrust chains are suitable for use-cases that require lower fees and generate lots of transactions (like gaming and social dApps).
 
 ## Step 3: Configure your Orbit chain's deployment
 
@@ -149,15 +160,13 @@ The following steps are under construction and will be updated with more detaile
 
 :::
 
-## Step 7: Review & Deploy AnyTrust (NEED TO FILL IN HERE) 
+## Step 7: Review & Deploy AnyTrust (NEED TO FILL IN HERE)
 
-## Step 8: Configure Keyset 
+## Step 8: Configure Keyset
 
-For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the SequencerInbox contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the SetValidKeyset method on the SequencerInbox contract. 
+For the Batch Poster to function correctly, it's essential that the keyset corresponding to its current configuration is active within the `SequencerInbox` contract. The production of the keyset and keyset hash binary blobs is mandatory, which should then be used as inputs for the `SetValidKeyset` method on the `SequencerInbox` contract.
 
-In this developmental network iteration, we have opted for a single Data Availability Server (DAS), assigning a null value to its private key, and generating a keyset accordingly. 
-
-As part of this transaction process, you will assign the predetermined keyset to your recently generated SequencerInbox contract.
+The current version of Orbit AnyTrust chains uses a single Data Availability Server and assigns a null value to its private key in order to generate an initial keyset. As part of this transaction process, you'll assign this initial keyset to your recently generated `SequencerInbox` contract.
 
 ## Step 9: Download your chain's configuration files and launch your chain
 
@@ -168,20 +177,20 @@ You should see two buttons appear: `Download Rollup JSON` and `Download L3Config
 1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
 2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
 
-## Step 8: Clone the setup script repository and add your configuration files
+## Step 10: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
 2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
-## Step 9: Run your chain's node and block explorer
+## Step 11: Run your chain's node and block explorer
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
 A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
-## Step 10: Finish setting up your chain
+## Step 12: Finish setting up your chain
 
 We've provided a Hardhat script that handles the following tasks:
 
