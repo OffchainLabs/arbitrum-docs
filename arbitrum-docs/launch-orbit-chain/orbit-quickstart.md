@@ -135,7 +135,6 @@ Click `Submit` to issue the final Arbitrum Goerli transaction that configures th
 
 Once this transaction is confirmed, you should see a `Batch poster changed!` notification appear in the portal UI. Click `Next` to proceed to the next step: **review & deploy your Orbit chain**.
 
-
 ## Step 6: Review & Deploy your Orbit chain
 
 Deploy your chain's base contracts to Arbitrum Goerli
