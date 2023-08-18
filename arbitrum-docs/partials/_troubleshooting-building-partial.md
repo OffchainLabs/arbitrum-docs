@@ -116,7 +116,7 @@ To let's find out which is custom error this signature represents, we can use th
 
 
 
-### How do block.timestamp and block.number work on Arbitrum? {#how-do-blocktimestamp-and-blocknumber-work-on-arbitrum}
+### How do block.number and block.timestamp work on Arbitrum? {#how-do-blocknumber-and-blocktimestamp-work-on-arbitrum}
 <p>Solidity calls to <code>block.number</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.</p>
 
 <p>Solidity calls to <code>block.timestamp</code> on Arbitrum are not linked to the timestamp of the L1 block, it is updated every L2 block based on the sequencer's clock.</p>
