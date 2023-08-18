@@ -20,11 +20,14 @@ const plugin = (options) => {
     // in the second argument.
     // In those nodes, we want to inject variables in different fields:
     //    - For 'text' and 'code' nodes, we'll look in the "value" property
-    //    - For 'link' nodes, we'll look in the "url" property
-    visit(ast, ['text', 'code', 'link'], (node) => {
+    //    - For 'link' and 'definition' nodes, we'll look in the "url" property
+    // Nodes generated in AST are referenced here: https://github.com/syntax-tree/mdast
+    // Note: to "visit" a node, reference it here in camelCase
+    visit(ast, ['text', 'code', 'link', 'definition'], (node) => {
       let value;
       switch (node.type) {
         case 'link':
+        case 'definition':
           value = node.url;
           break;
 
@@ -48,6 +51,7 @@ const plugin = (options) => {
 
       switch (node.type) {
         case 'link':
+        case 'definition':
           node.url = value;
           break;
 
