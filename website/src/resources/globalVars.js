@@ -19,7 +19,7 @@ const globalVars = {
   nitroRepositorySlug: 'nitro',
   nitroVersionTag: 'v2.0.14',
   nitroPathToPrecompiles: 'precompiles',
-  
+
   nitroContractsRepositorySlug: 'nitro',
   nitroContractsCommit: 'v2.0.14',
   nitroContractsPathToPrecompilesInterface: 'contracts/src/precompiles',

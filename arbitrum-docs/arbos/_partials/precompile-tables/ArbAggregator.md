@@ -189,4 +189,4 @@
     </tr>
   </tbody>
 </table>
-<p>Note: methods marked with ⚠️ are deprecated and we do not support their use.</p>
+<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>
