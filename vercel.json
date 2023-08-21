@@ -142,7 +142,17 @@
         },
         {
             "source": "/docs/arbsys",
-            "destination": "/arbos/precompiles#ArbSys",
+            "destination": "/for-devs/dev-tools-and-resources/precompiles#ArbSys",
+            "permanent": false
+        },
+        {
+            "source": "/arbos/precompiles",
+            "destination": "/for-devs/dev-tools-and-resources/precompiles",
+            "permanent": false
+        },
+        {
+            "source": "/arbos/common-precompiles",
+            "destination": "/for-devs/dev-tools-and-resources/precompiles",
             "permanent": false
         },
         {
