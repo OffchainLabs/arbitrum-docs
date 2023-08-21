@@ -7,7 +7,12 @@
         },
         {
             "source": "/docs/mainnet",
-            "destination": "/mainnet-beta",
+            "destination": "/mainnet-risks",
+            "permanent": false
+        },
+        {
+            "source": "/docs/mainnet-beta",
+            "destination": "/mainnet-risks",
             "permanent": false
         },
         {
@@ -237,7 +242,7 @@
         },
         {
             "source": "/faqs/beta-status",
-            "destination": "/mainnet-beta",
+            "destination": "/mainnet-risks",
             "permanent": false
         },
         {
