@@ -1,7 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimensionalContentWidget.js';
+import { MultiDimensionalContentWidget } from '@site/src/components/MultiDimensionalContentWidget.js';
 
 <MultiDimensionalContentWidget />
 
@@ -13,26 +13,33 @@ import {MultiDimensionalContentWidget} from '@site/src/components/MultiDimension
     {label: 'Linux, MacOS, Arm64', value: 'others'},
     {label: 'Windows', value: 'win'}
   ]}>
-  <TabItem className="unclickable-element" value="label"></TabItem>
-  <TabItem value="others"></TabItem>
-  <TabItem value="win"></TabItem>
+    <TabItem className="unclickable-element" value="label"></TabItem>
+    <TabItem value="others"></TabItem>
+    <TabItem value="win"></TabItem>
   </Tabs>
 
-  <Tabs className="tabgroup-with-label network-tabgroup" groupId="network" defaultValue="arb-one-nitro" values={[
-        {label: 'Network:', value: 'label'},
-        {label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro'},
-        {label: 'Arbitrum One (Classic)', value: 'arb-one-classic'},
-        {label: 'Arbitrum Nova', value: 'arb-nova'},
-        {label: 'Arbitrum Goerli', value: 'arb-goerli'},
-        {label: 'Localhost', value: 'localhost'},
-    ]}>
-    <TabItem className="unclickable-element" value="label"></TabItem>
-    <TabItem value="arb-one-nitro"></TabItem>
-    <TabItem value="arb-one-classic"></TabItem>
-    <TabItem value="arb-nova"></TabItem>
-    <TabItem value="arb-goerli"></TabItem>
-    <TabItem value="localhost"></TabItem>
-  </Tabs>
+{' '}
+
+<Tabs
+  className="tabgroup-with-label network-tabgroup"
+  groupId="network"
+  defaultValue="arb-one-nitro"
+  values={[
+    { label: 'Network:', value: 'label' },
+    { label: 'Arbitrum One (Nitro)', value: 'arb-one-nitro' },
+    { label: 'Arbitrum One (Classic)', value: 'arb-one-classic' },
+    { label: 'Arbitrum Nova', value: 'arb-nova' },
+    { label: 'Arbitrum Goerli', value: 'arb-goerli' },
+    { label: 'Localhost', value: 'localhost' },
+  ]}
+>
+  <TabItem className="unclickable-element" value="label"></TabItem>
+  <TabItem value="arb-one-nitro"></TabItem>
+  <TabItem value="arb-one-classic"></TabItem>
+  <TabItem value="arb-nova"></TabItem>
+  <TabItem value="arb-goerli"></TabItem>
+  <TabItem value="localhost"></TabItem>
+</Tabs>
 
   <Tabs className="tabgroup-with-label node-type-tabgroup" groupId="node-type" defaultValue="full-node" values={[
         {label: 'Node type:', value: 'label'},

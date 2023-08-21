@@ -10,7 +10,7 @@ From the perspective of user applications, precompiles live as contracts at the 
 | :------------------------------------------ | :------------- | :------------------------------------------------- |
 | [`ArbAddressTable`][arbaddresstable_link]   | `0x66`         | Supporting compression of addresses                |
 | [`ArbAggregator`][arbaggregator_link]       | `0x6d`         | Configuring transaction aggregation                |
-| [`ArbBLS`][arbbls_link]                     | `0x67`         | Managing BLS keys                                  |
+| ArbBLS                                      | `0x67`         | **Disabled** (Former registry of BLS public keys)  |
 | [`ArbDebug`][arbdebug_link]                 | `0xff`         | Testing tools                                      |
 | [`ArbFunctionTable`][arbfunctiontable_link] | `0x68`         | No longer used                                     |
 | [`ArbGasInfo`][arbgasinfo_link]             | `0x6c`         | Info about gas pricing                             |
@@ -111,33 +111,11 @@ Compression ratios are measured in basis points. Methods that are checkmarked ar
 
 ## ArbBLS
 
-[ArbBLS][arbbls_link] provides a registry of BLS public keys for accounts.
+:::caution Disabled
 
-| Methods                                                                       |                                                             |
-| :---------------------------------------------------------------------------- | :---------------------------------------------------------- |
-| [![](../assets/e.png)][bs0] [`registerAltBN128`][b0]`(x0, x1, y0, y1)` &nbsp; | Associate an AltBN128 public key with the caller's address  |
-| [![](../assets/e.png)][bs1] [`getAltBN128`][b1]`(account)`                    | Gets the AltBN128 public key associated with an address     |
-| [![](../assets/e.png)][bs2] [`registerBLS12381`][b2]`(key)`                   | Associate a BLS 12-381 public key with the caller's address |
-| [![](../assets/e.png)][bs3] [`getBLS12381`][b3]`(account)`                    | Gets the BLS 12-381 public key associated with an address   |
+This precompile has been disabled. It previously provided a registry of BLS public keys for accounts.
 
-[b0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L27
-[b1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L32
-[b2]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L37
-[b3]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L46
-[bs0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L44
-[bs1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L52
-[bs2]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L63
-[bs3]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L66
-
-| Deprecated Methods                                                      |                                |
-| :---------------------------------------------------------------------- | :----------------------------- |
-| [![](../assets/e.png)][bds0] [`register`][bd0]`(x0, x1, y0, y1)` &nbsp; | equivalent to registerAltBN128 |
-| [![](../assets/e.png)][bds1] [`getPublicKey`][bd1]`(account)`           | equivalent to getAltBN128      |
-
-[bd0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L17
-[bd1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/precompiles/ArbBLS.go#L22
-[bds0]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L25
-[bds1]: https://github.com/OffchainLabs/nitro/blob/3f504c57fba8ddf0759b7a55b4108e0bf5a078b3/solgen/src/precompiles/ArbBLS.sol#L33
+:::
 
 ## ArbDebug
 
@@ -289,7 +267,7 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 | [`setSpeedLimit`][o7]`(limit)`                                | Sets the computational speed limit for the chain                                |
 | [`setMaxTxGasLimit`][o8]`(limit)`                             | Sets the maximum size a transaction (and block) can be                          |
 | [`setL2GasPricingInertia`][o9]`(sec)`                         | Sets the L2 gas pricing inertia                                                 |
-| [`setL2GasBacklogTolerance`][o10]`(sec)`                      | Sets the the L2 gas backlog tolerance                                           |
+| [`setL2GasBacklogTolerance`][o10]`(sec)`                      | Sets the L2 gas backlog tolerance                                               |
 | [`getNetworkFeeAccount`][o11]`()`                             | Gets the network fee collector                                                  |
 | [`getInfraFeeAccount`][o12]`()`                               | Gets the infrastructure fee collector                                           |
 | [`setNetworkFeeAccount`][o13]`(newNetworkFeeAccount)`         | Sets the network fee collector to the new network fee account                   |

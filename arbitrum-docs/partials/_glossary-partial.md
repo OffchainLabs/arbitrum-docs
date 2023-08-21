@@ -204,7 +204,7 @@ The pirate flag originates from the Pirate Nation community. Pirate Nation is a 
 ### 🐵 Smolverse {#smolverse}
 <p>Near the core of Arbitrum community is Smolverse, a world filled with Smol Brains and Smol Bodies.<br />
 <br />
-If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" in the Arbitrum community, you've encounted the Smol Brains and Smol Bodies. </p>
+If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" in the Arbitrum community, you've encountered the Smol Brains and Smol Bodies. </p>
 
 ### Soft Confirmation {#soft-confirmation}
 <p>A semi-trusted promise from the <a href="/intro/glossary#sequencer">Sequencer</a>  to post a user's transaction in the near future; soft-confirmations happen prior to posting on L1, and thus can be given near-instantaneously (i.e., faster than L1 block times)</p>
@@ -222,7 +222,7 @@ If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" i
 <p><a href="/intro/glossary#token-gateway">Token Gateway</a> via which any L1 ERC20 token can permissionlessly bridge; the StandrardERC20 gateway contracts deploy a <a href="/intro/glossary#standard-arbtoken">Standard Arb-Token</a> on L2 for each bridged token.</p>
 
 ### Stylus {#stylus}
-<p>Upcoming upgrade to the the <a href="/intro/glossary#arbitrum-nitro">Arbitrum Nitro</a> virtual machine that will allow smart contract support for languages like Rust and C++ by taking advantage of Nitro's use of WASM (<a href="https://offchain.medium.com/hello-stylus-6b18fecc3a22">read more</a>).</p>
+<p>Upcoming upgrade to the <a href="/intro/glossary#arbitrum-nitro">Arbitrum Nitro</a> virtual machine that will allow smart contract support for languages like Rust and C++ by taking advantage of Nitro's use of WASM (<a href="https://offchain.medium.com/hello-stylus-6b18fecc3a22">read more</a>).</p>
 
 ### 🏹 Tales of Elleria {#tales-of-elleria}
 <p>The bow and arrow are commonly associated with the Hero's of Tales of Elleria.<br />
@@ -267,7 +267,7 @@ This is achieved through the use of cryptographic techniques and decentralized c
 <p>A <a href="/intro/glossary#validator">Validator</a>  that never stakes / never takes on chain action, who raises the alarm (by whatever off-chain means it chooses) if it witnesses an invalid assertion.</p>
 
 ### WETH Gateway {#weth-gateway}
-<p><a href="/intro/glossary#token-gateway">Token Gateway</a> for handing the bridging of wrapped Ether (WETH). WETH is upwraped on L1 and rewrapped on L1 upon depositing (and vice-versa upon withdrawing), ensuring WETH on L2 always remains collatoralized. </p>
+<p><a href="/intro/glossary#token-gateway">Token Gateway</a> for handing the bridging of wrapped Ether (WETH). WETH is unwrapped on L1 and rewrapped on L1 upon depositing (and vice-versa upon withdrawing), ensuring WETH on L2 always remains collateralized. </p>
 
 ### 👺 Zeeverse {#zeeverse}
 <p>As you're exploring the Arbitrum world, you may bump into a world filled with monsters and Zee's.<br />
