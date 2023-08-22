@@ -134,20 +134,9 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
+          type: 'doc',
           label: 'Precompiles',
-          items: [
-            {
-              type: 'doc',
-              label: 'Common precompiles',
-              id: 'arbos/common-precompiles',
-            },
-            {
-              type: 'doc',
-              label: 'Precompiles',
-              id: 'arbos/precompiles',
-            },
-          ],
+          id: 'for-devs/concepts/precompiles',
         },
         {
           type: 'doc',
@@ -175,6 +164,11 @@ const sidebars = {
           type: 'doc',
           label: 'Smart contract addresses',
           id: 'for-devs/useful-addresses',
+        },
+        {
+          type: 'doc',
+          label: 'Precompiles',
+          id: 'for-devs/dev-tools-and-resources/precompiles',
         },
         {
           type: 'doc',
@@ -443,11 +437,6 @@ const sidebars = {
               type: 'doc',
               id: 'arbos/geth',
               label: 'Geth',
-            },
-            {
-              type: 'doc',
-              label: 'All precompiles',
-              id: 'arbos/precompiles',
             },
           ],
         },

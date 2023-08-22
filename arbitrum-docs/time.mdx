@@ -38,7 +38,7 @@ const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
 */
 ```
 
-The Arbitrum block number can also be retrieved within an Arbitrum contract via [ArbSys](./arbos/precompiles#ArbSys):
+The Arbitrum block number can also be retrieved within an Arbitrum contract via [ArbSys](/for-devs/dev-tools-and-resources/precompiles.mdx#arbsys) precompile:
 
 ```sol
  ArbSys(100).arbBlockNumber() // returns Arbitrum block number
