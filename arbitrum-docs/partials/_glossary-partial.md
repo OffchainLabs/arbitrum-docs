@@ -267,7 +267,7 @@ This is achieved through the use of cryptographic techniques and decentralized c
 <p>A <a href="/intro/glossary#validator">Validator</a>  that never stakes / never takes on chain action, who raises the alarm (by whatever off-chain means it chooses) if it witnesses an invalid assertion.</p>
 
 ### WETH Gateway {#weth-gateway}
-<p><a href="/intro/glossary#token-gateway">Token Gateway</a> for handing the bridging of wrapped Ether (WETH). WETH is unwrapped on L1 and rewrapped on L1 upon depositing (and vice-versa upon withdrawing), ensuring WETH on L2 always remains collateralized </p>
+<p><a href="/intro/glossary#token-gateway">Token Gateway</a> for handing the bridging of wrapped Ether (WETH). WETH is unwrapped on L1 and rewrapped on L1 upon depositing (and vice-versa upon withdrawing), ensuring WETH on L2 always remains collateralized. </p>
 
 ### 👺 Zeeverse {#zeeverse}
 <p>As you're exploring the Arbitrum world, you may bump into a world filled with monsters and Zee's.<br />
