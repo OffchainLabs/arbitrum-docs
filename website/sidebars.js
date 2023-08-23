@@ -42,7 +42,6 @@ const sidebars = {
               label: 'Estimate gas',
               id: 'devs-how-tos/how-to-estimate-gas',
             },
-
             {
               type: 'doc',
               label: 'Use oracles',
