@@ -105,7 +105,7 @@ const config = {
             type: 'doc',
             docId: 'for-devs/quickstart-solidity-hardhat',
             position: 'left',
-            label: 'Build decentralized apps',
+            label: 'Build dApps',
           },
           {
             type: 'doc',
@@ -121,15 +121,9 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'launch-orbit-chain/orbit-gentle-introduction',
-            position: 'left',
-            label: 'Launch an Orbit chain',
-          },
-          {
-            type: 'doc',
             docId: 'intro/intro',
             position: 'left',
-            label: 'Learn more',
+            label: 'How it works',
           },
           {
             type: 'dropdown',
