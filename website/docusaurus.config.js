@@ -111,7 +111,7 @@ const config = {
             type: 'doc',
             docId: 'getting-started-users',
             position: 'left',
-            label: 'Bridge users',
+            label: 'Users (Bridge, dApps)',
           },
           {
             type: 'doc',
