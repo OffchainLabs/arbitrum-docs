@@ -185,6 +185,30 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'From Ethereum (L1) to Arbitrum (L2)',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'TODO (vibe-checking)',
+              id: 'migration/dapp_migration',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'From Arbitrum (L2) to Orbit',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'TODO (vibe-checking)',
+              id: 'migration/dapp_migration',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'From Polkadot to Arbitrum',
           collapsed: true,
           items: [
