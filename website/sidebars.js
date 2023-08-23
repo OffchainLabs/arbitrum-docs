@@ -262,16 +262,16 @@ const sidebars = {
         {
           type: 'doc',
           id: 'bridge-tokens/gentle-introduction-bridge',
-          label: 'A gentle introduction: Arbitrum Bridge',
+          label: 'A gentle introduction',
         },
         {
           type: 'doc',
           id: 'getting-started-users',
-          label: 'Quickstart: Bridge tokens',
+          label: 'Quickstart',
         },
         {
           type: 'doc',
-          label: 'Troubleshooting: Bridge tokens',
+          label: 'Troubleshooting',
           id: 'for-users/troubleshooting-users',
         },
       ],

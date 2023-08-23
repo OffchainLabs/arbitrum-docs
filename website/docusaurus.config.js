@@ -105,18 +105,18 @@ const config = {
             type: 'doc',
             docId: 'for-devs/quickstart-solidity-hardhat',
             position: 'left',
-            label: 'Build decentralized apps',
+            label: 'Developers',
           },
           {
             type: 'doc',
             docId: 'getting-started-users',
             position: 'left',
-            label: 'Bridge tokens',
+            label: 'Bridge users',
           },
           {
             type: 'doc',
             docId: 'node-running/quickstart-running-a-node',
-            label: 'Run a node',
+            label: 'Node runners',
             position: 'left',
           },
           {
