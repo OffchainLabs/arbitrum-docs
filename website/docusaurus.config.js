@@ -124,7 +124,7 @@ const config = {
             docId: 'intro/intro',
             position: 'left',
             label: 'How it works',
-          }
+          },
         ],
       },
       // todo: descriptive footer
