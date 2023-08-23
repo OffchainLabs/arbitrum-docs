@@ -20,7 +20,7 @@ const sidebars = {
   buildDecentralizedAppsSidebar: [
     {
       type: 'category',
-      label: 'Build dApps',
+      label: 'Build dApps (One, Nova)',
       collapsed: false,
       items: [
         {
@@ -163,18 +163,49 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Migrate to Arbitrum (Nitro)',
+      label: 'Migrate to Arbitrum',
       collapsed: false,
       items: [
         {
-          type: 'doc',
-          label: 'Migrate from Classic to Nitro (architecture, contracts)',
-          id: 'migration/dapp_migration',
+          type: 'category',
+          label: 'From Classic to Nitro',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Migrate from Classic to Nitro (architecture, contracts)',
+              id: 'migration/dapp_migration',
+            },
+            {
+              type: 'doc',
+              label: 'Migrate from Classic to Nitro (state)',
+              id: 'migration/state-migration',
+            },
+          ],
         },
         {
-          type: 'doc',
-          label: 'Migrate from Classic to Nitro (state)',
-          id: 'migration/state-migration',
+          type: 'category',
+          label: 'From Polkadot to Arbitrum',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'TODO (vibe-checking)',
+              id: 'migration/dapp_migration',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'From Solana to Arbitrum',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'TODO (vibe-checking)',
+              id: 'migration/dapp_migration',
+            },
+          ],
         },
       ],
     },
