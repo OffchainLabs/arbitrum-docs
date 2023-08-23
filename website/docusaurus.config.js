@@ -124,34 +124,7 @@ const config = {
             docId: 'intro/intro',
             position: 'left',
             label: 'How it works',
-          },
-          {
-            type: 'dropdown',
-            label: 'Links',
-            position: 'right',
-            items: [
-              {
-                href: '/sdk',
-                label: 'SDK docs',
-              },
-              {
-                href: 'https://github.com/OffchainLabs/nitro',
-                label: 'GitHub',
-              },
-              {
-                href: 'https://research.arbitrum.io/',
-                label: 'Research',
-              },
-              {
-                href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
-                label: 'Tutorials',
-              },
-              {
-                href: 'https://medium.com/offchainlabs',
-                label: 'Blog',
-              },
-            ],
-          },
+          }
         ],
       },
       // todo: descriptive footer
