@@ -142,7 +142,7 @@ const sidebars = {
           type: 'doc',
           label: 'Oracles',
           id: 'for-devs/concepts/oracles',
-        },
+        }
       ],
     },
     {

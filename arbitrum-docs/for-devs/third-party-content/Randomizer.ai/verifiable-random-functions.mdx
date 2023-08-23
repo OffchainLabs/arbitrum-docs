@@ -1,38 +1,34 @@
 ---
-title: 'Verifiable Random Functions (VRFs): A conceptual overview'
-sidebar_label: Verifiable Random Functions (VRF)
+title: 'Verifiable random functions (VRFs): A conceptual overview'
+sidebar_label: Verifiable random functions (VRF)
 description: A high level description of what random numbers and VRFs are
 reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: concept
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 :::info Community member contribution
 
-The following document was contributed by [@DeanPress](https://twitter.com/Deanpress). Give them a shoutout if you find it useful!
+The following third-party document was contributed by [@DeanPress](https://twitter.com/Deanpress). Give them a shoutout if you find it useful!
 
 :::
 
-Random numbers and Verifiable Random Functions (VRFs) are key aspects of cryptographic systems, playing crucial roles in many blockchain-based applications. In this conceptual overview, we'll explore what random numbers and VRFs are, how they work, and some general use cases for them.
+**Random numbers** and **verifiable random functions** (VRFs) are key aspects of cryptographic systems, playing crucial roles in many blockchain-based applications. In this conceptual overview, we'll explore what random numbers and VRFs are, how they work, and some general use cases for them.
 
-For instructions on how to integrate a VRF into your own Arbitrum smart contract using Rand, refer to Randomizer.ai's [Use Verifiable Random Functions in Arbitrum](./how-to-use-vrfs).
+Note that Solidity doesn't offer native support for VRFs, but you can use a third-party VRF protocol like [Randomizer.ai](https://randomizer.ai/) to integrate this functionality into your smart contracts. Refer to [How to use Randomizer.ai's VRFs on Arbitrum](./how-to-use-vrfs) for instructions.
 
 ### What are random numbers and VRFs?
 
 Random numbers are numbers generated in a manner that the values are statistically random and equally likely to be any of the possible outcomes. In the context of blockchain, they are used for many purposes, such as determining the outcomes in a decentralized lottery or generating NFT traits.
 
-Verifiable Random Functions (VRFs) are cryptographic methods to generate random numbers in a way that is verifiable and unpredictable. That means anyone can verify that a given number was generated correctly, but no one can predict the output before it's generated, even if they know the input.
+Verifiable random functions (VRFs) are cryptographic methods to generate random numbers in a way that is verifiable and unpredictable. That means anyone can verify that a given number was generated correctly, but no one can predict the output before it's generated, even if they know the input.
 
 ### Types of random number generation
 
 Random numbers can be generated in different ways, depending on the level of security and decentralization required:
 
-- **Pseudorandom Number Generators (PRNGs):** These generate numbers that appear to be random and unpredictable. They start with a seed value and produce a sequence of numbers using a deterministic algorithm. The same seed will always produce the same sequence of numbers, so they are not truly random.
-- **True Random Number Generators (TRNGs):** These generate numbers from a truly random physical process, such as atmospheric noise or radioactive decay. They do not use a deterministic algorithm, so they can't be reproduced. However, these are difficult to implement in a decentralized manner, since they require a source of physical randomness.
-- **Verifiable Random Functions:** As mentioned above, VRFs are a cryptographic method of generating verifiable and unpredictable random numbers. They combine the advantages of PRNGs and TRNGs by ensuring that the numbers are both unpredictable and verifiable.
+- **Pseudorandom number generators (PRNGs):** These generate numbers that appear to be random and unpredictable. They start with a seed value and produce a sequence of numbers using a deterministic algorithm. The same seed will always produce the same sequence of numbers, so they are not truly random.
+- **True random number generators (TRNGs):** These generate numbers from a truly random physical process, such as atmospheric noise or radioactive decay. They do not use a deterministic algorithm, so they can't be reproduced. However, these are difficult to implement in a decentralized manner, since they require a source of physical randomness.
+- **Verifiable random functions:** As mentioned above, VRFs are a cryptographic method of generating verifiable and unpredictable random numbers. They combine the advantages of PRNGs and TRNGs by ensuring that the numbers are both unpredictable and verifiable.
 
 ### How do VRFs work?
 
@@ -59,3 +55,5 @@ Random numbers and VRFs are used in various applications across different indust
 - **On-chain Random Governance:** For DAOs or other on-chain governance models, VRFs can be used to randomly select a subset of members for decision-making to ensure a fair representation and prevent collusion.
 
 In summary, random numbers and VRFs are key components of the blockchain ecosystem, ensuring fairness, security, and transparency in various applications.
+
+[^1]: [Randomizer.ai](https://randomizer.ai/) is one such solution. Refer to [Use Verifiable random functions in Arbitrum](./how-to-use-vrfs) to learn how to integrate Randomizer's VRFs into your smart contracts.
