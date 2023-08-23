@@ -1,0 +1,100 @@
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Solidity interface</th>
+      <th>Go implementation</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>isChainOwner(address addr)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/contracts/src/precompiles/ArbOwnerPublic.sol#L11"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/precompiles/ArbOwnerPublic.go#L23"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>IsChainOwner checks if the user is a chain owner</td>
+    </tr>
+    <tr>
+      <td>
+        <code>getAllChainOwners()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/contracts/src/precompiles/ArbOwnerPublic.sol#L14"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/precompiles/ArbOwnerPublic.go#L18"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>GetAllChainOwners retrieves the list of chain owners</td>
+    </tr>
+    <tr>
+      <td>
+        <code>getNetworkFeeAccount()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/contracts/src/precompiles/ArbOwnerPublic.sol#L17"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/precompiles/ArbOwnerPublic.go#L28"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>GetNetworkFeeAccount gets the network fee collector</td>
+    </tr>
+    <tr>
+      <td>
+        <code>getInfraFeeAccount()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/contracts/src/precompiles/ArbOwnerPublic.sol#L20"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v2.0.14/precompiles/ArbOwnerPublic.go#L33"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>GetInfraFeeAccount gets the infrastructure fee collector</td>
+    </tr>
+  </tbody>
+</table>

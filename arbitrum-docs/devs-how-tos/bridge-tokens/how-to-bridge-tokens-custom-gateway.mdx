@@ -43,7 +43,7 @@ On the other hand, the **L2 counterpart of the gateway**, must conform to the [I
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
 - A method `finalizeInboundTransfer`, to handle messages coming ONLY from L1’s gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
-- Methods to send cross-chain messages through the [ArbSys precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbSys.sol). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
+- Methods to send cross-chain messages through the [ArbSys precompile](/for-devs/dev-tools-and-resources/precompiles.mdx#arbsys). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
 ### What about my custom tokens?
 
@@ -790,7 +790,7 @@ In this case, when using this function only one action will be performed:
 
 1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK and call the method [registerCustomToken](/sdk/classes/assetBridger_erc20Bridger.AdminErc20Bridger#registercustomtoken) of the [AdminErc20Bridger](/sdk/classes/assetBridger_erc20Bridger.AdminErc20Bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK and call the method [registerCustomToken](/sdk/assetBridger_erc20Bridger#registercustomtoken) of the [AdminErc20Bridger](/sdk/assetBridger_erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
 
 ```tsx
 /**
