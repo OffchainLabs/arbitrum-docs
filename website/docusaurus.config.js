@@ -105,7 +105,7 @@ const config = {
             type: 'doc',
             docId: 'for-devs/quickstart-solidity-hardhat',
             position: 'left',
-            label: 'Build dApps',
+            label: 'Build decentralized apps',
           },
           {
             type: 'doc',

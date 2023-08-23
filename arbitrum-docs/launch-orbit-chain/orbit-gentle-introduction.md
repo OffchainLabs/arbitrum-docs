@@ -1,8 +1,8 @@
 ---
 title: 'A gentle introduction: Orbit chains'
-sidebar_label: 'A gentle introduction: Orbit chains'
+sidebar_label: 'A gentle introduction'
 description: "Launch your own Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli for now, One or Nova soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain or modify its instance of the Nitro codebase."
-author: oliviaJ3388
+author: oliviaJ3388, symbolpunk
 target_audience: technical decision-makers, people familiar with web3 who will decide to use Orbit on behalf of their organizations
 sidebar_position: 1
 ---

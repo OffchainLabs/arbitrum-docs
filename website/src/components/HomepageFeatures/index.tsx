@@ -55,7 +55,6 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>Learn about the decentralized organization that governs the One and Nova chains.</>
     ),
-    animate: true,
   },
   {
     title: 'Quickstart: Launch an Orbit chain',
