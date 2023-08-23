@@ -51,7 +51,7 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
 The protocol for creating new third-party docs is the same as that of [Creating new core documents](#creating-new-third-party-documents), with the following additions:
 
 1.  **Eligibility**
-    - Generally speaking, third-party docs PRs will only be merged for products listed in the [Arbitrum portal](https://portal.arbitrum.io/).
+    - Third-party docs are intended to support products listed in the [Arbitrum portal](https://portal.arbitrum.io/), or infrastructure and services that those products use.
     - To submit your project to the Arbitrum portal, [apply using this Google form](https://docs.google.com/forms/d/e/1FAIpQLSezhBlPgKIKKWgXKUz4MmlJPdHyfmPQlxUtS48HlRoi0e14_Q/viewform).
 2.  **Purpose**
     - The purpose of our `Third-party docs` sections is to **_meet Arbitrum developer (or user) demand for guidance that helps them use non-Arbitrum products with Arbitrum products_**.
