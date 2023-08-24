@@ -107,7 +107,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Build dApps (Rust, Stylus)',
+      label: 'Build dApps (Rust)',
       collapsed: false,
       items: [
         {

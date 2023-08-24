@@ -5,7 +5,7 @@ author: amarrazza
 sme: amarrazza
 sidebar_position: 2
 target_audience: todo
-sidebar_label: 'Quickstart'
+sidebar_label: 'Quickstart (Rust, Stylus)'
 ---
 
 TODO
