@@ -14,7 +14,7 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 <UnderConstructionPartial />
 
-When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
+When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
 
