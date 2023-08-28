@@ -58,7 +58,7 @@ Stylus brings the best of both worlds. Developers still get all of the benefits 
 
 Use cases not practical in the EVM are now possible in Stylus. Computation is over 10x improved. Memory is over 100x improved. Cryptography libraries can now be deployed as custom precompiles, permissionlessly. The greatest breeding ground for blockchain innovation has arrived.
 
-**Opt-in Reentrancy**
+**Opt-in reentrancy**
 
 Stylus doesn’t just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability that developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default, unless intentionally overridden.
 
