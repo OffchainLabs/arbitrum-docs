@@ -6,7 +6,7 @@ target_audience: developers who want to create their own self-managed AnyTrust o
 sidebar_label: 'Quickstart: Launch an Orbit chain'
 ---
 
-This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment).
+This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/).
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Goerli testnet**. Familiarity with Ethereum, Ethereum's Goerli testnet, and Arbitrum is expected.
 
@@ -70,7 +70,7 @@ We generally recommend using Rollup chains for use-cases that demand the highest
 
 <!-- https://orbit-deployment-ui.vercel.app/ -->
 
-Visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/deployment). You'll be prompted to connect your wallet. You may be prompted to add the **Arbitrum Goerli** network to your wallet and/or to switch your wallet to this network; approve this.
+Visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/). You'll be prompted to connect your wallet. You may be prompted to add the **Arbitrum Goerli** network to your wallet and/or to switch your wallet to this network; approve this.
 
 The deployment portal will then display a form that looks like this:
 
@@ -176,7 +176,7 @@ You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Confi
 ## Step 9: Clone the setup script repository and add your configuration files
 
 1.  Clone the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) repository: `git clone https://github.com/OffchainLabs/orbit-setup-script.git`
-2.  Move the `nodeConfig.json` file that you downloaded into the `chain` directory in the root of your cloned `orbit-setup-script` repository.
+2.  Move the `nodeConfig.json` file that you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 3.  Move the `orbitSetupScriptConfig.json` file you downloaded into the `config` directory in the root of your cloned `orbit-setup-script` repository.
 4.  Install dependencies by running `yarn install` from the root of the `orbit-setup-script` repository.
 
