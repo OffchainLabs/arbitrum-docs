@@ -8,7 +8,12 @@ target_audience: todo
 sidebar_position: 1
 ---
 
-# Stylus: A Gentle Introduction
+# A gentle introduction to Stylus
+
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
+
 
 This introduction is for developers who are interested in learning about Stylus, a new way to write smart contracts in popular programming languages, like Rust, alongside the EVM.
 
