@@ -8,7 +8,7 @@ target_audience: todo
 sidebar_position: 1
 ---
 
-# A gentle introduction to Stylus
+# A gentle introduction: Stylus
 
 import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
 
