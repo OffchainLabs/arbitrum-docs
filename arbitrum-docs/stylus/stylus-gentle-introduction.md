@@ -14,7 +14,6 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-
 This introduction is for developers who are interested in learning about Stylus, a new way to write smart contracts in popular programming languages, like Rust, alongside the EVM.
 
 **In a nutshell:**
