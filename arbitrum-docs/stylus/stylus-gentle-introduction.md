@@ -16,7 +16,7 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 This introduction is for developers who are interested in learning about Stylus, a new way to write smart contracts in popular programming languages, like Rust, alongside the EVM.
 
-**In a nutshell:**
+### In a nutshell:
 
 - Stylus lets you write smart contracts in programming languages that compile down to WASM, such as **Rust, C, C++, and many others**.
 - Rich language support already exists for Rust: developers can use the Stylus SDK and CLI tool to **start building today.**
@@ -50,23 +50,23 @@ For a detailed overview of Nitro's technical architecture, see the [documentati
 
 Stylus innovates on many levels, with the key ones described here:
 
-**One chain, many languages**
+#### One chain, many languages
 
 There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://www.slashdata.co/blog/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-blockchain-and-more)]. Developers no longer have to choose a blockchain that supports their preferred programming language; it all happens on one. Scaling to the next billion users requires onboarding the next million developers.
 
-**EVM+**
+#### EVM+
 
 Stylus brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++. All without changing anything about how the EVM works. EVM equivalence is no longer the ceiling, it's the floor.
 
-**Arbitrary cryptography is now inexpensive**
+#### Arbitrary cryptography is now inexpensive
 
 Use cases not practical in the EVM are now possible in Stylus. Computation is over 10x improved. Memory is over 100x improved. Cryptography libraries can now be deployed as custom precompiles, permissionlessly. The greatest breeding ground for blockchain innovation has arrived.
 
-**Opt-in reentrancy**
+#### Opt-in reentrancy
 
 Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability that developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default, unless intentionally overridden.
 
-**Fully composable**
+#### Fully composable
 
 Solidity programs and WASM programs are completely interoperable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.
 
@@ -74,7 +74,7 @@ Solidity programs and WASM programs are completely interoperable. If working in 
 
 There are four main steps for bringing a Stylus program to life — coding, compilation, execution, and proving.
 
-**Coding**
+#### Coding
 
 In principle, developers can write smart contracts in any programming language that can be compiled into WASM. In practice, some high-level languages generate far more performant WASMs than others.
 
@@ -82,7 +82,7 @@ Initially, there will be support for Rust, C, and C++. However, the levels of su
 
 The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the official [Stylus SDK](https://docs.arbitrum.io/) and [Rust crate](https://docs.arbitrum.io/).
 
-**Compilation**
+#### Compilation
 
 Stylus programs are compiled twice. Once from a high-level language (such as Rust, C, or C++) to WASM, and then once more, in a process called **activation**, from WASM to a node's native machine code (such as ARM or x86).
 
@@ -92,13 +92,13 @@ Activating a Stylus program requires a new precompile, `ArbWasm`. This precompil
 
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called “ink,” which is similar to Ethereum's gas but is thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that thousands of WASM opcodes could be executed in the same time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements.
 
-**Execution**
+#### Execution
 
 Stylus programs are executed in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes made to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than Geth executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
 EVM contracts continue to execute the same way that they did prior to Stylus. When a contract is called, the difference between an EVM contract and a WASM program can be seen via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract is executed using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider what language the contract was written in. Everything is interoperable.
 
-**Proving**
+#### Proving
 
 Nitro has a happy case and a sad case. Most of the time, it's in a happy case, compiling execution history to native code. In the sad case where there is a dispute between validators, Nitro compiles execution history to WASM to conduct interactive fraud proofs on Ethereum. Stylus is a natural extension to Nitro's fraud-proving technology, utilizing it to not only bisect over execution history but also any WASM programs deployed by developers.
 
