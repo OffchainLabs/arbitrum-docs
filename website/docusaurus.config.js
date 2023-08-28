@@ -181,7 +181,7 @@ const config = {
       },
       announcementBar: {
         id: 'support_us',
-        content: `Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>here</a>.`,
+        content: `You can now build Ethereum dApps using Rust, thanks to Stylus (public preview). Learn more by visiting the <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>Stylus docs</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
