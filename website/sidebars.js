@@ -194,7 +194,7 @@ const sidebars = {
             },
           ],
         },
-        {
+        /** {
           type: 'category',
           label: 'From Ethereum (L1) to Arbitrum (L2)',
           collapsed: true,
@@ -241,7 +241,7 @@ const sidebars = {
               id: 'migration/dapp_migration',
             },
           ],
-        },
+        }, **/
       ],
     },
     {
