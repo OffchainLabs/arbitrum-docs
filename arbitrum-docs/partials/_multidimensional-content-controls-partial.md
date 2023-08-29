@@ -18,8 +18,6 @@ import { MultiDimensionalContentWidget } from '@site/src/components/MultiDimensi
     <TabItem value="win"></TabItem>
   </Tabs>
 
-{' '}
-
 <Tabs
   className="tabgroup-with-label network-tabgroup"
   groupId="network"
