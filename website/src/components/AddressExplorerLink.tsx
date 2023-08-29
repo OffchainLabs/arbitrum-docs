@@ -8,11 +8,11 @@ const chainIDToExplorerUrlRoot: {
 } = {
   1: 'https://etherscan.io/address',
   5: 'https://goerli.etherscan.io/address',
-  11155111: 'https://sepolia.etherscan.io',
+  11155111: 'https://sepolia.etherscan.io/address',
   42161: 'https://arbiscan.io/address',
   42170: 'https://nova.arbiscan.io/address',
   421613: 'https://goerli.arbiscan.io/address',
-  421614: 'https://sepolia-explorer.arbitrum.io',
+  421614: 'https://sepolia-explorer.arbitrum.io/address',
 };
 
 export const AddressExplorerLink = (props: {
