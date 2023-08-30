@@ -1,5 +1,5 @@
 ---
-title: 'Stylus developer reference: Testnet information'
+title: 'Testnet information (Stylus)'
 description: todo
 author: todo
 sme: todo

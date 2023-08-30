@@ -1,5 +1,5 @@
 ---
-title: 'Stylus developer reference: ERC-20 example smart contract'
+title: 'ERC-20 example smart contract (Stylus)'
 description: todo
 author: todo
 sme: todo
