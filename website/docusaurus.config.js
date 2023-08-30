@@ -181,7 +181,7 @@ const config = {
       },
       announcementBar: {
         id: 'support_us',
-        content: `You can now build Ethereum dApps using Rust, thanks to Stylus (public preview). Learn more by visiting the <a href='/stylus/stylus-gentle-introduction'>Stylus docs</a>.`,
+        content: `The Stylus testnet is officially live! Build EVM-compatible apps with Rust by visiting the <a href='/stylus/stylus-gentle-introduction'>Stylus docs</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
