@@ -18,7 +18,12 @@ const FeatureList: FeatureItem[] = [
     title: 'Quickstart: Build a dApp (Rust)',
     Svg: require('@site/static/img/logo.svg').default,
     href: '/stylus/stylus-gentle-introduction',
-    description: <> Learn about Stylus, a new way to write EVM+ smart contracts using Rust and other languages.</>,
+    description: (
+      <>
+        {' '}
+        Learn about Stylus, a new way to write EVM+ smart contracts using Rust and other languages.
+      </>
+    ),
   },
   {
     title: 'Quickstart: Build a dApp (Solidity)',
