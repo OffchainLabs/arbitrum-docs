@@ -6,7 +6,7 @@ author: symbolpunk
 sidebar_position: 1
 ---
 
-Stylus is currently a **public preview** offering. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
+Stylus is currently a **public preview** `alpha` offering. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
 
 ### How products are developed at Offchain Labs
 
