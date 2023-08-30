@@ -15,13 +15,13 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'A gentle introduction',
-    Svg: require('@site/static/img/welcome.svg').default,
-    href: '/intro',
-    description: <> Learn about Arbitrum's core technologies and product portfolio.</>,
+    title: 'Quickstart: Build a dApp (Rust)',
+    Svg: require('@site/static/img/logo.svg').default,
+    href: '/stylus/stylus-gentle-introduction',
+    description: <> Learn about Stylus, a new way to write EVM+ smart contracts using Rust and other languages.</>,
   },
   {
-    title: 'Quickstart: Build a dApp',
+    title: 'Quickstart: Build a dApp (Solidity)',
     Svg: require('@site/static/img/cupcake.svg').default,
     href: '/for-devs/quickstart-solidity-hardhat',
     description: (
