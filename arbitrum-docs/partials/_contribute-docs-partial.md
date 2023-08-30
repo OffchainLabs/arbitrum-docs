@@ -26,7 +26,7 @@ The following protocols help us process contributions efficiently:
 
 ### New "core docs" protocol
 
-**Core docs** are documents that help readers use Arbitrum products directly. If a document isn't in a `Third-party content` folder in the sidebar, it's a core document.
+If a document isn't in the `Third-party content` sidebar node, it's a core document.
 
 Although Offchain Labs is responsible for producing and maintaining core docs, contributions are welcome from all. To contribute a new core doc:
 
@@ -46,12 +46,12 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
 
 ### New "third-party docs" protocol
 
-**Third-party docs** are documents that help readers of Arbitrum docs use partners' products (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products. These are generally authored by partner teams, but can be authored by anyone.
+**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products. These documents are generally authored by partner teams, but can be authored by anyone.
 
 The protocol for creating new third-party docs is the same as that of [Creating new core documents](#creating-new-third-party-documents), with the following additions:
 
 1.  **Eligibility**
-    - For now, you can only add third-party docs if your project is listed in the [Arbitrum portal](https://portal.arbitrum.io/).
+    - Third-party docs are intended to support products listed in the [Arbitrum portal](https://portal.arbitrum.io/), or infrastructure and services that those products use.
     - To submit your project to the Arbitrum portal, [apply using this Google form](https://docs.google.com/forms/d/e/1FAIpQLSezhBlPgKIKKWgXKUz4MmlJPdHyfmPQlxUtS48HlRoi0e14_Q/viewform).
 2.  **Purpose**
     - The purpose of our `Third-party docs` sections is to **_meet Arbitrum developer (or user) demand for guidance that helps them use non-Arbitrum products with Arbitrum products_**.
