@@ -20,7 +20,6 @@ const FeatureList: FeatureItem[] = [
     href: '/stylus/stylus-gentle-introduction',
     description: (
       <>
-        {' '}
         Learn about Stylus, a new way to write EVM+ smart contracts using Rust and other languages.
       </>
     ),
