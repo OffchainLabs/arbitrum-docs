@@ -78,7 +78,7 @@ The protocol for creating new third-party docs is the same as that of [Creating 
 
 ### Update request protocol
 
-If you'd like to request an update or share a suggestion related to an existing document without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
 
 ## Content conventions
 
@@ -248,3 +248,11 @@ Instead of opening a PR for this type of contribution, click the `Request an upd
 You're right! We draft FAQs and Glossaries on Notion to make it easier for nontechnical internal contributors to contribute. This content is then published to our docs repo using a script that reads from Notion and writes to Markdown.
 
 You can still submit changes to the Glossary and FAQ markdown files; we manually synchronize these types of changes with Notion content whenever we need to.
+
+#### How long does it take for my third-party content contribution to be reviewed?
+
+Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
+
+#### Is there any way to expedite third-party content contribution reviews?
+
+The most effective way to expedite processing is to ensure that your PR incorporates the conventions outlined in this document. Please don't ask for status updates - if you've submitted a PR, it's on our radar!
