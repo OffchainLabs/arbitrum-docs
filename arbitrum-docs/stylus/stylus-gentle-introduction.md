@@ -19,7 +19,7 @@ This introduction is for developers who are interested in learning about Stylus,
 ### In a nutshell:
 
 - Stylus lets you write smart contracts in programming languages that compile down to WASM, such as **Rust, C, C++, and many others**.
-- Rich language support already exists for Rust: developers can use the Stylus SDK and CLI tool to **start building today.**
+- Rich language support already exists for Rust: you can use the Stylus SDK and CLI tool to **start building today.**
 - Arbitrum's full **EVM equivalence would be maintained** while adding a second, coequal WASM virtual machine.
 - Due to the superior efficiency of WASM programs, Stylus contracts are over **an order of magnitude faster with significantly lower gas fees**.
 - **Memory is 100-500x cheaper** in Stylus, enabling new use cases now that consuming RAM is viable on the blockchain.
