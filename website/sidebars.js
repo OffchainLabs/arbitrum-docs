@@ -187,6 +187,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Data indexers',
+          id: 'for-devs/dev-tools-and-resources/data-indexers',
+        },
+        {
+          type: 'doc',
           label: 'Debugging tools',
           id: 'for-devs/dev-tools-and-resources/debugging-tools',
         },
