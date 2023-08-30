@@ -16,7 +16,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Build a dApp (Rust)',
-    Svg: require('@site/static/img/logo.svg').default,
+    Svg: require('@site/static/img/stylus-logo.svg').default,
     href: '/stylus/stylus-gentle-introduction',
     description: (
       <>
