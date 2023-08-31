@@ -1,8 +1,7 @@
 import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.css';
 import Link from '@docusaurus/Link';
-import { useColorMode } from '@docusaurus/theme-common';
+
+import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
@@ -54,13 +53,11 @@ const FeatureList: FeatureItem[] = [
 ];
 
 function Feature({ title, Svg, description, href }: FeatureItem) {
-  const { colorMode } = useColorMode();
-  const isDarkTheme = colorMode === 'dark';
   return (
     <Link href={href}>
       <div className={styles.featureCard}>
         <div className={styles.svgWrapper}>
-          <Svg className={clsx(styles.featureSvg, isDarkTheme && 'invert')} role="img" />
+          <Svg className={styles.featureSvg} role="img" />
         </div>
         <h3>{title}</h3>
         <p>{description}</p>
