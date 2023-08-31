@@ -15,7 +15,7 @@ function HomepageHeader(props) {
   const location = useLocation();
 
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={styles.heroBanner}>
       {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
       <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
       {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
