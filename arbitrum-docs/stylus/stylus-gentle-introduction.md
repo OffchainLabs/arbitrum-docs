@@ -14,13 +14,14 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-This introduction is for developers who are interested in learning about Stylus, a new way to write smart contracts in popular programming languages, like Rust, alongside the EVM.
+This introduction is for developers who want to build on Arbitrum using popular programming languages, like Rust. This capability is made possible by Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages.
 
 ### In a nutshell:
 
 - Stylus lets you write smart contracts in programming languages that compile down to WASM, such as **Rust, C, C++, and many others**.
 - Rich language support already exists for Rust: you can use the Stylus SDK and CLI tool to **start building today.**
-- Stylus smart contracts benefit from **Arbitrum's full EVM equivalence** thanks to a second, coequal WASM virtual machine.
+- Stylus smart contracts benefit from **Arbitrum's EVM equivalence** thanks to a second, coequal WASM virtual machine.
+- Solidity contracts and Stylus contracts are fully interoperable. In Solidity, you can call a Rust program and vice versa.
 - Stylus contracts are over **an order of magnitude faster with significantly lower gas fees** due to the superior efficiency of WASM programs.
 - **Memory is 100-500x cheaper** in Stylus, enabling new use cases now that consuming RAM is viable on the blockchain.
 
@@ -52,13 +53,13 @@ Stylus innovates on many levels, with the key ones described here:
 
 #### One chain, many languages
 
-There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://www.slashdata.co/blog/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-blockchain-and-more)]. Developers no longer have to choose a blockchain that supports their preferred programming language; it all happens on one. Scaling to the next billion users requires onboarding the next million developers.
+There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://www.slashdata.co/blog/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-blockchain-and-more)]. Developers are now free to use their preferred programming language, all interoperable on any Arbitrum chain with Stylus. Scaling to the next billion users requires onboarding the next million developers.
 
 #### EVM+
 
 Stylus brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++. All without changing anything about how the EVM works. EVM equivalence is no longer the ceiling, it's the floor.
 
-#### Arbitrary cryptography is now inexpensive
+#### Advanced cryptography is now inexpensive
 
 Use cases not practical in the EVM are now possible in Stylus. Computation is over 10x improved. Memory is over 100x improved. Cryptography libraries can now be deployed as custom precompiles, permissionlessly. The greatest breeding ground for blockchain innovation has arrived.
 
@@ -66,9 +67,9 @@ Use cases not practical in the EVM are now possible in Stylus. Computation is ov
 
 Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability that developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default, unless intentionally overridden.
 
-#### Fully composable
+#### Fully interoperable
 
-Solidity programs and WASM programs are completely interoperable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.
+Solidity programs and WASM programs are completely composable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.
 
 ### How does it work?
 
@@ -80,7 +81,7 @@ In principle, developers can write smart contracts in any programming language t
 
 Initially, there will be support for Rust, C, and C++. However, the levels of support will differ at first. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat too, which will enable deploying existing contracts in those languages on-chain with minimal modifications.
 
-The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the official [Stylus SDK](https://docs.arbitrum.io/) and [Rust crate](https://docs.arbitrum.io/).
+The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/crate/stylus-sdk).
 
 #### Compilation
 
@@ -117,4 +118,4 @@ The most exciting part about Stylus is all of the novel use cases that haven't e
 
 While many developers will be drawn to the net new use cases, rebuilding existing applications in Stylus will also open the door to innovation. dApps have never been faster, cheaper, or safer.
 
-If you're a developer interested in Stylus, visit the [quickstart](https://docs.arbitrum.io/), join the [Discord channel](https://docs.arbitrum.io/), and start building!
+If you're a developer interested in Stylus, visit the [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart), join the [Discord channel](https://discord.com/invite/arbitrum), and start building!
