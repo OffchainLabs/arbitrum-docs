@@ -87,7 +87,7 @@ The above will expand to the equivalent definitions in Rust, each structure impl
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/v0.8.20/abi-spec.html#basic-design), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
-:::tip 
+:::tip
 Existing Solidity smart contracts can upgrade to Rust if they use proxy patterns
 :::
 
