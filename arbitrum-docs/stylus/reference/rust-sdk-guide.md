@@ -410,23 +410,29 @@ interface Weth is Erc20 {
 
 ## Calls
 
-TODO
+:::caution UNDER CONSTRUCTION
+
+This section is currently under construction, and will be updated soon.
+
+If you're waiting for this content to be completed, click the `Request an update` button at the top of this page to let us know!
+
+:::
 
 ### `sol_interface!`
 
-TODO
+_Coming soon!_
 
 ### Call contexts
 
-TODO
+_Coming soon!_
 
 ### Calls with inheritance
 
-TODO
+_Coming soon!_
 
 ### `transfer_eth`
 
-TODO
+_Coming soon!_
 
 ### `RawCall` and `unsafe` calls
 
