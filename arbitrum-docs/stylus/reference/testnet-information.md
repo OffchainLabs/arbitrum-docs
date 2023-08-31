@@ -17,6 +17,9 @@ This table provides an overview of the available public RPC endpoints for the St
 | -------------------------- | -------------------------------------- | -------- | ------------------------------------- | -------------- | ---------- | ------------------------------------- | ------------------------------------------------- |
 | Stylus testnet              | https://stylus-testnet.arbitrum.io/rpc                 | 23011913        | https://stylus-testnet-explorer.arbitrum.io/           | Arbitrum Sepolia     | Nitro (Rollup) | wss://stylus-sepolia.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc            |
 
+⚠️ Unlike `https://arb1.arbitrum.io/rpc`, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
+
+For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](https://docs.arbitrum.io/node-running/node-providers#rpc-endpoints)
 
 ## Faucets
 
