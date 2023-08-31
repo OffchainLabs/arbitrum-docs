@@ -2,8 +2,8 @@
 # Learn more here: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # recursively assign all markdown files to @symbolpunk
-**/*.md @symbolpunk
-**/*.mdx @symbolpunk
+# **/*.md @symbolpunk
+# **/*.mdx @symbolpunk
 
 # assign ownership of `sidebars.js` to @symbolpunk
-./website/sidebars.js @symbolpunk
+# ./website/sidebars.js @symbolpunk
