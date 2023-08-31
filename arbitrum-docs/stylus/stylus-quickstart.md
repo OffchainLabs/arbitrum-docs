@@ -31,9 +31,9 @@ You’ll need some testnet ETH for deploying your Rust contract for live testing
 
 ## Developer wallet / account
 
-When deploying on and interacting with a testnet chain, it’s important to use a fresh wallet that does not contain any real assets. You’ll often be including private keys as CLI arguments to execute transactions programmatically, ***so avoid using personal accounts for development***.
+When deploying on and interacting with a testnet chain, it’s important to use a fresh wallet that does not contain any real assets. You’ll often be including private keys as CLI arguments to execute transactions programmatically, **_so avoid using personal accounts for development_**.
 
-If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at the top middle of the plugin and then click “Add Account” to create a fresh account. It can be helpful to label the account as a dev wallet or “Stylus” for this purpose. You’ll need this newly created account’s private key (as well as some Sepolia ETH) for deploying a smart contract. [Follow the instructions on MetaMask’s website](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key) to obtain your key. 
+If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at the top middle of the plugin and then click “Add Account” to create a fresh account. It can be helpful to label the account as a dev wallet or “Stylus” for this purpose. You’ll need this newly created account’s private key (as well as some Sepolia ETH) for deploying a smart contract. [Follow the instructions on MetaMask’s website](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key) to obtain your key.
 
 ![Stylus Wallet](./assets/stylus-wallet.png)
 
@@ -88,10 +88,10 @@ cargo stylus --help
 
 Cargo command for developing Arbitrum Stylus projects
 
-Usage: 
+Usage:
     cargo stylus new
     cargo stylus export-abi
-    cargo stylus check 
+    cargo stylus check
     cargo stylus deploy
 ```
 
@@ -107,7 +107,7 @@ cargo stylus new <YOUR_PROJECT_NAME>
 
 The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing.
 
-Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer. 
+Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
 
 ### Checking your Stylus project is valid
 
