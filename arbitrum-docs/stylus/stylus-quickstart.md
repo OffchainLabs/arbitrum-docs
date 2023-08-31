@@ -1,20 +1,19 @@
 ---
 title: 'Quickstart: Write a smart contract in Rust using Stylus'
+sidebar_label: 'Quickstart (Rust, Stylus)'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512
 sme: chrisco512
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
-sidebar_label: 'Quickstart (Rust, Stylus)'
 ---
-
-# Prerequisites
-
-## **Rust Toolchain**
+# Quickstart: Write a smart contract in Rust using Stylus
+## Prerequisites
+### Rust Toolchain
 
 Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to get a full Rust toolchain installed on your system. Make sure after installation that you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred command line terminal (programs should be added to your system’s PATH, more instructions available on Rust’s website)
 
-## **VS Code**
+### VS Code
 
 We recommend VSCode as the IDE of choice for developing Stylus contracts for its excellent Rust support. See **[code.visualstudio.com](https://code.visualstudio.com/)** to install. Feel free to use another text editor or IDE if you’re comfortable with those.
 
@@ -25,11 +24,11 @@ Some helpful VS Code extensions for Rust development:
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)
 - [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
 
-## **Testnet ETH for deployment**
+### Testnet ETH for deployment
 
 You’ll need some testnet ETH for deploying your Rust contract for live testing. Explained below in further detail.
 
-## Developer wallet / account
+### Developer wallet / account
 
 When deploying on and interacting with a testnet chain, it’s important to use a fresh wallet that does not contain any real assets. You’ll often be including private keys as CLI arguments to execute transactions programmatically, **_so avoid using personal accounts for development_**.
 
@@ -37,12 +36,15 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 
 ![Stylus Wallet](./assets/stylus-wallet.png)
 
-<aside>
-⚠️ ***Never share your “secret recovery phrase” with anyone***. Never enter it anywhere. A *private key* is valid for an individual account only, but a *secret recovery phrase* can be used to gain access to ALL accounts in your wallet.
 
-</aside>
+:::caution
 
-# Testnet ETH / Sepolia
+***Never share your “secret recovery phrase” with anyone***. Never enter it anywhere. A *private key* is valid for an individual account only, but a *secret recovery phrase* can be used to gain access to ALL accounts in your wallet.
+
+:::
+
+
+## Testnet ETH / Sepolia
 
 The Stylus testnet settles directly to the [Arbitrum Sepolia](https://docs.arbitrum.io/for-devs/concepts/public-chains#arbitrum-sepolia) testnet. While there is no faucet directly on the Stylus testnet, there is on Arbitrum Sepolia. Following these steps can get you testnet ETH on the Stylus testnet:
 
