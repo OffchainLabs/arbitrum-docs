@@ -177,7 +177,7 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
       },
       prism: {
-        additionalLanguages: ['solidity'],
+        additionalLanguages: ['solidity', 'rust'],
       },
       announcementBar: {
         id: 'support_us',

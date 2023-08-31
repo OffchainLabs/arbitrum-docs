@@ -7,8 +7,11 @@ sme: chrisco512
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
+
 # Quickstart: Write a smart contract in Rust using Stylus
+
 ## Prerequisites
+
 ### Rust Toolchain
 
 Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to get a full Rust toolchain installed on your system. Make sure after installation that you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred command line terminal (programs should be added to your system’s PATH, more instructions available on Rust’s website)
@@ -36,13 +39,11 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 
 ![Stylus Wallet](./assets/stylus-wallet.png)
 
-
 :::caution
 
-***Never share your “secret recovery phrase” with anyone***. Never enter it anywhere. A *private key* is valid for an individual account only, but a *secret recovery phrase* can be used to gain access to ALL accounts in your wallet.
+**_Never share your “secret recovery phrase” with anyone_**. Never enter it anywhere. A _private key_ is valid for an individual account only, but a _secret recovery phrase_ can be used to gain access to ALL accounts in your wallet.
 
 :::
-
 
 ## Testnet ETH / Sepolia
 

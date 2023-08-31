@@ -32,6 +32,10 @@ const sidebars = {
           id: 'stylus/stylus-quickstart',
         },
         {
+          type: 'doc',
+          id: 'stylus/rust-sdk-guide',
+        },
+        {
           type: 'category',
           label: 'Concepts',
           collapsed: true,
