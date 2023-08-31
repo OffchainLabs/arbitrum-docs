@@ -56,15 +56,14 @@ const FeatureList: FeatureItem[] = [
 function Feature({ title, Svg, description, href }: FeatureItem) {
   const { colorMode } = useColorMode();
   const isDarkTheme = colorMode === 'dark';
-  const textStyle = { color: isDarkTheme ? 'white' : 'black' };
   return (
     <Link href={href}>
       <div className={styles.featureCard}>
         <div className={styles.svgWrapper}>
           <Svg className={clsx(styles.featureSvg, isDarkTheme && 'invert')} role="img" />
         </div>
-        <h3 style={textStyle}>{title}</h3>
-        <p style={textStyle}>{description}</p>
+        <h3>{title}</h3>
+        <p>{description}</p>
       </div>
     </Link>
   );

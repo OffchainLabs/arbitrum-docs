@@ -35,6 +35,7 @@
   color: var(--arbitrum-text);
   font-size: 36px;
   font-weight: 400;
+  font-family: var(--arbitrum-font-family);
   margin-bottom: auto;
   transform: translateY(-50%);
 }
@@ -51,6 +52,7 @@
 .button {
   font-size: 14px;
   font-weight: 500;
+  font-family: var(--arbitrum-font-family);
   color: var(--arbitrum-primary-button-text);
   background: var(--arbitrum-primary-button-bg);
   padding: 12px;

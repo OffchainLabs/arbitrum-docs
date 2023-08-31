@@ -142,9 +142,6 @@
 [data-theme='dark'] .checklist .task .guidance-container > p {
   color: white;
 }
-.invert {
-  filter: invert(1);
-}
 /* MIXINS */
 .enable-transition {
   -o-transition: all 0.15s ease;
@@ -153,12 +150,6 @@
   -webkit-transition: all 0.15s ease;
   /* ...and now for the proper property */
   transition: all 0.15s ease;
-}
-body {
-  font-family: var(--arbitrum-font-family);
-}
-button {
-  font-family: var(--arbitrum-font-family);
 }
 .invisible-horizontal-scroll {
   -ms-overflow-style: none;

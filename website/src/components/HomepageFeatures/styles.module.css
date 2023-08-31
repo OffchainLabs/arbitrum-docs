@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  font-family: var(--arbitrum-font-family);
   padding: 20px 20px 150px;
   margin-top: 80px;
 }
@@ -17,6 +18,7 @@
   flex-direction: column;
   gap: 20px;
   height: 100%;
+  color: var(--arbitrum-text);
   background: var(--arbitrum-background-opacity);
   padding: 20px 70px 20px 20px;
   border-radius: var(--arbitrum-border-radius);
@@ -77,4 +79,8 @@ a:nth-child(1) .featureCard {
 .featureSvg {
   height: 24px;
   width: 24px;
+}
+
+:global([data-theme='dark']) .featureSvg {
+  filter: invert(1);
 }
