@@ -1,5 +1,5 @@
 ---
-title: 'Testnet information (Stylus)'
+title: 'Stylus testnet information'
 description: A reference providing details about the Stylus testnet and faucets for obtaining testnet ETH
 author: amarrazza
 sme: amarrazza
@@ -22,11 +22,10 @@ This table provides an overview of the available public RPC endpoints for the St
 
 Below you can find faucets for obtaining testnet ETH, which can be bridged to the Stylus testnet on the [Arbitrum Bridge](https://bridge.arbitrum.io/)
 
-
 | Faucet Operator            | Faucet URL                             | Chain     |
 | -------------------------- | -------------------------------------- | --------- |
-| QuickNode             | https://faucet.quicknode.com/arbitrum/sepolia             | Arbitrum Sepolia|
-| Alchemy                | https://sepoliafaucet.com/               | Ethereum Sepolia    |
-| Infura                | https://www.infura.io/faucet/sepolia                 | Ethereum Sepolia    |
-| Sepolia PoW Faucet              | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia  |
+| QuickNode                  | https://faucet.quicknode.com/arbitrum/sepolia             | Arbitrum Sepolia|
+| Alchemy                    | https://sepoliafaucet.com/               | Ethereum Sepolia    |
+| Infura                     | https://www.infura.io/faucet/sepolia                 | Ethereum Sepolia    |
+| Sepolia PoW Faucet         | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia  |
 
