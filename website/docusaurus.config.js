@@ -59,7 +59,7 @@ const config = {
           ],
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.scss'),
         },
       }),
     ],
@@ -87,6 +87,7 @@ const config = {
     ],
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-lunr-search'),
+    require.resolve('docusaurus-plugin-sass'),
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
