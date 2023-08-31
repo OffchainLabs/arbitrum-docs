@@ -1,6 +1,6 @@
 ---
-title: 'Rust SDK Feature Guide'
-sidebar_label: 'Rust SDK Feature Guide'
+title: 'Stylus SDK guide (Rust)'
+sidebar_label: 'SDK guide (Rust)'
 description: 'An in-depth overview of the features provided by the Rust Stylus SDK'
 author: rachel-bousfield
 sme: rachel-bousfield
@@ -8,7 +8,9 @@ sidebar_position: 3
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
-# Stylus Rust SDK Docs
+import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
 
 This document provides an in-depth overview of the features provided by the [Rust Stylus SDK](https://github.com/OffchainLabs/stylus-sdk-rs). For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For more information about Stylus, see Stylus: A Gentle Introduction. For a simpler intro to Stylus Rust development, see the Quick Start guide.
 
@@ -93,7 +95,7 @@ Existing Solidity smart contracts can upgrade to Rust if they use proxy patterns
 
 Consequently, the order of fields will affect the JSON ABIs produced that explorers and tooling might use. Most developers won’t need to worry about this though and can freely order their types when working on a Rust contract from scratch.
 
-### Reading and Writing Storage
+### Reading and writing storage
 
 You can access storage types via getters and setters. For example, the `Contract` struct from earlier might access its `owner` address as follows.
 
@@ -193,7 +195,7 @@ sol_storage! {
 
 You can also implement `Erase` manually if desired. Note that the reason we care about `Erase` at all is that you get storage refunds when clearing state, lowering fees. There’s also minor implications for patterns using `unsafe` Rust.
 
-### The Storage Cache
+### The storage cache
 
 The Stylus SDK employs an optimal storage-caching policy that avoids the underlying `SLOAD` or `SSTORE` operations needed to get and set state. For the vast majority of use cases, this happens in the background and requires no input from the user.
 
@@ -220,7 +222,7 @@ sol_storage! {
 
 The above allows consumers of `Erc20` to choose immutable constants via specialization. See our WETH sample contract for a full example of this feature.
 
-### Future Storage Work
+### Future storage work
 
 The Stylus SDK is currently in alpha and will improve in the coming versions. Something you may notice is that storage access patterns are often a bit verbose. This will change soon when we implement `DerefMut` for most types.
 
@@ -299,7 +301,7 @@ sol_storage! {
 
 The above will make the external methods of `Contract` the first to consider during invocation. In a later section we’ll discuss inheritance, which will allow the `#[external]` methods of other types to be invoked as well.
 
-### Bytes-In, Bytes-Out Programming
+### Bytes-in, bytes-out programming
 
 A less common usage of `#[entrypoint]` is for low-level, bytes-in bytes-out programming. When applied to a free-standing function, a different way of writing smart contracts becomes possible, where the Rust SDK’s macros and storage types are entirely optional.
 
@@ -372,7 +374,7 @@ sol_storage! {
 
 In the future we plan to simplify the SDK so that `Borrow` isn’t needed and so that `Router` composition is more configurable. The motivation for this becomes clearer in complex cases of multi-level inheritance, which we intend to improve.
 
-## Exporting a Solidity Interface
+## Exporting a Solidity interface
 
 Recall that Stylus contracts are fully interoperable across all languages, including Solidity. The Stylus SDK provides tools for exporting a Solidity interface for your contract so that others can call it. This is usually done with the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis), but we’ll detail how to do it manually here.
 
@@ -412,11 +414,11 @@ TODO
 
 TODO
 
-### Call Contexts
+### Call contexts
 
 TODO
 
-### Calls with Inheritance
+### Calls with inheritance
 
 TODO
 
@@ -424,7 +426,7 @@ TODO
 
 TODO
 
-### `RawCall` and `unsafe` Calls
+### `RawCall` and `unsafe` calls
 
 Occasionally, an untyped call to another contract is necessary. `RawCall` lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a `File` in Rust.
 
@@ -438,7 +440,7 @@ let data = RawCall::new_delegate()   // configure a delegate call
 
 Note that the `call` method is `unsafe`. This is due to reentrancy, and the fact that the call does not require clearing the storage cache.
 
-## `RawDeploy` and `unsafe` Deployments
+## `RawDeploy` and `unsafe` deployments
 
 Right now the only way to deploy a contract from inside Rust is to use `RawDeploy`, similar to `RawCall`. As with `RawCall`, this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the `StorageCache`.
 
@@ -473,7 +475,7 @@ The SDK also exposes a low-level, `evm::raw_log` that takes in raw bytes and top
 fn emit_log(bytes: &[u8], topics: usize)
 ```
 
-## EVM Affordances
+## EVM affordances
 
 The SDK contains several modules for interacting with the EVM, which can be imported like so.
 

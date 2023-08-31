@@ -8,15 +8,17 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-# Quickstart: Write a smart contract in Rust using Stylus
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
 
 ## Prerequisites
 
-### Rust Toolchain
+#### Rust toolchain
 
 Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to get a full Rust toolchain installed on your system. Make sure after installation that you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred command line terminal (programs should be added to your system’s PATH, more instructions available on Rust’s website)
 
-### VS Code
+#### VS Code
 
 We recommend VSCode as the IDE of choice for developing Stylus contracts for its excellent Rust support. See **[code.visualstudio.com](https://code.visualstudio.com/)** to install. Feel free to use another text editor or IDE if you’re comfortable with those.
 
@@ -27,11 +29,11 @@ Some helpful VS Code extensions for Rust development:
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)
 - [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
 
-### Testnet ETH for deployment
+#### Testnet ETH for deployment
 
 You’ll need some testnet ETH for deploying your Rust contract for live testing. Explained below in further detail.
 
-### Developer wallet / account
+#### Developer wallet / account
 
 When deploying on and interacting with a testnet chain, it’s important to use a fresh wallet that does not contain any real assets. You’ll often be including private keys as CLI arguments to execute transactions programmatically, **_so avoid using personal accounts for development_**.
 
@@ -45,7 +47,7 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 
 :::
 
-## Testnet ETH / Sepolia
+### Testnet ETH / Sepolia
 
 The Stylus testnet settles directly to the [Arbitrum Sepolia](https://docs.arbitrum.io/for-devs/concepts/public-chains#arbitrum-sepolia) testnet. While there is no faucet directly on the Stylus testnet, there is on Arbitrum Sepolia. Following these steps can get you testnet ETH on the Stylus testnet:
 
