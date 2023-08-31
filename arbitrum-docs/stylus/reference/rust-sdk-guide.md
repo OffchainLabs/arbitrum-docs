@@ -17,7 +17,9 @@ This document provides an in-depth overview of the features provided by the [Rus
 The Stylus SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/alloy), a collection of crates empowering the Rust Ethereum ecosystem. Because the SDK uses the same [Rust primitives for Ethereum types](https://docs.rs/alloy-primitives/latest/alloy_primitives/), Stylus is compatible with existing Rust libraries.
 
 :::info
-💡 Many of the affordances use macros. Though this document details what each does, it may be helpful to use [`cargo expand`](https://crates.io/crates/cargo-expand) to see what they expand into if you’re doing advanced work in Rust.
+
+Many of the affordances use macros. Though this document details what each does, it may be helpful to use [`cargo expand`](https://crates.io/crates/cargo-expand) to see what they expand into if you’re doing advanced work in Rust.
+
 :::
 
 Additionally, the Stylus SDK supports `#[no_std]` for contracts that wish to opt out of the standard library. In fact, the entire SDK is available from `#[no_std]`, so no special feature flag is required. This can be helpful for reducing binary size, and may be preferable in pure-compute use cases like cryptography.
