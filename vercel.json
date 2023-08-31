@@ -11,6 +11,11 @@
             "permanent": false
         },
         {
+            "source": "/stylus",
+            "destination": "/stylus/stylus-gentle-introduction",
+            "permanent": false
+        },
+        {
             "source": "/docs/mainnet",
             "destination": "/mainnet-risks",
             "permanent": false
