@@ -1,10 +1,10 @@
 ---
 title: 'Quickstart: Write a smart contract in Rust using Stylus'
-description: ''
-author: amarrazza
-sme: amarrazza
+description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
+author: chrisco512
+sme: chrisco512
 sidebar_position: 2
-target_audience: todo
+target_audience: Developers writing Stylus contracts in Rust using Stylus
 sidebar_label: 'Quickstart (Rust, Stylus)'
 ---
 
@@ -58,6 +58,7 @@ The Stylus testnet settles directly to the [Arbitrum Sepolia](https://docs.arbit
 10. Enter an amount of ETH and bridge!
 
 For additional sources of testnet ETH, please use a faucet on L1 mainnet:
+
 [https://sepoliafaucet.com/](https://sepoliafaucet.com/)
 
 [https://www.infura.io/faucet/sepolia](https://www.infura.io/faucet/sepolia)
@@ -66,7 +67,7 @@ For additional sources of testnet ETH, please use a faucet on L1 mainnet:
 
 ## Creating a Stylus project
 
-![Untitled](Quickstart%20e54d94cbb43e4289bb86bbb5700126e3/Untitled.png)
+![Cargo Stylus](./assets/cargo-stylus.png)
 
 `cargo-stylus` is our CLI tool for assisting with building, verifying, and deploying Arbitrum Stylus programs in Rust. This is available as a plugin to the standard `Cargo` tool used for developing Rust programs, integrating easily into common Rust workflows. Once [Rust has been installed](https://www.rust-lang.org/tools/install) on your system, install the Stylus CLI tool by running the following command:
 
