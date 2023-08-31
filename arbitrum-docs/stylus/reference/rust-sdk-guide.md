@@ -5,7 +5,7 @@ description: 'An in-depth overview of the features provided by the Stylus Rust S
 author: rachel-bousfield
 sme: rachel-bousfield
 sidebar_position: 1
-target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
+target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts
 ---
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
