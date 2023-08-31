@@ -1,10 +1,10 @@
 ---
-title: 'Stylus SDK guide (Rust)'
-sidebar_label: 'Stylus SDK guide (Rust)'
-description: 'An in-depth overview of the features provided by the Rust Stylus SDK'
+title: 'Stylus Rust SDK: Feature overview'
+sidebar_label: 'Rust SDK: Feature overview'
+description: 'An in-depth overview of the features provided by the Stylus Rust SDK'
 author: rachel-bousfield
 sme: rachel-bousfield
-sidebar_position: 3
+sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
@@ -12,9 +12,9 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 <PublicPreviewBannerPartial />
 
-This document provides an in-depth overview of the features provided by the [Rust Stylus SDK](https://github.com/OffchainLabs/stylus-sdk-rs). For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.md).
+This document provides an in-depth overview of the features provided by the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs). For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.md).
 
-The Stylus SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/alloy), a collection of crates empowering the Rust Ethereum ecosystem. Because the SDK uses the same [Rust primitives for Ethereum types](https://docs.rs/alloy-primitives/latest/alloy_primitives/), Stylus is compatible with existing Rust libraries.
+The Stylus Rust SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/alloy), a collection of crates empowering the Rust Ethereum ecosystem. Because the SDK uses the same [Rust primitives for Ethereum types](https://docs.rs/alloy-primitives/latest/alloy_primitives/), Stylus is compatible with existing Rust libraries.
 
 :::info
 
