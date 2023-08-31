@@ -4,7 +4,7 @@ description: A table with links and minimal information about the different SDKs
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: Developers writing and deploying Stylus programs
-sidebar_label: 'SDK repositories'
+sidebar_label: 'Stylus SDK repositories'
 ---
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';

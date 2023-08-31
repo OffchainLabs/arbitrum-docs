@@ -1,6 +1,6 @@
 ---
 title: 'Stylus SDK guide (Rust)'
-sidebar_label: 'SDK guide (Rust)'
+sidebar_label: 'Stylus SDK guide (Rust)'
 description: 'An in-depth overview of the features provided by the Rust Stylus SDK'
 author: rachel-bousfield
 sme: rachel-bousfield
