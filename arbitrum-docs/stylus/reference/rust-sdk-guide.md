@@ -111,7 +111,7 @@ impl Contract {
     /// Updates the owner in storage
     pub fn set_owner(&mut self, new_owner: Address) -> Result<(), Vec<u8>> {
         if msg::sender() == self.owner()? {  // we'll discuss msg::sender later
-            self.owner.set(new_number);
+            self.owner.set(new_owner);
         }
         Ok(())
     }

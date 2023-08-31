@@ -11,6 +11,11 @@
             "permanent": false
         },
         {
+            "source": "/stylus/",
+            "destination": "/stylus/stylus-gentle-introduction",
+            "permanent": false
+        },
+        {
             "source": "/stylus/rust-sdk-guide",
             "destination": "/stylus/reference/rust-sdk-guide",
             "permanent": false
