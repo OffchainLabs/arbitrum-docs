@@ -1,38 +1,80 @@
 .features {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 20px 150px;
+  margin-top: 80px;
+}
+
+.featureCardsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.featureCard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  background: var(--arbitrum-background-opacity);
+  padding: 20px 70px 20px 20px;
+  border-radius: var(--arbitrum-border-radius);
+}
+
+@media screen and (min-width: 1024px) {
+  .features {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 3fr;
+    gap: 20px;
+  }
+  .featureCardsWrapper {
+    display: grid;
+    grid-template-columns: repeat(3, calc(33.33% - 20px * 2 / 3));
+  }
+  .featureCard {
+    padding: 20px 50px 20px 20px;
+  }
+}
+
+h3,
+p {
+  line-height: normal;
+  margin: 0;
+}
+
+h3 {
+  font-size: 22px;
+  font-weight: 400;
+}
+
+p {
+  font-size: var(--arbitrum-font-size);
+  font-weight: 500;
+  opacity: 50%;
+}
+
+a:hover {
+  text-decoration: none;
+  opacity: 80%;
+}
+
+a:nth-child(1) .featureCard {
+  background: var(--arbitrum-color-primary);
+}
+
+.svgWrapper {
+  display: flex;
   align-items: center;
-  padding: 2rem 0;
-  width: 100%;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  background: var(--arbitrum-background-opacity);
+  border-radius: var(--arbitrum-border-radius-sm);
 }
 
 .featureSvg {
-  height: 150px;
-  width: 150px;
-}
-
-.landingPageLink {
-  background-color: black;
-  color: black;
-  text-decoration: none;
-}
-
-#animate {
-  opacity: 0;
-  animation-duration: 1.2s;
-  animation-name: animate-pop;
-  animation-timing-function: cubic-bezier(0.23, 0.53, 0.74, 2.2);
-  animation-delay: 0.8s;
-  animation-fill-mode: forwards;
-}
-
-@keyframes animate-pop {
-  0% {
-    opacity: 0;
-    transform: scale(0.1, 0.1);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1, 1);
-  }
+  height: 24px;
+  width: 24px;
 }

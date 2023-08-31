@@ -17,21 +17,48 @@
 }
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
   position: relative;
-  overflow: hidden;
-  background-color: #28a0f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  height: 350px;
+  background-color: var(--arbitrum-color-primary);
+  border-radius: var(--arbitrum-border-radius);
+  padding: 20px;
+  margin: 0 20px;
 }
 
-@media screen and (max-width: 996px) {
+.heroTitle {
+  position: absolute;
+  top: 50%;
+  color: var(--arbitrum-text);
+  font-size: 36px;
+  font-weight: 400;
+  margin-bottom: auto;
+  transform: translateY(-50%);
+}
+
+@media screen and (max-width: 1023px) {
   .heroBanner {
-    padding: 2rem;
+    height: 400px;
+  }
+  .heroTitle {
+    font-size: 28px;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.button {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--arbitrum-primary-button-text);
+  background: var(--arbitrum-primary-button-bg);
+  padding: 12px;
+  border-radius: var(--arbitrum-border-radius-sm);
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 70%;
 }

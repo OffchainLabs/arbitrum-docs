@@ -16,16 +16,12 @@ function HomepageHeader(props) {
 
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
-        <h1 className="hero__title">{siteConfig.title}</h1>
-        {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
-        <div className={styles.buttons}>
-          <Link className="button button--secondary button--lg" to="/intro">
-            A gentle introduction to Arbitrum 🔵
-          </Link>
-        </div>
-      </div>
+      {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
+      <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
+      {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
+      <Link to="/intro">
+        <button className={styles.button}>A Gentle Introduction to Arbitrum</button>
+      </Link>
     </header>
   );
 }
