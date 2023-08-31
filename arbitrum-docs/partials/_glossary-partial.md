@@ -75,9 +75,7 @@
 <p>The protocol by which <a href="/intro/glossary#rblock">RBlock</a>s are submitted, disputed, and ultimately confirmed. The Challenge Protocol guarantees that only valid RBlocks will be confirmed provided that there is at least one honest <a href="/intro/glossary#active-validator">Active Validator</a>.</p>
 
 ### Child chain {#child-chain}
-<p></p>
-
-
+<p>An Arbitrum Chain that settles to an underlying <a href="/intro/glossary#parent-chain">Parent chain</a> . For example, Arbitrum One and Arbitrum Nova are child chains of Ethreeum.</p>
 
 ### Client {#client}
 <p>A program running on a user's machine, often in the user's browser, that interacts with contracts on an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>  and provides a user interface.</p>
