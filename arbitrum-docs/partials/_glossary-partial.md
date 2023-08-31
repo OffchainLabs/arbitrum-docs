@@ -75,7 +75,7 @@
 <p>The protocol by which <a href="/intro/glossary#rblock">RBlock</a>s are submitted, disputed, and ultimately confirmed. The Challenge Protocol guarantees that only valid RBlocks will be confirmed provided that there is at least one honest <a href="/intro/glossary#active-validator">Active Validator</a>.</p>
 
 ### Child chain {#child-chain}
-<p>An Arbitrum Chain that settles to an underlying <a href="/intro/glossary#parent-chain">Parent chain</a> . For example, Arbitrum One and Arbitrum Nova are child chains of Ethreeum.</p>
+<p>An Arbitrum Chain that settles to an underlying <a href="/intro/glossary#parent-chain">Parent chain</a> . For example, Arbitrum One and Arbitrum Nova are child chains of Ethereum.</p>
 
 ### Client {#client}
 <p>A program running on a user's machine, often in the user's browser, that interacts with contracts on an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>  and provides a user interface.</p>
@@ -176,7 +176,7 @@ The iconic blueberries come from the community of the decentralized exchange, GM
 <p>An L1 contract responsible for tracking <a href="/intro/glossary#l2-to-l1-message">L2 to L1 Message</a>s, including withdrawals, which can be executed once they are confirmed. The outbox stores a Merkle Root of all outgoing messages.</p>
 
 ### Parent chain {#parent-chain}
-<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href="/intro/glossary#child-chain">Child chain</a>  ). E.g., Ethereum is the parent chain of both Arbitrum One Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain." </p>
+<p>EVM compatible chain that acts as the settlement layer for one or more Arbitrum Chains (aka <a href="/intro/glossary#child-chain">Child chain</a>  ). E.g., Ethereum is the parent chain of both Arbitrum One and Arbitrum Nova. Parent chain is synonymous with "underlying chain." </p>
 
 ### 🏴‍☠️ Pirate Nation {#pirate-nation}
 <p>If you sail in the deep blue seas of Arbitrum, you may encounter some ships with pirate flags along the way ARRGG!<br />
