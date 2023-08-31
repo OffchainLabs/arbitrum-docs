@@ -6,6 +6,11 @@
             "permanent": false
         },
         {
+            "source": "/stylus/rust-sdk-guide",
+            "destination": "/stylus/reference/rust-sdk-guide",
+            "permanent": false
+        },
+        {
             "source": "/docs/mainnet",
             "destination": "/mainnet-risks",
             "permanent": false
