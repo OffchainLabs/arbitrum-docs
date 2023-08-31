@@ -15,14 +15,10 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Quickstart: Build a dApp (Rust)',
+    title: 'Quickstart: Stylus',
     Svg: require('@site/static/img/stylus-logo.svg').default,
-    href: '/stylus/stylus-gentle-introduction',
-    description: (
-      <>
-        Learn about Stylus, a new way to write EVM+ smart contracts using Rust and other languages.
-      </>
-    ),
+    href: '/stylus/quickstart',
+    description: <>Use Stylus to write an EVM-compatible smart contract in Rust.</>,
   },
   {
     title: 'Quickstart: Build a dApp (Solidity)',
