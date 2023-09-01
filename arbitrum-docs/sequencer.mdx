@@ -27,7 +27,7 @@ First, they submit their L2 message via L1 into the delayed Inbox as described a
 
 Once in the delayed Inbox, we obviously can’t rely on the Sequencer to include the transaction in a batch. Instead, we can use `SequencerInbox`’s `forceInclusion` method. Once a message has been in the delayed Inbox for a sufficient amount of time, `forceInclusion` can be called to move it from the delayed Inbox into the core Inbox, at which point it’s finalized. Crucially, any account can call `forceInclusion`.
 
-Currently, on Arbitrum One, this delay time between submission and force inclusion is roughly 24 hours, as specified by `maxTimeVariation.delayBlocks` / `maxTimeVariation.delaySeconds`. A force inclusion from L1 would directly affect the state for any unconfirmed L2 transactions; keeping conservatively high delay value ensures it should only be used under extraordinary circumstances.
+Currently, on Arbitrum One, this delay time between submission and force inclusion is roughly @arbOneForceIncludePeriodHours hours, as specified by `maxTimeVariation.delayBlocks` / `maxTimeVariation.delaySeconds`. A force inclusion from L1 would directly affect the state for any unconfirmed L2 transactions; keeping conservatively high delay value ensures it should only be used under extraordinary circumstances.
 
 On top of the delay itself, the `forceInclusion` path has the downside of uncertainty around transaction ordering; i.e., while waiting for a message's max delay to pass, a malicious Sequencer could, in principle, directly post messages in front of it. However, there’s ultimately nothing the Sequencer can do to stop it from being included in the core Inbox, at which point its ordering is finalized.
 
