@@ -19,7 +19,7 @@ This table provides an overview of the available public RPC endpoints for the St
 
 :::caution
 
-Unlike `https://arb1.arbitrum.io/rpc`, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
+Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
 
 :::
 
