@@ -49,7 +49,7 @@
   }
 }
 
-.button {
+.heroBanner .button {
   font-size: 14px;
   font-weight: 500;
   font-family: var(--arbitrum-font-family);
@@ -61,6 +61,6 @@
   cursor: pointer;
 }
 
-.button:hover {
+.heroBanner .button:hover {
   opacity: 70%;
 }
