@@ -48,7 +48,7 @@ pub struct SubStruct {
 }
 ```
 
-Any type implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus-sdk/trait.StorageType.html) trait may be used as a field, including other structs, which will implement the trait automatically when `#[solidity_storage]` is applied. You can even implement [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus-sdk/trait.StorageType.html) yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
+Any type implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait may be used as a field, including other structs, which will implement the trait automatically when `#[solidity_storage]` is applied. You can even implement [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
 
 | Type              | Info                                                                 |
 | ----------------- | -------------------------------------------------------------------- |
