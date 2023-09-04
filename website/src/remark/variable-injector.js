@@ -61,7 +61,7 @@ const plugin = (options) => {
         case 'text':
           node.value = value;
           break;
-          
+
         case 'definition':
         case 'link':
           node.url = value;
