@@ -1,16 +1,16 @@
 ---
-title: "A gentle introduction to Stylus"
-sidebar_label: "A gentle introduction to Stylus"
-description: "An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages."
+title: 'A gentle introduction to Stylus'
+sidebar_label: 'A gentle introduction to Stylus'
+description: 'An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages.'
 author: amarrazza
 sme: amarrazza
-target_audience: "Developers who want to build on Arbitrum using popular programming languages, like Rust"
+target_audience: 'Developers who want to build on Arbitrum using popular programming languages, like Rust'
 sidebar_position: 1
 ---
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from './partials/\_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
