@@ -1,16 +1,16 @@
 ---
-title: 'A gentle introduction to Stylus'
-sidebar_label: 'A gentle introduction to Stylus'
-description: 'An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages.'
+title: "A gentle introduction to Stylus"
+sidebar_label: "A gentle introduction to Stylus"
+description: "An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages."
 author: amarrazza
 sme: amarrazza
-target_audience: 'Developers who want to build on Arbitrum using popular programming languages, like Rust'
+target_audience: "Developers who want to build on Arbitrum using popular programming languages, like Rust"
 sidebar_position: 1
 ---
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/\_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -27,7 +27,7 @@ This introduction is for developers who want to build on Arbitrum using popular 
 
 ### What's Stylus?
 
-Stylus is an upgrade to Arbitrum Nitro, the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm \*EVM**+\*** since **everything is entirely additive.**
+Stylus is an upgrade to Arbitrum Nitro, the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **EVM\+** since **everything is entirely additive.**
 
 ![Stylus gives you EVM+](./assets/stylus-gives-you-evm-plus.png)
 
@@ -81,7 +81,7 @@ In principle, developers can write smart contracts in any programming language t
 
 Initially, there will be support for Rust, C, and C++. However, the levels of support will differ at first. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat too, which will enable deploying existing contracts in those languages on-chain with minimal modifications.
 
-The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/crate/stylus-sdk).
+The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use in Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/crate/stylus-sdk).
 
 #### Compilation
 
@@ -89,7 +89,7 @@ Stylus programs are compiled twice. Once from a high-level language (such as Rus
 
 The first stage of compilation happens either using the CLI tool provided in the Stylus SDK for Rust or by using any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted on-chain. While the contract's behavior is now defined, it still cannot be called until after it's activated.
 
-Activating a Stylus program requires a new precompile, `ArbWasm`. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure user programs can be safely executed and deterministically fraud proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute.
+Activating a Stylus program requires a new precompile, `ArbWasm`. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure user programs can be safely executed and deterministically fraud-proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute.
 
 <!--
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called “ink,” which is similar to Ethereum's gas but is thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that thousands of WASM opcodes could be executed in the same time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements.
