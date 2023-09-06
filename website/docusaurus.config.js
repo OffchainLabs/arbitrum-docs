@@ -8,7 +8,7 @@ const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const config = {
   title: 'Arbitrum Docs',
   tagline: 'Arbitrum Docs',
-  url: 'https://developer.arbitrum.io/',
+  url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',

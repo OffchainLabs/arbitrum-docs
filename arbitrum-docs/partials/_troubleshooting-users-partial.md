@@ -85,13 +85,15 @@
 
 <p>The <em>Validators</em> are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.</p>
 
-<p>Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, the single Sequencer will be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't <em>strictly</em> necessary for Arbitrum One to achieve its most fundamental properties.</p>
+<p><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">Currently</a>, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't <em>strictly</em> necessary for Arbitrum One to achieve its most fundamental properties.</p>
 
 <p>In other words: <em><strong>An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!</strong></em></p>
 
 <p>Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the <em>Validators</em>.</p>
 
-<p>Arbitrum One's Validator set is currently allowlisted; overtime, the allowlist will grow and then be removed entirely. For more info see <a href="https://developer.arbitrum.io/mainnet-beta">"Mainnet Beta"</a>.</p>
+<p>Arbitrum One's Validator set is currently whitelisted; overtime, we expect <a href="https://docs.arbitrum.foundation/">governance</a> to expand the whitelist and eventually be removed entirely. For more info see <a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">"State of Progressive Decentralization"</a>.</p>
+
+<p></p>
 
 
 
