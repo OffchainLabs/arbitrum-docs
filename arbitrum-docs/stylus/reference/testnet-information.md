@@ -11,6 +11,12 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 <PublicPreviewBannerPartial />
 
+:::caution
+
+Stylus is undergoing major upgrades, and some improvements are expected to require a chain reset. Prior to a reset, developers on the testnet are recommened to withdraw their testnet ETH (there is no 7-day delay since this is a testnet, withdrawals are processed in minutes) and redeploy their contracts on the new chain. There will be advanced warning of any resets. Stay up-to-date by joining the Stylus channel in [Discord](https://discord.com/invite/arbitrum).
+
+:::
+
 This table provides an overview of the available public RPC endpoints for the Stylus testnet and necessary details to interact with them.
 
 | Name           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
