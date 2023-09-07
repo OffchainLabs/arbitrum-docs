@@ -30,9 +30,9 @@ Most users will want to use the standard library, which is available since the S
 
 Rust smart contracts may use state that persists across transactions. There’s two primary ways to define storage, depending on if you want to use Rust or Solidity definitions. Both are equivalent, and are up to the developer depending on their needs.
 
-### `#[solidity_storage]`
+### [`#[solidity_storage]`][solidity_storage]
 
-The `#[solidity_storage]` macro allows a Rust struct to be used in persistent storage.
+The [`#[solidity_storage]`][solidity_storage] macro allows a Rust struct to be used in persistent storage.
 
 ```rust
 #[solidity_storage]
@@ -48,26 +48,26 @@ pub struct SubStruct {
 }
 ```
 
-Any type implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus-sdk/trait.StorageType.html) trait may be used as a field, including other structs, which will implement the trait automatically when `#[solidity_storage]` is applied. You can even implement [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus-sdk/trait.StorageType.html) yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
+Any type implementing the [`StorageType`][StorageType] trait may be used as a field, including other structs, which will implement the trait automatically when [`#[solidity_storage]`][solidity_storage] is applied. You can even implement [`StorageType`][StorageType] yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
 
-| Type              | Info                                                                 |
-| ----------------- | -------------------------------------------------------------------- |
-| StorageBool       | Stores a bool                                                        |
-| StorageAddress    | Stores an Alloy Address                                              |
-| StorageUint       | Stores an Alloy Uint                                                 |
-| StorageSigned     | Stores an Alloy Signed                                               |
-| StorageFixedBytes | Stores an Alloy FixedBytes                                           |
-| StorageBytes      | Stores a Solidity bytes                                              |
-| StorageString     | Stores a Solidity string                                             |
-| StorageVec        | Stores a vector of StorageType                                       |
-| StorageMap        | Stores a mapping of StorageKey to StorageType                        |
-| StorageArray      | Not yet implement, but will store a fixed-sized array of StorageType |
+| Type                                     | Info                                                                           |
+|------------------------------------------|--------------------------------------------------------------------------------|
+| [`StorageBool`][StorageBool]             | Stores a bool                                                                  |
+| [`StorageAddress`][StorageAddress]       | Stores an Alloy [`Address`][Address]                                           |
+| [`StorageUint`][StorageUint]             | Stores an Alloy [`Uint`][Uint]                                                 |
+| [`StorageSigned`][StorageSigned]         | Stores an Alloy [`Signed`][Signed]                                             |
+| [`StorageFixedBytes`][StorageFixedBytes] | Stores an Alloy [`FixedBytes`][FixedBytes]                                     |
+| [`StorageBytes`][StorageBytes]           | Stores a Solidity bytes                                                        |
+| [`StorageString`][StorageString]         | Stores a Solidity string                                                       |
+| [`StorageVec`][StorageVec]               | Stores a vector of [`StorageType`][StorageType]                                |
+| [`StorageMap`][StorageMap]               | Stores a mapping of [`StorageKey`][StorageKey] to [`StorageType`][StorageType] |
+| [`StorageArray`][StorageArray]           | Stores a fixed-sized array of [`StorageType`][StorageType]                     |
 
-Every [Alloy primitive](https://docs.rs/alloy-primitives/latest/alloy_primitives/) has a corresponding `StorageType` implementation with the word `Storage` before it. This includes aliases, like `StorageU256` and `StorageB64`.
+Every [Alloy primitive][alloy_primitives] has a corresponding [`StorageType`][StorageType] implementation with the word `Storage` before it. This includes aliases, like [`StorageU256`][StorageUint256] and [`StorageB64`][StorageB64].
 
-### `sol_storage!`
+### [`sol_storage!`][sol_storage]
 
-The types in `#[solidity_storage]` are laid out in the EVM state trie exactly as they are in [Solidity](https://docs.soliditylang.org/en/v0.8.20/abi-spec.html#basic-design). This means that the fields of a struct definition will map to the same storage slots as they would in EVM programming languages.
+The types in [`#[solidity_storage]`][solidity_storage] are laid out in the EVM state trie exactly as they are in [Solidity][sol_abi]. This means that the fields of a struct definition will map to the same storage slots as they would in EVM programming languages.
 
 Because of this, it is often nice to define your types using Solidity syntax, which makes that guarantee easier to see. For example, the earlier Rust struct can re-written to:
 
@@ -87,9 +87,9 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the `StorageType` trait. Many contracts, like our example ERC 20, do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`][StorageType] trait. Many contracts, like [our example ERC 20][erc20], do exactly this.
 
-Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/v0.8.20/abi-spec.html#basic-design), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
+Because the layout is identical to [Solidity’s][sol_abi], existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
 :::tip
 Existing Solidity smart contracts can upgrade to Rust if they use proxy patterns
@@ -118,7 +118,7 @@ impl Contract {
 }
 ```
 
-In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying `SLOAD` or `SSTORE` operations.
+In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`][SLOAD] or [`SSTORE`][SSTORE] operations.
 
 :::tip
 Stylus uses storage caching, so multiple accesses of the same variable is virtually free.
@@ -128,7 +128,7 @@ However it must be said that storage is ultimately more expensive than memory. S
 
 ### Collections
 
-Collections like `StorageVec` and `StorageMap` are dynamic and have methods like `push`, `insert`, `replace`, and similar.
+Collections like [`StorageVec`][StorageVec] and [`StorageMap`][StorageMap] are dynamic and have methods like [`push`][StorageVec_push], [`insert`][StorageMap_insert], [`replace`][StorageMap_replace], and similar.
 
 ```rust
 impl SubStruct {
@@ -142,7 +142,7 @@ impl SubStruct {
 }
 ```
 
-You may notice that some methods return types like `StorageGuard` and `StorageGuardMut`. This allows us to leverage the Rust borrow checker for storage mistakes, just like it does for memory. Here’s an example that will fail to compile.
+You may notice that some methods return types like [`StorageGuard`][StorageGuard] and [`StorageGuardMut`][StorageGuardMut]. This allows us to leverage the Rust borrow checker for storage mistakes, just like it does for memory. Here’s an example that will fail to compile.
 
 ```rust
 fn mistake(vec: &mut StorageVec<StorageU64>) -> U64 {
@@ -154,13 +154,13 @@ fn mistake(vec: &mut StorageVec<StorageU64>) -> U64 {
 }
 ```
 
-Under the hood, `vec.setter()` returns a `StorageGuardMut` instead of a `&mut StorageU64`. Because the guard is bound to a `&mut StorageVec` lifetime, `value` and `alias` cannot be alive simultaneously. This causes the Rust compiler to reject the above code, saving you from entire classes of storage aliasing errors.
+Under the hood, [`vec.setter()`][StorageVec_setter] returns a [`StorageGuardMut`][StorageGuardMut] instead of a [`&mut StorageU64`][StorageU64]. Because the guard is bound to a [`&mut StorageVec`][StorageVec] lifetime, `value` and `alias` cannot be alive simultaneously. This causes the Rust compiler to reject the above code, saving you from entire classes of storage aliasing errors.
 
 In this way the Stylus SDK safeguards storage access the same way Rust ensures memory safety. It should never be possible to alias Storage without `unsafe` Rust.
 
-### `SimpleStorageType`
+### [`SimpleStorageType`][SimpleStorageType]
 
-You may run into scenarios where a collection’s methods like `push` and `insert` aren’t available. This is because only primitives, which implement a special trait called `SimpleStorageType`, can be added to a collection by value. For nested collections, one instead uses the equivalent `grow` and `setter`.
+You may run into scenarios where a collection’s methods like [`push`][StorageVec_push] and [`insert`][StorageMap_insert] aren’t available. This is because only primitives, which implement a special trait called [`SimpleStorageType`][SimpleStorageType], can be added to a collection by value. For nested collections, one instead uses the equivalent [`grow`][StorageVec_grow] and [`setter`][StorageVec_setter].
 
 ```rust
 fn nested_vec(vec: &mut StorageVec<StorageVec<StorageU8>>) {
@@ -174,11 +174,11 @@ fn nested_map(map: &mut StorageMap<u32, StorageVec<U8>>) {
 }
 ```
 
-### `Erase` and `#[derive(Erase)]`
+### [`Erase`][Erase] and [`#[derive(Erase)]`][derive_erase]
 
-Some `StorageType` values implement `Erase`, which provides an `erase()` method for clearing state. We’ve implemented `Erase` for all primitives, and for vectors of primitives, but not maps. This is because a solidity `mapping` does not provide iteration, and so it’s generally impossible to know which slots to set to zero.
+Some [`StorageType`][StorageType] values implement [`Erase`][Erase], which provides an [`erase()`][erase] method for clearing state. We’ve implemented [`Erase`][Erase] for all primitives, and for vectors of primitives, but not maps. This is because a solidity [`mapping`][mapping] does not provide iteration, and so it’s generally impossible to know which slots to set to zero.
 
-Structs may also be `Erase` if all of the fields are. `#[derive(Erase)]` lets you do this automatically.
+Structs may also be [`Erase`][Erase] if all of the fields are. [`#[derive(Erase)]`][derive_erase] lets you do this automatically.
 
 ```rust
 sol_storage! {
@@ -195,17 +195,17 @@ sol_storage! {
 }
 ```
 
-You can also implement `Erase` manually if desired. Note that the reason we care about `Erase` at all is that you get storage refunds when clearing state, lowering fees. There’s also minor implications for patterns using `unsafe` Rust.
+You can also implement [`Erase`][Erase] manually if desired. Note that the reason we care about [`Erase`][Erase] at all is that you get storage refunds when clearing state, lowering fees. There’s also minor implications for patterns using `unsafe` Rust.
 
 ### The storage cache
 
-The Stylus SDK employs an optimal storage-caching policy that avoids the underlying `SLOAD` or `SSTORE` operations needed to get and set state. For the vast majority of use cases, this happens in the background and requires no input from the user.
+The Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`][SLOAD] or [`SSTORE`][SSTORE] operations needed to get and set state. For the vast majority of use cases, this happens in the background and requires no input from the user.
 
-However, developers working with `unsafe` Rust implementing their own custom `StorageType` collections, the `StorageCache` type enables direct control over this data structure. Included are `unsafe` methods for manipulating the cache directly, as well as for bypassing it altogether.
+However, developers working with `unsafe` Rust implementing their own custom [`StorageType`][StorageType] collections, the [`StorageCache`][StorageCache] type enables direct control over this data structure. Included are `unsafe` methods for manipulating the cache directly, as well as for bypassing it altogether.
 
-### Immutables and `PhantomData`
+### Immutables and [`PhantomData`][PhantomData]
 
-So that generics are possible in `sol_interface!`, `core::marker::PhantomData` implements `StorageType` and takes up zero space, ensuring that it won’t cause storage slots to change. This can be useful when writing libraries.
+So that generics are possible in [`sol_interface!`][sol_interface], [`core::marker::PhantomData`][PhantomData] implements [`StorageType`][StorageType] and takes up zero space, ensuring that it won’t cause storage slots to change. This can be useful when writing libraries.
 
 ```rust
 pub trait Erc20Params {
@@ -222,13 +222,11 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of `Erc20` to choose immutable constants via specialization. See our WETH sample contract for a full example of this feature.
+The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract][erc20] for a full example of this feature.
 
 ### Future storage work
 
-The Stylus SDK is currently in alpha and will improve in the coming versions. Something you may notice is that storage access patterns are often a bit verbose. This will change soon when we implement `DerefMut` for most types.
-
-Another area for improvement we expect to land very soon is support for fixed arrays of `StorageType`. There’s nothing conceptually different about them, but we just haven’t finished implementing them. There’s other improvements we intend to make to structs too.
+The Stylus SDK is currently in alpha and will improve in the coming versions. Something you may notice is that storage access patterns are often a bit verbose. This will change soon when we implement [`DerefMut`][DerefMut] for most types.
 
 ## Methods
 
@@ -238,9 +236,9 @@ Just as with storage, Stylus SDK methods are Solidity ABI equivalent. This means
 Stylus programs compose regardless of programming language. For example, existing Solidity DEXs can list Rust ERC-20s without modification.
 :::
 
-### `#[external]`
+### [`#[external]`][external]
 
-This macro makes methods “external” so that other contracts can call them by implementing the `Router` trait.
+This macro makes methods “external” so that other contracts can call them by implementing the [`Router`][Router] trait.
 
 ```rust
 #[external]
@@ -259,9 +257,9 @@ impl Contract {
 }
 ```
 
-Note that, currently, all external methods must return a `Result` with the error type `Vec<u8>`. We intend to change this very soon. In the current model, `Vec<u8>` becomes the program’s revert data, which we intend to both make optional and richly typed.
+Note that, currently, all external methods must return a [`Result`][Result] with the error type [`Vec<u8>`][Vec]. We intend to change this very soon. In the current model, [`Vec<u8>`][Vec] becomes the program’s revert data, which we intend to both make optional and richly typed.
 
-### `#[payable]`
+### [`#[payable]`][payable]
 
 As in Solidity, methods may accept ETH as call value.
 
@@ -275,15 +273,15 @@ impl Contract {
 }
 ```
 
-In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with `#[payable]`, or else calls to it will revert. This is required as a safety measure since it prevents vulnerabilities based on covertly updating contract balances.
+In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with [`#[payable]`][external], or else calls to it will revert. This is required as a safety measure since it prevents vulnerabilities based on covertly updating contract balances.
 
-### `#[pure]`, `#[view]`, and `#[write]`
+### [`#[pure]`][pure], [`#[view]`][view], and `#[write]`
 
-For aesthetics, these additional purity attributes exist to clarify that a method is `pure`, `view`, or `write`. They aren’t necessary though, since the `#[external]` macro can figure purity out for you based on the types of the arguments.
+For aesthetics, these additional purity attributes exist to clarify that a method is [`pure`][pure], [`view`][view], or `write`. They aren’t necessary though, since the [`#[external]`][external] macro can figure purity out for you based on the types of the arguments.
 
-For example, if a method includes an `&self`, it’s at least `view`. If you’d prefer it be `write`, applying `#[write]` will make it so. Note however that the reverse is not allowed. An `&mut self` method cannot be made `#[view]`, since it might mutate state.
+For example, if a method includes an `&self`, it’s at least [`view`][view]. If you’d prefer it be `write`, applying `#[write]` will make it so. Note however that the reverse is not allowed. An `&mut self` method cannot be made [`#[view]`][view], since it might mutate state.
 
-### `#[entrypoint]`
+### [`#[entrypoint]`][entrypoint]
 
 This macro allows you to define the entrypoint, which is where Stylus execution begins. Without it, the contract will fail to pass `cargo stylus check`. Most commonly, the macro is used to annotate the top level storage struct.
 
@@ -301,11 +299,11 @@ sol_storage! {
 }
 ```
 
-The above will make the external methods of `Contract` the first to consider during invocation. In a later section we’ll discuss inheritance, which will allow the `#[external]` methods of other types to be invoked as well.
+The above will make the external methods of `Contract` the first to consider during invocation. In a later section we’ll discuss inheritance, which will allow the [`#[external]`][external] methods of other types to be invoked as well.
 
 ### Bytes-in, bytes-out programming
 
-A less common usage of `#[entrypoint]` is for low-level, bytes-in bytes-out programming. When applied to a free-standing function, a different way of writing smart contracts becomes possible, where the Rust SDK’s macros and storage types are entirely optional.
+A less common usage of [`#[entrypoint]`][entrypoint] is for low-level, bytes-in bytes-out programming. When applied to a free-standing function, a different way of writing smart contracts becomes possible, where the Rust SDK’s macros and storage types are entirely optional.
 
 ```rust
 #[entrypoint]
@@ -326,13 +324,13 @@ This is dangerous, and should be done only after careful review — ideally by 3
 
 If enabled, the Stylus SDK will flush the storage cache in between reentrant calls, persisting values to state that might be used by inner calls. Note that preventing storage invalidation is only part of the battle in the fight against exploits. You can tell if a call is reentrant via `msg::reentrant`, and condition your business logic accordingly.
 
-### `TopLevelStorage`
+### [`TopLevelStorage`][TopLevelStorage]
 
-The `#[entrypoint]` macro will automatically implement the `TopLevelStorage` trait for the annotated `struct`. The single type implementing `TopLevelStorage` is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
+The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
 ### Inheritance, `#[inherit]`, and `#[borrow]`.
 
-Composition in Rust follows that of Solidity. Types that implement `Router`, the trait that `#[external]` provides, can be connected via inheritance.
+Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[external]`][external] provides, can be connected via inheritance.
 
 ```rust
 #[external]
@@ -351,13 +349,13 @@ impl Erc20 {
 }
 ```
 
-Because `Token` inherits `Erc20` in the above, if `Token` has the `#[entrypoint]`, calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
+Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`][entrypoint], calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
 
 Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the ERC 20, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
-Note that for the above to work, `Token` must implement `Borrow<Erc20>`. You can implement this yourself, but for simplicity, `#[solidity_storage]` and `sol_storage!` provide a `#[borrow]` annotation.
+Note that for the above to work, `Token` must implement [`Borrow<Erc20>`][Borrow]. You can implement this yourself, but for simplicity, [`#[solidity_storage]`][solidity_storage] and [`sol_storage!`][sol_storage] provide a `#[borrow]` annotation.
 
 ```rust
 sol_storage! {
@@ -374,13 +372,13 @@ sol_storage! {
 }
 ```
 
-In the future we plan to simplify the SDK so that `Borrow` isn’t needed and so that `Router` composition is more configurable. The motivation for this becomes clearer in complex cases of multi-level inheritance, which we intend to improve.
+In the future we plan to simplify the SDK so that [`Borrow`][Borrow] isn’t needed and so that [`Router`][Router] composition is more configurable. The motivation for this becomes clearer in complex cases of multi-level inheritance, which we intend to improve.
 
 ## Exporting a Solidity interface
 
-Recall that Stylus contracts are fully interoperable across all languages, including Solidity. The Stylus SDK provides tools for exporting a Solidity interface for your contract so that others can call it. This is usually done with the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis), but we’ll detail how to do it manually here.
+Recall that Stylus contracts are fully interoperable across all languages, including Solidity. The Stylus SDK provides tools for exporting a Solidity interface for your contract so that others can call it. This is usually done with the `cargo stylus` [CLI tool][abi_export], but we’ll detail how to do it manually here.
 
-The SDK does this automatically for you via a feature flag called `export-abi` that causes the `#[external]` and `#[entrypoint]` macros to generate a `main` function that prints the Solidity ABI to the console.
+The SDK does this automatically for you via a feature flag called `export-abi` that causes the [`#[external]`][external] and [`#[entrypoint]`][entrypoint] macros to generate a `main` function that prints the Solidity ABI to the console.
 
 ```rust
 cargo run --features export-abi --target <triple>
@@ -418,7 +416,7 @@ If you're waiting for this content to be completed, click the `Request an update
 
 :::
 
-### `sol_interface!`
+### [`sol_interface!`][sol_interface]
 
 _Coming soon!_
 
@@ -430,13 +428,13 @@ _Coming soon!_
 
 _Coming soon!_
 
-### `transfer_eth`
+### [`transfer_eth`][transfer_eth]
 
 _Coming soon!_
 
-### `RawCall` and `unsafe` calls
+### [`RawCall`][RawCall] and `unsafe` calls
 
-Occasionally, an untyped call to another contract is necessary. `RawCall` lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a `File` in Rust.
+Occasionally, an untyped call to another contract is necessary. [`RawCall`][RawCall] lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
 
 ```rust
 let data = RawCall::new_delegate()   // configure a delegate call
@@ -446,19 +444,19 @@ let data = RawCall::new_delegate()   // configure a delegate call
     .call(contract, calldata)?;      // do the call
 ```
 
-Note that the `call` method is `unsafe`. This is due to reentrancy, and the fact that the call does not require clearing the storage cache.
+Note that the [`call`][RawCall_call] method is `unsafe`. This is due to reentrancy, and the fact that the call does not require clearing the storage cache.
 
-## `RawDeploy` and `unsafe` deployments
+## [`RawDeploy`][RawDeploy] and `unsafe` deployments
 
-Right now the only way to deploy a contract from inside Rust is to use `RawDeploy`, similar to `RawCall`. As with `RawCall`, this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the `StorageCache`.
+Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`][RawDeploy], similar to [`RawCall`][RawCall]. As with [`RawCall`][RawCall], this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`][StorageCache].
 
 Note that the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
 
-When configured with a `salt`, `RawDeploy` will use `CREATE2` instead of the default `CREATE`, facilitating address determinism.
+When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CREATE2] instead of the default [`CREATE`][CREATE], facilitating address determinism.
 
 ## Events
 
-Emitting Solidity-style events is supported out-of-the-box with the Rust SDK. They can be defined in Solidity syntax using Alloy’s `sol!` macro, and then used as input arguments to `evm::log`. The function accepts any type that implements Alloy’s `SolEvent` trait.
+Emitting Solidity-style events is supported out-of-the-box with the Rust SDK. They can be defined in Solidity syntax using Alloy’s [`sol!`][alloy_sol] macro, and then used as input arguments to [`evm::log`][evm_log]. The function accepts any type that implements Alloy’s [`SolEvent`][SolEvent] trait.
 
 ```rust
 sol! {
@@ -476,7 +474,7 @@ fn foo() {
 }
 ```
 
-The SDK also exposes a low-level, `evm::raw_log` that takes in raw bytes and topics:
+The SDK also exposes a low-level, [`evm::raw_log`][raw_log] that takes in raw bytes and topics:
 
 ```rust
 /// Emits an evm log from combined topics and data. The topics come first.
@@ -493,11 +491,94 @@ use stylus_sdk::{block, contract, crypto, evm, msg, tx};
 let callvalue = msg::value();
 ```
 
-| Rust SDK Module | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| block           | block info for the number, timestamp, etc.            |
-| contract        | contract info, such as its address, balance           |
-| crypto          | VM accelerated cryptography                           |
-| evm             | ink / memory access functions                         |
-| msg             | sender, value, and reentrancy detection               |
-| tx              | gas price, ink price, origin, and other tx-level info |
+| Rust SDK Module               | Description                                           |
+|-------------------------------|-------------------------------------------------------|
+| [`block`][module_block]       | block info for the number, timestamp, etc.            |
+| [`contract`][module_contract] | contract info, such as its address, balance           |
+| [`crypto`][module_crypto]     | VM accelerated cryptography                           |
+| [`evm`][module_evm]           | ink / memory access functions                         |
+| [`msg`][module_msg]           | sender, value, and reentrancy detection               |
+| [`tx`][module_tx]             | gas price, ink price, origin, and other tx-level info |
+
+[abi_export]: https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis
+
+[StorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html
+[StorageKey]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageKey.html
+[SimpleStorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html
+[TopLevelStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html
+[Erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html
+[erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase
+[StorageCache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html
+[EagerStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.EagerStorage.html
+
+[StorageBool]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
+[StorageAddress]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html
+[StorageUint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageUint.html
+[StorageUint256]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU256.html
+[StorageU64]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU64.html
+[StorageB64]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageB64.html
+[StorageSigned]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageSigned.html
+[StorageFixedBytes]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageFixedBytes.html
+[StorageBytes]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBytes.html
+[StorageString]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageString.html
+[StorageVec]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html
+[StorageMap]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html
+[StorageArray]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageArray.html
+[StorageGuard]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuard.html
+[StorageGuardMut]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html
+
+[Address]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html
+[Uint]: https://docs.rs/ruint/1.10.1/ruint/struct.Uint.html
+[Signed]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html
+[FixedBytes]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.FixedBytes.html
+[alloy_sol]: https://docs.rs/alloy-sol-macro/latest/alloy_sol_macro/macro.sol.html
+
+[evm_log]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.log.html
+[raw_log]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.raw_log.html
+[SolEvent]: https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolEvent.html
+
+[module_block]: https://docs.rs/stylus-sdk/latest/stylus_sdk/block/index.html
+[module_contract]: https://docs.rs/stylus-sdk/latest/stylus_sdk/contract/index.html
+[module_crypto]: https://docs.rs/stylus-sdk/latest/stylus_sdk/crypto/index.html
+[module_evm]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/index.html
+[module_msg]: https://docs.rs/stylus-sdk/latest/stylus_sdk/msg/index.html
+[module_tx]: https://docs.rs/stylus-sdk/latest/stylus_sdk/tx/index.html
+
+[alloy_primitives]: https://docs.rs/alloy-primitives/latest/alloy_primitives/
+[erc20]: https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs
+[SLOAD]: https://www.evm.codes/#54
+[SSTORE]: https://www.evm.codes/#55
+[CREATE]: https://www.evm.codes/#f0
+[CREATE2]: https://www.evm.codes/#f5
+
+[StorageVec_push]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.push
+[StorageVec_grow]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.grow
+[StorageVec_setter]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.setter
+[StorageMap_insert]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.insert
+[StorageMap_replace]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.replace
+
+[Router]: https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html
+[transfer_eth]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html
+[RawCall]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html
+[RawCall_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call
+[RawDeploy]: https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html
+
+[solidity_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.solidity_storage.html
+[sol_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
+[sol_interface]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html
+[derive_erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html
+[external]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.external.html
+[entrypoint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html
+
+[PhantomData]: https://doc.rust-lang.org/core/marker/struct.PhantomData.html
+[DerefMut]: https://doc.rust-lang.org/core/ops/trait.DerefMut.html
+[Result]: https://doc.rust-lang.org/core/result/
+[Vec]: https://doc.rust-lang.org/alloc/vec/struct.Vec.html
+[Borrow]: https://doc.rust-lang.org/core/borrow/trait.Borrow.html
+[File]: https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
+
+[sol_abi]: https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html
+[pure]: https://docs.soliditylang.org/en/develop/contracts.html#pure-functions
+[view]: https://docs.soliditylang.org/en/develop/contracts.html#view-functions
+[payable]: https://docs.alchemy.com/docs/solidity-payable-functions
+[mapping]: https://docs.soliditylang.org/en/latest/types.html#mapping-types
