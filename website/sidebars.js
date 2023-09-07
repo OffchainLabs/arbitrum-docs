@@ -297,6 +297,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Chain Params',
+          id: 'for-devs/chain-params',
+        },
+        {
+          type: 'doc',
           label: 'Precompiles',
           id: 'for-devs/dev-tools-and-resources/precompiles',
         },
