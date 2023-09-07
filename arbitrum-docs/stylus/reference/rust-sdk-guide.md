@@ -51,7 +51,7 @@ pub struct SubStruct {
 Any type implementing the [`StorageType`][StorageType] trait may be used as a field, including other structs, which will implement the trait automatically when [`#[solidity_storage]`][solidity_storage] is applied. You can even implement [`StorageType`][StorageType] yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
 
 | Type                                     | Info                                                                           |
-|------------------------------------------|--------------------------------------------------------------------------------|
+| ---------------------------------------- | ------------------------------------------------------------------------------ |
 | [`StorageBool`][StorageBool]             | Stores a bool                                                                  |
 | [`StorageAddress`][StorageAddress]       | Stores an Alloy [`Address`][Address]                                           |
 | [`StorageUint`][StorageUint]             | Stores an Alloy [`Uint`][Uint]                                                 |
@@ -492,7 +492,7 @@ let callvalue = msg::value();
 ```
 
 | Rust SDK Module               | Description                                           |
-|-------------------------------|-------------------------------------------------------|
+| ----------------------------- | ----------------------------------------------------- |
 | [`block`][module_block]       | block info for the number, timestamp, etc.            |
 | [`contract`][module_contract] | contract info, such as its address, balance           |
 | [`crypto`][module_crypto]     | VM accelerated cryptography                           |
@@ -501,7 +501,6 @@ let callvalue = msg::value();
 | [`tx`][module_tx]             | gas price, ink price, origin, and other tx-level info |
 
 [abi_export]: https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis
-
 [StorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html
 [StorageKey]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageKey.html
 [SimpleStorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html
@@ -510,7 +509,6 @@ let callvalue = msg::value();
 [erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase
 [StorageCache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html
 [EagerStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.EagerStorage.html
-
 [StorageBool]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
 [StorageAddress]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html
 [StorageUint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageUint.html
@@ -526,57 +524,48 @@ let callvalue = msg::value();
 [StorageArray]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageArray.html
 [StorageGuard]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuard.html
 [StorageGuardMut]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html
-
 [Address]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html
 [Uint]: https://docs.rs/ruint/1.10.1/ruint/struct.Uint.html
 [Signed]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html
 [FixedBytes]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.FixedBytes.html
 [alloy_sol]: https://docs.rs/alloy-sol-macro/latest/alloy_sol_macro/macro.sol.html
-
 [evm_log]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.log.html
 [raw_log]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/fn.raw_log.html
 [SolEvent]: https://docs.rs/alloy-sol-types/latest/alloy_sol_types/trait.SolEvent.html
-
 [module_block]: https://docs.rs/stylus-sdk/latest/stylus_sdk/block/index.html
 [module_contract]: https://docs.rs/stylus-sdk/latest/stylus_sdk/contract/index.html
 [module_crypto]: https://docs.rs/stylus-sdk/latest/stylus_sdk/crypto/index.html
 [module_evm]: https://docs.rs/stylus-sdk/latest/stylus_sdk/evm/index.html
 [module_msg]: https://docs.rs/stylus-sdk/latest/stylus_sdk/msg/index.html
 [module_tx]: https://docs.rs/stylus-sdk/latest/stylus_sdk/tx/index.html
-
 [alloy_primitives]: https://docs.rs/alloy-primitives/latest/alloy_primitives/
 [erc20]: https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs
 [SLOAD]: https://www.evm.codes/#54
 [SSTORE]: https://www.evm.codes/#55
 [CREATE]: https://www.evm.codes/#f0
 [CREATE2]: https://www.evm.codes/#f5
-
 [StorageVec_push]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.push
 [StorageVec_grow]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.grow
 [StorageVec_setter]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.setter
 [StorageMap_insert]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.insert
 [StorageMap_replace]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.replace
-
 [Router]: https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html
 [transfer_eth]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html
 [RawCall]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html
 [RawCall_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call
 [RawDeploy]: https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html
-
 [solidity_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.solidity_storage.html
 [sol_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
 [sol_interface]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html
 [derive_erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html
 [external]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.external.html
 [entrypoint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html
-
 [PhantomData]: https://doc.rust-lang.org/core/marker/struct.PhantomData.html
 [DerefMut]: https://doc.rust-lang.org/core/ops/trait.DerefMut.html
 [Result]: https://doc.rust-lang.org/core/result/
 [Vec]: https://doc.rust-lang.org/alloc/vec/struct.Vec.html
 [Borrow]: https://doc.rust-lang.org/core/borrow/trait.Borrow.html
 [File]: https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
-
 [sol_abi]: https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html
 [pure]: https://docs.soliditylang.org/en/develop/contracts.html#pure-functions
 [view]: https://docs.soliditylang.org/en/develop/contracts.html#view-functions
