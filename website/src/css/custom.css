@@ -742,10 +742,13 @@ h2.anchor {
     margin-top: 35px;
     margin-bottom: 10px;
   }
+  article a:not([data-quicklook-from]):not(.footnote-ref) {
+    text-underline-offset: 5px;
+  }
 }
 article a:not([data-quicklook-from]):not(.footnote-ref) {
   text-decoration: underline;
-  text-underline-offset: 5px;
+  text-underline-offset: 3px;
 }
 /* default mermaid container */
 .docusaurus-mermaid-container {
