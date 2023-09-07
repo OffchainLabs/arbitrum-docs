@@ -273,7 +273,7 @@ impl Contract {
 }
 ```
 
-In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with [`#[payable]`][external], or else calls to it will revert. This is required as a safety measure since it prevents vulnerabilities based on covertly updating contract balances.
+In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with [`#[payable]`][payable], or else calls to it will revert. This is required as a safety measure since it prevents vulnerabilities based on covertly updating contract balances.
 
 ### [`#[pure]`][pure], [`#[view]`][view], and `#[write]`
 
