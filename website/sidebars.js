@@ -615,6 +615,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'proving/osp-assumptions',
+              label: 'One step proof assumptions',
+            },
+            {
+              type: 'doc',
               id: 'proving/wasm-to-wavm',
               label: 'Wasm To WAVM',
             },
