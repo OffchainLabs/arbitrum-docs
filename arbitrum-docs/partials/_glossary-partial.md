@@ -31,7 +31,7 @@
 <p>Current Arbitrum tech stack; runs a fork of <a href="/intro/glossary#geth">Geth</a> and uses WebAssembly as its underlying VM for fraud proofs.</p>
 
 ### Arbitrum Nova {#arbitrum-nova}
-<p>The first <a href="/intro/glossary#arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> running on Ethereum mainnet. Introduces cheaper transactions; great for gaming and social use-cases. Implements the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a>, not the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> protocol. </p>
+<p>The first <a href="/intro/glossary#arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> running on Ethereum mainnet. Introduces cheaper transactions; great for gaming and social use-cases. Implements the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a>, not the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> protocol.</p>
 
 ### Arbitrum One {#arbitrum-one}
 <p>The first <a href="/intro/glossary#arbitrum-rollup-chain">Arbitrum Rollup Chain</a> running on Ethereum mainnet. Fully trustless; inherits Ethereum's base-layer security guarantees without introducing additional trust assumptions; great for decentralized finance and other use-cases that demand L1-level trustlessness.</p>
@@ -56,6 +56,9 @@
 
 ### Blockchain {#blockchain}
 <p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols. </p>
+
+### BOLD {#bold}
+<p>Short for "Bounded Liquidity Delay"; latest version of the Arbitrum <a href="/intro/glossary#challenge-protocol">Challenge protocol</a> designed to eliminate <a href="https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a">delay attack vectors</a> (see <a href="https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc">here</a> for more). Not curently on mainnet. </p>
 
 ### 🧢 CAP Finance {#cap-finance}
 <p>Widely considered the most degen community on Arbitrum.<br />
@@ -232,6 +235,9 @@ If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" i
 <p>The bow and arrow are commonly associated with the Hero's of Tales of Elleria.<br />
 <br />
 Jump into the world of Elleria and go on adventures.</p>
+
+### Time boost {#time-boost}
+<p>A proposed (not currently live) transaction policy in which users can pay a fee to the <a href="/intro/glossary#sequencer">Sequencer</a> for a small ordering advantage. See [here](<a href="https://medium.com/offchainlabs/time-boost-a-new-transaction-ordering-policy-for-arbitrum-5b3066382d62">https://medium.com/offchainlabs/time-boost-a-new-transaction-ordering-policy-for-arbitrum-5b3066382d62</a>) for more.    </p>
 
 ### 🐸 Toadstoolz {#toadstoolz}
 <p>Hidden in the Croakshire, you will find the friendly Toadstoolz. <br />
