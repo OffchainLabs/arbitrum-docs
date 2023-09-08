@@ -125,7 +125,7 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 
 ### Wen mainnet?
 
-Stylus remains in `alpha`, which means there are a lot of planned improvements on the roadmap! A few high-level next steps for Stylus include:
+Stylus is in `alpha`, which means there are a lot of planned improvements on the roadmap! A few high-level next steps for Stylus include:
 
 - An audit of the [Stylus source code](https://github.com/OffchainLabs/stylus) to ensure the safety of the contracts, as well as the [Stylus SDK](https://docs.arbitrum.io/stylus/reference/stylus-sdk)
 - Enabling Stylus for mainnet [Orbit Chains](https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction), which can be deployed and upgraded permissionlessly
