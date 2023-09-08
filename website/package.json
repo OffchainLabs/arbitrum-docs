@@ -45,7 +45,7 @@
     "@docusaurus/module-type-aliases": "^2.1.0",
     "@offchainlabs/prettier-config": "0.2.1",
     "@tsconfig/docusaurus": "^1.0.6",
-    "prettier": "^2.8.3",
+    "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typedoc": "^0.24.8",
     "typedoc-plugin-frontmatter": "^0.0.2",

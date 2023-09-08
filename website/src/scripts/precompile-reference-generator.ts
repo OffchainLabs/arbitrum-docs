@@ -114,11 +114,11 @@ const renderMethodsInTable = (
           return `<tr>
             <td>${methodInfo.deprecated ? `⚠️` : ''}<code>${methodInfo.signature}</code></td>
             <td><a href="${interfaceBaseUrl}${precompileName}.sol#L${
-            methodInfo.interfaceLine
-          }" target="_blank">Interface</a></td>
+              methodInfo.interfaceLine
+            }" target="_blank">Interface</a></td>
             <td><a href="${implementationBaseUrl}${precompileName}.go#L${
-            methodInfo.implementationLine
-          }" target="_blank">Implementation</a></td>
+              methodInfo.implementationLine
+            }" target="_blank">Implementation</a></td>
             <td>${methodInfo.description}</td>
           </tr>`;
         })
