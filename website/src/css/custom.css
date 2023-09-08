@@ -743,6 +743,9 @@ h2.anchor {
     margin-bottom: 10px;
   }
 }
+a:has(code) {
+  text-decoration: none !important;
+}
 article a:not([data-quicklook-from]):not(.footnote-ref) {
   text-decoration: underline;
 }
