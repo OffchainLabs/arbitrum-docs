@@ -141,7 +141,7 @@ const sidebars = {
             {
               type: 'link',
               label: 'Rust crate docs',
-              href: 'https://docs.rs/crate/stylus-sdk',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
             },
             {
               type: 'link',
@@ -294,6 +294,11 @@ const sidebars = {
           type: 'doc',
           label: 'Smart contract addresses',
           id: 'for-devs/useful-addresses',
+        },
+        {
+          type: 'doc',
+          label: 'Chain Params',
+          id: 'for-devs/chain-params',
         },
         {
           type: 'doc',
