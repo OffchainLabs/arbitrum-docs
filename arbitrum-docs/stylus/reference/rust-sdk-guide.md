@@ -408,7 +408,7 @@ interface Weth is Erc20 {
 
 ## Calls
 
-Just as with storage and methods, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the [`cargo stylus`] [CLI tool][abi_export].
+Just as with storage and methods, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool][abi_export].
 
 :::tip
 You can call contracts in any programming language with the Stylus SDK.
@@ -443,7 +443,7 @@ pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Er
 
 Observe the casing change. [`sol_interface!`][sol_interface] computes the selector based on the exact name passed in, which should almost always be `CamelCase`. For aesthetics, the rust functions will instead use `snake_case`.
 
-### Configuring `gas` and `value` with [`Call`]
+### Configuring gas and value with [`Call`][Call]
 
 [`Call`][Call] lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
 
@@ -457,11 +457,11 @@ pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
 }
 ```
 
-By default [`Call`] supplies all gas remaining and zero value, which often means `Call::new()` may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new()`][Call_new] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
 ### Reentrant calls
 
-Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`][`StorageCache_flush`] or [`clear`][StorageCache_clear] the [`StorageCache`][StorageCache] to safeguard state. This happens automatically via the type system.
+Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`][StorageCache_flush] or [`clear`][StorageCache_clear] the [`StorageCache`][StorageCache] to safeguard state. This happens automatically via the type system.
 
 ```rust
 sol_interface! {
