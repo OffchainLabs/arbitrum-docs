@@ -459,7 +459,7 @@ pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
 
 By default [`Call`] supplies all gas remaining and zero value, which often means `Call::new()` may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
-### Reentrant Calls
+### Reentrant calls
 
 Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`][`StorageCache_flush`] or [`clear`][StorageCache_clear] the [`StorageCache`][StorageCache] to safeguard state. This happens automatically via the type system.
 
