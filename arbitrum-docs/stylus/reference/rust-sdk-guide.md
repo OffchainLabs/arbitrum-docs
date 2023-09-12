@@ -443,7 +443,7 @@ pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Er
 
 Observe the casing change. [`sol_interface!`][sol_interface] computes the selector based on the exact name passed in, which should almost always be `CamelCase`. For aesthetics, the rust functions will instead use `snake_case`.
 
-### Configuring Gas and Value with [`Call`]
+### Configuring `gas` and `value` with [`Call`]
 
 [`Call`][Call] lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
 
