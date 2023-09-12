@@ -57,6 +57,9 @@
 ### Blockchain {#blockchain}
 <p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols. </p>
 
+### BOLD {#bold}
+<p>Short for "Bounded Liquidity Delay"; latest version of the Arbitrum <a href="/intro/glossary#challenge-protocol">Challenge protocol</a> designed to eliminate <a href="https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a">delay attack vectors</a> (see <a href="https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc">here</a> for more). Not currently on mainnet. </p>
+
 ### 🧢 CAP Finance {#cap-finance}
 <p>Widely considered the most degen community on Arbitrum.<br />
 <br />
@@ -100,8 +103,6 @@
 
 ### Data Availability Committee (DAC) {#data-availability-committee-dac}
 <p>A permissioned set of parties responsible for enforcing data availability in an <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a> chain. See <em><a href="https://medium.com/offchainlabs/introducing-anytrust-chains-cheaper-faster-l2-chains-with-minimal-trust-assumptions-31def59eb8d7">Introducing AnyTrust Chains: Cheaper, Faster L2 Chains with Minimal Trust Assumptions</a></em> to learn more.</p>
-
-<p></p>
 
 
 
@@ -234,6 +235,9 @@ If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" i
 <p>The bow and arrow are commonly associated with the Hero's of Tales of Elleria.<br />
 <br />
 Jump into the world of Elleria and go on adventures.</p>
+
+### Time boost {#time-boost}
+<p>A proposed (not currently live) transaction policy in which users can pay a fee to the <a href="/intro/glossary#sequencer">Sequencer</a> for a small ordering advantage. See [here](<a href="https://medium.com/offchainlabs/time-boost-a-new-transaction-ordering-policy-for-arbitrum-5b3066382d62">https://medium.com/offchainlabs/time-boost-a-new-transaction-ordering-policy-for-arbitrum-5b3066382d62</a>) for more.    </p>
 
 ### 🐸 Toadstoolz {#toadstoolz}
 <p>Hidden in the Croakshire, you will find the friendly Toadstoolz. <br />
