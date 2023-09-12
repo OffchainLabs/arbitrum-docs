@@ -58,7 +58,7 @@
 <p>A distributed digital ledger that is used to record transactions and store data in a secure, transparent, and tamper-resistant way, notably in cryptocurrency protocols. </p>
 
 ### BOLD {#bold}
-<p>Short for "Bounded Liquidity Delay"; latest version of the Arbitrum <a href="/intro/glossary#challenge-protocol">Challenge protocol</a> designed to eliminate <a href="https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a">delay attack vectors</a> (see <a href="https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc">here</a> for more). Not curently on mainnet. </p>
+<p>Short for "Bounded Liquidity Delay"; latest version of the Arbitrum <a href="/intro/glossary#challenge-protocol">Challenge protocol</a> designed to eliminate <a href="https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a">delay attack vectors</a> (see <a href="https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc">here</a> for more). Not currently on mainnet. </p>
 
 ### 🧢 CAP Finance {#cap-finance}
 <p>Widely considered the most degen community on Arbitrum.<br />
