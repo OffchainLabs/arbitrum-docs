@@ -273,7 +273,7 @@ impl Contract {
 }
 ```
 
-In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with [`#[payable]`][payable], or else calls to it will revert. This is required as a safety measure since it prevents vulnerabilities based on covertly updating contract balances.
+In the above, `msg::value` is the amount of ETH passed to the contract in wei, which may be used to pay for something depending on the contract’s business logic. Note that you have to annotate the method with [`#[payable]`][payable], or else calls to it will revert. This is required as a safety measure to prevent users losing funds to methods that didn’t intend to accept ether.
 
 ### [`#[pure]`][pure], [`#[view]`][view], and `#[write]`
 
@@ -314,10 +314,10 @@ fn entrypoint(calldata: Vec<u8>) -> ArbResult {
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happened. However, you can opt out of this behavior by customizing your entrypoint.
+If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happened. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
 
 ```rust
-#[entrypoint(allow_reentrancy = true)]
+stylus-sdk = { version = "0.3.0", features = ["reentrant"] }
 ```
 
 This is dangerous, and should be done only after careful review — ideally by 3rd party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
@@ -384,7 +384,7 @@ The SDK does this automatically for you via a feature flag called `export-abi` t
 cargo run --features export-abi --target <triple>
 ```
 
-Note that because the above actually generates a `main` function that you need to run, the target can’t be `wasm32-unknown-unknown` like normal. Instead you’ll need to pass in your target triple, which `cargo stylus` figures out for you. This `main` function is also why the following commonly appears in the `[main.rs](http://main.rs)` file of Stylus contracts.
+Note that because the above actually generates a `main` function that you need to run, the target can’t be `wasm32-unknown-unknown` like normal. Instead you’ll need to pass in your target triple, which `cargo stylus` figures out for you. This `main` function is also why the following commonly appears in the `main.rs` file of Stylus contracts.
 
 ```rust
 #![cfg_attr(not(feature = "export-abi"), no_main)]
@@ -408,29 +408,140 @@ interface Weth is Erc20 {
 
 ## Calls
 
-:::caution UNDER CONSTRUCTION
+Just as with storage and methods, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the [`cargo stylus`] [CLI tool][abi_export].
 
-This section is currently under construction, and will be updated soon.
-
-If you're waiting for this content to be completed, click the `Request an update` button at the top of this page to let us know!
-
+:::tip
+You can call contracts in any programming language with the Stylus SDK.
 :::
 
 ### [`sol_interface!`][sol_interface]
 
-_Coming soon!_
+This macro defines a `struct` for each of the Solidity interfaces provided.
 
-### Call contexts
+```rust
+sol_interface! {
+    interface IService {
+        function makePayment(address user) payable returns (string);
+        function getConstant() pure returns (bytes32)
+    }
 
-_Coming soon!_
+    interface ITree {
+        // other interface methods
+    }
+}
+```
 
-### Calls with inheritance
+The above will define `IService` and `ITree` for calling the methods of the two contracts.
 
-_Coming soon!_
+For example, `IService` will have a `make_payment` method that accepts an [`Address`][Address] and returns a [`B256`][B256].
+
+```rust
+pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Error> {
+    account.make_payment(self, user)  // note the snake case
+}
+```
+
+Observe the casing change. [`sol_interface!`][sol_interface] computes the selector based on the exact name passed in, which should almost always be `CamelCase`. For aesthetics, the rust functions will instead use `snake_case`.
+
+### Configuring `gas` and `value` with [`Call`]
+
+[`Call`][Call] lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
+
+```rust
+pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
+    let config = Call::new()
+        .gas(evm::gas_left() / 2)       // limit to half the gas left
+        .value(msg::value());           // set the callvalue
+
+    account.make_payment(config, user)
+}
+```
+
+By default [`Call`] supplies all gas remaining and zero value, which often means `Call::new()` may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+
+### Reentrant calls
+
+Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`][`StorageCache_flush`] or [`clear`][StorageCache_clear] the [`StorageCache`][StorageCache] to safeguard state. This happens automatically via the type system.
+
+```rust
+sol_interface! {
+    interface IMethods {
+        function pureFoo() pure;
+        function viewFoo() view;
+        function writeFoo();
+        function payableFoo() payable;
+    }
+}
+
+#[external]
+impl Contract {
+    pub fn call_pure(&self, methods: IMethods) -> Result<(), Vec<u8>> {
+        Ok(methods.pure_foo(self)?)    // `pure` methods might lie about not being `view`
+    }
+
+    pub fn call_view(&self, methods: IMethods) -> Result<(), Vec<u8>> {
+        Ok(methods.view_foo(self)?)
+    }
+
+    pub fn call_write(&mut self, methods: IMethods) -> Result<(), Vec<u8>> {
+        methods.view_foo(self)?;       // allows `pure` and `view` methods too
+        Ok(methods.write_foo(self)?)
+    }
+
+    #[payable]
+    pub fn call_payable(&mut self, methods: IMethods) -> Result<(), Vec<u8>> {
+        methods.write_foo(Call::new_in(self))?;   // these are the same
+        Ok(methods.payable_foo(self)?)            // ------------------
+    }
+}
+```
+
+In the above, we’re able to pass `&self` and `&mut self` because `Contract` implements [`TopLevelStorage`][TopLevelStorage], which means that a reference to it entails access to the entirety of the contract’s state. This is the reason it is sound to make a call, since it ensures all cached values are invalidated and/or persisted to state at the right time.
+
+When writing Stylus libraries, a type might not be [`TopLevelStorage`][TopLevelStorage] and therefore `&self` or `&mut self` won’t work. Building a [`Call`][Call] from a generic parameter via [`new_in`][Call_new_in] is the usual solution.
+
+```rust
+pub fn do_call(
+    storage: &mut impl TopLevelStorage,  // can be generic, but often just &mut self
+    account: IService,                   // serializes as an Address
+    user: Address,
+) -> Result<String, Error> {
+
+    let config = Call::new_in(storage)   // take exclusive access to all contract storage
+        .gas(evm::gas_left() / 2)        // limit to half the gas left
+        .value(msg::value());            // set the callvalue
+
+    account.make_payment(config, user)   // note the snake case
+}
+```
+
+Note that in the context of an [`#[external]`][external] call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`][payable]. This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
+
+Note too that [`Call::new_in`][Call_new_in] should be used instead of [`Call::new`][Call_new] since the former provides access to storage. Code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
+
+### [`call`][fn_call], [`static_call`][fn_static_call], and [`delegate_call`][fn_delegate_call]
+
+Though [`sol_interface!`][sol_interface] and [`Call`][Call] form the most common idiom to invoke other contracts, their underlying [`call`][fn_call] and [`static_call`][fn_static_call] are exposed for direct access.
+
+```rust
+let return_data = call(Call::new(), contract, call_data)?;
+```
+
+In each case the calldata is supplied as a [`Vec<u8>`][Vec]. The return result is either the raw return data on success, or a call [`Error`][CallError] on failure.
+
+[`delegate_call`][fn_delegate_call] is also available, though it's `unsafe` and doesn't have a richly-typed equivalent. This is because a delegate call must trust the other contract to uphold safety requirements. Though this function clears any cached values, the other contract may arbitrarily change storage, spend ether, and do other things one should never blindly allow other contracts to do.
 
 ### [`transfer_eth`][transfer_eth]
 
-_Coming soon!_
+This method provides a convenient shorthand for transferring ether.
+
+Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`][fn_call] function may be used instead.
+
+```rust
+transfer_eth(recipient, value)?;                 // these two are equivalent
+
+call(Call::new().value(value), recipient, &[])?; // these two are equivalent
+```
 
 ### [`RawCall`][RawCall] and `unsafe` calls
 
@@ -444,7 +555,7 @@ let data = RawCall::new_delegate()   // configure a delegate call
     .call(contract, calldata)?;      // do the call
 ```
 
-Note that the [`call`][RawCall_call] method is `unsafe`. This is due to reentrancy, and the fact that the call does not require clearing the storage cache.
+Note that the [`call`][RawCall_call] method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`][RawCall_flush_storage_cache] and [`clear_storage_cache`][RawCall_clear_storage_cache] for more information.
 
 ## [`RawDeploy`][RawDeploy] and `unsafe` deployments
 
@@ -508,6 +619,8 @@ let callvalue = msg::value();
 [Erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html
 [erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase
 [StorageCache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html
+[StorageCache_flush]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.flush
+[StorageCache_clear]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.clear
 [EagerStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.EagerStorage.html
 [StorageBool]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
 [StorageAddress]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html
@@ -525,6 +638,7 @@ let callvalue = msg::value();
 [StorageGuard]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuard.html
 [StorageGuardMut]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html
 [Address]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html
+[B256]: https://docs.rs/alloy-primitives/latest/alloy_primitives/aliases/type.B256.html
 [Uint]: https://docs.rs/ruint/1.10.1/ruint/struct.Uint.html
 [Signed]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html
 [FixedBytes]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.FixedBytes.html
@@ -551,8 +665,17 @@ let callvalue = msg::value();
 [StorageMap_replace]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.replace
 [Router]: https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html
 [transfer_eth]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html
+[Call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html
+[Call_new]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new
+[Call_new_in]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in
+[CallError]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/enum.Error.html
+[fn_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html
+[fn_static_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html
+[fn_delegate_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html
 [RawCall]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html
 [RawCall_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call
+[RawCall_flush_storage_cache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache
+[RawCall_clear_storage_cache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache
 [RawDeploy]: https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html
 [solidity_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.solidity_storage.html
 [sol_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
