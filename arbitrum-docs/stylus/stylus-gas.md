@@ -1,3 +1,17 @@
+---
+title: 'Gas Costs in Stylus'
+sidebar_label: 'Gas Costs in Stylus'
+description: 'A guide into the pricing models of Stylus, including information about both gas costs and ink.'
+author: rachel-bousfield
+sme: rachel-bousfield
+target_audience: 'Developers deploying smart contracts using Stylus.'
+sidebar_position: 3
+---
+
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
+
 # Stylus Gas Costs
 
 Stylus introduces new pricing models for WASM programs. Intended for high-compute applications, Stylus makes the following more affordable:
