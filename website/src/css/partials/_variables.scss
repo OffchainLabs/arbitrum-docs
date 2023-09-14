@@ -1,4 +1,14 @@
 :root {
+  --arbitrum-font-size: 14px;
+  --arbitrum-border-radius-sm: 5px;
+  --arbitrum-border-radius: 10px;
+  --arbitrum-font-family: 'Roboto', sans-serif;
+  --arbitrum-color-primary: #8594b4;
+  --arbitrum-background-opacity: rgba(0, 0, 0, 0.05);
+  --arbitrum-text: black;
+  --arbitrum-secondary-text: rgba(0, 0, 0, 0.5);
+  --arbitrum-primary-button-bg: black;
+  --arbitrum-primary-button-text: white;
   --ifm-color-primary: #007bdd;
   --ifm-color-primary-dark: #295f78;
   --ifm-color-primary-darker: #275771;
@@ -11,6 +21,7 @@
   --ifm-code-font-size: 95%;
   --ifm-global-radius: 2px;
   --ifm-navbar-item-padding-horizontal: 0.6rem;
+  --ifm-heading-font-family: 'Roboto', sans-serif;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --ifm-color-info-dark: #359aec;
   --ifm-color-info-contrast-background: #f0f8ff;
@@ -20,3 +31,4 @@
   --tab-active-color-hover: hsl(217, 58%, 36%);
   --tab-gray: #ddd;
 }
+ 

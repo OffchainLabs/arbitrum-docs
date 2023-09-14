@@ -38,6 +38,8 @@ article {
       }
     }
 
+
+
     strong {
       font-weight: 600;
     }
@@ -87,6 +89,10 @@ article {
       background-color: rgba(150, 150, 150, 0.2);
     }
   }
+}
+
+a:has(code) {
+  text-decoration: none !important;
 }
 
 article a:not([data-quicklook-from]):not(.footnote-ref) {

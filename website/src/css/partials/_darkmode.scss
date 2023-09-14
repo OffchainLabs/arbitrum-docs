@@ -1,4 +1,10 @@
 [data-theme='dark'] {
+  --arbitrum-color-primary: #152c4e;
+  --arbitrum-background-opacity: rgba(255, 255, 255, 0.05);
+  --arbitrum-text: white;
+  --arbitrum-secondary-text: rgba(255, 255, 255, 0.5);
+  --arbitrum-primary-button-bg: white;
+  --arbitrum-primary-button-text: black;
   --ifm-color-primary: #28a0f0;
   --ifm-color-primary-dark: #2182af;
   --ifm-color-primary-darker: #1f7fa5;
@@ -6,6 +12,7 @@
   --ifm-color-primary-light: #29b0d5;
   --ifm-color-primary-lighter: #32b4d8;
   --ifm-color-primary-lightest: #4fbcdd;
+  --ifm-color-content: white;
   --ifm-link-color: #51b2ff;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --prysm-pink: var(--prysm-pink-light);
