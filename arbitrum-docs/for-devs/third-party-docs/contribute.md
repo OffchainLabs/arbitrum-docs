@@ -11,15 +11,17 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 These documents are usually authored by partner teams, but can be authored by anyone. They follow the same general process that [core docs](/for-devs/contribute#add-a-new-core-document) follow, embedded here for convenience:
 
-<br />
+---
 
 import ContributeCoreDocsPartial from '../../partials/_contribute-core-docs-partial.md';
 
 <ContributeCoreDocsPartial />
 
+---
+
 <br />
 
-If you're contributing third-party docs, we ask that you follow these guidelines in addition to the above:
+Third-party docs contributors are asked to follow these guidelines as well (in addition to the above):
 
 import ContributeThirdPartyDocsPartial from '../../partials/_contribute-third-party-docs-partial.md';
 
