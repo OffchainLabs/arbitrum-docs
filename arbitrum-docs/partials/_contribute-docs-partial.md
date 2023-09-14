@@ -10,25 +10,19 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. This includes documentation for:
 
-1. [Building dApps](/for-devs/quickstart-solidity-hardhat.md) with Arbitrum's chains.
-2. [Bridging tokens](../getting-started-users.mdx) to Arbitrum's chains.
-3. [Running an Arbitrum node](../node-running/quickstart-running-a-node.md).
-4. [Launching a self-managed chain](../launch-orbit-chain/orbit-quickstart.md) using Arbitrum Orbit.
-5. [Educational materials](../intro) that explain how these technologies work.
+1. [Developers](/for-devs/quickstart-solidity-hardhat.md)
+2. [Users (bridge)](/getting-started-users.mdx)
+3. [Node runners](/node-running/quickstart-running-a-node.md)
+4. [How it works](/intro)
 
 Contributions to each of these content areas are welcome from the entire Ethereum community.
 
-This document provides an overview of the **protocols** and **content conventions** that we use to craft, organize, and publish documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft, organize, and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
 
-## Protocols
 
-The following protocols help us process contributions efficiently:
+### Add a new core document
 
-### New "core docs" protocol
-
-If a document isn't in the `Third-party content` sidebar node, it's a core document.
-
-Although Offchain Labs is responsible for producing and maintaining core docs, contributions are welcome from all. To contribute a new core doc:
+If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
 1.  Begin by creating a branch of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
 2.  Issue a `Draft` pull request from your branch into `master`. Pull requests into `master` generate a preview of your changes via a branch-specific Docusaurus deployment; this preview will update as you push commits to your remote branch.
@@ -44,11 +38,13 @@ Although Offchain Labs is responsible for producing and maintaining core docs, c
 4.  As you craft your contribution, refer to the [document types](#document-type-conventions), [Style guidance](#style-conventions), and other conventions below.
 5.  Mark your PR as `Open` when it's ready for review.
 
-### New "third-party docs" protocol
+### Add a new third-party document
 
-**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products. These documents are generally authored by partner teams, but can be authored by anyone.
+**Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
 
-The protocol for creating new third-party docs is the same as that of [Creating new core documents](#creating-new-third-party-documents), with the following additions:
+These documents are generally authored by partner teams, but can be authored by anyone.
+
+Follow the same guidance within *[How to contribute new "core docs"](#add-a-new-core-document)*, with the following additions:
 
 1.  **Eligibility**
     - Third-party docs are intended to support products listed in the [Arbitrum portal](https://portal.arbitrum.io/), or infrastructure and services that those products use.
@@ -76,13 +72,13 @@ The protocol for creating new third-party docs is the same as that of [Creating 
       2. **License for use**: By contributing your content to our documentation, you grant Offchain Labs a non-exclusive, royalty-free license to use, reproduce, adapt, translate, distribute, and display the content in our documentation. This allows us to integrate your content into our docs and make it available to all users.
       3. **Right to modify or remove**: Offchain Labs reserves the right to modify or remove third-party content from our documentation at any time. This might be necessary due to a range of reasons, such as content becoming outdated, receiving very low pageviews over an extended period, or misalignment with our guidelines or goals.
 
-### Update request protocol
+### Request an update
 
 If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
 
-## Content conventions
+<br />
 
-Offchain Labs supports [Arbitrum docs](/) and [Prysm docs](https://docs.prylabs.network/docs/getting-started). The following **content conventions** help us maintain consistency across these documentation sets:
+----
 
 ### Document type conventions
 
@@ -199,7 +195,7 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 :::
 ```
 
-### Organization conventions
+### Appendix D: Organization conventions
 
 Our published docs are generally organized like this in the sidebar:
 
@@ -231,7 +227,9 @@ Our published docs are generally organized like this in the sidebar:
 
 <br />
 
-## Frequently asked questions
+----
+
+### Frequently asked questions
 
 #### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](/node-running/node-providers) page?
 
