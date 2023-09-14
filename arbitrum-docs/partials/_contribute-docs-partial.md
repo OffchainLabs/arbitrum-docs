@@ -52,7 +52,6 @@ Follow the same guidance within *[How to contribute new "core docs"](#add-a-new-
 2.  **Purpose**
     - The purpose of our `Third-party docs` sections is to **_meet Arbitrum developer (or user) demand for guidance that helps them use non-Arbitrum products with Arbitrum products_**.
     - It's _not_ meant to drive traffic to your product (although that may happen); it's meant to solve problems that our readers are actually facing, which are directly related to Arbitrum products.
-    - Partner products that support Arbitrum products aren't automatically eligible; we need to be able to prove to ourselves that our readers actually need the proposed third-party content.
 3.  **Maintenance expectations**
     - Offchain Labs can't commit to maintaining third-party docs, but we make it easy for you to maintain them.
     - Ensure that your document's YAML frontmatter contains a `third_party_content_owner` property, with the Github username of the designated maintainer. This person will be assigned to your document's issues and PRs, and will be expected to resolve them in a timely manner.
