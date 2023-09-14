@@ -1,5 +1,3 @@
----
-
 ### Document type conventions
 
 Every document should be a specific _type_ of document. Each type of document has its own purpose:

@@ -39,6 +39,8 @@ If you'd like to request an update or share a suggestion related to an **existin
 
 <br />
 
+---
+
 import ContributeDocsConventionsFaqsPartial from './_contribute-docs-conventions-faqs-partial.md';
 
 <ContributeDocsConventionsFaqsPartial />

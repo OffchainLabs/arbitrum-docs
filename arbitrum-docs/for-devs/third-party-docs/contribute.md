@@ -27,6 +27,8 @@ import ContributeThirdPartyDocsPartial from '../../partials/_contribute-third-pa
 
 <br />
 
+---
+
 import ContributeDocsConventionsFaqsPartial from '../../partials/_contribute-docs-conventions-faqs-partial.md';
 
 <ContributeDocsConventionsFaqsPartial />
