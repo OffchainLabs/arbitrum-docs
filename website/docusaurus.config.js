@@ -132,20 +132,28 @@ const config = {
       footer: {
         style: 'dark',
         links: [
+          {},
           {
-            title: 'Info',
             items: [
-              {
-                label: 'Offchain Labs',
-                to: 'https://offchainlabs.com/',
-              },
               {
                 label: 'Arbitrum.io',
                 to: 'https://arbitrum.io/',
               },
               {
-                label: 'Nova.arbitrum.io',
-                to: 'https://nova.arbitrum.io/',
+                label: 'Arbitrum Rollup',
+                to: 'https://arbitrum.io/rollup',
+              },
+              {
+                label: 'Arbitrum AnyTrust',
+                to: 'https://arbitrum.io/anytrust',
+              },
+              {
+                label: 'Arbitrum Orbit',
+                to: 'https://arbitrum.io/orbit',
+              },
+              {
+                label: 'Arbitrum Stylus',
+                to: 'https://arbitrum.io/stylus',
               },
               {
                 label: 'Nitro whitepaper',
@@ -154,28 +162,63 @@ const config = {
             ],
           },
           {
-            title: 'Community',
+            items: [
+              {
+                label: 'Network status',
+                to: 'https://status.arbitrum.io/',
+              },
+              {
+                label: 'Portal',
+                to: 'https://portal.arbitrum.io/',
+              },
+              {
+                label: 'Bridge',
+                to: 'https://bridge.arbitrum.io/',
+              },
+              {
+                label: 'Community',
+                to: 'https://arbitrum.io/community',
+              },
+              {
+                label: 'Careers',
+                to: 'https://offchainlabs.com/careers/',
+              },
+              {
+                label: 'Support',
+                to: 'https://arbitrumfoundation.zendesk.com/hc/en-us/requests/new?ticket_form_id=18163883015323',
+              },
+            ],
+          },
+          {
             items: [
               {
                 label: 'Discord',
-                href: 'https://discord.gg/ZpZuw7p',
+                to: 'https://discord.gg/ZpZuw7p',
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/ArbitrumDevs',
+                to: 'https://twitter.com/ArbitrumDevs',
+              },
+              {
+                label: 'Youtube',
+                to: 'https://www.youtube.com/@Arbitrum',
               },
               {
                 label: 'Research forum',
-                href: 'https://research.arbitrum.io/',
+                to: 'https://research.arbitrum.io/',
               },
               {
                 label: 'Medium Blog',
-                href: 'https://medium.com/offchainlabs',
+                to: 'https://medium.com/offchainlabs',
+              },
+              {
+                label: 'Governance docs',
+                to: 'https://medium.com/offchainlabs',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
         additionalLanguages: ['solidity', 'rust'],
