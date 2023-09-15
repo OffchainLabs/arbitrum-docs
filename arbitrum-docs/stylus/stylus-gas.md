@@ -1,12 +1,14 @@
 ---
 title: 'Gas Costs in Stylus'
 sidebar_label: 'Gas Costs in Stylus'
-description: 'A guide into the pricing models of Stylus, including information about both gas costs and ink.'
+description: 'A conceptual overview of the pricing models of Stylus, including the relationshup between gas and ink.'
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
+
+This conceptual overview is for Stylus Developers who want to understand the pricing models that Stylus uses to assess the price of various opcodes and host I/Os, along with its native unit of payment, ink. 
 
 import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
 
@@ -16,9 +18,9 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 Stylus introduces new pricing models for WASM programs. Intended for high-compute applications, Stylus makes the following more affordable:
 
-- Compute, which is generally **10-100x** cheaper depending on the program. This is primarily due to the efficiency of the WASM runtime relative to the EVM, and the quality of the code produced by Rust, C, and C++ compilers. Another factor that matters is the quality of the code itself. For example, highly optimized and audited C libraries that implement a particular cryptographic operation are usually deployable without modification and perform exceptionally well. The fee reduction may be smaller for highly optimized Solidity that makes heavy use of native precompiles vs an unoptimized Stylus equivalent that doesn't do the same.
+- Compute, which is generally **10-100x** cheaper depending on the program. This is primarily due to the efficiency of the WASM runtime relative to the EVM, and the quality of the code produced by Rust, C, and C++ compilers. Another factor that matters is the quality of the code itself. For example, highly optimized and audited C libraries that implement a particular cryptographic operation are usually deployable without modification and perform exceptionally well. The fee reduction may be smaller for highly optimized Solidity that makes heavy use of native precompiles vs. an unoptimized Stylus equivalent that doesn't do the same.
 - Memory, which is **100-500x** cheaper due to Stylus's novel exponential pricing mechanism intended to address Vitalik's concerns with the EVM's per-call, [quadratic memory pricing policy](https://notes.ethereum.org/@vbuterin/proposals_to_adjust_memory_gas_costs). For the first time ever, high-memory applications are possible on an EVM-equivalent chain.
-- Storage, for which the Rust SDK promotes better access patterns and type choices. Note that while the underlying `[SLOAD](https://www.evm.codes/#54)` and `[SSTORE](https://www.evm.codes/#55)` operations cost as they do in the EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
+- Storage, for which the Rust SDK promotes better access patterns and type choices. Note that while the underlying <a href="https://www.evm.codes/#54"><code>SLOAD</code></a> and <a href="https://www.evm.codes/#55"><code>SSTORE</code></a> operations cost as they do in the EVM, the Rust SDK implements an optimal caching policy that minimizes their use. Exact savings depends on the program.
 - VM affordances, including common operations like `keccak` and reentrancy detection. No longer is it expensive to make safety the default.
 
 There are, however, minor overheads to using Stylus that may matter to your application:
@@ -64,4 +66,8 @@ For example, if the Stylus VM becomes 2x faster, instead of cutting the nominal 
 
 It is important to note that users never need to worry about this notion of ink. Receipts will always be measured in gas, with the exchange rate applied automatically under the hood as the VMs pass execution back and forth.
 
-However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The `[ink_left](https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html)` function exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
+However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The <a href="https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html"><code>ink_left</code></a> function exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
+
+## Opcode and Host I/O Pricing
+
+If interested in the latest ink and gas measurements of WASM opcodes and Host I/Os, please visit the [Opcode and Host I/O pricing reference](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
