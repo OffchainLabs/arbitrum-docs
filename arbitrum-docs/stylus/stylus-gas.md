@@ -40,14 +40,13 @@ Because WASM opcodes are orders of magnitude faster than their EVM counterparts,
 
 To build intuition for why this is the case, consider the `ADD` instruction. 
 
-1. Pop two items of the simulated stack
-
 ### In the EVM
 
-1. Pay for gas, requiring multiple look-ups of an in-memory table
-2. Consider tracing, even if disabled
-3. Add them together
-4. Push the result
+1. Pop two items of the simulated stack
+2. Pay for gas, requiring multiple look-ups of an in-memory table
+3. Consider tracing, even if disabled
+4. Add them together
+5. Push the result
 
 ### In the Stylus VM
 
