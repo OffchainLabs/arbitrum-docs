@@ -5,6 +5,7 @@ author: amarrazza
 sme: amarrazza
 target_audience: Developers building on the Stylus testnet
 sidebar_label: 'Testnet information'
+sidebar_position: 9
 ---
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
