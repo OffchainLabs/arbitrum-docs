@@ -8,13 +8,15 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 4
 ---
 
+This reference provides the latest measurements of WASM opcodes and Host I/Os when using Stylus, in both ink and gas.
+
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
 # Opcode table
 
-The Stylus VM charges for WASM opcodes according to the following table, which was determined via a conservative statistical analysis and is expected to change for Stylus mainnet. Prices may fluctuate across upgrades as our analysis matures and optimizations are made.
+The Stylus VM charges for WASM opcodes according to the following table, which was determined via a conservative statistical analysis and is expected to change as Stylus matures. Prices may fluctuate across upgrades as our analysis evolves and optimizations are made.
 
 | Hex | Opcode | Ink | Gas | Notes |
 | --- | --- | --- | --- | --- |
@@ -134,14 +136,13 @@ The Stylus VM charges for WASM opcodes according to the following table, which w
 
 Certain operations require suspending WASM execution so that the Stylus VM can perform tasks natively in the host. This costs about `1.25 gas` to do. Though we’ll publish a full specification later, the following table details the costs of simple operations that run in the host.
 
-Note that the values in this table were determined via a conservative statistical analysis and are expected to change for Stylus mainnet. Prices may fluctuate across upgrades as our analysis matures and optimizations are made.
+Note that the values in this table were determined via a conservative statistical analysis and are expected to change as Stylus matures. Prices may fluctuate across upgrades as our analysis evolves and optimizations are made.
 
 | Host I/O | Ink | Gas | Notes |
 | --- | --- | --- | --- |
-| read_args | 12513 + 18287b | 1.2513 + 1.8287b | b = bytes after first 32 |
-| write_result | 12513 + 40423b | 12513 + 4.0423b | b = bytes after first 32 |
-| keccak | 281040 + 41920w | 28.104 + 4.192w | Due to a pricing mistake, keccak will soon be ~8 gas cheaper!
-w = EVM words |
+| read_args | 12513 + 18287b | 1.2513 + 1.8287b | `b` = bytes after first 32 |
+| write_result | 12513 + 40423b | 12513 + 4.0423b | `b` = bytes after first 32 |
+| keccak | 281040 + 41920w | 28.104 + 4.192w | Due to a pricing mistake, keccak will soon be `~8 gas` cheaper! `w` = EVM words |
 | block_basefee | 22137 | 2.2137 |  |
 | block_coinbase | 22137 | 2.2137 |  |
 | block_gas_limit | 12513 | 1.2513 |  |
