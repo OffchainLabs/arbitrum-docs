@@ -185,7 +185,7 @@ const config = {
               },
               {
                 label: 'Support',
-                to: 'https://arbitrumfoundation.zendesk.com/hc/en-us/requests/new?ticket_form_id=18163883015323',
+                to: 'https://support.arbitrum.io/',
               },
             ],
           },
