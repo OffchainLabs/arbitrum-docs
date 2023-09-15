@@ -8,7 +8,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 4
 ---
 
-This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [conceptual overview for gas costs in Stylus](/stylus/concepts/stylus-gas).
+This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
@@ -168,4 +168,4 @@ For some opcodes, the value in the table may be larger than its EVM equivalent. 
 
 ### See also
 
- - [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
+- [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O

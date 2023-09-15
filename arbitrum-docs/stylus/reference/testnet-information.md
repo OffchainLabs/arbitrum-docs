@@ -20,7 +20,7 @@ Stylus is undergoing major upgrades, and some improvements are expected to requi
 
 This table provides an overview of the available public RPC endpoints for the Stylus testnet and necessary details to interact with them.
 
-| Name           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                   |
+| Name           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
 | -------------- | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | -------------- | ------------------------------------- | ------------------------------------------------ |
 | Stylus testnet | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | Nitro (Rollup) | wss://stylus-sepolia.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
 

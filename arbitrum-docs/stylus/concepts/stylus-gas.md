@@ -19,7 +19,7 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
    2. "here's what you need to know about how it works, how it differs from traditional Solidity dApp cost modeling"
    3. "here's where costs are incurred along the lifecycle, simply said"
    4. "here's where costs are incurred along the lifecycle, with more technical precision
-   
+
    If devs need more guidance, we could author a how-to titled "Measure and manage your gas costs"
 -->
 
@@ -79,4 +79,4 @@ However, developers optimizing contracts may choose to measure performance in in
 
 ### See also
 
- - [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
+- [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
