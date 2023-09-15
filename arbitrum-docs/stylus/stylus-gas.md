@@ -8,7 +8,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-This conceptual overview is for Stylus Developers who want to understand the pricing models that Stylus uses to assess the price of various opcodes and host I/Os, along with its native unit of payment, ink. 
+This conceptual overview is for Stylus Developers who want to understand the pricing models that Stylus uses to assess the price of various opcodes and host I/Os, along with its native unit of payment, ink. If interested in the latest ink and gas measurements of WASM opcodes and Host I/Os, please visit the [Opcode and Host I/O pricing reference](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
 
 import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
 
