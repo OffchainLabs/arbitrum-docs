@@ -1,20 +1,29 @@
 ---
-title: 'Gas Costs in Stylus'
-sidebar_label: 'Gas Costs in Stylus'
-description: 'A conceptual overview of the pricing models of Stylus, including the relationshup between gas and ink.'
+title: 'Gas and ink (Stylus)'
+sidebar_label: 'Gas and ink'
+description: 'A conceptual overview of gas and ink, the primitives that Stylus uses to measure the cost of WASM activation, compute, memory, and storage.'
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-This conceptual overview is for Stylus Developers who want to understand the pricing models that Stylus uses to assess the price of various opcodes and host I/Os, along with its native unit of payment, ink. If interested in the latest ink and gas measurements of WASM opcodes and host I/Os, please visit the [Opcode and Host I/O pricing reference](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
+**Gas and ink** are the pricing primitives that Stylus uses to determine how much it costs to handle specific opcodes and host I/Os. For an overview of specific opcode and host I/O costs, see [Opcode and host I/O pricing](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
-# Stylus Gas Costs
+<!-- todo as a future optimization: pull the "Ink and gas" content up top; give devs what they need to know in order to build stuff - the "just in time" information - progressively disclose the "just in case" details. An example flow:
+   1. "think of gas and ink as dollars and cents"
+   2. "here's what you need to know about how it works, how it differs from traditional Solidity dApp cost modeling"
+   3. "here's where costs are incurred along the lifecycle, simply said"
+   4. "here's where costs are incurred along the lifecycle, with more technical precision
+   
+   If devs need more guidance, we could author a how-to titled "Measure and manage your gas costs"
+-->
+
+## Stylus gas costs
 
 Stylus introduces new pricing models for WASM programs. Intended for high-compute applications, Stylus makes the following more affordable:
 
@@ -25,12 +34,12 @@ Stylus introduces new pricing models for WASM programs. Intended for high-comput
 
 There are, however, minor overheads to using Stylus that may matter to your application:
 
-- The first time a WASM is deployed, it must be *activated*. This is generally a few million gas, though to avoid testnet DoS, we've set it to a fixed 14 million. Note that you do not have to activate future copies of the same program. For example, the same NFT template can be deployed many times without paying this cost more than once. We will soon make the fees paid depend on the program, so that the gas used is based on the complexity of the WASM instead of this very conservative, worst-case estimate.
+- The first time a WASM is deployed, it must be _activated_. This is generally a few million gas, though to avoid testnet DoS, we've set it to a fixed 14 million. Note that you do not have to activate future copies of the same program. For example, the same NFT template can be deployed many times without paying this cost more than once. We will soon make the fees paid depend on the program, so that the gas used is based on the complexity of the WASM instead of this very conservative, worst-case estimate.
 - Calling a Stylus program costs 128-2048 gas. We're working with Wasmer to improve setup costs, but there will likely always be some amount of gas one pays to jump into WASM execution. This means that if a contract does next to nothing, it may be cheaper in Solidity. However if a contract starts doing interesting work, the dynamic fees will quickly make up for this fixed-cost overhead.
 
 Though conservative bounds have been chosen for testnet, all of this is subject to change as pricing models mature and further optimizations are made. Since gas numbers will vary across updates, it may make more sense to clock the time it takes to perform an operation rather than going solely by the numbers reported in receipts.
 
-# Ink and gas
+## Ink and gas
 
 Because WASM opcodes are orders of magnitude faster than their EVM counterparts, almost every operation that Stylus does costs less than `1 gas`. “Fractional gas” isn’t an EVM concept, so the Stylus VM introduces a new unit of payment known as ink that’s orders of magnitude smaller.
 
@@ -38,11 +47,11 @@ Because WASM opcodes are orders of magnitude faster than their EVM counterparts,
 1 gas = 10,000 ink
 ```
 
-## Intuition
+### Intuition
 
-To build intuition for why this is the case, consider the `ADD` instruction. 
+To build intuition for why this is the case, consider the `ADD` instruction.
 
-### In the EVM
+#### In the EVM
 
 1. Pay for gas, requiring multiple look-ups of an in-memory table
 2. Consider tracing, even if disabled
@@ -50,24 +59,24 @@ To build intuition for why this is the case, consider the `ADD` instruction.
 4. Add them together
 5. Push the result
 
-### In the Stylus VM
+#### In the Stylus VM
 
 1. Execute a single x86 or ARM `ADD` instruction
 
-Note that unlike the EVM, which charges for gas before running each opcode, the Stylus VM strategically charges for many opcodes all at once. This cuts fees considerably, since the VM only rarely needs to execute gas charging logic. Additionally, gas charging happens *inside the program*, removing the need for an in-memory table. 
+Note that unlike the EVM, which charges for gas before running each opcode, the Stylus VM strategically charges for many opcodes all at once. This cuts fees considerably, since the VM only rarely needs to execute gas charging logic. Additionally, gas charging happens _inside the program_, removing the need for an in-memory table.
 
-## The ink price
+### The ink price
 
 The ink price, which measures the amount of ink a single EVM gas buys, is configurable by the chain owner. By default, the exchange rate is `1:10000`, but this may be adjusted as the EVM and Stylus VM improve over time.
 
 For example, if the Stylus VM becomes 2x faster, instead of cutting the nominal cost of each operation 2x, the ink price may instead be doubled, allowing 1 EVM gas to buy twice as much ink. This provides an elegant mechanism for smoothly repricing resources between the two VMs as each makes independent progress.
 
-## User Experience
+### User experience
 
 It is important to note that users never need to worry about this notion of ink. Receipts will always be measured in gas, with the exchange rate applied automatically under the hood as the VMs pass execution back and forth.
 
 However, developers optimizing contracts may choose to measure performance in ink to pin down the exact cost of executing various routines. The <a href="https://docs.rs/stylus-sdk/0.3.0/stylus_sdk/evm/fn.ink_left.html"><code>ink_left</code></a> function exposes this value, and various methods throughout the Rust SDK optionally accept ink amounts too.
 
-## Opcode and Host I/O Pricing
+### See also
 
-If interested in the latest ink and gas measurements of WASM opcodes and host I/Os, please visit the [opcode and host I/O pricing reference](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
+ - [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
