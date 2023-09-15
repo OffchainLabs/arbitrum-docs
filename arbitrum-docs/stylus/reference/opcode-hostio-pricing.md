@@ -168,4 +168,4 @@ For some opcodes, the value in the table may be larger than its EVM equivalent. 
 
 ### See also
 
-- [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
+- [Gas and ink (Stylus)](/stylus/concepts/stylus-gas): A conceptual introduction to the "gas" and "ink" primitives
