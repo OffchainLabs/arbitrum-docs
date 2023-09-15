@@ -8,7 +8,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 4
 ---
 
-This reference provides the latest measurements of WASM opcodes and Host I/Os when using Stylus, in both ink and gas.
+This reference provides the latest measurements of WASM opcodes and Host I/Os when using Stylus, in both ink and gas. If interested in learning more about the pricing models that Stylus uses to assess the cost of these opcodes and host I/Os, along with its native unit of payment, ink, please visit the [conceptual overview for gas costs in Stylus](https://nitro-docs-git-stylus-gas-offchain-labs.vercel.app/stylus/stylus-gas).
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
