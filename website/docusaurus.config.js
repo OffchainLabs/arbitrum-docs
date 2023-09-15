@@ -105,58 +105,25 @@ const config = {
             type: 'doc',
             docId: 'for-devs/quickstart-solidity-hardhat',
             position: 'left',
-            label: 'Build decentralized apps',
+            label: 'Developers',
           },
           {
             type: 'doc',
             docId: 'getting-started-users',
             position: 'left',
-            label: 'Bridge tokens',
+            label: 'Users (Bridge)',
           },
           {
             type: 'doc',
             docId: 'node-running/quickstart-running-a-node',
-            label: 'Run a node',
+            label: 'Node runners',
             position: 'left',
-          },
-          {
-            type: 'doc',
-            docId: 'launch-orbit-chain/orbit-gentle-introduction',
-            position: 'left',
-            label: 'Launch an Orbit chain',
           },
           {
             type: 'doc',
             docId: 'intro/intro',
             position: 'left',
-            label: 'Learn more',
-          },
-          {
-            type: 'dropdown',
-            label: 'Links',
-            position: 'right',
-            items: [
-              {
-                href: '/sdk',
-                label: 'SDK docs',
-              },
-              {
-                href: 'https://github.com/OffchainLabs/nitro',
-                label: 'GitHub',
-              },
-              {
-                href: 'https://research.arbitrum.io/',
-                label: 'Research',
-              },
-              {
-                href: 'https://github.com/OffchainLabs/arbitrum-tutorials',
-                label: 'Tutorials',
-              },
-              {
-                href: 'https://medium.com/offchainlabs',
-                label: 'Blog',
-              },
-            ],
+            label: 'How it works',
           },
         ],
       },
@@ -210,11 +177,11 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
       },
       prism: {
-        additionalLanguages: ['solidity'],
+        additionalLanguages: ['solidity', 'rust'],
       },
       announcementBar: {
         id: 'support_us',
-        content: `Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>here</a>.`,
+        content: `The Stylus testnet is officially live! Build EVM-compatible apps with Rust by visiting the <a href='/stylus/stylus-gentle-introduction'>Stylus docs</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
