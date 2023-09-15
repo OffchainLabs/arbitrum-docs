@@ -123,7 +123,7 @@ interface IDepositUserContract {
 }
 ```
 
-Navigate to the “Navigate & run Transactions” tab in remix, and Paste the Deposit Contract Address into the text box besides the “At Address” button & Press the At Address button. You will find the instance for the Deposit Contract created using which a user can interact and use the features provided by the Deposit Contract.
+Navigate to the “Navigate & run Transactions” tab in remix, and paste the deposit contract address into the text box besides the “At Address” button & press the at address button. You will find the instance for the deposit contract created using which a user can interact and use the features provided by the deposit contract.
 Following functions will facilitate whitelisting your requester smart contracts and fund deposits.
 “addContracttoWhitelist(address)” - The whitelisted users will have to whitelist their contract which they will be using to request for random numbers. The parameter this function takes is the User’s contract address. This function will be called after the user deploys the requester contract post development and makes it ready for interacting with the Supra Contracts.
 “depositFundClient()” - is another mandatory function for a user to use once, before the user starts requesting from that contract. This is a function which will deposit funds in the deposit contract from the users for the response/callback transaction. The funds for a specific user should remain higher than the minimum amount set by the Supra( 0.1 Eth for Arbitrum testnet) for the new request transactions to be accepted.  
