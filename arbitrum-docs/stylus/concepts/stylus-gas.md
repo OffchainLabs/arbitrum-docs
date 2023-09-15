@@ -8,7 +8,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-**Gas and ink** are the pricing primitives that Stylus uses to determine how much it costs to handle specific opcodes and host I/Os. For an overview of specific opcode and host I/O costs, see [Opcode and host I/O pricing](https://docs.arbitrum.io/stylus/reference/opcode-hostio-pricing).
+**Gas and ink** are the pricing primitives that Stylus uses to determine how much it costs to handle specific opcodes and host I/Os. For an overview of specific opcode and host I/O costs, see [Opcode and host I/O pricing](/stylus/reference/opcode-hostio-pricing).
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
