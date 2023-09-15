@@ -42,9 +42,9 @@ To build intuition for why this is the case, consider the `ADD` instruction.
 
 ### In the EVM
 
-1. Pop two items of the simulated stack
-2. Pay for gas, requiring multiple look-ups of an in-memory table
-3. Consider tracing, even if disabled
+1. Pay for gas, requiring multiple look-ups of an in-memory table
+2. Consider tracing, even if disabled
+3. Pop two items of the simulated stack
 4. Add them together
 5. Push the result
 
