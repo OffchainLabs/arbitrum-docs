@@ -8,7 +8,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 4
 ---
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
