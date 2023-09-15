@@ -30,9 +30,7 @@ Etc.
 
 ## Precompiles
 
-Arbitrum chains include a number of special precompiles not present on Ethereum; see [Common Precompiles](./arbos/common-precompiles.mdx) / [All Precompiles](./arbos/precompiles.mdx).
-
-Of particular note is the [ArbAddressTable](./arbos/precompiles#ArbAddressTable), which allows contracts to map addresses to integers, saving calldata / fees for addresses expected to be reused as parameters; see [Arb Address Table tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/address-table) for example usage.
+Arbitrum chains include a number of special precompiles not present on Ethereum; see [Precompiles](/for-devs/concepts/precompiles.mdx).
 
 ## Solidity
 
@@ -40,7 +38,7 @@ You can deploy Solidity contracts onto Arbitrum just like you do Ethereum; there
 
 ## JSON-RPC Comparisons
 
-This section covers the differences in response body fields you'll find when using the Arbitrum JSON-RPC vs Ethereum mainnet. 
+This section covers the differences in response body fields you'll find when using the Arbitrum JSON-RPC vs Ethereum mainnet.
 
 :::info
 
@@ -51,7 +49,6 @@ Comprehensive documentation on all generally available JSON-RPC methods for Ethe
 ### `eth_syncing` RPC Method
 
 Calling `eth_syncing` returns false if not synchronizing (just like on Ethereum). However, if the node is still syncing, `eth_syncing` returns an object with data about the synchronization status. The returned object is different from what one would get on Ethereum, see [here](https://developer.arbitrum.io/node-running/faq#how-can-i-verify-that-my-node-is-fully-synced) for more details.
-
 
 ### Blocks
 
@@ -78,7 +75,7 @@ See full list of [mainnet block fields](https://ethereum.org/en/developers/docs/
 
 In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on mainnet, Arbitrum adds additional types listed below and [documented in full detail here](arbos/geth#transaction-types).
 
-On RPC calls that return transactions, such as [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash), the `type` field will reflect the custom codes where applicable. 
+On RPC calls that return transactions, such as [`eth_getTransactionByHash`](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash), the `type` field will reflect the custom codes where applicable.
 
 - `100` - `ArbitrumDepositTxType`: A deposit of ETH from L1 to L2 via the Arbitrum bridge.
 - `101` - `ArbitrumUnsignedTxType`: An L1 user can use to call an L2 contract via the bridge.
@@ -93,7 +90,7 @@ On RPC calls that return transactions, such as [`eth_getTransactionByHash`](http
 
 #### Existing Fields With Different Behavior
 
-- `from`: For L1-to-L2 related transactions, will be the _aliased_ version of the L1's `msg.sender`. See [L1 to L2 Messaging](./arbos/l1-to-l2-messaging.mdx) for more info. 
+- `from`: For L1-to-L2 related transactions, will be the _aliased_ version of the L1's `msg.sender`. See [L1 to L2 Messaging](./arbos/l1-to-l2-messaging.mdx) for more info.
 
 See full list of [mainnet transaction fields](https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_gettransactionbyhash) for additional reference.
 

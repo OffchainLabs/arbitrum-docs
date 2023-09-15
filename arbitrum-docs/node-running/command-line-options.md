@@ -1,11 +1,13 @@
 ---
-title: "Command-line options"
+title: 'Command-line options'
 ---
 
 Arbitrum nodes can be configured using flags. This document provides a comprehensive list of all available flags and their descriptions. The flag descriptions that you see in this document are generated from code comments within the latest Nitro/Classic release.
 
 ### Nitro Node flags
+
 This is for Arbitrum Nitro Node:
+
 ```
       --auth.addr string                                                                                AUTH-RPC server listening interface (default "127.0.0.1")
       --auth.api strings                                                                                APIs offered over the AUTH-RPC interface (default [validation])
@@ -330,7 +332,9 @@ Version: v2.0.14-2baa834
 ```
 
 ### Classic Node
+
 This is for Arbitrum Classic Node:
+
 ```
 Usage of :
       --bridge-utils-address string                                    bridgeutils contract address
@@ -481,7 +485,7 @@ Usage of :
       --wallet.local.pathname string                                   path to store wallet in (default "rpc-wallet")
       --wallet.local.private-key string                                wallet private key string
 
-Sample usage:                  arb-node --conf=<filename> 
+Sample usage:                  arb-node --conf=<filename>
           or:  forwarder node: arb-node --l1.url=<L1 RPC> [optional arguments]
 
           or: aggregator node: arb-node --l1.url=<L1 RPC> --node.type=aggregator [optional arguments] [--wallet.password=pass] [--wallet.gasprice==FloatInGwei]

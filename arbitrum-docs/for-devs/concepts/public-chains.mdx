@@ -1,14 +1,14 @@
 ---
-title: "Arbitrum chains: A conceptual overview"
+title: 'Arbitrum chains: A conceptual overview'
 sidebar_label: Arbitrum chains
 description: A high level description of the Arbitrum chains available
 reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: concept
 ---
 
-import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink'
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
-Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, designed to increase scalability and reduce transaction costs. In this conceptual overview, we’ll learn about the different Arbitrum chains and how they relate to each other. We’ll describe the available Arbitrum production and testnet chains, their differences, and the technology stacks that these chains use. We will finally list the current validators in each chain, as well as the members of the data availability committee (DAC) in Arbitrum Nova.
+Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, designed to increase scalability and reduce transaction costs. In this conceptual overview, we’ll learn about the different Arbitrum chains and how they relate to each other. We’ll describe the available Arbitrum production and testnet chains, their differences, and the technology stacks that these chains use.
 
 ## What Arbitrum production chains are available?
 
@@ -22,11 +22,23 @@ Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, d
 
 ## What Arbitrum testnet chains are available?
 
+### Arbitrum Sepolia
+
+Arbitrum Sepolia serves as a testnet chain replicating the capabilities of Arbitrum One's main network. Linked to the Sepolia testnet, it offers developers a secure platform to experiment with and evaluate their smart contracts prior to actual deployment on the mainnet.
+
 ### Arbitrum Goerli
 
 Arbitrum Goerli is a testnet chain that mirrors the functionality of the Arbitrum One mainnet. It's connected to the Ethereum Goerli testnet, allowing developers to test their smart contracts in a risk-free environment before deploying them on the mainnet.
 
+⚠️ Important note: Ethereum Goerli was deprecated in Q1 2023 but will be supported until Q4 2023. Once Arbitrum Sepolia becomes publicly available, we will phase out the usage of Arbitrum Goerli. Support for Arbitrum Goerli will cease prior to the conclusion of Ethereum Goerli.
+
 ⚠️ The old testnet RinkArby was deprecated on December 20th, 2022.
+
+### Stylus testnet
+
+Stylus uses the Nitro technology and allows for efficient smart contract creation using languages like Rust, C, and C++. Leveraging Arbitrum's EVM equivalence, Stylus contracts achieve remarkable speed and low gas fees. With full interoperability between Solidity and Stylus contracts, new horizons emerge, while significantly cheaper memory costs unlock novel blockchain use cases.
+
+⚠️ Important note: Stylus testnet will be deprecated once stylus comes out of beta and is enabled on the Sepolia testnet.
 
 ## What differences there are between the available Arbitrum chains?
 
@@ -34,7 +46,7 @@ The main differences between the Arbitrum chains lie in their purpose and the en
 
 Arbitrum One and Arbitrum Nova are production chains designed for real-world use. They're connected to the Ethereum mainnet and handle real, valuable transactions. They both use Arbitrum's Nitro technology stack under the hood, but Arbitrum One implements the Rollup protocol, while Nova implements the AnyTrust protocol. Arbitrum One is designed for general use, providing a scalable and cost-effective solution for running Ethereum-compatible smart contracts. On the other hand, Arbitrum Nova is designed for applications that require a higher transaction throughput and don’t require the full decentralization that rollups provide.
 
-Finally, Arbitrum Goerli is a testnet chain. It's designed for testing purposes and is connected to the Ethereum Goerli testnet, which uses test Ether with no real-world value.
+Finally, Arbitrum Sepolia is a testnet chain. It's designed for testing purposes and is connected to the Sepolia testnet, which uses test Ether with no real-world value.
 
 ## What technology stacks use the Arbitrum chains?
 
@@ -49,57 +61,6 @@ AnyTrust is a variant of the Nitro technology stack that lowers costs by accepti
 ### Classic (deprecated)
 
 The Classic technology stack is the original version of Arbitrum. It has been deprecated and replaced by the Nitro technology stack.
-
-## Allowlisted validators
-
-These are the whitelisted validators for every public Arbitrum chain (more information in **["state of progressive decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)**):
-
-#### Arbitrum One
-
-- <AEL address={"0x0fF813f6BD577c3D1cDbE435baC0621BE6aE34B4"} chainID={1} />
-- <AEL address={"0x54c0D3d6C101580dB3be8763A2aE2c6bb9dc840c"} chainID={1} />
-- <AEL address={"0x56D83349c2B8DCF74d7E92D5b6B33d0BADD52D78"} chainID={1} />
-- <AEL address={"0x610Aa279989F440820e14248BD3879B148717974"} chainID={1} />
-- <AEL address={"0x6Fb914de4653eC5592B7c15F4d9466Cbd03F2104"} chainID={1} />
-- <AEL address={"0x758C6bB08B3ea5889B5cddbdeF9A45b3a983c398"} chainID={1} />
-- <AEL address={"0x7CF3d537733F6Ba4183A833c9B021265716cE9d0"} chainID={1} />
-- <AEL address={"0x83215480dB2C6A7E56f9E99EF93AB9B36F8A3DD5"} chainID={1} />
-- <AEL address={"0xAB1A39332e934300eBCc57B5f95cA90631a347FF"} chainID={1} />
-- <AEL address={"0xB0CB1384e3f4a9a9b2447e39b05e10631E1D34B0"} chainID={1} />
-- <AEL address={"0xF8D3E1cF58386c92B27710C6a0D8A54c76BC6ab5"} chainID={1} />
-- <AEL address={"0xdDf2F71Ab206C0138A8eceEb54386567D5abF01E"} chainID={1} />
-- <AEL address={"0xf59caf75e8A4bFBA4e6e07aD86C7E498E4d2519b"} chainID={1} />
-
-#### Arbitrum Nova
-
-- <AEL address={"0x1732BE6738117e9d22A84181AF68C8d09Cd4FF23"} chainID={1} />
-- <AEL address={"0x24Ca61c31C7f9Af3ab104dB6B9A444F28e9071e3"} chainID={1} />
-- <AEL address={"0x3B0369CAD35d257793F51c28213a4Cf4001397AC"} chainID={1} />
-- <AEL address={"0x54c0D3d6C101580dB3be8763A2aE2c6bb9dc840c"} chainID={1} />
-- <AEL address={"0x57004b440Cc4eb2FEd8c4d1865FaC907F9150C76"} chainID={1} />
-- <AEL address={"0x658e8123722462F888b6fa01a7dbcEFe1D6DD709"} chainID={1} />
-- <AEL address={"0xDfB23DFE9De7dcC974467195C8B7D5cd21C9d7cB"} chainID={1} />
-- <AEL address={"0xE27d4Ed355e5273A3D4855c8e11BC4a8d3e39b87"} chainID={1} />
-- <AEL address={"0xB51EDdfc9A945e2B909905e4F242C4796Ac0C61d"} chainID={1} />
-
-#### Arbitrum Goerli (testnet)
-
-- <AEL address={"0x3EABe7e5e3fcDdFB8fb8c5972EB151bF4fddf2ce"} chainID={5} />
-- <AEL address={"0x9549263185294a7FB24bf357b0050252d3653C74"} chainID={5} />
-- <AEL address={"0xAa01D5570E932a13eF9a06677eaf97d56a33393f"} chainID={5} />
-- <AEL address={"0xe08339b8Da134f1e39876b7523586c4D2a4173d8"} chainID={5} />
-
-## Data Availability Committee members
-
-These are the members of the 6-of-7 data availability committee (DAC) in Arbitrum Nova:
-
-- Reddit, Inc.
-- ConsenSys Software Inc.
-- QuickNode, Inc.
-- P2P
-- Google Cloud
-- Offchain Labs, Inc.
-- Opensea Innovation Labs Private Limited
 
 ## Conclusion
 

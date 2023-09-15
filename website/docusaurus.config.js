@@ -1,52 +1,51 @@
-// @ts-check
+// @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const variableInjector = require('./src/remark/variable-injector');
+const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Arbitrum Docs",
-  tagline: "Arbitrum Docs",
-  url: "https://developer.arbitrum.io/",
-  baseUrl: "/",
-  onBrokenLinks: "ignore",
-  onBrokenMarkdownLinks: "warn",
-  favicon: "img/logo.svg",
+  title: 'Arbitrum Docs',
+  tagline: 'Arbitrum Docs',
+  url: 'https://developer.arbitrum.io/',
+  baseUrl: '/',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
+  favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
   },
-  themes: ["@docusaurus/theme-mermaid", "@docusaurus/theme-live-codeblock"],
+  themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "OffchainLabs", // Usually your GitHub org/user name.
-  projectName: "docusaurus", // Usually your repo name.
+  organizationName: 'OffchainLabs', // Usually your GitHub org/user name.
+  projectName: 'docusaurus', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
+    defaultLocale: 'en',
+    locales: ['en'],
   },
 
   presets: [
     [
-      "@docusaurus/preset-classic",
+      '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: "../arbitrum-docs/",
-          sidebarPath: require.resolve("./sidebars.js"),
-          routeBasePath: "/",
+          path: '../arbitrum-docs/',
+          sidebarPath: require.resolve('./sidebars.js'),
+          routeBasePath: '/',
           breadcrumbs: false,
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
-            if (s.docPath.includes("troubleshooting") || s.docPath.includes("node-providers")) return undefined;
+            if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
+              return undefined;
             return (
-              "https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/" +
-              s.docPath
+              'https://github.com/OffchainLabs/arbitrum-docs/edit/master/arbitrum-docs/' + s.docPath
             );
           },
           showLastUpdateTime: true,
@@ -54,156 +53,123 @@ const config = {
             [
               variableInjector,
               {
-                replacements: require("./static/globalVars.js")
-              }
-            ]
-          ]
+                replacements: require('./src/resources/globalVars.js'),
+              },
+            ],
+          ],
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css')
-        }
+          customCss: require.resolve('./src/css/custom.css'),
+        },
       }),
     ],
   ],
   plugins: [
     // See below hack - this gets modified if you're running locally on windows
     [
-      "@docusaurus/plugin-content-docs",
+      '@docusaurus/plugin-content-docs',
       {
-        id: "arbitrum-sdk",
-        path: "../arbitrum-sdk/docs",
-        routeBasePath: "sdk",
-        // ... other options
+        id: 'arbitrum-sdk',
+        path: './sdk-docs',
+        routeBasePath: 'sdk',
+        sidebarItemsGenerator: sdkSidebarGenerator,
       },
     ],
     [
-      "posthog-docusaurus",
+      'posthog-docusaurus',
       {
-        apiKey: "phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL",
-        appUrl: "https://app.posthog.com",
+        apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
+        appUrl: 'https://app.posthog.com',
         enableInDevelopment: false,
-        persistence: "memory",
-        disable_session_recording: true
+        persistence: 'memory',
+        disable_session_recording: true,
       },
     ],
-    require.resolve("docusaurus-plugin-fathom"),
-    require.resolve("docusaurus-lunr-search"),
+    require.resolve('docusaurus-plugin-fathom'),
+    require.resolve('docusaurus-lunr-search'),
   ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       fathomAnalytics: {
-        siteId: "DOHOZGJO"
+        siteId: 'DOHOZGJO',
       },
       navbar: {
-        title: "Arbitrum Docs",
+        title: 'Arbitrum Docs',
         logo: {
-          alt: "My Site Logo",
-          src: "img/logo.svg",
+          alt: 'My Site Logo',
+          src: 'img/logo.svg',
         },
         items: [
           {
-            type: "doc",
-            docId: "for-devs/quickstart-solidity-hardhat",
-            position: "left",
-            label: "Build decentralized apps",
+            type: 'doc',
+            docId: 'for-devs/quickstart-solidity-hardhat',
+            position: 'left',
+            label: 'Developers',
           },
           {
-            type: "doc",
-            docId: "getting-started-users",
-            position: "left",
-            label: "Bridge tokens",
+            type: 'doc',
+            docId: 'getting-started-users',
+            position: 'left',
+            label: 'Users (Bridge)',
           },
           {
-            type: "doc",
-            docId: "node-running/quickstart-running-a-node",
-            label: "Run a node",
-            position: "left",
+            type: 'doc',
+            docId: 'node-running/quickstart-running-a-node',
+            label: 'Node runners',
+            position: 'left',
           },
           {
-            type: "doc",
-            docId: "chain-launching/launch-a-chain",
-            position: "left",
-            label: "Launch an L3",
-          },
-          {
-            type: "doc",
-            docId: "intro/intro",
-            position: "left",
-            label: "Learn more",
-          },
-          {
-            type: "dropdown",
-            label: "Links",
-            position: "right",
-            items: [
-              {
-                href: "/sdk",
-                label: "SDK docs",
-              },
-              {
-                href: "https://github.com/OffchainLabs/nitro",
-                label: "GitHub",
-              },
-              {
-                href: "https://research.arbitrum.io/",
-                label: "Research",
-              },
-              {
-                href: "https://github.com/OffchainLabs/arbitrum-tutorials",
-                label: "Tutorials",
-              },
-              {
-                href: "https://medium.com/offchainlabs",
-                label: "Blog",
-              },
-            ],
+            type: 'doc',
+            docId: 'intro/intro',
+            position: 'left',
+            label: 'How it works',
           },
         ],
       },
       // todo: descriptive footer
       footer: {
-        style: "dark",
+        style: 'dark',
         links: [
           {
-            title: "Info",
+            title: 'Info',
             items: [
               {
-                label: "Offchain Labs",
-                to: "https://offchainlabs.com/",
+                label: 'Offchain Labs',
+                to: 'https://offchainlabs.com/',
               },
               {
-                label: "Arbitrum.io",
-                to: "https://arbitrum.io/",
+                label: 'Arbitrum.io',
+                to: 'https://arbitrum.io/',
               },
               {
-                label: "Nova.arbitrum.io",
-                to: "https://nova.arbitrum.io/",
+                label: 'Nova.arbitrum.io',
+                to: 'https://nova.arbitrum.io/',
               },
               {
-                label: "Nitro whitepaper",
-                to: "https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf",
-              }
+                label: 'Nitro whitepaper',
+                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+              },
             ],
           },
           {
-            title: "Community",
+            title: 'Community',
             items: [
               {
-                label: "Discord",
-                href: "https://discord.gg/ZpZuw7p",
+                label: 'Discord',
+                href: 'https://discord.gg/ZpZuw7p',
               },
               {
-                label: "Twitter",
-                href: "https://twitter.com/ArbitrumDevs",
+                label: 'Twitter',
+                href: 'https://twitter.com/ArbitrumDevs',
               },
               {
-                label: "Research forum",
-                href: "https://research.arbitrum.io/",
+                label: 'Research forum',
+                href: 'https://research.arbitrum.io/',
               },
               {
-                label: "Medium Blog",
-                href: "https://medium.com/offchainlabs",
+                label: 'Medium Blog',
+                href: 'https://medium.com/offchainlabs',
               },
             ],
           },
@@ -211,13 +177,11 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-        additionalLanguages: ["solidity"],
+        additionalLanguages: ['solidity', 'rust'],
       },
       announcementBar: {
-        id: "support_us",
-        content: `Arbitrum One and Arbitrum Nova are now under decentralized governance. Learn more about Arbitrum DAO <a href='https://docs.arbitrum.foundation/gentle-intro-dao-governance'>here</a>.`,
+        id: 'support_us',
+        content: `The Stylus testnet is officially live! Build EVM-compatible apps with Rust by visiting the <a href='/stylus/stylus-gentle-introduction'>Stylus docs</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
@@ -233,11 +197,10 @@ const config = {
           flowchart: {
             curve: 'basis',
           },
-        }
-      }
+        },
+      },
     }),
 };
-
 
 // HACK
 // this was originally included above
@@ -246,12 +209,16 @@ const config = {
 const isRunningLocally = process.env.NODE_ENV === 'development';
 const isRunningOnWindows = process.platform === 'win32';
 if (isRunningLocally && isRunningOnWindows) {
-  config.plugins = config.plugins.filter(plugin => {
-    if (Array.isArray(plugin) && plugin[0] === "@docusaurus/plugin-content-docs") {
-      return false;  // remove the offending plugin config
+  config.plugins = config.plugins.filter((plugin) => {
+    if (Array.isArray(plugin) && plugin[0] === '@docusaurus/plugin-content-docs') {
+      return false; // remove the offending plugin config
     }
-    return true;  // keep everything else
+    return true; // keep everything else
   });
+} else {
+  // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
+  config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
+  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/dracula');
 }
 
 module.exports = config;

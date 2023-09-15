@@ -1,13 +1,12 @@
-import React from "react";
-import { ethers } from 'ethers'
-import VendingMachineContract from './VendingMachine.sol/VendingMachine.json'
+import React from 'react';
+import { ethers } from 'ethers';
+import VendingMachineContract from './VendingMachine.sol/VendingMachine.json';
 
-export const VendingMachine = (props: { id: string, type: string }) => {
-
+export const VendingMachine = (props: { id: string; type: string }) => {
   class Web2VendingMachineClient {
     // UI concerns
     isWeb3 = false;
-    identityLabel = "Name";
+    identityLabel = 'Name';
 
     // state variables = internal memory of the vending machine
     cupcakeBalances = {};
@@ -22,13 +21,16 @@ export const VendingMachine = (props: { id: string, type: string }) => {
 
       // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
       const fiveSeconds = 5000;
-      const userCanReceiveCupcake = this.cupcakeDistributionTimes[identity] + fiveSeconds <= Date.now();
+      const userCanReceiveCupcake =
+        this.cupcakeDistributionTimes[identity] + fiveSeconds <= Date.now();
       if (userCanReceiveCupcake) {
         this.cupcakeBalances[identity]++;
         this.cupcakeDistributionTimes[identity] = Date.now();
         return true;
       } else {
-        console.error("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+        console.error(
+          'HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)',
+        );
         return false;
       }
     }
@@ -36,8 +38,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     // the web3 version of the vending machine implements this using ethereum
     async getCupcakeBalanceFor(identity) {
       let balance = this.cupcakeBalances[identity];
-      if (balance === undefined)
-        balance = 0;
+      if (balance === undefined) balance = 0;
       return balance;
     }
   }
@@ -45,7 +46,7 @@ export const VendingMachine = (props: { id: string, type: string }) => {
   class Web3VendingMachineClient {
     // UI concerns
     isWeb3 = true;
-    identityLabel = "Metamask wallet address";
+    identityLabel = 'Metamask wallet address';
 
     // notice the absence of state variables; the web3 version of the vending machine stores its state in a blockchain data structure hosted by Ethereum's decentralized network of nodes
 
@@ -109,7 +110,11 @@ export const VendingMachine = (props: { id: string, type: string }) => {
       if (ethereumAvailable()) {
         // "hey metamask, let's use the network and account the user has selected to interact with the contract"
         const signer = await this.initSigner();
-        const contract = new ethers.Contract(vendingMachineContractAddress, VendingMachineContract.abi, signer)
+        const contract = new ethers.Contract(
+          vendingMachineContractAddress,
+          VendingMachineContract.abi,
+          signer,
+        );
         return contract;
       }
     }
@@ -119,30 +124,32 @@ export const VendingMachine = (props: { id: string, type: string }) => {
     }
   }
 
-  const vendingMachineClient = props.type == "web2" ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
+  const vendingMachineClient =
+    props.type == 'web2' ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
   vendingMachineClient.domId = props.id;
-  vendingMachineClient.getElementById = (id) => document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
+  vendingMachineClient.getElementById = (id) =>
+    document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
 
   const prefillWeb3Identity = async () => {
     // if the user has metamask installed, prefill the identity input with their wallet address
-    identityInput.value = identityInput.value || await vendingMachineClient.getWalletAddress();
-  }
+    identityInput.value = identityInput.value || (await vendingMachineClient.getWalletAddress());
+  };
 
   const updateSuccessIndicator = (success) => {
-    vendingMachineClient.getElementById("error-indicator").classList.toggle("visible", !success);
-  }
+    vendingMachineClient.getElementById('error-indicator').classList.toggle('visible', !success);
+  };
 
   const callWeb3VendingMachine = async (func) => {
-    const identityInput = vendingMachineClient.getElementById("identity-input");
+    const identityInput = vendingMachineClient.getElementById('identity-input');
     const identity = identityInput.value;
-    const contractAddressInput = vendingMachineClient.getElementById("contract-address-input");
+    const contractAddressInput = vendingMachineClient.getElementById('contract-address-input');
     const contractAddress = contractAddressInput.value;
     return await func(identity, contractAddress);
-  }
+  };
 
   const handleCupcakePlease = async () => {
     try {
-      const identityInput = vendingMachineClient.getElementById("identity-input");
+      const identityInput = vendingMachineClient.getElementById('identity-input');
       const identity = identityInput.value;
 
       let gotCupcake;
@@ -155,38 +162,38 @@ export const VendingMachine = (props: { id: string, type: string }) => {
 
       let existingFadeout;
       if (gotCupcake) {
-        const cupcake = vendingMachineClient.getElementById("cupcake");
+        const cupcake = vendingMachineClient.getElementById('cupcake');
         cupcake.style.opacity = 1;
-        cupcake.style.transition = "unset";
+        cupcake.style.transition = 'unset';
         clearTimeout(existingFadeout);
 
         existingFadeout = setTimeout(() => {
-          cupcake.style.transition = "opacity 5.5s";
+          cupcake.style.transition = 'opacity 5.5s';
           cupcake.style.opacity = 0;
         }, 0);
 
         setTimeout(() => {
-          cupcake.style.transition = "opacity 0s";
+          cupcake.style.transition = 'opacity 0s';
           cupcake.style.opacity = 0;
         }, 5000);
 
         await handleRefreshBalance();
       } else if (gotCupcake === false) {
-        alert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+        alert('HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)');
       }
       updateSuccessIndicator(true);
     } catch (err) {
-      console.error("ERROR: handleCupcakePlease: " + err);
+      console.error('ERROR: handleCupcakePlease: ' + err);
       updateSuccessIndicator(false);
     }
   };
 
   const handleRefreshBalance = async () => {
     try {
-      const identityInputEl = vendingMachineClient.getElementById("identity-input");
+      const identityInputEl = vendingMachineClient.getElementById('identity-input');
       let identityFromInput = identityInputEl.value;
       let identityToDisplay;
-      const cupcakeCountEl = vendingMachineClient.getElementById("cupcake-balance");
+      const cupcakeCountEl = vendingMachineClient.getElementById('cupcake-balance');
       let balanceToDisplay;
 
       if (vendingMachineClient.isWeb3) {
@@ -196,35 +203,50 @@ export const VendingMachine = (props: { id: string, type: string }) => {
         identityToDisplay = identityFromInput.truncateAddress();
       } else {
         identityToDisplay = identityFromInput;
-        if (identityToDisplay == null || identityToDisplay == "")
-          identityToDisplay = "no name";
+        if (identityToDisplay == null || identityToDisplay == '') identityToDisplay = 'no name';
         balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identityFromInput);
       }
 
-      cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`
+      cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`;
       updateSuccessIndicator(true);
     } catch (err) {
-      console.error("ERROR: handleRefreshBalance: " + err);
+      console.error('ERROR: handleRefreshBalance: ' + err);
       updateSuccessIndicator(false);
     }
   };
 
   String.prototype.truncateAddress = function () {
-    return this.slice(0, 5) + "..." + this.slice(-3);
+    return this.slice(0, 5) + '...' + this.slice(-3);
   };
 
   return (
-    <div className='vending-machine' id={vendingMachineClient.domId}>
+    <div className="vending-machine" id={vendingMachineClient.domId}>
       <h4>Free Cupcakes</h4>
-      <span className='subheader'>{props.type}</span>
+      <span className="subheader">{props.type}</span>
       <label>{vendingMachineClient.identityLabel}</label>
-      <input id="identity-input" type="text" placeholder={"Enter " + vendingMachineClient.identityLabel.toLowerCase()} />
+      <input
+        id="identity-input"
+        type="text"
+        placeholder={'Enter ' + vendingMachineClient.identityLabel.toLowerCase()}
+      />
       <label className={vendingMachineClient.isWeb3 ? '' : 'hidden'}>Contract address</label>
-      <input id="contract-address-input" type="text" placeholder="Enter contract address" className={vendingMachineClient.isWeb3 ? '' : 'hidden'} />
-      <button id="cupcake-please" onClick={handleCupcakePlease}>Cupcake please!</button>
-      <a id="refresh-balance" onClick={handleRefreshBalance}>Refresh balance</a>
-      <span id="cupcake" style={{ opacity: 0 }}> 🧁</span>
-      <p id='balance-wrapper'>
+      <input
+        id="contract-address-input"
+        type="text"
+        placeholder="Enter contract address"
+        className={vendingMachineClient.isWeb3 ? '' : 'hidden'}
+      />
+      <button id="cupcake-please" onClick={handleCupcakePlease}>
+        Cupcake please!
+      </button>
+      <a id="refresh-balance" onClick={handleRefreshBalance}>
+        Refresh balance
+      </a>
+      <span id="cupcake" style={{ opacity: 0 }}>
+        {' '}
+        🧁
+      </span>
+      <p id="balance-wrapper">
         <span>Cupcake balance:</span>
         <span id="cupcake-balance">0</span>
       </p>

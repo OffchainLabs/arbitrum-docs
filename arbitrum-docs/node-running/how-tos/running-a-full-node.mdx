@@ -1,5 +1,5 @@
 ---
-title: "How to run a full node (Nitro)"
+title: 'How to run a full node (Nitro)'
 description: Learn how to run an Arbitrum node on your local machine.
 content-type: how-to
 ---
@@ -9,7 +9,7 @@ content-type: how-to
 ### Minimum hardware configuration
 
 - Followings specify the minimum hardware configuration required to setup a Nitro full node (not archival):
-  - RAM: 4-8 GB
+  - RAM: 8-16 GB
   - CPU: 2-4 core CPU (For AWS: t3 xLarge)
   - Storage: Minimum 1.2TB SSD (make sure it is extendable)
   - Estimated Growth Rate: around 3 GB per day
@@ -20,24 +20,18 @@ content-type: how-to
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
-- Arbitrum One Nitro Genesis Database Snapshot
-
-  - Use the parameter `--init.url="https://snapshot.arbitrum.io/mainnet/nitro.tar"` on first startup to initialize Nitro database
-  - If running more than one node, easiest to manually download image from https://snapshot.arbitrum.io/mainnet/nitro.tar and host it locally for your nodes
-  - Or use `--init.url="file:///path/to/snapshot/in/container/nitro.tar"` to use a local snapshot archive
-  - sha256 checksum: `a609773c6103435b8a04d32c63f42bb5fa0dc8fc38a2acee4d2ab2d05880205c`
-  - size: 33.5573504 GB
-
-- Other chains do not have classic blocks, and do not require an initial genesis database
-
-- Snapshot list: https://snapshot.arbitrum.foundation/index.html
+- Database snapshot (required for Arbitrum One, optional for other chains)
+  - Use the parameter `--init.url` on first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroPrunedSnapshot@"</code>.
+  - When running more than one node, it's easier to manually download the image of the snapshot and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it.
+  - This parameter is **required** when initializing an Arbitrum One node because the chain has _classic_ blocks. For the rest of chains, this parameter is optional.
+  - This parameter is ignored if the database already exists.
 
 ### Required parameter
 
 - `--l1.url=<Layer 1 Ethereum RPC URL>`
   - Must provide standard layer 1 node RPC endpoint that you run yourself or from a node provider
 - `--l2.chain-id=<L2 Chain ID>`
-  - See [public chains](/for-devs/concepts/public-chains.mdx) for a list of Arbitrum chains and the respective L2 Chain Ids
+  - See [RPC endpoints and providers](/node-running/node-providers.mdx#rpc-endpoints) for a list of Arbitrum chains and the respective L2 Chain Ids
 
 ### Important ports
 
@@ -76,10 +70,22 @@ content-type: how-to
   chmod -fR 777 /data/arbitrum
   ```
 
+### Watchtower mode
+
+- By default, the full node will run in Watchtower mode. This means that the node watches the on-chain assertions and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`.
+- Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode by using the parameter `--node.staker.enable=false`.
+
+### Pruning
+
+- Pruning a full node refers to the process of removing older, unnecessary data from the local copy of the blockchain that the node maintains, in order to save disk space and slightly improve the efficiency of the node. Pruning will remove all states from blocks older than the latest 128.
+- You can activate pruning by using the parameter `--init.prune` and using "full" or "validator" as the value (depending on the type of node you are running). Keep in mind that this process will happen upon starting the node and it will not serve RPC requests while pruning.
+
 ### Optional parameters
 
-- `--init.url=https://snapshot.arbitrum.io/mainnet/nitro.tar`
-  - URL to download genesis database from. Only needed when starting Arbitrum One without database. If you want to run an archive node, use the url in [running an archive node](./running-an-archive-node.mdx).
+- `--init.url="<snapshot file>"`
+  - URL to download the genesis database from. Only required when starting an Arbitrum One node for the first time. You can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html). If you want to run an archive node, use the url in [running an archive node](./running-an-archive-node.mdx).
+- `--init.download-path="/path/to/directory"`
+  - Location to temporarily save the downloaded database snapshot (it defaults to "/tmp/"). It is used together with `--init.url` when needed.
 - `--node.rpc.classic-redirect=<classic node RPC>`
   - If set, will redirect archive requests for pre-nitro blocks to the designated RPC, which should be an Arbitrum Classic node with archive database. Only valid for Arbitrum One.
 - `--http.api`
@@ -92,7 +98,7 @@ content-type: how-to
 - `--http.addr`
   - Address to bind RPC to. May need to be set to `0.0.0.0` for docker networking to work properly
 - `--node.caching.archive`
-  - Retain past block state
+  - Retain past block state (for archive nodes)
 - `--node.feed.input.url=<feed address>`
   - Defaults to `wss://<chainName>.arbitrum.io/feed`.
   - ⚠️ When running more than one node, it is strongly suggested to provide one feed relay per datacenter. See further instructions in [How to run a feed relay](/node-running/how-tos/running-a-feed-relay.mdx).
@@ -109,4 +115,4 @@ content-type: how-to
   - 🔉 Note that `IPC (Inter-Process Communication)` is not supported on the macOS yet, and hence, it will return connection refused if used
   - 🔉 Also note that this path is within the Docker container, you need to put it to the Docker mount point in order to use it
 - `--init.prune`
-  - Pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators (Only works after v2.0.14)
+  - Activates offline pruning on initialization. Value can be "full" for full nodes serving RPC requests, or "validator" for validators (Only works after `v2.0.14`)

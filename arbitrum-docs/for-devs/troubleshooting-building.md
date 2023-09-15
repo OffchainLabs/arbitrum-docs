@@ -1,11 +1,11 @@
 ---
-title: "Troubleshooting: Building Arbitrum dApps"
+title: 'Troubleshooting: Building Arbitrum dApps'
 ---
 
-import FaqPartial, {toc as FAQTOC} from '../partials/\_troubleshooting-building-partial.md';
+import FaqPartial, { toc as FAQTOC } from '../partials/_troubleshooting-building-partial.md';
 
-<div data-faq-origin-slug='build-faq'>
-    <FaqPartial />
+<div data-faq-origin-slug="build-faq">
+  <FaqPartial />
 </div>
 
-export const toc = FAQTOC
+export const toc = FAQTOC;

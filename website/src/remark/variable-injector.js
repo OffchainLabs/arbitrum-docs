@@ -14,24 +14,31 @@
 
 const visit = require('unist-util-visit');
 
-const plugin = ((options) => {
-  return (async (ast) => {
+// Allowed types (in alphabetical order)
+const allowedTypes = ['code', 'definition', 'inlineCode', 'jsx', 'link', 'text'];
 
+const plugin = (options) => {
+  return async (ast) => {
     // visit() will match all nodes form the AST that have one of the types specified
     // in the second argument.
     // In those nodes, we want to inject variables in different fields:
-    //    - For 'text' and 'code' nodes, we'll look in the "value" property
-    //    - For 'link' nodes, we'll look in the "url" property
-    visit(ast, ['text', 'code', 'link'], (node) => {
+    //    - For 'code', 'inlineCode', 'jsx' and 'text' nodes, we'll look in the "value" property
+    //    - For 'link' and 'definition' nodes, we'll look in the "url" property
+    // Nodes generated in AST are referenced here: https://github.com/syntax-tree/mdast
+    // Note: to "visit" a node, reference it here in camelCase
+    visit(ast, allowedTypes, (node) => {
       let value;
-      switch(node.type) {
-        case "link":
-          value = node.url;
-          break;
-        
-        case "text":
-        case "code":
+      switch (node.type) {
+        case 'code':
+        case 'inlineCode':
+        case 'jsx':
+        case 'text':
           value = node.value;
+          break;
+
+        case 'definition':
+        case 'link':
+          value = node.url;
           break;
       }
 
@@ -48,17 +55,20 @@ const plugin = ((options) => {
       });
 
       switch (node.type) {
-        case "link":
-          node.url = value;
+        case 'code':
+        case 'inlineCode':
+        case 'jsx':
+        case 'text':
+          node.value = value;
           break;
 
-        case "text":
-        case "code":
-          node.value = value;
+        case 'definition':
+        case 'link':
+          node.url = value;
           break;
       }
     });
-  });
-});
+  };
+};
 
 module.exports = plugin;
