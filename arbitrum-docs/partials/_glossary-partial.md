@@ -31,7 +31,7 @@
 <p>Current Arbitrum tech stack; runs a fork of <a href="/intro/glossary#geth">Geth</a> and uses WebAssembly as its underlying VM for fraud proofs.</p>
 
 ### Arbitrum Nova {#arbitrum-nova}
-<p>The first <a href="/intro/glossary#arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> running on Ethereum mainnet. Introduces cheaper transactions; great for gaming and social use-cases. Implements the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a>, not the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> protocol. </p>
+<p>The first <a href="/intro/glossary#arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> running on Ethereum mainnet. Introduces cheaper transactions; great for gaming and social use-cases. Implements the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a>, not the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> protocol.</p>
 
 ### Arbitrum One {#arbitrum-one}
 <p>The first <a href="/intro/glossary#arbitrum-rollup-chain">Arbitrum Rollup Chain</a> running on Ethereum mainnet. Fully trustless; inherits Ethereum's base-layer security guarantees without introducing additional trust assumptions; great for decentralized finance and other use-cases that demand L1-level trustlessness.</p>

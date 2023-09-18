@@ -5,7 +5,7 @@
 
 <p>The L1 component is meant to compensate the Sequencer for the cost of posting transactions on L1 (but no more). (See <a href="https://developer.arbitrum.io/arbos/l1-pricing">L1 Pricing</a>.)</p>
 
-<p>The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See [Gas](/arbos/gas.mdx)).</p>
+<p>The L2 component covers the cost of operating the L2 chain; it uses Geth for gas calculation and thus behaves nearly identically to L1 Ethereum. One difference is that unlike on Ethereum, Arbitrum chains enforce a gas price floor; currently 0.1 gwei on Arbitrum One and 0.01 gwei on Nova (See <a href="https://docs.arbitrum.io/arbos/gas">Gas</a>).</p>
 
 <p>L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.</p>
 
@@ -100,10 +100,6 @@ To let's find out which is custom error this signature represents, we can use th
 <p>See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">2-D fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a> for more.</p>
 
 <p></p>
-
-<p><strong>References</strong></p>
-
-<p><a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9</a></p>
 
 <p></p>
 
