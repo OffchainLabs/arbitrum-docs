@@ -1,25 +1,28 @@
 ---
-title: 'How to run a local dev node'
-description: Learn how to run an Arbitrum local dev node on your local machine.
+title: 'How to run a local dev node with Stylus support'
+sidebar_label: 'Local Stylus dev node'
+description: 'A guide to run an Arbitrum local dev node with Stylus support on your local machine'
+author: jose-franco
+sme: jose-franco
+target_audience: 'Developers deploying smart contracts using Stylus'
 content-type: how-to
+sidebar_position: 4
 ---
 
-A local Arbitrum Nitro dev node can help you deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of deploying and running a full development environment on your local machine that includes a Nitro dev node, a dev-mode geth L1, and multiple instances with different roles.
+import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
-:::info Stylus support
+<PublicPreviewBannerPartial />
 
-This guide follows the process to setup a regular nitro local dev node without Stylus support. If you want to have Stylus support for your local development environment, [check out this guide](/stylus/reference/local-stylus-dev-node.mdx).
-
-:::
+This how-to guides you through the process of setting up a local Arbitrum Nitro dev node, with Stylus support, to help you deploy and test smart contracts written in Solidity or any of the [Stylus supported languages](/stylus/stylus-gentle-introduction.md#in-a-nutshell) in a fully controlled environment. By following these steps, you'll deploy and run a full development environment on your local machine that includes a Nitro dev node (L2), a dev-mode geth parent chain (L1), and multiple instances with different roles.
 
 ### 1. Install prerequisites
 
 You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
 
-### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
+### 2. Clone the stylus branch of the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 ```bash
-git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git
+git clone -b stylus --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git
 cd nitro-testnode
 ```
 
