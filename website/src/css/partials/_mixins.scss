@@ -1,0 +1,47 @@
+@mixin enable-transition {
+  -o-transition: all 0.15s ease;
+  -ms-transition: all 0.15s ease;
+  -moz-transition: all 0.15s ease;
+  -webkit-transition: all 0.15s ease;
+  /* ...and now for the proper property */
+  transition: all 0.15s ease;
+}
+
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin invisible-horizontal-scroll {
+  -ms-overflow-style: none;
+  /* for Internet Explorer, Edge */
+  scrollbar-width: none;
+  /* for Firefox */
+  overflow-x: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+    /* for Chrome, Safari, and Opera */
+  }
+}
+
+@mixin small-table {
+  font-size: 12.5px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  td {
+    padding: 10px;
+  }
+}
+
+@mixin medium-table {
+  font-size: 13px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+
+  td {
+    padding: 15px;
+  }
+}
