@@ -5,7 +5,7 @@ description: 'A reference of how much opcodes and host I/Os cost in Stylus, with
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: 'Developers deploying smart contracts using Stylus.'
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
