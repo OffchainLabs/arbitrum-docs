@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 The guidance displayed on this page will change based on your selected configuration:
 
-import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/partials/_multidimensional-content-controls-partial.md';
+import MultidimensionalContentControlsPartial from '../partials/_multidimensional-content-controls-partial.md';
 
 <MultidimensionalContentControlsPartial />
 
