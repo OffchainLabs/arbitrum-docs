@@ -1,11 +1,11 @@
 ---
 title: 'Frequently asked questions: Get started'
+sidebar_label: 'Frequently asked questions: Get started'
+description: List of questions and answers frequently asked by users
+reader_audience: users who want to use, or are using, Arbitrum
+content-type: faq
 ---
 
-import FaqPartial, { toc as FAQTOC } from '../partials/_troubleshooting-users-partial.md';
+import FaqPartial from '../partials/_troubleshooting-users-partial.md';
 
-<div data-faq-origin-slug="get-started-faq">
-  <FaqPartial />
-</div>
-
-export const toc = FAQTOC;
+<FaqPartial />
