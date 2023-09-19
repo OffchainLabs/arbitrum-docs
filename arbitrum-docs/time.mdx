@@ -26,7 +26,7 @@ As a general rule, any timing assumptions a contract makes about block numbers a
 
 Arbitrum blocks have their own block numbers, starting at 0 at the Arbitrum genesis block and updating sequentially.
 
-ArbOS and the Sequencer are responsible for delineating when one Arbitrum block ends and the next one begins; one should expect to see Arbitrum blocks produced at a relatively steady rate.
+ArbOS and the Sequencer are responsible for delineating when one Arbitrum block ends and the next one begins. However, block creation depends entirely on chain usage, meaning that blocks are only produced when there are transactions to sequence. In active chains, one can expect to see Arbitrum blocks produced at a relatively steady rate. In more quiet chains, block production might be sporadic depending on the rate at which transactions are received.
 
 A client that queries an Arbitrum node's RPC interface (for, ie., transaction receipts) will receive the transaction's Arbitrum block number as the standard block number field. The L1 block number will also be included in the added `l1BlockNumber field`.
 
