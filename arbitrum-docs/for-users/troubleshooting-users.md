@@ -1,11 +1,11 @@
 ---
 title: 'Troubleshooting: Bridge funds using the Arbitrum Bridge'
+sidebar_label: 'Troubleshooting: Bridge funds using the Arbitrum Bridge'
+description: List of questions and answers frequently asked by users
+reader_audience: end users who want to use, or are using, Arbitrum
+content-type: faq
 ---
 
-import FaqPartial, { toc as FAQTOC } from '../partials/_troubleshooting-bridging-partial.md';
+import FaqPartial from '../partials/_troubleshooting-bridging-partial.md';
 
-<div data-faq-origin-slug="bridging-faq">
-  <FaqPartial />
-</div>
-
-export const toc = FAQTOC;
+<FaqPartial />

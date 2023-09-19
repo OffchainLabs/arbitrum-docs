@@ -1,3 +1,19 @@
+import CodeBlock from '@theme/CodeBlock';
+
+### 1. Install prerequisites
+
+You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
+
+### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
+
+<p>
+  You'll need the <code>{props.branch}</code> branch.
+</p>
+
+<CodeBlock language="bash">
+  {`git clone -b ${props.branch} --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`}
+</CodeBlock>
+
 ### 3. Run your node
 
 ```bash
