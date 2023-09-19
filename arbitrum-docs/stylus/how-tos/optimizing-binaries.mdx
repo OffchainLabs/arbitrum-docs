@@ -13,7 +13,7 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 <PublicPreviewBannerPartial />
 
-WebAssembly (WASM) programs need to be small to be deployed onchain. Stylus applies [brotli compression](https://github.com/google/brotli), which empirically reduces the footprint of common Rust WASMs by over 50%, the Stylus runtime obeys the EVM contract size limit of 24KB. This means that, after compression, **all WASMs must not exceed 24KB**.
+To be deployed onchain, the size of your compressed WebAssembly (WASM) binary must not exceed 24KB. The Stylus CLI automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries. Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
 
 **Uncompressed WASM** files also have an enforced limit of **128Kb**.
 
