@@ -1,6 +1,7 @@
 ---
 title: 'Contribute third-party docs'
 description: "Learn how to contribute to Arbitrum's documentation"
+sidebar_position: 0
 ---
 
 import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
