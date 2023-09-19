@@ -17,7 +17,7 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus programs compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
 
-Today, the Stylus testnet also comes with 2 officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages. 
+Today, the Stylus testnet also comes with 2 officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
 
 However, _anyone_ can add support for new languages in Stylus. **As long as a programming language can compile to WebAssembly**, fit under 24Kb brotli-compressed, and meets some of the gas metering requirements of Stylus, it can be deployed and used onchain.
 
@@ -26,7 +26,7 @@ In this document, we go over how we added support for the up-and-coming [Zig](ht
 Why Zig?
 
 1. Zig contains **memory safety guardrails**, requiring developers to think hard about manual memory allocation in a prudent manner
-2. Zig is a **C equivalent** language, and its tooling is also a C compiler. This means C projects can incrementally adopt Zig when refactoring 
+2. Zig is a **C equivalent** language, and its tooling is also a C compiler. This means C projects can incrementally adopt Zig when refactoring
 3. Zig is **lightning fast** and produces **small binaries**, making it suitable for blockchain applications
 
 Programs written in Zig and deployed to Stylus have a tiny footprint and will have gas costs comparable, if not equal to, C programs.
@@ -56,7 +56,7 @@ then delete everything inside of `main.zig`. We'll be filling it out ourselves i
 
 To support Stylus, your Zig programs need to define a special entrypoint function, which takes in the length of its input args, `len`, and returns a status code `i32`, which is either 0 or 1. We won't need the Zig standard library for this.
 
-One more thing it needs is to use a special function, called `memory_grow` which can allocate memory for your program. This function is *injected* into all Stylus contracts as an external import. Internally, we call these `vm_hooks`, and also refer to them as `host-io's`, because they give you access to the host, EVM environment.
+One more thing it needs is to use a special function, called `memory_grow` which can allocate memory for your program. This function is _injected_ into all Stylus contracts as an external import. Internally, we call these `vm_hooks`, and also refer to them as `host-io's`, because they give you access to the host, EVM environment.
 
 Go ahead and replace everything in your `main.zig` function with:
 
