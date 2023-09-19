@@ -17,7 +17,6 @@ To be deployed onchain, the size of your **uncompressed WebAssembly (WASM) file*
 
 The [Stylus CLI](https://github.com/OffchainLabs/cargo-stylus) automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries. Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
 
-
 ## Rust compiler flags
 
 The Rust compiler supports various config options for shrinking binary sizes.
@@ -70,9 +69,6 @@ Additional WASM-specific tooling exists to shrink binaries. Due to being 3rd par
 ### `wasm-opt`
 
 [wasm-opt](https://docs.rs/wasm-opt/0.113.0/wasm_opt/) applies techniques to further reduce binary size, usually netting around 10%.
-
-
-
 
 ### Frequently asked questions
 
