@@ -40,5 +40,18 @@ jobs:
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Check formatting with Prettier
+        id: prettierCheck
         working-directory: ./website
         run: yarn format:check
+      
+      - name: Output formatting error
+        if: failure() && steps.prettierCheck.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.pulls.createReviewComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: 'Test automatic comment'
+            })
