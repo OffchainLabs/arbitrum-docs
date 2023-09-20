@@ -43,11 +43,9 @@ jobs:
         id: prettier-check
         working-directory: ./website
         run: |
-          {
-            echo 'prettierCheckOutput<<EOF'
-            yarn format:check
-            echo 'EOF'
-          } >> $GITHUB_OUTPUT
+          echo 'prettierCheckOutput<<EOF' >> $GITHUB_OUTPUT
+          yarn format:check >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       
       - name: Output formatting error
         if: failure() && steps.prettier-check.outcome == 'failure'
@@ -59,5 +57,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Test automatic comment ${{ steps.prettier-check.outputs.prettierCheckOutput }}'
+              body: 'Test automatic comment: ${{ steps.prettier-check.outputs.prettierCheckOutput }}'
             })
