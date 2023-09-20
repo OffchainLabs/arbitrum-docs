@@ -40,13 +40,12 @@ jobs:
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
 
       - name: Check formatting with Prettier
-        id: prettierCheck
+        id: prettier-check
         working-directory: ./website
-        # run: echo "format-check-output=$(yarn format:check)" >> $GITHUB_OUTPUT
-        run: yarn format:check
+        run: echo "prettier-check-output=$(yarn format:check)" >> $GITHUB_OUTPUT
       
       - name: Output formatting error
-        if: failure() && steps.prettierCheck.outcome == 'failure'
+        if: failure() && steps.prettier-check.outcome == 'failure'
         uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -55,5 +54,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Test automatic comment'
+              body: 'Test automatic comment ${{ steps.prettier-check.outputs.prettier-check-output }}'
             })
