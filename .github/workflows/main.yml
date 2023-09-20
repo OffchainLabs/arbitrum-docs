@@ -42,10 +42,7 @@ jobs:
       - name: Check formatting with Prettier
         id: prettier-check
         working-directory: ./website
-        run: |
-          echo 'prettierCheckOutput<<EOF' >> "$GITHUB_OUTPUT"
-          yarn format:check >> "$GITHUB_OUTPUT"
-          echo 'EOF' >> "$GITHUB_OUTPUT"
+        run: yarn format:check
       
       - name: Output formatting error
         if: failure() && steps.prettier-check.outcome == 'failure'
@@ -57,5 +54,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Test automatic comment: ${{ steps.prettier-check.outputs.prettierCheckOutput.replace('\n', ' ') }}'
+              body: 'It looks like your changes are not well formatted. You can merge this PR, but we recommend to format your code with: `cd website && yarn format`. Thanks!'
             })
