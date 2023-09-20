@@ -318,6 +318,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Data indexers',
+          id: 'for-devs/dev-tools-and-resources/data-indexers',
+        },
+        {
+          type: 'doc',
           label: 'Development frameworks',
           id: 'for-devs/dev-tools-and-resources/development-frameworks',
         },
