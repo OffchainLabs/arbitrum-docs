@@ -42,12 +42,14 @@ jobs:
       - name: Check formatting with Prettier
         id: prettierCheck
         working-directory: ./website
+        # run: echo "format-check-output=$(yarn format:check)" >> $GITHUB_OUTPUT
         run: yarn format:check
       
       - name: Output formatting error
         if: failure() && steps.prettierCheck.outcome == 'failure'
         uses: actions/github-script@v6
         with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.rest.pulls.createReviewComment({
               owner: context.repo.owner,
