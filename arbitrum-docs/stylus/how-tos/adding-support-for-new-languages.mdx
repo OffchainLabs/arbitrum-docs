@@ -219,7 +219,7 @@ cast call --rpc-url 'https://stylus-testnet.arbitrum.io/rpc' $ADDR '0x123456'
 
 Works!
 
-## Prime Number Checker Implementation
+## Prime number checker implementation
 
 Let's build something a little bit fancier: this time we'll implement a primality checker in Zig using an ancient algorithm called the [sieve of erathosthenes](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes). Given a number, our contract will output 1 if it is prime, or 0 otherwise. We'll implement in a pretty naive way, but leverage one of Zig's awesome features: [comptime](https://kristoff.it/blog/what-is-zig-comptime/).
 
