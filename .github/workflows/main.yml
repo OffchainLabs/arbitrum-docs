@@ -42,7 +42,12 @@ jobs:
       - name: Check formatting with Prettier
         id: prettier-check
         working-directory: ./website
-        run: echo "prettier-check-output=$(yarn format:check)" >> $GITHUB_OUTPUT
+        run: |
+          {
+            echo "prettier-check-output<<EOF"
+            yarn format:check
+            echo EOF
+          } >> $GITHUB_OUTPUT
       
       - name: Output formatting error
         if: failure() && steps.prettier-check.outcome == 'failure'
