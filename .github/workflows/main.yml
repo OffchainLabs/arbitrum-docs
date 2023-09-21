@@ -54,5 +54,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'It looks like your changes are not well formatted. You can merge this PR, but we recommend to format your code with:\n```cd website && yarn format```\nThanks!💙🧡'
+              body: 'It looks like your changes are not well formatted. You can merge this PR, but we recommend to format your code with:\n```\ncd website && yarn format\n```\nThanks!💙🧡'
             })
