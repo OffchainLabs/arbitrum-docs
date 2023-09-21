@@ -14,7 +14,10 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 <UnderConstructionPartial />
 
-There are 2 ways to customize your own precompile, first is to add your method logic to existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles), second is to create a new precompile.
+There are 2 ways to customize your own precompile:
+
+ 1. Add your method logic to an existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles).
+ 2. Create a new precompile.
 
 ### Prepare work
 
