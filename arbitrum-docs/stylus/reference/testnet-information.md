@@ -30,7 +30,7 @@ Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction
 
 :::
 
-For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](https://docs.arbitrum.io/node-running/node-providers#rpc-endpoints).
+For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](/node-running/node-providers#rpc-endpoints).
 
 ## Faucets
 
