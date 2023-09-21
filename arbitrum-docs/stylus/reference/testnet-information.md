@@ -36,9 +36,9 @@ For information on other mainnet and testnet Arbitrum chains, visit the Node Run
 
 Below you can find faucets for obtaining testnet ETH. If using a faucet on Ethereum Sepolia or Arbitrum Sepolia, your testnet ETH can be bridged to the Stylus testnet on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
-| Faucet Operator    | Faucet URL                                    | Chain            |
-| ------------------ | --------------------------------------------- | ---------------- |
-| Bware Labs         | https://bwarelabs.com/faucets/arbitrum-stylus-testnet | Stylus Testnet |
-| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia | Arbitrum Sepolia |
-| Alchemy            | https://sepoliafaucet.com/                    | Ethereum Sepolia |
-| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia |
+| Faucet Operator    | Faucet URL                                            | Chain            |
+| ------------------ | ----------------------------------------------------- | ---------------- |
+| Bware Labs         | https://bwarelabs.com/faucets/arbitrum-stylus-testnet | Stylus Testnet   |
+| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia         | Arbitrum Sepolia |
+| Alchemy            | https://sepoliafaucet.com/                            | Ethereum Sepolia |
+| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/                      | Ethereum Sepolia |
