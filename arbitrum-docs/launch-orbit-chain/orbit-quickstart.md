@@ -203,6 +203,16 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://sepolia-rollup.arbitrum.io/rp
 
 Your local Orbit chain is now running. You'll see an `outputInfo.json` file in the main directory of your script folder - this contains more information about your chain, including the addresses of your chain's base contracts.
 
+## Add Testnet Orbit Chain to the Arbitrum Bridge 
+
+1. Navigate to https://bridge.arbitrum.io/
+2. Connect to Arbitrum Goerli or Sepolia and the bridge page will automatically switch to the correct testnet view
+3. If you are connected to mainnet, and don’t switch networks manually in your wallet, then you can enable testnet mode in the bridge by clicking on your address in the top right --> clicking "settings" --> and then "turn on testnet mode".
+4. Go to settings and scroll down to “Add testnet Orbit chain”
+5. Insert the JSON configuration from the `outputInfo.json` file that's generated into the Orbit Testnet Bridge.
+6. Click “Add chain” Button
+7. Then your chain will appear in both the network drop down in the top navigation, and as an option in the bridging interface directly.
+
 ### Appendix A: Logging
 
 Run this command in the root directory of your cloned orbit setup script repo to view your chain's logs:
