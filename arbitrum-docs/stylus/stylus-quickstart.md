@@ -53,7 +53,7 @@ The Stylus testnet settles directly to the [Arbitrum Sepolia](/for-devs/concepts
 
 1. Navigate to [https://bwarelabs.com/faucets/arbitrum-stylus-testnet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
 2. Enter your wallet address into the text field.
-3. Click claim and optionally follow the second step to receive extra testnet tokens
+3. Click `Claim` and optionally follow the second step to receive extra testnet tokens.
 4. You should now have Sepolia ETH on the Stylus testnet
 
 For additional sources of testnet ETH, please use a faucet on Arbitrum Sepolia or Ethereum Sepolia:
