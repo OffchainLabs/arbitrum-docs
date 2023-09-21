@@ -14,30 +14,21 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 <UnderConstructionPartial />
 
-# How to customize your own precompile
-
-Status: Ready for consumption!
-
-## Customize precompile
-
 There are 2 ways to customize your own precompile, first is to add your method logic to existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles), second is to create a new precompile.
 
 ### Prepare work
 
 Get nitro:
 
-```rust
+```shell
 git clone <https://github.com/OffchainLabs/nitro.git>
-
 cd nitro
-
 git submodule update --init --recursive --force
-
 ```
 
 ### Add methods to existing precompile:
 
-First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) , and vi one of the existing precompile (let’s use ArbSys.sol as an example), then `vi ArbSys.go`, now we can add a simple `SayHi` to it:
+First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles), and vi one of the existing precompile (let’s use ArbSys.sol as an example), then `vi ArbSys.go`, now we can add a simple `SayHi` to it:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -45,7 +36,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then we need to go to **`[contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles)`** and find `ArbSys.sol`, we can add the related interface to it (you need to make sure their method name is same):
+Then we need to go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and find `ArbSys.sol`, we can add the related interface to it (you need to make sure their method name is same):
 
 ```go
 function sayHi() external view returns(string memory);
@@ -53,7 +44,8 @@ function sayHi() external view returns(string memory);
 
 Now we can build the nitro by following [this](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally) docs. (Note if you have already built the docker image, you still need run last step to build again)
 Run nitro following this [guide](https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#putting-it-all-together).
-When it is ready, we can call our new `ArbSys.sol`
+
+When it is ready, we can call our new `ArbSys.sol`.
 
 #### Use curl to make call directly
 
@@ -101,10 +93,10 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then edit [precompile.go](https://github.com/OffchainLabs/nitro/blob/master/precompiles/precompile.go), we need to register the new precompile like this (Under method `Precompiles()`):
+Then edit [precompile.go](https://github.com/OffchainLabs/nitro/blob/master/precompiles/precompile.go), we need to register the new precompile under method `Precompiles()`:
 
 ```go
-insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")}))
+insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // You can set it to other address, we sue 0x011a here as an example
 ```
 
 Go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and create `ArbHi.sol`, we can add the related interface to it (you need to make sure their method/contract name are same):
@@ -120,8 +112,9 @@ interface ArbHi {
 }
 ```
 
-Now we can build the nitro by following [this](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally) docs. (Note if you have already built the docker image, you still need run last step to build again)
-When it is ready, we can call our new `ArbHi.sol`
+Now we can build the nitro by following [this](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally) docs. (Note if you have already built the docker image, you still need run last step to build again).
+
+When it is ready, we can call our new `ArbHi.sol`.
 
 #### Use curl to make call directly
 
