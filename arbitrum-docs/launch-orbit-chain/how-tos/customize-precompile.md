@@ -16,8 +16,8 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 There are two ways to customize your chain's precompiles:
 
- 1. Add new methods to to an existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles).
- 2. Create a new precompile.
+1.  Add new methods to to an existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles).
+2.  Create a new precompile.
 
 ### Prerequisites
 
@@ -82,7 +82,7 @@ hi
 
 ## Option 2: Create a new precompile
 
-First, navigate to the [`precompiles/` directory](https://github.com/OffchainLabs/nitro/tree/master/precompiles) and create a new precompile called `ArbSys.sol`.  We'll define a new method, and we'll give it an address:
+First, navigate to the [`precompiles/` directory](https://github.com/OffchainLabs/nitro/tree/master/precompiles) and create a new precompile called `ArbSys.sol`. We'll define a new method, and we'll give it an address:
 
 ```go
 package precompiles
