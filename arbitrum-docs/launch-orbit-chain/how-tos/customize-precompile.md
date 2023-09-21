@@ -79,7 +79,7 @@ You can now see:
 hi
 ```
 
-### Create a new precompile
+## Option 2: Create a new precompile
 
 First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) , and create a new precompile (let’s use ArbSys.sol as an example), we named ArbHi: `vi ArbHi.go`, and give it address `0x11a` for examples, like this:
 
