@@ -48,9 +48,9 @@ function sayHi() external view returns(string memory);
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
-When it is ready, we can call our new `ArbSys.sol`.
+Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
-#### Use curl to make call directly
+### Call your function directly using `curl`
 
 ```shell
 curl Your_IP_Address:8547\
@@ -59,7 +59,7 @@ curl Your_IP_Address:8547\
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x0000000000000000000000000000000000000064","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
 ```
 
-You can now see:
+You should see something like this:
 
 ```
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
@@ -67,13 +67,13 @@ You can now see:
 
 Which the `0x6869` is the hexify utf8 decode of `hi`
 
-#### Use foundry `cast call`:
+### Call your function using Foundry's `cast call`
 
 ```
 cast call 0x0000000000000000000000000000000000000064 "sayHi()(string)”
 ```
 
-You can now see:
+You should see something like this:
 
 ```
 hi
@@ -81,14 +81,15 @@ hi
 
 ## Option 2: Create a new precompile
 
-First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) , and create a new precompile (let’s use ArbSys.sol as an example), we named ArbHi: `vi ArbHi.go`, and give it address `0x11a` for examples, like this:
+First, navigate to the [`precompiles/` directory](https://github.com/OffchainLabs/nitro/tree/master/precompiles) and create a new precompile 
+called `ArbSys.sol`.  We'll define a new method, and we'll give it an address:
 
 ```go
 package precompiles
 
 // ArbGasInfo provides insight into the cost of using the rollup.
 type ArbHi struct {
-	Address addr // 0x11a
+	Address addr // 0x11a, for example
 }
 
 func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
@@ -96,13 +97,13 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then edit [precompile.go](https://github.com/OffchainLabs/nitro/blob/master/precompiles/precompile.go), we need to register the new precompile under method `Precompiles()`:
+Then, update [precompile.go](https://github.com/OffchainLabs/nitro/blob/master/precompiles/precompile.go) to register the new precompile under the `Precompiles()` method:
 
 ```go
-insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // You can set it to other address, we sue 0x011a here as an example
+insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and create `ArbHi.sol`, we can add the related interface to it (you need to make sure their method/contract name are same):
+Go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and create `ArbHi.sol`. We'll specify the corresponding interface here. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -115,7 +116,9 @@ interface ArbHi {
 }
 ```
 
-Now we can build the nitro by following [this](https://docs.arbitrum.io/node-running/how-tos/build-nitro-locally) docs. (Note if you have already built the docker image, you still need run last step to build again).
+Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
+Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
 When it is ready, we can call our new `ArbHi.sol`.
 
