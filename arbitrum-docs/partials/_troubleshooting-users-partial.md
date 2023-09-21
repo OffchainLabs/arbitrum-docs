@@ -91,7 +91,7 @@
 
 <p>Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the <em>Validators</em>.</p>
 
-<p>Arbitrum One's validator set is currently allowlisted; overtime, we expect <a href="https://docs.arbitrum.foundation/">governance</a> to expand the allowlist and eventually be removed entirely.</p>
+<p>Arbitrum One's validator set is currently allowlisted; over time, we expect <a href="https://docs.arbitrum.foundation/">governance</a> to expand the allowlist and eventually be removed entirely.</p>
 
 <p>For more info see <a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">"State of Progressive Decentralization"</a>.</p>
 
