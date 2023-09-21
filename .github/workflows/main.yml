@@ -24,7 +24,7 @@ jobs:
           cache-key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
   
   check-formatting:
-    name: "Check Formatting"
+    name: "Check Formatting - does not fail, only comments on error"
     runs-on: ubuntu-latest
     needs: install
     steps:
@@ -51,11 +51,11 @@ jobs:
         if: steps.prettier-check.outputs.format-check-result == 1
         uses: actions/github-script@v6
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'Exit code was: ${{ steps.prettier-check.outputs.format-check-result }}'
+              body: 'It looks like your changes are not well formatted. You can merge this PR, but we recommend to format your code with:\n```\ncd website && yarn format\n```\nThanks!💙🧡'
             })
