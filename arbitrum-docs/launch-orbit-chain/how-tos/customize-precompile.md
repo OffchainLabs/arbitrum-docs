@@ -38,7 +38,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 
 Then we need to go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and find `ArbSys.sol`, we can add the related interface to it (you need to make sure their method name is same):
 
-```go
+```solidity
 function sayHi() external view returns(string memory);
 ```
 
@@ -49,7 +49,7 @@ When it is ready, we can call our new `ArbSys.sol`.
 
 #### Use curl to make call directly
 
-```go
+```shell
 curl Your_IP_Address:8547\
 -X POST \
 -H "Content-Type: application/json" \
@@ -58,7 +58,7 @@ curl Your_IP_Address:8547\
 
 You can now see: 
 
-```go
+```
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
 ```
 
@@ -66,13 +66,13 @@ Which the `0x6869` is the hexify utf8 decode of `hi`
 
 #### Use foundry `cast call`:
 
-```rust
+```
 cast call 0x0000000000000000000000000000000000000064 "sayHi()(string)”
 ```
 
 You can now see:
 
-```rust
+```
 hi
 ```
 
@@ -118,7 +118,7 @@ When it is ready, we can call our new `ArbHi.sol`.
 
 #### Use curl to make call directly
 
-```go
+```shell
 curl Your_IP_Address:8547 \
 -X POST \
 -H "Content-Type: application/json" \
@@ -127,18 +127,18 @@ curl Your_IP_Address:8547 \
 
 You can now see: 
 
-```go
+```
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
 ```
 
 #### Use foundry `cast call`:
 
-```rust
+```
 cast call 0x000000000000000000000000000000000000011a "sayHi()(string)”
 ```
 
 You can now see: 
 
-```rust
+```
 hi
 ```
