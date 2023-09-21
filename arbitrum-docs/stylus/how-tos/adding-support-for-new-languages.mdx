@@ -19,7 +19,7 @@ This is possible thanks to [WebAssembly](https://www.infoworld.com/article/32917
 
 Today, the Stylus testnet also comes with 2 officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
 
-However, _anyone_ can add support for new languages in Stylus. **As long as a programming language can compile to WebAssembly**, fit under 24Kb brotli-compressed, and meets some of the gas metering requirements of Stylus, it can be deployed and used onchain.
+However, _anyone_ can add support for new languages in Stylus. **As long as a programming language can compile to WebAssembly**, Stylus will let you use it to write EVM-compatible smart contracts. Note that in order to be deployed onchain, your compiled program must fit under the 24Kb brotli-compressed limit, and should meet Stylus gas metering requirements.
 
 In this document, we go over how we added support for the up-and-coming [Zig](https://ziglang.org/) programming language, which is meant to be a spiritual successor to C that comes with great performance and memory safety **within 20 lines of code**.
 
