@@ -1,6 +1,6 @@
 ---
 title: "How to customize your Orbit chain's precompile"
-sidebar_label: "Customize your chain's prcompile"
+sidebar_label: "Customize your chain's precompile"
 description: "Learn how (and when) to customize your Orbit chain's precompile"
 author: jasonwan
 sidebar_position: 2
