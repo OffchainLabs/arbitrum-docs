@@ -39,7 +39,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then we need to go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and find `ArbSys.sol`, we can add the related interface to it (you need to make sure their method name is same):
+Then, find the corresponding Solidity file (in this case, `ArbSys.sol`) in [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and add the related interface to it. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
