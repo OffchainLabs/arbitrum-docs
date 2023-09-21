@@ -120,7 +120,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 
 Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
-When it is ready, we can call our new `ArbHi.sol`.
+Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
 #### Use curl to make call directly
 
