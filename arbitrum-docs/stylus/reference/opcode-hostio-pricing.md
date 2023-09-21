@@ -141,7 +141,7 @@ Note that the values in this table were determined via a conservative statistica
 | Host I/O         | Ink             | Gas              | Notes                                                                           |
 | ---------------- | --------------- | ---------------- | ------------------------------------------------------------------------------- |
 | read_args        | 12513 + 18287b  | 1.2513 + 1.8287b | `b` = bytes after first 32                                                      |
-| write_result     | 12513 + 40423b  | 1.2513 + 4.0423b  | `b` = bytes after first 32                                                      |
+| write_result     | 12513 + 40423b  | 1.2513 + 4.0423b | `b` = bytes after first 32                                                      |
 | keccak           | 281040 + 41920w | 28.104 + 4.192w  | Due to a pricing mistake, keccak will soon be `~8 gas` cheaper! `w` = EVM words |
 | block_basefee    | 22137           | 2.2137           |                                                                                 |
 | block_coinbase   | 22137           | 2.2137           |                                                                                 |
