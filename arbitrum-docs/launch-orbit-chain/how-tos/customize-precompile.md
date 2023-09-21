@@ -29,7 +29,7 @@ cd nitro
 git submodule update --init --recursive --force
 ```
 
-### Add methods to existing precompile:
+## Option 1: Add new methods to existing precompile
 
 First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles), and vi one of the existing precompile (let’s use ArbSys.sol as an example), then `vi ArbSys.go`, now we can add a simple `SayHi` to it:
 
