@@ -1,7 +1,7 @@
 ---
-title: "How to customize your Orbit chain's precompile"
-sidebar_label: "Customize your chain's precompile"
-description: "Learn how (and when) to customize your Orbit chain's precompile"
+title: "How to customize your Orbit chain's precompiles"
+sidebar_label: "Customize your chain's precompiles"
+description: "Learn how (and when) to customize your Orbit chain's precompiles"
 author: jasonwan
 sidebar_position: 2
 ---
@@ -14,9 +14,9 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 <UnderConstructionPartial />
 
-There are 2 ways to customize your own precompile:
+There are two ways to customize your chain's precompiles:
 
- 1. Add your method logic to an existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles).
+ 1. Add new methods to to an existing [precompile](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles).
  2. Create a new precompile.
 
 ### Prerequisites
@@ -29,9 +29,9 @@ cd nitro
 git submodule update --init --recursive --force
 ```
 
-## Option 1: Add new methods to existing precompile
+## Option 1: Add new methods to an existing precompile
 
-First you need to go to [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles), and vi one of the existing precompile (let’s use ArbSys.sol as an example), then `vi ArbSys.go`, now we can add a simple `SayHi` to it:
+Using your favorite code editor, open an existing precompile from the [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) directory. We'll use `ArbSys.sol` as an example. Open the the corresponding `go` file (`ArbSys.go`) and add a simple `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -39,13 +39,14 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, find the corresponding Solidity file (in this case, `ArbSys.sol`) in [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and add the related interface to it. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, open the corresponding Solidity file (`ArbSys.sol`) from the [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) directory and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
 ```
 
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
 Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
@@ -81,8 +82,7 @@ hi
 
 ## Option 2: Create a new precompile
 
-First, navigate to the [`precompiles/` directory](https://github.com/OffchainLabs/nitro/tree/master/precompiles) and create a new precompile 
-called `ArbSys.sol`.  We'll define a new method, and we'll give it an address:
+First, navigate to the [`precompiles/` directory](https://github.com/OffchainLabs/nitro/tree/master/precompiles) and create a new precompile called `ArbSys.sol`.  We'll define a new method, and we'll give it an address:
 
 ```go
 package precompiles
@@ -103,7 +103,7 @@ Then, update [precompile.go](https://github.com/OffchainLabs/nitro/blob/master/p
 insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Go to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and create `ArbHi.sol`. We'll specify the corresponding interface here. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Navigate to [contracts/src/precompiles/](https://github.com/OffchainLabs/nitro-contracts/tree/97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4/src/precompiles) and create `ArbHi.sol` and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -122,7 +122,7 @@ Run Nitro by following the instructions in [How to run a full node](/node-runnin
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
-#### Use curl to make call directly
+### Call your function directly using `curl`
 
 ```shell
 curl Your_IP_Address:8547 \
@@ -137,13 +137,13 @@ You should see something like this:
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
 ```
 
-#### Use foundry `cast call`:
+### Call your function using Foundry's `cast call`
 
 ```
 cast call 0x000000000000000000000000000000000000011a "sayHi()(string)”
 ```
 
-You can now see:
+You should see something like this:
 
 ```
 hi
