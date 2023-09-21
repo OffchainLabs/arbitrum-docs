@@ -42,10 +42,13 @@ jobs:
       - name: Check formatting with Prettier
         id: prettier-check
         working-directory: ./website
-        run: yarn format:check
+        run: |
+          set +e
+          yarn format:check
+          echo "format-check-result=$?" >> $GITHUB_OUTPUT
       
       - name: Output formatting error
-        if: failure() && steps.prettier-check.outcome == 'failure'
+        if: steps.prettier-check.outputs.format-check-result == 1
         uses: actions/github-script@v6
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -54,5 +57,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: 'It looks like your changes are not well formatted. You can merge this PR, but we recommend to format your code with:\n```\ncd website && yarn format\n```\nThanks!💙🧡'
+              body: 'Exit code was: ${{ steps.prettier-check.outputs.format-check-result }}'
             })
