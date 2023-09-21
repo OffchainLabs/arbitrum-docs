@@ -21,7 +21,7 @@ There are 2 ways to customize your own precompile:
 
 ### Prerequisites
 
-Get nitro:
+Clone the Nitro repository before you begin:
 
 ```shell
 git clone <https://github.com/OffchainLabs/nitro.git>
