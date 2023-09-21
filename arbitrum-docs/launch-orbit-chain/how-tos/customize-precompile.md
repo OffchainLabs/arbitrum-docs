@@ -46,7 +46,7 @@ function sayHi() external view returns(string memory);
 ```
 
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
-Run nitro following this [guide](https://docs.arbitrum.io/node-running/how-tos/running-a-full-node#putting-it-all-together).
+Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
 When it is ready, we can call our new `ArbSys.sol`.
 
