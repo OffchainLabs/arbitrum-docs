@@ -52,7 +52,7 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 The Stylus testnet settles directly to the [Arbitrum Sepolia](/for-devs/concepts/public-chains#arbitrum-sepolia) testnet. Follow these steps to acquire testnet ETH on the Stylus testnet:
 
 1. Navigate to [https://bwarelabs.com/faucets/arbitrum-stylus-testnet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
-2. Enter your wallet address into the text field
+2. Enter your wallet address into the text field.
 3. Click claim and optionally follow the second step to receive extra testnet tokens
 4. You should now have Sepolia ETH on the Stylus testnet
 
