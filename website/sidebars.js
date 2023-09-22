@@ -443,6 +443,16 @@ const sidebars = {
           id: 'node-running/quickstart-running-a-node',
           label: 'Quickstart',
         },
+        {
+          type: 'doc',
+          id: 'node-running/troubleshooting-running-nodes',
+          label: 'Troubleshooting',
+        },
+        {
+          type: 'doc',
+          label: 'Frequently asked questions',
+          id: 'node-running/faq',
+        },
       ],
     },
     {
@@ -515,16 +525,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
-          label: 'Troubleshooting',
-        },
-        {
-          type: 'doc',
-          label: 'Frequently asked questions',
-          id: 'node-running/faq',
-        },
-        {
-          type: 'doc',
           id: 'node-running/contribute',
         },
       ],
@@ -533,7 +533,7 @@ const sidebars = {
   learnMoreSidebar: [
     {
       type: 'category',
-      label: 'Introductory concepts',
+      label: 'Get started',
       collapsed: false,
       items: [
         {
@@ -541,6 +541,23 @@ const sidebars = {
           id: 'intro/intro',
           label: 'A gentle introduction',
         },
+        {
+          type: 'doc',
+          id: 'learn-more/faq',
+          label: 'Frequently asked questions',
+        },
+        {
+          type: 'doc',
+          id: 'intro/glossary',
+          label: 'Glossary',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Introductory concepts',
+      collapsed: false,
+      items: [
         {
           type: 'doc',
           id: 'why-nitro',
@@ -674,17 +691,6 @@ const sidebars = {
       label: 'More',
       collapsed: false,
       items: [
-        {
-          type: 'doc',
-          id: 'learn-more/faq',
-          label: 'Frequently asked questions',
-        },
-        {
-          type: 'doc',
-          id: 'intro/glossary',
-          label: 'Glossary',
-        },
-
         {
           type: 'doc',
           label: 'Audit reports',
