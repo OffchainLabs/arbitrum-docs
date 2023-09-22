@@ -45,7 +45,7 @@ Then, open the corresponding Solidity file (`ArbSys.sol`) from the [contracts/sr
 function sayHi() external view returns(string memory);
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following steps 3-7 of the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
 
