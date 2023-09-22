@@ -63,7 +63,7 @@
 ### 🧢 CAP Finance {#cap-finance}
 <p>Widely considered the most degen community on Arbitrum.<br />
 <br />
-<a href="https://cap.finance/">CAP</a> is a decentralized trading protocol. It's designed to be fast and easy to use by anyone.</p>
+<a href="https://cap.io/">CAP</a> is a decentralized trading protocol. It's designed to be fast and easy to use by anyone.</p>
 
 ### Chain state {#chain-state}
 <p>A particular point in the history of an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>. A chain's state is determined by applying Arbitrum state-transition function to sequence of transactions (i.e., the chain's history).</p>
