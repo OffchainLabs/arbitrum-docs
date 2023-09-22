@@ -31,7 +31,7 @@ git submodule update --init --recursive --force
 
 ## Option 1: Add new methods to an existing precompile
 
-Using your favorite code editor, open an existing precompile from the [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) directory. We'll use `ArbSys.sol` as an example. Open the the corresponding `go` file (`ArbSys.go`) and add a simple `SayHi` method:
+Using your favorite code editor, open the implementation file of an existing precompile from the [precompiles/](https://github.com/OffchainLabs/nitro/tree/master/precompiles) directory. We'll use `ArbSys.sol` as an example. Open the the corresponding `go` file (`ArbSys.go`) and add a simple `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
