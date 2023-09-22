@@ -76,6 +76,12 @@ const globalVars = {
   novaGasSpeedLimitGasPerSec: '7,000,000',
   goerliGasSpeedLimitGasPerSec: '3,000,000',
   sepoliaGasSpeedLimitGasPerSec: '7,000,000',
+
+  // block gas limit
+  arbOneBlockGasLimit: '32,000,000',
+  novaBlockGasLimit: '32,000,000',
+  goerBlockGasLimit: '20,000,000',
+  sepoliaBlockGasLimit: '32,000,000',
 };
 
 function blocksToMinutes(blocks) {
