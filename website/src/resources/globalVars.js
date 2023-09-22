@@ -84,7 +84,7 @@ const globalVars = {
   // block gas limit
   arbOneBlockGasLimit: '32,000,000',
   novaBlockGasLimit: '32,000,000',
-  goerBlockGasLimit: '20,000,000',
+  goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
 };
 
