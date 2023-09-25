@@ -32,7 +32,7 @@ While you're tinkering locally, we'll be building the tech and docs that help yo
 
 ## Step 1: Acquire Arbitrum Testnet $ETH
 
-You'll need at least 1.5 testnet $ETH to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia).
+You'll need at least 1.5 testnet $ETH to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
 
 At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Goerli or Sepolia network to Arbitrum's corresponding L2 testnet:
 

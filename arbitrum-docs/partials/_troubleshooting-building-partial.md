@@ -134,6 +134,27 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 
 
+### **How many block numbers must we wait for in Arbitrum before we can confidently state that the transaction has reached finality?** {#how-many-block-numbers-must-we-wait-for-in-arbitrum-before-we-can-confidently-state-that-the-transaction-has-reached-finality}
+<p>Arbitrum's block intervals fluctuate with throughput, so relying on block numbers for finality isn't recommended. However, Arbitrum nodes support Ethereum's JSON RPC, enabling the use of <code><a href="https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber">eth_getBlockByNumber()</a></code> to determine block finality. Here, we provide additional details on how to achieve this.</p>
+
+<p></p>
+
+<p>You can use <code><a href="https://ethereum.org/en/developers/docs/apis/json-rpc/#eth_getblockbynumber">eth_getBlockByNumber()</a></code> with the string <code>"latest"</code>, <code>"safe"</code>, or <code>"finalized"</code>, each offering varying degrees of finality:</p>
+
+<p></p>
+
+<ul><li><code>{'latest'}</code>: Provides you with the most recent Arbitrum block number that the node has observed on the L1 and indicates that the Sequencer's batch has been just published<strong> </strong>as an L1 block on the Ethereum network. It's important to note that this block has the potential to be re-orged but<strong> </strong>you can consider and trust this block as final, if you trust the sequencer.</li>
+<li><code>{'safe'}</code>: Provides you with the most recent Arbitrum block number that has achieved attestations from a two-thirds majority of Ethereum's validator set. This occurs when the Sequencer's batch is posted as an L1 block on Ethereum and then the batch transactions achieve <code>safe</code> finality there. While safe blocks are typically resistant to re-orgs, they can still be re-orged in the event of a significant L1 re-org.</li>
+<li><code>{'finalized'}</code>: Provides you with the most recent Arbitrum block number that is finalized on Ethereum. This means that the Sequencer's batch has been published<strong> </strong>as an L1 block on the Ethereum network and has reached a substantial depth, making it eligible for hard finality. Unlike <code>safe</code> blocks, <code>finalized</code> blocks are highly improbable to undergo re-orgs. </li>
+</ul>
+<p></p>
+
+<p>To learn more about the different phases of an Arbitrum transaction, from client initiation to Layer 1 confirmation, check out <a href="https://docs.arbitrum.io/tx-lifecycle">The Lifecycle of an Arbitrum Transaction</a>.</p>
+
+<p></p>
+
+
+
 ### How can I list my token on the Arbitrum Bridge? {#how-can-i-list-my-token-on-the-arbitrum-bridge}
 <p>The L2 token list used in the Arbitrum bridge is generated from the L1 tokens that are part of the token list of Uniswap, Gemini or Coinmarketcap. This is valid for L1-native tokens that have been bridged over to L2, and for L2-native tokens that have been bridged over to L1 as long as they are part of any of those lists.</p>
 
