@@ -43,11 +43,17 @@ function sayHi() external view returns(string memory);
 
 Next, build Nitro by following steps 3-7 of the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
-Run Nitro by following the instructions (note the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together) cannot be used to start an Orbit node):
+Run Nitro with the following command:
 
 ```shell
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestOrbitNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node, but the flags in [Command-line options](/node-running/command-line-options) **will**.
+
+:::
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -118,11 +124,17 @@ interface ArbHi {
 
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
-Run Nitro by following the instructions (note the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together) cannot be used to start an Orbit node):
+Run Nitro with the following command:
 
 ```shell
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestOrbitNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node, but the flags in [Command-line options](/node-running/command-line-options) **will**.
+
+:::
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
