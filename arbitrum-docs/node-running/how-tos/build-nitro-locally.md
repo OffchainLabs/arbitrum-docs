@@ -111,7 +111,7 @@ sudo service docker start
 Depending on whether your Mac has Intel Chip or Apple silicon, download corresponding
 disk image from [docker](https://docs.docker.com/desktop/install/mac-install/), and move it to applications folder.
 
-### 6. Configure Go [1.19.5](https://github.com/moovweb/gvm)
+### 6. Configure Go [1.20](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
