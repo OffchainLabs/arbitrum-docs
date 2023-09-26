@@ -276,6 +276,41 @@
             "permanent": false
         },
         {
+            "source": "/faqs/faqs-index",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/gas-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/nodes-faqs",
+            "destination": "/node-running/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/x-chain-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/protocol-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/tooling-faqs",
+            "destination": "/for-devs/troubleshooting-building",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/misc-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
             "source": "/public-chains",
             "destination": "/for-devs/concepts/public-chains",
             "permanent": false
