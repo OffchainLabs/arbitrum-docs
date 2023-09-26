@@ -137,7 +137,7 @@
         },
         {
             "source": "/docs/tutorials",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
@@ -147,12 +147,17 @@
         },
         {
             "source": "/docs/frontend_integration",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
             "source": "/docs/contract_deployment",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
+            "permanent": false
+        },
+        {
+            "source": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
@@ -318,6 +323,16 @@
         {
             "source": "/useful-addresses",
             "destination": "/for-devs/useful-addresses",
+            "permanent": false
+        },
+        {
+            "source": "/for-devs/dev-tools-and-resources/overview",
+            "destination": "/node-running/node-providers",
+            "permanent": false
+        },
+        {
+            "source": "/for-devs/dev-tools-and-resources/overview",
+            "destination": "/node-running/node-providers",
             "permanent": false
         },
         {
