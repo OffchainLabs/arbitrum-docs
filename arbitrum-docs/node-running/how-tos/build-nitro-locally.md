@@ -34,7 +34,7 @@ Install essentials:
 
 ```bash
 brew install git curl make cmake npm go gvm golangci-lint wabt llvm gotestsum
-npm install –global yarn
+npm install --global yarn
 sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
@@ -109,13 +109,23 @@ disk image from [docker](https://docs.docker.com/desktop/install/mac-install/), 
 
 ### 6. Configure Go [1.19.5](https://github.com/moovweb/gvm)
 
+#### Install Bison 
+##### For Debian/Ubuntu
+```bash
+sudo apt-get install bison
+```
+##### For MacOS
+```bash
+brew install bison
+```
+
+#### Install and configure Go
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-apt-get install bison
 gvm install go1.20
 gvm use go1.20 --default
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.52.2
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
 ### 7. Start build
