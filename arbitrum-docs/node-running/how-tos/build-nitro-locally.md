@@ -71,7 +71,7 @@ nvm install 16.19
 nvm use 16.19
 ```
 
-### 4. Configure Rust [1.66.1](https://www.rust-lang.org/tools/install)
+### 4. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
