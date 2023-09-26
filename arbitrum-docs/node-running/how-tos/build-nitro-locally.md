@@ -15,6 +15,7 @@ This how-to is based on [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage
 ### 1. Configure prerequisites
 
 #### For Debian/Ubuntu
+
 ```bash
 apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13
 npm install --global yarn
@@ -22,12 +23,14 @@ ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
 ```
 
 #### For MacOS
+
 Install [Homebrew](https://brew.sh/) package manager and add it to your path environment variable.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
+
 (replace `~/.zprofile` with `~/.bash_profile` if you use bash instead of zsh).
 
 Install essentials:
@@ -38,7 +41,6 @@ npm install --global yarn
 sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
-
 
 ### 2. Configure Nitro
 
@@ -51,6 +53,7 @@ git submodule update --init --recursive --force
 ### 3. Configure Node [16.19](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
+
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
@@ -59,14 +62,14 @@ nvm use 16.19
 ```
 
 #### For MacOS
+
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-export NVM_DIR="$HOME/.nvm" 
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install 16.19
 nvm use 16.19
 ```
-
 
 ### 4. Configure Rust [1.66.1](https://www.rust-lang.org/tools/install)
 
@@ -82,8 +85,8 @@ cargo install cbindgen
 
 ### 5. Configure [Docker](https://docs.docker.com/engine/install)
 
-
 #### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
+
 ```bash
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
 # Add Docker's official GPG key:
@@ -104,22 +107,28 @@ sudo service docker start
 ```
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
+
 Depending on whether your Mac has Intel Chip or Apple silicon, download corresponding
 disk image from [docker](https://docs.docker.com/desktop/install/mac-install/), and move it to applications folder.
 
 ### 6. Configure Go [1.19.5](https://github.com/moovweb/gvm)
 
-#### Install Bison 
+#### Install Bison
+
 ##### For Debian/Ubuntu
+
 ```bash
 sudo apt-get install bison
 ```
+
 ##### For MacOS
+
 ```bash
 brew install bison
 ```
 
 #### Install and configure Go
+
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
@@ -127,6 +136,8 @@ gvm install go1.20
 gvm use go1.20 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
+
+If you use zsh, replace `bash` with `zsh`.
 
 ### 7. Start build
 
