@@ -27,7 +27,7 @@ ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
 
 #### For MacOS
 
-Install [Homebrew](https://brew.sh/) package manager and add it to your path environment variable.
+Install [Homebrew](https://brew.sh/) package manager and add it to your `PATH` environment variable:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
