@@ -262,13 +262,13 @@ Note that in the context of this quickstart, "account" refers to a public wallet
 
 Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
-![Connect Metamask to Localhost 8545](assets/quickstart-localhost-metamask.png)
+![Connect Metamask to Localhost 8545](./assets/quickstart-localhost-metamask.png)
 
 <!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (**excluding** the `0x` prefix, so eg `ac0..f80`) and import it into Metamask:
 
-![Connect Metamask to Localhost 8545](assets/quickstart-import-metamask.png)
+![Connect Metamask to Localhost 8545](./assets/quickstart-import-metamask.png)
 
 You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
 
@@ -295,7 +295,7 @@ Ensure that the `Localhost` network is selected within Metamask. Then copy and p
 
 Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional n-tier web application architecture:
 
-![Architecture diagram](assets/quickstart-vending-machine-architecture.png)
+![Architecture diagram](./assets/quickstart-vending-machine-architecture.png)
 
 The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers.
 
@@ -371,7 +371,7 @@ Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address i
 
 Now that we've verified that our smart contract works on Arbitrum's Goerli testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Goerli testnet, except that we'll need to pay a transaction fee in real $ETH instead of $AGOR.
 
-Expect to see inconsistent $ETH gas fees in this step - our [Gas FAQs](../faqs/gas-faqs.mdx) contain more information about how gas fees are determined for Arbitrum transactions.
+Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/arbos/gas.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
 
 <!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 
