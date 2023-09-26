@@ -111,7 +111,7 @@ sudo service docker start
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
 
-Depending on whether your Mac has Intel Chip or Apple silicon, download corresponding
+Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 disk image from [docker](https://docs.docker.com/desktop/install/mac-install/), and move it to applications folder.
 
 ### 6. Configure Go [1.20](https://github.com/moovweb/gvm)
