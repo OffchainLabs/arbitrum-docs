@@ -1,7 +1,7 @@
 ---
-title: 'How to build Nitro locally (Docker, Debian)'
-sidebar_label: Build Nitro locally (Docker, Debian)
-description: This how-to will help you build Nitro locally using Docker on Debian.
+title: 'How to build Nitro locally (Debian, Ubuntu, MacOS)'
+sidebar_label: Build Nitro locally (Debian, Ubuntu, MacOS)
+description: This how-to provides step-by-step instructions for building Nitro locally using Docker on Debian, Ubuntu, or MacOS.
 author: amsanghi
 content-type: how-to
 ---
