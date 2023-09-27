@@ -39,6 +39,7 @@ const globalVars = {
 
   // Orbit Github references
   orbitVersionTag: 'v2.1.0-beta.16',
+  orbitNitroContractsCommit: '97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4',
 
   // gas floor
   arbOneGasFloorGwei: '0.1',
