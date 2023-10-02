@@ -137,7 +137,7 @@
         },
         {
             "source": "/docs/tutorials",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
@@ -147,12 +147,17 @@
         },
         {
             "source": "/docs/frontend_integration",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
             "source": "/docs/contract_deployment",
-            "destination": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
+            "permanent": false
+        },
+        {
+            "source": "/getting-started-devs",
+            "destination": "/for-devs/quickstart-solidity-hardhat",
             "permanent": false
         },
         {
@@ -276,6 +281,41 @@
             "permanent": false
         },
         {
+            "source": "/faqs/faqs-index",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/gas-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/nodes-faqs",
+            "destination": "/node-running/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/x-chain-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/protocol-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/tooling-faqs",
+            "destination": "/for-devs/troubleshooting-building",
+            "permanent": false
+        },
+        {
+            "source": "/faqs/misc-faqs",
+            "destination": "/learn-more/faq",
+            "permanent": false
+        },
+        {
             "source": "/public-chains",
             "destination": "/for-devs/concepts/public-chains",
             "permanent": false
@@ -283,6 +323,16 @@
         {
             "source": "/useful-addresses",
             "destination": "/for-devs/useful-addresses",
+            "permanent": false
+        },
+        {
+            "source": "/for-devs/dev-tools-and-resources/overview",
+            "destination": "/node-running/node-providers",
+            "permanent": false
+        },
+        {
+            "source": "/for-devs/dev-tools-and-resources/overview",
+            "destination": "/node-running/node-providers",
             "permanent": false
         },
         {

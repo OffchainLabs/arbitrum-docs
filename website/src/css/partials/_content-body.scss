@@ -1,3 +1,5 @@
+@use './_mixins.scss' as *;
+
 article {
   .markdown {
     h1:first-child {
@@ -77,6 +79,13 @@ article {
 
       hr {
         display: none;
+      }
+    }
+
+    .small-table {
+      @include small-table; // target tables
+      table {
+        @include small-table; // target section wrappers around tables
       }
     }
 

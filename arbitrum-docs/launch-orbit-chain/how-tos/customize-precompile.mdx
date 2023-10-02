@@ -12,7 +12,7 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 There are two ways to customize your chain's precompiles:
 
-1.  Add new methods to to an existing [precompile][precompile_dir_link].
+1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
 2.  Create a new precompile.
 
 ### Prerequisites
@@ -20,14 +20,14 @@ There are two ways to customize your chain's precompiles:
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @orbitVersionTag@ <https://github.com/OffchainLabs/nitro.git>
+git clone --branch @nitroVersionTag@ <https://github.com/OffchainLabs/nitro.git>
 cd nitro
 git submodule update --init --recursive --force
 ```
 
 ## Option 1: Add new methods to an existing precompile
 
-Using your favorite code editor, open an existing precompile from the [precompiles/][precompile_dir_link] directory. We'll use `ArbSys.sol` as an example. Open the the corresponding `go` file (`ArbSys.go`) and add a simple `SayHi` method:
+Using your favorite code editor, open an existing precompile from the [precompiles implementation][precompile_impl_dir_link] directory, `/@nitroPathToPrecompiles@`. We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a simple `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -35,7 +35,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [contracts/src/precompiles/][precompile_dir_link] directory and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 function sayHi() external view returns(string memory);
@@ -43,7 +43,17 @@ function sayHi() external view returns(string memory);
 
 Next, build Nitro by following steps 3-7 of the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
-Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
 
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -78,7 +88,7 @@ hi
 
 ## Option 2: Create a new precompile
 
-First, navigate to the [`precompiles/` directory][precompile_dir_link] and create a new precompile called `ArbSys.sol`. We'll define a new method, and we'll give it an address:
+First, navigate to the [precompiles implementation][precompile_impl_dir_link] directory, `/@nitroPathToPrecompiles@`, and create a new precompile implementation file called `ArbHi.go`. We'll define a new method, and we'll give it an address:
 
 ```go
 package precompiles
@@ -99,7 +109,7 @@ Then, update [precompile.go][precompile_main_file_link] to register the new prec
 insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Navigate to [contracts/src/precompiles/][precompile_dir_link], create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Navigate to the [precompiles interface][precompile_impl_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -114,7 +124,17 @@ interface ArbHi {
 
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
-Run Nitro by following the instructions in [How to run a full node](/node-running/how-tos/running-a-full-node#putting-it-all-together).
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -146,6 +166,13 @@ hi
 ```
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
+<!--
+Note that nitro-contracts repository is hardcoded because atm we use the "nitro" repository for referencing precompiles for the current released nitro version  (for Arb chains),
+but we use the "nitro-contracts" repo for Orbit chains (next nitro release version will use "nitro-contracts" for all chains though).
+The same goes for the path to precompiles interface.
+We can use the @nitroContractsRepositorySlug@ and @nitroContractsPathToPrecompilesInterface@ variables once we release nitro version 2.1.0 or above.
+-->
 
-[precompile_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@orbitVersionTag@/@nitroPathToPrecompiles@/
-[precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@orbitVersionTag@/@nitroPathToPrecompiles@/precompile.go
+[precompile_impl_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/
+[precompile_interface_dir_link]: https://github.com/OffchainLabs/nitro-contracts/blob/@orbitNitroContractsCommit@/src/precompiles/
+[precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go

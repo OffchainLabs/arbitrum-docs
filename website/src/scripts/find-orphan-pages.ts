@@ -1,4 +1,3 @@
-// Get all markdown files
 import path from 'path';
 import fs from 'fs';
 import markdownLinkExtractor from 'markdown-link-extractor';
@@ -13,6 +12,11 @@ const resourcesLinkedInSidebar = [];
 const resourcesLinkedInDocs = [];
 const resourcesImportedInDocs = [];
 
+//
+//-----------------------------
+// Sidebar processing functions
+//-----------------------------
+//
 // Analyzes a sidebar item and get the resources if it can
 const getResourcesFromSidebarItem = (sidebarItem: SidebarItemConfig) => {
   if (typeof sidebarItem == 'string') {
@@ -81,6 +85,11 @@ const extractResourcesLinkedInSidebar = () => {
   });
 };
 
+//
+//-----------------------------
+// Document processing functions
+//-----------------------------
+//
 // Gets the full path to a resource starting from the arbitrum-docs folder (not included)
 // "originFilePath" is the path to the file that contains this "link"
 const getFullPathToResource = (link: string, originFilePath: string) => {
@@ -168,14 +177,31 @@ const extractLinksFromMdFile = (filePath: string) => {
     }
   });
 
-  // Also detecting the imported files (thanks GPT)
+  // Detecting the imported files (thanks GPT)
   const importPathRegex = /import\s+[a-zA-Z_]\w+\s+from\s+'(?<path>.+\.mdx?)';/g;
-  let match: RegExpExecArray | null;
-
-  // Iterate over each match found in the content
-  while ((match = importPathRegex.exec(markdown)) !== null) {
+  let importMatch: RegExpExecArray | null;
+  while ((importMatch = importPathRegex.exec(markdown)) !== null) {
     // Extract the captured path of the resource
-    const resourcePath = match.groups!.path;
+    const resourcePath = importMatch.groups!.path;
+
+    // Getting full path to resource (starting from the arbitrum-docs folder)
+    const resourceFullPath = getFullPathToResource(
+      resourcePath,
+      filePath.replace('../arbitrum-docs', ''),
+    );
+
+    // Avoid duplicates
+    if (!resourcesImportedInDocs.includes(resourceFullPath)) {
+      resourcesImportedInDocs.push(resourceFullPath);
+    }
+  }
+
+  // Detecting Markdown images (thanks GPT)
+  const imagePathRegex = /\!\[.*?\]\((.*?)\)/g;
+  let imageMatch: RegExpExecArray | null;
+  while ((imageMatch = imagePathRegex.exec(markdown)) !== null) {
+    // Extract the captured path of the resource
+    const resourcePath = imageMatch[1];
 
     // Getting full path to resource (starting from the arbitrum-docs folder)
     const resourceFullPath = getFullPathToResource(
@@ -208,6 +234,11 @@ const getResourcePathsAndLinks = (dir: string) => {
   });
 };
 
+//
+//-----------------------------
+// Main flow
+//-----------------------------
+//
 // Get resources available (resources) and all linked resources (resourcesLinkedInDocs)
 getResourcePathsAndLinks(docsRoot);
 
