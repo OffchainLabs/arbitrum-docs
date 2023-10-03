@@ -24,6 +24,12 @@ Each of these tracers has distinct fields that represent balance transfers occur
 - `feeCollection`: This tracer pertains to the distribution of the two gas fee components mentioned [here](https://docs.arbitrum.io/arbos/gas).
 - Furthermore, fields such as `escrow`, `prepaid`, `refund`, and `undoRefund` are associated with [retryable tickets](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#retryable-tickets) and the mechanics of gas charging in [manual redemption processes](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#manual-redemption). During the redeem call, gas is consumed and initially "prepaid" in a separate redeem transaction. If any unused gas remains, Geth refunds it to an incorrect address, a situation rectified through the "undoRefund" process, ultimately resulting in the refund being correctly directed to the intended address using the "refund" step within the afterEvmTransfers tracer.
 
+:::info
+
+Please note that Geth VM trace tool on Arbiscan will not be functional for Arbitrum legacy transactions due to our non-use of Geth in the initial Arbitrum version.
+
+:::
+
 ## Hooks
 
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
