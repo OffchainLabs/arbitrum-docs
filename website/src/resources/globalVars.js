@@ -32,12 +32,9 @@ const globalVars = {
   nitroVersionTag: 'v2.1.0',
   nitroPathToPrecompiles: 'precompiles',
 
-  nitroContractsRepositorySlug: 'nitro',
-  nitroContractsCommit: 'v2.0.14',
-  nitroContractsPathToPrecompilesInterface: 'contracts/src/precompiles',
-
-  // Orbit Github references
-  orbitNitroContractsCommit: '97cfbe00ff0eea4d7f5f5f3afb01598c19ddabc4',
+  nitroContractsRepositorySlug: 'nitro-contracts',
+  nitroContractsCommit: '9edc1b943ed0255f050f91f265d96bc1ad9de1a2',
+  nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
   // gas floor
   arbOneGasFloorGwei: '0.1',
