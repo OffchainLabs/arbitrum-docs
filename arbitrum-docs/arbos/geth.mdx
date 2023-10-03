@@ -26,7 +26,8 @@ Each of these tracers has distinct fields that represent balance transfers occur
 
 :::info
 
-Please note that Geth VM trace tool on Arbiscan will not be functional for Arbitrum legacy transactions due to our non-use of Geth in the initial Arbitrum version.
+Please note that the Geth tracing API `debug_*` is only available for transactions that happened after the Nitro migration.
+For transactions that happened before the migration (i.e., legacy transactions) you need to use the Parity tracing API `trace_*`.
 
 :::
 
