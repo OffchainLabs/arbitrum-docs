@@ -13,6 +13,17 @@ Please note any links on this page may be referencing old releases of Nitro or o
 
 :::
 
+### tracing
+
+As previously mentioned, Nitro is built upon Geth, but it has been customized specifically for Arbitrum. Therefore, alongside Geth's built-in tracers, we introduce additional tracers known as `beforeEVMtransfers` and `afterEVMTransfers`. These additional tracers serve the purpose of capturing transfers that occur outside of the execution of the Ethereum Virtual Machine (EVM).
+
+Each of these tracers has distinct fields that represent balance transfers occurring either before or after the execution of EVM code is initiated. Here, we will describe each of these fields in detail:
+
+`feePayment`: This tracer is responsible for tracking the transaction fee that will be deducted from the balance of the transaction sender (`from` address).
+`deposit`: This tracer follows the primary trace from the sender's address to the recipient's address. The process involves the initial minting of balance in a `beforeEvmTransfer` for the sender's address, followed by its subsequent transfer to the recipient's address. It's worth noting that if the `from` or `to` field of a `beforeEvmTransfer`/`afterEvmTransfer` is empty, it indicates that the transaction is either a mint or a burn operation.
+`feeCollection`: This tracer pertains to the distribution of the two gas fee components mentioned [here](https://docs.arbitrum.io/arbos/gas).
+Furthermore, fields such as `escrow`, `prepaid`, `refund`, and `undoRefund` are associated with [retryable tickets](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#retryable-tickets) and the mechanics of gas charging in [manual redemption processes](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#manual-redemption). During the redeem call, gas is consumed and initially "prepaid" in a separate redeem transaction. If any unused gas remains, Geth refunds it to an incorrect address, a situation rectified through the "undoRefund" process, ultimately resulting in the refund being correctly directed to the intended address using the "refund" step within the afterEvmTransfers tracer.
+
 ## Hooks
 
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
@@ -273,11 +284,11 @@ Arbitrum introduces a new [`signer`](https://github.com/OffchainLabs/go-ethereum
 
 ### ReorgToOldBlock
 
-Geth natively only allows reorgs to a fork of the currently-known network. In nitro, reorgs can sometimes be detected before computing the forked block. We added the [`ReorgToOldBlock`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/blockchain_arbitrum.go#L38) function to support reorging to a block that's an ancestor of current head.
+Geth natively only allows reorgs to a fork of the currently-known network. In Nitro, reorgs can sometimes be detected before computing the forked block. We added the [`ReorgToOldBlock`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/blockchain_arbitrum.go#L38) function to support reorging to a block that's an ancestor of current head.
 
 ### Genesis block creation
 
-Genesis block in nitro is not necessarily block #0. Nitro supports importing blocks that take place before genesis. We split out [`WriteHeadBlock`][writeheadblock_link] from genesis.Commit and use it to commit non-zero genesis blocks.
+Genesis block in Nitro is not necessarily block #0. Nitro supports importing blocks that take place before genesis. We split out [`WriteHeadBlock`][writeheadblock_link] from genesis.Commit and use it to commit non-zero genesis blocks.
 
 [pad_estimates_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/accounts/abi/bind/base.go#L355
 [conservation_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state/statedb.go#L42
