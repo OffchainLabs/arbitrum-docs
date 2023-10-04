@@ -1,6 +1,6 @@
 ---
 title: 'How to use oracles in Arbitrum'
-sidebar_label: Use oracles in Arbitrum
+sidebar_label: Use oracles
 description: Learn how to integrate oracles into your dapp
 reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: how-to
@@ -249,6 +249,8 @@ contract ARBPriceConsumer is UsingTellor {
 
 You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the oracle contract in that network**. Remember we have a [Quickstart](../for-devs/quickstart-solidity-hardhat) available that goes through the process of compiling and deploying a contract.
 
-### More examples
+### See also
 
-Refer to [Tellor’s documentation](https://docs.tellor.io/) for more examples of querying price feeds plus other data feeds available.
+- [Tellor’s documentation](https://docs.tellor.io/) demonstrates how to query price feeds and other data feeds.
+- [How to use Supra's price feed oracle](/for-devs/third-party-docs/Supra/use-supras-price-feed-oracle)
+- [How to use Supra's VRF](/for-devs/third-party-docs/Supra/use-supras-vrf)

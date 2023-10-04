@@ -31,7 +31,7 @@ Yes, indeed we can be. This is where the “rollup” part comes in. The data th
 
 The parties who move the Arbitrum chain state forward on L1 — i.e., making claims about the chain’s state, disputing other’s claims, etc. — are called validators.
 In practice, we don’t expect the average Arbitrum user to be interested in running a
-validator, just like the average Ethereum user typically doesn’t run their own layer 1 staking node. The crucial property, however, is that anybody can; becoming an Arbitrum validator requires no special permission ([once the whitelist is lifted](https://docs.arbitrum.foundation/state-of-progressive-decentralization)), only that a user runs the [open source validator software](https://github.com/OffchainLabs/nitro) (and stakes Ether when/if they need to take action).
+validator, just like the average Ethereum user typically doesn’t run their own layer 1 staking node. The crucial property, however, is that anybody can; becoming an Arbitrum validator requires no special permission ([once the allowlist is lifted](https://docs.arbitrum.foundation/state-of-progressive-decentralization)), only that a user runs the [open source validator software](https://github.com/OffchainLabs/nitro) (and stakes Ether when/if they need to take action).
 
 Additionally, as long as there’s even just one honest validator, the chain will remain secure; i.e., it only takes one non-malicious fraud-prover to catch any number of malicious trouble-makers. These properties together make the system “trustless”; users are not relying on any special designated party for their funds to be secure.
 
@@ -55,6 +55,10 @@ Different layer 2 protocols emphasize and optimize for different things; Arbitru
 
 Much development went into achieving this level of Ethereum compatibility. But at its core: the Arbitrum itself uses a fork of [Geth](../arbos/geth.mdx) — the most widely used Ethereum implementation — with modifications to transform it into a trustless layer 2. This means most of the code running in Arbitrum is identical to the code running in Ethereum. We call this cutting-edge approach Nitro (developers can see the codebase [here](https://github.com/OffchainLabs/nitro)).
 
+#### Q: So builders can do all the stuff they do on Ethereum on Arbitrum, nice! But can they do _more_?
+
+They can; the latest version of the Arbitrum tech stack, called <a data-quicklook-from='stylus'>Stylus</a>, keeps Nitro's Ethereum compatibility, while adding on powerful new features, namely the ability to write highly performant smart contracts in programming languages like Rust, C++, and more. Stylus is currently on public testnet; you can read more about it [here](../stylus/stylus-gentle-introduction.md).
+
 #### Q: So it sounds like Arbitrum Rollup is an ideal solution that solves any and all scaling problems…?
 
 Arbitrum Rollup is very awesome and cool; its design is geared heavily toward avoidance of introducing any centralization or trust assumptions, and it is thus a clear, strict net-win for the Ethereum ecosystem. Decentralization, however, comes at a (literal) price, and not all applications and users necessarily want or need to pay that price. For dapp use-cases with different security considerations, different tools in the Arbitrum suite are appropriate; i.e., Arbitrum AnyTrust chains!
@@ -67,6 +71,8 @@ For applications that require high transaction throughput and don’t require th
 #### Q: So there's more than one Arbitrum chain out there?
 
 Yep! The fact that multiple chains can run in parallel is a crucial perk to off-chain scaling technology. Currently, on Ethereum mainnet, there are 2 Arbitrum chains: one Arbitrum Rollup chain, called ["Arbitrum One,"](https://portal.arbitrum.one/) and one AnyTrust chain, called ["Nova"](https://nova.arbitrum.io/); users and developers can pick whatever suits their security / transaction cost needs.
+
+Developers also have the option of launching their own Arbitrum chains that run top an Arbitrum layer 2. These are called <a data-quicklook-from='arbitrum-orbit'>Orbit</a> chains and you can read more about them [here](../launch-orbit-chain/orbit-gentle-introduction.md).
 
 #### Q: Who makes decisions about the future of Arbitrum One and Arbitrum Nova?
 
