@@ -23,7 +23,7 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 2. The vending machine's rules can't be changed by anyone.
 
 Here's our vending machine implemented with Javascript.
-To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up. 
+To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
