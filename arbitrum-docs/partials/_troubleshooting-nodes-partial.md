@@ -58,7 +58,7 @@
 ### **Is there any way to retrieve pre-Nitro archive data from a Nitro node?** {#is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node}
 <p>The pre-nitro stack is also referred to as a "classic" stack. Full nitro nodes start with a database that contains the information from the "classic" era. However, it is not possible for a nitro node to query archive information contained in "classic" blocks right away. To do that, you need to also run a classic node (<a href="https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node">instructions here</a>) and set the parameter <code>—node.rpc.classic-redirect=your-classic-node-RPC</code>.</p>
 
-<p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova and Arbitrum Goerli nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
+<p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova, Arbitrum Goerli and Arbitrum Sepolia nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
 
 <p></p>
 
