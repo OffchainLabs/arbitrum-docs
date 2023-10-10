@@ -160,3 +160,23 @@ A week is expected to be more than enough time for validators to carry out an in
 
 
 
+### Are there any plans for reducing the time a transaction needs to wait before being able to be forced included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently 24 hours) {#are-there-any-plans-for-reducing-the-time-a-transaction-needs-to-wait-before-being-able-to-be-forced-included-from-ethereum-into-the-arbitrum-chain-bypassing-the-sequencer-currently-24-hours}
+<p>The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, specially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.</p>
+
+<p>When using this mechanism, if the sequencer is down for longer than the time window for force-including transactions from Ethereum, the moment it is online again, it can lead to a reorganization of blocks in Arbitrum (it would have received transactions timestamped before the force-included one).</p>
+
+<p>24 hours was chosen because it provides a comfortable period of time for the team running the sequencer infrastructure to fix any bugs that may cause the sequencer to not work. While there aren't any active initiatives to lower that time, the decision ultimately falls in the hands of the Arbitrum DAO, who has discussed the topic in their governance forum (<a href="https://forum.arbitrum.foundation/t/proposal-decrease-censorship-delay-from-24-hours-to-4-hours/13047">see here for more information</a>).</p>
+
+<p>In any case, we could also analyze why would someone use this mechanism having an honest and functional sequencer. For instance, if the reason is a distrust of the sequencer, a centralised agent as of now, one potential solution could be to <a href="https://medium.com/@espressosys/offchain-labs-partnership-improving-transaction-ordering-for-arbitrum-technology-chains-beyond-de2b6018acb2">decentralize the sequencer</a> instead of reducing the force-inclusion delay time.</p>
+
+<p></p>
+
+
+
+### Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits? {#why-do-arbitrum-chains-enforce-a-speed-limit-isnt-it-better-that-the-speed-grows-without-limits}
+<p>The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.</p>
+
+<p></p>
+
+
+
