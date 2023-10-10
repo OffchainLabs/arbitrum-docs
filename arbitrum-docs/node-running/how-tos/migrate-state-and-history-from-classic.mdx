@@ -24,7 +24,7 @@ Keep in mind that this process only applies to Arbitrum One. Other Arbitrum chai
 To successfully migrate the state and history of the chain from a classic (pre-Nitro) node to a Nitro node, you'll need:
 
 - A fully synced classic node: you can find instructions on how to run a classic node in [this page](/node-running/how-tos/running-a-classic-node.mdx).
-- A clean, uninitialized nitro node: you can find instructions on how to set up a Nitro node in [this page](/node-running/how-tos/running-a-full-node.mdx).
+- A clean, uninitialized Nitro node: you can find instructions on how to set up a Nitro node in [this page](/node-running/how-tos/running-a-full-node.mdx).
 
 ## Step 1: Enable export options in your classic node
 
@@ -46,7 +46,7 @@ Exporting the state of your own classic node should produce the same state as us
 
 ### Block & transaction history
 
-These are block-headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and parentHash is taken from the last block's blockHash.
+These are block headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and parentHash is taken from the last block's blockHash.
 
 - Call the RPC method `arb_exportHistory` with parameter `"latest"` to initiate history export. It will return immediately.
 - Calling `arb_exportHistoryStatus` will return the latest block exported, or an error if the export failed.
@@ -61,7 +61,7 @@ The rollup state is exported as a series of JSON files. State read from these JS
 
 ### Outbox messages (optional)
 
-This data does not impact consensus and is optional. It allows a Nitro node to provide the information required when redeeming a withdrawal made on the classic rollup.
+This data does not impact consensus and is optional. It allows a Nitro node to provide the information required when executing a withdrawal made on the classic rollup.
 
 - Call the RPC method `arb_exportOutbox` with parameter `"0xffffffffffffffff"` to initiate outbox export. It will return immediately.
 - Calling `arb_exportOutboxStatus` will return the latest outbox batch exported, or an error if the export failed.
@@ -74,7 +74,7 @@ This data does not impact consensus and is optional. It allows a Nitro node to p
 
 :::caution Caution
 
-This state import operation requires more resources than a regular run of a nitro node.
+This state import operation requires more resources than a regular run of a Nitro node.
 
 :::
 
