@@ -12,7 +12,11 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 :::caution
 
-The tutorial only works when you use eth_call to call the new precompiles, if you want to add non-view/pure methods or call from other contracts, it will break validation, but we will have `how to update the wasm module root tutorial` to fix this soon. If you want to test modifying the STS before we have instructions for wasm module root generation, you can add command `--node.staker.dangerous.without-block-validator` when you start the node.
+The guidance in this document will work only if you use `eth_call` to call the new precompiles. If you're calling from other contracts or adding non-view/pure methods, this approach will break block validation.
+
+To support these additional use-cases, stay tuned for instructions that walk you through the process of updating the Wasm module root.
+
+If you want to test modifying the State Transition System (STS) before this guidance is available, use the `--node.staker.dangerous.without-block-validator` config flag when you start your node.
 
 :::
 
