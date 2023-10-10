@@ -28,6 +28,7 @@ import { MultiDimensionalContentWidget } from '@site/src/components/MultiDimensi
     { label: 'Arbitrum One (Classic)', value: 'arb-one-classic' },
     { label: 'Arbitrum Nova', value: 'arb-nova' },
     { label: 'Arbitrum Goerli', value: 'arb-goerli' },
+    { label: 'Arbitrum Sepolia', value: 'arb-sepolia' },
     { label: 'Localhost', value: 'localhost' },
   ]}
 >
@@ -36,6 +37,7 @@ import { MultiDimensionalContentWidget } from '@site/src/components/MultiDimensi
   <TabItem value="arb-one-classic"></TabItem>
   <TabItem value="arb-nova"></TabItem>
   <TabItem value="arb-goerli"></TabItem>
+  <TabItem value="arb-sepolia"></TabItem>
   <TabItem value="localhost"></TabItem>
 </Tabs>
 
