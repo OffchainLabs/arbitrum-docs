@@ -10,7 +10,11 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-⚠️⚠️⚠️ The tutorial only works when you use eth_call to call the new precompiles, if you want to add non-view/pure methods or call from other contracts, it will break validation, but we will have `how to update the wasm module root tutorial` to fix this soon. If you want to test modifying the STS before we have instructions for wasm module root generation, you can add command `--node.staker.dangerous.without-block-validator` when you start the node.
+:::caution
+
+The tutorial only works when you use eth_call to call the new precompiles, if you want to add non-view/pure methods or call from other contracts, it will break validation, but we will have `how to update the wasm module root tutorial` to fix this soon. If you want to test modifying the STS before we have instructions for wasm module root generation, you can add command `--node.staker.dangerous.without-block-validator` when you start the node.
+
+:::
 
 There are two ways to customize your chain's precompiles:
 
