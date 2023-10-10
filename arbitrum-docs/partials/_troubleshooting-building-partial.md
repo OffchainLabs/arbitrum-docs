@@ -169,16 +169,16 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 ### What is a testnet or a devnet? {#what-is-a-testnet-or-a-devnet}
 <p>Testnets (or devnets) primarily serve developers who want to test out the applications they're building without having to use any real mainnet funds.</p>
 
-<p>Arbitrum Goerli testnet has the same full feature-set as the mainnet networks. It is also a "true" L2 that runs on top of the Goerli testnet (L1), using it for security and settlement.</p>
+<p>Arbitrum Goerli and Arbitrum Sepolia are both testnets that have the same full feature-set as the mainnet networks. They are also a "true" L2 that run on top of the Goerli testnet (L1) and the Sepolia testnet (L1) respectively, using them for security and settlement.</p>
 
-<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
+<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet, and from the Sepolia testnet (L1) into the Arbitrum Sepolia testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
 
 <p></p>
 
 
 
 ### Is there any testnet available on Arbitrum? {#is-there-any-testnet-available-on-arbitrum}
-<p>Yes, there's an Arbitrum Goerli testnet (421613) that uses the Nitro tech stack, running on top of Ethereum Goerli. You can find more information <a href="https://developer.arbitrum.io/public-chains">here</a>.</p>
+<p>Yes, there's an Arbitrum Goerli testnet (421613) that uses the Nitro tech stack, running on top of Ethereum Goerli, and an Arbitrum Sepolia testnet (421614) that also uses the Nitro tech stack and runs on top of Ethereum Sepolia. You can find more information <a href="https://developer.arbitrum.io/public-chains">here</a>.</p>
 
 <p></p>
 
