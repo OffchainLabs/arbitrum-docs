@@ -48,7 +48,9 @@ jobs:
           echo "format-check-result=$?" >> $GITHUB_OUTPUT
       
       - name: Output formatting error
-        if: steps.prettier-check.outputs.format-check-result == 1
+        if: |
+          steps.prettier-check.outputs.format-check-result == 1 &&
+          github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
