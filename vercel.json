@@ -36,6 +36,11 @@
             "permanent": false
         },
         {
+            "source": "/migration/state-migration",
+            "destination": "/node-running/how-tos/migrate-state-and-history-from-classic",
+            "permanent": false
+        },
+        {
             "source": "/docs/public_chains",
             "destination": "/for-devs/concepts/public-chains",
             "permanent": false
@@ -373,6 +378,11 @@
         {
             "source": "/node-running/running-a-node",
             "destination": "/node-running/how-tos/running-a-full-node",
+            "permanent": false
+        },
+        {
+            "source": "/das/daserver-instructions",
+            "destination": "/node-running/how-tos/running-a-daserver",
             "permanent": false
         }
     ]

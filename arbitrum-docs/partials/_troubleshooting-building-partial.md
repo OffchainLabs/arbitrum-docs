@@ -115,7 +115,7 @@ To let's find out which is custom error this signature represents, we can use th
 ### How do block.number and block.timestamp work on Arbitrum? {#how-do-blocknumber-and-blocktimestamp-work-on-arbitrum}
 <p>Solidity calls to <code>block.number</code> on Arbitrum will return the block number/ timestamp of the underlying L1 on a slight delay; i.e., updated every few minutes. Note that L2 block numbers (i.e., as seen in block explorers / returned by RPCs) are different, and are typically updated roughly every second.</p>
 
-<p>Solidity calls to <code>block.timestamp</code> on Arbitrum are not linked to the timestamp of the L1 block, it is updated every L2 block based on the sequencer's clock.</p>
+<p>Solidity calls to <code>block.timestamp</code> on Arbitrum are not linked to the timestamp of the L1 block. It is updated every L2 block based on the sequencer's clock. Furthermore, for transactions that are force-included from L1 (bypassing the Sequencer) <code>block.timestamp</code> will be equal to the L1 timestamp when the transaction was put in the delayed inbox on L1 (not force-included), or the L2 timestamp of the previous L2 block (whichever is greater of the two timestamps).</p>
 
 <p>For more info, see <a href="https://developer.arbitrum.io/time">block numbers and time</a>.</p>
 
@@ -169,16 +169,16 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 ### What is a testnet or a devnet? {#what-is-a-testnet-or-a-devnet}
 <p>Testnets (or devnets) primarily serve developers who want to test out the applications they're building without having to use any real mainnet funds.</p>
 
-<p>Arbitrum Goerli testnet has the same full feature-set as the mainnet networks. It is also a "true" L2 that runs on top of the Goerli testnet (L1), using it for security and settlement.</p>
+<p>Arbitrum Goerli and Arbitrum Sepolia are both testnets that have the same full feature-set as the mainnet networks. They are also a "true" L2 that run on top of the Goerli testnet (L1) and the Sepolia testnet (L1) respectively, using them for security and settlement.</p>
 
-<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
+<p>Users can bridge any asset from the Goerli testnet (L1) into the Arbitrum Goerli testnet, and from the Sepolia testnet (L1) into the Arbitrum Sepolia testnet (and back!), using the official <a href="https://bridge.arbitrum.io/">bridge</a>.</p>
 
 <p></p>
 
 
 
 ### Is there any testnet available on Arbitrum? {#is-there-any-testnet-available-on-arbitrum}
-<p>Yes, there's an Arbitrum Goerli testnet (421613) that uses the Nitro tech stack, running on top of Ethereum Goerli. You can find more information <a href="https://developer.arbitrum.io/public-chains">here</a>.</p>
+<p>Yes, there's an Arbitrum Goerli testnet (421613) that uses the Nitro tech stack, running on top of Ethereum Goerli, and an Arbitrum Sepolia testnet (421614) that also uses the Nitro tech stack and runs on top of Ethereum Sepolia. You can find more information <a href="https://developer.arbitrum.io/public-chains">here</a>.</p>
 
 <p></p>
 
@@ -186,6 +186,13 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 ### When was Arbitrum One upgraded from Classic to Nitro? {#when-was-arbitrum-one-upgraded-from-classic-to-nitro}
 <p>Arbitrum One <a href="https://medium.com/offchainlabs/its-nitro-time-86944693bf29">was upgraded</a> on August 31st, 2022, from the Classic stack to the improved <a href="https://developer.arbitrum.io/inside-arbitrum-nitro/">Nitro</a> tech stack, maintaining the same state.</p>
+
+
+
+### Do Arbitrum chains support precompiles that are present on Ethereum? {#do-arbitrum-chains-support-precompiles-that-are-present-on-ethereum}
+<p>Yes, all Arbitrum chains support all precompiles that Ethereum supports, as well as others that are not present on Ethereum. Check the <a href="https://docs.arbitrum.io/for-devs/dev-tools-and-resources/precompiles">precompiles reference page</a> for more information about Arbitrum specific precompiles.</p>
+
+<p></p>
 
 
 
