@@ -173,11 +173,9 @@ Open `scripts/deploy.js` and replace its contents with the following:
 const hre = require('hardhat');
 
 async function main() {
-  const VendingMachineFactory = await hre.ethers.getContractFactory('VendingMachine');
-  const vendingMachine = await VendingMachineFactory.deploy();
-  await vendingMachine.deployed();
-
-  console.log(`Cupcake vending machine deployed to ${vendingMachine.address}`);
+  const vendingMachine = await hre.ethers.deployContract("VendingMachine");
+  await vendingMachine.waitForDeployment();
+  console.log(`Cupcake vending machine deployed to ${vendingMachine.target}`);
 }
 
 main().catch((error) => {
