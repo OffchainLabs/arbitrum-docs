@@ -109,7 +109,7 @@ Then, update [precompile.go][precompile_main_file_link] to register the new prec
 insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
-Navigate to the [precompiles interface][precompile_impl_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+Navigate to the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
 
 ```solidity
 pragma solidity >=0.4.21 <0.9.0;
@@ -174,5 +174,5 @@ We can use the @nitroContractsRepositorySlug@ and @nitroContractsPathToPrecompil
 -->
 
 [precompile_impl_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/
-[precompile_interface_dir_link]: https://github.com/OffchainLabs/nitro-contracts/blob/@orbitNitroContractsCommit@/src/precompiles/
+[precompile_interface_dir_link]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
