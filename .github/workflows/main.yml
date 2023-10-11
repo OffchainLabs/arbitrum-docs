@@ -2,7 +2,9 @@ name: Check format
 run-name: Checking format
 
 on:
-  - pull_request_target
+  pull_request_target:
+    branches:
+      - master
 
 jobs:
   install:
