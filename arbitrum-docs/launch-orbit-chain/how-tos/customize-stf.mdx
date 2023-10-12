@@ -21,6 +21,7 @@ However, changes that modify the STF require updating the fraud proving system t
 Otherwise, the fraud prover would side with unmodified nodes, which would win fraud proofs against your modified node.
 
 Here's some examples of modifications that affect the STF:
+
 - Adding a new EVM opcode or precompile:
   This modifies the STF because a node with this change would disagree about the outcome of EVM execution compared to an unmodified nitro node
   when the new opcode or precompile is invoked.
@@ -28,6 +29,7 @@ Here's some examples of modifications that affect the STF:
   This modifies the STF because a node which has this change applied would disagree about the balance of the deployer after transactions. Such changes would lead to disagreements about block hashes compared to unmodified Nitro nodes.
 
 Here's some examples of modifications that don't affect the STF:
+
 - Adding a new RPC method to query an address's balance across multiple blocks:
   This doesn't modify the STF because this doesn't change on-chain balances or block hashes.
 - Changing the sequencer to order blocks by tip:
@@ -38,6 +40,7 @@ Here's some examples of modifications that don't affect the STF:
 
 Some potential modifications are incompatible with Arbitrum Nitro and would not result in a functioning blockchain.
 Here are some requirements for the Arbitrum Nitro State Transition Function:
+
 - The STF must be deterministic. For instance, if you gave an address a random balance using the Go randomness library,
   every node would disagree on the correct amount of balance and the blockchain would not function correctly.
   However, it is acceptable to take a non-deterministic path to a deterministic output.
@@ -107,6 +110,7 @@ Once your node is running, you can try out your modifications to the State Trans
 To enable fraud proofs, you'll need to build the "replay binary", which defines the State Transition Function for the fraud prover.
 The replay binary (sometimes called the machine) re-executes the State Transition Function against input messages to determine the correct output block.
 It has three forms:
+
 - The `replay.wasm` binary is the Go replay binary compiled to WASM. It's used by the JIT validator to verify blocks against the fraud prover.
 - The `machine.wavm.br` binary is a compressed binary containing the Go replay binary and all its dependencies, compiled to WASM, then translated to the Arbitrum fraud proving variant WAVM.
   It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
