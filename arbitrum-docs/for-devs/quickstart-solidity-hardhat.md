@@ -22,7 +22,8 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 1. The vending machine will distribute a cupcake to anyone who hasn't recently received one.
 2. The vending machine's rules can't be changed by anyone.
 
-Here's our vending machine implemented with Javascript:
+Here's our vending machine implemented with Javascript.
+To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
@@ -172,11 +173,9 @@ Open `scripts/deploy.js` and replace its contents with the following:
 const hre = require('hardhat');
 
 async function main() {
-  const VendingMachineFactory = await hre.ethers.getContractFactory('VendingMachine');
-  const vendingMachine = await VendingMachineFactory.deploy();
-  await vendingMachine.deployed();
-
-  console.log(`Cupcake vending machine deployed to ${vendingMachine.address}`);
+  const vendingMachine = await hre.ethers.deployContract("VendingMachine");
+  await vendingMachine.waitForDeployment();
+  console.log(`Cupcake vending machine deployed to ${vendingMachine.target}`);
 }
 
 main().catch((error) => {
