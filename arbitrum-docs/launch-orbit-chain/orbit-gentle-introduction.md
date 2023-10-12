@@ -18,7 +18,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 ### In a nutshell:
 
-- Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains: <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, or **Arbitrum Goerli**.
+- Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains: <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, **Arbitrum Goerli**, or **Arbitrum Sepolia**.
 - **You own your Orbit chain** and can customize its privacy, permissions, fee token, governance, and more.
 - Examples of possibilities that this unlocks:
   - **Launch a decentralized Nitro-powered blockchain network**, and that benefits from <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://offchain.medium.com/hello-stylus-6b18fecc3a22), and continuous improvements.
