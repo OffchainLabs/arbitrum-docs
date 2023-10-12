@@ -3,7 +3,7 @@ title: "How to customize your Orbit chain's precompiles"
 sidebar_label: "Customize your chain's precompiles"
 description: "Learn how (and when) to customize your Orbit chain's precompiles"
 author: jasonwan
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
@@ -41,13 +41,7 @@ Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [pr
 function sayHi() external view returns(string memory);
 ```
 
-Next, build Nitro by following steps 3-7 of the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
-
-Run Nitro with the following command:
-
-```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
-```
+Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx) to build a modified Arbitrum Nitro node docker image and run it.
 
 :::info
 
@@ -122,13 +116,7 @@ interface ArbHi {
 }
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
-
-Run Nitro with the following command:
-
-```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
-```
+Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx) to build a modified Arbitrum Nitro node docker image and run it.
 
 :::info
 

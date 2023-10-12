@@ -16,7 +16,52 @@ This how-to assumes that you're running one of the following operating systems:
 - [Ubuntu 22.04 (amd64)](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)
 - [MacOS Ventura 13.4](https://developer.apple.com/documentation/macos-release-notes/macos-13_4-release-notes).
 
-### 1. Configure prerequisites
+### 1. Configure [Docker](https://docs.docker.com/engine/install)
+
+#### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
+
+```bash
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo service docker start
+```
+
+#### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
+
+Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
+
+### 2. Download the Nitro source code
+
+```bash
+git clone https://github.com/OffchainLabs/nitro.git
+cd nitro
+git submodule update --init --recursive --force
+```
+
+### Intermission: Building a Nitro node Docker image
+
+If you want to build a Docker image for the Arbitrum Nitro node,
+now that you have Docker setup and the Nitro source code checked out,
+all you need to do is run `docker build . --tag nitro-node` in the `nitro` folder.
+That command will build a Docker image called `nitro-node` from the local source.
+
+The rest of the guide covers building the node binary natively, outside of Docker.
+However, Docker is still used to help build some WebAssembly components.
+
+### 3. Configure prerequisites
 
 #### For Debian/Ubuntu
 
@@ -46,15 +91,7 @@ sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
 
-### 2. Configure Nitro
-
-```bash
-git clone https://github.com/OffchainLabs/nitro.git
-cd nitro
-git submodule update --init --recursive --force
-```
-
-### 3. Configure Node [16.19](https://github.com/nvm-sh/nvm)
+### 4. Configure Node [16.19](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
@@ -75,7 +112,7 @@ nvm install 16.19
 nvm use 16.19
 ```
 
-### 4. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
+### 5. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -86,33 +123,6 @@ rustup target add wasm32-unknown-unknown --toolchain 1.72.1
 rustup target add wasm32-wasi --toolchain 1.72.1
 cargo install cbindgen
 ```
-
-### 5. Configure [Docker](https://docs.docker.com/engine/install)
-
-#### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
-
-```bash
-for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl gnupg
-sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-# Add the repository to Apt sources:
-echo \
-  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo service docker start
-```
-
-#### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
-
-Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 
 ### 6. Configure Go [1.20](https://github.com/moovweb/gvm)
 
