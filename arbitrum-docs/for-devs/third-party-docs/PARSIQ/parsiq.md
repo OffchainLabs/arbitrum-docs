@@ -11,7 +11,7 @@ sidebar_label: "PARSIQ"
 
 PARSIQ API allows querying blockchain data such as transactions, token transfers, events, internal function calls, blocks, etc.
 
-PARSIQ SDK allows accumulationg, processing, and storing this data according to the developer-specified logic, as well as building your own API endpoints.
+PARSIQ SDK allows accumulating, processing, and storing this data according to the developer-specified logic, as well as building your own API endpoints.
 
 Check out **[<ins>this introduction video</ins>](https://www.youtube.com/watch?v=kQJYJGt62hc)**
 to get started.
