@@ -24,7 +24,7 @@ Otherwise, the fraud prover would side with unmodified nodes, which would win fr
 Here's some examples of modifications that affect the STF:
 
 - Adding a new EVM opcode or precompile:
-  This modifies the STF because a node with this change would disagree about the outcome of EVM execution compared to an unmodified nitro node
+  This modifies the STF because a node with this change would disagree about the outcome of EVM execution compared to an unmodified Nitro node
   when the new opcode or precompile is invoked.
 - Rewarding the deployer of a smart contract with a portion of gas spent in the smart contract's execution:
   This modifies the STF because a node which has this change applied would disagree about the balance of the deployer after transactions. Such changes would lead to disagreements about block hashes compared to unmodified Nitro nodes.
@@ -32,9 +32,9 @@ Here's some examples of modifications that affect the STF:
 Here's some examples of modifications that don't affect the STF:
 
 - Adding a new RPC method to query an address's balance across multiple blocks:
-  This doesn't modify the STF because this doesn't change on-chain balances or block hashes.
+  This doesn't modify the STF because it doesn't change on-chain balances or block hashes.
 - Changing the sequencer to order blocks by tip:
-  The sequencer is trusted to order transactions in Arbitrum Nitro, and it can chose any ordering it wants.
+  The sequencer is trusted to order transactions in Arbitrum Nitro, and it can choose any ordering it wants.
   Nodes (and the fraud proofs) will simply accept the new transaction ordering as there is no single ordering they think is correct.
 
 ### Modification compatibility with Arbitrum Nitro
@@ -66,7 +66,7 @@ Here are some requirements for the Arbitrum Nitro State Transition Function:
 
 ## Building the modified node
 
-To modify the State Transition Function, you'll need to build a modified Arbitrum Nitro node docker image.
+To modify the State Transition Function, you'll need to build a modified Arbitrum Nitro node Docker image.
 This guide covers how to build the node and enable fraud proofs by building a new replay binary.
 
 ### Step 1. Download the Nitro source code
@@ -88,7 +88,7 @@ Next, make your changes to the State Transition Function. For example, you could
 To build the Arbitrum Nitro node image, you'll first need to install Docker.
 You can confirm if it's already setup by running `docker version` in a terminal.
 If not, try following [Docker's getting started guide](https://www.docker.com/get-started/), or if you're on Linux,
-install Docker from your distribution's package manager and start the docker service.
+install Docker from your distribution's package manager and start the Docker service.
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
@@ -148,7 +148,7 @@ docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:
 
 Note that `--node.staker.dangerous.without-block-validator` has been removed from this invocation now that fraud proofs are working again.
 
-#### 4.2 Preserving the Replay Binary
+#### 4.2 Preserving the replay binary
 
 The primary issue with simply using a nitro-node-dev build is that, whenever the code changes at all, the replay binary will also change.
 

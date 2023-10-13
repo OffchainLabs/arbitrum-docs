@@ -11,7 +11,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx).
+Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a Docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx).
 
 This how-to assumes that you're running one of the following operating systems:
 
@@ -68,7 +68,7 @@ cd nitro
 git submodule update --init --recursive --force
 ```
 
-### Step 3. Build the Nitro node docker image
+### Step 3. Build the Nitro node Docker image
 
 ```bash
 docker build . --tag nitro-node
@@ -110,7 +110,7 @@ sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
 
-### Step 5. Configure Node [16.19](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node [16.19](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
