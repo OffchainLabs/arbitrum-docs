@@ -6,7 +6,6 @@ sme: Ivan-Ivanitskiy
 sidebar_label: "PARSIQ"
 ---
 
-# PARSIQ Data API & SDK Quickstart
 
 **[<ins>PARSIQ</ins>](https://www.parsiq.net/)** is a reliable, fully customizable blockchain data indexer, helping developers to seamlessly access, process and utilize Web3 data - both raw and custom.
 
