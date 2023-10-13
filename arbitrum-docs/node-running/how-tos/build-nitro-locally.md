@@ -11,13 +11,17 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
+Arbitrum Nitro is the software that powers all Arbitrum chains. This how-to shows how you can build a docker image, or binaries, directly from Nitro's source code. If you want to run a node for one of the Arbitrum chains, however, it is recommended that you use the docker image available on DockerHub, as explained in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx).
+
 This how-to assumes that you're running one of the following operating systems:
 
 - [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/arm64/iso-cd/debian-11.7.0-arm64-netinst.iso)
 - [Ubuntu 22.04 (amd64)](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)
 - [MacOS Ventura 13.4](https://developer.apple.com/documentation/macos-release-notes/macos-13_4-release-notes).
 
-### 1. Configure [Docker](https://docs.docker.com/engine/install)
+## Build a Docker image
+
+### Step 1. Configure [Docker](https://docs.docker.com/engine/install)
 
 #### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
 
@@ -44,25 +48,39 @@ sudo service docker start
 
 Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 
-### 2. Download the Nitro source code
+#### [Optional] Run docker from a different user
+
+After installing docker, you might want to be able to run it with your current user instead of root. You can run the following commands to do so.
 
 ```bash
-git clone https://github.com/OffchainLabs/nitro.git
+sudo groupadd docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+For troubleshooting, check Docker's section in [their documentation](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+
+### Step 2. Download the Nitro source code
+
+```bash
+git clone --branch @nitroVersionTag@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
 
-### Intermission: Building a Nitro node Docker image
+### Step 3. Build the Nitro node docker image
 
-If you want to build a Docker image for the Arbitrum Nitro node,
-now that you have Docker setup and the Nitro source code checked out,
-all you need to do is run `docker build . --tag nitro-node` in the `nitro` folder.
+```bash
+docker build . --tag nitro-node
+```
+
 That command will build a Docker image called `nitro-node` from the local source.
 
-The rest of the guide covers building the node binary natively, outside of Docker.
-However, Docker is still used to help build some WebAssembly components.
+## Build Nitro's binaries natively
 
-### 3. Configure prerequisites
+If you want to build the node binaries natively, execute steps 1-3 of the [Build a Docker image](#build-a-docker-image) section and continue with the steps described here. Notice that even though we are building the binaries outside of Docker, it is still used to help build some WebAssembly components.
+
+### Step 4. Configure prerequisites
 
 #### For Debian/Ubuntu
 
@@ -92,7 +110,7 @@ sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
 
-### 4. Configure Node [16.19](https://github.com/nvm-sh/nvm)
+### Step 5. Configure Node [16.19](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
@@ -113,7 +131,7 @@ nvm install 16.19
 nvm use 16.19
 ```
 
-### 5. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
+### Step 6. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -125,7 +143,7 @@ rustup target add wasm32-wasi --toolchain 1.72.1
 cargo install cbindgen
 ```
 
-### 6. Configure Go [1.20](https://github.com/moovweb/gvm)
+### Step 7. Configure Go [1.20](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
@@ -153,8 +171,22 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 
 If you use zsh, replace `bash` with `zsh`.
 
-### 7. Start build
+### Step 8. Start build
 
 ```bash
 make
+```
+
+### Step 9. Produce binaries
+
+```bash
+make build
+```
+
+### Step 10. Run your node
+
+To run your node using the generated binaries, use the following command from the `nitro` folder, with your desired parameters
+
+```bash
+./target/bin/nitro <node parameters>
 ```
