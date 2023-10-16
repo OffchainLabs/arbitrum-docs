@@ -40,6 +40,10 @@ Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which
 
 Chain owners can either call [UpgradeExecutor.executeCall](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L73), which will in turn call the target contract directly, or [UpgradeExecutor.execute](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L57), which will delegate-call to an "action contract" and use its code to call the target contract.
 
-The Arbitrum DAO governed chains, while not Orbit chains themselves, use a similar architecture and upgrade pattern; for more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
+### Ownership Flexibility 
+A chain owner is simply an address; it is set by the Orbit chain's deployer and  can represent any sort of governance scheme. I.e., it could be an EOA (as is set via the [Orbit Quickstart](../orbit-quickstart.md)), a Multisig, a governance token system, etc.
+
+
+The Arbitrum DAO governed chains, while not Orbit chains themselves, use a similar architecture and upgrade pattern as Orbit chains, with both a governance token and a Multisig (aka, the "Security Council") as chain owners. For more info and best practices on action contracts, see ["DAO Governance Action Contracts"](https://github.com/ArbitrumFoundation/governance/blob/main/src/gov-action-contracts/README.md).
 
 (_NOTE: The DAO Governed chains' Upgrade Executor contracts don't have the `.executeCall` method; only the `.execute` method_)
