@@ -162,6 +162,107 @@ You should see something like this:
 hi
 ```
 
+## Option 3: Define a new event
+
+Here we will still use the precompile `Arbsys` as an example add a simple `Hi` event to be emitted in `SayHi` which we added in Option 1, first go to the [precompiles implementation][precompile_impl_dir_link] directory, and find `ArbSys.go`:
+
+```go
+// ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
+type ArbSys struct {
+	Address                 addr // 0x64
+	L2ToL1Tx                func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, []byte) error
+	L2ToL1TxGasCost         func(addr, addr, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
+	SendMerkleUpdate        func(ctx, mech, huge, bytes32, huge) error
+	SendMerkleUpdateGasCost func(huge, bytes32, huge) (uint64, error)
+	InvalidBlockNumberError func(huge, huge) error
+
+	// Add your customize event here:
+	Hi						func(ctx, mech, addr) error
+	// This is needed which will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
+	HiGasCost				func(addr) (uint64, error)
+
+	// deprecated event
+	L2ToL1Transaction        func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) error
+	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
+}
+```
+
+Then add the event to `SayHi` method:
+
+```go
+func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
+	err := con.Hi(c, evm, c.caller)
+	return "hi", err
+}
+```
+
+Navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the Event name on the interface matches the name of the function you introduced in the previous step:
+
+```solidity
+event Hi(address caller);
+```
+
+If you want to make the param in event as `index`, just add index to solidity interface as this:
+
+```solidity
+event Hi(address indexed caller);
+```
+
+Now as emiting events need to cost gas, so we should remove `view` function behavior:
+
+```solidity
+function sayHi() external returns(string memory);
+```
+
+Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
+
+### Send the tx and get tx receipt
+
+Send transaction to `ArbSys`, note as the function is not view/pure function, we need to send transaction with gas cost.
+```
+cast send 0x0000000000000000000000000000000000000064 "sayHi()(string)"
+```
+Then we will have a transaction hash result, send eth_getTransactionReceipt, you may get:
+
+```
+{"jsonrpc":"2.0","id":1,"result":{"blockHash":"Your_blockHash","blockNumber":"Your_blockNumber","contractAddress":null,"cumulativeGasUsed":"0x680b","effectiveGasPrice":"0x5f5e100","from":"Your_address","gasUsed":"0x680b","gasUsedForL1":"0xe35","l1BlockNumber":"l1_blockNumber","logs":[{"address":"0x0000000000000000000000000000000000000064","topics":["0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa","0x000000000000000000000000{Your_address}"],"data":"0x","blockNumber":"Your_blockNumber","transactionHash":"Your_txHash","transactionIndex":"0x1","blockHash":"Your_blockHash","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000100000000000000040000000000000080004000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000004000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000","status":"0x1","to":"0x0000000000000000000000000000000000000064","transactionHash":"0xb041f2cd839100bbb449cb6bed3489807649dbb470db9532d6a1cb6d84e4ce93","transactionIndex":"0x1","type":"0x2"}}
+```
+
+You should see something within the transaction receipt like this:
+
+```
+"logs":[
+         {
+            "address":"0x0000000000000000000000000000000000000064",
+            "topics":[
+               "0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa",
+               "0x000000000000000000000000{Your_address}"
+            ],
+            "data":"0x",
+            "blockNumber":"0x40",
+            "transactionHash":"{Your_txHash}",
+            "transactionIndex":"0x1",
+            "blockHash":"0x0b367d705002b3575db99354a0964c033f929f26f4442ed347e47ae43a8f28e4",
+            "logIndex":"0x0",
+            "removed":false
+         }
+      ]
+```
+From the `logs` field, we can see the topics[0] `0xa937..cfa`, which is the event encode of `Hi(address)`, you can check it using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa), and topics[1] is `Your_address`.
+
+
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
 Note that nitro-contracts repository is hardcoded because atm we use the "nitro" repository for referencing precompiles for the current released nitro version  (for Arb chains),
