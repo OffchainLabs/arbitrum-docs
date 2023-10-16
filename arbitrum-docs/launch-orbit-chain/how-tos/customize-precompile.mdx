@@ -231,7 +231,7 @@ Note that the instructions provided in [How to run a full node](/node-running/ho
 
 ### Send the transaction and get the transaction receipt
 
-Send transaction to `ArbSys`, note as the function is not view/pure function, we need to send transaction with gas cost.
+Send transaction to `ArbSys`, note as the function is not view/pure function, we need to send transaction with gas cost:
 
 ```
 cast send 0x0000000000000000000000000000000000000064 "sayHi()(string)"
@@ -265,7 +265,6 @@ You should see `logs` field within the transaction receipt like this:
 ```
 
 From the `logs` field, we can see the topics[0] is `0xa937..cfa`, which is the event signature of `Hi(address)`, you can check it using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa), and topics[1] is `Your_address`.
-
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
