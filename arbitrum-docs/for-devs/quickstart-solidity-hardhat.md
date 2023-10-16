@@ -61,9 +61,10 @@ We'll install the rest of our dependencies as we go.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
-  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from="arbitrum-rollup">
-      Arbitrum Rollup
-    </a> protocol.
+  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from="arbitrum-rollup-protocol">
+      Arbitrum Rollup protocol
+    </a>
+    .
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
 Let's review our vending machine's Javascript implementation, then convert it into a Solidity smart contract, then deploy it to Arbitrum One.
@@ -173,11 +174,9 @@ Open `scripts/deploy.js` and replace its contents with the following:
 const hre = require('hardhat');
 
 async function main() {
-  const VendingMachineFactory = await hre.ethers.getContractFactory('VendingMachine');
-  const vendingMachine = await VendingMachineFactory.deploy();
-  await vendingMachine.deployed();
-
-  console.log(`Cupcake vending machine deployed to ${vendingMachine.address}`);
+  const vendingMachine = await hre.ethers.deployContract('VendingMachine');
+  await vendingMachine.waitForDeployment();
+  console.log(`Cupcake vending machine deployed to ${vendingMachine.target}`);
 }
 
 main().catch((error) => {
