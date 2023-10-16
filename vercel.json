@@ -2,7 +2,7 @@
     "redirects": [
         {
             "source": "/arb-specific-things",
-            "destination": "/arbitrum-ethereum-differences",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
@@ -32,7 +32,12 @@
         },
         {
             "source": "/migration/dapp-migration",
-            "destination": "/migration/dapp_migration",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
+            "permanent": false
+        },
+        {
+            "source": "/migration/dapp_migration",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
@@ -147,7 +152,7 @@
         },
         {
             "source": "/docs/security_considerations",
-            "destination": "/arbitrum-ethereum-differences",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
@@ -192,22 +197,37 @@
         },
         {
             "source": "/docs/differences_overview",
-            "destination": "/arbitrum-ethereum-differences",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
             "source": "/docs/special_features",
-            "destination": "/arbitrum-ethereum-differences",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
             "source": "/docs/solidity_support",
-            "destination": "/solidity-support",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support",
             "permanent": false
         },
         {
             "source": "/docs/time_in_arbitrum",
-            "destination": "/time",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time",
+            "permanent": false
+        },
+        {
+            "source": "/arbitrum-ethereum-differences",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
+            "permanent": false
+        },
+        {
+            "source": "/solidity-support",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support",
+            "permanent": false
+        },
+        {
+            "source": "/time",
+            "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time",
             "permanent": false
         },
         {
