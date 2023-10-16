@@ -177,14 +177,14 @@ type ArbSys struct {
 	SendMerkleUpdateGasCost func(huge, bytes32, huge) (uint64, error)
 	InvalidBlockNumberError func(huge, huge) error
 
+	// deprecated event
+	L2ToL1Transaction        func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) error
+	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
+
 	// Add your customize event here:
 	Hi						func(ctx, mech, addr) error
 	// This is needed which will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
 	HiGasCost				func(addr) (uint64, error)
-
-	// deprecated event
-	L2ToL1Transaction        func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) error
-	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
 }
 ```
 
