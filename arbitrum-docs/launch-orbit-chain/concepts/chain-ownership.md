@@ -40,7 +40,7 @@ Upgrades occur via a chain owner initiating a call to an Upgrade Executor, which
 
 Chain owners can either call [UpgradeExecutor.executeCall](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L73), which will in turn call the target contract directly, or [UpgradeExecutor.execute](https://github.com/OffchainLabs/upgrade-executor/blob/a8d3020c2771d164ebd323b1d99249049fe749f9/src/UpgradeExecutor.sol#L57), which will delegate-call to an "action contract" and use its code to call the target contract.
 
-### Ownership Flexibility
+### Ownership flexibility
 
 A chain owner is simply an address; it is set by the Orbit chain's deployer and can represent any sort of governance scheme. I.e., it could be an EOA (as is set via the [Orbit Quickstart](../orbit-quickstart.md)), a Multisig, a governance token system, etc.
 
