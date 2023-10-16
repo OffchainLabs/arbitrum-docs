@@ -1,0 +1,27 @@
+ Deploying an Orbit Chain on Mainnet has many risks. These instructions will do its best at guiding you through the process, however there are additional risks. 
+
+These instructions serve as a resource and do not gurantee secure deployment. 
+
+After deploying an Orbit Testnet chain, you can deploy an Orbit Mainnet Chain now as Contracts have been audited on mainnet and are production ready
+
+This tutorial shows you to do the following on Mainnet:
+    Create an Orbit Mainnet Chain
+Prerequisites
+- Public RPC 
+PLACEHOLDER for guidance for running backend (minimal helm chart guidance, etc.) 
+PLACEHOLDER FOR guidance for validators and members of the Data Availability Committee (DAC) to run required infrastructure and reasonable support in connection with the same
+
+
+    We've listed below a few options for infrastructure to get ready for mainnet 
+
+Block Explorer Options 
+
+RPC Infrastructure Providers 
+
+Fast Bridging Provider
+
+Rollup as a Service Providers 
+
+Data Availability Layers 
+
+Subgraph Providrs 
