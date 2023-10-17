@@ -302,13 +302,42 @@ The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with on
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
-
-|                       | `WEB2` (the first one)                                                                  | `WEB3-LOCALHOST` (the latest one)                                                          | `WEB3-ARB-GOERLI` (the next one)                                                       | `WEB3-ARB-MAINNET` (the final one)                                                        |
-| --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).        | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
-| **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).    | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
-| **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | <- same                                                                                    | <- same                                                                                | <- same                                                                                   |
-| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | <- same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | <- same, but devs and users pay **testnet $ETH** to testnet validators.                | <- same, but instead of testnet $ETH, they use **mainnet $ETH**.                          |
+<table>
+  <thead style={{verticalAlign: 'top'}}>
+    <th></th>
+    <th><code>WEB2</code><br/>(the first one)</th>
+    <th><code>WEB3-LOCALHOST</code><br/>(the latest one)</th>
+    <th><code>WEB3-ARB-GOERLI</code><br/>(the next one)</th>
+    <th><code>WEB3-ARB-MAINNET</code><br/>(the final one)</th>
+  </thead>
+  <tbody style={{verticalAlign: 'top'}}>
+    <tr>
+      <td><strong>Data</strong> (cupcakes)</td>
+      <td>Stored only in your <strong>browser</strong>. (Usually, stored by centralized infrastructure.)</td>
+      <td>Stored on your <strong>device</strong> in an <strong>emulated Ethereum network</strong> (via smart contract).</td>
+      <td>Stored on Ethereum's <strong>decentralized test network</strong> (via smart contract).</td>
+      <td>Stored on Ethereum's <strong>decentralized mainnet network</strong> (via smart contract).</td>
+    </tr>
+    <tr>
+      <td><strong>Logic</strong> (vending)</td>
+      <td>Served from <strong>Offchain's servers</strong>. Executed by your <strong>browser</strong>.</td>
+      <td>Stored and executed by your <strong>locally emulated Ethereum network</strong> (via smart contract).</td>
+      <td>Stored and executed by Arbitrum's <strong>decentralized test network</strong> (via smart contract).</td>
+      <td>Stored and executed by Arbitrum's <strong>decentralized mainnet network</strong> (via smart contract).</td>
+    </tr>
+    <tr style={{verticalAlign: 'middle'}}>
+      <td><strong>Presentation</strong> (UI)</td>
+      <td colspan="4" align="center">Served from <strong>Offchain's servers</strong>. Rendered and executed by your <strong>browser</strong>.</td>
+    </tr>
+    <tr>
+      <td><strong>Money</strong></td>
+      <td>Devs and users pay centralized service providers for server access using fiat currency.</td>
+      <td>← same, but only for the presentation-layer concerns (code that supports frontend UI/UX).</td>
+      <td>← same, but devs and users pay <strong>testnet $ETH</strong> to testnet validators.</td>
+      <td>← same, but instead of testnet $ETH, they use <strong>mainnet $ETH</strong>.</td>
+    </tr>
+  </tbody>
+</table>
 
 Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goerli testnet.
 
