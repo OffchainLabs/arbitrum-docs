@@ -165,7 +165,9 @@ hi
 
 ## Option 3: Define a new event
 
-Here we will still use the precompile `Arbsys` as an example and add a simple `Hi` event to be emitted in `SayHi` method which we added in `ArbSys.sol` contract at Option 1, first go to the [precompiles implementation][precompile_impl_dir_link] directory, and find `ArbSys.go`, edit the `ArbSys` struct:
+We'll reuse the `Arbsys` precompile from Option 1 above to demonstrate how to emit a simple `Hi` event from the `SayHi` method in `ArbSys.sol`.
+
+First, go to the [precompiles implementation][precompile_impl_dir_link] directory, find `ArbSys.go`, and edit the `ArbSys` struct:
 
 ```go
 // ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
