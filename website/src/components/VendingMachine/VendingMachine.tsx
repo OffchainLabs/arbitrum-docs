@@ -4,20 +4,20 @@ import VendingMachineContract from './VendingMachine.sol/VendingMachine.json';
 
 function truncateAddress(text: string) {
   if (text == null || text === '') {
-    return 'no name'
+    return 'no name';
   }
   if (text.length < 10) {
-    return text
+    return text;
   }
-  return text.slice(0, 5) + '...' + text.slice(-3)
-};
+  return text.slice(0, 5) + '...' + text.slice(-3);
+}
 
 export const VendingMachine = (props: { id: string; type: string }) => {
-  const [identity, setIdentity] = useState<string>('')
-  const [contractAddress, setContractAddress] = useState<string>()
-  const [cupcakeBalance, setCupcakeBalance] = useState<number>(0)
-  const cupcakeRef = useRef(null)
-  const errorIndicatorRef = useRef(null)
+  const [identity, setIdentity] = useState<string>('');
+  const [contractAddress, setContractAddress] = useState<string>();
+  const [cupcakeBalance, setCupcakeBalance] = useState<number>(0);
+  const cupcakeRef = useRef(null);
+  const errorIndicatorRef = useRef(null);
 
   class Web2VendingMachineClient {
     // UI concerns
@@ -145,23 +145,28 @@ export const VendingMachine = (props: { id: string; type: string }) => {
 
   const prefillWeb3Identity = async () => {
     // if the user has metamask installed, prefill the identity input with their wallet address
-    const identityFromWallet = (await (vendingMachineClient as Web3VendingMachineClient).getWalletAddress());
+    const identityFromWallet = await (
+      vendingMachineClient as Web3VendingMachineClient
+    ).getWalletAddress();
     if (identityFromWallet) {
-      setIdentity(identityFromWallet)
+      setIdentity(identityFromWallet);
     }
   };
 
   useEffect(() => {
-    prefillWeb3Identity()
-  }, [])
+    prefillWeb3Identity();
+  }, []);
 
   const updateSuccessIndicator = (success: boolean) => {
     errorIndicatorRef.current.classList.toggle('visible', !success);
   };
 
-  const callWeb3VendingMachine = useCallback(async (func) => {
-    return await func(identity, contractAddress);
-  }, [identity, contractAddress]);
+  const callWeb3VendingMachine = useCallback(
+    async (func) => {
+      return await func(identity, contractAddress);
+    },
+    [identity, contractAddress],
+  );
 
   const handleCupcakePlease = useCallback(async () => {
     try {
@@ -170,7 +175,9 @@ export const VendingMachine = (props: { id: string; type: string }) => {
         await prefillWeb3Identity();
         gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
       } else {
-        gotCupcake = await (vendingMachineClient as Web2VendingMachineClient).giveCupcakeTo(identity || 'no name');
+        gotCupcake = await (vendingMachineClient as Web2VendingMachineClient).giveCupcakeTo(
+          identity || 'no name',
+        );
       }
 
       let existingFadeout;
@@ -206,7 +213,11 @@ export const VendingMachine = (props: { id: string; type: string }) => {
         await prefillWeb3Identity();
         setCupcakeBalance(await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor));
       } else {
-        setCupcakeBalance(await (vendingMachineClient as Web2VendingMachineClient).getCupcakeBalanceFor(identity || 'no name'));
+        setCupcakeBalance(
+          await (vendingMachineClient as Web2VendingMachineClient).getCupcakeBalanceFor(
+            identity || 'no name',
+          ),
+        );
       }
       updateSuccessIndicator(true);
     } catch (err) {
@@ -245,7 +256,9 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       </span>
       <p className="balance-wrapper">
         <span>Cupcake balance:</span>
-        <span>{cupcakeBalance} {`(${truncateAddress(identity)})`}</span>
+        <span>
+          {cupcakeBalance} {`(${truncateAddress(identity)})`}
+        </span>
       </p>
       <span className="success-indicator" />
       <span className="error-indicator" ref={errorIndicatorRef} />

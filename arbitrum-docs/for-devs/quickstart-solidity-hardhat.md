@@ -302,39 +302,96 @@ The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with on
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
+
 <table>
-  <thead style={{verticalAlign: 'top'}}>
+  <thead style={{ verticalAlign: 'top' }}>
     <th></th>
-    <th><code>WEB2</code><br/>(the first one)</th>
-    <th><code>WEB3-LOCALHOST</code><br/>(the latest one)</th>
-    <th><code>WEB3-ARB-GOERLI</code><br/>(the next one)</th>
-    <th><code>WEB3-ARB-MAINNET</code><br/>(the final one)</th>
+    <th>
+      <code>WEB2</code>
+      <br />
+      (the first one)
+    </th>
+    <th>
+      <code>WEB3-LOCALHOST</code>
+      <br />
+      (the latest one)
+    </th>
+    <th>
+      <code>WEB3-ARB-GOERLI</code>
+      <br />
+      (the next one)
+    </th>
+    <th>
+      <code>WEB3-ARB-MAINNET</code>
+      <br />
+      (the final one)
+    </th>
   </thead>
-  <tbody style={{verticalAlign: 'top'}}>
+  <tbody style={{ verticalAlign: 'top' }}>
     <tr>
-      <td><strong>Data</strong> (cupcakes)</td>
-      <td>Stored only in your <strong>browser</strong>. (Usually, stored by centralized infrastructure.)</td>
-      <td>Stored on your <strong>device</strong> in an <strong>emulated Ethereum network</strong> (via smart contract).</td>
-      <td>Stored on Ethereum's <strong>decentralized test network</strong> (via smart contract).</td>
-      <td>Stored on Ethereum's <strong>decentralized mainnet network</strong> (via smart contract).</td>
+      <td>
+        <strong>Data</strong> (cupcakes)
+      </td>
+      <td>
+        Stored only in your <strong>browser</strong>. (Usually, stored by centralized
+        infrastructure.)
+      </td>
+      <td>
+        Stored on your <strong>device</strong> in an <strong>emulated Ethereum network</strong> (via
+        smart contract).
+      </td>
+      <td>
+        Stored on Ethereum's <strong>decentralized test network</strong> (via smart contract).
+      </td>
+      <td>
+        Stored on Ethereum's <strong>decentralized mainnet network</strong> (via smart contract).
+      </td>
     </tr>
     <tr>
-      <td><strong>Logic</strong> (vending)</td>
-      <td>Served from <strong>Offchain's servers</strong>. Executed by your <strong>browser</strong>.</td>
-      <td>Stored and executed by your <strong>locally emulated Ethereum network</strong> (via smart contract).</td>
-      <td>Stored and executed by Arbitrum's <strong>decentralized test network</strong> (via smart contract).</td>
-      <td>Stored and executed by Arbitrum's <strong>decentralized mainnet network</strong> (via smart contract).</td>
+      <td>
+        <strong>Logic</strong> (vending)
+      </td>
+      <td>
+        Served from <strong>Offchain's servers</strong>. Executed by your <strong>browser</strong>.
+      </td>
+      <td>
+        Stored and executed by your <strong>locally emulated Ethereum network</strong> (via smart
+        contract).
+      </td>
+      <td>
+        Stored and executed by Arbitrum's <strong>decentralized test network</strong> (via smart
+        contract).
+      </td>
+      <td>
+        Stored and executed by Arbitrum's <strong>decentralized mainnet network</strong> (via smart
+        contract).
+      </td>
     </tr>
-    <tr style={{verticalAlign: 'middle'}}>
-      <td><strong>Presentation</strong> (UI)</td>
-      <td colspan="4" align="center">Served from <strong>Offchain's servers</strong>. Rendered and executed by your <strong>browser</strong>.</td>
+    <tr style={{ verticalAlign: 'middle' }}>
+      <td>
+        <strong>Presentation</strong> (UI)
+      </td>
+      <td colspan="4" align="center">
+        Served from <strong>Offchain's servers</strong>. Rendered and executed by your{' '}
+        <strong>browser</strong>.
+      </td>
     </tr>
     <tr>
-      <td><strong>Money</strong></td>
-      <td>Devs and users pay centralized service providers for server access using fiat currency.</td>
-      <td>← same, but only for the presentation-layer concerns (code that supports frontend UI/UX).</td>
-      <td>← same, but devs and users pay <strong>testnet $ETH</strong> to testnet validators.</td>
-      <td>← same, but instead of testnet $ETH, they use <strong>mainnet $ETH</strong>.</td>
+      <td>
+        <strong>Money</strong>
+      </td>
+      <td>
+        Devs and users pay centralized service providers for server access using fiat currency.
+      </td>
+      <td>
+        ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX).
+      </td>
+      <td>
+        ← same, but devs and users pay <strong>testnet $ETH</strong> to testnet validators.
+      </td>
+      <td>
+        ← same, but instead of testnet $ETH, they use <strong>mainnet $ETH</strong>.
+      </td>
     </tr>
   </tbody>
 </table>
