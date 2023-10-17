@@ -71,13 +71,13 @@
       font-family: monospace;
     }
 
-    #cupcake {
+    .cupcake {
       display: block;
       font-size: 30px;
       margin-bottom: 10px;
     }
 
-    #cupcake-please {
+    .cupcake-please {
       color: white;
       background-color: #007bdd;
       padding: 10px 20px;
@@ -92,7 +92,7 @@
       }
     }
 
-    #refresh-balance {
+    .refresh-balance {
       font-size: 11px;
       display: block;
       margin-bottom: 10px;
@@ -103,7 +103,7 @@
       }
     }
 
-    #balance-wrapper {
+    .balance-wrapper {
       padding: 10px 0px;
       font-size: 11px;
       margin: 0;
@@ -115,8 +115,8 @@
       }
     }
 
-    #error-indicator,
-    #success-indicator {
+    .error-indicator,
+    .success-indicator {
       background: rgb(170, 0, 0);
       width: 10px;
       height: 10px;
@@ -131,7 +131,7 @@
       }
     }
 
-    #success-indicator {
+    .success-indicator {
       background: rgb(0, 164, 0);
       display: block;
     }
