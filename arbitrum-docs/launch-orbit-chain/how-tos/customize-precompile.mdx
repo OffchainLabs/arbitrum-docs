@@ -185,7 +185,7 @@ type ArbSys struct {
 
 	// Add your customize event here:
 	Hi						func(ctx, mech, addr) error
-	// This is needed which will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
+	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
 	HiGasCost				func(addr) (uint64, error)
 }
 ```
