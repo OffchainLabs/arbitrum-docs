@@ -1,8 +1,24 @@
-import React from 'react';
-import { ethers } from 'ethers';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { BigNumber, ethers } from 'ethers';
 import VendingMachineContract from './VendingMachine.sol/VendingMachine.json';
 
+function truncateAddress(text: string) {
+  if (text == null || text === '') {
+    return 'no name';
+  }
+  if (text.length < 10) {
+    return text;
+  }
+  return text.slice(0, 5) + '...' + text.slice(-3);
+}
+
 export const VendingMachine = (props: { id: string; type: string }) => {
+  const [identity, setIdentity] = useState<string>('');
+  const [contractAddress, setContractAddress] = useState<string>();
+  const [cupcakeBalance, setCupcakeBalance] = useState<number>(0);
+  const cupcakeRef = useRef(null);
+  const errorIndicatorRef = useRef(null);
+
   class Web2VendingMachineClient {
     // UI concerns
     isWeb3 = false;
@@ -13,7 +29,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     cupcakeDistributionTimes = {};
 
     // the web3 version of the vending machine implements this using ethereum
-    async giveCupcakeTo(identity) {
+    async giveCupcakeTo(identity: string) {
       if (this.cupcakeDistributionTimes[identity] === undefined) {
         this.cupcakeBalances[identity] = 0;
         this.cupcakeDistributionTimes[identity] = 0;
@@ -36,7 +52,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     }
 
     // the web3 version of the vending machine implements this using ethereum
-    async getCupcakeBalanceFor(identity) {
+    async getCupcakeBalanceFor(identity: string) {
       let balance = this.cupcakeBalances[identity];
       if (balance === undefined) balance = 0;
       return balance;
@@ -76,18 +92,18 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       console.log(`getting cupcake balance for ${identity} on ${vendingMachineContractAddress}`);
       const contract = await this.initContract(vendingMachineContractAddress);
       const cupcakeBalance = await contract.getCupcakeBalanceFor(identity);
-      return cupcakeBalance;
+      return BigNumber.from(cupcakeBalance).toNumber();
     }
 
     async requestAccount() {
-      if (ethereumAvailable()) {
+      if (this.ethereumAvailable()) {
         // "hey metamask, please ask the user to connect their wallet and select an account"
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       }
     }
 
     async getWalletAddress() {
-      if (ethereumAvailable()) {
+      if (this.ethereumAvailable()) {
         // "hey metamask, please give me the wallet address corresponding to the account the user has selected"
         const signer = await this.initSigner();
         const walletAddress = await signer.getAddress();
@@ -97,7 +113,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     }
 
     async initSigner() {
-      if (ethereumAvailable()) {
+      if (this.ethereumAvailable()) {
         // "hey metamask, let's prepare to sign transactions with the account the user has selected"
         await this.requestAccount();
         const metamaskProvider = new ethers.providers.Web3Provider(window.ethereum);
@@ -107,7 +123,7 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     }
 
     async initContract(vendingMachineContractAddress) {
-      if (ethereumAvailable()) {
+      if (this.ethereumAvailable()) {
         // "hey metamask, let's use the network and account the user has selected to interact with the contract"
         const signer = await this.initSigner();
         const contract = new ethers.Contract(
@@ -126,55 +142,58 @@ export const VendingMachine = (props: { id: string; type: string }) => {
 
   const vendingMachineClient =
     props.type == 'web2' ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
-  vendingMachineClient.domId = props.id;
-  vendingMachineClient.getElementById = (id) =>
-    document.getElementById(vendingMachineClient.domId).querySelector(`#${id}`);
 
   const prefillWeb3Identity = async () => {
     // if the user has metamask installed, prefill the identity input with their wallet address
-    identityInput.value = identityInput.value || (await vendingMachineClient.getWalletAddress());
+    const identityFromWallet = await (
+      vendingMachineClient as Web3VendingMachineClient
+    ).getWalletAddress();
+    if (identityFromWallet) {
+      setIdentity(identityFromWallet);
+    }
   };
 
-  const updateSuccessIndicator = (success) => {
-    vendingMachineClient.getElementById('error-indicator').classList.toggle('visible', !success);
+  useEffect(() => {
+    prefillWeb3Identity();
+  }, []);
+
+  const updateSuccessIndicator = (success: boolean) => {
+    errorIndicatorRef.current.classList.toggle('visible', !success);
   };
 
-  const callWeb3VendingMachine = async (func) => {
-    const identityInput = vendingMachineClient.getElementById('identity-input');
-    const identity = identityInput.value;
-    const contractAddressInput = vendingMachineClient.getElementById('contract-address-input');
-    const contractAddress = contractAddressInput.value;
-    return await func(identity, contractAddress);
-  };
+  const callWeb3VendingMachine = useCallback(
+    async (func) => {
+      return await func(identity, contractAddress);
+    },
+    [identity, contractAddress],
+  );
 
-  const handleCupcakePlease = async () => {
+  const handleCupcakePlease = useCallback(async () => {
     try {
-      const identityInput = vendingMachineClient.getElementById('identity-input');
-      const identity = identityInput.value;
-
       let gotCupcake;
       if (vendingMachineClient.isWeb3) {
         await prefillWeb3Identity();
         gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
       } else {
-        gotCupcake = await vendingMachineClient.giveCupcakeTo(identity);
+        gotCupcake = await (vendingMachineClient as Web2VendingMachineClient).giveCupcakeTo(
+          identity || 'no name',
+        );
       }
 
       let existingFadeout;
       if (gotCupcake) {
-        const cupcake = vendingMachineClient.getElementById('cupcake');
-        cupcake.style.opacity = 1;
-        cupcake.style.transition = 'unset';
+        cupcakeRef.current.style.opacity = 1;
+        cupcakeRef.current.style.transition = 'unset';
         clearTimeout(existingFadeout);
 
         existingFadeout = setTimeout(() => {
-          cupcake.style.transition = 'opacity 5.5s';
-          cupcake.style.opacity = 0;
+          cupcakeRef.current.style.transition = 'opacity 5.5s';
+          cupcakeRef.current.style.opacity = 0;
         }, 0);
 
         setTimeout(() => {
-          cupcake.style.transition = 'opacity 0s';
-          cupcake.style.opacity = 0;
+          cupcakeRef.current.style.transition = 'opacity 0s';
+          cupcakeRef.current.style.opacity = 0;
         }, 5000);
 
         await handleRefreshBalance();
@@ -186,72 +205,63 @@ export const VendingMachine = (props: { id: string; type: string }) => {
       console.error('ERROR: handleCupcakePlease: ' + err);
       updateSuccessIndicator(false);
     }
-  };
+  }, [identity, callWeb3VendingMachine]);
 
-  const handleRefreshBalance = async () => {
+  const handleRefreshBalance = useCallback(async () => {
     try {
-      const identityInputEl = vendingMachineClient.getElementById('identity-input');
-      let identityFromInput = identityInputEl.value;
-      let identityToDisplay;
-      const cupcakeCountEl = vendingMachineClient.getElementById('cupcake-balance');
-      let balanceToDisplay;
-
       if (vendingMachineClient.isWeb3) {
         await prefillWeb3Identity();
-        balanceToDisplay = await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor);
-        identityFromInput = identityInputEl.value;
-        identityToDisplay = identityFromInput.truncateAddress();
+        setCupcakeBalance(await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor));
       } else {
-        identityToDisplay = identityFromInput;
-        if (identityToDisplay == null || identityToDisplay == '') identityToDisplay = 'no name';
-        balanceToDisplay = await vendingMachineClient.getCupcakeBalanceFor(identityFromInput);
+        setCupcakeBalance(
+          await (vendingMachineClient as Web2VendingMachineClient).getCupcakeBalanceFor(
+            identity || 'no name',
+          ),
+        );
       }
-
-      cupcakeCountEl.textContent = `${balanceToDisplay} (${identityToDisplay})`;
       updateSuccessIndicator(true);
     } catch (err) {
       console.error('ERROR: handleRefreshBalance: ' + err);
       updateSuccessIndicator(false);
     }
-  };
-
-  String.prototype.truncateAddress = function () {
-    return this.slice(0, 5) + '...' + this.slice(-3);
-  };
+  }, [identity, callWeb3VendingMachine]);
 
   return (
-    <div className="vending-machine" id={vendingMachineClient.domId}>
+    <div className="vending-machine">
       <h4>Free Cupcakes</h4>
       <span className="subheader">{props.type}</span>
       <label>{vendingMachineClient.identityLabel}</label>
       <input
-        id="identity-input"
         type="text"
         placeholder={'Enter ' + vendingMachineClient.identityLabel.toLowerCase()}
+        value={identity}
+        onChange={(event) => setIdentity(event.target.value)}
       />
       <label className={vendingMachineClient.isWeb3 ? '' : 'hidden'}>Contract address</label>
       <input
-        id="contract-address-input"
         type="text"
         placeholder="Enter contract address"
+        value={contractAddress}
+        onChange={(event) => setContractAddress(event.target.value)}
         className={vendingMachineClient.isWeb3 ? '' : 'hidden'}
       />
-      <button id="cupcake-please" onClick={handleCupcakePlease}>
+      <button className="cupcake-please" onClick={handleCupcakePlease}>
         Cupcake please!
       </button>
-      <a id="refresh-balance" onClick={handleRefreshBalance}>
+      <a className="refresh-balance" onClick={handleRefreshBalance}>
         Refresh balance
       </a>
-      <span id="cupcake" style={{ opacity: 0 }}>
-        {' '}
+      <span ref={cupcakeRef} className="cupcake" style={{ opacity: 0 }}>
         🧁
       </span>
-      <p id="balance-wrapper">
+      <p className="balance-wrapper">
         <span>Cupcake balance:</span>
-        <span id="cupcake-balance">0</span>
+        <span>
+          {cupcakeBalance} {`(${truncateAddress(identity)})`}
+        </span>
       </p>
-      <span id="success-indicator"></span>
-      <span id="error-indicator"></span>
+      <span className="success-indicator" />
+      <span className="error-indicator" ref={errorIndicatorRef} />
     </div>
   );
 };
