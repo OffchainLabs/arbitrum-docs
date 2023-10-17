@@ -233,7 +233,7 @@ Note that the instructions provided in [How to run a full node](/node-running/ho
 
 ### Send the transaction and get the transaction receipt
 
-Send transaction to `ArbSys`, note as the function is not view/pure function, we need to send transaction with gas cost:
+To send a transaction to `ArbSys`, we need to include a gas cost, because the function is no longer a view/pure function: 
 
 ```
 cast send 0x0000000000000000000000000000000000000064 "sayHi()(string)"
