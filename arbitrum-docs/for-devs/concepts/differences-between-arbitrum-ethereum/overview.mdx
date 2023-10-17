@@ -9,7 +9,7 @@ target_audience: developers who want to build on Arbitrum
 content-type: concept
 ---
 
-Arbitrum is designed to be as compatible and consistent with Ethereum as possible, from its high-level RPCs to its low-level bytecode and everything in between. Decentralized app (dApp) developers with experience building on Ethereum will likely find that little-to-no new specific knowledge is required to build on Arbitrum.
+Arbitrum is designed to be as compatible and consistent with Ethereum as possible, from its high-level RPCs to its low-level bytecode and everything in between. <a data-quicklook-from="dapp">Decentralized app (dApp)</a> developers with experience building on Ethereum will likely find that little-to-no new specific knowledge is required to build on Arbitrum.
 
 This section describes the differences, perks, and gotchas that devs are advised to be aware of when working with Arbitrum. This first page serves as an overview of where you might these differences, with links to the relevant pages when needed.
 
@@ -27,13 +27,13 @@ You can deploy Solidity contracts onto Arbitrum just like you do Ethereum. There
 
 ## Fees
 
-The fees an Arbitrum transaction pays essentially work identically to gas fees on Ethereum. Arbitrum transactions must also, however, pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, an L2, is posted to Ethereum, an L1). Find more information about the two components of gas fees in [Gas and fees](/arbos/gas.mdx) and [L1 pricing](/arbos/l1-pricing.mdx).
+The fees an Arbitrum transaction pays for execution essentially work identically to gas fees on Ethereum. Arbitrum transactions must also, however, pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, an L2, is posted to Ethereum, an L1). Find more information about the two components of gas fees in [Gas and fees](/arbos/gas.mdx) and [L1 pricing](/arbos/l1-pricing.mdx).
 
 ## Cross-chain messaging
 
 Arbitrum chains support arbitrary message passing from a parent chain (for example, a Layer 1 (L1) like Ethereum) to a child chain (for example, a Layer 2 (L2) like Arbitrum One or Arbitrum Nova). These are commonly known as "L1 to L2 messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [L1 to L2 messaging](/arbos/l1-to-l2-messaging.mdx).
 
-Similarly, Arbitrum chains can also send messages to the parent chain, although these follow more strict rules. Find more information about them in [L2 to L1 messaging and the outbox](/arbos/l2-to-l1-messaging.mdx).
+Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [L2 to L1 messaging and the outbox](/arbos/l2-to-l1-messaging.mdx).
 
 ## Precompiles
 
@@ -41,4 +41,4 @@ Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-s
 
 ## NodeInterface
 
-Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that only exists in the RPC (it's not deployed on-chain). Find more information about this interface in [NodeInterface.sol](/arbos/gas.mdx#nodeinterfacesol).
+Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that is only accessible via RPCs (it's not actually deployed on-chain, and thus can't be called by smart contracts). Find more information about this interface in [NodeInterface.sol](/arbos/gas.mdx#nodeinterfacesol).

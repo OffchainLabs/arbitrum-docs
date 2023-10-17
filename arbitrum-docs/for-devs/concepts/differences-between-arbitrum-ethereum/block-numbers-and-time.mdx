@@ -7,6 +7,12 @@ target_audience: developers who want to build on Arbitrum
 content-type: concept
 ---
 
+:::info Arbitrum chains and their parent chains
+
+With the release of Arbitrum Orbit, Arbitrum chains can now be L2s that settle to Ethereum (or one of their testnets), or L3s that settle to one of the Arbitrum L2 chains. For simplicity, in this page we speak in terms of Arbitrum One (L2) and Ethereum (L1), but the same logic can be applied to the relationship between any chain and its parent chain.
+
+:::
+
 As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions at some later time. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the sequencer](/sequencer.mdx#happycommon-case-sequencer-is-live-and-well-behaved) or via the chain's [delayed inbox](/sequencer.mdx#unhappyuncommon-case-sequencer-isnt-doing-its-job).
 
 Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between the time when a message is put into the inbox (and timestamped) and the time when the contract processes the message and carries out the transaction requested by the message.
@@ -60,7 +66,7 @@ The Arbitrum block number can also be retrieved within an Arbitrum contract via 
 | L2 `block.number` \*                   | 1000     | 1000        | 1000        | 1000        | 1004     | 1004        |
 | Arbitrum Block number (from RPCs) \*\* | 370000   | 370005      | 370006      | 370008      | 370012   | 370015      |
 
-_\* **L2 `block.number`:** updated to sync with L1 `block.number` approximately every minute. Thus, over time, it will, like the L1 `block.number`, average to ~15 seconds per block._
+_\* **L2 `block.number`:** updated to sync with L1 `block.number` approximately every minute. Thus, over time, it will, like the L1 `block.number`, average to ~12 seconds per block._
 
 _\*\* **Arbitrum block number from RPCs:** note that this can be updated multiple times per L1 block (this lets the sequencer give sub-L1-block-time transaction receipts.)_
 
@@ -70,7 +76,7 @@ The Multicall contract offers a great case study for the differences between L1 
 
 The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behaviour.
 
-You can find a deployed version of the adapted Multicall2 at [0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF](https://arbiscan.io/address/0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF#code).
+You can find a version of the adapted Multicall2 deployed on Arbitrum One at [0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF](https://arbiscan.io/address/0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF#code).
 
 By default the `getBlockNumber`, `tryBlockAndAggregate`, and `aggregate` functions return the L2 block number. This allows you to use this value to compare your state against the tip of the chain.
 
@@ -83,7 +89,7 @@ Block timestamps on Arbitrum are not linked to the timestamp of the L1 block. Th
 1. Must be always equal or greater than the previous L2 block timestamp
 2. Must fall within the established boundaries (24 hours earlier than the current time or 1 hour in the future). More on this below.
 
-FUrthermore, for transactions that are force-included from L1 (bypassing the sequencer), the block timestamp will be equal to either the L1 timestamp when the transaction was put in the delayed inbox on L1 (not when it was force-included), or the L2 timestamp of the previous L2 block, whichever is greater of the two timestamps.
+Furthermore, for transactions that are force-included from L1 (bypassing the sequencer), the block timestamp will be equal to either the L1 timestamp when the transaction was put in the delayed inbox on L1 (not when it was force-included), or the L2 timestamp of the previous L2 block, whichever of the two timestamps is greater.
 
 ### Timestamp boundaries of the sequencer
 

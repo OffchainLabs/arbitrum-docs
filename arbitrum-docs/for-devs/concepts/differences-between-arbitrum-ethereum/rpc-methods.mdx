@@ -7,7 +7,7 @@ target_audience: developers who want to build on Arbitrum
 content-type: concept
 ---
 
-Although the majority of RPC methods follow the same behavior than in Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. This page covers the differences in response body fields you'll find when calling RPC methods on an Arbitrum chain vs on Ethereum.
+Although the majority of RPC methods follow the same behavior as in Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. This page covers the differences in response body fields you'll find when calling RPC methods on an Arbitrum chain vs on Ethereum.
 
 :::info
 
@@ -81,12 +81,12 @@ On RPC calls that return a block, the following fields are added to the returned
 
 On RPC calls that return a block, the following fields will have a different content than what's received on Ethereum.
 
-| Field name   | Description                                                                                                           |
-| ------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `extraData`  | This field is equivalent to `sendRoot`                                                                                |
-| `mixHash`    | First 8 bytes is equivalent to `sendCount`, second 8 bytes is equivalent to `l1BlockNumber`                           |
-| `difficulty` | Fixed at `0x1`                                                                                                        |
-| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum currently has a 32M gas limit per block |
+| Field name   | Description                                                                                                                                                                                                 |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `extraData`  | This field is equivalent to `sendRoot`                                                                                                                                                                      |
+| `mixHash`    | First 8 bytes is equivalent to `sendCount`, second 8 bytes is equivalent to `l1BlockNumber`                                                                                                                 |
+| `difficulty` | Fixed at `0x1`                                                                                                                                                                                              |
+| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/for-devs/chain-params.mdx) for the gas limit of other chains |
 
 ## Other methods that are slightly different
 
@@ -96,7 +96,7 @@ Calling `eth_syncing` returns false when the node is fully synced (just like on 
 
 #### Understanding messages, batches, and blocks
 
-Nitro node reads messages from the parent chain an optionally from the message feed. It executes these messages and produces blocks. Each message produces exactly one block (a message may contain multiple transactions). In most Nitro chains, message number and block number are the same. However, Arbitrum One chain has pre-Nitro (classic) blocks, so for that chain, message 0 produced block `22207818`. Keep in mind that the offset between message and block number is constant in the chain.
+Nitro nodes receive transactions from their parent chain and the sequencer feed in the form of messages. These messages may contain multiple transactions that are executed by the node, which then produces blocks. Each message produces exactly one block. In most Nitro chains, the message number and the block number are the same. However, Arbitrum One has pre-Nitro (classic) blocks, so for that chain, message 0 produced block `22207818` (blocks prior to that one are 'classic' blocks). Keep in mind that the offset between message and block number is constant in the chain.
 
 On the parent chain, messages appear in batches. The number of messages per batch changes between batches.
 
