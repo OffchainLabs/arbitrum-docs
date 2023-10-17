@@ -185,12 +185,12 @@ type ArbSys struct {
 
 	// Add your customize event here:
 	Hi						func(ctx, mech, addr) error
-	// This is needed which will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
+	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
 	HiGasCost				func(addr) (uint64, error)
 }
 ```
 
-Then add the event to `SayHi` method:
+Then add the event to the `SayHi` method:
 
 ```go
 func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
@@ -199,7 +199,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the Event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
