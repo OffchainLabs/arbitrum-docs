@@ -81,7 +81,7 @@ This is for Arbitrum Nitro Node:
       --node.batch-poster.compression-level int                                                         batch compression level (default 11)
       --node.batch-poster.das-retention-period duration                                                 In AnyTrust mode, the period which DASes are requested to retain the stored batches. (default 360h0m0s)
       --node.batch-poster.data-poster.allocate-mempool-balance                                          if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance (default true)
-      --node.batch-poster.data-poster.dangerous.clear-leveldb                                           clear leveldb
+      --node.batch-poster.data-poster.dangerous.clear-dbstorage                                         clear database storage
       --node.batch-poster.data-poster.legacy-storage-encoding                                           encodes items in a legacy way (as it was before dropping generics) (default true)
       --node.batch-poster.data-poster.max-mempool-transactions uint                                     the maximum number of transactions to have queued in the mempool at once (0 = unlimited) (default 10)
       --node.batch-poster.data-poster.max-queued-transactions int                                       the maximum number of unconfirmed transactions to track at once (0 = unlimited)
@@ -95,7 +95,7 @@ This is for Arbitrum Nitro Node:
       --node.batch-poster.data-poster.replacement-times string                                          comma-separated list of durations since first posting to attempt a replace-by-fee (default "5m,10m,20m,30m,1h,2h,4h,6h,8h,12h,16h,18h,20h,22h")
       --node.batch-poster.data-poster.target-price-gwei float                                           the target price to use for maximum fee cap calculation (default 60)
       --node.batch-poster.data-poster.urgency-gwei float                                                the urgency to use for maximum fee cap calculation (default 2)
-      --node.batch-poster.data-poster.use-leveldb                                                       uses leveldb when enabled (default true)
+      --node.batch-poster.data-poster.use-db-storage                                                    uses database storage when enabled (default true)
       --node.batch-poster.data-poster.use-noop-storage                                                  uses noop storage, it doesn't store anything
       --node.batch-poster.data-poster.wait-for-l1-finality                                              only treat a transaction as confirmed after L1 finality has been achieved (recommended) (default true)
       --node.batch-poster.disable-das-fallback-store-data-on-chain                                      If unable to batch to DAS, disable fallback storing data on chain
@@ -139,8 +139,8 @@ This is for Arbitrum Nitro Node:
       --node.caching.block-age duration                                                                 minimum age of recent blocks to keep in memory (default 30m0s)
       --node.caching.block-count uint                                                                   minimum number of recent blocks to keep in memory (default 128)
       --node.caching.database-cache int                                                                 amount of memory in megabytes to cache database contents with (default 2048)
-      --node.caching.max-amount-of-gas-to-skip-state-saving uint                                        maximum amount of gas in blocks to skip saving state to Persistent storage (archive node only) (default 15000000)
-      --node.caching.max-number-of-blocks-to-skip-state-saving uint32                                   maximum number of blocks to skip state saving to persistent storage (archive node only) (default 127)
+      --node.caching.max-amount-of-gas-to-skip-state-saving uint                                        maximum amount of gas in blocks to skip saving state to Persistent storage (archive node only) -- warning: this option seems to cause issues
+      --node.caching.max-number-of-blocks-to-skip-state-saving uint32                                   maximum number of blocks to skip state saving to persistent storage (archive node only) -- warning: this option seems to cause issues
       --node.caching.snapshot-cache int                                                                 amount of memory in megabytes to cache state snapshots with (default 400)
       --node.caching.snapshot-restore-gas-limit uint                                                    maximum gas rolled back to recover snapshot (default 300000000000)
       --node.caching.trie-clean-cache int                                                               amount of memory in megabytes to cache unchanged state trie nodes with (default 600)
@@ -311,7 +311,7 @@ This is for Arbitrum Nitro Node:
       --node.staker.dangerous.ignore-rollup-wasm-module-root                                            DANGEROUS! make assertions even when the wasm module root is wrong
       --node.staker.dangerous.without-block-validator                                                   DANGEROUS! allows running an L1 validator without a block validator
       --node.staker.data-poster.allocate-mempool-balance                                                if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance (default true)
-      --node.staker.data-poster.dangerous.clear-leveldb                                                 clear leveldb
+      --node.staker.data-poster.dangerous.clear-dbstorage                                               clear database storage
       --node.staker.data-poster.legacy-storage-encoding                                                 encodes items in a legacy way (as it was before dropping generics) (default true)
       --node.staker.data-poster.max-mempool-transactions uint                                           the maximum number of transactions to have queued in the mempool at once (0 = unlimited) (default 10)
       --node.staker.data-poster.max-queued-transactions int                                             the maximum number of unconfirmed transactions to track at once (0 = unlimited)
@@ -325,7 +325,7 @@ This is for Arbitrum Nitro Node:
       --node.staker.data-poster.replacement-times string                                                comma-separated list of durations since first posting to attempt a replace-by-fee (default "5m,10m,20m,30m,1h,2h,4h,6h,8h,12h,16h,18h,20h,22h")
       --node.staker.data-poster.target-price-gwei float                                                 the target price to use for maximum fee cap calculation (default 60)
       --node.staker.data-poster.urgency-gwei float                                                      the urgency to use for maximum fee cap calculation (default 2)
-      --node.staker.data-poster.use-leveldb                                                             uses leveldb when enabled (default true)
+      --node.staker.data-poster.use-db-storage                                                          uses database storage when enabled (default true)
       --node.staker.data-poster.use-noop-storage                                                        uses noop storage, it doesn't store anything
       --node.staker.data-poster.wait-for-l1-finality                                                    only treat a transaction as confirmed after L1 finality has been achieved (recommended) (default true)
       --node.staker.disable-challenge                                                                   disable validator challenge
@@ -376,6 +376,7 @@ This is for Arbitrum Nitro Node:
       --parent-chain.wallet.private-key string                                                          private key for wallet
       --persistent.ancient string                                                                       directory of ancient where the chain freezer can be opened
       --persistent.chain string                                                                         directory to store chain state
+      --persistent.db-engine string                                                                     backing database implementation to use ('leveldb' or 'pebble') (default "leveldb")
       --persistent.global-config string                                                                 directory to store global config (default ".arbitrum")
       --persistent.handles int                                                                          number of file descriptor handles to use for the database (default 512)
       --persistent.log-dir string                                                                       directory to store log file
@@ -400,7 +401,7 @@ This is for Arbitrum Nitro Node:
       --ws.origins strings                                                                              Origins from which to accept websockets requests
       --ws.port int                                                                                     WS-RPC server listening port (default 8548)
       --ws.rpcprefix string                                                                             WS path path prefix on which JSON-RPC is served. Use '/' to serve on all paths
-Version: v2.1.0-72ccc0c
+Version: v2.1.1-e9d8842
 ```
 
 ### Classic Node

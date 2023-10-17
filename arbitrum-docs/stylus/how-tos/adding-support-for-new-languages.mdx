@@ -40,15 +40,15 @@ We'll also be using Rust to run an example script that can call our Zig contract
 
 Once Rust is installed, also install the Stylus CLI tool with
 
-```
-cargo install cargo-stylus
+```bash
+RUSTFLAGS="-C link-args=-rdynamic" cargo install --force cargo-stylus
 ```
 
 ## Using Zig with Stylus
 
 First, let's clone the repository:
 
-```
+```bash
 git clone https://github.com/offchainlabs/zig-on-stylus && cd zig-on-stylus
 ```
 
@@ -83,7 +83,7 @@ Next, we can build our Zig library to a freestanding WASM file for our onchain d
 zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_entrypoint -OReleaseSmall --export=mark_unused
 ```
 
-This is enough for us to deploy on the Stylus testnet! We'll use the [Stylus CLI tool](https://github.com/OffchainLabs/cargo-stylus), which you installed earlier using `cargo install cargo-stylus`:
+This is enough for us to deploy on the Stylus testnet! We'll use the [Stylus CLI tool](https://github.com/OffchainLabs/cargo-stylus), which you installed earlier using `cargo install`:
 
 ```
 cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file-path=main.wasm
