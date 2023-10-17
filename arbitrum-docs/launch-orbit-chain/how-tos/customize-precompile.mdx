@@ -199,7 +199,7 @@ func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Now navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the Event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+Now navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
 
 ```solidity
 event Hi(address caller);
