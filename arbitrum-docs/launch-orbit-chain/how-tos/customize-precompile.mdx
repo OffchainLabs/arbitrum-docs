@@ -211,7 +211,7 @@ If you want to make the param in event as `index`, just add `index` to the Solid
 event Hi(address indexed caller);
 ```
 
-Now as emiting events need to cost gas, so we should remove `view` function behavior from the method:
+When an event is emitted, state is changed and a gas cost is incurred, so we should remove the `view` function behavior:
 
 ```solidity
 function sayHi() external returns(string memory);
