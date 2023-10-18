@@ -61,9 +61,10 @@ We'll install the rest of our dependencies as we go.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
-  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from="arbitrum-rollup">
-      Arbitrum Rollup
-    </a> protocol.
+  - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the <a data-quicklook-from="arbitrum-rollup-protocol">
+      Arbitrum Rollup protocol
+    </a>
+    .
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
 Let's review our vending machine's Javascript implementation, then convert it into a Solidity smart contract, then deploy it to Arbitrum One.
@@ -126,7 +127,7 @@ yarn add hardhat @nomicfoundation/hardhat-toolbox -D
 
 This installs two packages: `hardhat` lets us write, test and deploy our smart contracts, and `hardhat-toolbox` is a bundle of popular Hardhat plugins that we'll use later.
 
-Next, run `yarn hardhat` to configure Hardhat. Select `Create a JavaScript project` when prompted. Make sure you specify your `decentralized-cupcakes` directory as the project root when asked.
+Next, run `yarn hardhat init` to configure Hardhat. Select `Create a JavaScript project` when prompted. Make sure you specify your `decentralized-cupcakes` directory as the project root when asked.
 
 At this point, you should see the following items (among others) in your `decentralized-cupcakes` project directory:
 
@@ -165,7 +166,7 @@ module.exports = {
 };
 ```
 
-Run `yarn hardhat compile` to compile the default `contracts`. You may be prompted to install additional dependencies - follow those instructions until this command runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
+Before compiling the default `contracts`, you will need to install additional dependencies. Run `yarn hardhat compile` and expect it to fail for the first time — follow those instructions, then run `yarn hardhat compile` again until it runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
 
 Open `scripts/deploy.js` and replace its contents with the following:
 
@@ -173,11 +174,9 @@ Open `scripts/deploy.js` and replace its contents with the following:
 const hre = require('hardhat');
 
 async function main() {
-  const VendingMachineFactory = await hre.ethers.getContractFactory('VendingMachine');
-  const vendingMachine = await VendingMachineFactory.deploy();
-  await vendingMachine.deployed();
-
-  console.log(`Cupcake vending machine deployed to ${vendingMachine.address}`);
+  const vendingMachine = await hre.ethers.deployContract('VendingMachine');
+  await vendingMachine.waitForDeployment();
+  console.log(`Cupcake vending machine deployed to ${vendingMachine.target}`);
 }
 
 main().catch((error) => {
@@ -267,7 +266,7 @@ Next, open Metamask and create or import a wallet by following the displayed ins
 
 <!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
 
-Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (**excluding** the `0x` prefix, so eg `ac0..f80`) and import it into Metamask:
+Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
 ![Connect Metamask to Localhost 8545](./assets/quickstart-import-metamask.png)
 
@@ -284,7 +283,7 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 
 #### Deploy the smart contract to your local testnet
 
-From another terminal instance, run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
+From another terminal instance, run `yarn add --dev @nomicfoundation/hardhat-ethers ethers hardhat-deploy hardhat-deploy-ethers` to install additional dependencies needed for contract deployment. Then run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
 
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
 
@@ -304,12 +303,100 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
-|                       | `WEB2` (the first one)                                                                  | `WEB3-LOCALHOST` (the latest one)                                                          | `WEB3-ARB-GOERLI` (the next one)                                                       | `WEB3-ARB-MAINNET` (the final one)                                                        |
-| --------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).        | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
-| **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).    | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
-| **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | <- same                                                                                    | <- same                                                                                | <- same                                                                                   |
-| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | <- same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | <- same, but devs and users pay **testnet $ETH** to testnet validators.                | <- same, but instead of testnet $ETH, they use **mainnet $ETH**.                          |
+<table>
+  <thead style={{ verticalAlign: 'top' }}>
+    <tr>
+      <th></th>
+      <th>
+        <code>WEB2</code>
+        <br />
+        (the first one)
+      </th>
+      <th>
+        <code>WEB3-LOCALHOST</code>
+        <br />
+        (the latest one)
+      </th>
+      <th>
+        <code>WEB3-ARB-GOERLI</code>
+        <br />
+        (the next one)
+      </th>
+      <th>
+        <code>WEB3-ARB-MAINNET</code>
+        <br />
+        (the final one)
+      </th>
+    </tr>
+  </thead>
+  <tbody style={{ verticalAlign: 'top' }}>
+    <tr>
+      <td>
+        <strong>Data</strong> (cupcakes)
+      </td>
+      <td>
+        Stored only in your <strong>browser</strong>. (Usually, stored by centralized
+        infrastructure.)
+      </td>
+      <td>
+        Stored on your <strong>device</strong> in an <strong>emulated Ethereum network</strong> (via
+        smart contract).
+      </td>
+      <td>
+        Stored on Ethereum's <strong>decentralized test network</strong> (via smart contract).
+      </td>
+      <td>
+        Stored on Ethereum's <strong>decentralized mainnet network</strong> (via smart contract).
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Logic</strong> (vending)
+      </td>
+      <td>
+        Served from <strong>Offchain's servers</strong>. Executed by your <strong>browser</strong>.
+      </td>
+      <td>
+        Stored and executed by your <strong>locally emulated Ethereum network</strong> (via smart
+        contract).
+      </td>
+      <td>
+        Stored and executed by Arbitrum's <strong>decentralized test network</strong> (via smart
+        contract).
+      </td>
+      <td>
+        Stored and executed by Arbitrum's <strong>decentralized mainnet network</strong> (via smart
+        contract).
+      </td>
+    </tr>
+    <tr style={{ verticalAlign: 'middle' }}>
+      <td>
+        <strong>Presentation</strong> (UI)
+      </td>
+      <td colSpan="4" align="center">
+        Served from <strong>Offchain's servers</strong>. Rendered and executed by your{' '}
+        <strong>browser</strong>.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>Money</strong>
+      </td>
+      <td>
+        Devs and users pay centralized service providers for server access using fiat currency.
+      </td>
+      <td>
+        ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX).
+      </td>
+      <td>
+        ← same, but devs and users pay <strong>testnet $ETH</strong> to testnet validators.
+      </td>
+      <td>
+        ← same, but instead of testnet $ETH, they use <strong>mainnet $ETH</strong>.
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goerli testnet.
 
