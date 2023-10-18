@@ -211,7 +211,7 @@ If you want to [index the parameter](https://docs.soliditylang.org/en/latest/con
 event Hi(address indexed caller);
 ```
 
-When an event is emitted, state is changed and a gas cost is incurred, so we should remove the `view` function behavior:
+Our function now emits an event, which means that when calling it, the state will change and a gas cost will be incurred. So we have to remove the `view` function behavior:
 
 ```solidity
 function sayHi() external returns(string memory);
