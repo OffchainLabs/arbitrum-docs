@@ -16,6 +16,14 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 <PublicPreviewBannerPartial />
 
+### Arbitrum Orbit is Mainnet Ready:
+
+The Arbitrum Orbit core technology has undergone a comprehensive audit and is prepared for deployment on Mainnet. To optimize the experience, we recommend deploying an Orbit chain to Testnet before proceeding to Mainnet. 
+
+It is important to note, that with novel technology, there are inherent risks involved. 
+
+In the pipeline, we have exciting customizations in store, including the introduction of custom fee tokens. We will keep the community informed and updated on the development timelines for these enhancements.
+
 ### In a nutshell:
 
 - Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains: <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, or **Arbitrum Goerli**.
