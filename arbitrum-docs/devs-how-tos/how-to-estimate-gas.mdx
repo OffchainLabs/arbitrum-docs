@@ -14,7 +14,7 @@ This how-to is intended for users and developers interested in understanding how
 
 ## Skip the formula, focus on practical know-how
 
-Before diving into the specifics and the formula, if you're looking for a practical way to estimate gas for your transaction, you can rely on the standard gas estimation process. This can be achieved by calling an Arbitrum Node's `eth_estimateGas`, which provides a value (gas limit) that should sufficiently cover the entire transaction fee at the specified L2 gas price.
+Before diving into the specifics and the formula, if you're looking for a practical way to estimate gas for your transaction, you can rely on the standard gas estimation process. This can be achieved by calling an Arbitrum node's `eth_estimateGas`, which provides a value (gas limit) that should sufficiently cover the entire transaction fee at the specified L2 gas price.
 Multiplying the value obtained from `eth_estimateGas` by the L2 gas price will give you the total amount of Ether required for the transaction to be successful. It's important to note that, for a specific operation, the result of `eth_estimateGas` value may vary over time due to fluctuations in the L1 calldata price, see below to learn why!
 
 Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the L2 gas price, which is available in the third result, `baseFee`.
