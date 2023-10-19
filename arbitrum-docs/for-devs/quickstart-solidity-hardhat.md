@@ -46,7 +46,7 @@ Let's implement the "web3" version of the above vending machine using Arbitrum.
 - **Metamask**: The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) to install.
 - **Yarn**: The package manager we'll use to install our dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.
 
-We'll install the rest of our dependencies as we go.
+We'll address remaining dependencies as we go.
 
 ### Ethereum and Arbitrum in a nutshell
 
