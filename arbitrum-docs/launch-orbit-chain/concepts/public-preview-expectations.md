@@ -8,7 +8,17 @@ sidebar_position: 1
 
 Orbit chains are currently a **public preview** offering. This concept document explains what "public preview" means, what to expect from Orbit's public preview capabilities, and how to engage with our team as you tinker.
 
-### How products are developed at Offchain Labs
+### Arbitrum Orbit is Mainnet ready, but deploy to Testnet first
+
+Arbitrum Orbit's core technology has undergone a comprehensive audit and is now able to support deployments to Mainnet.
+
+It's important to note that Orbit is a new technology and as such, **there are risks involved**.
+
+To mitigate these risks, you're strongly encouraged to **deploy your Orbit chain on Testnet first**. If you don't launch on Testnet first, you significantly increase risk. 
+
+Refer to the [Orbit quickstart](./orbit-quickstart) for instructions that walk you through the process of deploying your Orbit chain to Testnet.
+
+### How products like Orbit are developed at Offchain Labs
 
 Offchain Labs builds products in a way that aligns loosely with the spirit of "building in public". We like to release things **early and often** so that we can capture feedback and iterate in service of your needs, as empirically as possible.
 
