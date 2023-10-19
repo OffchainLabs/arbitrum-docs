@@ -16,7 +16,7 @@ It's important to note that Orbit is a new technology and as such, **there are r
 
 To mitigate these risks, you're strongly encouraged to **deploy your Orbit chain on Testnet first**. If you don't launch on Testnet first, you significantly increase risk.
 
-Refer to the [Orbit quickstart](./orbit-quickstart) for instructions that walk you through the process of deploying your Orbit chain to Testnet.
+Refer to the [Orbit quickstart](/launch-orbit-chain/orbit-quickstart) for instructions that walk you through the process of deploying your Orbit chain to Testnet.
 
 ### How products like Orbit are developed at Offchain Labs
 
