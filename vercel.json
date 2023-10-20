@@ -11,7 +11,7 @@
             "permanent": false
         },
         {
-            "source": "/stylus/rust-sdk-guide",
+            "source": "/stylus/(rust-sdk-guide\\/?)",
             "destination": "/stylus/reference/rust-sdk-guide",
             "permanent": false
         },
