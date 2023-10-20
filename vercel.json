@@ -1,17 +1,12 @@
 {
     "redirects": [
         {
-            "source": "/arb-specific-things",
+            "source": "/(arb-specific-things\\/?)",
             "destination": "/arbitrum-ethereum-differences",
             "permanent": false
         },
         {
-            "source": "/stylus",
-            "destination": "/stylus/stylus-gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/stylus/",
+            "source": "/(stylus\\/?)",
             "destination": "/stylus/stylus-gentle-introduction",
             "permanent": false
         },
