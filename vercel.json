@@ -21,12 +21,12 @@
             "permanent": false
         },
         {
-            "source": "/docs/mainnet",
+            "source": "/docs/mainnet/",
             "destination": "/mainnet-risks",
             "permanent": false
         },
         {
-            "source": "/docs/mainnet-beta",
+            "source": "/docs/mainnet-beta/",
             "destination": "/mainnet-risks",
             "permanent": false
         },
