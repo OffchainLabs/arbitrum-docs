@@ -245,14 +245,14 @@ In the normal case, the rollup chain will look like this:
 
 ```mermaid
 graph RL
-  y["First unresolved block"]
-  z["Latest confirmed block"]
+  f["First unresolved block"]
+  l["Latest confirmed block"]
 
   98-->97-->96-->95
-  y-.-95
+  f-.-95
 
   95-->94
-  z-.-94
+  l-.-94
 
   94-->93-->92-->91-->90-->x[...]
 
@@ -269,7 +269,8 @@ graph RL
   classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
   class 98,97,96,95,Unconfirmed unconfirmed
 
-
+  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
+  class l,f note
 ```
 
 On the left, representing an earlier part of the chain’s history, we have confirmed RBlocks. These have been fully accepted and recorded by the Layer 1 contracts that manage the chain. The newest of the confirmed RBlocks, RBlock 94, is called the “latest confirmed RBlock.” On the right, we see a set of newer proposed RBlocks. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest RBlock whose fate has yet to be determined, RBlock 95, is called the “first unresolved RBlock.”
@@ -308,6 +309,9 @@ graph RL
 
   classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
   class 106,107,108,109,110,111,Unconfirmed unconfirmed
+
+  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
+  class l,f note
 
 ```
 
