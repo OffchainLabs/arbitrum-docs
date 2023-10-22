@@ -1,5 +1,5 @@
 ---
-title: 'Quickstart: Indexing custom data via Flair'
+title: 'Quickstart: Indexing Arbitrum custom data via Flair'
 description: 'Real-time and historical custom data indexing for any evm chain.'
 author: kasra-khosravi
 sme: kasra-khosravi
