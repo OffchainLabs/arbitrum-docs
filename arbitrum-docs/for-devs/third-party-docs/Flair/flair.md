@@ -1,22 +1,15 @@
 ---
-title: 'Data indexers'
-sidebar_label: Data indexers
-description: An overview of popular onchain data indexers
-reader-audience: developers who want to build on Ethereum/Arbitrum
-content-type: overview
+title: 'Quickstart: Indexing custom data via Flair'
+description: 'Real-time and historical custom data indexing for any evm chain.'
+author: kasra-khosravi
+sme: kasra-khosravi
+third_party_content_owner: kasrakhosravi
+sidebar_label: 'Flair'
 ---
 
-import KnowMoreToolsBox from '../partials/_know-more-tools-box-partial.md';
+[Flair](https://flair.dev), Real-time and historical custom data indexing for any evm chain.
 
-<KnowMoreToolsBox />
-
-The following tools will help you index onchain data on Arbitrum:
-
-## Flair
-
-Real-time and historical custom data indexing for any evm chain.
-
-[Flair](https://flair.dev) offers reusable **indexing primitives** (such as fault-tolerant RPC ingestors, custom processors, re-org aware database integrations) to make it easy to receive, transform, store and access your on-chain data.
+Flair offers reusable **indexing primitives** (such as fault-tolerant RPC ingestors, custom processors, re-org aware database integrations) to make it easy to receive, transform, store and access your on-chain data.
 
 [![flair architecture](https://imgur.com/0q5bHZK.png)](https://docs.flair.dev/)
 
