@@ -46,7 +46,7 @@ Let's implement the "web3" version of the above vending machine using Arbitrum.
 - **Metamask**: The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) to install.
 - **Yarn**: The package manager we'll use to install our dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.
 
-We'll install the rest of our dependencies as we go.
+We'll address remaining dependencies as we go.
 
 ### Ethereum and Arbitrum in a nutshell
 
@@ -305,27 +305,29 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 
 <table>
   <thead style={{ verticalAlign: 'top' }}>
-    <th></th>
-    <th>
-      <code>WEB2</code>
-      <br />
-      (the first one)
-    </th>
-    <th>
-      <code>WEB3-LOCALHOST</code>
-      <br />
-      (the latest one)
-    </th>
-    <th>
-      <code>WEB3-ARB-GOERLI</code>
-      <br />
-      (the next one)
-    </th>
-    <th>
-      <code>WEB3-ARB-MAINNET</code>
-      <br />
-      (the final one)
-    </th>
+    <tr>
+      <th></th>
+      <th>
+        <code>WEB2</code>
+        <br />
+        (the first one)
+      </th>
+      <th>
+        <code>WEB3-LOCALHOST</code>
+        <br />
+        (the latest one)
+      </th>
+      <th>
+        <code>WEB3-ARB-GOERLI</code>
+        <br />
+        (the next one)
+      </th>
+      <th>
+        <code>WEB3-ARB-MAINNET</code>
+        <br />
+        (the final one)
+      </th>
+    </tr>
   </thead>
   <tbody style={{ verticalAlign: 'top' }}>
     <tr>
@@ -371,7 +373,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
       <td>
         <strong>Presentation</strong> (UI)
       </td>
-      <td colspan="4" align="center">
+      <td colSpan="4" align="center">
         Served from <strong>Offchain's servers</strong>. Rendered and executed by your{' '}
         <strong>browser</strong>.
       </td>

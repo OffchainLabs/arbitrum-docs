@@ -143,20 +143,6 @@ export const VendingMachine = (props: { id: string; type: string }) => {
   const vendingMachineClient =
     props.type == 'web2' ? new Web2VendingMachineClient() : new Web3VendingMachineClient();
 
-  const prefillWeb3Identity = async () => {
-    // if the user has metamask installed, prefill the identity input with their wallet address
-    const identityFromWallet = await (
-      vendingMachineClient as Web3VendingMachineClient
-    ).getWalletAddress();
-    if (identityFromWallet) {
-      setIdentity(identityFromWallet);
-    }
-  };
-
-  useEffect(() => {
-    prefillWeb3Identity();
-  }, []);
-
   const updateSuccessIndicator = (success: boolean) => {
     errorIndicatorRef.current.classList.toggle('visible', !success);
   };
@@ -172,7 +158,6 @@ export const VendingMachine = (props: { id: string; type: string }) => {
     try {
       let gotCupcake;
       if (vendingMachineClient.isWeb3) {
-        await prefillWeb3Identity();
         gotCupcake = await callWeb3VendingMachine(vendingMachineClient.giveCupcakeTo);
       } else {
         gotCupcake = await (vendingMachineClient as Web2VendingMachineClient).giveCupcakeTo(
@@ -210,7 +195,6 @@ export const VendingMachine = (props: { id: string; type: string }) => {
   const handleRefreshBalance = useCallback(async () => {
     try {
       if (vendingMachineClient.isWeb3) {
-        await prefillWeb3Identity();
         setCupcakeBalance(await callWeb3VendingMachine(vendingMachineClient.getCupcakeBalanceFor));
       } else {
         setCupcakeBalance(
