@@ -47,26 +47,20 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 
 :::
 
-### Testnet ETH / Sepolia
+### Testnet ETH
 
-The Stylus testnet settles directly to the [Arbitrum Sepolia](https://docs.arbitrum.io/for-devs/concepts/public-chains#arbitrum-sepolia) testnet. While there is no faucet directly on the Stylus testnet, there is on Arbitrum Sepolia. Following these steps can get you testnet ETH on the Stylus testnet:
+The Stylus testnet settles directly to the [Arbitrum Sepolia](/for-devs/concepts/public-chains#arbitrum-sepolia) testnet. Follow these steps to acquire testnet ETH on the Stylus testnet:
 
-1. Navigate to [https://faucet.quicknode.com/arbitrum/sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
-2. Connect your wallet and select Arbitrum Sepolia (Note: To receive testnet ETH using this faucet, you must have 0.001 ETH on Ethereum mainnet)
-3. Click continue, and either follow the prompt to receive a bonus, or confirm to receive the normal amount. After a few minutes, you should now have Arbitrum Sepolia ETH
-4. Navigate to [https://bridge.arbitrum.io/](https://bridge.arbitrum.io/)
-5. Connect your wallet
-6. Click on the profile dropdown and select “Settings”
-7. Turn on testnet mode (Note: If you are already connected to a test network, skip this step)
-8. Click the network dropdown and select Arbitrum Sepolia, this will set it as the source network
-9. Click the destination chain dropdown and select the Stylus testnet
-10. Enter an amount of ETH and bridge!
+1. Navigate to [https://bwarelabs.com/faucets/arbitrum-stylus-testnet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
+2. Enter your wallet address into the text field.
+3. Click `Claim` and optionally follow the second step to receive extra testnet tokens.
+4. You should now have Sepolia ETH on the Stylus testnet.
 
-For additional sources of testnet ETH, please use a faucet on L1 mainnet:
+For additional sources of testnet ETH, please use a faucet on Arbitrum Sepolia or Ethereum Sepolia:
+
+[https://faucet.quicknode.com/arbitrum/sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
 
 [https://sepoliafaucet.com/](https://sepoliafaucet.com/)
-
-[https://www.infura.io/faucet/sepolia](https://www.infura.io/faucet/sepolia)
 
 [https://sepolia-faucet.pk910.de/](https://sepolia-faucet.pk910.de/)
 
@@ -77,7 +71,7 @@ For additional sources of testnet ETH, please use a faucet on L1 mainnet:
 `cargo-stylus` is our CLI tool for assisting with building, verifying, and deploying Arbitrum Stylus programs in Rust. This is available as a plugin to the standard `Cargo` tool used for developing Rust programs, integrating easily into common Rust workflows. Once [Rust has been installed](https://www.rust-lang.org/tools/install) on your system, install the Stylus CLI tool by running the following command:
 
 ```bash
-cargo install --git https://github.com/OffchainLabs/cargo-stylus
+RUSTFLAGS="-C link-args=-rdynamic" cargo install --force cargo-stylus
 ```
 
 In addition, add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:

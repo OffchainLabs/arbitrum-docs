@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 The guidance displayed on this page will change based on your selected configuration:
 
-import MultidimensionalContentControlsPartial from '@site/../arbitrum-docs/partials/_multidimensional-content-controls-partial.md';
+import MultidimensionalContentControlsPartial from '../partials/_multidimensional-content-controls-partial.md';
 
 <MultidimensionalContentControlsPartial />
 
@@ -67,6 +67,7 @@ If you're running into unexpected outputs or errors, the following checklist may
                 { label: 'Arbitrum One (Classic)', value: 'arb-one-classic' },
                 { label: 'Arbitrum Nova', value: 'arb-nova' },
                 { label: 'Arbitrum Goerli', value: 'arb-goerli' },
+                { label: 'Arbitrum Sepolia', value: 'arb-sepolia' },
                 { label: 'Localhost', value: 'localhost' },
               ]}
             >
@@ -98,6 +99,15 @@ If you're running into unexpected outputs or errors, the following checklist may
                 </p>
               </TabItem>
               <TabItem value="arb-goerli">
+                <p>
+                  The{' '}
+                  <a href="/node-running/how-tos/running-a-full-node">
+                    How to run a full node (Nitro)
+                  </a>{' '}
+                  may address your issue.
+                </p>
+              </TabItem>
+              <TabItem value="arb-sepolia">
                 <p>
                   The{' '}
                   <a href="/node-running/how-tos/running-a-full-node">

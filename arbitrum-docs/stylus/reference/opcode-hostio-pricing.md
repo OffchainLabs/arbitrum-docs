@@ -5,7 +5,7 @@ description: 'A reference of how much opcodes and host I/Os cost in Stylus, with
 author: rachel-bousfield
 sme: rachel-bousfield
 target_audience: 'Developers deploying smart contracts using Stylus.'
-sidebar_position: 4
+sidebar_position: 3
 ---
 
 This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
@@ -141,7 +141,7 @@ Note that the values in this table were determined via a conservative statistica
 | Host I/O         | Ink             | Gas              | Notes                                                                           |
 | ---------------- | --------------- | ---------------- | ------------------------------------------------------------------------------- |
 | read_args        | 12513 + 18287b  | 1.2513 + 1.8287b | `b` = bytes after first 32                                                      |
-| write_result     | 12513 + 40423b  | 12513 + 4.0423b  | `b` = bytes after first 32                                                      |
+| write_result     | 12513 + 40423b  | 1.2513 + 4.0423b | `b` = bytes after first 32                                                      |
 | keccak           | 281040 + 41920w | 28.104 + 4.192w  | Due to a pricing mistake, keccak will soon be `~8 gas` cheaper! `w` = EVM words |
 | block_basefee    | 22137           | 2.2137           |                                                                                 |
 | block_coinbase   | 22137           | 2.2137           |                                                                                 |

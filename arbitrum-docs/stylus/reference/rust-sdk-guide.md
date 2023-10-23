@@ -314,7 +314,7 @@ fn entrypoint(calldata: Vec<u8>) -> ArbResult {
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happened. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
+If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
 
 ```rust
 stylus-sdk = { version = "0.3.0", features = ["reentrant"] }

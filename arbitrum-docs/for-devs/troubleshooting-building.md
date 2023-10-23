@@ -1,11 +1,11 @@
 ---
 title: 'Troubleshooting: Building Arbitrum dApps'
+sidebar_label: 'Troubleshooting'
+description: List of questions and answers frequently asked by developers
+reader_audience: developers who want to build on Ethereum/Arbitrum
+content-type: faq
 ---
 
-import FaqPartial, { toc as FAQTOC } from '../partials/_troubleshooting-building-partial.md';
+import FaqPartial from '../partials/_troubleshooting-building-partial.md';
 
-<div data-faq-origin-slug="build-faq">
-  <FaqPartial />
-</div>
-
-export const toc = FAQTOC;
+<FaqPartial />
