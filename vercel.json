@@ -1,32 +1,27 @@
 {
     "redirects": [
         {
-            "source": "/arb-specific-things",
+            "source": "/(arb-specific-things/?)",
             "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
         },
         {
-            "source": "/stylus",
+            "source": "/(stylus/?)",
             "destination": "/stylus/stylus-gentle-introduction",
             "permanent": false
         },
         {
-            "source": "/stylus/",
-            "destination": "/stylus/stylus-gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/stylus/rust-sdk-guide",
+            "source": "/stylus/(rust-sdk-guide/?)",
             "destination": "/stylus/reference/rust-sdk-guide",
             "permanent": false
         },
         {
-            "source": "/docs/mainnet",
+            "source": "/docs/(mainnet/?)",
             "destination": "/mainnet-risks",
             "permanent": false
         },
         {
-            "source": "/docs/mainnet-beta",
+            "source": "/docs/(mainnet-beta/?)",
             "destination": "/mainnet-risks",
             "permanent": false
         },
