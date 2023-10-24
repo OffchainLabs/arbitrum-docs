@@ -24,6 +24,7 @@ There are three primary ways to customize your chain's precompiles:
 1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
 2.  Create a new precompile.
 3.  Define a new event.
+4.  Set gas usage needed for a specific method
 
 ### Prerequisites
 
@@ -265,6 +266,74 @@ Note the `logs` field within the transaction receipt:
          }
       ]
 ```
+
+## Option 4: Customize gas usage needed for a specific method
+
+在上文中，我们介绍了如何定义一个新的precompile函数，然而，如果只是简单的定义而不在函数内进行gas收取将会导致潜在的dos攻击，为此，我们将继续介绍如何在precompile里进行gas费的计算（event不需要定制gas开销，因为程序会在启动时对event的gas开销进行计算）。
+
+同时，您也可以根据该文档，定制一个gas开销低于常规solidity链上合约的计算库，以方便用户以低gas的开销作为第三方库调用使用。
+
+在procompile中，我们通过调用precompile函数中参数ctx的Burn方法来进行gas扣取，如ArbInfo.go中的`GetBalance` 方法中：
+
+```
+// GetBalance retrieves an account's balance
+func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
+	if err := c.Burn(params.BalanceGasEIP1884); err != nil {
+		return nil, err
+	}
+	return evm.StateDB.GetBalance(account), nil
+}
+```
+该方法目的是为了获取一个地址的balance，同时根据[EIP1884](https://eips.ethereum.org/EIPS/eip-1884)中的定义, 获取地址余额的操作码开销为700gas，因此在返回结果前，函数通过调用c.Burn消耗了700gas （params.BalanceGasEIP1884的返回值为700）。
+
+接下来，我们将尝试定义一个根据caller地址余额来消耗gas的函数作为例子, 在此步中，我们将不按照EIP1884中的规范进行gas收取,并且不再详细介绍如何
+首先定义一个Event来记录我们收取了多少个Gas：
+```
+// ArbInfo povides the ability to lookup basic info about accounts and contracts.
+type ArbInfo struct {
+	Address addr 			// 0x65
+	// Add your customize event here:
+	GetBalanceRecord		func(ctx, mech, addr, huge, huge) error
+	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
+	GetBalanceRecordGasCost				func(addr, huge, huge) (uint64, error)
+}
+```
+
+```
+// GetBalance retrieves an account's balance
+func (con ArbInfo) BurnGasAccordingToBalance(c ctx, evm mech, account addr) (huge, error) {
+	balance := evm.StateDB.GetBalance(account)
+
+	// If balance too low, we should not charge gas
+	if (balance <= 100000) {
+		return evm.StateDB.GetBalance(account), nil
+	}
+	gasForBalanceCall := arbmath.BigDiv(balance, 100000)
+	if err := c.Burn(gasForBalanceCall); err != nil {
+		return nil, err
+	}
+	err := con.GetBalanceRecord(c, evm, c.caller, balance, gasForBalanceCall)
+	return balance, err
+}
+```
+
+Then register the defined event and method as Option 1 and Option 3.
+
+Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
+
+
 
 From the `logs` field, we can see the `topics[0]` is `0xa937..cfa`, which is the event signature of `Hi(address)`. You can verify this using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa) - `topics[1]` is `Your_address`, which is exactly what we defined above!
 
