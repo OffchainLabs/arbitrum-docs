@@ -117,7 +117,7 @@ To let's find out which is custom error this signature represents, we can use th
 
 <p>Solidity calls to <code>block.timestamp</code> on Arbitrum are not linked to the timestamp of the L1 block. It is updated every L2 block based on the sequencer's clock. Furthermore, for transactions that are force-included from L1 (bypassing the Sequencer) <code>block.timestamp</code> will be equal to the L1 timestamp when the transaction was put in the delayed inbox on L1 (not force-included), or the L2 timestamp of the previous L2 block (whichever is greater of the two timestamps).</p>
 
-<p>For more info, see <a href="https://developer.arbitrum.io/time">block numbers and time</a>.</p>
+<p>For more info, see <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time">block numbers and time</a>.</p>
 
 <p></p>
 
@@ -191,6 +191,13 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 ### Do Arbitrum chains support precompiles that are present on Ethereum? {#do-arbitrum-chains-support-precompiles-that-are-present-on-ethereum}
 <p>Yes, all Arbitrum chains support all precompiles that Ethereum supports, as well as others that are not present on Ethereum. Check the <a href="https://docs.arbitrum.io/for-devs/dev-tools-and-resources/precompiles">precompiles reference page</a> for more information about Arbitrum specific precompiles.</p>
+
+<p></p>
+
+
+
+### What's the contract code size limit in Arbitrum chains? {#whats-the-contract-code-size-limit-in-arbitrum-chains}
+<p>As specified in <a href="https://eips.ethereum.org/EIPS/eip-170">EIP-170</a>, contracts of up to 24KB are deployable on Arbitrum chains.</p>
 
 <p></p>
 
