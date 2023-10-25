@@ -48,6 +48,8 @@ Let's implement the "web3" version of the above vending machine using Arbitrum.
 
 We'll address remaining dependencies as we go.
 
+> [Run this entire tutorial](https://app.atlaszk.com/projects?template=https://github.com/sameesiddiqui/arbitrum-quickstart&open=VendingMachine.sol) in under a minute with Atlas - an in-browser IDE for writing and deploying smart contracts.
+
 ### Ethereum and Arbitrum in a nutshell
 
 - **Ethereum**
