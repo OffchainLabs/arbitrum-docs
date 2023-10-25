@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L13"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L13"
           target="_blank"
         >
           Interface
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L16"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L16"
           target="_blank"
         >
           Interface
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L19"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L19"
           target="_blank"
         >
           Interface
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L38"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L38"
           target="_blank"
         >
           Interface
@@ -102,7 +102,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L40"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L40"
           target="_blank"
         >
           Interface
@@ -136,7 +136,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L22"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L22"
           target="_blank"
         >
           Interface
@@ -160,7 +160,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L23"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L23"
           target="_blank"
         >
           Interface
@@ -184,7 +184,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9edc1b943ed0255f050f91f265d96bc1ad9de1a2/src/precompiles/ArbDebug.sol#L30"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbDebug.sol#L30"
           target="_blank"
         >
           Interface

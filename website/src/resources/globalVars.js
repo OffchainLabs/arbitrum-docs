@@ -33,8 +33,10 @@ const globalVars = {
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '9edc1b943ed0255f050f91f265d96bc1ad9de1a2',
+  nitroContractsCommit: 'b16bf0b737468382854dac28346fec8b65b55989',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
+
+  goEthereumCommit: 'e8c8827c0b9e22e60829da1945cba9c451cda85a',
 
   // gas floor
   arbOneGasFloorGwei: '0.1',
