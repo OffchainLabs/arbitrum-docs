@@ -160,8 +160,8 @@ You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Confi
 
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
-1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks to your chain's base contracts on L2.
-2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge Contract**.
+1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks and batches to your chain's base contracts on L2.
+2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge contracts**.
 
 ## Step 9: Clone the setup script repository and add your configuration files
 
@@ -182,7 +182,7 @@ We've provided a Hardhat script that handles the following tasks:
 
 1. Fund the **batch-poster** and **validator** (staker) accounts on your underlying L2 chain.
 2. Deposit ETH into your account on the chain using your chain's newly deployed bridge.
-3. Deploy your Token Bridge Contracts on both L2 and chains.
+3. Deploy your Token Bridge contracts on both L2 and local Orbit chains.
 4. Configure parameters on the chain.
 
 To run this script, issue the following command from the root of the `orbit-setup-script` repository, replacing `OxYourPrivateKey` with the private key of the `Owner` account you used to deploy your chain's contracts, and replacing `http://localhost:8449` with the RPC URL of your chain's node.
@@ -213,7 +213,7 @@ docker-compose logs -f nitro
 
 ### Appendix B: Depositing ETH
 
-If you need to deposit more ETH into either your validator or batch poster addresses, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` and `<AMOUNT>`:
+If you need to deposit more ETH into either your validator or batch poster addresses, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the account that will send the ETH, and `<AMOUNT>` with the amount of ETH to send:
 
 Using Arbitrum Goerli:
 
