@@ -25,7 +25,8 @@ type PrecompileEventOverrides = {
   [key: string]: PrecompileEventInfo;
 };
 
-const partialTablesBasePath = '../arbitrum-docs/arbos/_partials/precompile-tables';
+const partialTablesBasePath =
+  '../arbitrum-docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
 const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
 const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
 const defaultDeprecationNotice = `<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>`;

@@ -58,7 +58,7 @@
 ### **Is there any way to retrieve pre-Nitro archive data from a Nitro node?** {#is-there-any-way-to-retrieve-prenitro-archive-data-from-a-nitro-node}
 <p>The pre-nitro stack is also referred to as a "classic" stack. Full nitro nodes start with a database that contains the information from the "classic" era. However, it is not possible for a nitro node to query archive information contained in "classic" blocks right away. To do that, you need to also run a classic node (<a href="https://developer.arbitrum.io/node-running/how-tos/running-a-classic-node">instructions here</a>) and set the parameter <code>—node.rpc.classic-redirect=your-classic-node-RPC</code>.</p>
 
-<p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova and Arbitrum Goerli nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
+<p>Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum Nova, Arbitrum Goerli and Arbitrum Sepolia nodes started with a Nitro stack from the beginning, so they don't have "classic" data.</p>
 
 <p></p>
 
@@ -67,50 +67,18 @@
 ### How can I verify that my node is syncing at a desirable speed? {#how-can-i-verify-that-my-node-is-syncing-at-a-desirable-speed}
 <p>Syncing speed can vary depending on multiple factors. You can find the minimum hardware requirements to run your node <a href="https://developer.arbitrum.io/node-running/how-tos/running-a-full-node#minimum-hardware-configuration">in this page</a>. You should also verify your network and disk speed.</p>
 
+<p></p>
+
 
 
 ### How can I verify that my node is fully synced? {#how-can-i-verify-that-my-node-is-fully-synced}
 <p>You can make an <code>eth_syncing</code> RPC call to your node. When a nitro node is fully synced, <code>eth_syncing</code> returns the value <code>false</code> (just like a normal Geth node).</p>
 
-<p>When a nitro node is still syncing, <code>eth_syncing</code> returns a map of values to help understand why the node is not synced. Nitro execution and bottleneck are different from a normal Geth node, so <code>eth_syncing</code> output is unique to nitro. Here, we provide more details:</p>
+<p>When a nitro node is still syncing, <code>eth_syncing</code> returns a map of values to help understand why the node is not synced. Nitro execution and bottleneck are different from a normal Geth node, so <code>eth_syncing</code> output is unique to nitro.</p>
+
+<p>You can find information to understand the output of <code>eth_syncing</code> in the <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#eth_syncing">RPC methods</a> page.</p>
 
 <p></p>
-
-<p><strong>Messages, Batches, and Blocks:</strong></p>
-
-<p>Nitro node reads <strong>messages </strong>from the parent chain an optionally from the message feed. It executes these messages and produces <strong>blocks.</strong> Each message produces exactly one block (a message may contain multiple transactions). In most nitro chains, message number and block number are the same. However, Arbitrum One chain has pre-nitro blocks, so for that chain message 0 produced block #XXXX, the offset between message and block number is constant in the chain.</p>
-
-<p>On the parent chain, messages appear in batches. The number of messages per batch changes between batches.</p>
-
-<p></p>
-
-<p><strong><code>{'eth_syncing'}</code></strong><strong> Fields:</strong></p>
-
-<p></p>
-
-<p>⚠️ <strong>Note that the exact output for </strong><strong><code>eth_syncing</code></strong><strong> RPC call of an out-of-sync nitro node is not considered a stable API. It is still being actively developed and modified  without notice between versions.</strong></p>
-
-<p></p>
-
-<ul><li><code>{'batchSeen'}</code> is the  last batch number observed on the parent chain</li>
-<li><code>{'batchProcessed'}</code> is the last batch that was processed on the parent chain. Processing means dividing the batch into messages</li>
-<li><code>{'messageOfProcessedBatch'}</code> is the last message in the last processed batch</li>
-<li><code>{'msgCount'}</code> specifies the number of messages known/queued by the nitro node</li>
-<li><code>{'blockNum'}</code>  is the  last block created by the nitro node (up-to-date L2 block the node is synced to)</li>
-<li><code>{'messageOfLastBlock'}</code> is the message that was used to produce the block above</li>
-<li><code>{'broadcasterQueuedMessagesPos'}</code>  If ≠0, this is expected to be > msgCount. This field notes a message that was read from the feed but not processed because earlier messages are still missing</li>
-<li><code>{'lastL1BlockNum'}</code>, <code>lastl1BlockHash</code> The last block number and hash from parent chain that nitro sees. This is used to debug the parent-chain connection<br />
-</li>
-</ul>
-<p>⚠️ <strong>Note that if the sync process encounters an error while trying to collect the data above (</strong><em><strong>not expected</strong></em><strong>) this error will be added to the response.</strong></p>
-
-<p></p>
-
-<p><strong>Expected Stages of Syncing Nodes:</strong></p>
-
-<ul><li><code>{'batchSeen > batchProcessed'}</code> Some batches were still not processed</li>
-<li><code>{'msgCount > messageOfLastBlock'}</code> Some messages were processed but not all relevant blocks were built (usually the longest stage while syncing a new node)</li>
-<li><code>{'broadcasterQueuedMessagesPos > msgCount'}</code> Feed is ahead of last message known to the node  </li></ul>
 
 
 

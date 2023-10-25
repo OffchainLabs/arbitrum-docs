@@ -85,13 +85,17 @@
 
 <p>The <em>Validators</em> are the ones responsible for the safety of the chain; i.e., making staked claims about the chain state, disputing each other, etc.</p>
 
-<p>Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, the single Sequencer will be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't <em>strictly</em> necessary for Arbitrum One to achieve its most fundamental properties.</p>
+<p>Currently, on Arbitrum One, the Sequencer is a centralized entity maintained by Offchain Labs. Eventually, we expect the single Sequencer to be replaced by a distributed committee of Sequencers who come to consensus on transaction ordering. This upgrade will be an improvement; we don't want you to have to trust us not to reorder your transactions. However, it also isn't <em>strictly</em> necessary for Arbitrum One to achieve its most fundamental properties.</p>
 
 <p>In other words: <em><strong>An Arbitrum Rollup chain with a centralized Sequencer could theoretically still be trustless!</strong></em></p>
 
 <p>Which is to say — the more important thing than decentralizing the Sequencer, i.e., the thing you ought to care more about — is decentralizing the <em>Validators</em>.</p>
 
-<p>Arbitrum One's Validator set is currently allowlisted; overtime, the allowlist will grow and then be removed entirely. For more info see <a href="https://developer.arbitrum.io/mainnet-beta">"Mainnet Beta"</a>.</p>
+<p>Arbitrum One's validator set is currently allowlisted; over time, we expect <a href="https://docs.arbitrum.foundation/">governance</a> to expand the allowlist and eventually be removed entirely.</p>
+
+<p>For more info see <a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">"State of Progressive Decentralization"</a>.</p>
+
+<p></p>
 
 
 
@@ -151,6 +155,37 @@ A week is expected to be more than enough time for validators to carry out an in
 
 ### Where can I find the current Data Availability Committee members? {#where-can-i-find-the-current-data-availability-committee-members}
 <p>The Arbitrum Nova chain has a 7-party DAC, whose members can be seen <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members">here</a></strong>. Governance has the ability to remove or add members to the committee.</p>
+
+<p></p>
+
+
+
+### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently 24 hours) {#are-there-any-plans-to-reduce-the-time-a-transaction-needs-to-wait-before-being-able-to-be-forceincluded-from-ethereum-into-the-arbitrum-chain-bypassing-the-sequencer-currently-24-hours}
+<p>The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, especially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.</p>
+
+<p>When using this mechanism, if the sequencer is down for longer than the time window for force-including transactions from Ethereum, the moment it is online again, it can lead to a reorganization of blocks in Arbitrum (it would have received transactions timestamped before the force-included one).</p>
+
+<p>24 hours was chosen because it provides a comfortable period of time for the team running the sequencer infrastructure to fix any bugs that may cause the sequencer to not work. While there aren't any active initiatives to lower that time, the decision ultimately falls in the hands of the Arbitrum DAO, who has discussed the topic in their governance forum (<a href="https://forum.arbitrum.foundation/t/proposal-decrease-censorship-delay-from-24-hours-to-4-hours/13047">see here for more information</a>).</p>
+
+<p>In any case, we could also analyze why would someone use this mechanism having an honest and functional sequencer. For instance, if the reason is a distrust of the sequencer, a centralised agent as of now, one potential solution could be to <a href="https://medium.com/@espressosys/offchain-labs-partnership-improving-transaction-ordering-for-arbitrum-technology-chains-beyond-de2b6018acb2">decentralize the sequencer</a> instead of reducing the force-inclusion delay time.</p>
+
+<p></p>
+
+
+
+### Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits? {#why-do-arbitrum-chains-enforce-a-speed-limit-isnt-it-better-that-the-speed-grows-without-limits}
+<p>The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.</p>
+
+<p></p>
+
+
+
+### What is the difference between an L2 block and a RBlock? {#what-is-the-difference-between-an-l2-block-and-a-rblock}
+<p>An L2 block is very similar to the concept of an L1 block. These blocks are generated by validator nodes of Arbitrum by executing the state transition function on sequenced transactions. The structure of an L2 block is similar to that of an Ethereum block, with a few differences that you can <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#blocks">see here</a>.</p>
+
+<p>On the other hand, an RBlock is a distinctive block that is transmitted back to L1 to serve as a fingerprint of the most recent state of the Arbitrum chain. It comprises an assertion of the present state root of the Arbitrum chain and other essential information pertaining to withdrawals and challenges. The structure of RBlocks can be viewed <a href="https://github.com/OffchainLabs/nitro/blob/2436da3fbf339ce72b02f761254aff5b86efafac/contracts/src/rollup/Node.sol#L7">here</a>.</p>
+
+<p>These RBlocks are also generated by validators, but they are appended to the L1 chain. Other validators can <a href="https://docs.arbitrum.io/inside-arbitrum-nitro/#resolving-disputes-using-interactive-fraud-proofs">challenge them</a> during a specific time frame of approximately one week if they discover that the current state hash of the chain varies from the one that was initially claimed. Once the challenge period elapses, the RBlock is confirmed on L1.</p>
 
 <p></p>
 
