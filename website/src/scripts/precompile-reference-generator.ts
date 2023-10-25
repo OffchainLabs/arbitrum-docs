@@ -249,7 +249,7 @@ const generatePrecompileReferenceTables = async (
     eventOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/${precompileName}.md`, methodsTable + eventsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.md`, methodsTable + eventsTable);
 };
 
 const main = async (precompilesInformation) => {

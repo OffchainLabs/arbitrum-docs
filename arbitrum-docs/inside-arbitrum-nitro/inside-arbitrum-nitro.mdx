@@ -32,9 +32,25 @@ Nitro is a major upgrade to Arbitrum, improving over "classic" Arbitrum in sever
 
 At the most basic level, an Arbitrum chain works like this:
 
-![img](https://lh4.googleusercontent.com/qwf_aYyB1AfX9s-_PQysOmPNtWB164_qA6isj3NhkDnmcro6J75f6MC2_AjlN60lpSkSw6DtZwNfrt13F3E_G8jdvjeWHX8EophDA2oUM0mEpPVeTlMbsjUCMmztEM0WvDpyWZ6R)
+```mermaid
+graph LR
+  u[users]
+  con[contracts]
 
-People and contracts put messages into the inbox. The chain reads the messages one at a time, and processes each one. This updates the state of the chain and produces some outputs.
+  subgraph Arbitrum
+    i[inbox]
+    c["chain state"]
+    o[outputs]
+  end
+
+  u-->i
+  con-->i
+  i-->c
+  c-->c
+  c-->o
+```
+
+Users and contracts put messages into the inbox. The chain reads the messages one at a time, and processes each one. This updates the state of the chain and produces some outputs.
 
 If you want an Arbitrum chain to process a transaction for you, you need to put that transaction into the chain’s inbox. Then the chain will see your transaction, execute it, and produce some outputs: a transaction receipt, and any withdrawals that your transaction initiated.
 
@@ -227,7 +243,35 @@ The RBlock is assigned a deadline, which says how long other validators have to 
 
 In the normal case, the rollup chain will look like this:
 
-![img](https://lh3.googleusercontent.com/vv118kJMXj76PG6J-Jv4BC9KTpe72mdfD1uWoqhKXvKKfPWHW6wMMCvJ9KKQx_VXIw34XfzT4yfyNVtQVstYRczLk6kLKvBv8Pbl-0MjSzGxz1Z_8T5Y_6UcDMWpy7_D9PxQYKdT)
+```mermaid
+graph RL
+  f["First unresolved block"]
+  l["Latest confirmed block"]
+
+  98-->97-->96-->95
+  f-.-95
+
+  95-->94
+  l-.-94
+
+  94-->93-->92-->91-->90-->x[...]
+
+  subgraph Legend
+    direction RL
+    Confirmed
+    Unconfirmed
+  end
+
+  classDef confirmed fill:#47b860,stroke:#37914c,stroke-width:2px,color:#fff
+  class 94,93,92,91,90,x,Confirmed confirmed
+
+
+  classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
+  class 98,97,96,95,Unconfirmed unconfirmed
+
+  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
+  class l,f note
+```
 
 On the left, representing an earlier part of the chain’s history, we have confirmed RBlocks. These have been fully accepted and recorded by the Layer 1 contracts that manage the chain. The newest of the confirmed RBlocks, RBlock 94, is called the “latest confirmed RBlock.” On the right, we see a set of newer proposed RBlocks. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest RBlock whose fate has yet to be determined, RBlock 95, is called the “first unresolved RBlock.”
 
@@ -235,12 +279,46 @@ Notice that a proposed RBlock can build on an earlier proposed RBlock. This allo
 
 Here’s another example of what the chain state might look like, if several validators are being malicious. It’s a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
 
-![img](https://lh3.googleusercontent.com/IKBNeX9IVAD5Vom8vqYER4CEZhTecJJrp51ddlEGYiZrdV6y9zaG0Ip8HuKgfJ-eS9_TN_C2I0EPl-7H5ITRgSQqJONnSE7X0P62sRbGoiv_shmijBxsVDJL9RhWbyDjs2lKxU-M)
+```mermaid
+graph RL
+ subgraph Legend
+    direction RL
+    Confirmed
+    Rejected
+    Unconfirmed
+  end
+
+  f["First unresolved block"]
+  l["Latest confirmed block"]
+
+
+  l-.-103
+  f-.-106
+
+  108-->107-->106-->103
+  111-->104
+  101-->100
+  105-->104-->103
+  110-->109-->103-->102-->100-->x[...]
+
+  classDef confirmed fill:#47b860,stroke:#37914c,stroke-width:2px,color:#fff
+  class 100,102,103,x,Confirmed confirmed
+
+  classDef rejected fill:#fdaa07,stroke:#fd8607,stroke-width:2px,color:#fff
+  class 101,104,105,Rejected rejected
+
+  classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
+  class 106,107,108,109,110,111,Unconfirmed unconfirmed
+
+  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
+  class l,f note
+
+```
 
 There’s a lot going on here, so let’s unpack it.
 
 - RBlock 100 has been confirmed.
-- RBlock 101 claimed to be a correct successor to RBlock 100, but 101 was rejected (hence the X drawn in it).
+- RBlock 101 claimed to be a correct successor to RBlock 100, but 101 was rejected (hence it is orange).
 - RBlock 102 was eventually confirmed as the correct successor to 100.
 - RBlock 103 was confirmed and is now the latest confirmed RBlock.
 - RBlock 104 was proposed as a successor to RBlock 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, and as a consequence 105 was rejected because its predecessor was rejected.
