@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L26"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L26"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L91"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L91"
           target="_blank"
         >
           Implementation
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L96"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L96"
           target="_blank"
         >
           Implementation
@@ -90,7 +90,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L138"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L138"
           target="_blank"
         >
           Implementation
@@ -112,7 +112,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L143"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L143"
           target="_blank"
         >
           Implementation
@@ -134,7 +134,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L151"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L151"
           target="_blank"
         >
           Implementation
@@ -156,7 +156,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L156"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L156"
           target="_blank"
         >
           Implementation
@@ -178,7 +178,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L161"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L161"
           target="_blank"
         >
           Implementation
@@ -202,7 +202,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L166"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L166"
           target="_blank"
         >
           Implementation
@@ -224,7 +224,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L171"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L171"
           target="_blank"
         >
           Implementation
@@ -246,7 +246,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L176"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L176"
           target="_blank"
         >
           Implementation
@@ -268,7 +268,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L181"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L181"
           target="_blank"
         >
           Implementation
@@ -290,7 +290,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L186"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L186"
           target="_blank"
         >
           Implementation
@@ -312,7 +312,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L191"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L191"
           target="_blank"
         >
           Implementation
@@ -334,7 +334,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L196"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L196"
           target="_blank"
         >
           Implementation
@@ -359,7 +359,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L200"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L200"
           target="_blank"
         >
           Implementation
@@ -381,7 +381,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L236"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L236"
           target="_blank"
         >
           Implementation
@@ -405,7 +405,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L240"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L240"
           target="_blank"
         >
           Implementation
@@ -427,7 +427,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.0/precompiles/ArbGasInfo.go#L244"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbGasInfo.go#L244"
           target="_blank"
         >
           Implementation
