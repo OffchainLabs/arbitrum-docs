@@ -34,23 +34,23 @@ This name provides a way for people to distinguish your Orbit chain from other O
 
 ### Challenge period (blocks)
 
-The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the integrity of transactions posted to your Orbit chain's base chain on L2 (Arbitrum Goerli for now; settlement to One and Nova mainnet chains isn't supported yet).
+The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the current state of the chain posted to your Orbit chain's base chain on L2 (Arbitrum Goerli or Sepolia for now; settlement to One and Nova mainnet chains isn't supported yet).
 
-A longer challenge period means that your chain's nodes will have more time to dispute fraudulent transactions, but it also means that your chain's users will have to wait longer for their transactions to finalize. This is one of the many tradeoffs that Orbit allows you to make when configuring your chain.
+A longer challenge period means that your chain's nodes will have more time to dispute fraudulent states, but it also means that your chain's users will have to wait longer to withdraw their assets from your chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your chain.
 
-Note that the challenge period is measured in blocks on the underlying L1 chain, not the base (L2) chain. If your Orbit chain settles to Arbitrum Goerli, the challenge period window would be the number of `Challenge period (blocks)` multiplied by the L1 Goerli block time (~12 seconds).
+Note that the challenge period is measured in blocks on the underlying L1 chain, not the base (L2) chain. For example, if your Orbit chain settles to Arbitrum Goerli, the challenge period window would be the number of `Challenge period (blocks)` multiplied by the L1 Goerli block time (~12 seconds).
 
 <!-- todo: revisit and discuss defaults -->
 
 ### Stake token
 
-Your Orbit chain will be supported by at least one node. In order for your chain's nodes to record transactions, they're required to stake some value as a way to incentivize honest participation.
+Your Orbit chain will be supported by at least one validator node. In order for your chain's validators to post assertions of the state of the chain on the base chain (L2), they're required to stake some value as a way to incentivize honest participation.
 
-This `Stake token` parameter specifies the type of token that your chain's nodes must deposit into this contract when they stake. This is specified using the **token's contract address on the L2 chain that your chain is settling to - Arbitrum Goerli**.
+This `Stake token` parameter specifies the token that your chain's validators must deposit into this contract when they stake. This is specified using the token's contract address on the L2 chain that your chain is settling to - Arbitrum Goerli or Arbitrum Sepolia - or `0x0000000000000000000000000000000000000000` if you want to use ETH as the stake token.
 
 ### Base stake
 
-The `Base stake` parameter specifies the **amount of ETH** that your chain's validator must deposit in order to begin proposing batches of transactions from your Orbit chain to its base contracts. This is specified using a float value.
+The `Base stake` parameter specifies the amount of the stake token (ETH or an ERC-20 token) that your chain's validators must deposit in order to post assertions of the state of your Orbit chain on the base chain's rollup contracts. This is specified using a float value.
 
 If your `Base stake` is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
@@ -58,7 +58,7 @@ For example, an Orbit chain with a base stake of 0.01 ETH could be halted by an 
 
 The malicious challenges would result in slashed Orbit chain validators (one slashed validator per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
-A higher base stake incentivize honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's validator operators. This is another tradeoff to consider.
+A higher base stake incentivize honest participation by making it more expensive to launch these types of attacks. However, a higher base stake also translates to a higher barrier to entry for your chain's validators. This is another tradeoff to consider.
 
 ### Owner
 
@@ -70,4 +70,4 @@ In production scenarios, this is a high-stakes address that's often controlled b
 
 Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
 
-This address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
+When deploying your Orbit chain, this address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
