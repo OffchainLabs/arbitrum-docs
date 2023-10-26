@@ -225,7 +225,7 @@ const config = {
       },
       announcementBar: {
         id: 'support_us',
-        content: `The Stylus testnet is officially live! Build EVM-compatible apps with Rust by visiting the <a href='/stylus/stylus-gentle-introduction'>Stylus docs</a>.`,
+        content: `Arbitrum Orbit is mainnet-ready! Start building a customized chain by visiting the <a href='/launch-orbit-chain/orbit-quickstart'>Orbit docs</a>.`,
         isCloseable: false,
       },
       liveCodeBlock: {
