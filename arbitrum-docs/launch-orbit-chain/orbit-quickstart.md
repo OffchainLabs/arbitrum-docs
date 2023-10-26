@@ -16,14 +16,6 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 <PublicPreviewBannerPartial />
 
-:::caution YOUR ORBIT CHAIN IS A LOCAL DEVNET CHAIN (FOR NOW)
-
-Your local Orbit chain will settle transactions to Arbitrum Goerli or Sepolia, **not a mainnet L2 chain**. We recommend using this public preview version of Orbit to **prototype** and **experiment**.
-
-While you're tinkering locally, we'll be building the tech and docs that help you move your project from "local devnet chain that settles to Arbitrum testnets" to "public production-ready chain that settles to Arbitrum One or Arbitrum Nova". Stay tuned!
-
-:::
-
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
@@ -198,6 +190,8 @@ Using Arbitrum Sepolia:
 ```shell
 PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://sepolia-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" yarn run setup
 ```
+
+<!-- todo: align on mainnet guidance when ready to update quickstart -->
 
 ## Congratulations
 
