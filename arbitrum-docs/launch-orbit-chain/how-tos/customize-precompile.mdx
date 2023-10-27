@@ -267,7 +267,7 @@ Note the `logs` field within the transaction receipt:
       ]
 ```
 
-## Option 4: Customize gas usage needed for a specific method
+## Option 4: Customize gas usage for a specific method
 
 In the above, we introduced how to define a new precompile function. However, if it is simply defined without performing gas collection within the function, it will lead to potential DOS attacks. For this reason, we will continue to introduce how to perform gas collection in precompile. (event does not need to customize the gas cost, because the program will calculate the gas cost of the event when it starts).
 
