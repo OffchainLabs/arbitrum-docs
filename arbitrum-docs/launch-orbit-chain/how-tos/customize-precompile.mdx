@@ -269,11 +269,11 @@ Note the `logs` field within the transaction receipt:
 
 ## Option 4: Customize gas usage needed for a specific method
 
-在上文中，我们介绍了如何定义一个新的precompile函数，然而，如果只是简单的定义而不在函数内进行gas收取将会导致潜在的dos攻击，为此，我们将继续介绍如何在precompile里进行gas费的计算（event不需要定制gas开销，因为程序会在启动时对event的gas开销进行计算）。
+In the above, we introduced how to define a new precompile function. However, if it is simply defined without performing gas collection within the function, it will lead to potential DOS attacks. For this reason, we will continue to introduce how to perform gas collection in precompile. (event does not need to customize the gas cost, because the program will calculate the gas cost of the event when it starts).
 
-同时，您也可以根据该文档，定制一个gas开销低于常规solidity链上合约的计算库，以方便用户以低gas的开销作为第三方库调用使用。
+At the same time, you can also customize a calculation library with lower gas usage than conventional solidity chain contracts based on this document, so that users can use it as a third-party library call with low gas usage.
 
-在procompile中，我们通过调用precompile函数中参数ctx的Burn方法来进行gas扣取，如ArbInfo.go中的`GetBalance` 方法中：
+In procompile, we perform gas deduction by calling the `Burn` method of parameter` ctx `in the precompile function, such as the `GetBalance` method in ArbInfo.go:
 
 ```
 // GetBalance retrieves an account's balance
@@ -284,40 +284,22 @@ func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
 	return evm.StateDB.GetBalance(account), nil
 }
 ```
-该方法目的是为了获取一个地址的balance，同时根据[EIP1884](https://eips.ethereum.org/EIPS/eip-1884)中的定义, 获取地址余额的操作码开销为700gas，因此在返回结果前，函数通过调用c.Burn消耗了700gas （params.BalanceGasEIP1884的返回值为700）。
+The purpose of this method is to obtain the balance of an address. At the same time, according to the definition in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code gas usage of obtaining the address balance is 700 gas, so before returning Before the result, the function consumed 700 gas by calling `c.Burn(int64)` (the return value of `params.BalanceGasEIP1884` is 700).
 
-接下来，我们将尝试定义一个根据caller地址余额来消耗gas的函数作为例子, 在此步中，我们将不按照EIP1884中的规范进行gas收取,并且不再详细介绍如何
-首先定义一个Event来记录我们收取了多少个Gas：
-```
-// ArbInfo povides the ability to lookup basic info about accounts and contracts.
-type ArbInfo struct {
-	Address addr 			// 0x65
-	// Add your customize event here:
-	GetBalanceRecord		func(ctx, mech, addr, huge, huge) error
-	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
-	GetBalanceRecordGasCost				func(addr, huge, huge) (uint64, error)
-}
-```
+Next, we will try to define a function that consumes gas based on the caller address balance as an example. In this step, we will not charge gas according to the specifications in EIP1884, but reduce the gas usage by 400 to 300 gas.
 
 ```
 // GetBalance retrieves an account's balance
-func (con ArbInfo) BurnGasAccordingToBalance(c ctx, evm mech, account addr) (huge, error) {
-	balance := evm.StateDB.GetBalance(account)
-
-	// If balance too low, we should not charge gas
-	if (balance <= 100000) {
-		return evm.StateDB.GetBalance(account), nil
-	}
-	gasForBalanceCall := arbmath.BigDiv(balance, 100000)
+func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error) {
+	gasForBalanceCall := uint64(300)
 	if err := c.Burn(gasForBalanceCall); err != nil {
-		return nil, err
+		return evm.StateDB.GetBalance(account), err
 	}
-	err := con.GetBalanceRecord(c, evm, c.caller, balance, gasForBalanceCall)
-	return balance, err
+	return balance, nil
 }
 ```
 
-Then register the defined event and method as Option 1 and Option 3.
+How to register a new precompile method please see option1.
 
 Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
@@ -333,9 +315,75 @@ Note that the instructions provided in [How to run a full node](/node-running/ho
 
 :::
 
+### Send the transaction and get the transaction receipt
 
+In order to obtain the gas used, we can use the `eth_sendRawTransaction` rpc method to test execution on the chain.
+First call:
+```
+cast send 0x0000000000000000000000000000000000000064 "GetBalance()({Any_Address})"
+```
+Secondly call:
+```
+cast send 0x0000000000000000000000000000000000000064 "GetBalanceCustom()({Any_Address})"
+```
 
-From the `logs` field, we can see the `topics[0]` is `0xa937..cfa`, which is the event signature of `Hi(address)`. You can verify this using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa) - `topics[1]` is `Your_address`, which is exactly what we defined above!
+Afterwards we will obtain the following two results respectively.
+
+Result 1:
+```
+{
+   "jsonrpc":"2.0",
+   "id":1,
+   "result":{
+      "blockHash":"{Your_blockHash}",
+      "blockNumber":"0x15",
+      "contractAddress":null,
+      "cumulativeGasUsed":"0x638f",
+      "effectiveGasPrice":"0x5f5e100",
+      "from":"{Your_address}",
+      "gasUsed":"0x638f",
+      "gasUsedForL1":"0x9f5",
+      "l1BlockNumber":"0x979a02",
+      "logs":[
+         
+      ],
+      "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "status":"0x1",
+      "to":"0x0000000000000000000000000000000000000065",
+      "transactionHash":"{Your_txHash}",
+      "transactionIndex":"0x1",
+      "type":"0x2"
+   }
+}
+```
+Result 2:
+```
+{
+   "jsonrpc":"2.0",
+   "id":1,
+   "result":{
+      "blockHash":"{Your_blockHash}",
+      "blockNumber":"0x16",
+      "contractAddress":null,
+      "cumulativeGasUsed":"0x61ff",
+      "effectiveGasPrice":"0x5f5e100",
+      "from":"{Your_address}",
+      "gasUsed":"0x61ff",
+      "gasUsedForL1":"0x9f5",
+      "l1BlockNumber":"0x979a08",
+      "logs":[
+         
+      ],
+      "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "status":"0x1",
+      "to":"0x0000000000000000000000000000000000000065",
+      "transactionHash":"{Your_txHash}",
+      "transactionIndex":"0x1",
+      "type":"0x2"
+   }
+}
+```
+We can get that the gas used for execution of tx1 is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas used for tx2 is `22538` (for the gas model, see [how to estimate gas](/devs-how-tos/how-to -estimate-gas)), subtract the two, and the result is `400`, which is exactly what we expected.
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
