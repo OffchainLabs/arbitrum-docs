@@ -320,11 +320,11 @@ Note that the instructions provided in [How to run a full node](/node-running/ho
 In order to obtain the gas used, we can use the `eth_sendRawTransaction` rpc method to test execution on the chain.
 First call:
 ```
-cast send 0x0000000000000000000000000000000000000064 "GetBalance()({Any_Address})"
+cast send 0x0000000000000000000000000000000000000065 "GetBalance()({Any_Address})"
 ```
 Secondly call:
 ```
-cast send 0x0000000000000000000000000000000000000064 "GetBalanceCustom()({Any_Address})"
+cast send 0x0000000000000000000000000000000000000065 "GetBalanceCustom()({Any_Address})"
 ```
 
 Afterwards we will obtain the following two results respectively.
