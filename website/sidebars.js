@@ -82,6 +82,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'NodeInterface',
+              id: 'for-devs/concepts/nodeinterface',
+            },
+            {
+              type: 'doc',
               label: 'Oracles',
               id: 'for-devs/concepts/oracles',
             },
@@ -288,6 +293,11 @@ const sidebars = {
           type: 'doc',
           label: 'Precompiles',
           id: 'for-devs/dev-tools-and-resources/precompiles',
+        },
+        {
+          type: 'doc',
+          label: 'NodeInterface',
+          id: 'for-devs/dev-tools-and-resources/nodeinterface',
         },
         {
           type: 'doc',
