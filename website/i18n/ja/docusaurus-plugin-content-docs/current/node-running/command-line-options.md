@@ -1,0 +1,566 @@
+---
+title: 'Command-line options'
+---
+
+Arbitrum nodes can be configured using flags. This document provides a comprehensive list of all available flags and their descriptions. The flag descriptions that you see in this document are generated from code comments within the latest Nitro/Classic release.
+
+### Nitro Node flags
+
+This is for Arbitrum Nitro Node:
+
+```
+      --auth.addr string                                                                                AUTH-RPC server listening interface (default "127.0.0.1")
+      --auth.api strings                                                                                APIs offered over the AUTH-RPC interface (default [validation])
+      --auth.jwtsecret string                                                                           Path to file holding JWT secret (32B hex)
+      --auth.origins strings                                                                            Origins from which to accept AUTH requests (default [localhost])
+      --auth.port int                                                                                   AUTH-RPC server listening port (default 8549)
+      --chain.dev-wallet.account string                                                                 account to use (default is first account in keystore)
+      --chain.dev-wallet.only-create-key                                                                if true, creates new key then exits
+      --chain.dev-wallet.password string                                                                wallet passphrase (default "PASSWORD_NOT_SET")
+      --chain.dev-wallet.pathname string                                                                pathname for wallet
+      --chain.dev-wallet.private-key string                                                             private key for wallet
+      --chain.id uint                                                                                   L2 chain ID (determines Arbitrum network)
+      --chain.info-files strings                                                                        L2 chain info json files
+      --chain.info-ipfs-download-path string                                                            path to save temp downloaded file (default "/tmp/")
+      --chain.info-ipfs-url string                                                                      url to download chain info file
+      --chain.info-json string                                                                          L2 chain info in json string format
+      --chain.name string                                                                               L2 chain name (determines Arbitrum network)
+      --conf.dump                                                                                       print out currently active configuration file
+      --conf.env-prefix string                                                                          environment variables with given prefix will be loaded as configuration values
+      --conf.file strings                                                                               name of configuration file
+      --conf.reload-interval duration                                                                   how often to reload configuration (0=disable periodic reloading)
+      --conf.s3.access-key string                                                                       S3 access key
+      --conf.s3.bucket string                                                                           S3 bucket
+      --conf.s3.object-key string                                                                       S3 object key
+      --conf.s3.region string                                                                           S3 region
+      --conf.s3.secret-key string                                                                       S3 secret key
+      --conf.string string                                                                              configuration as JSON string
+      --file-logging.buf-size int                                                                       size of intermediate log records buffer (default 512)
+      --file-logging.compress                                                                           enable compression of old log files (default true)
+      --file-logging.enable                                                                             enable logging to file (default true)
+      --file-logging.file string                                                                        path to log file (default "nitro.log")
+      --file-logging.local-time                                                                         if true: local time will be used in old log filename timestamps
+      --file-logging.max-age int                                                                        maximum number of days to retain old log files based on the timestamp encoded in their filename (0 = no limit)
+      --file-logging.max-backups int                                                                    maximum number of old log files to retain (0 = no limit) (default 20)
+      --file-logging.max-size int                                                                       log file size in Mb that will trigger log file rotation (0 = trigger disabled) (default 5)
+      --graphql.corsdomain strings                                                                      Comma separated list of domains from which to accept cross origin requests (browser enforced)
+      --graphql.enable                                                                                  Enable graphql endpoint on the rpc endpoint
+      --graphql.vhosts strings                                                                          Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard (default [localhost])
+      --http.addr string                                                                                HTTP-RPC server listening interface
+      --http.api strings                                                                                APIs offered over the HTTP-RPC interface (default [net,web3,eth,arb])
+      --http.corsdomain strings                                                                         Comma separated list of domains from which to accept cross origin requests (browser enforced)
+      --http.port int                                                                                   HTTP-RPC server listening port (default 8547)
+      --http.rpcprefix string                                                                           HTTP path path prefix on which JSON-RPC is served. Use '/' to serve on all paths
+      --http.server-timeouts.idle-timeout duration                                                      the maximum amount of time to wait for the next request when keep-alives are enabled (http.Server.IdleTimeout) (default 2m0s)
+      --http.server-timeouts.read-header-timeout duration                                               the amount of time allowed to read the request headers (http.Server.ReadHeaderTimeout) (default 30s)
+      --http.server-timeouts.read-timeout duration                                                      the maximum duration for reading the entire request (http.Server.ReadTimeout) (default 30s)
+      --http.server-timeouts.write-timeout duration                                                     the maximum duration before timing out writes of the response (http.Server.WriteTimeout) (default 30s)
+      --http.vhosts strings                                                                             Comma separated list of virtual hostnames from which to accept requests (server enforced). Accepts '*' wildcard (default [localhost])
+      --init.accounts-per-sync uint                                                                     during init - sync database every X accounts. Lower value for low-memory systems. 0 disables. (default 100000)
+      --init.dev-init                                                                                   init with dev data (1 account with balance) instead of file import
+      --init.dev-init-address string                                                                    Address of dev-account. Leave empty to use the dev-wallet.
+      --init.dev-init-blocknum uint                                                                     Number of preinit blocks. Must exist in ancient database.
+      --init.download-path string                                                                       path to save temp downloaded file (default "/tmp/")
+      --init.download-poll duration                                                                     how long to wait between polling attempts (default 1m0s)
+      --init.empty                                                                                      init with empty state
+      --init.force                                                                                      if true: in case database exists init code will be reexecuted and genesis block compared to database
+      --init.import-file string                                                                         path for json data to import
+      --init.prune string                                                                               pruning for a given use: "full" for full nodes serving RPC requests, or "validator" for validators
+      --init.prune-bloom-size uint                                                                      the amount of memory in megabytes to use for the pruning bloom filter (higher values prune better) (default 2048)
+      --init.reset-to-message int                                                                       forces a reset to an old message height. Also set max-reorg-resequence-depth=0 to force re-reading messages (default -1)
+      --init.then-quit                                                                                  quit after init is done
+      --init.url string                                                                                 url to download initializtion data - will poll if download fails
+      --ipc.path string                                                                                 Requested location to place the IPC endpoint. An empty path disables IPC.
+      --log-level int                                                                                   log level (default 3)
+      --log-type string                                                                                 log type (plaintext or json) (default "plaintext")
+      --metrics                                                                                         enable metrics
+      --metrics-server.addr string                                                                      metrics server address (default "127.0.0.1")
+      --metrics-server.port int                                                                         metrics server port (default 6070)
+      --metrics-server.update-interval duration                                                         metrics server update interval (default 3s)
+      --node.archive                                                                                    retain past block state (deprecated, please use node.caching.archive)
+      --node.batch-poster.compression-level int                                                         batch compression level (default 11)
+      --node.batch-poster.das-retention-period duration                                                 In AnyTrust mode, the period which DASes are requested to retain the stored batches. (default 360h0m0s)
+      --node.batch-poster.data-poster.allocate-mempool-balance                                          if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance (default true)
+      --node.batch-poster.data-poster.dangerous.clear-dbstorage                                         clear database storage
+      --node.batch-poster.data-poster.legacy-storage-encoding                                           encodes items in a legacy way (as it was before dropping generics) (default true)
+      --node.batch-poster.data-poster.max-mempool-transactions uint                                     the maximum number of transactions to have queued in the mempool at once (0 = unlimited) (default 10)
+      --node.batch-poster.data-poster.max-queued-transactions int                                       the maximum number of unconfirmed transactions to track at once (0 = unlimited)
+      --node.batch-poster.data-poster.max-tip-cap-gwei float                                            the maximum tip cap to post transactions at (default 5)
+      --node.batch-poster.data-poster.min-fee-cap-gwei float                                            the minimum fee cap to post transactions at
+      --node.batch-poster.data-poster.min-tip-cap-gwei float                                            the minimum tip cap to post transactions at (default 0.05)
+      --node.batch-poster.data-poster.nonce-rbf-soft-confs uint                                         the maximum probable reorg depth, used to determine when a transaction will no longer likely need replaced-by-fee (default 1)
+      --node.batch-poster.data-poster.redis-signer.dangerous.disable-signature-verification             disable message signature verification
+      --node.batch-poster.data-poster.redis-signer.fallback-verification-key string                     a fallback key used for message verification
+      --node.batch-poster.data-poster.redis-signer.signing-key string                                   a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it
+      --node.batch-poster.data-poster.replacement-times string                                          comma-separated list of durations since first posting to attempt a replace-by-fee (default "5m,10m,20m,30m,1h,2h,4h,6h,8h,12h,16h,18h,20h,22h")
+      --node.batch-poster.data-poster.target-price-gwei float                                           the target price to use for maximum fee cap calculation (default 60)
+      --node.batch-poster.data-poster.urgency-gwei float                                                the urgency to use for maximum fee cap calculation (default 2)
+      --node.batch-poster.data-poster.use-db-storage                                                    uses database storage when enabled (default true)
+      --node.batch-poster.data-poster.use-noop-storage                                                  uses noop storage, it doesn't store anything
+      --node.batch-poster.data-poster.wait-for-l1-finality                                              only treat a transaction as confirmed after L1 finality has been achieved (recommended) (default true)
+      --node.batch-poster.disable-das-fallback-store-data-on-chain                                      If unable to batch to DAS, disable fallback storing data on chain
+      --node.batch-poster.enable                                                                        enable posting batches to l1
+      --node.batch-poster.error-delay duration                                                          how long to delay after error posting batch (default 10s)
+      --node.batch-poster.extra-batch-gas uint                                                          use this much more gas than estimation says is necessary to post batches (default 50000)
+      --node.batch-poster.gas-refunder-address string                                                   The gas refunder contract address (optional)
+      --node.batch-poster.l1-block-bound string                                                         only post messages to batches when they're within the max future block/timestamp as of this L1 block tag ("safe", "finalized", "latest", or "ignore" to ignore this check)
+      --node.batch-poster.l1-block-bound-bypass duration                                                post batches even if not within the layer 1 future bounds if we're within this margin of the max delay (default 1h0m0s)
+      --node.batch-poster.max-delay duration                                                            maximum batch posting delay (default 1h0m0s)
+      --node.batch-poster.max-size int                                                                  maximum batch size (default 100000)
+      --node.batch-poster.parent-chain-wallet.account string                                            account to use (default is first account in keystore)
+      --node.batch-poster.parent-chain-wallet.only-create-key                                           if true, creates new key then exits
+      --node.batch-poster.parent-chain-wallet.password string                                           wallet passphrase (default "PASSWORD_NOT_SET")
+      --node.batch-poster.parent-chain-wallet.pathname string                                           pathname for wallet (default "batch-poster-wallet")
+      --node.batch-poster.parent-chain-wallet.private-key string                                        private key for wallet
+      --node.batch-poster.poll-interval duration                                                        how long to wait after no batches are ready to be posted before checking again (default 10s)
+      --node.batch-poster.redis-lock.background-lock                                                    should node always try grabing lock in background
+      --node.batch-poster.redis-lock.key string                                                         key for lock (default "node.batch-poster.redis-lock.simple-lock-key")
+      --node.batch-poster.redis-lock.lockout-duration duration                                          how long lock is held (default 1m0s)
+      --node.batch-poster.redis-lock.my-id string                                                       this node's id prefix when acquiring the lock (optional)
+      --node.batch-poster.redis-lock.refresh-duration duration                                          how long between consecutive calls to redis (default 10s)
+      --node.batch-poster.redis-url string                                                              if non-empty, the Redis URL to store queued transactions in
+      --node.batch-poster.wait-for-max-delay                                                            wait for the max batch delay, even if the batch is full
+      --node.block-validator.current-module-root string                                                 current wasm module root ('current' read from chain, 'latest' from machines/latest dir, or provide hash) (default "current")
+      --node.block-validator.dangerous.reset-block-validation                                           resets block-by-block validation, starting again at genesis
+      --node.block-validator.enable                                                                     enable block-by-block validation
+      --node.block-validator.failure-is-fatal                                                           failing a validation is treated as a fatal error (default true)
+      --node.block-validator.forward-blocks uint                                                        prepare entries for up to that many blocks ahead of validation (small footprint) (default 1024)
+      --node.block-validator.pending-upgrade-module-root string                                         pending upgrade wasm module root to additionally validate (hash, 'latest' or empty) (default "latest")
+      --node.block-validator.prerecorded-blocks uint                                                    record that many blocks ahead of validation (larger footprint) (default 128)
+      --node.block-validator.validation-poll duration                                                   poll time to check validations (default 1s)
+      --node.block-validator.validation-server.arg-log-limit uint                                       limit size of arguments in log entries (default 2048)
+      --node.block-validator.validation-server.connection-wait duration                                 how long to wait for initial connection
+      --node.block-validator.validation-server.jwtsecret string                                         path to file with jwtsecret for validation - ignored if url is self or self-auth
+      --node.block-validator.validation-server.retries uint                                             number of retries in case of failure(0 mean one attempt)
+      --node.block-validator.validation-server.retry-errors string                                      Errors matching this regular expression are automatically retried
+      --node.block-validator.validation-server.timeout duration                                         per-response timeout (0-disabled)
+      --node.block-validator.validation-server.url string                                               url of server, use self for loopback websocket, self-auth for loopback with authentication (default "self-auth")
+      --node.caching.archive                                                                            retain past block state
+      --node.caching.block-age duration                                                                 minimum age of recent blocks to keep in memory (default 30m0s)
+      --node.caching.block-count uint                                                                   minimum number of recent blocks to keep in memory (default 128)
+      --node.caching.database-cache int                                                                 amount of memory in megabytes to cache database contents with (default 2048)
+      --node.caching.max-amount-of-gas-to-skip-state-saving uint                                        maximum amount of gas in blocks to skip saving state to Persistent storage (archive node only) -- warning: this option seems to cause issues
+      --node.caching.max-number-of-blocks-to-skip-state-saving uint32                                   maximum number of blocks to skip state saving to persistent storage (archive node only) -- warning: this option seems to cause issues
+      --node.caching.snapshot-cache int                                                                 amount of memory in megabytes to cache state snapshots with (default 400)
+      --node.caching.snapshot-restore-gas-limit uint                                                    maximum gas rolled back to recover snapshot (default 300000000000)
+      --node.caching.trie-clean-cache int                                                               amount of memory in megabytes to cache unchanged state trie nodes with (default 600)
+      --node.caching.trie-dirty-cache int                                                               amount of memory in megabytes to cache state diffs against disk with (larger cache lowers database growth) (default 1024)
+      --node.caching.trie-time-limit duration                                                           maximum block processing time before trie is written to hard-disk (default 1h0m0s)
+      --node.dangerous.no-l1-listener                                                                   DANGEROUS! disables listening to L1. To be used in test nodes only
+      --node.data-availability.enable                                                                   enable Anytrust Data Availability mode
+      --node.data-availability.ipfs-storage.enable                                                      enable storage/retrieval of sequencer batch data from IPFS
+      --node.data-availability.ipfs-storage.peers strings                                               list of IPFS peers to connect to, eg /ip4/1.2.3.4/tcp/12345/p2p/abc...xyz
+      --node.data-availability.ipfs-storage.pin-after-get                                               pin sequencer batch data in IPFS (default true)
+      --node.data-availability.ipfs-storage.pin-percentage float                                        percent of sequencer batch data to pin, as a floating point number in the range 0.0 to 100.0 (default 100)
+      --node.data-availability.ipfs-storage.profiles string                                             comma separated list of IPFS profiles to use, see https://docs.ipfs.tech/how-to/default-profile
+      --node.data-availability.ipfs-storage.read-timeout duration                                       timeout for IPFS reads, since by default it will wait forever. Treat timeout as not found (default 1m0s)
+      --node.data-availability.ipfs-storage.repo-dir string                                             directory to use to store the local IPFS repo
+      --node.data-availability.panic-on-error                                                           whether the Data Availability Service should fail immediately on errors (not recommended)
+      --node.data-availability.parent-chain-connection-attempts int                                     layer 1 RPC connection attempts (spaced out at least 1 second per attempt, 0 to retry infinitely), only used in standalone daserver; when running as part of a node that node's L1 configuration is used (default 15)
+      --node.data-availability.parent-chain-node-url string                                             URL for L1 node, only used in standalone daserver; when running as part of a node that node's L1 configuration is used
+      --node.data-availability.request-timeout duration                                                 Data Availability Service timeout duration for Store requests (default 5s)
+      --node.data-availability.rest-aggregator.enable                                                   enable retrieval of sequencer batch data from a list of remote REST endpoints; if other DAS storage types are enabled, this mode is used as a fallback
+      --node.data-availability.rest-aggregator.max-per-endpoint-stats int                               number of stats entries (latency and success rate) to keep for each REST endpoint; controls whether strategy is faster or slower to respond to changing conditions (default 20)
+      --node.data-availability.rest-aggregator.online-url-list string                                   a URL to a list of URLs of REST das endpoints that is checked at startup; additive with the url option
+      --node.data-availability.rest-aggregator.online-url-list-fetch-interval duration                  time interval to periodically fetch url list from online-url-list (default 1h0m0s)
+      --node.data-availability.rest-aggregator.simple-explore-exploit-strategy.exploit-iterations int   number of consecutive GetByHash calls to the aggregator where each call will cause it to select from REST endpoints in order of best latency and success rate, before switching to explore mode (default 1000)
+      --node.data-availability.rest-aggregator.simple-explore-exploit-strategy.explore-iterations int   number of consecutive GetByHash calls to the aggregator where each call will cause it to randomly select from REST endpoints until one returns successfully, before switching to exploit mode (default 20)
+      --node.data-availability.rest-aggregator.strategy string                                          strategy to use to determine order and parallelism of calling REST endpoint URLs; valid options are 'simple-explore-exploit' (default "simple-explore-exploit")
+      --node.data-availability.rest-aggregator.strategy-update-interval duration                        how frequently to update the strategy with endpoint latency and error rate data (default 10s)
+      --node.data-availability.rest-aggregator.sync-to-storage.check-already-exists                     check if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)
+      --node.data-availability.rest-aggregator.sync-to-storage.delay-on-error duration                  time to wait if encountered an error before retrying (default 1s)
+      --node.data-availability.rest-aggregator.sync-to-storage.eager                                    eagerly sync batch data to this DAS's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily
+      --node.data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state
+      --node.data-availability.rest-aggregator.sync-to-storage.ignore-write-errors                      log only on failures to write when syncing; otherwise treat it as an error (default true)
+      --node.data-availability.rest-aggregator.sync-to-storage.parent-chain-blocks-per-read uint        when eagerly syncing, max l1 blocks to read per poll (default 100)
+      --node.data-availability.rest-aggregator.sync-to-storage.retention-period duration                period to retain synced data (defaults to forever) (default 2562047h47m16.854775807s)
+      --node.data-availability.rest-aggregator.sync-to-storage.state-dir string                         directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time
+      --node.data-availability.rest-aggregator.urls strings                                             list of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints; additive with the online-url-list option
+      --node.data-availability.rest-aggregator.wait-before-try-next duration                            time to wait until trying the next set of REST endpoints while waiting for a response; the next set of REST endpoints is determined by the strategy selected (default 2s)
+      --node.data-availability.rpc-aggregator.assumed-honest int                                        Number of assumed honest backends (H). If there are N backends, K=N+1-H valid responses are required to consider an Store request to be successful.
+      --node.data-availability.rpc-aggregator.backends string                                           JSON RPC backend configuration
+      --node.data-availability.rpc-aggregator.enable                                                    enable storage/retrieval of sequencer batch data from a list of RPC endpoints; this should only be used by the batch poster and not in combination with other DAS storage types
+      --node.data-availability.sequencer-inbox-address string                                           L1 address of SequencerInbox contract
+      --node.delayed-sequencer.enable                                                                   enable delayed sequencer
+      --node.delayed-sequencer.finalize-distance int                                                    how many blocks in the past L1 block is considered final (ignored when using Merge finality) (default 20)
+      --node.delayed-sequencer.require-full-finality                                                    whether to wait for full finality before sequencing delayed messages
+      --node.delayed-sequencer.use-merge-finality                                                       whether to use The Merge's notion of finality before sequencing delayed messages (default true)
+      --node.feed.input.enable-compression                                                              enable per message deflate compression support (default true)
+      --node.feed.input.reconnect-initial-backoff duration                                              initial duration to wait before reconnect (default 1s)
+      --node.feed.input.reconnect-maximum-backoff duration                                              maximum duration to wait before reconnect (default 1m4s)
+      --node.feed.input.require-chain-id                                                                require chain id to be present on connect
+      --node.feed.input.require-feed-version                                                            require feed version to be present on connect
+      --node.feed.input.timeout duration                                                                duration to wait before timing out connection to sequencer feed (default 20s)
+      --node.feed.input.url strings                                                                     URL of sequencer feed source
+      --node.feed.input.verify.accept-sequencer                                                         accept verified message from sequencer (default true)
+      --node.feed.input.verify.allowed-addresses stringArray                                            a list of allowed addresses
+      --node.feed.input.verify.dangerous.accept-missing                                                 accept empty as valid signature (default true)
+      --node.feed.output.addr string                                                                    address to bind the relay feed output to
+      --node.feed.output.client-delay duration                                                          delay the first messages sent to each client by this amount
+      --node.feed.output.client-timeout duration                                                        duration to wait before timing out connections to client (default 15s)
+      --node.feed.output.connection-limits.enable                                                       enable broadcaster per-client connection limiting
+      --node.feed.output.connection-limits.per-ip-limit int                                             limit clients, as identified by IPv4/v6 address, to this many connections to this relay (default 5)
+      --node.feed.output.connection-limits.per-ipv6-cidr-48-limit int                                   limit ipv6 clients, as identified by IPv6 address masked with /48, to this many connections to this relay (default 20)
+      --node.feed.output.connection-limits.per-ipv6-cidr-64-limit int                                   limit ipv6 clients, as identified by IPv6 address masked with /64, to this many connections to this relay (default 10)
+      --node.feed.output.connection-limits.reconnect-cooldown-period duration                           time to wait after a relay client disconnects before the disconnect is registered with respect to the limit for this client
+      --node.feed.output.disable-signing                                                                don't sign feed messages (default true)
+      --node.feed.output.enable                                                                         enable broadcaster
+      --node.feed.output.enable-compression                                                             enable per message deflate compression support (default true)
+      --node.feed.output.handshake-timeout duration                                                     duration to wait before timing out HTTP to WS upgrade (default 1s)
+      --node.feed.output.limit-catchup                                                                  only supply catchup buffer if requested sequence number is reasonable
+      --node.feed.output.log-connect                                                                    log every client connect
+      --node.feed.output.log-disconnect                                                                 log every client disconnect
+      --node.feed.output.max-catchup int                                                                the maximum size of the catchup buffer (-1 means unlimited) (default -1)
+      --node.feed.output.max-send-queue int                                                             maximum number of messages allowed to accumulate before client is disconnected (default 4096)
+      --node.feed.output.ping duration                                                                  duration for ping interval (default 5s)
+      --node.feed.output.port string                                                                    port to bind the relay feed output to (default "9642")
+      --node.feed.output.queue int                                                                      queue size for HTTP to WS upgrade (default 100)
+      --node.feed.output.read-timeout duration                                                          duration to wait before timing out reading data (i.e. pings) from clients (default 1s)
+      --node.feed.output.require-compression                                                            require clients to use compression
+      --node.feed.output.require-version                                                                don't connect if client version not present
+      --node.feed.output.signed                                                                         sign broadcast messages
+      --node.feed.output.workers int                                                                    number of threads to reserve for HTTP to WS upgrade (default 100)
+      --node.feed.output.write-timeout duration                                                         duration to wait before timing out writing data to clients (default 2s)
+      --node.forwarder.connection-timeout duration                                                      total time to wait before cancelling connection (default 30s)
+      --node.forwarder.idle-connection-timeout duration                                                 time until idle connections are closed (default 15s)
+      --node.forwarder.max-idle-connections int                                                         maximum number of idle connections to keep open (default 1)
+      --node.forwarder.redis-url string                                                                 the Redis URL to recomend target via
+      --node.forwarder.retry-interval duration                                                          minimal time between update retries (default 100ms)
+      --node.forwarder.update-interval duration                                                         forwarding target update interval (default 1s)
+      --node.forwarding-target string                                                                   transaction forwarding target URL, or "null" to disable forwarding (if not sequencer)
+      --node.inbox-reader.check-delay duration                                                          the maximum time to wait between inbox checks (if not enough new blocks are found) (default 1m0s)
+      --node.inbox-reader.default-blocks-to-read uint                                                   the default number of blocks to read at once (will vary based on traffic by default) (default 100)
+      --node.inbox-reader.delay-blocks uint                                                             number of latest blocks to ignore to reduce reorgs
+      --node.inbox-reader.hard-reorg                                                                    erase future transactions in addition to overwriting existing ones on reorg
+      --node.inbox-reader.max-blocks-to-read uint                                                       if adjust-blocks-to-read is enabled, the maximum number of blocks to read at once (default 2000)
+      --node.inbox-reader.min-blocks-to-read uint                                                       the minimum number of blocks to read at once (when caught up lowers load on L1) (default 1)
+      --node.inbox-reader.target-messages-read uint                                                     if adjust-blocks-to-read is enabled, the target number of messages to read at once (default 500)
+      --node.maintenance.lock.background-lock                                                           should node always try grabing lock in background
+      --node.maintenance.lock.key string                                                                key for lock (default "node.maintenance.lock.simple-lock-key")
+      --node.maintenance.lock.lockout-duration duration                                                 how long lock is held (default 1m0s)
+      --node.maintenance.lock.my-id string                                                              this node's id prefix when acquiring the lock (optional)
+      --node.maintenance.lock.refresh-duration duration                                                 how long between consecutive calls to redis (default 10s)
+      --node.maintenance.time-of-day string                                                             UTC 24-hour time of day to run maintenance (currently only db compaction) at (e.g. 15:00)
+      --node.message-pruner.enable                                                                      enable message pruning (default true)
+      --node.message-pruner.min-batches-left uint                                                       min number of batches not pruned (default 2)
+      --node.message-pruner.prune-interval duration                                                     interval for running message pruner (default 1m0s)
+      --node.parent-chain-reader.enable                                                                 enable reader connection (default true)
+      --node.parent-chain-reader.old-header-timeout duration                                            warns if the latest l1 block is at least this old (default 5m0s)
+      --node.parent-chain-reader.poll-interval duration                                                 interval when polling endpoint (default 15s)
+      --node.parent-chain-reader.poll-only                                                              do not attempt to subscribe to header events
+      --node.parent-chain-reader.tx-timeout duration                                                    timeout when waiting for a transaction (default 5m0s)
+      --node.parent-chain-reader.use-finality-data                                                      use l1 data about finalized/safe blocks (default true)
+      --node.recording-database.trie-clean-cache int                                                    like trie-clean-cache for the separate, recording database (used for validation) (default 16)
+      --node.recording-database.trie-dirty-cache int                                                    like trie-dirty-cache for the separate, recording database (used for validation) (default 1024)
+      --node.resource-mgmt.mem-free-limit string                                                        RPC calls are throttled if free system memory excluding the page cache is below this amount, expressed in bytes or multiples of bytes with suffix B, K, M, G. The limit should be set such that sufficient free memory is left for the page cache in order for the system to be performant
+      --node.rpc.arbdebug.block-range-bound uint                                                        bounds the number of blocks arbdebug calls may return (default 256)
+      --node.rpc.arbdebug.timeout-queue-bound uint                                                      bounds the length of timeout queues arbdebug calls may return (default 512)
+      --node.rpc.bloom-bits-blocks uint                                                                 number of blocks a single bloom bit section vector holds (default 16384)
+      --node.rpc.bloom-confirms uint                                                                    number of confirmation blocks before a bloom section is considered final (default 256)
+      --node.rpc.classic-redirect string                                                                url to redirect classic requests, use "error:[CODE:]MESSAGE" to return specified error instead of redirecting
+      --node.rpc.classic-redirect-timeout duration                                                      timeout for forwarded classic requests, where 0 = no timeout
+      --node.rpc.evm-timeout duration                                                                   timeout used for eth_call (0=infinite) (default 5s)
+      --node.rpc.feehistory-max-block-count uint                                                        max number of blocks a fee history request may cover (default 1024)
+      --node.rpc.filter-log-cache-size int                                                              log filter system maximum number of cached blocks (default 32)
+      --node.rpc.filter-timeout duration                                                                log filter system maximum time filters stay active (default 5m0s)
+      --node.rpc.gas-cap uint                                                                           cap on computation gas that can be used in eth_call/estimateGas (0=infinite) (default 50000000)
+      --node.rpc.max-recreate-state-depth int                                                           maximum depth for recreating state, measured in l2 gas (0=don't recreate state, -1=infinite, -2=use default value for archive or non-archive node (whichever is configured)) (default -2)
+      --node.rpc.tx-allow-unprotected                                                                   allow transactions that aren't EIP-155 replay protected to be submitted over the RPC (default true)
+      --node.rpc.tx-fee-cap float                                                                       cap on transaction fee (in ether) that can be sent via the RPC APIs (0 = no cap) (default 1)
+      --node.seq-coordinator.chosen-healthcheck-addr string                                             if non-empty, launch an HTTP service binding to this address that returns status code 200 when chosen and 503 otherwise
+      --node.seq-coordinator.enable                                                                     enable sequence coordinator
+      --node.seq-coordinator.handoff-timeout duration                                                   the maximum amount of time to spend waiting for another sequencer to accept the lockout when handing it off on shutdown or db compaction (default 30s)
+      --node.seq-coordinator.lockout-duration duration                                                   (default 1m0s)
+      --node.seq-coordinator.lockout-spare duration                                                      (default 30s)
+      --node.seq-coordinator.msg-per-poll uint                                                          will only be marked as wanting the lockout if not too far behind (default 2000)
+      --node.seq-coordinator.my-url string                                                              url for this sequencer if it is the chosen (default "<?INVALID-URL?>")
+      --node.seq-coordinator.redis-url string                                                           the Redis URL to coordinate via
+      --node.seq-coordinator.release-retries int                                                        the number of times to retry releasing the wants lockout and chosen one status on shutdown (default 4)
+      --node.seq-coordinator.retry-interval duration                                                     (default 50ms)
+      --node.seq-coordinator.safe-shutdown-delay duration                                               if non-zero will add delay after transferring control (default 5s)
+      --node.seq-coordinator.seq-num-duration duration                                                   (default 24h0m0s)
+      --node.seq-coordinator.signer.ecdsa.accept-sequencer                                              accept verified message from sequencer (default true)
+      --node.seq-coordinator.signer.ecdsa.allowed-addresses stringArray                                 a list of allowed addresses
+      --node.seq-coordinator.signer.ecdsa.dangerous.accept-missing                                      accept empty as valid signature (default true)
+      --node.seq-coordinator.signer.symmetric-fallback                                                  if to fall back to symmetric hmac
+      --node.seq-coordinator.signer.symmetric-sign                                                      if to sign with symmetric hmac
+      --node.seq-coordinator.signer.symmetric.dangerous.disable-signature-verification                  disable message signature verification
+      --node.seq-coordinator.signer.symmetric.fallback-verification-key string                          a fallback key used for message verification
+      --node.seq-coordinator.signer.symmetric.signing-key string                                        a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it
+      --node.seq-coordinator.update-interval duration                                                    (default 250ms)
+      --node.sequencer.dangerous.no-coordinator                                                         DANGEROUS! allows sequencer without coordinator.
+      --node.sequencer.enable                                                                           act and post to l1 as sequencer
+      --node.sequencer.forwarder.connection-timeout duration                                            total time to wait before cancelling connection (default 30s)
+      --node.sequencer.forwarder.idle-connection-timeout duration                                       time until idle connections are closed (default 1m0s)
+      --node.sequencer.forwarder.max-idle-connections int                                               maximum number of idle connections to keep open (default 100)
+      --node.sequencer.forwarder.redis-url string                                                       the Redis URL to recomend target via
+      --node.sequencer.forwarder.retry-interval duration                                                minimal time between update retries (default 100ms)
+      --node.sequencer.forwarder.update-interval duration                                               forwarding target update interval (default 1s)
+      --node.sequencer.max-acceptable-timestamp-delta duration                                          maximum acceptable time difference between the local time and the latest L1 block's timestamp (default 1h0m0s)
+      --node.sequencer.max-block-speed duration                                                         minimum delay between blocks (sets a maximum speed of block production) (default 100ms)
+      --node.sequencer.max-revert-gas-reject uint                                                       maximum gas executed in a revert for the sequencer to reject the transaction instead of posting it (anti-DOS) (default 31000)
+      --node.sequencer.max-tx-data-size int                                                             maximum transaction size the sequencer will accept (default 95000)
+      --node.sequencer.nonce-cache-size int                                                             size of the tx sender nonce cache (default 1024)
+      --node.sequencer.nonce-failure-cache-expiry duration                                              maximum amount of time to wait for a predecessor before rejecting a tx with nonce too high (default 1s)
+      --node.sequencer.nonce-failure-cache-size int                                                     number of transactions with too high of a nonce to keep in memory while waiting for their predecessor (default 1024)
+      --node.sequencer.queue-size int                                                                   size of the pending tx queue (default 1024)
+      --node.sequencer.queue-timeout duration                                                           maximum amount of time transaction can wait in queue (default 12s)
+      --node.sequencer.sender-whitelist string                                                          comma separated whitelist of authorized senders (if empty, everyone is allowed)
+      --node.staker.confirmation-blocks int                                                             confirmation blocks (default 12)
+      --node.staker.contract-wallet-address string                                                      validator smart contract wallet public address
+      --node.staker.dangerous.ignore-rollup-wasm-module-root                                            DANGEROUS! make assertions even when the wasm module root is wrong
+      --node.staker.dangerous.without-block-validator                                                   DANGEROUS! allows running an L1 validator without a block validator
+      --node.staker.data-poster.allocate-mempool-balance                                                if true, don't put transactions in the mempool that spend a total greater than the batch poster's balance (default true)
+      --node.staker.data-poster.dangerous.clear-dbstorage                                               clear database storage
+      --node.staker.data-poster.legacy-storage-encoding                                                 encodes items in a legacy way (as it was before dropping generics) (default true)
+      --node.staker.data-poster.max-mempool-transactions uint                                           the maximum number of transactions to have queued in the mempool at once (0 = unlimited) (default 10)
+      --node.staker.data-poster.max-queued-transactions int                                             the maximum number of unconfirmed transactions to track at once (0 = unlimited)
+      --node.staker.data-poster.max-tip-cap-gwei float                                                  the maximum tip cap to post transactions at (default 5)
+      --node.staker.data-poster.min-fee-cap-gwei float                                                  the minimum fee cap to post transactions at
+      --node.staker.data-poster.min-tip-cap-gwei float                                                  the minimum tip cap to post transactions at (default 0.05)
+      --node.staker.data-poster.nonce-rbf-soft-confs uint                                               the maximum probable reorg depth, used to determine when a transaction will no longer likely need replaced-by-fee (default 1)
+      --node.staker.data-poster.redis-signer.dangerous.disable-signature-verification                   disable message signature verification
+      --node.staker.data-poster.redis-signer.fallback-verification-key string                           a fallback key used for message verification
+      --node.staker.data-poster.redis-signer.signing-key string                                         a 32-byte (64-character) hex string used to sign messages, or a path to a file containing it
+      --node.staker.data-poster.replacement-times string                                                comma-separated list of durations since first posting to attempt a replace-by-fee (default "5m,10m,20m,30m,1h,2h,4h,6h,8h,12h,16h,18h,20h,22h")
+      --node.staker.data-poster.target-price-gwei float                                                 the target price to use for maximum fee cap calculation (default 60)
+      --node.staker.data-poster.urgency-gwei float                                                      the urgency to use for maximum fee cap calculation (default 2)
+      --node.staker.data-poster.use-db-storage                                                          uses database storage when enabled (default true)
+      --node.staker.data-poster.use-noop-storage                                                        uses noop storage, it doesn't store anything
+      --node.staker.data-poster.wait-for-l1-finality                                                    only treat a transaction as confirmed after L1 finality has been achieved (recommended) (default true)
+      --node.staker.disable-challenge                                                                   disable validator challenge
+      --node.staker.enable                                                                              enable validator (default true)
+      --node.staker.extra-gas uint                                                                      use this much more gas than estimation says is necessary to post transactions (default 50000)
+      --node.staker.gas-refunder-address string                                                         The gas refunder contract address (optional)
+      --node.staker.make-assertion-interval duration                                                    if configured with the makeNodes strategy, how often to create new assertions (bypassed in case of a dispute) (default 1h0m0s)
+      --node.staker.only-create-wallet-contract                                                         only create smart wallet contract and exit
+      --node.staker.parent-chain-wallet.account string                                                  account to use (default is first account in keystore)
+      --node.staker.parent-chain-wallet.only-create-key                                                 if true, creates new key then exits
+      --node.staker.parent-chain-wallet.password string                                                 wallet passphrase (default "PASSWORD_NOT_SET")
+      --node.staker.parent-chain-wallet.pathname string                                                 pathname for wallet (default "validator-wallet")
+      --node.staker.parent-chain-wallet.private-key string                                              private key for wallet
+      --node.staker.posting-strategy.high-gas-delay-blocks int                                          high gas delay blocks
+      --node.staker.posting-strategy.high-gas-threshold float                                           high gas threshold
+      --node.staker.redis-lock.background-lock                                                          should node always try grabing lock in background
+      --node.staker.redis-lock.key string                                                               key for lock (default "node.staker.redis-lock.simple-lock-key")
+      --node.staker.redis-lock.lockout-duration duration                                                how long lock is held (default 1m0s)
+      --node.staker.redis-lock.my-id string                                                             this node's id prefix when acquiring the lock (optional)
+      --node.staker.redis-lock.refresh-duration duration                                                how long between consecutive calls to redis (default 10s)
+      --node.staker.redis-url string                                                                    redis url for L1 validator
+      --node.staker.staker-interval duration                                                            how often the L1 validator should check the status of the L1 rollup and maybe take action with its stake (default 1m0s)
+      --node.staker.start-validation-from-staked                                                        assume staked nodes are valid (default true)
+      --node.staker.strategy string                                                                     L1 validator strategy, either watchtower, defensive, stakeLatest, or makeNodes (default "Watchtower")
+      --node.staker.use-smart-contract-wallet                                                           use a smart contract wallet instead of an EOA address
+      --node.sync-monitor.block-build-lag uint                                                          allowed lag between messages read and blocks built (default 20)
+      --node.sync-monitor.block-build-sequencer-inbox-lag uint                                          allowed lag between messages read from sequencer inbox and blocks built
+      --node.sync-monitor.coordinator-msg-lag uint                                                      allowed lag between local and remote messages (default 15)
+      --node.transaction-streamer.execute-message-loop-delay duration                                   delay when polling calls to execute messages (default 100ms)
+      --node.transaction-streamer.max-broadcaster-queue-size int                                        maximum cache of pending broadcaster messages (default 1024)
+      --node.transaction-streamer.max-reorg-resequence-depth int                                        maximum number of messages to attempt to resequence on reorg (0 = never resequence, -1 = always resequence) (default 1024)
+      --node.tx-lookup-limit uint                                                                       retain the ability to lookup transactions by hash for the past N blocks (0 = all blocks) (default 126230400)
+      --node.tx-pre-checker.required-state-age int                                                      how long ago should the storage conditions from eth_SendRawTransactionConditional be true, 0 = don't check old state (default 2)
+      --node.tx-pre-checker.required-state-max-blocks uint                                              maximum number of blocks to look back while looking for the <required-state-age> seconds old state, 0 = don't limit the search (default 4)
+      --node.tx-pre-checker.strictness uint                                                             how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed
+      --parent-chain.connection.arg-log-limit uint                                                      limit size of arguments in log entries
+      --parent-chain.connection.connection-wait duration                                                how long to wait for initial connection (default 1m0s)
+      --parent-chain.connection.jwtsecret string                                                        path to file with jwtsecret for validation - ignored if url is self or self-auth
+      --parent-chain.connection.retries uint                                                            number of retries in case of failure(0 mean one attempt) (default 2)
+      --parent-chain.connection.retry-errors string                                                     Errors matching this regular expression are automatically retried
+      --parent-chain.connection.timeout duration                                                        per-response timeout (0-disabled) (default 1m0s)
+      --parent-chain.connection.url string                                                              url of server, use self for loopback websocket, self-auth for loopback with authentication
+      --parent-chain.id uint                                                                            if set other than 0, will be used to validate database and L1 connection
+      --parent-chain.wallet.account string                                                              account to use (default is first account in keystore)
+      --parent-chain.wallet.only-create-key                                                             if true, creates new key then exits
+      --parent-chain.wallet.password string                                                             wallet passphrase (default "PASSWORD_NOT_SET")
+      --parent-chain.wallet.pathname string                                                             pathname for wallet (default "wallet")
+      --parent-chain.wallet.private-key string                                                          private key for wallet
+      --persistent.ancient string                                                                       directory of ancient where the chain freezer can be opened
+      --persistent.chain string                                                                         directory to store chain state
+      --persistent.db-engine string                                                                     backing database implementation to use ('leveldb' or 'pebble') (default "leveldb")
+      --persistent.global-config string                                                                 directory to store global config (default ".arbitrum")
+      --persistent.handles int                                                                          number of file descriptor handles to use for the database (default 512)
+      --persistent.log-dir string                                                                       directory to store log file
+      --pprof                                                                                           enable pprof
+      --pprof-cfg.addr string                                                                           pprof server address (default "127.0.0.1")
+      --pprof-cfg.port int                                                                              pprof server port (default 6071)
+      --rpc.max-batch-response-size int                                                                 the maximum response size for a JSON-RPC request measured in bytes (-1 means no limit) (default 10000000)
+      --validation.api-auth                                                                             validate is an authenticated API (default true)
+      --validation.api-public                                                                           validate is a public API
+      --validation.arbitrator.execution-run-timeout duration                                            timeout before discarding execution run (default 15m0s)
+      --validation.arbitrator.execution.cached-challenge-machines int                                   how many machines to store in cache while working on a challenge (should be even) (default 4)
+      --validation.arbitrator.execution.initial-steps uint                                              initial steps between machines (default 100000)
+      --validation.arbitrator.output-path string                                                        path to write machines to (default "./target/output")
+      --validation.arbitrator.workers int                                                               number of concurrent validation threads
+      --validation.jit.cranelift                                                                        use Cranelift instead of LLVM when validating blocks using the jit-accelerated block validator (default true)
+      --validation.jit.workers int                                                                      number of concurrent validation threads
+      --validation.use-jit                                                                              use jit for validation (default true)
+      --validation.wasm.root-path string                                                                path to machine folders, each containing wasm files (machine.wavm.br, replay.wasm)
+      --ws.addr string                                                                                  WS-RPC server listening interface
+      --ws.api strings                                                                                  APIs offered over the WS-RPC interface (default [net,web3,eth,arb])
+      --ws.expose-all                                                                                   expose private api via websocket
+      --ws.origins strings                                                                              Origins from which to accept websockets requests
+      --ws.port int                                                                                     WS-RPC server listening port (default 8548)
+      --ws.rpcprefix string                                                                             WS path path prefix on which JSON-RPC is served. Use '/' to serve on all paths
+Version: v2.1.1-e9d8842
+```
+
+### Classic Node
+
+This is for Arbitrum Classic Node:
+
+```
+Usage of :
+      --bridge-utils-address string                                    bridgeutils contract address
+      --conf.dump                                                      print out currently active configuration file
+      --conf.env-prefix string                                         environment variables with given prefix will be loaded as configuration values
+      --conf.file string                                               name of configuration file
+      --conf.s3.access-key string                                      S3 access key
+      --conf.s3.bucket string                                          S3 bucket
+      --conf.s3.object-key string                                      S3 object key
+      --conf.s3.region string                                          S3 region
+      --conf.s3.secret-key string                                      S3 secret key
+      --conf.string string                                             configuration as JSON string
+      --core.add-messages-max-failure-count int                        number of add messages failures before exiting program (default 10)
+      --core.cache.basic-interval int                                  amount of gas to wait between saving to basic cache (default 100000000)
+      --core.cache.basic-size int                                      number of basic cache entries to save (default 100)
+      --core.cache.disable                                             disable saving to cache while in core thread
+      --core.cache.last                                                whether to always cache the machine from last block
+      --core.cache.lru-size int                                        number of recently used L2 blocks to hold in lru memory cache (default 1000)
+      --core.cache.seed-on-startup                                     seed cache on startup by re-executing timed-expire worth of history
+      --core.cache.timed-expire duration                               length of time to hold L2 blocks in arbcore timed memory cache (default 20m0s)
+      --core.checkpoint-gas-frequency int                              amount of gas between saving checkpoints (default 1000000000)
+      --core.checkpoint-load-gas-cost int                              running machine for given gas takes same amount of time as loading database entry (default 250000000)
+      --core.checkpoint-load-gas-factor int                            factor to weight difference in database checkpoint vs cache checkpoint (default 4)
+      --core.checkpoint-max-execution-gas int                          maximum amount of gas any given checkpoint is allowed to execute (default 250000000)
+      --core.checkpoint-max-to-prune int                               number of checkpoints to delete at a time, 0 for no limit (default 2)
+      --core.checkpoint-prune-on-startup                               perform full database pruning on startup
+      --core.checkpoint-pruning-mode string                            Prune old checkpoints: 'on', 'off', or 'default' (default "default")
+      --core.database.compact                                          perform database compaction
+      --core.database.exit-after                                       exit after loading or manipulating database
+      --core.database.metadata                                         just print database metadata and exit
+      --core.database.save-interval duration                           duration between saving database backups, 0 to disable
+      --core.database.save-on-startup                                  save database backup on start
+      --core.database.save-path string                                 path to save database backups in (default "db_checkpoints")
+      --core.debug                                                     print extra debug messages in arbcore
+      --core.debug-timing                                              print extra debug timing messages in arbcore
+      --core.deliver-messages-max-failure-count int                    number of deliver messages failures before exiting program (default 50)
+      --core.idle-sleep duration                                       how long core thread should sleep when idle (default 5ms)
+      --core.lazy-load-archive-queries                                 if the archive queries should be loaded as they're run (default true)
+      --core.lazy-load-core-machine                                    if the core machine should be loaded as it's run
+      --core.message-process-count int                                 maximum number of messages to process at a time (default 100)
+      --core.test.load-count int                                       number of snapshots to load from database for profile test, zero to disable
+      --core.test.reorg-to.l1-block int                                reorg to snapshot with given L1 block or before, zero to disable
+      --core.test.reorg-to.l2-block int                                reorg to snapshot with given L2 block or before, zero to disable
+      --core.test.reorg-to.log int                                     reorg to snapshot with given log or before, zero to disable
+      --core.test.reorg-to.message int                                 reorg to snapshot with given message or before, zero to disable
+      --core.test.reset-all-except-inbox                               remove all database info except for inbox
+      --core.test.run-until int                                        run until gas is reached for profile test, zero to disable
+      --core.thread-max-failure-count int                              number of core thread failures before exiting program (default 2)
+      --core.yield-instruction-count int                               number of instructions to for core thread to run between calling yield (default 50000000)
+      --feed.input.require-chain-id                                    disconnect if Chain-Id HTTP header not present
+      --feed.input.timeout duration                                    duration to wait before timing out connection to server (default 20s)
+      --feed.input.url strings                                         URL of sequencer feed source
+      --feed.output.addr string                                        address to bind the relay feed output to (default "0.0.0.0")
+      --feed.output.client-timeout duration                            duration to wait before timing out connections to client (default 15s)
+      --feed.output.io-timeout duration                                duration to wait before timing out HTTP to WS upgrade (default 5s)
+      --feed.output.max-send-queue int                                 Maximum number of messages allowed to accumulate before client is disconnected (default 4096)
+      --feed.output.ping duration                                      duration for ping interval (default 5s)
+      --feed.output.port string                                        port to bind the relay feed output to (default "9642")
+      --feed.output.require-version                                    disconnect if Arbitrum-Feed-Version HTTP header not present
+      --feed.output.workers int                                        Number of threads to reserve for HTTP to WS upgrade (default 100)
+      --gas-price float                                                float of gas price to use in gwei (0 = use L1 node's recommended value)
+      --healthcheck.addr string                                        address to bind the healthcheck endpoint to
+      --healthcheck.enable                                             enable healthcheck endpoint
+      --healthcheck.l1-node                                            enable checking the health of the L1 node
+      --healthcheck.metrics                                            enable prometheus endpoint
+      --healthcheck.metrics-prefix string                              prepend the specified prefix to the exported metrics names
+      --healthcheck.port int                                           port to bind the healthcheck endpoint to
+      --healthcheck.sequencer                                          enable checking the health of the sequencer
+      --l1.chain-id uint                                               if set other than 0, will be used to validate database and L1 connection
+      --l1.url string                                                  layer 1 ethereum node RPC URL
+      --l2.disable-upstream                                            disable feed and transaction forwarding
+      --log.core string                                                log level for general arb node logging (default "info")
+      --log.rpc string                                                 log level for rpc (default "info")
+      --metrics                                                        enable metrics
+      --metrics-server.addr string                                     metrics server address (default "127.0.0.1")
+      --metrics-server.port string                                     metrics server address (default "6070")
+      --node.aggregator.inbox-address string                           address of the inbox contract
+      --node.aggregator.max-batch-time int                             max-batch-time=NumSeconds (default 10)
+      --node.aggregator.stateful                                       enable pending state tracking
+      --node.cache.allow-slow-lookup                                   load L2 block from disk if not in memory cache
+      --node.cache.block-info-lru-size int                             number of recently used L2 block info to hold in lru memory cache (default 100000)
+      --node.cache.lru-size int                                        number of recently used L2 blocks to hold in lru memory cache (default 1000)
+      --node.cache.timed-expire duration                               length of time to hold L2 blocks in timed memory cache (default 20m0s)
+      --node.chain-id uint                                             chain id of the arbitrum chain (default 42161)
+      --node.forwarder.rpc-mode string                                 RPC mode: either full, non-mutating (no eth_sendRawTransaction), or forwarding-only (only requests forwarded upstream are permitted) (default "full")
+      --node.forwarder.submitter-address string                        address of the node that will submit your transaction to the chain
+      --node.forwarder.target string                                   url of another node to send transactions through
+      --node.inbox-reader.delay-blocks int                             number of L1 blocks to wait for confirmation before updating L2 state (default 4)
+      --node.inbox-reader.paranoid                                     if enabled, check for reorgs before searching for messages
+      --node.inbox-reader.sequencer-signature-expiry duration          length of time between verifying sequencer feed signing address on-chain (default 10m0s)
+      --node.log-idle-sleep duration                                   milliseconds for log reader to sleep between reading logs (default 100ms)
+      --node.log-process-count int                                     maximum number of logs to process at a time (default 100)
+      --node.rpc.addr string                                           RPC address (default "0.0.0.0")
+      --node.rpc.enable-devops-stubs                                   Enable fake versions of eth_syncing and eth_netPeers
+      --node.rpc.enable-l1-calls                                       If RPC calls which query the L1 node indirectly should be allowed
+      --node.rpc.max-call-gas uint                                     Max computational arbgas limit when processing eth_call and eth_estimateGas (default 5000000)
+      --node.rpc.nitroexport.basedir string                            Base dir for nitro export
+      --node.rpc.nitroexport.enable                                    Enable rpcs for nitro export (stored locally on node)
+      --node.rpc.path string                                           RPC path (default "/")
+      --node.rpc.port int                                              RPC port (default 8547)
+      --node.rpc.tracing.enable                                        enable tracing api
+      --node.rpc.tracing.namespace string                              rpc namespace for tracing api (default "arbtrace")
+      --node.sequencer.continue-batch-posting-block-interval int       block interval to post the next batch after posting a partial one (default 2)
+      --node.sequencer.create-batch-block-interval int                 block interval at which to create new batches (default 270)
+      --node.sequencer.dangerous.disable-batch-posting                 disable posting batches to L1 (DANGEROUS)
+      --node.sequencer.dangerous.disable-delayed-message-sequencing    disable sequencing delayed messages (DANGEROUS)
+      --node.sequencer.dangerous.disable-user-message-sequencing       disable sequencing user messages (DANGEROUS)
+      --node.sequencer.dangerous.publish-batches-without-lockout       continue publishing batches (but not sequencing) without the lockout (DANGEROUS)
+      --node.sequencer.dangerous.reorg-out-huge-messages               erase any huge messages in database that cannot be published (DANGEROUS)
+      --node.sequencer.dangerous.rewrite-sequencer-address             reorganize to rewrite the sequencer address if it's not the loaded wallet (DANGEROUS)
+      --node.sequencer.debug-timing                                    log elapsed time throughout core sequencing loop
+      --node.sequencer.delayed-messages-target-delay int               delay before sequencing delayed messages (default 12)
+      --node.sequencer.gas-refunder-address string                     address of the L1 gas refunder contract (optional)
+      --node.sequencer.gas-refunder-extra-gas uint                     amount of extra gas to supply for the gas refunder operation (default 50000)
+      --node.sequencer.l1-posting-strategy.high-gas-delay-blocks int   wait up to this many more blocks when gas costs are high (default 270)
+      --node.sequencer.l1-posting-strategy.high-gas-threshold float    gwei threshold at which to consider gas price high and delay batch posting (default 150)
+      --node.sequencer.lockout.redis string                            sequencer lockout redis instance URL
+      --node.sequencer.lockout.self-rpc-url string                     own RPC URL for other sequencers to failover to
+      --node.sequencer.max-batch-gas-cost int                          max L1 batch gas cost to post before splitting it up into multiple batches (default 2000000)
+      --node.type string                                               forwarder, aggregator, sequencer or validator (default "forwarder")
+      --node.ws.addr string                                            websocket address (default "0.0.0.0")
+      --node.ws.path string                                            websocket path (default "/")
+      --node.ws.port int                                               websocket port (default 8548)
+      --persistent.chain string                                        path that chain specific state is located
+      --persistent.global-config string                                location global configuration is located (default ".arbitrum")
+      --pprof-enable                                                   enable profiling server
+      --rollup.address string                                          layer 2 rollup contract address
+      --rollup.block-search-size int                                   number of blocks to search at a time when looking for validator smart contract wallet creation, 0 to search all blocks at once
+      --rollup.from-block int                                          layer 2 rollup contract creation block
+      --rollup.machine.filename string                                 file to load machine from
+      --validator.contract-wallet-address string                       validator smart contract wallet public address
+      --validator.contract-wallet-address-filename string              json file that validator smart contract wallet address is stored in (default "chainState.json")
+      --validator.dont-challenge                                       don't challenge any other validators' assertions
+      --validator.l1-posting-strategy.high-gas-delay-blocks int        wait up to this many more blocks when gas costs are high (default 270)
+      --validator.l1-posting-strategy.high-gas-threshold float         gwei threshold at which to consider gas price high and delay batch posting (default 150)
+      --validator.only-create-wallet-contract                          only create smart contract wallet contract, then exit
+      --validator.staker-delay duration                                delay between updating stake (default 1m0s)
+      --validator.strategy string                                      strategy for validator to use
+      --validator.utils-address string                                 validator utilities address
+      --validator.wallet-factory-address string                        strategy for validator to use
+      --validator.withdraw-destination string                          the address to withdraw funds to (defaults to the wallet address)
+      --wait-to-catch-up                                               wait to catch up to the chain before opening the RPC
+      --wallet.fireblocks.feed-signer.password string                  password for feed-signer wallet (default "PASSWORD_NOT_SET")
+      --wallet.fireblocks.feed-signer.pathname string                  path to store feed-signer wallet in (default "feed-signer-wallet")
+      --wallet.fireblocks.feed-signer.private-key string               wallet feed-signer private key string
+      --wallet.local.only-create-key                                   create new wallet and exit
+      --wallet.local.password string                                   password for wallet (default "PASSWORD_NOT_SET")
+      --wallet.local.pathname string                                   path to store wallet in (default "rpc-wallet")
+      --wallet.local.private-key string                                wallet private key string
+
+Sample usage:                  arb-node --conf=<filename>
+          or:  forwarder node: arb-node --l1.url=<L1 RPC> [optional arguments]
+
+          or: aggregator node: arb-node --l1.url=<L1 RPC> --node.type=aggregator [optional arguments] [--wallet.password=pass] [--wallet.gasprice==FloatInGwei]
+          or:       sequencer: arb-node --l1.url=<L1 RPC> --node.type=sequencer [optional arguments] [--wallet.password=pass] [--wallet.gasprice==FloatInGwei]
+```

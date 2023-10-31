@@ -1,0 +1,281 @@
+---
+title: "How to customize your Orbit chain's precompiles"
+sidebar_label: "Customize your chain's precompiles"
+description: "Learn how (and when) to customize your Orbit chain's precompiles"
+author: jasonwan
+sidebar_position: 4
+content-type: how-to
+---
+
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
+
+:::caution
+
+The guidance in this document will work only if you use `eth_call` to call the new precompiles. If you're calling from other contracts or adding non-view/pure methods, this approach will break block validation.
+
+To support these additional use-cases, follow the instructions described in [How to customize your Orbit chain's behavior](/launch-orbit-chain/how-tos/customize-stf.mdx).
+
+:::
+
+There are three primary ways to customize your chain's precompiles:
+
+1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
+2.  Create a new precompile.
+3.  Define a new event.
+
+### Prerequisites
+
+Clone the Nitro repository before you begin:
+
+```shell
+git clone --branch @nitroVersionTag@ <https://github.com/OffchainLabs/nitro.git>
+cd nitro
+git submodule update --init --recursive --force
+```
+
+## Option 1: Add new methods to an existing precompile
+
+Using your favorite code editor, open an existing precompile from the [precompiles implementation][precompile_impl_dir_link] directory, `/@nitroPathToPrecompiles@`. We'll use `ArbSys.go` as an example. Open the corresponding Go implementation file (`ArbSys.go`) and add a simple `SayHi` method:
+
+```go
+func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
+	return "hi", nil
+}
+```
+
+Then, open the corresponding Solidity interface file (`ArbSys.sol`) from the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+
+```solidity
+function sayHi() external view returns(string memory);
+```
+
+Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options.md) for Orbit-specific CLI flags.
+
+:::
+
+Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
+
+### Call your function directly using `curl`
+
+```shell
+curl Your_IP_Address:8547\
+-X POST \
+-H "Content-Type: application/json" \
+--data '{"method":"eth_call","params":[{"from":null,"to":"0x0000000000000000000000000000000000000064","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
+```
+
+You should see something like this:
+
+```
+{"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
+```
+
+`0x6869` is the hex-encoded utf8 representation of `hi`, which you'll see embedded in the `result` hex string.
+
+### Call your function using Foundry's `cast call`
+
+```
+cast call 0x0000000000000000000000000000000000000064 "sayHi()(string)”
+```
+
+You should see something like this:
+
+```
+hi
+```
+
+## Option 2: Create a new precompile
+
+First, navigate to the [precompiles implementation][precompile_impl_dir_link] directory, `/@nitroPathToPrecompiles@`, and create a new precompile implementation file called `ArbHi.go`. We'll define a new method, and we'll give it an address:
+
+```go
+package precompiles
+
+// ArbGasInfo provides insight into the cost of using the rollup.
+type ArbHi struct {
+	Address addr // 0x11a, for example
+}
+
+func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+	return "hi", nil
+}
+```
+
+Then, update [precompile.go][precompile_main_file_link] to register the new precompile under the `Precompiles()` method:
+
+```go
+insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
+```
+
+Navigate to the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
+
+```solidity
+pragma solidity >=0.4.21 <0.9.0;
+
+/// @title Say hi.
+/// @notice just for test
+/// This custom contract will set on 0x000000000000000000000000000000000000011a since we set it in precompile.go.
+interface ArbHi {
+    function sayHi() external view returns(string memory);
+}
+```
+
+Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options.md) for Orbit-specific CLI flags.
+
+:::
+
+Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
+
+### Call your function directly using `curl`
+
+```shell
+curl Your_IP_Address:8547 \
+-X POST \
+-H "Content-Type: application/json" \
+--data '{"method":"eth_call","params":[{"from":null,"to":"0x000000000000000000000000000000000000011a","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
+```
+
+You should see something like this:
+
+```
+{"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
+```
+
+### Call your function using Foundry's `cast call`
+
+```
+cast call 0x000000000000000000000000000000000000011a "sayHi()(string)”
+```
+
+You should see something like this:
+
+```
+hi
+```
+
+## Option 3: Define a new event
+
+We'll reuse the `Arbsys` precompile from Option 1 above to demonstrate how to emit a simple `Hi` event from the `SayHi` method in `ArbSys.sol`.
+
+First, go to the [precompiles implementation][precompile_impl_dir_link] directory, find `ArbSys.go`, and edit the `ArbSys` struct:
+
+```go
+// ArbSys provides system-level functionality for interacting with L1 and understanding the call stack.
+type ArbSys struct {
+	Address                 addr // 0x64
+	L2ToL1Tx                func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, []byte) error
+	L2ToL1TxGasCost         func(addr, addr, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
+	SendMerkleUpdate        func(ctx, mech, huge, bytes32, huge) error
+	SendMerkleUpdateGasCost func(huge, bytes32, huge) (uint64, error)
+	InvalidBlockNumberError func(huge, huge) error
+
+	// deprecated event
+	L2ToL1Transaction        func(ctx, mech, addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) error
+	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
+
+	// Add your customize event here:
+	Hi						func(ctx, mech, addr) error
+	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
+	HiGasCost				func(addr) (uint64, error)
+}
+```
+
+Then add the event to the `SayHi` method:
+
+```go
+func (con *ArbSys) SayHi(c ctx, evm mech) (string, error) {
+	err := con.Hi(c, evm, c.caller)
+	return "hi", err
+}
+```
+
+Now navigate to the [precompiles interface][precompile_interface_dir_link] directory, open `Arbsys.sol`, and add the required interface. Ensure that the event name on the interface matches the name of the function you introduced in `ArbSys` struct in the previous step:
+
+```solidity
+event Hi(address caller);
+```
+
+If you want to [index the parameter](https://docs.soliditylang.org/en/latest/contracts.html#events) of the event (if you want to filter by that parameter in the future, for example), just add `indexed` to the Solidity interface:
+
+```solidity
+event Hi(address indexed caller);
+```
+
+Our function now emits an event, which means that when calling it, the state will change and a gas cost will be incurred. So we have to remove the `view` function behavior:
+
+```solidity
+function sayHi() external returns(string memory);
+```
+
+Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
+
+### Send the transaction and get the transaction receipt
+
+To send a transaction to `ArbSys`, we need to include a gas cost, because the function is no longer a view/pure function:
+
+```
+cast send 0x0000000000000000000000000000000000000064 "sayHi()(string)"
+```
+
+Call `eth_getTransactionReceipt` with the returned transaction hash result. You should see something like this:
+
+```
+{"jsonrpc":"2.0","id":1,"result":{"blockHash":"Your_blockHash","blockNumber":"Your_blockNumber","contractAddress":null,"cumulativeGasUsed":"0x680b","effectiveGasPrice":"0x5f5e100","from":"Your_address","gasUsed":"0x680b","gasUsedForL1":"0xe35","l1BlockNumber":"l1_blockNumber","logs":[{"address":"0x0000000000000000000000000000000000000064","topics":["0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa","0x000000000000000000000000{Your_address}"],"data":"0x","blockNumber":"Your_blockNumber","transactionHash":"Your_txHash","transactionIndex":"0x1","blockHash":"Your_blockHash","logIndex":"0x0","removed":false}],"logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000100000000000000040000000000000080004000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000004000000000000200000000000000000000000000000000000000000000000000000000000000000000000000000000000","status":"0x1","to":"0x0000000000000000000000000000000000000064","transactionHash":"Your_txHash","transactionIndex":"0x1","type":"0x2"}}
+```
+
+Note the `logs` field within the transaction receipt:
+
+```
+"logs":[
+         {
+            "address":"0x0000000000000000000000000000000000000064",
+            "topics":[
+               "0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa",
+               "0x000000000000000000000000{Your_address}"
+            ],
+            "data":"0x",
+            "blockNumber":"0x40",
+            "transactionHash":"{Your_txHash}",
+            "transactionIndex":"0x1",
+            "blockHash":"0x0b367d705002b3575db99354a0964c033f929f26f4442ed347e47ae43a8f28e4",
+            "logIndex":"0x0",
+            "removed":false
+         }
+      ]
+```
+
+From the `logs` field, we can see the `topics[0]` is `0xa937..cfa`, which is the event signature of `Hi(address)`. You can verify this using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa) - `topics[1]` is `Your_address`, which is exactly what we defined above!
+
+<!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
+<!--
+Note that nitro-contracts repository is hardcoded because atm we use the "nitro" repository for referencing precompiles for the current released nitro version  (for Arb chains),
+but we use the "nitro-contracts" repo for Orbit chains (next nitro release version will use "nitro-contracts" for all chains though).
+The same goes for the path to precompiles interface.
+We can use the @nitroContractsRepositorySlug@ and @nitroContractsPathToPrecompilesInterface@ variables once we release nitro version 2.1.0 or above.
+-->
+
+[precompile_impl_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/
+[precompile_interface_dir_link]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/
+[precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
