@@ -10,13 +10,22 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-This how-to is intended for users and developers who want to understand how gas is calculated in Arbitrum, and how it can be estimated before submitting transactions. More information about the theory behind these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/arbos/gas.mdx) page.
+This how-to is intended for users and developers interested in understanding how gas operates in Arbitrum, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found in this [Medium article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and the [Gas and Fees](/arbos/gas.mdx) page.
 
-We'll first break down the formula mentioned in the Medium article, moving then to where to get the information of each variable, and finally seeing an example of how to apply the formula in your code as well as other practical ways of estimating gas costs.
+## Skip the formula, focus on practical know-how
 
-However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) that goes through all the calculations explained in this how-to.
+Before diving into the specifics and the formula, if you're looking for a practical way to estimate gas for your transaction, you can rely on the standard gas estimation process. This can be achieved by calling an Arbitrum node's `eth_estimateGas`, which provides a value (gas limit) that should sufficiently cover the entire transaction fee at the specified L2 gas price.
+Multiplying the value obtained from `eth_estimateGas` by the L2 gas price will give you the total amount of Ether required for the transaction to be successful. It's important to note that, for a specific operation, the result of `eth_estimateGas` value may vary over time due to fluctuations in the L1 calldata price, see below to learn why!
+
+Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the L2 gas price, which is available in the third result, `baseFee`.
+
+Note that when working with L1 to L2 messages (also known as [retryable tickets](/arbos/l1-to-l2-messaging.mdx)), you can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a succesful transaction.
 
 ## Breaking down the formula
+
+We'll now break down the formula mentioned in the Medium article, moving then to where to get the information of each variable, and finally seeing an example of how to apply the formula in your code as well as other practical ways of estimating gas costs.
+
+However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) that goes through all the calculations explained in this how-to.
 
 As explained in the Medium article, the transaction fees to pay at any given moment are the result of the following product:
 
@@ -55,7 +64,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We'll use one resource available in Arbitrum: the [NodeInterface](/arbos/gas.mdx#nodeinterfacesol).
+We'll use one resource available in Arbitrum: the [NodeInterface](/for-devs/dev-tools-and-resources/nodeinterface.mdx).
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at @arbOneGasFloorGwei@ gwei on Arbitrum One (@novaGasFloorGwei@ gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
   - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
@@ -142,14 +151,6 @@ const TXFEES = P.mul(G);
 ```
 
 Refer to [our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/gas-estimation) for a working example of this code.
-
-## Other practical ways of estimating gas costs in your code
-
-Instead of going through the formula, we can also use the following methods to easily estimate gas costs:
-
-- We can call `NodeInterface.gasEstimateComponents()` and obtain the first result, `gasEstimate`, to get the gas limit of the transaction. We would then need to multiply that amount by the L2 gas price, which we can get in the third result, `baseFee`.
-- We can call an Arbitrum node’s `eth_estimateGas` to get the gas limit of the transaction. We would then need to multiply that amount by the L2 gas price, which we can get by calling `eth_gasPrice`.
-- When working with L1 to L2 messages (also known as [Retryable tickets](/arbos/l1-to-l2-messaging.mdx)), we can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/nitro/blob/master/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send the transaction.
 
 ## Final note
 

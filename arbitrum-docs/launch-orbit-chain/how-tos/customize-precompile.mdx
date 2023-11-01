@@ -206,13 +206,13 @@ Now navigate to the [precompiles interface][precompile_interface_dir_link] direc
 event Hi(address caller);
 ```
 
-If you want to make the param in event as `index`, just add `index` to the Solidity interface:
+If you want to [index the parameter](https://docs.soliditylang.org/en/latest/contracts.html#events) of the event (if you want to filter by that parameter in the future, for example), just add `indexed` to the Solidity interface:
 
 ```solidity
 event Hi(address indexed caller);
 ```
 
-When an event is emitted, state is changed and a gas cost is incurred, so we should remove the `view` function behavior:
+Our function now emits an event, which means that when calling it, the state will change and a gas cost will be incurred. So we have to remove the `view` function behavior:
 
 ```solidity
 function sayHi() external returns(string memory);
