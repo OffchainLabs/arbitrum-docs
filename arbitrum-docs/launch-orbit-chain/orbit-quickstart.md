@@ -72,6 +72,8 @@ The below table provides a brief description of each of these configuration para
 | **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                             |
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
+| **Native Token**                     | The address of the ERC-20 token on the parent chain that is intended to be used as the native fee token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration).|
+
 
 ## Step 4: Configure your chain's validator(s)
 
