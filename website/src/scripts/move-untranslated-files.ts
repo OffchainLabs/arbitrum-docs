@@ -15,12 +15,12 @@ const moveTranslatedFiles = async () => {
     moveFiles(filePath, filesToMove);
   });
 };
+
 async function getFiles(dir: string) {
   const subdirs = await readdir(dir);
   const files = await Promise.all(
     subdirs.map(async (subdir) => {
       const res = resolve(dir, subdir);
-      //   console.log(res)
       return (await stat(res)).isDirectory() ? getFiles(res) : res;
     }),
   );
