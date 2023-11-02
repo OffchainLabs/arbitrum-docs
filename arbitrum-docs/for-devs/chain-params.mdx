@@ -6,11 +6,68 @@ reader-audience: developers who want to build on Ethereum/Arbitrum
 content-type: overview
 ---
 
-| Param                | Description                                                                                               | Arbitrum One                                                                    | Nova                                                                        | Arb Goerli                                                                      | Arb Sepolia                                                                       |
-| -------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Dispute window       | Time for assertions to get confirmed during which validaors can issue a challenge                      | @arbOneDisputeWindowBlocks@ blocks (~ @arbOneDisputeWindowDays@ days )          | @novaDisputeWindowBlocks@ blocks (~ @novaDisputeWindowDays@ days)           | @goerliDisputeWindowBlocks@ blocks (~ @goerliDisputeWindowMinutes@ minutes)     | @sepoliaDisputeWindowBlocks@ blocks (~ @sepoliaDisputeWindowMinutes@ minutes)     |
-| Base stake           | Amount of stake required for a validator to make an assertion                                             | @arbOneBaesStakeEth@ ETH                                                        | @novaBaesStakeEth@ ETH                                                      | @goerliBaesStakeEth@ Goerli ETH                                                 | @sepoliaBaesStakeEth@ Sepolia ETH                                                 |
-| Force-include period | Period after which a delayed message can be included into the inbox without any action from the Sequencer | @arbOneForceIncludePeriodBlocks@ blocks / @arbOneForceIncludePeriodHours@ hours | @novaForceIncludePeriodBlocks@ blocks / @novaForceIncludePeriodHours@ hours | @goerliForceIncludePeriodBlocks@ blocks / @goerliForceIncludePeriodHours@ hours | @sepoliaForceIncludePeriodBlocks@ blocks / @sepoliaForceIncludePeriodHours@ hours |
-| Gas speed limit      | Target gas/sec, over which the congestion mechanism activates                                             | @arbOneGasSpeedLimitGasPerSec@ gas/sec                                          | @novaGasSpeedLimitGasPerSec@ gas/sec                                        | @goerliGasSpeedLimitGasPerSec@ gas/sec                                          | @sepoliaGasSpeedLimitGasPerSec@ gas/sec                                           |
-| Gas price floor      | Minimum gas price                                                                                         | @arbOneGasFloorGwei@ gwei                                                       | @novaGasFloorGwei@ gwei                                                     | @goerliGasFloorGwei@ gwei                                                       | @sepoliaGasFloorGwei@ gwei                                                        |
-| Block gas limit      | Maximum amount of gas that all the transactions inside a block are allowed to consume                   | @arbOneBlockGasLimit@                                                           | @novaBlockGasLimit@                                                         | @goerliBlockGasLimit@                                                           | @sepoliaBlockGasLimit@                                                            |
+<table>
+  <thead>
+    <tr>
+      <th>Param</th>
+      <th>Description</th>
+      <th>Arbitrum One</th>
+      <th>Nova</th>
+      <th>Arb Goerli</th>
+      <th>Arb Sepolia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Dispute window</td>
+      <td>Time for assertions to get confirmed during which validaors can issue a challenge</td>
+      <td>@arbOneDisputeWindowBlocks@ blocks (~ @arbOneDisputeWindowDays@ days ) </td>
+      <td>@novaDisputeWindowBlocks@ blocks (~ @novaDisputeWindowDays@ days) </td>
+      <td>@goerliDisputeWindowBlocks@ blocks (~ @goerliDisputeWindowMinutes@ minutes) </td>
+      <td>@sepoliaDisputeWindowBlocks@ blocks (~ @sepoliaDisputeWindowMinutes@ minutes) </td>
+    </tr>
+    <tr>
+      <td>Base stake</td>
+      <td>Amount of stake required for a validator to make an assertion</td>
+      <td> @arbOneBaesStakeEth@ ETH </td>
+      <td> @novaBaesStakeEth@ ETH </td>
+      <td>@goerliBaesStakeEth@ Goerli ETH </td>
+      <td>@sepoliaBaesStakeEth@ Sepolia ETH </td>
+    </tr>
+    <tr>
+      <td>Force-include period</td>
+      <td>
+        Period after which a delayed message can be included into the inbox without any action from
+        the Sequencer
+      </td>
+      <td>@arbOneForceIncludePeriodBlocks@ blocks / @arbOneForceIncludePeriodHours@ hours </td>
+      <td>@novaForceIncludePeriodBlocks@ blocks / @novaForceIncludePeriodHours@ hours</td>
+      <td>@goerliForceIncludePeriodBlocks@ blocks / @goerliForceIncludePeriodHours@ hours</td>
+      <td>@sepoliaForceIncludePeriodBlocks@ blocks / @sepoliaForceIncludePeriodHours@ hours</td>
+    </tr>
+    <tr>
+      <td>Gas speed limit</td>
+      <td>Target gas/sec, over which the congestion mechanism activates</td>
+      <td> @arbOneGasSpeedLimitGasPerSec@ gas/sec </td>
+      <td>@novaGasSpeedLimitGasPerSec@ gas/sec </td>
+      <td>@goerliGasSpeedLimitGasPerSec@ gas/sec </td>
+      <td>@sepoliaGasSpeedLimitGasPerSec@ gas/sec </td>
+    </tr>
+    <tr>
+      <td>Gas price floor</td>
+      <td>Minimum gas price</td>
+      <td>@arbOneGasFloorGwei@ gwei </td>
+      <td>@novaGasFloorGwei@ gwei </td>
+      <td>@goerliGasFloorGwei@ gwei </td>
+      <td>@sepoliaGasFloorGwei@ gwei </td>
+    </tr>
+    <tr>
+      <td>Block gas limit</td>
+      <td>Maximum amount of gas that all the transactions inside a block are allowed to consume</td>
+      <td>@arbOneBlockGasLimit@ </td>
+      <td>@novaBlockGasLimit@ </td>
+      <td>@goerliBlockGasLimit@ </td>
+      <td>@sepoliaBlockGasLimit@ </td>
+    </tr>
+  </tbody>
+</table>
