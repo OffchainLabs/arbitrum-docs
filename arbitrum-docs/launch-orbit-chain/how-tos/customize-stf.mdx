@@ -112,7 +112,7 @@ With that, you have now two ways of running your node.
 
 **1. Using the docker-compose file**
 
-This is the recommended way if you are running your orbit chain locally through the provided docker-compose file. In `docker-compose.yml`, modify the docker image used for the nitro container:
+This is the recommended way if you're running your Orbit chain locally through the provided docker-compose file. In `docker-compose.yml`, modify the Docker image used for the Nitro container:
 
 ```
 ...
@@ -122,11 +122,11 @@ nitro:
 ...
 ```
 
-And run `docker compose up` to run all your containers.
+And run `docker compose up` to run all of your containers.
 
-**2. Use `docker run` to run your nitro node only**
+**2. Use `docker run` to run your Nitro node only**
 
-This method will only run the customized nitro node (i.e., it will not run blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
+This method will only run the customized Nitro node (i.e., it will not run Blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
 
 ```shell
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
@@ -174,15 +174,15 @@ Once you have the WASM module root, you can put it on-chain by calling `setWasmM
 The rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the rollup contract.
 
-Once you have set the new WASM module root on-chain, you may then run the new node image. Following a similar process than before, we will first remove the parameter `--node.staker.dangerous.without-block-validator` to enable fraud proofs back.
+Once you have set the new WASM module root on-chain, you can re-enable fraud proofs and run your node.
 
-To do that, open your `nodeConfig.json` file again, and remove the `"dangerous"` section you created before.
+To re-enable fraud proofs, open your `nodeConfig.json` file again, and remove the `"dangerous"` section (containing the `without-block-validator` property) that you previously added.
 
 After that, you'll have, again, two ways of running your node.
 
 **1. Using the docker-compose file**
 
-As mentioned before, this is the recommended way if you are running your orbit chain locally through the provided docker-compose file. In `docker-compose.yml`, modify the docker image used for the nitro container. Notice that we will now use the `custom-nitro-node-dev` you just created.
+As mentioned before, this is the recommended way if you're running your Orbit chain locally through the provided docker-compose file. In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
 
 ```
 ...
@@ -192,11 +192,11 @@ nitro:
 ...
 ```
 
-And run `docker compose up` to run all your containers.
+And run `docker compose up` to run all of your containers.
 
-**2. Use `docker run` to run your nitro node only**
+**2. Use `docker run` to run your Nitro node only**
 
-This method will only run the customized nitro node (i.e., it will not run blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
+This method will only run the customized Nitro node (i.e., it will not run Blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
 
 ```shell
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node-dev --conf.file /home/user/.arbitrum/nodeConfig.json
