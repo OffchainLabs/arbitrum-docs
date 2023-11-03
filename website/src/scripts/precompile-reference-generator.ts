@@ -1,5 +1,8 @@
 import globalVars from '../resources/globalVars.js';
-import precompilesInformation from '../resources/precompilesInformation.js';
+import {
+  precompilesInformation,
+  nodeInterfaceInformation,
+} from '../resources/precompilesInformation.js';
 import fs from 'fs';
 
 type PrecompileMethodInfo = {
@@ -29,12 +32,15 @@ const partialTablesBasePath =
   '../arbitrum-docs/for-devs/dev-tools-and-resources/partials/precompile-tables';
 const interfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/${globalVars.nitroContractsPathToPrecompilesInterface}/`;
 const implementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/${globalVars.nitroPathToPrecompiles}/`;
+const nodeInterfaceInterfaceBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroContractsRepositorySlug}/blob/${globalVars.nitroContractsCommit}/src/node-interface/`;
+const nodeInterfaceImplementationBaseUrl = `https://github.com/OffchainLabs/${globalVars.nitroRepositorySlug}/blob/${globalVars.nitroVersionTag}/nodeInterface/`;
 const defaultDeprecationNotice = `<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>`;
 
 const renderMethodsInTable = (
   interfaceCode: string,
   implementationCode: string,
-  precompileName: string,
+  interfaceUrl: string,
+  implementationUrl: string,
   methodOverrides?: PrecompileMethodOverrides,
 ) => {
   // Initialization of list of methods
@@ -114,10 +120,10 @@ const renderMethodsInTable = (
 
           return `<tr>
             <td>${methodInfo.deprecated ? `⚠️` : ''}<code>${methodInfo.signature}</code></td>
-            <td><a href="${interfaceBaseUrl}${precompileName}.sol#L${
+            <td><a href="${interfaceUrl}#L${
             methodInfo.interfaceLine
           }" target="_blank">Interface</a></td>
-            <td><a href="${implementationBaseUrl}${precompileName}.go#L${
+            <td><a href="${implementationUrl}#L${
             methodInfo.implementationLine
           }" target="_blank">Implementation</a></td>
             <td>${methodInfo.description}</td>
@@ -135,7 +141,8 @@ const renderMethodsInTable = (
 const renderEventsInTable = (
   interfaceCode: string,
   implementationCode: string,
-  precompileName: string,
+  interfaceUrl: string,
+  implementationUrl: string,
   eventOverrides?: PrecompileEventOverrides,
 ) => {
   // Initialization of list of events
@@ -203,8 +210,8 @@ const renderEventsInTable = (
           .map((eventInfo: PrecompileEventInfo) => {
             return `<tr>
               <td><code>${eventInfo.name}</code></td>
-              <td><a href="${interfaceBaseUrl}${precompileName}.sol#L${eventInfo.interfaceLine}" target="_blank">Interface</a></td>
-              <td><a href="${implementationBaseUrl}${precompileName}.go#L${eventInfo.implementationLine}" target="_blank">Implementation</a></td>
+              <td><a href="${interfaceUrl}#L${eventInfo.interfaceLine}" target="_blank">Interface</a></td>
+              <td><a href="${implementationUrl}#L${eventInfo.implementationLine}" target="_blank">Implementation</a></td>
               <td>${eventInfo.description}</td>
             </tr>`;
           })
@@ -239,20 +246,49 @@ const generatePrecompileReferenceTables = async (
   const methodsTable = renderMethodsInTable(
     interfaceCode,
     implementationCode,
-    precompileName,
+    interfaceBaseUrl + precompileName + '.sol',
+    implementationBaseUrl + precompileName + '.go',
     methodOverrides,
   );
   const eventsTable = renderEventsInTable(
     interfaceCode,
     implementationCode,
-    precompileName,
+    interfaceBaseUrl + precompileName + '.sol',
+    implementationBaseUrl + precompileName + '.go',
     eventOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/${precompileName}.md`, methodsTable + eventsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.md`, methodsTable + eventsTable);
 };
 
-const main = async (precompilesInformation) => {
+const generateNodeInterfaceReferenceTables = async (
+  methodOverrides?: PrecompileMethodOverrides,
+) => {
+  const interfaceCodeRawResponse = await fetch(
+    `${nodeInterfaceInterfaceBaseUrl
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('blob/', '')}NodeInterface.sol`,
+  );
+  const interfaceCode = await interfaceCodeRawResponse.text();
+  const implementationCodeRawResponse = await fetch(
+    `${nodeInterfaceImplementationBaseUrl
+      .replace('github.com', 'raw.githubusercontent.com')
+      .replace('blob/', '')}NodeInterface.go`,
+  );
+  const implementationCode = await implementationCodeRawResponse.text();
+
+  const methodsTable = renderMethodsInTable(
+    interfaceCode,
+    implementationCode,
+    nodeInterfaceInterfaceBaseUrl + 'NodeInterface.sol',
+    nodeInterfaceImplementationBaseUrl + 'NodeInterface.go',
+    methodOverrides,
+  );
+
+  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.md`, methodsTable);
+};
+
+const main = async (precompilesInformation, nodeInterfaceInformation) => {
   await Promise.all(
     Object.keys(precompilesInformation).map(async (precompileName) => {
       const methodOverrides = precompilesInformation[precompileName].methodOverrides ?? undefined;
@@ -260,9 +296,10 @@ const main = async (precompilesInformation) => {
       await generatePrecompileReferenceTables(precompileName, methodOverrides, eventOverrides);
     }),
   );
+  await generateNodeInterfaceReferenceTables(nodeInterfaceInformation.methodOverrides ?? undefined);
 };
 
-main(precompilesInformation)
+main(precompilesInformation, nodeInterfaceInformation)
   .then(() => process.exit(0))
   .catch((err) => {
     console.error(err);
