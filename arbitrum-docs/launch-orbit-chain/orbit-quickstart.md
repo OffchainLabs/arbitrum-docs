@@ -22,9 +22,9 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
 - At least 1.5 testnet ETH
 
-## Step 1: Acquire Arbitrum Testnet $ETH
+## Step 1: Acquire Arbitrum Testnet $ETH (and Native token in custom fee token Orbits)
 
-You'll need at least 1.5 testnet $ETH to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
+You'll need at least 1.5 testnet $ETH on the regular Orbit chains and 1.1 $ETH plus 0.4 of your desired native token for Custom Fee Token Orbit chains. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
 
 At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Goerli or Sepolia network to Arbitrum's corresponding L2 testnet:
 
@@ -72,6 +72,8 @@ The below table provides a brief description of each of these configuration para
 | **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                             |
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                      |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later. |
+| **Native Token**                     | The address of the ERC-20 token on the parent chain that is intended to be used as the native fee token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration).|
+
 
 ## Step 4: Configure your chain's validator(s)
 
@@ -205,9 +207,9 @@ Run this command in the root directory of your cloned orbit setup script repo to
 docker-compose logs -f nitro
 ```
 
-### Appendix B: Depositing ETH
+### Appendix B: Depositing ETH/native token
 
-If you need to deposit more ETH into either your validator or batch poster addresses, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the account that will send the ETH, and `<AMOUNT>` with the amount of ETH to send:
+If you need to deposit more ETH (or native tokens) into your Orbit chain account, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the originating account, and `<AMOUNT>` with the amount to send:
 
 Using Arbitrum Goerli:
 
