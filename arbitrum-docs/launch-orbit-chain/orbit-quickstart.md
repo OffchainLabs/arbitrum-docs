@@ -207,7 +207,7 @@ Run this command in the root directory of your cloned orbit setup script repo to
 docker-compose logs -f nitro
 ```
 
-### Appendix B: Depositing ETH/Native token
+### Appendix B: Depositing ETH/native token
 
 If you need to deposit more ETH or native tokens into either your Orbit chain account, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the account that will send the ETH, and `<AMOUNT>` with the amount of ETH or your native token to send:
 
