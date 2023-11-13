@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.1/precompiles/ArbosTest.go#L16"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbosTest.go#L16"
           target="_blank"
         >
           Implementation
