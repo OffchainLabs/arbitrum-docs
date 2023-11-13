@@ -50,10 +50,10 @@ The main requirement for custom native fee tokens is that they are natively depl
 
 There are other important considerations to keep in mind when deciding to use a custom native fee token. Restrictions on the ERC-20 token include: 
 * In this version, only tokens with **18** decimals are permitted to be the native token.
-* The token can't be rebasing or have a transfer fee
-* The token must only be transferrable via a call to the token address itself
-* The token must only be able to set allowance via a call to the token address itself
-* The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert
+* The token can't be rebasing or have a transfer fee.
+* The token must only be transferrable via a call to the token address itself.
+* The token must only be able to set allowance via a call to the token address itself.
+* The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
 
 It is worth reiterating that currently this feature is only supported on **Orbit AnyTrust chains**. Additionally, using a native fee token other than ETH adds additional overhead when it comes to ensuring chains are funded properly when posting data to their parent chain.
 
