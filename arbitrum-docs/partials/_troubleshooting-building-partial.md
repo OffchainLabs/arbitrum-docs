@@ -203,3 +203,54 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 
 
+### How can I find the L2 block(s) that corresponds to a given L1 block? {#how-can-i-find-the-l2-blocks-that-corresponds-to-a-given-l1-block}
+<p>First of all, you should be familiar with how block numbers behave on Arbitrum. You can find information about it in <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time">Block numbers and time</a>.</p>
+
+<p>When you query an RPC node for a transaction receipt or a block information, you obtain as part of the result the property <code>l1BlockNumber</code>, which is the L1 block number that the sequencer viewed when it processed the transaction.</p>
+
+<p>With that, although it might be computationally complex, you can binary search the L1 block number you are looking for, and get all L2 blocks that have that <code>l1BlockNumber</code>.</p>
+
+<p>If you want a more specific result, you can perform the same operation with the timestamp from the L1 block, instead of the actual block number.</p>
+
+
+
+### Why do some old transactions have extremely high gas prices when querying them? {#why-do-some-old-transactions-have-extremely-high-gas-prices-when-querying-them}
+<p>When Arbitrum One was running under the Arbitrum Classic stack (before Nitro), the gas price was an unbounded bid, so when requesting those transactions via RPC, you may obtain a very high amount in the <code>gasPrice</code> property.</p>
+
+<p>Instead of that, it is recommended to look at the <code>effectiveGasPrice</code> property from the transaction receipt.</p>
+
+<p></p>
+
+
+
+### What is the WASM module root? {#what-is-the-wasm-module-root}
+<p>The WASM module root is a 32 byte hash, which is a merkelization of the Go replay binary and its dependencies.</p>
+
+<p>The replay binary is much too large to post on-chain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.</p>
+
+<p>You can find more information in <a href="https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-stf#step-4-enable-fraud-proofs">How to customize your Orbit chain's behavior</a>.</p>
+
+<p></p>
+
+
+
+### Why do I get a "gas required exceeds allowance" when trying to estimate the gas costs of a request? {#why-do-i-get-a-gas-required-exceeds-allowance-when-trying-to-estimate-the-gas-costs-of-a-request}
+<p>During an <code>eth_estimateGas</code> call the actual request will be simulated on the node, so if the transaction reverts or if there aren't enough funds in the wallet that's making the call (usually the <code>from</code> parameter), the eth_estimateGas request will return the error <code>gas required exceeds allowance</code>.</p>
+
+<p>Make sure you have enough funds in your wallet, and the gas fields of the request (if you're using them) are correctly set.</p>
+
+
+
+### How can I verify that an L2 block has been processed as part of a specific RBlock? {#how-can-i-verify-that-an-l2-block-has-been-processed-as-part-of-a-specific-rblock}
+<p>If you want to verify that the latest confirmed (or created) assertion has processed a specific L2 block, you can follow these steps:</p>
+
+<ol><li>From the rollup contract, obtain the latest confirmed (or created) Rblock through the function <code>latestConfirmed</code> (or <code>latestNodeCreated</code>). In this context, we refer to RBlocks as "nodes".</li>
+<li>Obtain the node information through <code>getNode</code></li>
+<li>Find the <code>NodeCreated</code> event that was emitted when that node was created.</li>
+<li>In that NodeCreated event, there's an <code>assertion</code> property that contains the state of the chain before processing the specified blocks, and after processing them. Get the <code>afterState.globalState</code> property</li>
+<li>That value contains a bytes32Vals array with the latest L2 block hash processed in the first element.</li>
+</ol>
+<p>You can find an example script in our <a href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l2-block-verification-in-assertion">arbitrum-tutorials</a> repository.</p>
+
+
+

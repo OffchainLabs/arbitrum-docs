@@ -96,3 +96,12 @@
 
 
 
+### How can I migrate the date of one synced node to a new one? {#how-can-i-migrate-the-date-of-one-synced-node-to-a-new-one}
+<p>From a fully synced node, you can copy its database (the <code>.arbitrum</code> directory in a default setup) to the same database folder of the new node, and it will start from the same state.</p>
+
+<p>Keep in mind that this must be done after a clean shutdown, while the node is not running.</p>
+
+<p></p>
+
+
+

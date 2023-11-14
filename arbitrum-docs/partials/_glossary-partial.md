@@ -226,7 +226,7 @@ If you see any Smol's with giga brains, swole arms or hear the sound of "EEEE" i
 <p>An token contract on an Arbitrum chain deployed via the <a href="/intro/glossary#standarderc20-gateway">StandardERC20 gateway</a>; offers basic ERC20 functionality in addition to deposit / withdrawal affordances.</p>
 
 ### StandardERC20 gateway {#standarderc20-gateway}
-<p><a href="/intro/glossary#token-gateway">Token Gateway</a> via which any underlying chain's ERC20 token can permissionlessly bridge; the StandrardERC20 gateway contracts deploy a <a href="/intro/glossary#standard-arbtoken">Standard Arb-Token</a> on the <a href="/intro/glossary#child-chain">Child chain</a>   for each bridged token.</p>
+<p><a href="/intro/glossary#token-gateway">Token Gateway</a> via which any underlying chain's ERC20 token can permissionlessly bridge; the StandardERC20 gateway contracts deploy a <a href="/intro/glossary#standard-arbtoken">Standard Arb-Token</a> on the <a href="/intro/glossary#child-chain">Child chain</a>   for each bridged token.</p>
 
 ### Stylus {#stylus}
 <p>Upgrade to the <a href="/intro/glossary#arbitrum-nitro">Arbitrum Nitro</a> virtual machine that allows smart contract support for languages like Rust and C++ by taking advantage of Nitro's use of WASM. Currently on testnet (<a href="https://docs.arbitrum.io/stylus/stylus-gentle-introduction">read more</a>).</p>
