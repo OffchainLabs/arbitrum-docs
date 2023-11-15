@@ -283,7 +283,7 @@ func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
 	return evm.StateDB.GetBalance(account), nil
 }
 ```
-The purpose of this method is to obtain the balance of an address. At the same time, according to the definition in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code gas usage of obtaining the address balance is 700 gas, so before returning Before the result, the function consumed 700 gas by calling `c.Burn(int64)` (the return value of `params.BalanceGasEIP1884` is 700).
+The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
 
 To customize the gas cost, let's implement an alternative to `GetBalance`, called `GetBalanceCustom`:
 
