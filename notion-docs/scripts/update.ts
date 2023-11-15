@@ -1,27 +1,40 @@
 import { Client } from '@notionhq/client'
 import {
+  Definition,
+  FAQ,
+  RenderedKnowledgeItem,
+  renderKnowledgeItem,
+  escapeForJSON,
   lookupProject,
   lookupGlossaryTerms,
   lookupFAQs,
   handleRenderError,
   renderGlossary,
-  renderSimpleFAQs,
   Record,
   renderGlossaryJSON,
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
 } from '@offchainlabs/notion-docs-generator'
-
 import fs from 'fs'
-
 import dotenv from 'dotenv'
 dotenv.config()
 
+// Types
+type CMSContents = {
+  glossaryTerms: Definition[]
+  getStartedFAQs: RenderedKnowledgeItem[]
+  nodeRunningFAQs: RenderedKnowledgeItem[]
+  buildingFAQs: RenderedKnowledgeItem[]
+  bridgingFAQs: RenderedKnowledgeItem[]
+}
+
+// Notion client
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 })
 
+// Helper functions
 export function recordValidity(record: Record): LinkValidity {
   if (record.status != '4 - Continuously publishing') {
     return { reason: 'page not yet marked as ready' }
@@ -35,15 +48,14 @@ const isValid = (item: KnowledgeItem) => {
   return recordValidity(item) === 'Valid'
 }
 
-async function generateFiles() {
-  const linkableTerms: LinkableTerms = {}
-
+// Content getter
+const getContentFromCMS = async (): Promise<CMSContents> => {
   const devDocsV2Project = await lookupProject(
     notion,
     'Arbitrum developer docs portal v2.0'
   )
 
-  const _definitions = await lookupGlossaryTerms(notion, {
+  const glossaryTerms = await lookupGlossaryTerms(notion, {
     filter: {
       property: 'Project(s)',
       relation: {
@@ -51,9 +63,8 @@ async function generateFiles() {
       },
     },
   })
-  const validDefs = _definitions.filter(isValid)
 
-  const getStartedFAQ = await lookupFAQs(notion, {
+  const getStartedFAQs = await lookupFAQs(notion, {
     filter: {
       and: [
         {
@@ -78,7 +89,7 @@ async function generateFiles() {
     ],
   })
 
-  const nodeFAQ = await lookupFAQs(notion, {
+  const nodeRunningFAQs = await lookupFAQs(notion, {
     filter: {
       and: [
         {
@@ -103,7 +114,7 @@ async function generateFiles() {
     ],
   })
 
-  const buildFAQ = await lookupFAQs(notion, {
+  const buildingFAQs = await lookupFAQs(notion, {
     filter: {
       and: [
         {
@@ -128,7 +139,7 @@ async function generateFiles() {
     ],
   })
 
-  const bridgeFAQ = await lookupFAQs(notion, {
+  const bridgingFAQs = await lookupFAQs(notion, {
     filter: {
       and: [
         {
@@ -153,6 +164,43 @@ async function generateFiles() {
     ],
   })
 
+  return {
+    glossaryTerms,
+    getStartedFAQs: getStartedFAQs
+      .filter(isValid)
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+    nodeRunningFAQs: nodeRunningFAQs
+      .filter(isValid)
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+    buildingFAQs: buildingFAQs
+      .filter(isValid)
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+    bridgingFAQs: bridgingFAQs
+      .filter(isValid)
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+  }
+}
+
+// Renderer for FAQs structured data in JSON
+const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
+  const printItem = (faq: RenderedKnowledgeItem) => {
+    const faqQuestion = escapeForJSON(faq.title)
+    const faqAnswer = escapeForJSON(faq.text)
+    const faqKey = escapeForJSON(faq.key)
+    return `{"question": "${faqQuestion}","answer": "${faqAnswer}","key": "${faqKey}"}`
+  }
+
+  return '[\n' + faqs.map(printItem).join(',\n') + '\n]'
+}
+
+async function generateFiles() {
+  const linkableTerms: LinkableTerms = {}
+
+  // Getting content from the CMS
+  const cmsContents = await getContentFromCMS()
+
+  // Glossary
+  // --------
   const addItems = (items: KnowledgeItem[], page: string) => {
     for (const item of items) {
       linkableTerms[item.pageId] = {
@@ -164,33 +212,40 @@ async function generateFiles() {
       }
     }
   }
-  console.log('Rendering contents')
 
-  addItems(validDefs, '/intro/glossary')
-  const glossaryJSON = renderGlossaryJSON(validDefs, linkableTerms)
+  const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
+  addItems(validGlossaryTerms, '/intro/glossary')
+  const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
   fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
-
-  const definitionsHTML = `\n\n${renderGlossary(validDefs, linkableTerms)}\n`
+  const definitionsHTML = `\n\n${renderGlossary(
+    validGlossaryTerms,
+    linkableTerms
+  )}\n`
   fs.writeFileSync(
     '../arbitrum-docs/partials/_glossary-partial.md',
     definitionsHTML
   )
 
+  // FAQs
+  // ----
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-users-partial.md',
-    renderSimpleFAQs(getStartedFAQ.filter(isValid), linkableTerms)
+    '../website/static/get-started-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
   )
+
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-nodes-partial.md',
-    renderSimpleFAQs(nodeFAQ.filter(isValid), linkableTerms)
+    '../website/static/building-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
+
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-building-partial.md',
-    renderSimpleFAQs(buildFAQ.filter(isValid), linkableTerms)
+    '../website/static/node-running-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
   )
+
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-bridging-partial.md',
-    renderSimpleFAQs(bridgeFAQ.filter(isValid), linkableTerms)
+    '../website/static/bridging-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
   )
 }
 

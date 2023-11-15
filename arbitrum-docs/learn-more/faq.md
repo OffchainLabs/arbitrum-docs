@@ -6,6 +6,6 @@ reader_audience: users who want to use, or are using, Arbitrum
 content-type: faq
 ---
 
-import FaqPartial from '../partials/_troubleshooting-users-partial.md';
+import FAQStructuredData from '@site/src/components/FAQStructuredData';
 
-<FaqPartial />
+<FAQStructuredData faqsId="get-started" />

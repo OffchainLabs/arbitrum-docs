@@ -6,6 +6,6 @@ reader_audience: developers who want to build on Ethereum/Arbitrum
 content-type: faq
 ---
 
-import FaqPartial from '../partials/_troubleshooting-building-partial.md';
+import FAQStructuredData from '@site/src/components/FAQStructuredData';
 
-<FaqPartial />
+<FAQStructuredData faqsId="building" />
