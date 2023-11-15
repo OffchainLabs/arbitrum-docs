@@ -269,7 +269,9 @@ Note the `logs` field within the transaction receipt:
 
 ## Option 4: Customize gas usage for a specific method
 
-In the above, we introduced how to define a new precompile function. However, if it is simply defined without performing gas collection within the function, it will lead to potential DOS attacks. For this reason, we will continue to introduce how to perform gas collection in precompile. (event does not need to customize the gas cost, because the program will calculate the gas cost of the event when it starts).
+The above instructions demonstrate how you can define a new precompile function. However, if this new function is simply defined without performing gas collection within the function, your precompile will be vulnerable to Denial-of-Service (DOS) attacks. These attacks exploit the function by flooding it with excessive requests without bearing the computational cost.
+
+To deter this type of attack, you can implement a gas collection mechanism within your precompile. The event itself doesn't need to specify the gas cost; the program will calculate the gas cost when the event's execution is initially triggered.
 
 At the same time, you can also customize a calculation library with lower gas usage than conventional solidity chain contracts based on this document, so that users can use it as a third-party library call with low gas usage.
 
