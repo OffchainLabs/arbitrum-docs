@@ -384,7 +384,9 @@ Result 2:
    }
 }
 ```
-We can get that the gas used for execution of tx1 is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas used for tx2 is `22538` (for the gas model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas)), subtract the two, and the result is `400`, which is exactly what we expected.
+Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
+
+To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas). 
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
