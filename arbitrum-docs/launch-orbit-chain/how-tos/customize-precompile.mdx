@@ -273,7 +273,6 @@ In the above, we introduced how to define a new precompile function. However, if
 
 At the same time, you can also customize a calculation library with lower gas usage than conventional solidity chain contracts based on this document, so that users can use it as a third-party library call with low gas usage.
 
-In procompile, we perform gas deduction by calling the `Burn` method of parameter` ctx `in the precompile function, such as the `GetBalance` method in ArbInfo.go:
 
 ```
 // GetBalance retrieves an account's balance
