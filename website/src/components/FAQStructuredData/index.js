@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { useLocation } from '@docusaurus/router';
 
 /**
  * A component that renders a FAQ structured data and markdown entries
@@ -13,8 +14,27 @@ import React from 'react';
  * @returns
  */
 export default function FAQStructuredData(props) {
+  // This component is rendered asynchronously
+  // If the accessed URL for a page that calls this component contains an anchor, React won't be able to
+  // scroll into the right element, because it doesn't exist at the beginning.
+  // We use this piece of code to trigger the scrolling action when the component is fully loaded
+  const scrolledRef = React.useRef(false);
+  const { hash } = useLocation();
+  React.useEffect(() => {
+    if (hash && !scrolledRef.current) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        window.scrollTo({top: element.getBoundingClientRect().top + window.scrollY - 20});
+        scrolledRef.current = true;
+      }
+    }
+  });
+
+  // Loading the FAQs
   const faqs = require(`./../../../static/${props.faqsId}-faqs.json`);
 
+  // Creating the Structured Data object
   /** @type {FAQStructuredData} */
   const faqStructuredData = {
     '@context': 'https://schema.org',
@@ -28,7 +48,8 @@ export default function FAQStructuredData(props) {
       },
     })),
   };
-  console.log(faqStructuredData);
+
+  // Rendering the ld+json script and the actual FAQ in HTML
   return (
     <>
       <script
@@ -37,7 +58,7 @@ export default function FAQStructuredData(props) {
       />
 
       {faqs.map((faq) => (
-        <div className='faq-question'>
+        <div className='faq-question' key={faq.key} id={faq.key}>
           <h3>
             {faq.question}
             <a className="hash-link" href={'#' + faq.key}></a>

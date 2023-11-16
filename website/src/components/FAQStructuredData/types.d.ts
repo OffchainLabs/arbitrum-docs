@@ -5,7 +5,7 @@ export interface FAQ {
 }
 
 export interface FAQStructuredDataProps {
-  faqs: FAQ[];
+  faqsId: string;
 }
 
 export interface FAQStructuredData {
