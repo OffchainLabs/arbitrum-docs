@@ -25,7 +25,7 @@ export default function FAQStructuredData(props) {
       const id = hash.replace('#', '');
       const element = document.getElementById(id);
       if (element) {
-        window.scrollTo({top: element.getBoundingClientRect().top + window.scrollY - 20});
+        window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY - 20 });
         scrolledRef.current = true;
       }
     }
@@ -58,7 +58,7 @@ export default function FAQStructuredData(props) {
       />
 
       {faqs.map((faq) => (
-        <div className='faq-question' key={faq.key} id={faq.key}>
+        <div className="faq-question" key={faq.key} id={faq.key}>
           <h3>
             {faq.question}
             <a className="hash-link" href={'#' + faq.key}></a>

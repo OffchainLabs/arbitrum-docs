@@ -26,6 +26,7 @@ type CMSContents = {
   getStartedFAQs: RenderedKnowledgeItem[]
   nodeRunningFAQs: RenderedKnowledgeItem[]
   buildingFAQs: RenderedKnowledgeItem[]
+  buildingStylusFAQs: RenderedKnowledgeItem[]
   bridgingFAQs: RenderedKnowledgeItem[]
 }
 
@@ -139,6 +140,31 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
     ],
   })
 
+  const buildingStylusFAQs = await lookupFAQs(notion, {
+    filter: {
+      and: [
+        {
+          property: 'Target document slugs',
+          multi_select: {
+            contains: 'troubleshooting-building-stylus',
+          },
+        },
+        {
+          property: 'Publishable?',
+          select: {
+            equals: 'Publishable',
+          },
+        },
+      ],
+    },
+    sorts: [
+      {
+        property: 'FAQ order index',
+        direction: 'ascending',
+      },
+    ],
+  })
+
   const bridgingFAQs = await lookupFAQs(notion, {
     filter: {
       and: [
@@ -173,6 +199,9 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
       .filter(isValid)
       .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
     buildingFAQs: buildingFAQs
+      .filter(isValid)
+      .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
+    buildingStylusFAQs: buildingStylusFAQs
       .filter(isValid)
       .map((faq: FAQ) => renderKnowledgeItem(faq, {})),
     bridgingFAQs: bridgingFAQs
@@ -234,13 +263,18 @@ async function generateFiles() {
   )
 
   fs.writeFileSync(
+    '../website/static/node-running-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
+  )
+
+  fs.writeFileSync(
     '../website/static/building-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
 
   fs.writeFileSync(
-    '../website/static/node-running-faqs.json',
-    renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
+    '../website/static/building-stylus-faqs.json',
+    renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
   )
 
   fs.writeFileSync(
