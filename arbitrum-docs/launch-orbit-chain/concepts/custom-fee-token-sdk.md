@@ -12,14 +12,11 @@ Arbitrum SDK is a TypeScript library for client-side interactions with Arbitrum.
 
 We've developed different versions of the SDK for different use cases. Orbit functionality can be found under the `orbit` and `orbit-custom-fee-token` tags of the [Arbitrum SDK package](https://www.npmjs.com/package/@arbitrum/sdk?activeTab=versions).
 
-
-
 import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
-### Custom fee token SDK 
-
+### Custom fee token SDK
 
 The following custom fee token APIs are available under the `orbit-custom-fee-token` SDK tag:
 
@@ -29,4 +26,3 @@ The following custom fee token APIs are available under the `orbit-custom-fee-to
 If you're using custom fee tokens, you'll need to use each of these; on custom fee token chains, token approval is required when transferring ERC20 tokens (while Orbit chains that use ETH do not have this requirement).
 
 Note that everything else is under the hood, and the custom fee token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
-
