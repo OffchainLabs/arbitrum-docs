@@ -6,7 +6,6 @@ const stat = promisify(fs.stat);
 
 const moveTranslatedFiles = async () => {
   const i18nRoot = './i18n/';
-
   fs.readdirSync(i18nRoot).forEach(async (lang) => {
     const filePath = i18nRoot + lang + '/';
     const translatedFiles = await getTranslatedFiles(filePath);
@@ -43,7 +42,6 @@ const putTogether = async (translateFiles: string[], untranslatedFiles: string[]
   const unTranslatedRoot = resolve('../arbitrum-docs');
   translateFiles.forEach((file) => {
     const key = file.replace(translatedRoot, '');
-    console.log(key);
     outputFilesMap.set(key, file);
   });
   untranslatedFiles.forEach((file) => {
