@@ -12,7 +12,7 @@
 sdk-docs
 
 # Misc
-.DS_Storexw
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local
