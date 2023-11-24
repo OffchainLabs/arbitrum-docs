@@ -10,7 +10,7 @@ const moveTranslatedFiles = async () => {
     const filePath = i18nRoot + lang + '/';
     const translatedFiles = await getTranslatedFiles(filePath);
     const untranslatedFiles = await getUnTranslatedFiles();
-    const filesToMove = await putTogether(translatedFiles, untranslatedFiles);
+    const filesToMove = await putTogether(translatedFiles, untranslatedFiles, lang);
     moveFiles(filePath, filesToMove);
   });
 };
@@ -36,9 +36,9 @@ const getUnTranslatedFiles = async () => {
   return await getFiles(docsPath);
 };
 
-const putTogether = async (translateFiles: string[], untranslatedFiles: string[]) => {
+const putTogether = async (translateFiles: string[], untranslatedFiles: string[], language: string) => {
   const outputFilesMap = new Map<string, string>();
-  const translatedRoot = resolve('./i18n/zh/docusaurus-plugin-content-docs/translated');
+  const translatedRoot = resolve('./i18n/' + language +'/docusaurus-plugin-content-docs/translated');
   const unTranslatedRoot = resolve('../arbitrum-docs');
   translateFiles.forEach((file) => {
     const key = file.replace(translatedRoot, '');
