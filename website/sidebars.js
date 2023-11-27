@@ -155,6 +155,11 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'stylus/troubleshooting-building-stylus',
+        },
       ],
     },
     {
