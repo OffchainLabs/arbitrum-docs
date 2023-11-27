@@ -273,7 +273,7 @@ The above instructions demonstrate how you can define a new precompile function.
 
 To deter this type of attack, you can implement a gas collection mechanism within your precompile. The event itself doesn't need to specify the gas cost; the program will calculate the gas cost when the event's execution is initially triggered.
 
-At the same time, you can also customize a calculation library with lower gas usage than conventional solidity chain contracts based on this document, so that users can use it as a third-party library call with low gas usage.
+In addition to introducing gas costs where they don't exist, you can also customize gas costs where they're already being incurred. To demonstrate, consider the `GetBalance` method in `ArbInfo.go`:
 
 
 ```
