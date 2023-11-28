@@ -40,7 +40,7 @@
 <p>The first <a href="/intro/glossary#arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> running on Ethereum mainnet. Introduces cheaper transactions; great for gaming and social use-cases. Implements the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a>, not the <a href="/intro/glossary#arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> protocol. Governed by the <a href="https://docs.arbitrum.foundation/gentle-intro-dao-governance">Arbitrum DAO</a>.</p>
 
 ### Arbitrum One {#arbitrum-one}
-<p>The first <a href="/intro/glossary#arbitrum-rollup-chain">Arbitrum Rollup Chain</a> running on Ethereum mainnet. Great for decentralized finance and other use-cases that demand strong security guaruntees. Governed by the <a href="https://docs.arbitrum.foundation/gentle-intro-dao-governance">Arbitrum DAO</a>.</p>
+<p>The first <a href="/intro/glossary#arbitrum-rollup-chain">Arbitrum Rollup Chain</a> running on Ethereum mainnet. Great for decentralized finance and other use-cases that demand strong security guarantees. Governed by the <a href="https://docs.arbitrum.foundation/gentle-intro-dao-governance">Arbitrum DAO</a>.</p>
 
 ### Arbitrum Orbit {#arbitrum-orbit}
 <p>Arbitrum Orbit refers to the ability for anyone to permissionlessly deploy <a href="/intro/glossary#layer-3-l3">Layer 3 (L3)</a> chains on top of Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chains.</p>
@@ -78,7 +78,7 @@
 <a href="https://cap.io/">CAP</a> is a decentralized trading protocol. It's designed to be fast and easy to use by anyone.</p>
 
 ### Chain Owner {#chain-owner}
-<p>An entity (i.e., a smart contract) with affordance to carry out critical upgrades to an Arbitrum chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding & removing other chain owners.</p>
+<p>An entity (i.e., a smart contract) with affordance to carry out critical upgrades to an Arbitrum chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding and removing other chain owners.</p>
 
 ### Chain state {#chain-state}
 <p>A particular point in the history of an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>. A chain's state is determined by applying Arbitrum state-transition function to sequence of transactions (i.e., the chain's history).</p>
@@ -128,7 +128,7 @@
 <p>A contract that holds <a href="/intro/glossary#parent-chain">Parent chain</a> initiated messages to be eventually included in the <a href="/intro/glossary#fast-inbox">Fast Inbox</a>. Inclusion of messages doesn't depend on the <a href="/intro/glossary#sequencer">Sequencer</a>.</p>
 
 ### Dev-Tools Dashboard {#devtools-dashboard}
-<p>Web application built and maintained by <a href="/intro/glossary#offchain-labs">Offchain Labs</a> for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of <a href="/intro/glossary#crosschain-message">Cross-chain message</a>s; visit it <a href="https://retryable-tx-panel-nitro.arbitrum.io/">here</a>.   </p>
+<p>Web application built and maintained by <a href="/intro/glossary#offchain-labs">Offchain Labs</a> for developers and users to debug Arbitrum transactions; i.e., executing or checking the status of <a href="/intro/glossary#crosschain-message">Cross-chain message</a>s; visit it <a href="https://retryable-dashboard.arbitrum.io/">here</a>.   </p>
 
 ### Dissection {#dissection}
 <p>A step in the <a href="/intro/glossary#challenge-protocol">Challenge protocol</a>  in which two challenging parties interactively narrow down their disagreement until they reach a <a href="/intro/glossary#one-step-proof">One Step Proof</a>.</p>
@@ -198,7 +198,7 @@ The iconic blueberries come from the community of the decentralized exchange, GM
 <p>An Arbitrum chain whose core contract reside on an  Arbitrum <a href="/intro/glossary#layer-2-l2">Layer 2 (L2)</a> chain.</p>
 
 ### Native Fee Token {#native-fee-token}
-<p>An ERC20 token used as the native currency for gas fees on an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a> (i.e., as opposed to using Ether). <a href="/intro/glossary#arbitrum-orbit">Arbitrum Orbit</a> introduced the option for chains to the use native fee tokens. </p>
+<p>An ERC-20 token used as the native currency for gas fees on an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a> (i.e., as opposed to using Ether). <a href="/intro/glossary#arbitrum-orbit">Arbitrum Orbit</a> introduced the option for chains to use native fee tokens. </p>
 
 ### Offchain Labs {#offchain-labs}
 <p>The initial builders Arbitrum; current contributors to the Arbitrum ecosystem and service providers to the <a href="https://docs.arbitrum.foundation/gentle-intro-dao-governance">Arbitrum DAO</a>. Offchain also runs and maintains the <a href="/intro/glossary#sequencer">Sequencer</a>s for <a href="/intro/glossary#arbitrum-one">Arbitrum One</a> and <a href="/intro/glossary#arbitrum-nova">Arbitrum Nova</a>.  </p>
@@ -311,9 +311,6 @@ This is achieved through the use of cryptographic techniques and decentralized c
 <p></p>
 
 
-
-### Underlying Chain {#underlying-chain}
-<p>Synonymous with <a href="/intro/glossary#parent-chain">Parent chain</a>.</p>
 
 ### Underlying Chain {#underlying-chain}
 <p>Synonymous with <a href="/intro/glossary#parent-chain">Parent chain</a>.</p>
