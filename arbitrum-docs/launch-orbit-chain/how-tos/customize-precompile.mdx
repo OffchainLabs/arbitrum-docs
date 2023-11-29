@@ -275,7 +275,6 @@ To deter this type of attack, you can implement a gas collection mechanism withi
 
 In addition to introducing gas costs where they don't exist, you can also customize gas costs where they're already being incurred. To demonstrate, consider the `GetBalance` method in `ArbInfo.go`:
 
-
 ```
 // GetBalance retrieves an account's balance
 func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
@@ -285,6 +284,7 @@ func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
 	return evm.StateDB.GetBalance(account), nil
 }
 ```
+
 The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
 
 To customize the gas cost, let's implement an alternative to `GetBalance`, called `GetBalanceCustom`:
@@ -320,10 +320,13 @@ Note that the instructions provided in [How to run a full node](/node-running/ho
 
 In order to obtain the gas used, we can use the `eth_sendRawTransaction` RPC method to test execution on the chain.
 First, call:
+
 ```
 cast send 0x0000000000000000000000000000000000000065 "GetBalance()({Any_Address})"
 ```
+
 Then, call:
+
 ```
 cast send 0x0000000000000000000000000000000000000065 "GetBalanceCustom()({Any_Address})"
 ```
@@ -331,6 +334,7 @@ cast send 0x0000000000000000000000000000000000000065 "GetBalanceCustom()({Any_Ad
 The two responses will look like this, respectively:
 
 Result 1:
+
 ```
 {
    "jsonrpc":"2.0",
@@ -346,7 +350,7 @@ Result 1:
       "gasUsedForL1":"0x9f5",
       "l1BlockNumber":"0x979a02",
       "logs":[
-         
+
       ],
       "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "status":"0x1",
@@ -357,7 +361,9 @@ Result 1:
    }
 }
 ```
+
 Result 2:
+
 ```
 {
    "jsonrpc":"2.0",
@@ -373,7 +379,7 @@ Result 2:
       "gasUsedForL1":"0x9f5",
       "l1BlockNumber":"0x979a08",
       "logs":[
-         
+
       ],
       "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "status":"0x1",
@@ -384,9 +390,10 @@ Result 2:
    }
 }
 ```
+
 Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
-To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas). 
+To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas).
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
