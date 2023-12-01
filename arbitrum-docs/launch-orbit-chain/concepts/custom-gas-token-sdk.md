@@ -18,7 +18,7 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 ### Custom gas token SDK
 
-The following custom gas token APIs are available under the `orbit-custom--token` SDK tag:
+The following custom gas token APIs are available under the `orbit-custom-fee-token` SDK tag:
 
 - `getApproveFeeTokenRequest` and `approveFeeToken` on [EthBridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-a977cd005aca51be6f05bc7e1c7c1bf6d734b62b2c45c84b05e2eb0c3c3c6fff)
 - `getApproveFeeTokenRequest` and `approveFeeToken` on [Erc20Bridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-b1894b842df6f4794b6623dc57e9e14c2519fbe5fa5c5dd63403f1185f305cbb)
