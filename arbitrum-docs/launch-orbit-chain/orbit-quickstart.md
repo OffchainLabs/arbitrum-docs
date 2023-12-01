@@ -20,7 +20,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 - [Docker](https://docs.docker.com/get-docker/)
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
-- At least 1 testnet ETH (for custom fee token chains 0.6 ETH and 0.4 native tokens)
+- At least 1 testnet ETH (for custom gas token chains, 0.6 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and Native token in custom fee token Orbits)
 
