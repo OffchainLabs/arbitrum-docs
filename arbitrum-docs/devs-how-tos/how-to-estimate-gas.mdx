@@ -19,7 +19,7 @@ Multiplying the value obtained from `eth_estimateGas` by the L2 gas price will g
 
 Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the L2 gas price, which is available in the third result, `baseFee`.
 
-Note that when working with L1 to L2 messages (also known as [retryable tickets](/arbos/l1-to-l2-messaging.mdx)), you can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a  successful transaction.
+Note that when working with L1 to L2 messages (also known as [retryable tickets](/arbos/l1-to-l2-messaging.mdx)), you can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
 
 ## Breaking down the formula
 
