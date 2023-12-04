@@ -3,12 +3,13 @@ title: 'クイックスタート: Stylusを使用してRustでスマートコン
 sidebar_label: 'クイックスタート (Rust, Stylus)'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512
+translator: Ying, Kakizawa
 sme: chrisco512
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner.md';
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
