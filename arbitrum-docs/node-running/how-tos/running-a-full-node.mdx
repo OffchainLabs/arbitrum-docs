@@ -48,7 +48,7 @@ The minimum storage requirements will change over time as the Nitro chain grows.
   - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the L2 chain from its name (options are: `arb1`, `nova`, `goerli-rollup` and `sepolia-rollup`)
   - Note: this parameter was called --l2.chain-id and only accepted chain ids in versions prior to `v2.1.0`
 - For Orbit chains
-  - `nodeConfig.json` will be generated when orbit chain is created, you need use either `--conf.file` or `--chain.info-json` to set it
+  - `nodeConfig.json` will be generated when orbit chain is created, you need to set it using either `--conf.file` or `--chain.info-json` 
   - `--conf.file` is the docker container's path of `nodeConfig.json`, you need put this file to mount point first. `--chain.info-json` is the json content itself
   - `--chain.name="My Arbitrum L3 Chain"` must be provided, and matches the chain name used in `--conf.file` file or `--chain.info-json` content
   - If anytrust chain, also need to supply `--node.data-availablity.enable` and then some ways to get the data like `--node.data-availability.rest-aggregator.enable` and associated options or `--node.data-availability.ipfs-storage.enable` and associated options
