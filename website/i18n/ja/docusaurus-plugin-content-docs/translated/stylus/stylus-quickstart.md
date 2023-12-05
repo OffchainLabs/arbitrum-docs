@@ -8,8 +8,11 @@ sme: chrisco512
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
+import TranslationBannerPartial from "./partials/_stylus-translation-banner-partial.md";
 
 import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+
+<TranslationBannerPartial />
 
 <PublicPreviewBannerPartial />
 
