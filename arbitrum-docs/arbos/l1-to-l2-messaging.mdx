@@ -240,6 +240,6 @@ modifier onlyFromMyL1Contract() override {
 
 ### Signed Messages
 
-The delayed inbox can also accept messages that include a signature. In this case, the message will execute with the `msg.sender` address equal to the address that produced the included signature (i.e., _not_ its alias). Intuitively, the signature proves that the sender address is not a contract, and thus is safe from cross-chain exploit concerns described above. Thus, it can safely execute from signer's address, similar to a transaction included in a Sequencer's batch. For these messages, the address of the L1 sender is effectively ignored at L2.  
+The delayed inbox can also accept messages that include a signature. In this case, the message will execute with the `msg.sender` address equal to the address that produced the included signature (i.e., _not_ its alias). Intuitively, the signature proves that the sender address is not a contract, and thus is safe from cross-chain exploit concerns described above. Thus, it can safely execute from signer's address, similar to a transaction included in a Sequencer's batch. For these messages, the address of the L1 sender is effectively ignored at L2.
 
 These signed messages submitted through the delayed inbox can be used to execute messages that bypass the Sequencer and require EOA authorization at L2, e.g., force-including an Ether withdrawal (see ["withdraw eth tutorial"](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)).
