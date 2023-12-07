@@ -468,11 +468,6 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'node-running/command-line-options',
-          label: 'Command-line options',
-        },
-        {
-          type: 'doc',
           id: 'node-running/contribute',
         },
       ],
