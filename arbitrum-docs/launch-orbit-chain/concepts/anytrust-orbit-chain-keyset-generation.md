@@ -83,6 +83,7 @@ KeysetHash: 0x4d795e20d33eea0b070600e4e100c512a750562bf03c300c99444bd5af92d9b0
 Upon successfully generating the Keyset, it is essential to establish it within the parent chain. This step ensures that the parent chain is accurately informed of the Committee members' keyset.
 
 The Keyset can be configured by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/bridge/SequencerInbox.sol#L466) method within the SequencerInbox contract.
+
 **Note** that only rollup owner can call this method to set the new valid keyset.
 
 #### Sequencer Configuration
