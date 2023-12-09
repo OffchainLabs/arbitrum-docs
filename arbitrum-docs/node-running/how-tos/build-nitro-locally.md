@@ -190,3 +190,12 @@ To run your node using the generated binaries, use the following command from th
 ```bash
 ./target/bin/nitro <node parameters>
 ```
+
+
+### Step 11. (Optional） Docker Image
+
+if you want to start with docker image, using [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) and following their reference
+
+```bash
+make docker
+```
