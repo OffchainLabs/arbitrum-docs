@@ -1,0 +1,80 @@
+---
+title: 'How to run an orbit node'
+description: Learn how to run an Arbitrum orbit node on your local machine.
+sme: Mehdi Salehi
+sidebar_label: Run an orbit node
+sidebar_position: 12
+content-type: how-to
+---
+
+This guide provides a step-by-step process for deploying and operating an Orbit node on your local machine. To initiate an Orbit node, it's essential to first deploy the core contracts of the Orbit chain. Additionally, you must supply a `nodeConfig.json` file, which includes crucial configurations required for the Orbit chain's operation. An example of the node configuration file is available at the conclusion of this section. For more information about orbit chain deployment please check our [Launch Your Own Chain](../../launch-orbit-chain) part of our docs.
+
+### Minimum hardware configuration
+
+- Followings specify the minimum hardware configuration required to setup a Nitro full node (not archival):
+  - RAM: 8-16 GB
+  - CPU: 2-4 core CPU (For AWS: t3 xLarge)
+  - Storage: It depends on the orbit chain and its traffic during the time. 
+
+### Prerequisites
+
+- Latest Docker Image: <code>@latestNitroNodeImage@</code>
+
+### Required parameters
+
+- Parent chain RPC URL
+  - Use the parameter `--parent-chain.connection.url=<Parent chain RPC URL>`
+  - It must provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider
+    - Would be set to appropriate Arbitrum One, Arbitrum Nova, or Arbitrum Sepolia RPC URL
+  - Note: [Arbitrum.io public RPCs](/node-running/node-providers.mdx) is rate limiting connections, So you will need to run a local node for the parent chain or rely on third party RPC providers
+- L3 orbit chain id and name
+  - `nodeConfig.json` will be generated when an Orbit chain is created, you need to set it using either `--conf.file` or `--chain.info-json` 
+  - `--conf.file` refers to the Docker container's location of `nodeConfig.json`. Initially, you must place this file at the designated mount point. As for `--chain.info-json`, it represents the actual JSON content
+  - `--chain.name="My Arbitrum L3 Chain"` must be provided, and it must match the chain name that is used in `--conf.file` file or `--chain.info-json` content
+  - For an Anytrust chain, it is essential to provide `--node.data-availability.enable`. Additionally, you must choose a method for obtaining the data, such as enabling `--node.data-availability.rest-aggregator.enable` with its associated options, or opting for `--node.data-availability.ipfs-storage.enable` along with its associated options.
+
+### Important ports
+
+- RPC: `8547`
+- Sequencer Feed: `9642`
+- WebSocket: `8548`
+  - WS port `8548` needs extra args to be opened. Please use these flags:
+    - --ws.port=8548
+    - --ws.addr=0.0.0.0
+    - --ws.origins=\*
+
+### Putting it all together
+
+- When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
+- Here is an example of how to run orbit-node:
+
+  - Note that is important that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
+
+  ```shell
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --chain.info-json --parent-chain.connection.url <Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name="My Arbitrum L3 Chain" --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+  ```
+  -Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well. Additionally, you must choose a method for obtaining the data discussed on required parameters section.
+  - When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
+
+  ```shell
+  docker stop --time=300 $(docker ps -aq)
+  ```
+
+### Note on permissions
+
+- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders
+  ```shell
+  mkdir /data/arbitrum
+  chmod -fR 777 /data/arbitrum
+  ```
+
+### Example of `nodeConfig.json`
+
+Here is an example of node config file generated after an orbit chain deployment.
+
+```
+
+--chain.info-json="[{\"chain-id\":94692861356,\"parent-chain-id\":421614,\"chain-name\":\"My Arbitrum L3 Chain\",\"chain-config\":{\"chainId\":94692861356,\"homesteadBlock\":0,\"daoForkBlock\":null,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"berlinBlock\":0,\"londonBlock\":0,\"clique\":{\"period\":0,\"epoch\":0},\"arbitrum\":{\"EnableArbOS\":true,\"AllowDebugPrecompiles\":false,\"DataAvailabilityCommittee\":false,\"InitialArbOSVersion\":10,\"InitialChainOwner\":\"0xAde4000C87923244f0e95b41f0e45aa3C02f1Bb2\",\"GenesisBlockNum\":0}},\"rollup\":{\"bridge\":\"0xde835286442c6446E36992c036EFe261AcD87F6d\",\"inbox\":\"0x0592d3861Ea929B5d108d915c36f64EE69418049\",\"sequencer-inbox\":\"0xf9d77199288f00440Ed0f494Adc0005f362c17b1\",\"rollup\":\"0xF5A42aDA664E7c2dFE9DDa4459B927261BF90E09\",\"validator-utils\":\"0xB11EB62DD2B352886A4530A9106fE427844D515f\",\"validator-wallet-creator\":\"0xEb9885B6c0e117D339F47585cC06a2765AaE2E0b\",\"deployed-at\":1764099}}]"
+
+```
+
