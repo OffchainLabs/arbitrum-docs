@@ -3,7 +3,7 @@ title: 'クイックスタート: Stylusを使用してRustでスマートコン
 sidebar_label: 'クイックスタート (Rust, Stylus)'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512
-translator: Ying@Fracton, Akazawa@Fracton, Tokunaga Hikaru@Fracton
+translator: Ying@Fracton, Naoki@Fracton, Hikaru@Fracton
 sme: chrisco512
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus

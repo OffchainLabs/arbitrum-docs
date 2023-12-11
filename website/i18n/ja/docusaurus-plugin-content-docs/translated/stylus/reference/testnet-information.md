@@ -2,6 +2,7 @@
 title: 'Stylusテストネット情報'
 description: A reference providing details about the Stylus testnet and faucets for obtaining testnet ETH
 author: amarrazza
+translator: Ying@Fracton, Naoki@Fracton, Hikaru@Fracton
 sme: amarrazza
 target_audience: Developers building on the Stylus testnet
 sidebar_label: 'テストネット情報'

@@ -2,6 +2,7 @@
 title: 'Stylus SDK レポジトリ'
 description: A table with links and minimal information about the different SDKs
 author: rachel-bousfield
+translator: Ying@Fracton, Naoki@Fracton, Yu@Fracton
 sme: rachel-bousfield
 target_audience: Developers writing and deploying Stylus programs
 sidebar_label: 'Stylus SDK レポジトリ'

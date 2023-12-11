@@ -3,6 +3,7 @@ title: 'パブリックプレビュー'
 sidebar_label: 'パブリックプレビュー'
 description: 'Stylus is currently tagged as an `alpha` release supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
 author: symbolpunk
+translator: Ying@Fracton, Naoki@Fracton, Yu@Fracton
 sidebar_position: 10
 ---
 
