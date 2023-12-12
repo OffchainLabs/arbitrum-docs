@@ -170,7 +170,7 @@ docker build . --target nitro-node-dev --tag custom-nitro-node-dev
 docker run --rm --entrypoint cat custom-nitro-node-dev target/machines/latest/module-root.txt
 ```
 
-Once you have the WASM module root, you can put it on-chain by calling `setWasmModuleRoot(newWasmModuleRoot)` through the upgradeExecutor contract as the owner, to call this method, you need to set `target` as your rollup contract address, set `targetCallData` start with `0x89384960` (this is the signature of `setWasmModuleRoot(byte32)`), and followed by your wasm module root.
+Once you have the WASM module root, you can put it on-chain by calling `setWasmModuleRoot(newWasmModuleRoot)` through the upgradeExecutor contract as the owner. To call this method, you need to set `target` as your rollup contract address. Ensure that `targetCallData` starts with `0x89384960` (this is the signature of `setWasmModuleRoot(byte32)`), and that it's followed by your WASM module root.
 The `upgradeExecutor` contract address and rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the rollup contract.
 
