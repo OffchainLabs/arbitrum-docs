@@ -9,7 +9,11 @@ sidebar_label: 'Stylus SDK レポジトリ'
 sidebar_position: 2
 ---
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner.md';
+import TranslationBannerPartial from "./partials/_stylus-translation-banner-partial.md";
+
+import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+
+<TranslationBannerPartial />
 
 <PublicPreviewBannerPartial />
 
