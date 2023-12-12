@@ -144,4 +144,48 @@ const precompilesInformation = {
   },
 };
 
-module.exports = precompilesInformation;
+const nodeInterfaceInformation = {
+  methodOverrides: {
+    estimateretryableticket: {
+      signature:
+        'estimateRetryableTicket(address sender, uint256 deposit, address to, uint256 l2CallValue, address excessFeeRefundAddress, address callValueRefundAddress, bytes calldata data)',
+      description: 'Estimates the gas needed for a retryable submission',
+    },
+    constructoutboxproof: {
+      description:
+        "Constructs an outbox proof of an l2->l1 send's existence in the outbox accumulator",
+    },
+    findbatchcontainingblock: {
+      description: 'Finds the L1 batch containing a requested L2 block, reverting if none does',
+    },
+    getl1confirmations: {
+      description:
+        'Gets the number of L1 confirmations of the sequencer batch producing the requested L2 block',
+    },
+    gasestimatecomponents: {
+      signature: 'gasEstimateComponents(address to, bool contractCreation, bytes calldata data)',
+      description: 'Same as native gas estimation, but with additional info on the l1 costs',
+    },
+    gasestimatel1component: {
+      signature: 'gasEstimateL1Component(address to, bool contractCreation, bytes calldata data)',
+      description: "Estimates a transaction's l1 costs",
+    },
+    legacylookupmessagebatchproof: {
+      description: 'Returns the proof necessary to redeem a message',
+    },
+    nitrogenesisblock: {
+      description: 'Returns the first block produced using the Nitro codebase',
+    },
+    blockl1num: {
+      description: 'Returns the L1 block number of the L2 block',
+    },
+    l2blockrangeforl1: {
+      description: 'Finds the L2 block number range that has the given L1 block number',
+    },
+  },
+};
+
+module.exports = {
+  precompilesInformation,
+  nodeInterfaceInformation,
+};

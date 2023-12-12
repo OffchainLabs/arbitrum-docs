@@ -6,6 +6,6 @@ reader_audience: users who want to run a node on Arbitrum
 content-type: faq
 ---
 
-import FaqPartial from '../partials/_troubleshooting-nodes-partial.md';
+import FAQStructuredData from '@site/src/components/FAQStructuredData';
 
-<FaqPartial />
+<FAQStructuredData faqsId="node-running" />

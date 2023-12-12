@@ -3,7 +3,8 @@
     font-size: 24px;
   }
 
-  .markdown > h3 {
+  .markdown > h3,
+  .markdown > .faq-question > h3 {
     font-size: 18px;
     margin-top: 35px;
     margin-bottom: 10px;

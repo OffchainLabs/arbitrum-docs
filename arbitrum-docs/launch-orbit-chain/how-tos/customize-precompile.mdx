@@ -19,11 +19,12 @@ To support these additional use-cases, follow the instructions described in [How
 
 :::
 
-There are three primary ways to customize your chain's precompiles:
+There are four primary ways to customize your chain's precompiles:
 
 1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
 2.  Create a new precompile.
 3.  Define a new event.
+4.  Customize gas usage for a specific method
 
 ### Prerequisites
 
@@ -266,7 +267,133 @@ Note the `logs` field within the transaction receipt:
       ]
 ```
 
-From the `logs` field, we can see the `topics[0]` is `0xa937..cfa`, which is the event signature of `Hi(address)`. You can verify this using [4 byte directory](https://www.4byte.directory/event-signatures/?bytes_signature=0xa9378d5bd800fae4d5b8d4c6712b2b64e8ecc86fdc831cb51944000fc7c8ecfa) - `topics[1]` is `Your_address`, which is exactly what we defined above!
+## Option 4: Customize gas usage for a specific method
+
+The above instructions demonstrate how you can define a new precompile function. However, if this new function is simply defined without performing gas collection within the function, your precompile will be vulnerable to Denial-of-Service (DOS) attacks. These attacks exploit the function by flooding it with excessive requests without bearing the computational cost.
+
+To deter this type of attack, you can implement a gas collection mechanism within your precompile. The event itself doesn't need to specify the gas cost; the program will calculate the gas cost when the event's execution is initially triggered.
+
+In addition to introducing gas costs where they don't exist, you can also customize gas costs where they're already being incurred. To demonstrate, consider the `GetBalance` method in `ArbInfo.go`:
+
+```
+// GetBalance retrieves an account's balance
+func (con ArbInfo) GetBalance(c ctx, evm mech, account addr) (huge, error) {
+	if err := c.Burn(params.BalanceGasEIP1884); err != nil {
+		return nil, err
+	}
+	return evm.StateDB.GetBalance(account), nil
+}
+```
+
+The purpose of this method is to retrieve the balance of an address. As defined in [EIP1884](https://eips.ethereum.org/EIPS/eip-1884), the operation code (opcode) for obtaining the address balance has an associated gas cost of 700 gas. The function accounts for this cost by deducting the specified amount of gas, indicated by the protocol constant `BalanceGasEIP1884`, which is set to `700`, through the call to `c.Burn(int64)`.
+
+To customize the gas cost, let's implement an alternative to `GetBalance`, called `GetBalanceCustom`:
+
+```
+// GetBalance retrieves an account's balance
+func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error) {
+	gasForBalanceCall := uint64(300)
+	if err := c.Burn(gasForBalanceCall); err != nil {
+		return evm.StateDB.GetBalance(account), err
+	}
+	return balance, nil
+}
+```
+
+To register this new precompile method, refer to Option 1 above.
+
+Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+
+Run Nitro with the following command:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
+
+:::info
+
+Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+
+:::
+
+### Send the transaction and get the transaction receipt
+
+In order to obtain the gas used, we can use the `eth_sendRawTransaction` RPC method to test execution on the chain.
+First, call:
+
+```
+cast send 0x0000000000000000000000000000000000000065 "GetBalance()({Any_Address})"
+```
+
+Then, call:
+
+```
+cast send 0x0000000000000000000000000000000000000065 "GetBalanceCustom()({Any_Address})"
+```
+
+The two responses will look like this, respectively:
+
+Result 1:
+
+```
+{
+   "jsonrpc":"2.0",
+   "id":1,
+   "result":{
+      "blockHash":"{Your_blockHash}",
+      "blockNumber":"0x15",
+      "contractAddress":null,
+      "cumulativeGasUsed":"0x638f",
+      "effectiveGasPrice":"0x5f5e100",
+      "from":"{Your_address}",
+      "gasUsed":"0x638f",
+      "gasUsedForL1":"0x9f5",
+      "l1BlockNumber":"0x979a02",
+      "logs":[
+
+      ],
+      "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "status":"0x1",
+      "to":"0x0000000000000000000000000000000000000065",
+      "transactionHash":"{Your_txHash}",
+      "transactionIndex":"0x1",
+      "type":"0x2"
+   }
+}
+```
+
+Result 2:
+
+```
+{
+   "jsonrpc":"2.0",
+   "id":1,
+   "result":{
+      "blockHash":"{Your_blockHash}",
+      "blockNumber":"0x16",
+      "contractAddress":null,
+      "cumulativeGasUsed":"0x61ff",
+      "effectiveGasPrice":"0x5f5e100",
+      "from":"{Your_address}",
+      "gasUsed":"0x61ff",
+      "gasUsedForL1":"0x9f5",
+      "l1BlockNumber":"0x979a08",
+      "logs":[
+
+      ],
+      "logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "status":"0x1",
+      "to":"0x0000000000000000000000000000000000000065",
+      "transactionHash":"{Your_txHash}",
+      "transactionIndex":"0x1",
+      "type":"0x2"
+   }
+}
+```
+
+Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
+
+To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas).
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
