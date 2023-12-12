@@ -30,7 +30,7 @@ This guide provides a step-by-step process for deploying and operating an Orbit 
 - L3 orbit chain id and name
   - Providing the flag --chain.info-json="Orbit Chain's chain info" is mandatory. The chain info contains vital information about the Orbit chain, which is necessary for the node to commence operations. An example of the chain info is available in the subsequent sections.
   - `--chain.name="My Arbitrum L3 Chain"` must be provided, and it must match the chain name that is used in `--conf.file` file or `--chain.info-json` content
-  - For an Anytrust chain, it is essential to provide `--node.data-availability.enable`. Additionally, you must choose a method for obtaining the data, such as enabling `--node.data-availability.rest-aggregator.enable` with its associated options, or opting for `--node.data-availability.ipfs-storage.enable` along with its associated options.
+  - For an Anytrust chain, it is essential to provide `--node.data-availability.enable`.
 
 ### Important ports
 
@@ -60,7 +60,7 @@ This guide provides a step-by-step process for deploying and operating an Orbit 
 
   ```
 
-  - Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well. Additionally, you must choose a method for obtaining the data discussed on required parameters section.
+  - Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well.
 
 
 - When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
