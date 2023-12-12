@@ -26,7 +26,7 @@ This guide provides a step-by-step process for deploying and operating an Orbit 
   - Use the parameter `--parent-chain.connection.url=<Parent chain RPC URL>`
   - It must provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider
     - Would be set to appropriate Arbitrum One, Arbitrum Nova, or Arbitrum Sepolia RPC URL
-  - Note: [Arbitrum.io public RPCs](/node-running/node-providers.mdx) is rate limiting connections, So you will need to run a local node for the parent chain or rely on third party RPC providers
+  - Note: [Arbitrum.io public RPCs](/node-running/node-providers.mdx) RPCs rate limit connections, So you will need to run a local node for the parent chain or rely on third party RPC providers
 - L3 orbit chain id and name
   - Providing the flag --chain.info-json="Orbit Chain's info-json" is mandatory. The info-json contains vital information about the Orbit chain, which is necessary for the node to commence operations. An example of the info-json is available in the subsequent sections.
   - `--chain.name="My Arbitrum L3 Chain"` must be provided, and it must match the chain name that is used in `--conf.file` file or `--chain.info-json` content
