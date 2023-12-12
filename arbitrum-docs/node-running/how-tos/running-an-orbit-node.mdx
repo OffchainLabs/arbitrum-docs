@@ -52,9 +52,12 @@ This guide provides a step-by-step process for deploying and operating an Orbit 
 
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --chain.info-json --parent-chain.connection.url <Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name="My Arbitrum L3 Chain" --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+ 
   ```
-  -Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well. Additionally, you must choose a method for obtaining the data discussed on required parameters section.
-  - When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
+
+  - Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well. Additionally, you must choose a method for obtaining the data discussed on required parameters section.
+  
+- When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
   ```shell
   docker stop --time=300 $(docker ps -aq)
