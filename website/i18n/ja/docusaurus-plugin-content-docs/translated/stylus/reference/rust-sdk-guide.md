@@ -9,9 +9,9 @@ sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
-import TranslationBannerPartial from "./partials/_stylus-translation-banner-partial.md";
+import TranslationBannerPartial from "../partials/_stylus-translation-banner-partial.md";
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
 <TranslationBannerPartial />
 
