@@ -41,7 +41,7 @@ The pricer computes an allocation fraction `F = (updateTime-lastUpdateTime) / (c
 
 Now the pricer pays out the allocated funds to cover the rewards due and the amounts due to batch posters, reducing the balance due to each party as a result. If the allocated funds aren't sufficient to cover everything that is due, some amount due will remain. If all of the amount due can be covered with the allocated funds, any remaining allocated funds are returned to the `L1PricerFundsPool`.
 
-## Adjusting the L1 Gas Basefee
+## Adjusting the L1 gas basefee
 
 After allocating funds and paying what is owed, the L1 Pricer adjusts the L1 Gas Basefee. The goal of this process is to find a value that will cause the amount collected to equal the amount owed over time.
 
@@ -49,8 +49,8 @@ The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minu
 
 A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
 
-## Getting L1 Fee Info
+## Getting L1 fee info
 
-The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/for-devs/dev-tools-and-resources/precompiles.mdx#arbgasinfo). To estimate the L1 fee a transaction will use, the [`NodeInterface.gasEstimateComponents`](gas.mdx) or [`NodeInterface.gasEstimateL1Component`](gas.mdx) method can be used.
+The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/for-devs/dev-tools-and-resources/precompiles.mdx#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/for-devs/dev-tools-and-resources/nodeinterface.mdx) or [NodeInterface.gasEstimateL1Component()](/for-devs/dev-tools-and-resources/nodeinterface.mdx) method can be used.
 
 Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.

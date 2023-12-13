@@ -82,6 +82,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'NodeInterface',
+              id: 'for-devs/concepts/nodeinterface',
+            },
+            {
+              type: 'doc',
               label: 'Oracles',
               id: 'for-devs/concepts/oracles',
             },
@@ -149,6 +154,11 @@ const sidebars = {
               href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
+        },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'stylus/troubleshooting-building-stylus',
         },
       ],
     },
@@ -288,6 +298,11 @@ const sidebars = {
           type: 'doc',
           label: 'Precompiles',
           id: 'for-devs/dev-tools-and-resources/precompiles',
+        },
+        {
+          type: 'doc',
+          label: 'NodeInterface',
+          id: 'for-devs/dev-tools-and-resources/nodeinterface',
         },
         {
           type: 'doc',
@@ -451,11 +466,6 @@ const sidebars = {
       label: 'More',
       collapsed: false,
       items: [
-        {
-          type: 'doc',
-          id: 'node-running/command-line-options',
-          label: 'Command-line options',
-        },
         {
           type: 'doc',
           id: 'node-running/contribute',

@@ -92,10 +92,44 @@ install Docker from your distribution's package manager and start the Docker ser
 
 Once you have Docker installed, you can simply run `docker build . --tag custom-nitro-node` in the `nitro` folder to build your custom node.
 
-Once you've built your new Nitro node image, you can run it with the following command. The last argument `--node.staker.dangerous.without-block-validator` disables fraud proof verification:
+Once you've built your new Nitro node image, you have to modify the configuration file of your node to add a new parameter, `--node.staker.dangerous.without-block-validator`, which disables fraud proof verification.
+
+To do that, open your `nodeConfig.json` file (stored by default in the `config` folder) and add the new parameter inside the `staker` element:
+
+```json
+...
+"staker": {
+  ...
+  "dangerous": {
+    "without-block-validator": true
+  }
+  ...
+},
+...
+```
+
+With that, you have now two ways of running your node.
+
+**1. Using the docker-compose file**
+
+This is the recommended way if you're running your Orbit chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container:
+
+```
+...
+nitro:
+  image: custom-nitro-node
+  ports:
+...
+```
+
+And run `docker compose up` to run all of your containers.
+
+**2. Use `docker run` to run your Nitro node only**
+
+This method will only run the customized Nitro node (i.e., it will not run Blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
 
 ```shell
-docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 custom-nitro-node --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --node.staker.dangerous.without-block-validator
+docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
 ```
 
 :::info
@@ -140,13 +174,33 @@ Once you have the WASM module root, you can put it on-chain by calling `setWasmM
 The rollup contract address can be found in the chain deployment info JSON.
 You can confirm that the WASM module root was updated by calling `wasmModuleRoot()` on the rollup contract.
 
-Once you have set the new WASM module root on-chain, you may then run the new node image with:
+Once you have set the new WASM module root on-chain, you can re-enable fraud proofs and run your node.
 
-```shell
-docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 custom-nitro-node-dev --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+To re-enable fraud proofs, open your `nodeConfig.json` file again, and remove the `"dangerous"` section (containing the `without-block-validator` property) that you previously added.
+
+After that, you'll have, again, two ways of running your node.
+
+**1. Using the docker-compose file**
+
+As mentioned before, this is the recommended way if you're running your Orbit chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
+
+```
+...
+nitro:
+  image: custom-nitro-node-dev
+  ports:
+...
 ```
 
-Note that `--node.staker.dangerous.without-block-validator` has been removed from this invocation now that fraud proofs are working again.
+And run `docker compose up` to run all of your containers.
+
+**2. Use `docker run` to run your Nitro node only**
+
+This method will only run the customized Nitro node (i.e., it will not run Blockscout, or the DA server if you're using an AnyTrust chain). Use the following command:
+
+```shell
+docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node-dev --conf.file /home/user/.arbitrum/nodeConfig.json
+```
 
 #### 4.2 Preserving the replay binary
 
