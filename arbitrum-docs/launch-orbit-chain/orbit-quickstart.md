@@ -1,6 +1,6 @@
 ---
 title: 'Quickstart: Launch an Orbit chain'
-description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli or Sepolia testnets for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
+description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
 target_audience: developers who want to create their own self-managed AnyTrust or One chain
 sidebar_label: 'Quickstart'
