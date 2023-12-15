@@ -9,7 +9,7 @@ sidebar_position: 1
 ---
 **Anytrust** chains, relies on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer. 
 
-The Committee comprises N members, among whom it is presumed by AnyTrust that a minimum of two maintain integrity. Consequently, in scenarios where N - 1 members of the Committee pledge to grant access to specific data, it is guaranteed that at least one member among those committing to this promise upholds honesty.
+The Committee comprises N members, among whom it is presumed by AnyTrust that a minimum of H members maintain integrity. H is the minimum number of trusted committee members on Anytrust chains, and it is configurable by the "assumed-honest" parameter in the keyset, and by chain owner(s). Consequently, in scenarios where K = (N + 1) - H members of the Committee pledge to grant access to specific data, and they must sign and attest they have the data for store to be considered successful.
 
 Each member of the Committee is provisioned with a unique pair of BLS public and private keys. It is incumbent upon every member to independently generate a new, secure, and randomly derived set of BLS keys for their exclusive use. To generate a set of BLS keys, you can find more info [here](https://docs.arbitrum.io/node-running/how-tos/running-a-daserver#generate-key) on our docs.
 
