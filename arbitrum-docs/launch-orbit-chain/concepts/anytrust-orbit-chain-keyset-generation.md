@@ -21,7 +21,9 @@ The main blockchain (parent chain) needs to know who is in the Committee. It nee
 In the following section, we will provide a detailed guide on the generation of a Keyset corresponding to your individual set of keys, as well as instructions for its subsequent configuration within the chain.
 
 ### Batch Poster Configuration
-AnyTrust uses a committee of Data Availability Servers to provide access to batched transaction data. The Nitro Batch Poster needs to be configured with, for each committee member, the URL, BLS public key of that committee member, and a single bit bitmask to uniquely identify that committee member, and a parameter called `assumed-honest` that sets how many committee members need to respond that they successfully stored the data. 
+AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro Batch Poster, you need to provide specific information for each committee member. This includes their URL, BLS public key, a unique single-bit identifier (bitmask) for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
+
+To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as K = (N + 1) - H, where N is the total number of committee members and H is the minumum number of members assumed to be honest.
 
 Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [here](https://developer.arbitrum.io/das/daserver-instructions#generate-key). 
 
