@@ -1,7 +1,7 @@
 import React from 'react';
 import { getAddress, isAddress } from '@ethersproject/address';
 
-type ChainID = 1 | 5 | 11155111 | 42170 | 421613 | 42161 | 421614;
+type ChainID = 1 | 5 | 11155111 | 42170 | 421613 | 42161 | 421614 | 23011913;
 
 const chainIDToExplorerUrlRoot: {
   [chainId in ChainID]: string;
@@ -13,6 +13,7 @@ const chainIDToExplorerUrlRoot: {
   42170: 'https://nova.arbiscan.io/address',
   421613: 'https://goerli.arbiscan.io/address',
   421614: 'https://sepolia-explorer.arbitrum.io/address',
+  23011913: 'https://stylus-testnet-explorer.arbitrum.io/address',
 };
 
 export const AddressExplorerLink = (props: {

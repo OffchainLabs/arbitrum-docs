@@ -20,7 +20,7 @@
 
 
 ### What happens if I send my funds to an exchange that does not support Arbitrum? {#what-happens-if-i-send-my-funds-to-an-exchange-that-does-not-support-arbitrum}
-<p>If you send the funds and the receiving wallet/exchange does not support the Arbitrum network you are sending funds through, there is unfortunately nothing that we can do to recover your funds. You would need to contact the wallet/exchage support and see if they can do anything to help you retrieve the funds.</p>
+<p>If you send the funds and the receiving wallet/exchange does not support the Arbitrum network you are sending funds through, there is unfortunately nothing that we can do to recover your funds. You would need to contact the wallet/exchange support and see if they can do anything to help you retrieve the funds.</p>
 
 <p></p>
 

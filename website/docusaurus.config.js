@@ -27,7 +27,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh', 'ja'],
+    locales: ['en', 'ja'],
   },
 
   presets: [
@@ -160,6 +160,10 @@ const config = {
                 to: 'https://arbitrum.io/stylus',
               },
               {
+                label: 'Arbitrum Foundation',
+                to: 'https://arbitrum.foundation/',
+              },
+              {
                 label: 'Nitro whitepaper',
                 to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
               },
@@ -180,8 +184,8 @@ const config = {
                 to: 'https://bridge.arbitrum.io/',
               },
               {
-                label: 'Community',
-                to: 'https://arbitrum.io/community',
+                label: 'Governance docs',
+                to: 'https://docs.arbitrum.foundation/',
               },
               {
                 label: 'Careers',
@@ -190,6 +194,10 @@ const config = {
               {
                 label: 'Support',
                 to: 'https://support.arbitrum.io/',
+              },
+              {
+                label: 'Bug Bounties',
+                to: 'https://immunefi.com/bounty/arbitrum/',
               },
             ],
           },
@@ -201,23 +209,27 @@ const config = {
               },
               {
                 label: 'Twitter',
-                to: 'https://twitter.com/ArbitrumDevs',
+                to: 'https://twitter.com/OffchainLabs',
               },
               {
                 label: 'Youtube',
                 to: 'https://www.youtube.com/@Arbitrum',
               },
               {
-                label: 'Research forum',
-                to: 'https://research.arbitrum.io/',
-              },
-              {
                 label: 'Medium Blog',
                 to: 'https://medium.com/offchainlabs',
               },
               {
-                label: 'Governance docs',
-                to: 'https://medium.com/offchainlabs',
+                label: 'Research forum',
+                to: 'https://research.arbitrum.io/',
+              },
+              {
+                label: 'Privacy Policy',
+                to: 'https://www.iubenda.com/privacy-policy/76750372',
+              },
+              {
+                label: 'Terms of Service',
+                to: 'https://arbitrum.io/tos',
               },
             ],
           },
