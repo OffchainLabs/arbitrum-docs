@@ -46,7 +46,7 @@ This guide provides a step-by-step process for running an Orbit node on your loc
 ### Putting it all together
 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
-- Here is an example of how to run orbit-node:
+- Here is an example of how to run a node for an Orbit chain:
 
   - Note that is important that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
