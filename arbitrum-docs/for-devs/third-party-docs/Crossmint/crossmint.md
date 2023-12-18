@@ -51,13 +51,13 @@ You can find a YouTube video for the same [<ins>here</ins>](https://youtu.be/pq2
 
 :::
 
-## Connect with us!
+## Connect with Crossmint!
 
 Need further help? We got you! Check out all the ways you can reach Crossmint for further questions and support:
 
-- Visit us at [crossmint.com](http://crossmint.com/?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
-- Read our [Docs](https://docs.crossmint.com/?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
-- For assistance, contact us via our [Support](https://help.crossmint.com/hc/en-us?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
-- Follow us on [Twitter](https://twitter.com/crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
-- Join our [Discord](https://discord.gg/crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
-- Check us out on [Youtube](https://www.youtube.com/@crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- Visit Crossmint's official website at [crossmint.com](http://crossmint.com/?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- Read developer [Docs](https://docs.crossmint.com/?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- For assistance, contact the Crossmint team via the [Support forum](https://help.crossmint.com/hc/en-us?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- Follow Crossmint on [Twitter](https://twitter.com/crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- Join the official [Discord server](https://discord.gg/crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
+- Check out Crossmint on [Youtube](https://www.youtube.com/@crossmint?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum)
