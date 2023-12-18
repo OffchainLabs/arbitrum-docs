@@ -1,7 +1,7 @@
 ---
 title: 'Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)'
 sidebar_label: Quickstart (Solidity, Hardhat)
-description: This quickstart will walk you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Goerli testnet, and finally Arbitrum One mainnet.
+description: This quickstart will walk you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
 author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum
 reader-audience: web developers who haven't ever built on Ethereum/Arbitrum
@@ -143,7 +143,7 @@ Replace the contents of `hardhat.config.js` with the following:
 require('@nomicfoundation/hardhat-toolbox');
 
 // NEVER record important private keys in your code - this is for demo purposes
-const GOERLI_TESTNET_PRIVATE_KEY = '';
+const SEPOLIA_TESTNET_PRIVATE_KEY = '';
 const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = '';
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -153,10 +153,10 @@ module.exports = {
     hardhat: {
       chainId: 1337,
     },
-    arbitrumGoerli: {
-      url: 'https://goerli-rollup.arbitrum.io/rpc',
-      chainId: 421613,
-      //accounts: [GOERLI_TESTNET_PRIVATE_KEY]
+    arbitrumSepolia: {
+      url: 'https://sepolia-rollup.arbitrum.io/rpc',
+      chainId: 421614,
+      //accounts: [Sepolia_TESTNET_PRIVATE_KEY]
     },
     arbitrumOne: {
       url: 'https://arb1.arbitrum.io/rpc',
@@ -274,10 +274,10 @@ You should see a balance of 10,000 ETH. Keep your private key handy; we'll use i
 
 Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
-- Network Name: `Arbitrum Goerli`
-- New RPC URL: `https://goerli-rollup.arbitrum.io/rpc`
-- Chain ID: `421613`
-- Currency Symbol: `AGOR`
+- Network Name: `Arbitrum Sepolia`
+- New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
+- Chain ID: `421614`
+- Currency Symbol: `ASPL`
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
@@ -318,7 +318,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
         (the latest one)
       </th>
       <th>
-        <code>WEB3-ARB-GOERLI</code>
+        <code>WEB3-ARB-SEPOLIA</code>
         <br />
         (the next one)
       </th>
@@ -398,17 +398,17 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
   </tbody>
 </table>
 
-Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Goerli testnet.
+Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sepolia testnet.
 
-### Deploy the smart contract to the Arbitrum Goerli testnet
+### Deploy the smart contract to the Arbitrum Sepolia testnet
 
-We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Arbitrum's Goerli testnet is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Goerli testnet's token, $AGOR.
+We were able to deploy to a local testnet for free because we were using [Hardhat's built-in Ethereum network emulator](https://hardhat.org/hardhat-network/docs/overview#hardhat-network). Arbitrum's Sepolia testnet is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract. This fee can be paid with the Arbitrum Sepolia testnet's token, $ASPL.
 
 <!-- todo: partialize this - duplicated in Orbit quickstart -->
 
-:::info $AGOR IS SHORTHAND
+:::info $ASPL IS SHORTHAND
 
-"$AGOR" isn't a canonical term. It's just shorthand for "Arbitrum Goerli testnet $ETH" that we use for convenience.
+"$ASPL" isn't a canonical term. It's just shorthand for "Arbitrum Sepolia testnet $ETH" that we use for convenience.
 
 :::
 
@@ -416,9 +416,9 @@ First, update the `hardhat.config.js` file to specify the private key of the tes
 
 ```javascript title="hardhat.config.js"
 // ...
-const GOERLI_TESTNET_PRIVATE_KEY = ''; // <- this should **not** begin with "0x"
+const SEPOLIA_TESTNET_PRIVATE_KEY = ''; // <- this should **not** begin with "0x"
 // ...
-accounts: [GOERLI_TESTNET_PRIVATE_KEY]; // <- uncomment this line
+accounts: [SEPOLIA_TESTNET_PRIVATE_KEY]; // <- uncomment this line
 // ...
 ```
 
@@ -430,34 +430,34 @@ Note that we're adding a private key to a config file. This is **not** a best pr
 
 <!-- todo: partialize this - duplicated in Orbit quickstart -->
 
-Next, let's deposit some $AGOR into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $AGOR is to bridge Goerli $ETH from Ethereum's L1 Goerli network to Arbitrum's L2 Goerli network:
+Next, let's deposit some $ASPL into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia $ETH from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
-1. Use an L1 Goerli $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) to acquire some testnet $ETH on L1 Goerli.
-2. Bridge your L1 Goerli $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
+1. Use an L1 Sepolia $ETH faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet $ETH on L1 Sepolia.
+2. Bridge your L1 Sepolia $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-Once you've acquired some $AGOR, you'll be able to deploy your smart contract to Arbitrum's Goerli testnet by issuing the following command:
+Once you've acquired some $ASPL, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
 ```bash
-yarn hardhat run scripts/deploy.js --network arbitrumGoerli
+yarn hardhat run scripts/deploy.js --network arbitrumSepolia
 ```
 
-This tells hardhat to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumGoerli` in `hardhat.config.js`. You should see the following output:
+This tells hardhat to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in `hardhat.config.js`. You should see the following output:
 
 ```bash
 Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
 ```
 
-Congratulations! You've just deployed **business logic and data** to Arbitrum Goerli. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Goerli network, and then it will be mirrored across all nodes in the Goerli network[^6].
+Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
-To view your smart contract in a blockchain explorer, visit `https://goerli.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
+To view your smart contract in a blockchain explorer, visit `https://sepolia.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
-Select `Arbitrum Goerli` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
-<VendingMachine id="smart-goerli-cupcakes" type="web3-arb-goerli" />
+<VendingMachine id="smart-sepolia-cupcakes" type="web3-arb-sepolia" />
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
-Now that we've verified that our smart contract works on Arbitrum's Goerli testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Goerli testnet, except that we'll need to pay a transaction fee in real $ETH instead of $AGOR.
+Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real $ETH instead of $ASPL.
 
 Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/arbos/gas.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
 
@@ -507,7 +507,7 @@ In this quickstart, we:
 - Identified a **challenge**: These rules are difficult to follow in a centralized application.
 - Identified a **solution**: Arbitrum makes it easy for developers to decentralize business logic and data (using Ethereum mainnet as a settlement layer).
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
-- **Deployed our smart contract** to Hardhat's local development network, and then Arbitrum's Goerli testnet, and then Arbitrum One Mainnet.
+- **Deployed our smart contract** to Hardhat's local development network, and then Arbitrum's Sepolia testnet, and then Arbitrum One Mainnet.
 
 If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
 
