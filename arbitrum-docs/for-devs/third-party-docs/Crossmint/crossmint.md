@@ -42,7 +42,7 @@ Please check out the [<ins>docs</ins>](https://docs.crossmint.com/docs/create-de
 
 ## How to deploy an NFT smart contract on Arbitrum and enable credit card and cross-chain payments with no-code
 
-Please checkout the step-by-step tutorial on our docs [<ins>here</ins>](https://docs.crossmint.com/docs/create-an-nft-collection?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum) and [<ins>here</ins>](https://docs.crossmint.com/docs/storefronts).
+Please checkout the step-by-step tutorial on the docs [<ins>here</ins>](https://docs.crossmint.com/docs/create-an-nft-collection?utm_source=backlinks&utm_medium=docs&utm_campaign=arbitrum) and [<ins>here</ins>](https://docs.crossmint.com/docs/storefronts).
 
 
 :::info Video Tutorial
