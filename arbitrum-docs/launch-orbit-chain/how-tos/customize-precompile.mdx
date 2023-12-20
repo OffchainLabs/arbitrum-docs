@@ -400,7 +400,7 @@ To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/
 
 In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's ArbOS state.
 
-First you need to open the [arbosstate.go][arbosstate_file_link] file, then find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
+First, open the [arbosstate.go][arbosstate_file_link] file and locate the [ArbosState][arbosstate_link] structure. This is where ArbOS state is defined.
 
 We can define a state called `myNumber` here, `myNumber` uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link]:
 
