@@ -398,11 +398,11 @@ To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/
 
 ## Option 5: Call and modify state.
 
-Since in the evm chain, all states need to be stored under a certain address, in this example, we will introduce how to use arbos to store your state.
+Since in the evm chain, all states need to be stored under a certain address, in this example, we will introduce how to use arbos to store your state in a precompile contract.
 
-First you need to find the [arbosstate.go][precompile_impl_dir_link] file, find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
+First you need to open the [arbosstate.go][precompile_impl_dir_link] file, then find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
 
-We can define a state called myNumber here, myNumber uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link] :
+We can define a state called `myNumber` here, `myNumber` uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link]:
 
 ```
 type ArbosState struct {
@@ -481,7 +481,7 @@ InitializeArbosState:
 	_ = sto.SetUint64ByUint64(uint64(myNumberOffset), 0) // initialize your new state around here
 ```
 
-We also need to define some methods in this file to read and write this state (myNumber):
+You also need to define some methods in this file to read and write this state `myNumber`:
 
 ```
 func (state *ArbosState) SetNewMyNumber(
@@ -496,7 +496,7 @@ func (state *ArbosState) GetMyNumber() (uint64, error) {
 ```
 
 After that we can back to [precompiles implementation][precompile_impl_dir_link] and create a new ArbHi.go as we introduced in Option 2.
-But this time we need to add two new methods to read and write the state we defined above:
+But this time we will add two new methods to read and write the state in precompile:
 
 ```
 package precompiles
@@ -519,9 +519,9 @@ func (con *ArbHi) SetNumber(c ctx, evm mech, newNumber uint64) error {
 }
 ```
 
-After that, follow the Option 2 guide and add this new precompile contract and run your node.
+After that, follow the Option 2 guide and add this new precompile contract then run your node.
 
-Your smart contract interface should be like this:
+Your smart contract interface should look like this:
 
 ```
 pragma solidity >=0.4.21 <0.9.0;
