@@ -12,7 +12,7 @@ const chainIDToExplorerUrlRoot: {
   42161: 'https://arbiscan.io/address',
   42170: 'https://nova.arbiscan.io/address',
   421613: 'https://goerli.arbiscan.io/address',
-  421614: 'https://sepolia-explorer.arbitrum.io/address',
+  421614: 'https://sepolia.arbiscan.io/address',
   23011913: 'https://stylus-testnet-explorer.arbitrum.io/address',
 };
 
