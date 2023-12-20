@@ -7,15 +7,14 @@ sidebar_position: 12
 content-type: how-to
 ---
 
-This guide provides a step-by-step process for running a node for an Orbit chain on your local machine. To initiate an Orbit node, the `"chain info"` json string of the Orbit chain, which includes crucial configurations required for the Orbit chain's operation. The `"chain info"` json string should be provided by the Orbit chain owner, and the node runner can consume it to run the node for that specific Orbit chain. An example of the "chain info" json string is available in this section. 
-
+This guide provides a step-by-step process for running a node for an Orbit chain on your local machine. To initiate an Orbit node, the `"chain info"` json string of the Orbit chain, which includes crucial configurations required for the Orbit chain's operation. The `"chain info"` json string should be provided by the Orbit chain owner, and the node runner can consume it to run the node for that specific Orbit chain. An example of the "chain info" json string is available in this section.
 
 ### Minimum hardware configuration
 
 - Followings specify the minimum hardware configuration required to setup your node:
   - RAM: 8-16 GB
   - CPU: 2-4 core CPU (For AWS: t3 xLarge)
-  - Storage: It depends on the Orbit chain and its traffic during the time. 
+  - Storage: It depends on the Orbit chain and its traffic during the time.
 
 ### Prerequisites
 
@@ -52,8 +51,9 @@ This guide provides a step-by-step process for running a node for an Orbit chain
 
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
- 
+
   ```
+
   - Please note that when using the flag `--chain.info-json=<Orbit Chain's chain info>`, it is essential to replace <Orbit Chain's chain info> with the specific `chain info` json string of the Orbit chain for which you wish to run the node. For your convenience, an example of an chain info json string is provided below:
 
   ```
@@ -62,7 +62,6 @@ This guide provides a step-by-step process for running a node for an Orbit chain
   ```
 
   - Note for Anytrust chains, it is essential to add `--node.data-availability.enable` to the command as well.
-
 
 - When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
