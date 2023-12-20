@@ -400,7 +400,7 @@ To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/
 
 Since in the evm chain, all states need to be stored under a certain address, in this example, we will introduce how to use arbos to store your state in a precompile contract.
 
-First you need to open the [arbosstate.go][precompile_impl_dir_link] file, then find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
+First you need to open the [arbosstate.go][arbosstate_file_link] file, then find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
 
 We can define a state called `myNumber` here, `myNumber` uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link]:
 
@@ -495,8 +495,8 @@ func (state *ArbosState) GetMyNumber() (uint64, error) {
 }
 ```
 
-After that we can back to [precompiles implementation][precompile_impl_dir_link] and create a new ArbHi.go as we introduced in Option 2.
-But this time we will add two new methods to read and write the state in precompile:
+After that we need to back to [precompiles directory][precompile_impl_dir_link] and create a new `ArbHi.go` as we introduced in Option 2.
+But this time we will add two more new methods to read and write the arbos state:
 
 ```
 package precompiles
