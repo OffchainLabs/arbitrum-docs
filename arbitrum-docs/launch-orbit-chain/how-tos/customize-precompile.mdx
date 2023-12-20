@@ -7,7 +7,7 @@ sidebar_position: 4
 content-type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../partials/_orbit-public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
@@ -24,7 +24,8 @@ There are four primary ways to customize your chain's precompiles:
 1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
 2.  Create a new precompile.
 3.  Define a new event.
-4.  Customize gas usage for a specific method
+4.  Customize gas usage for a specific method.
+5.  Call and modify state.
 
 ### Prerequisites
 
@@ -395,6 +396,167 @@ Here we can see that the gas cost incurred by the execution of the first transac
 
 To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas).
 
+## Option 5: Call and modify state.
+
+Since in the evm chain, all states need to be stored under a certain address, in this example, we will introduce how to use arbos to store your state.
+
+First you need to find the [arbosstate.go][precompile_impl_dir_link] file, find the [ArbosState][arbosstate_link] structure in this file. This is where the state stored in arbos is defined.
+
+We can define a state called myNumber here, myNumber uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link] :
+
+```
+type ArbosState struct {
+	arbosVersion           uint64                      // version of the ArbOS storage format and semantics
+	upgradeVersion         storage.StorageBackedUint64 // version we're planning to upgrade to, or 0 if not planning to upgrade
+	upgradeTimestamp       storage.StorageBackedUint64 // when to do the planned upgrade
+	networkFeeAccount      storage.StorageBackedAddress
+	l1PricingState         *l1pricing.L1PricingState
+	l2PricingState         *l2pricing.L2PricingState
+	retryableState         *retryables.RetryableState
+	addressTable           *addressTable.AddressTable
+	chainOwners            *addressSet.AddressSet
+	sendMerkle             *merkleAccumulator.MerkleAccumulator
+	blockhashes            *blockhash.Blockhashes
+	chainId                storage.StorageBackedBigInt
+	chainConfig            storage.StorageBackedBytes
+	genesisBlockNum        storage.StorageBackedUint64
+	infraFeeAccount        storage.StorageBackedAddress
+	brotliCompressionLevel storage.StorageBackedUint64 // brotli compression level used for pricing
+	backingStorage         *storage.Storage
+	Burner                 burn.Burner
+	myNumber               storage.StorageBackedUint64 // this is what we added
+}
+```
+
+Next you need to define the offset of your newly added state (note please add it to the end so it won't affect other states):
+
+```
+const (
+	versionOffset Offset = iota
+	upgradeVersionOffset
+	upgradeTimestampOffset
+	networkFeeAccountOffset
+	chainIdOffset
+	genesisBlockNumOffset
+	infraFeeAccountOffset
+	brotliCompressionLevelOffset
+	myNumberOffset // define the offset of your new state here
+)
+```
+
+Then, initialize the state under method [OpenArbosState][arbosstate_openstate] and [InitializeArbosState][arbosstate_initializeArbosState]:
+
+OpenArbosState:
+
+```
+
+return &ArbosState{
+		arbosVersion,
+		backingStorage.OpenStorageBackedUint64(uint64(upgradeVersionOffset)),
+		backingStorage.OpenStorageBackedUint64(uint64(upgradeTimestampOffset)),
+		backingStorage.OpenStorageBackedAddress(uint64(networkFeeAccountOffset)),
+		l1pricing.OpenL1PricingState(backingStorage.OpenSubStorage(l1PricingSubspace)),
+		l2pricing.OpenL2PricingState(backingStorage.OpenSubStorage(l2PricingSubspace)),
+		retryables.OpenRetryableState(backingStorage.OpenSubStorage(retryablesSubspace), stateDB),
+		addressTable.Open(backingStorage.OpenSubStorage(addressTableSubspace)),
+		addressSet.OpenAddressSet(backingStorage.OpenSubStorage(chainOwnerSubspace)),
+		merkleAccumulator.OpenMerkleAccumulator(backingStorage.OpenSubStorage(sendMerkleSubspace)),
+		blockhash.OpenBlockhashes(backingStorage.OpenSubStorage(blockhashesSubspace)),
+		backingStorage.OpenStorageBackedBigInt(uint64(chainIdOffset)),
+		backingStorage.OpenStorageBackedBytes(chainConfigSubspace),
+		backingStorage.OpenStorageBackedUint64(uint64(genesisBlockNumOffset)),
+		backingStorage.OpenStorageBackedAddress(uint64(infraFeeAccountOffset)),
+		backingStorage.OpenStorageBackedUint64(uint64(brotliCompressionLevelOffset)),
+		backingStorage,
+		burner,
+		backingStorage.OpenStorageBackedUint64(uint64(myNumberOffset)), // define your new state here
+	}, nil
+```
+
+InitializeArbosState:
+
+```
+	_ = sto.SetUint64ByUint64(uint64(versionOffset), 1) // initialize to version 1; upgrade at end of this func if needed
+	_ = sto.SetUint64ByUint64(uint64(upgradeVersionOffset), 0)
+	_ = sto.SetUint64ByUint64(uint64(upgradeTimestampOffset), 0)
+	_ = sto.SetUint64ByUint64(uint64(myNumberOffset), 0) // initialize your new state around here
+```
+
+We also need to define some methods in this file to read and write this state (myNumber):
+
+```
+func (state *ArbosState) SetNewMyNumber(
+	newNumber uint64,
+) error {
+	return state.myNumber.Set(newNumber)
+}
+
+func (state *ArbosState) GetMyNumber() (uint64, error) {
+	return state.myNumber.Get()
+}
+```
+
+After that we can back to [precompiles implementation][precompile_impl_dir_link] and create a new ArbHi.go as we introduced in Option 2.
+But this time we need to add two new methods to read and write the state we defined above:
+
+```
+package precompiles
+
+// ArbGasInfo provides insight into the cost of using the rollup.
+type ArbHi struct {
+	Address addr // 0x11a, for example
+}
+
+func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+	return "hi", nil
+}
+
+func (con *ArbHi) GetNumber(c ctx, evm mech) (uint64, error) {
+	return c.State.GetMyNumber()
+}
+
+func (con *ArbHi) SetNumber(c ctx, evm mech, newNumber uint64) error {
+	return c.State.SetNewMyNumber(newNumber)
+}
+```
+
+After that, follow the Option 2 guide and add this new precompile contract and run your node.
+
+Your smart contract interface should be like this:
+
+```
+pragma solidity >=0.4.21 <0.9.0;
+
+/// @title Say hi.
+/// @notice just for test
+/// This custom contract will set on 0x000000000000000000000000000000000000011a since we set it in precompile.go.
+interface ArbHi {
+    function sayHi() external view returns(string memory);
+    function getNumber() external view returns(uint64);
+    function setNumber(uint64) external;
+}
+```
+
+### Send the transaction and get the transaction receipt
+
+To send a transaction to `ArbSys`, we need to include a gas cost, because the function is no longer a view/pure function:
+
+```
+cast send 0x000000000000000000000000000000000000011a "setNumber()" "2"
+```
+
+### Get results from foundry cast
+
+```
+cast call 0x000000000000000000000000000000000000011a "getNumber()(uint64)”
+```
+
+You should see something like this:
+
+```
+2
+```
+
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
 Note that nitro-contracts repository is hardcoded because atm we use the "nitro" repository for referencing precompiles for the current released nitro version  (for Arb chains),
@@ -406,3 +568,8 @@ We can use the @nitroContractsRepositorySlug@ and @nitroContractsPathToPrecompil
 [precompile_impl_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/
 [precompile_interface_dir_link]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
+[arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/arbos/arbosState/arbosstate.go
+[arbosstate_link]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38
+[storage_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/arbos/storage/storage.go
+[arbosstate_openstate]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89
+[arbosstate_initializeArbosState]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212
