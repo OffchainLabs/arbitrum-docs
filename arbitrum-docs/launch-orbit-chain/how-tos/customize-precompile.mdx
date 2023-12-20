@@ -481,7 +481,7 @@ InitializeArbosState:
 	_ = sto.SetUint64ByUint64(uint64(myNumberOffset), 0) // initialize your new state around here
 ```
 
-You also need to define some methods in this file to read and write this state `myNumber`:
+Next, define your getter and setter::
 
 ```
 func (state *ArbosState) SetNewMyNumber(
