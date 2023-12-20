@@ -402,7 +402,7 @@ In this example, we'll demonstrate how to _read from_ and _write to_ a precompil
 
 First, open the [arbosstate.go][arbosstate_file_link] file and locate the [ArbosState][arbosstate_link] structure. This is where ArbOS state is defined.
 
-We can define a state called `myNumber` here, `myNumber` uses the `storage.StorageBackedUint64` type. You can find more related types in [storage.go][storage_link]:
+Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go][storage_link]:
 
 ```
 type ArbosState struct {
