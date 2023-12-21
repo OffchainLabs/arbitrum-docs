@@ -406,20 +406,7 @@ Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You 
 
 ```
 type ArbosState struct {
-	arbosVersion           uint64                      // version of the ArbOS storage format and semantics
-	upgradeVersion         storage.StorageBackedUint64 // version we're planning to upgrade to, or 0 if not planning to upgrade
-	upgradeTimestamp       storage.StorageBackedUint64 // when to do the planned upgrade
-	networkFeeAccount      storage.StorageBackedAddress
-	l1PricingState         *l1pricing.L1PricingState
-	l2PricingState         *l2pricing.L2PricingState
-	retryableState         *retryables.RetryableState
-	addressTable           *addressTable.AddressTable
-	chainOwners            *addressSet.AddressSet
-	sendMerkle             *merkleAccumulator.MerkleAccumulator
-	blockhashes            *blockhash.Blockhashes
-	chainId                storage.StorageBackedBigInt
-	chainConfig            storage.StorageBackedBytes
-	genesisBlockNum        storage.StorageBackedUint64
+	// Other states
 	infraFeeAccount        storage.StorageBackedAddress
 	brotliCompressionLevel storage.StorageBackedUint64 // brotli compression level used for pricing
 	backingStorage         *storage.Storage
@@ -450,20 +437,7 @@ OpenArbosState:
 
 ```
 return &ArbosState{
-		arbosVersion,
-		backingStorage.OpenStorageBackedUint64(uint64(upgradeVersionOffset)),
-		backingStorage.OpenStorageBackedUint64(uint64(upgradeTimestampOffset)),
-		backingStorage.OpenStorageBackedAddress(uint64(networkFeeAccountOffset)),
-		l1pricing.OpenL1PricingState(backingStorage.OpenSubStorage(l1PricingSubspace)),
-		l2pricing.OpenL2PricingState(backingStorage.OpenSubStorage(l2PricingSubspace)),
-		retryables.OpenRetryableState(backingStorage.OpenSubStorage(retryablesSubspace), stateDB),
-		addressTable.Open(backingStorage.OpenSubStorage(addressTableSubspace)),
-		addressSet.OpenAddressSet(backingStorage.OpenSubStorage(chainOwnerSubspace)),
-		merkleAccumulator.OpenMerkleAccumulator(backingStorage.OpenSubStorage(sendMerkleSubspace)),
-		blockhash.OpenBlockhashes(backingStorage.OpenSubStorage(blockhashesSubspace)),
-		backingStorage.OpenStorageBackedBigInt(uint64(chainIdOffset)),
-		backingStorage.OpenStorageBackedBytes(chainConfigSubspace),
-		backingStorage.OpenStorageBackedUint64(uint64(genesisBlockNumOffset)),
+		// other states
 		backingStorage.OpenStorageBackedAddress(uint64(infraFeeAccountOffset)),
 		backingStorage.OpenStorageBackedUint64(uint64(brotliCompressionLevelOffset)),
 		backingStorage,
