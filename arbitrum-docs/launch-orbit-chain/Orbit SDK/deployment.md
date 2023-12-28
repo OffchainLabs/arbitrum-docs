@@ -79,3 +79,22 @@ The `createRollup` function in the [RollupCreator contract](https://github.com/O
    This nested structure within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
 All these parameters are customizable, allowing the chain deployer to either stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each of these parameters represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
+
+### Chain Configuration Parameters
+In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. Understanding these parameters is key to customizing your Orbit chain to suit your specific needs.
+
+1. **batchPoster**: This parameter sets the batch poster address for your Orbit chain. The batch poster account plays a crucial role in batching and compressing transactions on the Orbit chain and transmitting them back to the parent chain.
+
+2. **validators**: This parameter is an array of validator addresses. Validators are responsible for validating the chain state and posting Rollup Blocks (RBlocks) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty RBlocks submitted by other validators.
+
+3. **nativeToken**: This parameter determines the token used for paying gas fees on the Orbit chain. It can be set to ETH for regular chains, or to any ERC20 token for **gas fee token network** Orbit chains.
+
+4. **confirmPeriodBlocks**: This parameter sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately 7 days in block count.
+
+5. **stakeToken and baseStake**: Every Orbit chain requires at least one validator node. To post state assertions on the base chain, validators must stake a certain amount as an incentive for honest participation. The base stake parameter specifies the quantity of stake token (either ETH or an ERC-20 token) required for validators to post state assertions of your Orbit chain on the base chain's rollup contracts.
+
+6. **owner**: This is the account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.
+
+7. **chainId**: This parameter sets the unique chain ID for your Orbit chain.
+
+While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to contact us for further details and support.
