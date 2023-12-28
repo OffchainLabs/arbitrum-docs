@@ -31,5 +31,51 @@ To streamline the deployment process and make it more efficient, we've developed
 
 These functionalities within the RollupCreator contract significantly simplify the deployment process, providing a smoother and more user-friendly experience for chain deployers. We will delve into the specifics of the inputs and configurations required for the createRollup function and how to use Orbit-SDK for chain deployment in the following sections.
 
+### Chain Configuration
 
+The `createRollup` function in the [RollupCreator contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is a crucial component for deploying Orbit chains. It takes a complex input named `deployParams`, structured to encapsulate various configurable parameters essential for customizing the Orbit chain. Let's break down the structure of these parameters:
 
+1. **RollupDeploymentParams Structure:**
+   ```bash
+   struct RollupDeploymentParams {
+       Config config;
+       address batchPoster;
+       address[] validators;
+       uint256 maxDataSize;
+       address nativeToken;
+       bool deployFactoriesToL2;
+       uint256 maxFeePerGasForRetryables;
+   }
+   ```
+   This structure includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
+
+2. **Config Structure:**
+   ```bash
+   struct Config {
+       uint64 confirmPeriodBlocks;
+       uint64 extraChallengeTimeBlocks;
+       address stakeToken;
+       uint256 baseStake;
+       bytes32 wasmModuleRoot;
+       address owner;
+       address loserStakeEscrow;
+       uint256 chainId;
+       string chainConfig;
+       uint64 genesisBlockNum;
+       ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
+   }
+   ```
+   The `Config` structure defines the core settings of the chain, including block confirmation periods, stake parameters, and the chain ID.
+
+3. **MaxTimeVariation Structure:**
+   ```bash
+   struct MaxTimeVariation {
+       uint256 delayBlocks;
+       uint256 futureBlocks;
+       uint256 delaySeconds;
+       uint256 futureSeconds;
+   }
+   ```
+   This nested structure within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
+
+All these parameters are customizable, allowing the chain deployer to either stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each of these parameters represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
