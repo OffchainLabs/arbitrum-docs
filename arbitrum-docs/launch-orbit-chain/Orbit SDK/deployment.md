@@ -167,4 +167,42 @@ In this section, we'll provide detailed explanations of the various chain config
 
 While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to contact us for further details and support.
 
-### Configuration of Chain params on Orbit SDK
+### Configuration of Rollup Params and Deployment on Orbit SDK
+
+In order to facilitate the configuration and deployment of Rollup parameters for an Orbit chain, the Orbit SDK provides two essential APIs: `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
+
+1. **createRollupPrepareConfig API**: 
+   This API is designed to take parameters as defined in the Config structure and fill in the rest with default values. It outputs a complete Config structure that is ready for use. 
+   
+   For example, to create a Config structure with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the previous section, you would use the Orbit SDK as follows:
+
+   ```bash
+   import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
+
+   const config = createRollupPrepareConfig({
+       chainId: BigInt(chainId),
+       owner: deployer.address,
+       chainConfig,
+   });
+   ```
+
+2. **createRollupPrepareTransactionRequest API**: 
+   This API accepts parameters defined in the RollupDeploymentParams structure, applying defaults where necessary, and constructs the RollupDeploymentParams. This structure is then used to call the `createRollup` function of the RollupCreator contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
+
+   For instance, to deploy using the Orbit SDK with a Config equal to `config`, a batchPoster, and a set of validators such as `[validator]`, the process would look like this:
+
+   ```bash
+   import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
+
+   const request = await createRollupPrepareTransactionRequest({
+       params: {
+           config,
+           batchPoster,
+           validators: [validator],
+       },
+       account: deployer_address,
+       publicClient,
+   });
+   ```
+
+These APIs in the Orbit SDK make the complex process of configuring and deploying an Orbit chain more manageable and user-friendly. By abstracting the intricacies of smart contract interactions and deployment logistics, the SDK allows developers to focus more on their specific use cases and less on the underlying blockchain mechanics.
