@@ -161,7 +161,9 @@ In this section, we'll provide detailed explanations of the various chain config
 
 6. **owner**: This is the account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.
 
-7. **chainId**: This parameter sets the unique chain ID for your Orbit chain.
+7. **chainId**: This parameter sets the unique chain ID for your Orbit chain 
+
+**Note** that chainId and owner parameters must be equal to the chain ID and InitialOwner defined on chainConfig section.
 
 While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to contact us for further details and support.
 
