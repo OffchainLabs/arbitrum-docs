@@ -31,7 +31,7 @@ To streamline the deployment process and make it more efficient, we've developed
 
 These functionalities within the RollupCreator contract significantly simplify the deployment process, providing a smoother and more user-friendly experience for chain deployers. We will delve into the specifics of the inputs and configurations required for the createRollup function and how to use Orbit-SDK for chain deployment in the following sections.
 
-### Chain Configuration
+### Rollup Deployment Parameters Configuration
 
 The `createRollup` function in the [RollupCreator contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is a crucial component for deploying Orbit chains. It takes a complex input named `deployParams`, structured to encapsulate various configurable parameters essential for customizing the Orbit chain. Let's break down the structure of these parameters:
 
@@ -77,10 +77,76 @@ The `createRollup` function in the [RollupCreator contract](https://github.com/O
    }
    ```
    This nested structure within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
+4. **chainConfig:**
 
-All these parameters are customizable, allowing the chain deployer to either stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each of these parameters represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
+    The `chainConfig` parameter within the `Config` structure, is a critical component for customizing the Orbit chain. It's a stringified JSON object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network. Here's a brief overview of the JSON structure:
+   ```bash
+   {
+     chainId: number;
+     homesteadBlock: number;
+     daoForkBlock: null;
+     daoForkSupport: boolean;
+     eip150Block: number;
+     eip150Hash: string;
+     eip155Block: number;
+     eip158Block: number;
+     byzantiumBlock: number;
+     constantinopleBlock: number;
+     petersburgBlock: number;
+     istanbulBlock: number;
+     muirGlacierBlock: number;
+     berlinBlock: number;
+     londonBlock: number;
+     clique: {
+       period: number;
+       epoch: number;
+     };
+     arbitrum: {  
+     EnableArbOS: boolean;
+     AllowDebugPrecompiles: boolean;
+     DataAvailabilityCommittee: boolean;
+     InitialArbOSVersion: number;
+     InitialChainOwner: Address;
+     GenesisBlockNum: number;
+     MaxCodeSize: number;
+     MaxInitCodeSize: number;
+     };
+   }
+   ```
+    Out of these parameters, a few are particularly important and are likely to be configured by the chain owner: **chainId**, **DataAvailabilityCommittee**, **InitialChainOwner**, **MaxCodeSize** and **MaxInitCodeSize**. The other parameters, while part of the chainConfig, typically use default values and are less frequently modified. In the "Chain Config Parameter" section, we will delve into each of these important parameters in more detail. Additionally, we'll guide you through using the Orbit SDK to effectively set and customize these configurations, ensuring that your Orbit chain is tailored to your specific requirements and operational needs.
 
-### Chain Configuration Parameters
+All the parameters explained in this section are customizable, allowing the chain deployer to either stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each of these parameters represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
+
+### Chain Config Parameter
+
+In this section, we provide detailed explanations of key configurable parameters within the `chainConfig` for Orbit chain deployment and guide you on how to utilize the Orbit SDK to generate the desired `chainConfig` JSON string. These parameters play a crucial role in defining the characteristics and operational parameters of your Orbit chain. Here are the parameters you need to know about:
+
+1. **chainId**: This is the unique identifier for your Orbit chain. It differentiates your chain from others in the ecosystem.
+
+2. **DataAvailabilityCommittee**: This boolean parameter determines the nature of your Orbit chain. Setting it to `False` indicates a Rollup chain, whereas `True` configures it as an Anytrust chain.
+
+3. **InitialChainOwner**: This address is crucial as it denotes who initially owns and has control over the chain.
+
+4. **MaxCodeSize**: This parameter sets the maximum size for smart contract bytecodes on the Orbit chain. For comparison, the Ethereum mainnet has a limit of 24,576 Bytes.
+
+5. **MaxInitCodeSize**: Similar to `MaxCodeSize`, this parameter defines the maximum size for the **initialization** code on your Orbit chain. The Ethereum mainnet limit is 49,152 Bytes for reference.
+
+To make the configuration process user-friendly, the Orbit SDK includes an API named `prepareChainConfig`. This API allows you to input the above parameters and receive a `chainConfig` JSON string in return. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK documentation](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+
+Here is an example of how to use the `prepareChainConfig` API in the Orbit SDK to set up a chain with a specific `chainId`, an `InitialChainOwner` (denoted as `deployer_address`), and configure it as an Anytrust chain:
+
+```bash
+import { prepareChainConfig } from '@arbitrum/orbit-sdk';
+
+const chainConfig = prepareChainConfig({
+    chainId: Some_Chain_ID,
+    arbitrum: { InitialChainOwner: deployer_address, DataAvailabilityCommittee: true },
+});
+```
+
+This API simplifies the process of configuring your Orbit chain, ensuring that you can tailor it to your specific needs efficiently and effectively.
+
+### Rollup Configuration Parameters
 In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. Understanding these parameters is key to customizing your Orbit chain to suit your specific needs.
 
 1. **batchPoster**: This parameter sets the batch poster address for your Orbit chain. The batch poster account plays a crucial role in batching and compressing transactions on the Orbit chain and transmitting them back to the parent chain.
@@ -98,3 +164,5 @@ In this section, we'll provide detailed explanations of the various chain config
 7. **chainId**: This parameter sets the unique chain ID for your Orbit chain.
 
 While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to contact us for further details and support.
+
+### Configuration of Chain params on Orbit SDK
