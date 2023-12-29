@@ -187,7 +187,7 @@ In order to facilitate the configuration and deployment of Rollup parameters for
    ```
 
 2. **createRollupPrepareTransactionRequest API**: 
-   This API accepts parameters defined in the RollupDeploymentParams structure, applying defaults where necessary, and constructs the RollupDeploymentParams. This structure is then used to call the `createRollup` function of the RollupCreator contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
+   This API accepts parameters defined in the RollupDeploymentParams structure, applying defaults where necessary, and constructs the RollupDeploymentParams. This structure is then used to create a raw transaction which call the `createRollup` function of the RollupCreator contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
 
    For instance, to deploy using the Orbit SDK with a Config equal to `config`, a batchPoster, and a set of validators such as `[validator]`, the process would look like this:
 
@@ -204,5 +204,22 @@ In order to facilitate the configuration and deployment of Rollup parameters for
        publicClient,
    });
    ```
+    After creating the raw transaction, you need to sign and broadcast it to the network.
 
 These APIs in the Orbit SDK make the complex process of configuring and deploying an Orbit chain more manageable and user-friendly. By abstracting the intricacies of smart contract interactions and deployment logistics, the SDK allows developers to focus more on their specific use cases and less on the underlying blockchain mechanics.
+
+### Getting the Orbit Chain Information After Deployment
+
+Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment. The Orbit SDK provides a convenient way to do this through the `createRollupPrepareTransactionReceipt` API. This API allows you to extract vital data about the core contracts and other important aspects of your newly deployed Orbit chain.
+
+After you send the signed transaction and receive the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide you with comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other essential information.
+
+Here's an example of how to use the Orbit SDK to get data from a deployed Orbit chain:
+
+```bash
+import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
+
+const data = createRollupPrepareTransactionReceipt(txReceipt);
+```
+
+In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can easily access a wealth of information about your Orbit chain. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
