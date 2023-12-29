@@ -1,5 +1,5 @@
 ---
-title: 'Anytrust orbit chains keyset generation'
+title: 'AnyTrust Orbit chains: Keyset generation'
 sidebar_label: 'Keyset Generation for Anytrust Orbits'
 description: 'Keyset generation and setup for Anytrust Orbit chains'
 author: Mehdi Salehi
