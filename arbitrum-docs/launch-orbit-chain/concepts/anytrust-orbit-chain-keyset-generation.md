@@ -1,7 +1,7 @@
 ---
 title: 'AnyTrust Orbit chains: Keyset generation'
 sidebar_label: 'Keyset generation (AnyTrust chains)'
-description: 'Keyset generation and setup for Anytrust Orbit chains'
+description: 'Learn how Orbit's AnyTrust chains handle keyset generation.'
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Anytrust Orbit chains.'
