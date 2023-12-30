@@ -1,6 +1,6 @@
 ---
 title: 'Quickstart: Launch an Orbit chain'
-description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Goerli or Sepolia testnets for now; One and Nova coming soon). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
+description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
 target_audience: developers who want to create their own self-managed AnyTrust or One chain
 sidebar_label: 'Quickstart'
@@ -20,11 +20,11 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 - [Docker](https://docs.docker.com/get-docker/)
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
-- At least 1.5 testnet ETH
+- At least 1 testnet ETH (for custom gas token chains, 0.6 ETH and 0.4 native tokens)
 
-## Step 1: Acquire Arbitrum Testnet $ETH (and Native token in custom fee token Orbits)
+## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
 
-You'll need at least 1.5 testnet $ETH on the regular Orbit chains and 1.1 $ETH plus 0.4 of your desired native token for Custom Fee Token Orbit chains. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
+You'll need at least 1 testnet $ETH for regular Orbit chains or 0.6 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
 
 At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Goerli or Sepolia network to Arbitrum's corresponding L2 testnet:
 
@@ -72,7 +72,7 @@ The below table provides a brief description of each of these configuration para
 | **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                                                                                                                                                                    |
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                             |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later.                                                                                                                                        |
-| **Native token**              | The address of the ERC-20 token on the parent chain that is intended to be used as the native fee token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration). |
+| **Gas token**                 | The address of the ERC-20 token on the parent chain that is intended to be used as the native gas token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration). |
 
 ## Step 4: Configure your chain's validator(s)
 

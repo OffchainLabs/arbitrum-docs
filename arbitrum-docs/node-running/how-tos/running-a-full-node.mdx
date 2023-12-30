@@ -28,6 +28,12 @@ The minimum storage requirements will change over time as the Nitro chain grows.
 
 ### Prerequisites
 
+:::caution Only use released versions
+
+Even though there are alpha and beta versions of the <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro software</a>, only release versions should be used when running your node. Running alpha or beta versions is not supported, and might lead to unexpected behaviors.
+
+:::
+
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 - Database snapshot (required for Arbitrum One, optional for other chains)
   - Use the parameter `--init.url` on first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroPrunedSnapshot@"</code>.
@@ -94,6 +100,8 @@ The minimum storage requirements will change over time as the Nitro chain grows.
 - You can activate pruning by using the parameter `--init.prune` and using "full" or "validator" as the value (depending on the type of node you are running). Keep in mind that this process will happen upon starting the node and it will not serve RPC requests while pruning.
 
 ### Optional parameters
+
+We show here a list of the parameters that are most commonly used when running a node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
 import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.md';
 

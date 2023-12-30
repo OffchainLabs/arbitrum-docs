@@ -1,7 +1,7 @@
 ---
-title: 'SDK support for custom fee token Orbit chains'
-sidebar_label: 'Custom fee token SDK'
-description: 'SDK support for custom fee token Orbit chains'
+title: 'SDK support for custom gas token Orbit chains'
+sidebar_label: 'Custom gas token SDK'
+description: 'SDK support for custom gas token Orbit chains'
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
@@ -16,13 +16,13 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-### Custom fee token SDK
+### Custom gas token SDK
 
-The following custom fee token APIs are available under the `orbit-custom-fee-token` SDK tag:
+The following custom gas token APIs are available under the `orbit-custom-fee-token` SDK tag:
 
 - `getApproveFeeTokenRequest` and `approveFeeToken` on [EthBridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-a977cd005aca51be6f05bc7e1c7c1bf6d734b62b2c45c84b05e2eb0c3c3c6fff)
 - `getApproveFeeTokenRequest` and `approveFeeToken` on [Erc20Bridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-b1894b842df6f4794b6623dc57e9e14c2519fbe5fa5c5dd63403f1185f305cbb)
 
-If you're using custom fee tokens, you'll need to use each of these; on custom fee token chains, token approval is required when transferring ERC20 tokens (while Orbit chains that use ETH do not have this requirement).
+If you're using a custom gas token, you'll need to use each of these; on custom gas token chains, token approval is required when transferring ERC20 tokens (while Orbit chains that use ETH do not have this requirement).
 
-Note that everything else is under the hood, and the custom fee token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
+Note that everything else is under the hood, and the custom gas token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.

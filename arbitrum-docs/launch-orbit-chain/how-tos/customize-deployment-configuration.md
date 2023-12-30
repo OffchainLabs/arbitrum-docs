@@ -42,13 +42,13 @@ Note that the challenge period is measured in blocks on the underlying L1 chain,
 
 <!-- todo: revisit and discuss defaults -->
 
-### Native Fee Token
+### Gas Token
 
-The `Native Token` parameter specifies the token (ETH or an ERC-20 token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the native fee token is ETH. Orbit chains that are configured as AnyTrust chains can specify a different native token as long as it falls within certain requirements.
+The `Gas Token` parameter specifies the token (ETH or an ERC-20 token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the gas token is ETH. Orbit chains that are configured as AnyTrust chains can specify a different gas token as long as it falls within certain requirements.
 
-The main requirement for custom native fee tokens is that they are natively deployed on the parent chain. For example, if a team deploying an Orbit chain wants to use a specific ERC-20 as the native fee token, that token must be deployed on the parent chain first (i.e. Arbitrum One or Nova). During chain deployment, that token is "natively bridged" and then properly configured as the native fee token on the new network.
+The main requirement for custom gas tokens is that they are natively deployed on the parent chain. For example, if a team deploying an Orbit chain wants to use a specific ERC-20 as the gas token, that token must be deployed on the parent chain first (i.e. Arbitrum One or Nova). During chain deployment, that token is "natively bridged" and then properly configured as the native gas token on the new network.
 
-There are other important considerations to keep in mind when deciding to use a custom native fee token. Restrictions on the ERC-20 token include:
+There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the ERC-20 token include:
 
 - In this version, only tokens with **18** decimals are permitted to be the native token.
 - The token can't be rebasing or have a transfer fee.
@@ -56,7 +56,7 @@ There are other important considerations to keep in mind when deciding to use a 
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
 
-It is worth reiterating that currently this feature is only supported on **Orbit AnyTrust chains**. Additionally, using a native fee token other than ETH adds additional overhead when it comes to ensuring chains are funded properly when posting data to their parent chain.
+It is worth reiterating that currently this feature is only supported on **Orbit AnyTrust chains**. Additionally, using a gas token other than ETH adds additional overhead when it comes to ensuring chains are funded properly when posting data to their parent chain.
 
 ### Stake token
 

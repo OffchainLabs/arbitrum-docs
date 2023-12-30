@@ -38,6 +38,9 @@ const globalVars = {
 
   goEthereumCommit: '4a5108752c2b34fc83cb0d0c8447cded82921e59',
 
+  nitroPathToArbosState: 'arbos/arbosState',
+  nitroPathToStorage: 'arbos/storage',
+
   // gas floor
   arbOneGasFloorGwei: '0.1',
   novaGasFloorGwei: '0.01',
