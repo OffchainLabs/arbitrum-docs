@@ -1,6 +1,6 @@
 ---
 title: 'Arbitrum Orbit SDK'
-sidebar_label: 'Orbit SDK'
+sidebar_label: 'Rollup Orbit Deployment'
 description: 'Arbitrum SDK '
 author: Mehdi Salehi
 sme: Mehdi Salehi
