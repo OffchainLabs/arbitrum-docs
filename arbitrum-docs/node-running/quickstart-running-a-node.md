@@ -28,6 +28,7 @@ When it comes to interacting with the Arbitrum network, users have the option to
 For detailed instructions on how to run an Arbitrum full node, see [here](./how-tos/running-a-full-node.mdx).
 
 ### Considerations for running an Arbitrum archive node
+[Blockchain.logs.txt](https://github.com/OffchainLabs/arbitrum-docs/files/13802773/Blockchain.logs.txt)
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
