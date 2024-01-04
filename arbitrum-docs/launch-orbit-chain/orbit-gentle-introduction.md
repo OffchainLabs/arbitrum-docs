@@ -8,7 +8,7 @@ target_audience: technical decision-makers, people familiar with web3 who will d
 sidebar_position: 1
 ---
 
-This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains.
+This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit**, a new product offering that lets you create your own Arbitrum <a data-quicklook-from="arbitrum-rollup-protocol">Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains.
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
@@ -18,13 +18,13 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 ### In a nutshell:
 
-- Arbitrum Orbit lets you **create your own dedicated chain** that settles to one of Arbitrum's <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chains: <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, **Arbitrum Sepolia** or **Arbitrum Goerli**.
-- **You own your Orbit chain** and can customize its throughput, privacy, gas token, governance, and more.
-- Examples of possibilities that this unlocks:
-  - **Launch a decentralized Nitro-powered blockchain network**, and that benefits from <a data-quicklook-from='arbitrum-nitro'>Nitro</a>'s fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://offchain.medium.com/hello-stylus-6b18fecc3a22), and continuous improvements.
-  - **Offer gas price reliability** to your end-users thanks to the dedicated throughput and traffic isolation that Orbit chains offer by default.
-  - **Permission access** to control who can read your chain's data and who can deploy smart contracts to your chain. Your chain can be completely permissionless like Ethereum and <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, or you can implement your own permissions policies.
-  - **Collect fees using a token that you choose** to rapidly iterate on domain-specific mechanism designs and value capture opportunities.
+- Arbitrum Orbit is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
+- Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 chain which can settle to one of Arbitrum's L2s, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
+  - While L2 Orbit chains can be built today by getting in touch with the Arbitrum Foundation, an emerging structure to make this process permissionless is quickly forming.
+- Configure numerous components of the chain such as transaction fees, throughput, privacy, gas token, governance, precompiles and more — **the possibilities are endless**.
+- **You own your Orbit chain** and can decentralize its ownership, validation, and other dependencies. 
+- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/stylus-gentle-introduction), and continuous improvements.
+
 
 ### What's Orbit?
 
