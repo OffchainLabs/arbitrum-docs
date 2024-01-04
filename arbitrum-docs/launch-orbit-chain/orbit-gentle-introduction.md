@@ -19,9 +19,9 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 ### In a nutshell:
 
 - Arbitrum Orbit is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
-- Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 chain which can settle to one of Arbitrum's L2s, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
+- Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to one of Arbitrum's L2s, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
   - While L2 Orbit chains can be built today by getting in touch with the Arbitrum Foundation, an emerging structure to make this process permissionless is quickly forming.
-- Configure numerous components of the chain such as transaction fees, throughput, privacy, gas token, governance, precompiles and more — **the possibilities are endless**.
+- Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more — **the possibilities are endless**.
 - **You own your Orbit chain** and can decentralize its ownership, validation, and other dependencies. 
 - Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/stylus-gentle-introduction), and continuous improvements.
 
@@ -51,13 +51,10 @@ import {
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for="1,2,3">
-      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own chain
-      that settles to one of Arbitrum's public Layer 2 (L2) chains.
+      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own customizable chain, which can be an L2 or an L3.
     </NodeDescription>
     <NodeDescription for="4">
-      <strong>Arbitrum One</strong>, <strong>Arbitrum Nova</strong>,{' '}
-      <strong>Arbitrum Sepolia</strong> and <strong>Arbitrum Goerli</strong> are public Layer 2 (L2)
-      chains that settle to Ethereum.
+      L3 Orbit chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which settles to Ethereum.
     </NodeDescription>
     <NodeDescription for="5">
       <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
@@ -65,13 +62,13 @@ import {
   </NodeDescriptions>
 </MermaidWithHtml>
 
-- You can think of Orbit chains as **deployable, configurable forks of Arbitrum's L2 Nitro technology stack** that are tightly coupled to Arbitrum's L2 chains.
+- You can think of Orbit chains as **deployable, configurable instances of the Arbitrum Nitro tech stack**.
 - You can also think of them as **tailored chains** - chains tailored precisely to **your exact use-case and business needs**.
 - This gives you another way to **progressively decentralize** your applications and **incrementally adopt** the properties and security assumptions of Ethereum's base layer.
-- It also lets you continuously integrate improvements made to the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack (the code that powers the nodes that support Arbitrum's L2 and Orbit chains).
-- Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> implement the <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> and <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> protocols, respectively. Every Orbit chain can be configured to use either Rollup or AnyTrust — it's your choice![^1]
+- Every Orbit chain can be configured to be either a <a data-quicklook-from='arbitrum-rollup-protocol'>Rollup</a> or <a data-quicklook-from='arbitrum-anytrust-protocol'>AnyTrust</a> Chain.
+  - Note that <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an example of a rollup, and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> is an example of an AnyTrust chain.
 - Arbitrum One and Arbitrum Nova are owned and governed by the [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao). With Orbit chains, _you_ determine the way that your chain is governed.
-  - The [Arbitrum DAO](https://docs.arbitrum.foundation/concepts/arbitrum-dao) owns and governs the L2 chains that your Orbit chain can settle to. Refer to the [Arbitrum DAO docs](https://docs.arbitrum.foundation/new-arb-chains) to learn more about the Arbitrum DAO's purpose, protocols, and role with regard to Orbit chains.
+
 
 ### What problem does Orbit solve?
 
