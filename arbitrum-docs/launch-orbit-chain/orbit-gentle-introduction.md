@@ -1,7 +1,7 @@
 ---
 title: 'A gentle introduction: Orbit chains'
 sidebar_label: 'A gentle introduction to Orbit'
-description: "Launch your own Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain or modify its instance of the Nitro codebase."
+description: "Launch your own Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain or modify its instance of the Nitro codebase."
 author: symbolpunk
 sme: oliviaJ3388
 target_audience: technical decision-makers, people familiar with web3 who will decide to use Orbit on behalf of their organizations
@@ -42,9 +42,9 @@ import {
     <Node id="1">Orbit chain</Node>
     <Node id="2">Orbit chain</Node>
     <Node id="3">Orbit chain</Node>
-    <Node id="4">Arbitrum (L2 - Sepolia, Goerli, One, Nova)</Node>
-    <Node id="5">Ethereum (L1 - Sepolia, Goerli, Mainnet)</Node>
-    <Connection from="1" to="4" />
+    <Node id="4">Arbitrum (L2 - Sepolia, One, Nova)</Node>
+    <Node id="5">Ethereum (L1 - Sepolia, Mainnet)</Node>
+    <Connection from="1" to="5" />
     <Connection from="2" to="4" />
     <Connection from="3" to="4" />
     <Connection from="4" to="5" />
@@ -151,9 +151,24 @@ Note that the Arbitrum Orbit license doesn't automatically include chains that s
 1.  **Ask Offchain Labs**: Offchain Labs, as the initial developer of the Arbitrum Nitro codebase, is the licensor of the software, and can grant custom licenses.
 2.  **Propose to the Arbitrum DAO**: With the launch of the Arbitrum DAO, the DAO was also given co-licensor rights to approve additional L2s on Ethereum that do not settle to a DAO-governed chain. To utilize this mechanism, you’ll need to [submit a proposal to the Arbitrum DAO](https://docs.arbitrum.foundation/how-tos/create-submit-dao-proposal), and the DAO will democratically decide whether or not to grant the license for your proposed L2 chain.
 
+### What are the benefits of an L3 vs L2?
+
+Using an L3 Orbit chain grants developers the following benefits:
+- Cheaper user acquisition: Using the native bridge, onboarding from L2→L3 is less expensive than L1→L2.
+- Finality speed: Orbit chains with low amounts of activity can still achieve fast finality speed withour paying higher batch posting costs.
+
+Using an L2 Orbit chain offers the following benefits:
+- Reduced friction: users will be able to perform one bridge transaction rather than multiple, providing more direct access to Ethereum's deep liquidity and TVL.
+- Greater neutrality: L2 chains settle directly to Ethereum - while they leverage Arbitrum technology, this allows for simpler protocol design and provides stronger exit guarantees.
+
+
 ### I'd love to tinker with Orbit! What should I do next?
 
 Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
 
+### How can I launch an Orbit chain on mainnet?
+
+While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/), [Conduit](https://conduit.xyz/), and [AltLayer](https://altlayer.io/) that are enabling developers to quickly launch their own rollups.
+
 [^1]: Although your Orbit chain will be able to exchange information with other Orbit chains (and the L2 chain that it settles to) by default, you're free to modify your Orbit chain's code as much as you'd like. You can even intentionally make your Orbit chain _incompatible_ with other Orbit chains and L2s.
-[^2]: Note that Orbit chains can settle to **one** of either Arbitrum Sepolia, Arbitrum Goerli, Arbitrum One, or Arbitrum Nova. This selection is usually made pre-deployment, while you're initially configuring your Orbit chain on the [Orbit chain deployment portal](https://orbit.arbitrum.io/). Orbit chains aren't really meant to "hot swap" between networks; changing the L2 chain that your Orbit chain settles to post-deployment isn't explicitly supported. But you can totally experiment with this use-case.
+[^2]: Note that Orbit chains can settle to **one** of either Ethereum Sepolia, Ethereum, Arbitrum Sepolia, Arbitrum One, or Arbitrum Nova. This selection is usually made pre-deployment, while you're initially configuring your Orbit chain on the [Orbit chain deployment portal](https://orbit.arbitrum.io/). Orbit chains aren't really meant to "hot swap" between networks; changing the L2 chain that your Orbit chain settles to post-deployment isn't explicitly supported. But you can totally experiment with this use-case.
