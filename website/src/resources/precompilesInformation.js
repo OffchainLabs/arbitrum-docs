@@ -94,9 +94,28 @@ const precompilesInformation = {
       releasel1pricersurplusfunds: {
         description: 'Releases surplus funds from L1PricerFundsPoolAddress for use',
       },
+      setbrotlicompressionlevel: {
+        description:
+          'Sets the Brotli compression level used for fast compression (Available in ArbOS version 12 with default level as 1)',
+      },
+      setchainconfig: {
+        description: 'Sets serialized chain config in ArbOS state',
+      },
     },
   },
-  ArbOwnerPublic: {},
+  ArbOwnerPublic: {
+    methodOverrides: {
+      rectifychainowner: {
+        description:
+          'RectifyChainOwner checks if the account is a chain owner (Available in ArbOS version 11)',
+      },
+    },
+    eventOverrides: {
+      chainownerrectified: {
+        description: 'Emitted when verifying a chain owner',
+      },
+    },
+  },
   ArbosTest: {},
   ArbRetryableTx: {
     methodOverrides: {
