@@ -38,7 +38,7 @@ $fira-font-family: 'Fira Code', monospace;
             //font-size: 15px !important;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
-            //color: #777;
+            // opacity: 0.9;
             //text-transform: uppercase;
             vertical-align: middle;
           }
@@ -51,6 +51,7 @@ $fira-font-family: 'Fira Code', monospace;
 
       .menu__link {
         //font-size: 13px;
+        font-weight: 400;
       }
 
       > .theme-doc-sidebar-item-link{
