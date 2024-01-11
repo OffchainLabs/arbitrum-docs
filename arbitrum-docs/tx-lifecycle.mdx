@@ -32,7 +32,7 @@ Upon receiving a transaction, the Sequencer will:
 
 - Order it in its off-chain Inbox
 - Locally execute it using the Arbitrum Nitro VM (including collecting/allocating L1 and L2 fees, etc.)
-- "Instantly" give a transaction receipt to the client ("instant" in that it doesn't require any additional on-chain confirmations, and typically shouldn't take more than a second or two).
+- "Instantly" give a transaction receipt to the client ("instant" in that it doesn't require any additional on-chain confirmations, and typically takes less than a second - with the average user experiencing ~260ms).
 
 **See**:
 
