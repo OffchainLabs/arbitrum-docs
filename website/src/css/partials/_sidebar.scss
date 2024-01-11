@@ -8,8 +8,8 @@ $fira-font-family: 'Fira Code', monospace;
 
 .theme-doc-sidebar-container {
   .theme-doc-sidebar-menu {
-    font-weight: 500;
-    font-size: 13px;
+    padding-top: 20px;
+    font-weight: 400;
 
     .menu__link--sublist-caret:after {
       height: 1rem !important;
@@ -24,33 +24,37 @@ $fira-font-family: 'Fira Code', monospace;
       // the wrapper around all root sidebar items
 
       > .theme-doc-sidebar-item-category {
-        margin-top: 20px;
-        margin-bottom: 50px;
+        margin-top: 10px;
+        //margin-bottom: 20px;
 
         > div {
-          border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+          //border-bottom: 1px solid rgba(150, 150, 150, 0.1);
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
 
           > a {
-            @include apply-fira-font;
-            font-weight: 700;
-            font-size: 11.5px !important;
+            //@include apply-fira-font;
+            font-weight: 400;
+            //font-size: 15px !important;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
-            color: #777;
-            text-transform: uppercase;
+            //color: #777;
+            //text-transform: uppercase;
             vertical-align: middle;
           }
         }
 
         > ul {
-          padding-left: 0 !important;
+          padding-left: 20px !important;
         }
       }
 
       .menu__link {
-        font-size: 12px;
+        //font-size: 13px;
+      }
+
+      > .theme-doc-sidebar-item-link{
+        margin-top: 10px;
       }
     }
   }

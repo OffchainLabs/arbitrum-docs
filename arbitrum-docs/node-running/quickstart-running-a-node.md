@@ -5,6 +5,7 @@ author-objective: Build a quickstart that helps readers understand why they migh
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
 reader-task: Run a node with minimal effort and maximum understanding
 content-type: quickstart
+sidebar_label: 'Quickstart (Nitro)'
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';

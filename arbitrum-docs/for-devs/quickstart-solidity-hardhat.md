@@ -1,6 +1,6 @@
 ---
-title: 'Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)'
-sidebar_label: Quickstart (Solidity, Hardhat)
+title: 'Quickstart: Build a decentralized app with Arbitrum'
+sidebar_label: Quickstart (Solidity)
 description: This quickstart will walk you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
 author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum

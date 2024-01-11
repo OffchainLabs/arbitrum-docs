@@ -1,6 +1,6 @@
 ---
 title: 'A gentle introduction: Orbit chains'
-sidebar_label: 'A gentle introduction to Orbit'
+sidebar_label: 'Orbit'
 description: "Launch your own Arbitrum Orbit chain under the Arbitrum Nitro codebase's new licensing model. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain or modify its instance of the Nitro codebase."
 author: symbolpunk
 sme: oliviaJ3388
@@ -10,9 +10,9 @@ sidebar_position: 1
 
 This document is for developers and decision-makers who want to learn more about **Arbitrum Orbit**, a new product offering that lets you create your own self-managed <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup</a> and <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains.
 
-If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
+If you'd prefer to learn by doing, see the [Orbit quickstart](./launch-orbit-chain/orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './launch-orbit-chain/partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -106,7 +106,7 @@ Said simply:
 | **Customizable protocol logic**     | You may need to modify the logic of your chain's settlement, execution, or governance protocols in order to meet specific requirements. Orbit's chains let you do this, while benefiting from the security of Ethereum, through Arbitrum's DAO-governed L2 chains.                                                                                                                                                                                                                                                                           |
 | **Nitro extensibility**             | Orbit chains will have access to all Nitro code upgrades, feature additions, and improvements, giving your Orbit chain the option to stay up-to-date and incorporate the latest and greatest in Ethereum scaling technology.                                                                                                                                                                                                                                                                                                                 |
 | **Decentralization options**        | You can build an <a data-quicklook-from='arbitrum-rollup-protocol'>Arbitrum Rollup</a> chain that uses Ethereum for data availability, or you can build an <a data-quicklook-from='arbitrum-anytrust-protocol'>Arbitrum AnyTrust</a> chain that uses a <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee (DAC)</a> to expedite the settlement of transactions to your Orbit chain's base chain, making things even cheaper for you and your end-users. Orbit chains can use either of these technologies. |
-| **Low prototyping costs**           | Orbit chains can be easily created. See the [Orbit Quickstart](./orbit-quickstart) for step-by-step instructions.                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Low prototyping costs**           | Orbit chains can be easily created. See the [Orbit Quickstart](./launch-orbit-chain/orbit-quickstart) for step-by-step instructions.                                                                                                                                                                                                                                                                                                                                                                                                         |
 | **Security**                        | Arbitrum technology powers the most secure L2s, and you can use this same mature technology stack for your Orbit chain.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Flexible technology options**     | Orbit lets you choose between Rollup, AnyTrust, or custom technology stacks. This makes Ethereum and Arbitrum technologies more adaptable by allowing you to incorporate only the elements of the technologies that you need.                                                                                                                                                                                                                                                                                                                |
 | **Permissioned access**             | Orbit gives you the freedom to choose which contracts are deployed on your chain. You can keep it as open and permissionless as Ethereum, restrict contract deployment so that only your app can be deployed on this chain, or anything in between!                                                                                                                                                                                                                                                                                          |
@@ -156,7 +156,7 @@ Note that the Arbitrum Orbit license doesn't automatically include chains that s
 
 ### I'd love to tinker with Orbit! What should I do next?
 
-Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
+Visit the [Orbit Quickstart](./launch-orbit-chain/orbit-quickstart.md), start tinkering, and let us know how it goes - we're excited to learn and grow with you! 🚀
 
 [^1]: Although your Orbit chain will be able to exchange information with other Orbit chains (and the L2 chain that it settles to) by default, you're free to modify your Orbit chain's code as much as you'd like. You can even intentionally make your Orbit chain _incompatible_ with other Orbit chains and L2s.
 [^2]: Note that Orbit chains can settle to **one** of either Arbitrum Sepolia, Arbitrum Goerli, Arbitrum One, or Arbitrum Nova. This selection is usually made pre-deployment, while you're initially configuring your Orbit chain on the [Orbit chain deployment portal](https://orbit.arbitrum.io/). Orbit chains aren't really meant to "hot swap" between networks; changing the L2 chain that your Orbit chain settles to post-deployment isn't explicitly supported. But you can totally experiment with this use-case.
