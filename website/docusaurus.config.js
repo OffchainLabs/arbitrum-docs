@@ -100,7 +100,7 @@ const config = {
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
-          href: '/platform-overview',
+          href: '/for-devs/gentle-introduction-dapps',
         },
         items: [],
       },
