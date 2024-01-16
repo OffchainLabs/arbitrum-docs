@@ -20,8 +20,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 - Arbitrum Orbit is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
 - Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to one of Arbitrum's L2s, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
-  - While L2 Orbit chains can be built today by getting in touch with the Arbitrum Foundation, an emerging structure to make this process permissionless is quickly forming.
-- Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more — **the possibilities are endless**.
+- Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
 - **You own your Orbit chain** and can decentralize its ownership, validation, and other dependencies. 
 - Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/stylus-gentle-introduction), and continuous improvements.
 
@@ -42,8 +41,8 @@ import {
     <Node id="1">Orbit chain</Node>
     <Node id="2">Orbit chain</Node>
     <Node id="3">Orbit chain</Node>
-    <Node id="4">Arbitrum (L2 - Sepolia, One, Nova)</Node>
-    <Node id="5">Ethereum (L1 - Sepolia, Mainnet)</Node>
+    <Node id="4">Arbitrum (L2 - One, Nova)</Node>
+    <Node id="5">Ethereum (L1 - Ethereum Mainnet)</Node>
     <Connection from="1" to="5" />
     <Connection from="2" to="4" />
     <Connection from="3" to="4" />
@@ -87,8 +86,8 @@ Orbit chains give you the ability to create your own AnyTrust and Rollup chains 
 
 Said simply:
 
-- **Arbitrum One** and **Arbitrum Nova** chains unlocked **two public, DAO-managed contract deployment options** that scale Ethereum and meet most projects' needs.
-- **Arbitrum Orbit** chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden) of self-managed contract deployment options** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
+- **Arbitrum One** and **Arbitrum Nova** chains unlocked two options that scale Ethereum and meet most projects' needs.
+- **Arbitrum Orbit** chains unlock an **[infinite garden](https://ethereum.foundation/infinitegarden)** that scale Ethereum even further, with each individual Orbit chain being tailored precisely to its owner's needs.
 
 ### How does Orbit help me build decentralized apps?
 
@@ -118,20 +117,19 @@ Orbit helps Ethereum move towards a **multi-chain future**. This is valuable for
 | **Flexible security models**        | Different chains can experiment with different security models, allowing for tradeoffs. For example: Arbitrum One and Arbitrum Nova are both L2 chains, with Arbitrum Nova giving developers the ability to optimize for lower fees. With Arbitrum Orbit, extending the technology and experimenting is easier than ever. |
 | **Flexible execution environments** | Different chains can experiment with more-or-less restrictive execution environments. For example, although Arbitrum chains are fully EVM compatible, Orbit chains can restrict smart contract functionality to optimize for your project's needs.                                                                        |
 | **Flexible governance**             | Orbit chains let you define your own governance protocols.                                                                                                                                                                                                                                                                |
-| **Increased adoption of dApps**     | Orbit's optionality reduces the cost of progressive decentralization for devs, unlocking a new category of decentralized apps that are built under more autonomous, self-managed conditions.                                                                                                                              |
 
 ### Are Orbit chains the same thing as "app chains"?
 
-It depends on your definition of "app chain". Orbit chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute and storage resources away from Arbitrum's public L2 chains**, while **settling to one L2 chain in particular** based on your unique needs.
+It depends on your definition of "app chain". Orbit chains can be used as application-specific chains (often referred to as "app chains" or "appchains"). But **they aren't just for apps**. They're for **hosting EVM-compatible smart contracts using self-managed infrastructure that isolates compute resources away from Arbitrum's public L2 chains** based on your unique needs.
 
-- You can use your Orbit chain to host the smart contracts that support one dApp, two dApps, an ecosystem of dApps, or no dApps at all.
-- You can use your Orbit chain to host a private, centralized service's arbitrary EVM contracts.
+- You can use your Orbit chain to host the smart contracts that support one app, two apps, an ecosystem of apps, or no apps at all.
+- You can use your Orbit chain to host a private, centralized service.
 - Your Orbit chain can be special-purpose, general-purpose, and everything in-between.
-- You could even build a dApp that uses multiple Orbit chains to support strange new forms of redundancy, high availability, and trustlessness.
+- You could even build an app that uses multiple Orbit chains to support strange new forms of redundancy, high availability, and trustlessness.
 
 ### Can my Orbit chain talk to other Orbit chains?
 
-Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both **AnyTrust** and **Rollup** protocols; your Orbit chain can be configured to process and settle transactions using one or the other[^2].
+Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both **AnyTrust** and **Rollup** protocols; your Orbit chain can be configured to use either.
 
 This means that your Orbit chain **isn't a completely isolated blockchain network**. When you launch an Orbit chain, you’re joining an ecosystem of connected chains that can exchange information.
 
@@ -139,6 +137,7 @@ Our small-but-mighty team is hard at work developing tools and patterns that mak
 
 Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
 
+```
 ### What should I know about Orbit's licensing?
 
 You're granted full permission to modify and adapt the Arbitrum Nitro codebase to meet your needs. The license granted for Orbit chains is both **perpetual** and **recursive**:
@@ -150,17 +149,7 @@ Note that the Arbitrum Orbit license doesn't automatically include chains that s
 
 1.  **Ask Offchain Labs**: Offchain Labs, as the initial developer of the Arbitrum Nitro codebase, is the licensor of the software, and can grant custom licenses.
 2.  **Propose to the Arbitrum DAO**: With the launch of the Arbitrum DAO, the DAO was also given co-licensor rights to approve additional L2s on Ethereum that do not settle to a DAO-governed chain. To utilize this mechanism, you’ll need to [submit a proposal to the Arbitrum DAO](https://docs.arbitrum.foundation/how-tos/create-submit-dao-proposal), and the DAO will democratically decide whether or not to grant the license for your proposed L2 chain.
-
-### What are the benefits of an L3 vs L2?
-
-Using an L3 Orbit chain grants developers the following benefits:
-- Cheaper user acquisition: Using the native bridge, onboarding from L2→L3 is less expensive than L1→L2.
-- Finality speed: Orbit chains with low amounts of activity can still achieve fast finality speed withour paying higher batch posting costs.
-
-Using an L2 Orbit chain offers the following benefits:
-- Reduced friction: users will be able to perform one bridge transaction rather than multiple, providing more direct access to Ethereum's deep liquidity and TVL.
-- Greater neutrality: L2 chains settle directly to Ethereum - while they leverage Arbitrum technology, this allows for simpler protocol design and provides stronger exit guarantees.
-
+```
 
 ### I'd love to tinker with Orbit! What should I do next?
 
@@ -171,4 +160,3 @@ Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us
 While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/), [Conduit](https://conduit.xyz/), and [AltLayer](https://altlayer.io/) that are enabling developers to quickly launch their own rollups.
 
 [^1]: Although your Orbit chain will be able to exchange information with other Orbit chains (and the L2 chain that it settles to) by default, you're free to modify your Orbit chain's code as much as you'd like. You can even intentionally make your Orbit chain _incompatible_ with other Orbit chains and L2s.
-[^2]: Note that Orbit chains can settle to **one** of either Ethereum Sepolia, Ethereum, Arbitrum Sepolia, Arbitrum One, or Arbitrum Nova. This selection is usually made pre-deployment, while you're initially configuring your Orbit chain on the [Orbit chain deployment portal](https://orbit.arbitrum.io/). Orbit chains aren't really meant to "hot swap" between networks; changing the L2 chain that your Orbit chain settles to post-deployment isn't explicitly supported. But you can totally experiment with this use-case.
