@@ -439,11 +439,6 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/concepts/chain-ownership',
-              label: 'Introduction: Orbit chain ownership',
-            },
-            {
-              type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
               label: `How to: Customize your chain's deployment config`,
             },
@@ -461,6 +456,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-precompile',
               label: `How to: Customize your chain's precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/concepts/chain-ownership',
+              label: 'Concept: Orbit chain ownership',
             },
             {
               type: 'doc',
