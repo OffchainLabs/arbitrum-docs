@@ -1,6 +1,5 @@
 ---
 title: "How (and when) to customize your Orbit chain's deployment configuration"
-sidebar_label: "Customize your chain's deployment config"
 description: "Learn how (and when) to customize your Orbit chain's deployment configuration in the Orbit chain deployment portal."
 author: symbolpunk
 sidebar_position: 1

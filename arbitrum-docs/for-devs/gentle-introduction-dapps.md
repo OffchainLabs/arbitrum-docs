@@ -1,7 +1,6 @@
 ---
-title: 'A gentle introduction: Building Arbitrum dApps'
-description: 'Arbitrum is a suite of Ethereum scaling solutions that includes Arbitrum One, Arbitrum Nova, Stylus, and the Arbitrum Bridge. This guide introduces you to decentralized apps on Arbitrum: what they are, how they work, and the value that they provide.'
-sidebar_label: 'Arbitrum One, Arbitrum Nova'
+title: 'A gentle introduction to Arbitrum'
+description: 'Arbitrum is a suite of Ethereum scaling solutions that includes Arbitrum One, Arbitrum Nova, Stylus, Orbit, and the Arbitrum Bridge.'
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';

@@ -1,6 +1,5 @@
 ---
 title: 'USDC on Arbitrum One: A conceptual overview'
-sidebar_label: 'USDC on Arbitrum One'
 description: 'Learn about the two different types of USDC supported by Arbitrum One: Arbitrum-Native USDC and Bridged (from Ethereum) USDC'
 author: amarrazza
 target_audience: End-users who are not familiar with the different types of USDC
