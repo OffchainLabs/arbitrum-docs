@@ -259,18 +259,7 @@ const sidebars = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'Smart contract languages',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'How to: Add a new smart contract language (Stylus)',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-            },
-          ],
-        },
+
         {
           type: 'category',
           label: 'Optimizations and best practices',
@@ -377,6 +366,11 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/stylus-sdk',
               label: 'Stylus SDK repositories',
+            },
+            {
+              type: 'doc',
+              label: 'How to: Add a new smart contract language (Stylus)',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
             },
             {
               type: 'link',
