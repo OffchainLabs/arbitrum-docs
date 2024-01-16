@@ -139,7 +139,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Introduction: Gas and ink (Stylus)',
+              label: 'Concept: Gas and ink (Stylus)',
               id: 'stylus/concepts/stylus-gas',
             },
             {
