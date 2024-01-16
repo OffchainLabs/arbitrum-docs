@@ -224,7 +224,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              label: 'Introduction: token bridging',
+              label: 'Introduction: Token bridging',
               id: 'for-devs/concepts/token-bridge/token-bridge-overview',
             },
             {
