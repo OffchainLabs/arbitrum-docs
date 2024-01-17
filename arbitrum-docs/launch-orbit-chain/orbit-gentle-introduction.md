@@ -36,23 +36,24 @@ import {
   NodeDescription,
 } from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
+
 <MermaidWithHtml>
   <Nodes>
-    <Node id="1">Orbit chain</Node>
-    <Node id="2">Orbit chain</Node>
-    <Node id="3">Orbit chain</Node>
-    <Node id="4">Arbitrum (L2 - One, Nova)</Node>
-    <Node id="5">Ethereum (L1 - Ethereum Mainnet)</Node>
+    <Node id="1">Orbit L2</Node>
+    <Node id="2">Orbit L3</Node>
+    <Node id="3">Arbitrum One (L2)</Node>
+    <Node id="4">Orbit L2</Node>
+    <Node id="5">Ethereum (L1)</Node>
     <Connection from="1" to="5" />
-    <Connection from="2" to="4" />
-    <Connection from="3" to="4" />
+    <Connection from="2" to="3" />
+    <Connection from="3" to="5" />
     <Connection from="4" to="5" />
   </Nodes>
   <NodeDescriptions>
-    <NodeDescription for="1,2,3">
-      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own customizable chain, which can be an L2 or an L3.
+    <NodeDescription for="1,2,4">
+      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own customizable L2 or L3 chain.
     </NodeDescription>
-    <NodeDescription for="4">
+    <NodeDescription for="3">
       L3 Orbit chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which settles to Ethereum.
     </NodeDescription>
     <NodeDescription for="5">
