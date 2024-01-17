@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L17"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L17"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L33"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L32"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L23"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L23"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L38"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L37"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L29"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L29"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L59"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L58"
           target="_blank"
         >
           Implementation
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L35"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L35"
           target="_blank"
         >
           Interface
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L64"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L63"
           target="_blank"
         >
           Implementation
@@ -102,7 +102,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L41"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L41"
           target="_blank"
         >
           Interface
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L70"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L69"
           target="_blank"
         >
           Implementation
@@ -124,7 +124,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L48"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L48"
           target="_blank"
         >
           Interface
@@ -132,7 +132,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L75"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L74"
           target="_blank"
         >
           Implementation
@@ -146,7 +146,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L56"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L56"
           target="_blank"
         >
           Interface
@@ -154,7 +154,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L80"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L79"
           target="_blank"
         >
           Implementation
@@ -168,7 +168,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L65"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L65"
           target="_blank"
         >
           Interface
@@ -176,7 +176,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L85"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L84"
           target="_blank"
         >
           Implementation
@@ -190,7 +190,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L71"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L71"
           target="_blank"
         >
           Interface
@@ -198,7 +198,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L95"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L94"
           target="_blank"
         >
           Implementation
@@ -214,7 +214,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L79"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L79"
           target="_blank"
         >
           Interface
@@ -222,7 +222,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L207"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L206"
           target="_blank"
         >
           Implementation
@@ -236,7 +236,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L89"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L89"
           target="_blank"
         >
           Interface
@@ -244,7 +244,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L111"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L110"
           target="_blank"
         >
           Implementation
@@ -258,7 +258,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L100"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L100"
           target="_blank"
         >
           Interface
@@ -266,7 +266,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L191"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L190"
           target="_blank"
         >
           Implementation
@@ -295,7 +295,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L113"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L113"
           target="_blank"
         >
           Interface
@@ -303,7 +303,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L170"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L169"
           target="_blank"
         >
           Implementation
@@ -317,7 +317,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L126"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L126"
           target="_blank"
         >
           Interface
@@ -325,7 +325,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L0"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L0"
           target="_blank"
         >
           Implementation
@@ -341,7 +341,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/b16bf0b737468382854dac28346fec8b65b55989/src/precompiles/ArbSys.sol#L145"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbSys.sol#L145"
           target="_blank"
         >
           Interface
@@ -349,7 +349,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.1.3/precompiles/ArbSys.go#L154"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbSys.go#L153"
           target="_blank"
         >
           Implementation
