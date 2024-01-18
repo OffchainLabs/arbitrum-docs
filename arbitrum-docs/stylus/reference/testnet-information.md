@@ -42,6 +42,8 @@ Below you can find faucets for obtaining testnet ETH. If using a faucet on Ether
 | ------------------ | ----------------------------------------------------- | ---------------- |
 | Bware Labs         | https://bwarelabs.com/faucets/arbitrum-stylus-testnet | Stylus Testnet   |
 | QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia         | Arbitrum Sepolia |
+| LearnWeb3          | https://learnweb3.io/faucets/arbitrum_sepolia         | Arbitrum Sepolia |
+| LearnWeb3          | https://learnweb3.io/faucets/sepolia                  | Ethereum Sepolia |
 | Alchemy            | https://sepoliafaucet.com/                            | Ethereum Sepolia |
 | Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/                      | Ethereum Sepolia |
 
