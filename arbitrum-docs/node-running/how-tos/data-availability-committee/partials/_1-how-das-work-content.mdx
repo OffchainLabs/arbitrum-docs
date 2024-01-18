@@ -1,0 +1,8 @@
+A Data Availability Server (DAS) allows storage and retrieval of transaction data batches for an AnyTrust chain. It is the software that the members of the DAC run in order to provide the Data Availability service. It can be run in two modes: committee member or mirror.
+
+Committee member DAS accept time-limited requests to store data batches from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time.
+
+Mirror DAS (and, optionally, committee member servers) respond to requests to retrieve the data batches. They may also provide archived data beyond the limited time that committee member DAS are required to store the data. Mirror DAS serve two main purposes:
+
+1. Prevent the committee member servers from having to serve requests for data, allowing them to focus only on storing the data sent to them.
+2. Provide resiliency to the network in the case of a committee member DAS going down.
