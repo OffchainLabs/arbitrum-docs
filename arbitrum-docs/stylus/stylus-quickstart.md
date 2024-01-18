@@ -60,6 +60,10 @@ For additional sources of testnet ETH, please use a faucet on Arbitrum Sepolia o
 
 [https://faucet.quicknode.com/arbitrum/sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
 
+[https://learnweb3.io/faucets/arbitrum_sepolia](https://learnweb3.io/faucets/arbitrum_sepolia)
+
+[https://learnweb3.io/faucets/sepolia](https://learnweb3.io/faucets/sepolia)
+
 [https://sepoliafaucet.com/](https://sepoliafaucet.com/)
 
 [https://sepolia-faucet.pk910.de/](https://sepolia-faucet.pk910.de/)
