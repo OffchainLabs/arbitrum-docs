@@ -4,7 +4,7 @@ sidebar_label: 'Keyset generation (AnyTrust chains)'
 description: 'Learn how Orbit's AnyTrust chains handle keyset generation.'
 author: Mehdi Salehi
 sme: Mehdi Salehi
-target_audience: 'Developers deploying and maintaining Anytrust Orbit chains.'
+target_audience: 'Developers deploying and maintaining Orbit AnyTrust chains.'
 sidebar_position: 1
 ---
 **Anytrust** chains, relies on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer. 
