@@ -13,7 +13,7 @@ The DAC has _N_ members; the AnyTrust protocol assumes that a minimum of _H_ DAC
 
 Each DAC member gets their own set of BLS public and private keys. It's important for every member to create their own new and secure BLS keys. They should do this on their own and make sure these keys are random and only for their use. If you need help generating BLS keys, check out our guide [here](https://docs.arbitrum.io/node-running/how-tos/running-a-daserver#generate-key).
 
-The main blockchain (parent chain) needs to know who is in the Committee. It needs to have the names of all the members and their public keys. This is important for checking and verifying information. A 'Keyset' is a list of all the public keys of the Committee members. It also shows how many signatures are needed to approve a Data Availability Certificate. This Keyset setup lets us change who is in the Committee and lets members change their keys if needed. For more details, please read the <a data-quicklook-from='inside-anytrust'>Inside Anytrust</a> page in our documentation.
+The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a Data Availability Certificate. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See <a data-quicklook-from='inside-anytrust'>Inside Anytrust</a> for more information.
 
 
 <PublicPreviewBannerPartial />
