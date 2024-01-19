@@ -23,7 +23,7 @@ When exposing API endpoints to the Internet or any untrusted/hostile network, th
 
 - Increased risk of crashes due to OOM:
   Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
-- Increased risk of not Keeping ip with Ccain progression:
+- Increased risk of not keeping up with chain progression:
   Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
 
 We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
