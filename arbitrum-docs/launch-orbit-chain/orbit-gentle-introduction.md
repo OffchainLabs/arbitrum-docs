@@ -140,7 +140,7 @@ Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentrali
 
 ### What should I know about Orbit's licensing?
 
-The [Arbitrum Orbit Expansion program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) creates a self-service path to launching Orbit chains as L2s or L3s that settle to Ethereum. Via the permissionless profit-sharing model of the program, Orbit chains are granted the rights to make customized L2s or L3s that settle to Ethereum directly or other Ethereum L2s such as optimistic rollups, zk-rollups, optimiums, and validiums.
+L3 Orbit chains that settle to DAO-governed chains like Arbitrum One and Nova can be permissionlessly deployed without restrictions. For Orbit chains that are L2s or L3s settling to Ethereum, the [Arbitrum Orbit Expansion program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) creates a self-service path to launching. Via the permissionless profit-sharing model of the program, Orbit chains are granted the rights to make customized L2s or L3s that settle to Ethereum directly or other Ethereum L2s such as optimistic rollups, zk-rollups, optimiums, and validiums.
 
 ### I'd love to tinker with Orbit! What should I do next?
 
