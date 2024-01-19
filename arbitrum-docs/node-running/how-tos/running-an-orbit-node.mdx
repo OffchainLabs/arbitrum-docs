@@ -50,7 +50,7 @@ This guide provides a step-by-step process for running a node for an Orbit chain
   - Note that is important that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
 
   ```
 

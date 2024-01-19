@@ -13,7 +13,7 @@ The Data Availability Server, `daserver`, allows storage and retrieval of transa
 
 Committee members accept time-limited requests to store data batches from an Arbitrum AnyTrust sequencer, and if they store the data then they return a signed certificate promising to store that data. Committee members and mirrors both respond to requests to retrieve the data batches.
 
-The data batches are content addressed with a keccak256 tree-based hashing scheme called `dastree`. The hash is part of the Data Availability Certificate placed on L1 and that hash is used by the Nitro node to retrieve the data from `daservers`.
+The data batches are content addressed with a keccak256 tree-based hashing scheme called `dastree`. The hash is part of the Data Availability Certificate placed on the parent chain and that hash is used by the Nitro node to retrieve the data from `daservers`.
 
 Mirrors exist to replicate and serve the data to provide resiliency to the network in the case of committee members going down, and to make it so committee members don't need to serve requests for the data directly. Mirrors may also provide archived data beyond the limited time that committee members are required to store the data.
 
@@ -25,7 +25,7 @@ There are two main interfaces, a REST interface supporting only GET operations a
 
 Committee members listen on the REST interface and additionally listen on the RPC interface for `das_store` RPC messages from the sequencer. The sequencer signs its requests and the committee member checks the signature. The RPC interface also has a health check that checks the underlying storage that responds requests with RPC method `das_healthCheck`.
 
-IPFS is an alternative interface serving batch retrieval. A mirror can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. A Nitro node that is configured to use IPFS that is syncing an AnyTrust chain will use the batch hashes from L1 to find the batch data on the IPFS peer-to-peer network. Depending on network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
+IPFS is an alternative interface serving batch retrieval. A mirror can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. A Nitro node that is configured to use IPFS that is syncing an AnyTrust chain will use the batch hashes from the parent chain to find the batch data on the IPFS peer-to-peer network. Depending on network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
 
 ### Storage
 
@@ -39,7 +39,7 @@ An in-memory cache can be enabled to avoid needing to access underlying storage 
 
 ### Synchronizing state
 
-`daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to L1) can automatically repair gaps in data they store, and how mirrors can sync. A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
+`daserver` also has an optional REST aggregator which, in the case that a data batch is not found in cache or storage, queries for that batch from a list other of REST servers, and then stores that batch locally. This is how committee members that miss storing a batch (not all committee members are required by the AnyTrust protocol to report success in order to post the batch's certificate to the parent chain) can automatically repair gaps in data they store, and how mirrors can sync. A public list of REST endpoints is published online, which `daserver` can be configured to download and use, and additional endpoints can be specified in configuration.
 
 ## Image:
 
@@ -56,7 +56,7 @@ Options for both committee members and mirrors:
       --rest-addr string                                                                           REST server listening interface (default "localhost")
       --rest-port uint                                                                             REST server listening port (default 9877)
 
- # L1 options
+ # Parent chain options
       --data-availability.parent-chain-node-url string                                             URL for parent chain node, only used in standalone daserver; when running as part of a node that node's parent chain configuration is used
       --data-availability.sequencer-inbox-address string                                           parent chain address of SequencerInbox contract
 
@@ -89,8 +89,8 @@ Options for both committee members and mirrors:
       --data-availability.rest-aggregator.online-url-list string                                   a URL to a list of URLs of REST das endpoints that is checked at startup; additive with the url option
       --data-availability.rest-aggregator.urls strings                                             list of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints; additive with the online-url-list option
       --data-availability.rest-aggregator.sync-to-storage.check-already-exists                     check if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)
-      --data-availability.rest-aggregator.sync-to-storage.eager                                    eagerly sync batch data to this DAS's storage from the rest endpoints, using L1 as the index of batch data hashes; otherwise only sync lazily
-      --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this L1 block. Only used if there is no sync state
+      --data-availability.rest-aggregator.sync-to-storage.eager                                    eagerly sync batch data to this DAS's storage from the rest endpoints, using parent chain as the index of batch data hashes; otherwise only sync lazily
+      --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block uint             when eagerly syncing, start indexing forward from this block from parent chain. Only used if there is no sync state
       --data-availability.rest-aggregator.sync-to-storage.retention-period duration                period to retain synced data (defaults to forever) (default 2562047h47m16.854775807s)
       --data-availability.rest-aggregator.sync-to-storage.state-dir string                         directory to store the sync state in, ie the block number currently synced up to, so that we don't sync from scratch each time
 
@@ -131,8 +131,8 @@ Some options are not shown because they are only used by nodes, or they are expe
 Using `daserver` as a committee member requires:
 
 - A BLS private key to sign the Data Availability Certificates it returns to clients (the sequencer aka batch poster) requesting to Store data.
-- The Ethereum L1 address of the sequencer inbox contract, in order to find the batch poster signing address.
-- An Ethereum L1 RPC endpoint to query the sequencer inbox contract.
+- Your parent chain address of the sequencer inbox contract, in order to find the batch poster signing address.
+- Your parent chain RPC endpoint to query the sequencer inbox contract.
 - A persistent volume to write the stored data to if using one of the local disk modes.
 - A S3 bucket, and credentials (secret key, access key) of an IAM user that is able to read and write from it if you are using the S3 mode.
 
@@ -238,7 +238,7 @@ spec:
         - -c
         - |
 		  mkdir -p /home/user/data/badgerdb
-          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
+          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR PARENT CHAIN RPC ENDPOINT>
 --enable-rpc --rpc-addr '0.0.0.0' --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.local-db-storage.discard-after-timeout --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.s3-storage.discard-after-timeout --data-availability.key.key-dir /home/user/data/keys  --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b'
         image: @latestNitroNodeImage@
         imagePullPolicy: Always
@@ -279,8 +279,8 @@ spec:
 
 Using `daserver` as a mirror requires:
 
-- The Ethereum L1 address of the sequencer inbox contract, for syncing all batch data.
-- An Ethereum L1 RPC endpoint to query the sequencer inbox contract.
+- Your parent chain address of the sequencer inbox contract, for syncing all batch data.
+- Your parent chain RPC endpoint to query the sequencer inbox contract.
 - A persistent volume to write the stored data to if using one of the local disk modes.
 - A S3 bucket, and credentials (secret key, access key) of an IAM user that is able to read and write from it if you are using the S3 mode.
 
@@ -339,7 +339,7 @@ spec:
         - |
 		  mkdir -p /home/user/data/badgerdb
 		  mkdir -p /home/user/data/syncState
-          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR ETHEREUM L1 RPC ENDPOINT>
+          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR PARENT CHAIN RPC ENDPOINT>
 --enable-rest --rest-addr '0.0.0.0' --log-level 3  --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket <YOUR BUCKET> --data-availability.s3-storage.region <YOUR REGION> --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "YOUR OBJECT KEY PREFIX/" --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
         image: @latestNitroNodeImage@
         imagePullPolicy: Always
@@ -408,7 +408,7 @@ spec:
         - |
 		  mkdir -p /home/user/data/ipfsRepo
 		  mkdir -p /home/user/data/syncState
-          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR ETHEREUM L1 RPC ENDPOINT> --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.ipfs-storage.enable --data-availability.ipfs-storage.repo-dir /home/user/data/ipfsRepo --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
+          /usr/local/bin/daserver --data-availability.parent-chain-node-url <YOUR PARENT CHAIN RPC ENDPOINT> --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.ipfs-storage.enable --data-availability.ipfs-storage.repo-dir /home/user/data/ipfsRepo --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-committee-member.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "https://nova.arbitrum.io/das-servers" --data-availability.rest-aggregator.sync-to-storage.eager --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block 15025611 --data-availability.sequencer-inbox-address '0x211e1c4c7f1bf5351ac850ed10fd68cffcf6c21b' --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState
         image: @latestNitroNodeImage@
         imagePullPolicy: Always
         resources:
@@ -472,7 +472,7 @@ $ curl  https://<HOST>/<PATH>/get-by-hash/8b248e2bd8f75bf1334fe7f0da75cc7c1a34e0
 
 #### Further validation: Using store interface directly
 
-The Store interface of `daserver` validates that requests to store data are signed by the Batch Poster's ECDSA key, identified via a call to the Sequencer Inbox contract on L1. It can also be configured to accept Store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure. Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
+The Store interface of `daserver` validates that requests to store data are signed by the Batch Poster's ECDSA key, identified via a call to the Sequencer Inbox contract on parent chain. It can also be configured to accept Store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure. Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
 
 Generate an ECDSA keypair:
 
