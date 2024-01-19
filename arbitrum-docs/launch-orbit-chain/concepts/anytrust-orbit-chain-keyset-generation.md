@@ -7,7 +7,7 @@ sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit AnyTrust chains.'
 sidebar_position: 1
 ---
-**Anytrust** chains, relies on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer. 
+**AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer. 
 
 The Committee comprises N members, among whom it is presumed by AnyTrust that a minimum of H members maintain integrity. H is the minimum number of trusted committee members on Anytrust chains, and it is configurable by the "assumed-honest" parameter in the keyset, and by chain owner(s). Consequently, in scenarios where `K = (N + 1) - H` members of the Committee pledge to grant access to specific data, and they must sign and attest they have the data for store to be considered successful.
 
