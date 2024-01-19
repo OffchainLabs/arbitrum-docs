@@ -1,7 +1,13 @@
 There are two main interfaces that can be enabled in a DAS: an **RPC interface** to store data in the DAS, intended to be used only by the AnyTrust sequencer; and a **REST interface** that supports only GET operations and is intended for public use.
 
-Committee member DA servers listen on the RPC interface for `das_store` RPC messages coming from the sequencer. The sequencer signs its requests and the DAS checks the signature.
+DA servers listen on the RPC interface for `das_store` RPC messages coming from the sequencer. The sequencer signs its requests and the DAS checks the signature. They also listen on the REST interface and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash.
 
-Mirror DA servers (and, optionally, committee member servers if they enable this option) listen on the REST interface and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash.
+:::info
+
+Notice that it is possible to run one DAS that enables both interfaces, or one DAS with only the RPC interface enabled with an additional mirror DAS to serve REST requests.
+
+Notice also that mirror DA servers will only listen on the REST interface.
+
+:::
 
 Finally, IPFS is an alternative interface that serves batch retrieval. A mirror DAS can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. The advantage of using this interface is that a Nitro node that is configured to use IPFS will use the batch hashes to find the batch data on the IPFS peer-to-peer network. Depending on the network configuration, that Nitro node may then also act as an IPFS node serving the batch data.

@@ -1,8 +1,8 @@
 ---
-title: 'How to configure a Data Availability Committee: deploy a Data Availability Server (DAS) as a committee member'
-description: This how-to will help you deploy a Data Availability Server (DAS) as a committee member
+title: 'How to configure a Data Availability Committee: deploy a Data Availability Server (DAS)'
+description: This how-to will help you deploy a Data Availability Server (DAS)
 author: jose-franco
-sidebar_label: Deploy a committee member DAS
+sidebar_label: Deploy a DAS
 sidebar_position: 2
 content-type: how-to
 ---
@@ -18,7 +18,7 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
   members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
-In this how-to you'll learn how to deploy a DAS as a committee member and enable an RPC interface to store batches received from the sequencer. We'll also describe how to enable an optional REST interface to respond to requests of stored information. For more information related to configuring a DAC, please see the [Introduction](./introduction.mdx).
+In this how-to you'll learn how to deploy a Data Availability Server (DAS) and enable an RPC interface to store batches received from the sequencer, and a REST interface to respond to requests of stored information. For more information related to configuring a DAC, please see the [Introduction](./introduction.mdx).
 
 You should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx). It is also recommended to be familiarized with [Kubernetes](https://kubernetes.io/) as the examples on this guide are based on that software.
 
@@ -53,9 +53,9 @@ When setting up a DAS, there are certain options you can configure to suit your 
 
 <DASConfigurationOptionsStateSync />
 
-## How to deploy the DAS as a committee member
+## How to deploy the DAS
 
-We now start the process of deploying the DAS as a committee member. Remember that you can reach out to us on [Discord](https://discord.gg/arbitrum) if you are having trouble following this process.
+We now start the process of deploying the DAS. Remember that you can reach out to us on [Discord](https://discord.gg/arbitrum) if you are having trouble following this process.
 
 ### Step 0: Prerequisites
 
@@ -64,7 +64,7 @@ In order to setup your DAS, you'll need the following information:
 - The latest Nitro docker image: `@latestNitroNodeImage@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/node-running/node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
-- If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept. A REST aggregator is optional when running a committee member DAS.
+- If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
 
 <!--
 In terms of hardware requirements, these are the minimum specs that your infrastructure should comply with to run a stable DAS:
@@ -149,9 +149,9 @@ template:
         claimName: das-server
 ```
 
-### Step 3: Deploy the committee member DAS
+### Step 3: Deploy the DAS
 
-To run the committee member DAS, we'll use the `daserver` tool and we'll configure the following parameters:
+To run the DAS, we'll use the `daserver` tool and we'll configure the following parameters:
 
 | Parameter                                   | Description                                                                                                      |
 | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -163,7 +163,7 @@ To run the committee member DAS, we'll use the `daserver` tool and we'll configu
 | --rpc-port                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                         |
 | --log-level                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                       |
 
-To enable the REST interface (not required on a committee member DAS), you can use the following parameters:
+To enable the REST interface, you can use the following parameters:
 
 | Parameter     | Description                                                      |
 | ------------- | ---------------------------------------------------------------- |
@@ -217,13 +217,13 @@ import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
   </Tabs>
 </div>
 
-Here's an example `daserver` command for a committee member DAS that:
+Here's an example `daserver` command for a DAS that:
 
-- Enables both interfaces: RPC (required) and REST (optional)
+- Enables both interfaces: RPC and REST
 - Enables local cache
 - Enables a [REST aggregator](#state-synchronization)
-- Enables AWS S3 bucket storage that doesn't discard data after expiring
-- Enables local Badger database storage that doesn't discard data after expiring
+- Enables AWS S3 bucket storage
+- Enables local Badger database storage
 
 ```bash
 daserver
@@ -318,7 +318,7 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: RPC health check
 
-The RPC interface enabled in the committee member DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns 200 if the DAS is active.
+The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns 200 if the DAS is active.
 
 Example:
 
@@ -372,7 +372,7 @@ After running that command, the result should be: `Message: Hello world`
 
 The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
 
-### Test 3 (if the REST interface is enabled): REST health check
+### Test 3: REST health check
 
 The REST interface has a health check on the path `/health` which will return 200 if the underlying storage is working, otherwise 503.
 
@@ -386,19 +386,19 @@ curl -I <YOUR REST ENDPOINT>
 
 Keep in mind the following information when running the DAS.
 
-A committee member DAS should strive not to miss any batch of information sent by the sequencer. Although it can use a REST aggregator to fetch missing information from other DAS servers, it should aim to synchronize all received information directly. To facilitate this, avoid placing any load balancing layer before the DAS, enabling it to handle all incoming traffic.
+A DAS should strive not to miss any batch of information sent by the sequencer. Although it can use a REST aggregator to fetch missing information from other DA servers, it should aim to synchronize all received information directly. To facilitate this, avoid placing any load balancing layer before the DAS, enabling it to handle all incoming traffic.
 
 Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
 
-Finally, if you're also running a mirror, there's no need to publicly expose the REST interface of your committee member DAS. Your mirrors can synchronize over your private network using the REST interface from your committee member DAS and other public mirrors.
+Finally, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
 
 ## What to do next?
 
 Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
 
 - Public key
-- URL of the RPC endpoint (send this information through a private communication channel)
-- URL of the REST endpoint (if enabled)
+- The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
+- The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
 import DASOptionalParameters from './partials/_3-das-optional-parameters.mdx';
 import DASMetrics from './partials/_4-das-metrics.mdx';

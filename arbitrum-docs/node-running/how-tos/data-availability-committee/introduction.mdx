@@ -20,31 +20,36 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
 
 This section offers information and a series of how-to guides to help you along the process of setting up a Data Availability Committee. These guides target two audiences: Committee members who wish to deploy a Data Availability Server, and chain owners who wish to configure their chain with the information of the Committee.
 
-When following the guides in this section, you should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx).
-
-## DAC configuration checklist
-
-Here's a basic checklist of actions to complete in order to configure the DAC in your chain. You can keep this list as a reference while you go through the process of having the DA servers deployed by the members of the Committee and updating your chain's configuration:
-
-- [Deploy all committee member DA servers](./deploy-a-das-as-committee-member.mdx) needed. Gather the following information from them:
-  - Public BLS key
-  - URL for the RPC endpoint, through a secure communication channel
-  - If enabled, URL for the REST endpoint
-- [Deploy the desired mirror DA servers](./deploy-a-das-as-mirror.mdx). Gather the following information from them:
-  - URL for the REST endpoint
-- Have at least one of the DA servers be an [archive DAS](./deploy-a-das-as-mirror.mdx#archive-da-servers-for-mirror-das)
-- Generate the keyset and keyset hash with all the information from the servers
-- Craft the new configuration for the batch poster
-- Craft the new configuration for your chain's nodes
-- Update the SequencerInbox contract
+Before following the guides in this section, you should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx).
 
 ## If you are a DAC member
 
-Committee members will need to run a DAS. To do that, they will first need to generate a pair of keys and deploy a DAS as a committee member and, potentially, another DAS as a mirror. Find more information in [How to deploy a committee member DAS](./deploy-a-das-as-committee-member.mdx) and [How to deploy a mirror DAS](./deploy-a-das-as-mirror.mdx).
+Committee members will need to run a DAS. To do that, they will first need to generate a pair of keys and deploy a DAS. They may also choose to deploy an additional mirror DAS. Find more information in [How to deploy a DAS](./deploy-a-das.mdx) and [How to deploy a mirror DAS](./deploy-a-mirror-das.mdx).
+
+Here's a basic checklist of actions to complete for DAC members:
+
+- [Deploy a DAS](./deploy-a-das.mdx). Send the following information to the chain owner:
+  - Public BLS key
+  - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
+  - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
+- [Deploy a mirror DAS](./deploy-a-mirror-das.mdx) if your main DAS doesn't have the REST interface enabled. Send the following information to the chain owner:
+  - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
 ## If you are a chain owner
 
-Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](./configure-the-dac-in-your-chain.mdx)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a committee member DAS](./deploy-a-das-as-committee-member.mdx#testing-the-das) and [How to deploy a mirror DAS](./deploy-a-das-as-mirror.mdx#testing-the-das).
+Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](./configure-the-dac-in-your-chain.mdx)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](./deploy-a-das.mdx#testing-the-das) and [How to deploy a mirror DAS](./deploy-a-mirror-das.mdx#testing-the-das).
+
+Here's a basic checklist of actions to complete for chain owners:
+
+- Gather the following information from every member of the committee:
+  - Public BLS Key
+  - URL of the RPC endpoint
+  - URL(s) of the REST(s) endpoint
+- Ensure that at least one DAS is running as an [archive DAS](./deploy-a-mirror-das.mdx#archive-da-servers-for-mirror-das)
+- Generate the keyset and keyset hash with all the information from the servers (guide coming soon)
+- Craft the new configuration for the batch poster (guide coming soon)
+- Craft the new configuration for your chain's nodes (guide coming soon)
+- Update the SequencerInbox contract (guide coming soon)
 
 ## Ask for help
 
