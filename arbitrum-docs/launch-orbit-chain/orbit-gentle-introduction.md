@@ -138,19 +138,9 @@ Our small-but-mighty team is hard at work developing tools and patterns that mak
 
 Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentralized web - one that makes it easy for users to carry their digital swords, spells, skins, art, tokens, and other assets across digital boundaries of all kinds, without having to worry about security, censorship, or UX friction.
 
-```
 ### What should I know about Orbit's licensing?
 
-You're granted full permission to modify and adapt the Arbitrum Nitro codebase to meet your needs. The license granted for Orbit chains is both **perpetual** and **recursive**:
-
-- **Perpetual** — nobody can ever take the software license away from you
-- **Recursive** — your Orbit chain can itself host other chains governed by the same license
-
-Note that the Arbitrum Orbit license doesn't automatically include chains that settle to a non-Arbitrum-DAO-governed chain. So if you want to launch an Arbitrum Nitro chain as an independent L2 on Ethereum, you'll need to get a custom license. There are two options for this:
-
-1.  **Ask Offchain Labs**: Offchain Labs, as the initial developer of the Arbitrum Nitro codebase, is the licensor of the software, and can grant custom licenses.
-2.  **Propose to the Arbitrum DAO**: With the launch of the Arbitrum DAO, the DAO was also given co-licensor rights to approve additional L2s on Ethereum that do not settle to a DAO-governed chain. To utilize this mechanism, you’ll need to [submit a proposal to the Arbitrum DAO](https://docs.arbitrum.foundation/how-tos/create-submit-dao-proposal), and the DAO will democratically decide whether or not to grant the license for your proposed L2 chain.
-```
+L3 Orbit chains that settle to DAO-governed chains like Arbitrum One and Nova can be permissionlessly deployed without restrictions. For Orbit chains that are settling to any other Ethereum chain, the [Arbitrum Orbit Expansion program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) creates a self-service path to launching. Via the permissionless revenue-sharing model of the program, Orbit chains are granted the rights to build customized L2s or L3s (or L4s and beyond) that settle to Ethereum directly or other Ethereum chains, such as optimistic rollups, zk-rollups, optimiums, and validiums.
 
 ### I'd love to tinker with Orbit! What should I do next?
 
