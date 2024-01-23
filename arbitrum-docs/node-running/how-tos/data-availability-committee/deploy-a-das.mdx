@@ -22,16 +22,11 @@ In this how-to you'll learn how to deploy a Data Availability Server (DAS) and e
 
 You should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx). It is also recommended to be familiarized with [Kubernetes](https://kubernetes.io/) as the examples on this guide are based on that software.
 
-import HowDASWorkContent from './partials/_1-how-das-work-content.mdx';
-
 ## How does a Data Availability Server work?
 
-<HowDASWorkContent />
+A Data Availability Server (DAS) allows storage and retrieval of transaction data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
 
-import DASConfigurationOptionsInterfaces from './partials/_2.1-das-configuration-options-interfaces.mdx';
-import DASConfigurationOptionsStorage from './partials/_2.2-das-configuration-options-storage.mdx';
-import DASConfigurationOptionsCaching from './partials/_2.3-das-configuration-options-caching.mdx';
-import DASConfigurationOptionsStateSync from './partials/_2.4-das-configuration-options-state-sync.mdx';
+DA servers accept time-limited requests to store data batches from the sequencer of an AnyTrust chain, and return a signed certificate promising to store that data during the established time. They also respond to requests to retrieve the data batches.
 
 ## Configuration options
 
@@ -39,19 +34,34 @@ When setting up a DAS, there are certain options you can configure to suit your 
 
 ### Interfaces available in a DAS
 
-<DASConfigurationOptionsInterfaces />
+There are two main interfaces that can be enabled in a DAS: an **RPC interface** to store data in the DAS, intended to be used only by the AnyTrust sequencer; and a **REST interface** that supports only GET operations and is intended for public use.
+
+DA servers listen on the RPC interface for `das_store` RPC messages coming from the sequencer. The sequencer signs its requests and the DAS checks the signature. They also listen on the REST interface and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash.
+
+Finally, IPFS is an alternative interface that serves batch retrieval. A DAS can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. The advantage of using this interface is that a Nitro node that is configured to use IPFS will use the batch hashes to find the batch data on the IPFS peer-to-peer network. Depending on the network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
 
 ### Storage options
 
-<DASConfigurationOptionsStorage />
+A DAS can be configured to use one or more of four storage backends:
+
+- [AWS S3](https://aws.amazon.com/s3/) bucket
+- Files on local disk
+- [Badger](https://dgraph.io/docs/badger/) database on local disk
+- [IPFS](https://ipfs.tech/)
+
+If more than one option is selected, store requests must succeed to all of them for it to be considered successful, while retrieve requests only require one of them to succeed.
+
+If there are other storage backends you'd like us to support you can send us a message on [Discord](https://discord.gg/arbitrum), or contribute directly to the [nitro repository](https://github.com/OffchainLabs/nitro/).
 
 ### Caching
 
-<DASConfigurationOptionsCaching />
+An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests.
+
+Requests sent to the REST interface (to retrieve data from the DAS) return always the same data for a given hash so the result is cacheable. It also contains a `cache-control` header specifying that the object is immutable and to cache it for up to 28 days.
 
 ### State synchronization
 
-<DASConfigurationOptionsStateSync />
+DA servers also have an optional REST aggregator which, when a data batch is not found in cache or storage, requests that batch to other REST servers defined in a list and stores that batch upon receiving it. This is how a DAS that misses storing a batch (the AnyTrust protocol doesn't require all of them to report success in order to post the batch's certificate to the parent chain) can automatically repair gaps in the data it stores, and also how a [mirror DAS](#running-a-mirror-das) can sync its data. A public list of REST endpoints is published online, which the DAS can be configured to download and use, and additional endpoints can be specified in the configuration.
 
 ## How to deploy the DAS
 
@@ -161,15 +171,10 @@ To run the DAS, we'll use the `daserver` tool and we'll configure the following 
 | --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                               |
 | --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                        |
 | --rpc-port                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                         |
+| --enable-rest                               | Enables the REST server listening on --rest-addr and --rest-port                                                 |
+| --rest-addr                                 | REST server listening interface (default "localhost")                                                            |
+| --rest-port                                 | (Optional) REST server listening port (default 9877)                                                             |
 | --log-level                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                       |
-
-To enable the REST interface, you can use the following parameters:
-
-| Parameter     | Description                                                      |
-| ------------- | ---------------------------------------------------------------- |
-| --enable-rest | Enables the REST server listening on --rest-addr and --rest-port |
-| --rest-addr   | REST server listening interface (default "localhost")            |
-| --rest-port   | (Optional) REST server listening port (default 9877)             |
 
 To enable caching, you can use the following parameters:
 
@@ -312,6 +317,21 @@ template:
         claimName: das-server
 ```
 
+## Archive DA servers
+
+Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to make sure all historical data is available.
+
+To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to false in your storage method. For example:
+
+```bash
+--data-availability.s3-storage.discard-after-timeout=false
+--data-availability.local-db-storage.discard-after-timeout=false
+```
+
+Note that local-file-storage and ipfs-storage don't discard data after expiring, so the option `discard-after-timeout` is not available.
+
+Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
+
 ## Testing the DAS
 
 Once the DAS is running, we can test if everything is working correctly using the following methods.
@@ -382,6 +402,17 @@ Example:
 curl -I <YOUR REST ENDPOINT>
 ```
 
+## Running a mirror DAS
+
+To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [Security considerations](#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
+
+In general, mirror DA servers serve two main purposes:
+
+1. Prevent the main DAS from having to serve requests for data, allowing it to focus only on storing the data received.
+2. Provide resiliency to the network in the case of a DAS going down.
+
+Find information about how to setup a mirror DAS in [How to deploy a mirror DAS](./deploy-a-mirror-das.mdx).
+
 ## Security considerations
 
 Keep in mind the following information when running the DAS.
@@ -390,7 +421,7 @@ A DAS should strive not to miss any batch of information sent by the sequencer. 
 
 Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
 
-Finally, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
+Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
 
 ## What to do next?
 

@@ -11,6 +11,12 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
 
 <PublicPreviewBannerPartial />
 
+:::caution Running a regular DAS vs running a mirror DAS
+
+The main use case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then setup the mirror DAS. When following this guide, you should be familiarized with how a regular DAS work. You can find that information in [How to deploy a DAS](./deploy-a-das.mdx).
+
+:::
+
 <p>
   <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
   Availability Committee (DAC) to store data and provide it on demand instead of using the{' '}
@@ -20,38 +26,22 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
 
 In this how-to you'll learn how to deploy a mirror DAS and enable a REST interface to respond to requests of stored information. For more information related to configuring a DAC, please see the [Introduction](./introduction.mdx).
 
-You should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx). It is also recommended to be familiarized with [Kubernetes](https://kubernetes.io/) as the examples on this guide are based on that software.
+You should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx). You should also be familiarized with how a regular DAS works and what configuration options are available. You can find that information in [How to deploy a DAS](./deploy-a-das.mdx). Finally, it is also recommended to be familiarized with [Kubernetes](https://kubernetes.io/) as the examples on this guide are based on that software.
 
 import HowDASWorkContent from './partials/_1-how-das-work-content.mdx';
 
-## How does a Data Availability Server work?
+## What is a mirror DAS?
 
-<HowDASWorkContent />
+To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](./deploy-a-das.mdx#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
 
-import DASConfigurationOptionsInterfaces from './partials/_2.1-das-configuration-options-interfaces.mdx';
-import DASConfigurationOptionsStorage from './partials/_2.2-das-configuration-options-storage.mdx';
-import DASConfigurationOptionsCaching from './partials/_2.3-das-configuration-options-caching.mdx';
-import DASConfigurationOptionsStateSync from './partials/_2.4-das-configuration-options-state-sync.mdx';
+In general, mirror DA servers serve two main purposes:
+
+1. Prevent the main DAS from having to serve requests for data, allowing it to focus only on storing the data received.
+2. Provide resiliency to the network in the case of a DAS going down.
 
 ## Configuration options
 
-When setting up a DAS, there are certain options you can configure to suit your infrastructure needs:
-
-### Interfaces available in a DAS
-
-<DASConfigurationOptionsInterfaces />
-
-### Storage options
-
-<DASConfigurationOptionsStorage />
-
-### Caching
-
-<DASConfigurationOptionsCaching />
-
-### State synchronization
-
-<DASConfigurationOptionsStateSync />
+A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](./deploy-a-das.mdx#configuration-options).
 
 ## How to deploy a mirror DAS
 
@@ -150,8 +140,8 @@ import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
 Here's an example `daserver` command for a mirror DAS that:
 
 - Enables local cache
-- Enables AWS S3 bucket storage that doesn't discard data after expiring ([archive](#archive-da-servers-for-mirror-das))
-- Enables local Badger database storage that doesn't discard data after expiring ([archive](#archive-da-servers-for-mirror-das))
+- Enables AWS S3 bucket storage that doesn't discard data after expiring ([archive](#archive-da-servers))
+- Enables local Badger database storage that doesn't discard data after expiring ([archive](#archive-da-servers))
 - Uses a local main DAS as part of the REST aggregator
 
 ```bash
@@ -242,9 +232,9 @@ spec:
             claimName: das-mirror
 ```
 
-## Archive DA servers (for mirror DAS)
+## Archive DA servers
 
-Archive DA servers are mirror servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to make sure all historical data is available.
+Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to make sure all historical data is available.
 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to false in your storage method. For example:
 
