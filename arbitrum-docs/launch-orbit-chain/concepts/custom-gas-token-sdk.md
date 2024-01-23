@@ -5,7 +5,7 @@ description: 'SDK support for custom gas token Orbit chains'
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 0
+sidebar_position: 2
 ---
 
 Arbitrum SDK is a TypeScript library for client-side interactions with Arbitrum. It provides common helper functionality as well as access to the underlying smart contract interfaces.
