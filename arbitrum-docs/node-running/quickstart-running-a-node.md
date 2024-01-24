@@ -17,6 +17,18 @@ There is no protocol level incentive to run an Arbitum full node. If you’re in
 
 :::
 
+:::caution API security disclaimer
+
+When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
+
+- Increased risk of crashes due to OOM:
+  Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
+- Increased risk of not keeping up with chain progression:
+  Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
+
+We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
+:::
+
 When it comes to interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
 
 ### Considerations for running an Arbitrum full node

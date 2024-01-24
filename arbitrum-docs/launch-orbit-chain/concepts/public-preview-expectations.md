@@ -2,7 +2,7 @@
 title: 'Public preview: What to expect'
 description: 'Orbit chains are currently a public preview capability. This concept document explains what this means, and what to expect from public preview capabilities.'
 author: symbolpunk
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 Orbit chains are currently a **public preview** offering. This concept document explains what "public preview" means, what to expect from Orbit's public preview capabilities, and how to engage with our team as you tinker.
