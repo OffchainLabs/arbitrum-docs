@@ -1,6 +1,5 @@
 ---
 title: 'A gentle introduction: Orbit chains'
-sidebar_label: 'A gentle introduction to Orbit'
 description: "Launch your own Arbitrum Orbit chain using the Arbitrum Nitro codebase. Build an L2 or an L3 with the ability to customize every aspect of the chain specifically for your needs."
 author: symbolpunk
 sme: oliviaJ3388
