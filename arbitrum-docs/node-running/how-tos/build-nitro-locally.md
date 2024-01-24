@@ -85,7 +85,7 @@ If you want to build the node binaries natively, execute steps 1-3 of the [Build
 #### For Debian/Ubuntu
 
 ```bash
-apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13
+apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13 python3
 npm install --global yarn
 ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
 ```
