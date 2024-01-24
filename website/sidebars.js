@@ -19,24 +19,24 @@ const sidebars = {
   // But you can create a sidebar manually
   buildDecentralizedAppsSidebar: [
     {
-      type: 'doc',
-      id: 'for-devs/gentle-introduction-dapps',
-      label: 'A gentle introduction to Arbitrum',
-    },
-    {
       type: 'category',
-      label: 'Product introductions',
-      collapsed: true,
+      label: 'Gentle introductions',
+      collapsed: false,
       items: [
         {
           type: 'doc',
+          id: 'for-devs/gentle-introduction-dapps',
+          label: 'Arbitrum (for crypto natives)',
+        },
+        {
+          type: 'doc',
           id: 'stylus/stylus-gentle-introduction',
-          label: 'Stylus',
+          label: 'Stylus (for developers)',
         },
         {
           type: 'doc',
           id: 'orbit-gentle-introduction',
-          label: 'Orbit',
+          label: 'Orbit (for L2/L3 chain operators)',
         },
       ],
     },
@@ -67,6 +67,18 @@ const sidebars = {
       label: 'Build dApps and smart contracts',
       collapsed: true,
       items: [
+        {
+          type: 'category',
+          label: 'Gentle introductions',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/stylus-gentle-introduction',
+              label: 'Stylus (for developers)',
+            },
+          ],
+        },
         {
           type: 'category',
           label: 'Quickstarts',
@@ -408,75 +420,18 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run nodes and Orbit chains',
+      label: 'Run an Arbitrum node',
       collapsed: true,
       items: [
         {
           type: 'doc',
           id: 'node-running/gentle-introduction-run-node',
-          label: 'Introduction: Nodes',
+          label: 'Introduction: Arbitrum nodes',
         },
         {
           type: 'doc',
           id: 'node-running/quickstart-running-a-node',
           label: 'Quickstart: Choose a node type',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
-          label: 'Quickstart: Launch an Orbit chain',
-        },
-        {
-          type: 'category',
-          label: 'Custom chains (Orbit)',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `How to: Customize your chain's deployment config`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
-              label: `How to: Add your testnet chain to Arbitrum's bridge`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `How to: Customize your chain's behavior`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `How to: Customize your chain's precompiles`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/concepts/chain-ownership',
-              label: 'Concept: Orbit chain ownership',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
-              label: 'Reference: SDK support for chains with custom gas tokens',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/command-line-options',
-              label: 'Reference: Command-line options',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/concepts/public-preview-expectations',
-              label: 'Reference: Orbit public preview',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/troubleshooting-building-orbit',
-              label: 'Troubleshooting your Orbit chain',
-            },
-          ],
         },
         {
           type: 'category',
@@ -519,13 +474,8 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-an-orbit-node',
-              label: 'How to: Run a full node (Orbit)',
-            },
-            {
-              type: 'doc',
               id: 'node-running/how-tos/running-a-full-node',
-              label: 'How to: Run a full node (One, Nova)',
+              label: 'How to: Run a full node',
             },
             {
               type: 'doc',
@@ -576,6 +526,73 @@ const sidebars = {
           type: 'doc',
           label: 'Frequently asked questions',
           id: 'node-running/faq',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Run an L2/L3 chain with Orbit',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'orbit-gentle-introduction',
+          label: 'Gentle introduction to Orbit',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/orbit-quickstart',
+          label: 'Quickstart: Launch an Orbit chain',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-an-orbit-node',
+          label: 'How to: Run a full Orbit node',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
+          label: `How to: Customize chain config`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/customize-stf',
+          label: `How to: Customize chain behavior`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/customize-precompile',
+          label: `How to: Customize chain precompiles`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
+          label: `How to: Add your chain to the bridge`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/chain-ownership',
+          label: 'Concept: Orbit chain ownership',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/troubleshooting-building-orbit',
+          label: 'Troubleshooting your Orbit chain',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
+          label: 'Reference: SDK support for chains with custom gas tokens',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/command-line-options',
+          label: 'Reference: Command-line options',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/public-preview-expectations',
+          label: 'Reference: Orbit public preview',
         },
       ],
     },
@@ -720,31 +737,24 @@ const sidebars = {
       ],
     },
     {
+      type: 'doc',
+      id: 'for-devs/contribute',
+    },
+    {
       type: 'category',
-      label: 'Contribute',
+      label: 'Third-party docs',
       collapsed: true,
       items: [
         {
-          type: 'doc',
-          id: 'for-devs/contribute',
-        },
-        {
-          type: 'category',
-          label: 'Third-party docs',
-          collapsed: true,
-          items: [
-            {
-              type: 'autogenerated',
-              dirName: 'for-devs/third-party-docs',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          label: 'Audit reports',
-          id: 'audit-reports',
+          type: 'autogenerated',
+          dirName: 'for-devs/third-party-docs',
         },
       ],
+    },
+    {
+      type: 'doc',
+      label: 'Audit reports',
+      id: 'audit-reports',
     },
     /*
     {
