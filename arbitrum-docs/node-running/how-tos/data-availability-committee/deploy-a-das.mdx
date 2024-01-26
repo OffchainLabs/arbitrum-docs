@@ -1,8 +1,8 @@
 ---
-title: 'How to configure a Data Availability Committee: deploy a Data Availability Server (DAS)'
+title: 'How to deploy a Data Availability Server (DAS)'
 description: This how-to will help you deploy a Data Availability Server (DAS)
 author: jose-franco
-sidebar_label: Deploy a DAS
+sidebar_label: Deploy a Data Availability Server (DAS)
 sidebar_position: 2
 content-type: how-to
 ---
@@ -13,16 +13,24 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
 
 <p>
   <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on demand instead of using the{' '}
+  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
   <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
   members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
-In this how-to you'll learn how to deploy a Data Availability Server (DAS) and enable an RPC interface to store batches received from the sequencer, and a REST interface to respond to requests of stored information. For more information related to configuring a DAC, please see the [Introduction](./introduction.mdx).
+In this how-to, you'll learn how to deploy a Data Availability Server (DAS) that exposes:
 
-You should be familiarized with how the AnyTrust protocol works and what's the role of the DAC in the protocol. You can find more information about the AnyTrust protocol in [Inside AnyTrust](/inside-anytrust.mdx). It is also recommended to be familiarized with [Kubernetes](https://kubernetes.io/) as the examples on this guide are based on that software.
+1. **An RPC interface** that the sequencer uses to store batches of data on the DAS.
+2. **An HTTP REST interface** that lets the DAS respond to requests for those batches of data.
 
-## How does a Data Availability Server work?
+For more information related to configuring a DAC, refer to the _[Introduction](./introduction.mdx)_.
+
+This how-to assumes that you're familiar with:
+
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/inside-anytrust.mdx)_ for a refresher.
+- [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
+
+## How does a DAS work?
 
 A Data Availability Server (DAS) allows storage and retrieval of transaction data batches for an AnyTrust chain. It's the software that the members of the DAC run in order to provide the Data Availability service.
 
@@ -36,9 +44,12 @@ When setting up a DAS, there are certain options you can configure to suit your 
 
 There are two main interfaces that can be enabled in a DAS: an **RPC interface** to store data in the DAS, intended to be used only by the AnyTrust sequencer; and a **REST interface** that supports only GET operations and is intended for public use.
 
-DA servers listen on the RPC interface for `das_store` RPC messages coming from the sequencer. The sequencer signs its requests and the DAS checks the signature. They also listen on the REST interface and respond to queries on `/get-by-hash/<hex encoded data hash>`. The response is always the same for a given hash.
+DA servers listen on two primary interfaces:
 
-Finally, IPFS is an alternative interface that serves batch retrieval. A DAS can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. The advantage of using this interface is that a Nitro node that is configured to use IPFS will use the batch hashes to find the batch data on the IPFS peer-to-peer network. Depending on the network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
+1.  Its **RPC interface** listens for `das_store` RPC messages coming from the sequencer. Messages are signed by the sequencer, and the DAS checks this signature upon receipt.
+2.  Its **REST interface** respond to HTTP GET requests pointed at `/get-by-hash/<hex encoded data hash>`. This uses the hash of the data batch as a unique identifier, and will always return the same data for a given hash.
+
+**IPFS** is an alternative interface that serves requests for batch retrieval. A DAS can be configured to sync and pin batches to its local IPFS repository, then act as a node in the IPFS peer-to-peer network. The advantage of using IPFS is that the Nitro node will use the batch hashes to find the batch data on the IPFS peer-to-peer network. Depending on the network configuration, that Nitro node may then also act as an IPFS node serving the batch data.
 
 ### Storage options
 
@@ -51,13 +62,13 @@ A DAS can be configured to use one or more of four storage backends:
 
 If more than one option is selected, store requests must succeed to all of them for it to be considered successful, while retrieve requests only require one of them to succeed.
 
-If there are other storage backends you'd like us to support you can send us a message on [Discord](https://discord.gg/arbitrum), or contribute directly to the [nitro repository](https://github.com/OffchainLabs/nitro/).
+If there are other storage backends you'd like us to support, send us a message on [Discord](https://discord.gg/arbitrum), or contribute directly to the [Nitro repository](https://github.com/OffchainLabs/nitro/).
 
 ### Caching
 
 An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests.
 
-Requests sent to the REST interface (to retrieve data from the DAS) return always the same data for a given hash so the result is cacheable. It also contains a `cache-control` header specifying that the object is immutable and to cache it for up to 28 days.
+Requests sent to the REST interface (to retrieve data from the DAS) always return the same data for a given hash, so the result is cacheable. It also contains a `cache-control` header specifying that the object is immutable and to cache it for up to 28 days.
 
 ### State synchronization
 
@@ -65,11 +76,9 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 
 ## How to deploy the DAS
 
-We now start the process of deploying the DAS. Remember that you can reach out to us on [Discord](https://discord.gg/arbitrum) if you are having trouble following this process.
-
 ### Step 0: Prerequisites
 
-In order to setup your DAS, you'll need the following information:
+Gather the following information:
 
 - The latest Nitro docker image: `@latestNitroNodeImage@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/node-running/node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
@@ -87,7 +96,7 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 ### Step 1: Set up a persistent volume
 
-First, we'll set up a volume to store the DAS database and the BLS key pair that we generate in the next step.
+First, we'll set up a volume to store the DAS database and the BLS keypair that we generate in the next step.
 
 In k8s, we can use a configuration like this:
 
@@ -107,13 +116,13 @@ storageClassName: gp2
 
 ### Step 2: Generate the BLS keypair
 
-Next, we'll generate a BLS key pair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS.
+Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS.
 
-The BLS key pair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
+The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
 When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in. That directory will need to exist before running the tool.
 
-Here's an example of how to use a k8s deployment to run the `datool keygen` utility and store the key on the volume that we created in the previous step and that will be used by the DAS in the next step. After this deployment has run once, the deployment can be torn down and deleted.
+Here's an example of how to use a k8s deployment to run the `datool keygen` utility and store the key on the volume that we created in the previous step (and that will be used by the DAS in the next step). Note that after this deployment has run once, the deployment can be torn down and deleted:
 
 ```yaml
 apiVersion: apps/v1
@@ -163,18 +172,18 @@ template:
 
 To run the DAS, we'll use the `daserver` tool and we'll configure the following parameters:
 
-| Parameter                                   | Description                                                                                                      |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| --data-availability.parent-chain-node-url   | RPC endpoint of a parent chain node                                                                              |
-| --data-availability.sequencer-inbox-address | Address of the SequencerInbox in the parent chain                                                                |
-| --data-availability.key.key-dir             | The absolute path to the directory inside the volume to read the BLS key pair ('das_bls.pub' and 'das_bls') from |
-| --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                               |
-| --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                        |
-| --rpc-port                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                         |
-| --enable-rest                               | Enables the REST server listening on --rest-addr and --rest-port                                                 |
-| --rest-addr                                 | REST server listening interface (default "localhost")                                                            |
-| --rest-port                                 | (Optional) REST server listening port (default 9877)                                                             |
-| --log-level                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                       |
+| Parameter                                   | Description                                                                                                     |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| --data-availability.parent-chain-node-url   | RPC endpoint of a parent chain node                                                                             |
+| --data-availability.sequencer-inbox-address | Address of the SequencerInbox in the parent chain                                                               |
+| --data-availability.key.key-dir             | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
+| --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                              |
+| --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                       |
+| --rpc-port                                  | (Optional) HTTP-RPC server listening port (default 9876)                                                        |
+| --enable-rest                               | Enables the REST server listening on --rest-addr and --rest-port                                                |
+| --rest-addr                                 | REST server listening interface (default "localhost")                                                           |
+| --rest-port                                 | (Optional) REST server listening port (default 9877)                                                            |
+| --log-level                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                      |
 
 To enable caching, you can use the following parameters:
 
@@ -191,12 +200,12 @@ To enable the REST aggregator, use the following parameters:
 | --data-availability.rest-aggregator.online-url-list                         | A URL to a list of URLs of REST DAS endpoints that is checked at startup. This option is additive with the urls option                                                                      |
 | --data-availability.rest-aggregator.urls                                    | List of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints. This option is additive with the online-url-list option                                     |
 | --data-availability.rest-aggregator.sync-to-storage.check-already-exists    | When using a REST aggregator, checks if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)                                   |
-| --data-availability.rest-aggregator.sync-to-storage.eager                   | When using a REST aggregator, eagerly syncs batch data to this DAS's storage from the rest endpoints, using the parent chain as the index of batch data hashes; otherwise only syncs lazily |
+| --data-availability.rest-aggregator.sync-to-storage.eager                   | When using a REST aggregator, eagerly syncs batch data to this DAS's storage from the REST endpoints, using the parent chain as the index of batch data hashes; otherwise only syncs lazily |
 | --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block | When using a REST aggregator that's eagerly syncing, starts indexing forward from this block from the parent chain. Only used if there is no sync state.                                    |
 | --data-availability.rest-aggregator.sync-to-storage.retention-period        | When using a REST aggregator, period to retain the synced data (defaults to forever)                                                                                                        |
 | --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e. the block number currently synced up to, so that it doesn't sync from scratch each time                            |
 
-Finally, for the storage backends you wish to configure, use the following parameters. toggle between the different options to see all available parameters.
+Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -253,7 +262,7 @@ daserver
     --data-availability.local-db-storage.data-dir /home/user/data/badgerdb
 ```
 
-And here's an example of how to use a k8s deployment to run the that command:
+And here's an example of how to use a k8s deployment to run that command:
 
 ```yaml
 apiVersion: apps/v1
@@ -319,16 +328,16 @@ template:
 
 ## Archive DA servers
 
-Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to make sure all historical data is available.
+Archive DA servers are servers that don't discard any data after expiring. Each DAC should have at the very least one archive DAS to ensure all historical data is available.
 
-To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to false in your storage method. For example:
+To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
 ```bash
 --data-availability.s3-storage.discard-after-timeout=false
 --data-availability.local-db-storage.discard-after-timeout=false
 ```
 
-Note that local-file-storage and ipfs-storage don't discard data after expiring, so the option `discard-after-timeout` is not available.
+Note that `local-file-storage` and `ipfs-storage` don't discard data after expiring, so the option `discard-after-timeout` is not available.
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
@@ -338,7 +347,7 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: RPC health check
 
-The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns 200 if the DAS is active.
+The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns `200` if the DAS is active.
 
 Example:
 
@@ -351,11 +360,11 @@ curl -X POST \
 
 ### Test 2: Store and retrieve data
 
-The RPC interface of the DAS validates that requests to store data are signed by the sequencer's ECDSA key, identified via a call to the SequencerInbox contract on the parent chain. It can also be configured to accept store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure.
+The RPC interface of the DAS validates that requests to store data are signed by the sequencer's ECDSA key, identified via a call to the `SequencerInbox` contract on the parent chain. It can also be configured to accept store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure.
 
 Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
 
-First, generate an ECDSA key pair with `datool keygen`:
+First, generate an ECDSA keypair with `datool keygen`:
 
 ```bash
 datool keygen --dir /dir-to-store-the-key-pair/ --ecdsa
@@ -394,7 +403,7 @@ The retention period defaults to 24 hours, but can be configured when calling `d
 
 ### Test 3: REST health check
 
-The REST interface has a health check on the path `/health` which will return 200 if the underlying storage is working, otherwise 503.
+The REST interface has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise `503`.
 
 Example:
 
@@ -431,8 +440,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from './partials/_3-das-optional-parameters.mdx';
-import DASMetrics from './partials/_4-das-metrics.mdx';
+import DASOptionalParameters from './partials/_das-optional-parameters.mdx';
+import DASMetrics from './partials/_das-metrics.mdx';
 
 ## Optional parameters
 

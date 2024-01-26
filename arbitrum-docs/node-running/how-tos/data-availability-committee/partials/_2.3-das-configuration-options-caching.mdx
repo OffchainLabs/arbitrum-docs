@@ -1,3 +1,0 @@
-An in-memory cache can be enabled to avoid needing to access underlying storage for retrieve requests.
-
-Requests sent to the REST interface (to retrieve data from the DAS) return always the same data for a given hash so the result is cacheable. It also contains a `cache-control` header specifying that the object is immutable and to cache it for up to 28 days.
