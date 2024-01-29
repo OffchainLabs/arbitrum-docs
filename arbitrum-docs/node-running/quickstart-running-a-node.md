@@ -11,11 +11,27 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
+:::info
+
+There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [RPC endpoints and providers](/node-running/node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
+
+:::
+
+:::caution API security disclaimer
+
+When exposing API endpoints to the Internet or any untrusted/hostile network, the following risks may arise:
+
+- Increased risk of crashes due to OOM:
+  Exposing endpoints raises the risk of Out-of-Memory (OOM) crashes.
+- Increased risk of not keeping up with chain progression:
+  Resource starvation (IO or CPU) may occur, leading to an inability to keep up with chain progression.
+
+We strongly advise against exposing API endpoints publicly. Users considering such exposure should exercise caution and implement the right measures to enhance resilience.
+:::
+
 When it comes to interacting with the Arbitrum network, users have the option to run either a full node or an archive node. There are distinct advantages to running an Arbitrum full node. In this quickstart, we will explore the reasons why a user may prefer to run a full node instead of an archive node. By understanding the benefits and trade-offs of each type of node, users can make an informed decision based on their specific requirements and objectives.
 
 ### Considerations for running an Arbitrum full node
-
-⚠️ Note: There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [RPC endpoints and providers](/node-running/node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 - Transaction validation and security: Running a full node allows users to independently validate transactions and verify the state of the Arbitrum blockchain. Users can have full confidence in the authenticity and integrity of the transactions they interact with.
 - Reduced trust requirements: By running a full node, users can interact with the Arbitrum network without relying on third-party services or infrastructure. This reduces the need to trust external entities and mitigates the risk of potential centralized failures or vulnerabilities.
