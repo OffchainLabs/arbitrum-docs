@@ -28,7 +28,7 @@ The `orbit-custom-fee-token` SDK feature introduces a suite of APIs designed for
    - **Purpose:** In the scenario of bridging ERC20 assets to an Orbit chain, these APIs play a crucial role. Token Bridging on Arbitrum Nitro stack uses Retryable tickets and needs specific amount of fees to be paid for creation and redemption of the ticket. For more information about retryable tickets please take a look at [this](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#retryable-tickets) part of our docs. The Orbit chain operates as a custom gas token network, necessitating the payment of fees in native tokens for the creation of retryable tickets and their redemption on the Orbit chain. To cover the submission and execution fees associated with retryable tickets on the Orbit chain, an adequate amount of native tokens must be approved and allocated on the parent chain to cover the fees.
 
 
-**Note** that these APIs are just needed for `custom gas token` orbit chains and for regular rollup and anytrust orbit chains, you don't need to use them.
+**Note** that these APIs are just needed for `custom gas token` orbit chains and for ETH-powered rollup and anytrust orbit chains, you don't need to use them.
 
 **Note** that when native tokens are transferred to the custom gas token orbit chain, they function equivalently to ETH on EVM chains. This means that these tokens will exhibit behavior identical to that of ETH, which is the native currency on EVM chains. This similarity in functionality is a key feature to consider in transactions and operations within the orbit chain.
 
