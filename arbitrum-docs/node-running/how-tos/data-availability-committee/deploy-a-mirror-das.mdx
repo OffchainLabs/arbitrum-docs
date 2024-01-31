@@ -246,6 +246,10 @@ Note that `local-file-storage` and `ipfs-storage` don't discard data after expir
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
+## Helm charts
+
+A helm chart is available at [ArtifactHUB](https://artifacthub.io/packages/helm/offchainlabshelm/das). It supports running a mirror DAS by providing the parameters for your server. Find more information in the [OCL community Helm charts repository](https://github.com/OffchainLabs/community-helm-charts/tree/main/charts/das).
+
 ## Testing the DAS
 
 Once the DAS is running, we can test if everything is working correctly using the following methods.
