@@ -8,8 +8,7 @@ target_audience: 'Developers deploying and maintaining Orbit AnyTrust chains.'
 sidebar_position: 1
 ---
 
-
-**AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer. 
+**AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer.
 
 The DAC has _N_ members; the AnyTrust protocol assumes that a minimum of _H_ DAC members maintain integrity. _H_ is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for store to be considered successful.
 
@@ -17,17 +16,17 @@ Each DAC member gets their own set of BLS public and private keys. It's importan
 
 The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a Data Availability Certificate. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See <a data-quicklook-from='inside-anytrust'>Inside Anytrust</a> for more information.
 
-
 <PublicPreviewBannerPartial />
 
 In the following section, we will provide a detailed guide on the generation of a Keyset corresponding to your individual set of keys, as well as instructions for its subsequent configuration within the chain.
 
 ### Batch Poster Configuration
+
 AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro Batch Poster, you need to provide specific information for each committee member. This includes their URL, BLS public key, a unique single-bit identifier (bitmask) for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
 
 To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where N is the total number of committee members and H is the minimum number of members assumed to be honest.
 
-Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [here](https://developer.arbitrum.io/das/daserver-instructions#generate-key). 
+Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [here](https://developer.arbitrum.io/das/daserver-instructions#generate-key).
 
 Here is a sample of the JSON configuration, taken from a past configuration of Arbitrum Nova, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`, and `signer-mask` fields. `pubkey` is the base64 encoded BLS public key of the committee member, and `signer-mask` should be a power of 2, starting from 2^0, 2^1, etc.
 
@@ -47,6 +46,7 @@ Here is a sample of the JSON configuration, taken from a past configuration of A
 ```
 
 ### Keyset Generation
+
 For the Batch Poster to be able to post batches, the keyset corresponding to the configuration it is using must be enabled on the Inbox contract. You’ll need to generate the keyset and keyset hash binary blobs to pass to the SetValidKeyset call on the Inbox contract. Here’s an example using the same Nova @Keyset 8 configuration as before, and the datool utility which is distributed with Nitro:
 
 ```shell
@@ -66,17 +66,18 @@ KeysetHash: 0xf8bb9a67839d1767e79afe52d21e97a04ee0bf5f816d5b52c10df60cccb7f822
 
 ### Example with single private key = zero
 
-For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and Sequencer configuration can be established as detailed below. 
+For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and Sequencer configuration can be established as detailed below.
 
 #### Key
+
 ```shell
 $ cat /tmp/orbit-bls/das_bls  # this is an empty file, the private key is zero
 $ cat /tmp/orbit-bls/das_bls.pub
 YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==
 ```
 
-
 #### Keyset
+
 Once in possession of the keys, it is imperative to generate the Keyset as previously outlined. For example, in the scenario involving a zero-valued private key, the Keyset configuration would be as follows:
 
 ```shell
@@ -91,7 +92,8 @@ The Keyset can be configured by invoking the [setValidKeyset](https://github.com
 **Note** that only rollup owner can call this method to set the new valid keyset.
 
 #### Sequencer Configuration
-It is necessary to modify the node configuration file associated with the node intended to initiate your chain. To incorporate the Committee keys into this node configuration, the following segment must be appended to the JSON file: 
+
+It is necessary to modify the node configuration file associated with the node intended to initiate your chain. To incorporate the Committee keys into this node configuration, the following segment must be appended to the JSON file:
 
 ```shell
 {
@@ -105,5 +107,5 @@ It is necessary to modify the node configuration file associated with the node i
     }
   }
 ...
-} 
+}
 ```

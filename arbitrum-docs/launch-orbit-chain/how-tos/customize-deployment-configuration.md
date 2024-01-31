@@ -87,3 +87,7 @@ In production scenarios, this is a high-stakes address that's often controlled b
 Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
 
 When deploying your Orbit chain, this address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
+
+## Additional Configuration Parameters
+
+There are a number of [additional parameters](/launch-orbit-chain/reference/additional-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.
