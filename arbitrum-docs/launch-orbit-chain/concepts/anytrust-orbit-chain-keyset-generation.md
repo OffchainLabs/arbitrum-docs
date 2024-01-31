@@ -24,7 +24,7 @@ In the following section, we will provide a detailed guide on the generation of 
 
 AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro Batch Poster, you need to provide specific information for each committee member. This includes their URL, BLS public key, a unique single-bit identifier (bitmask) for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
 
-To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where N is the total number of committee members and H is the minumum number of members assumed to be honest.
+To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where N is the total number of committee members and H is the minimum number of members assumed to be honest.
 
 Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [here](https://developer.arbitrum.io/das/daserver-instructions#generate-key).
 
