@@ -397,7 +397,12 @@
         },
         {
             "source": "/das/daserver-instructions",
-            "destination": "/node-running/how-tos/running-a-daserver",
+            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "permanent": false
+        },
+        {
+            "source": "/node-running/how-tos/running-a-daserver",
+            "destination": "/node-running/how-tos/data-availability-committee/introduction",
             "permanent": false
         }
     ]
