@@ -28,12 +28,13 @@ The `WASM module root` is a 32-byte hash, created from the Merkelized Go replay 
 **Note** that wasm module roots are backward compatible, meaning upgrading it prior to an ArbOS version upgrade won't disrupt the system.
 
 #### Step 2: Schedule ArbOS version Upgrade
-To update the ArbOS version, you must schedule an upgrade on the Orbit chain. This is done by calling the [scheduleArbOSUpgrade](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61) function on the ArbOwner precompile of the Orbit chain. This function requires two inputs:
-    1. **newVersion**: Specify the ArbOS version you wish to upgrade to.
-    2. **timestamp**: Set the exact timestamp at which you want your Orbit chain to transition to the new ArbOS version.
 
-    As with the parent chain, performing **admin actions** on the orbit chain necessitates using the `upgrade executor` contract on the orbit chain. The **chain owner account** must execute a call to the upgrade executor with the appropriate calldata, to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile, thereby setting the new ArbOS version and the desired timestamp for the upgrade. 
-    **Note** that setting timestamp to `0` causes the upgrade to activate immediately.
+To update the ArbOS version, you must schedule an upgrade on the Orbit chain. This is done by calling the [scheduleArbOSUpgrade](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61) function on the ArbOwner precompile of the Orbit chain. This function requires two inputs:
+1. **newVersion**: Specify the ArbOS version you wish to upgrade to.
+2. **timestamp**: Set the exact timestamp at which you want your Orbit chain to transition to the new ArbOS version.
+
+As with the parent chain, performing **admin actions** on the orbit chain necessitates using the `upgrade executor` contract on the orbit chain. The **chain owner account** must execute a call to the upgrade executor with the appropriate calldata, to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile, thereby setting the new ArbOS version and the desired timestamp for the upgrade. 
+**Note** that setting timestamp to `0` causes the upgrade to activate immediately.
 
 #### Step 3: Update Arb Nodes
 
