@@ -28,6 +28,7 @@ To upgrade ArbOS on an Orbit chain, follow these steps:
     2. **timestamp**: Set the exact timestamp at which you want your Orbit chain to transition to the new ArbOS version.
 
     As with the parent chain, performing **admin actions** on the orbit chain necessitates using the `upgrade executor` contract on the orbit chain. The **chain owner account** must execute a call to the upgrade executor with the appropriate calldata, to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile, thereby setting the new ArbOS version and the desired timestamp for the upgrade. 
+    **Note** that setting timestamp to `0` causes the upgrade to activate immediately.
 
 3. **Update Arb Nodes**: The final step in upgrading ArbOS is to update the nodes of your Orbit chain to a version that supports the new ArbOS. This update should be performed after completing steps **1** and **2**, and prior to the **timestamp** set for the ArbOS upgrade. For example, if you are upgrading to ArbOS 11, the corresponding node version is `v2.2.2`. The Docker image for this node version is `offchainlabs/nitro-node:v2.2.2-8f33fea`. This step ensures that your nodes are compatible with the new ArbOS version and are ready to operate effectively after the upgrade.
 
