@@ -399,7 +399,7 @@ The above command will output the `Hex Encoded Data Hash` which can then be us
 datool client rest getbyhash --url http://localhost:9877 --data-hash <0xDataHash>
 ```
 
-Here if we set `<0xDataHash>` as `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (this hash is what we got from the last setp) as an example, then the result should be: `Message: Hello world`
+If we set `<0xDataHash>` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
 
 The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
 
