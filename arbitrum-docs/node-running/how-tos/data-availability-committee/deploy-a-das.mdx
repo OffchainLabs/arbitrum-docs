@@ -1,5 +1,5 @@
 ---
-title: 'How to deploy a Data Availability Server (DAS)'
+title: "How to deploy a Data Availability Server (DAS)"
 description: This how-to will help you deploy a Data Availability Server (DAS)
 author: jose-franco
 sidebar_label: Deploy a Data Availability Server (DAS)
@@ -7,15 +7,17 @@ sidebar_position: 2
 content-type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../../../partials/_public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely
+  on an external Data Availability Committee (DAC) to store data and provide it
+  on-demand instead of using its{" "}
+  <a data-quicklook-from="parent-chain">parent chain</a> as the Data
+  Availability (DA) layer. The members of the DAC run a Data Availability Server
+  (DAS) to handle these operations.
 </p>
 
 In this how-to, you'll learn how to deploy a DAS that exposes:
@@ -207,12 +209,12 @@ To enable the REST aggregator, use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import S3Parameters from './partials/parameters/_s3-parameters.mdx';
-import LocalBadgerDBParameters from './partials/parameters/_local-badger-db-parameters.mdx';
-import LocalFilesParameters from './partials/parameters/_local-files-parameters.mdx';
-import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import S3Parameters from "./partials/parameters/_s3-parameters.mdx";
+import LocalBadgerDBParameters from "./partials/parameters/_local-badger-db-parameters.mdx";
+import LocalFilesParameters from "./partials/parameters/_local-files-parameters.mdx";
+import IPFSParameters from "./partials/parameters/_ipfs-parameters.mdx";
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -397,7 +399,7 @@ The above command will output the `Hex Encoded Data Hash` which can then be us
 datool client rest getbyhash --url http://localhost:9877 --data-hash <0xDataHash>
 ```
 
-After running that command, the result should be: `Message: Hello world`
+Here we set `<0xDataHash>` as `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` as an example, then the result should be: `Message: Hello world`
 
 The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
 
@@ -440,8 +442,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from './partials/_das-optional-parameters.mdx';
-import DASMetrics from './partials/_das-metrics.mdx';
+import DASOptionalParameters from "./partials/_das-optional-parameters.mdx";
+import DASMetrics from "./partials/_das-metrics.mdx";
 
 ## Optional parameters
 
