@@ -1,12 +1,12 @@
 ---
 id: how-to-estimate-gas
-title: 'How to estimate gas in Arbitrum'
+title: "How to estimate gas in Arbitrum"
 description: Learn how to estimate gas before submitting transactions.
 author: TucksonDev
 content-type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../partials/_public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
@@ -71,8 +71,8 @@ We'll use one resource available in Arbitrum: the [NodeInterface](/for-devs/dev-
 - L2G (Gas used on L2) ⇒ Gas used to compute the transaction on L2. This does not include the _“posting on L1”_ part of the calculations. The value of L2G will depend on the transaction itself, but having the data of the transaction, we can calculate it as follows:
   - Call `NodeInterface.GasEstimateComponents()` with the transaction data and subtract the second element (`gasEstimateForL1`, which estimates the L1 part of the fees) from the first (`gasEstimate`, which includes both the L1 and the L2 parts).
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on L1:
-  - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
-- L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on L1 (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.GasEstimateComponents()` take the first element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
+  - Call `NodeInterface.gasEstimateL1Component()`, get the third element `l1BaseFeeEstimate` and multiply it by 16.
+- L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on L1 (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.gasEstimateL1Component()` take the first element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
   - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate is posted on L1, [as explained here](/inside-anytrust#data-availability-certificates).
 
 ## An example of how to apply this formula in your code
@@ -101,24 +101,37 @@ For this example, we'll use the method `NodeInterface.gasEstimateComponents()` t
 const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
 
 // And the estimations from NodeInterface.GasEstimateComponents()
-const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
-  destinationAddress,
-  false,
-  txData,
-  {
-    blockTag: 'latest',
-  },
-);
+const gasEstimateComponents =
+  await nodeInterface.callStatic.gasEstimateComponents(
+    destinationAddress,
+    false,
+    txData,
+    {
+      blockTag: "latest",
+    }
+  );
+
+const gasEstimateL1Component =
+  await nodeInterface.callStatic.gasEstimateL1Component(
+    destinationAddress,
+    false,
+    txData,
+    {
+      blockTag: "latest",
+    }
+  );
 ```
 
 With this, we can now get the values of the 4 variables we'll use in our formula:
 
 ```ts
 // Getting useful values for calculating the formula
-const l1GasEstimated = gasEstimateComponents.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(gasEstimateComponents.gasEstimateForL1);
+const l1GasEstimated = gasEstimateL1Component.gasEstimateForL1;
+const l2GasUsed = gasEstimateComponents.gasEstimate.sub(
+  gasEstimateL1Component.gasEstimateForL1
+);
 const l2EstimatedPrice = gasEstimateComponents.baseFee;
-const l1EstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
+const l1EstimatedPrice = gasEstimateL1Component.l1BaseFeeEstimate.mul(16);
 
 // Calculating some extra values to be able to apply all variables of the formula
 // -------------------------------------------------------------------------------
