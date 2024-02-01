@@ -126,8 +126,9 @@ With this, we can now get the values of the 4 variables we'll use in our formula
 
 ```ts
 // Getting useful values for calculating the formula
+const totalEstimated = gasEstimateComponents.gasEstimate;
 const l1GasEstimated = gasEstimateL1Component.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(l1GasEstimated);
+const l2GasUsed = totalEstimated.sub(l1GasEstimated);
 const l2EstimatedPrice = gasEstimateComponents.baseFee;
 const l1EstimatedPrice = gasEstimateL1Component.l1BaseFeeEstimate.mul(16);
 
