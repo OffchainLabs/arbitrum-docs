@@ -1,12 +1,12 @@
 ---
 id: how-to-estimate-gas
-title: "How to estimate gas in Arbitrum"
+title: 'How to estimate gas in Arbitrum'
 description: Learn how to estimate gas before submitting transactions.
 author: TucksonDev
 content-type: how-to
 ---
 
-import PublicPreviewBannerPartial from "../partials/_public-preview-banner-partial.md";
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -107,7 +107,7 @@ const gasEstimateComponents =
     false,
     txData,
     {
-      blockTag: "latest",
+      blockTag: 'latest',
     }
   );
 
@@ -117,7 +117,7 @@ const gasEstimateL1Component =
     false,
     txData,
     {
-      blockTag: "latest",
+      blockTag: 'latest',
     }
   );
 ```
@@ -127,9 +127,7 @@ With this, we can now get the values of the 4 variables we'll use in our formula
 ```ts
 // Getting useful values for calculating the formula
 const l1GasEstimated = gasEstimateL1Component.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(
-  gasEstimateL1Component.gasEstimateForL1
-);
+const l2GasUsed = gasEstimateComponents.gasEstimate.sub(l1GasEstimated);
 const l2EstimatedPrice = gasEstimateComponents.baseFee;
 const l1EstimatedPrice = gasEstimateL1Component.l1BaseFeeEstimate.mul(16);
 
