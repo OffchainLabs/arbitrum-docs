@@ -538,6 +538,28 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'BOLD: Challenge Protocol V3 (TESTNET)',
+      collapsed: false,
+      items: [
+        {
+          type: 'doc',
+          id: 'bold/bold-gentle-introduction',
+          label: 'A gentle introduction',
+        },
+        {
+          type: 'link',
+          href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
+          label: 'Deep dive: Whitepaper',
+        },
+        {
+          type: 'link',
+          href: 'https://github.com/OffchainLabs/bold',
+          label: 'Deeper dive: Specification on Github',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Advanced concepts',
       collapsed: false,
       items: [
