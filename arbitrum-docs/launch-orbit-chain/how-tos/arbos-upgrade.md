@@ -1,7 +1,7 @@
 ---
 title: 'How to upgrade ArbOS on your Orbit chain'
 sidebar_label: 'ArbOS upgrade'
-description: 'Overview of steps to upgrade arb os on an orbit chain.'
+description: 'Learn how to upgrade ArbOS on your Orbit chain.'
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers maintaining Orbit chains.'
