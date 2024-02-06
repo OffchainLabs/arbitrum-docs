@@ -8,7 +8,7 @@ target_audience: 'Developers maintaining Orbit chains.'
 sidebar_position: 3
 ---
 
-In this how-to, you'll discover how to upgrade ArbOS on your Orbit chain. This walkthrough assumes you have a basic understanding of ArbOS, Orbit chains, and smart contract operations. This step-by-step guide is designed to navigate you through the process, from the initial wasm module root upgrade to the final node update, ensuring a successful upgrade of the new ArbOS version.
+This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
 
 ### ArbOS
 ArbOS functions as a vital element in Arbitrum Nitro stack, acting as the connecting framework within the State Transition Function. It delivers key services for Arbitrum systems, including inter-chain communication, management of resources and Arbitrum Nitro specific fee structures, as well as overseeing chain operations.
