@@ -38,7 +38,7 @@ The `WASM module root` is a 32-byte hash, created from the Merkelized Go replay 
 #### Step 3: Schedule ArbOS version Upgrade
 
 To schedule an ArbOS version upgrade, call the `[scheduleArbOSUpgrade](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61)` function on the `ArbOwner` precompile of the Orbit chain(s) you're upgrading. This function requires two inputs:
-1. **newVersion**: Specify the ArbOS version you wish to upgrade to.
+1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to.
 2. **timestamp**: Set the exact timestamp at which you want your Orbit chain to transition to the new ArbOS version.
 
 As with the parent chain, performing **admin actions** on the orbit chain necessitates using the `upgrade executor` contract on the orbit chain. The **chain owner account** must execute a call to the upgrade executor with the appropriate calldata, to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile, thereby setting the new ArbOS version and the desired timestamp for the upgrade. 
