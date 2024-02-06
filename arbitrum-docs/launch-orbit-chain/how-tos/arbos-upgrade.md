@@ -46,4 +46,4 @@ Because this is an administrative action (similar to upgrading your Wasm module 
 To upgrade immediately (without scheduling), set the timestamp to `0`.
 :::
 
-By following these three steps, your chain will be successfully upgraded and start using the new ArbOS version after reaching the `timestamp` you specified in step 2. This process ensures a seamless transition to the latest functionalities and improvements of ArbOS.
+Congratulations! You've upgraded your Orbit chain(s) to the specified ArbOS version.
