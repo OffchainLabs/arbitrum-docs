@@ -10,7 +10,6 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
 
-### ArbOS
 ArbOS functions as a vital element in Arbitrum Nitro stack, acting as the connecting framework within the State Transition Function. It delivers key services for Arbitrum systems, including inter-chain communication, management of resources and Arbitrum Nitro specific fee structures, as well as overseeing chain operations.
 
 ### ArbOS upgrade
