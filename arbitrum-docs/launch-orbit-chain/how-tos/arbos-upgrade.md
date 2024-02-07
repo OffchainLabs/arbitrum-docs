@@ -24,7 +24,7 @@ All remaining orbit nodes must be upgraded prior to activating the new ArbOS ver
 
 For example, if your upgrade targets ArbOS 11, you should look for node version `v2.2.2`. The Docker image to use for this version is `offchainlabs/nitro-node:v2.2.2-8f33fea`. Completing this step guarantees that your nodes are prepared and will function smoothly with the ArbOS update.
 
-#### Step 2: Wasm Module Root Upgrade
+#### Step 2: Upgrade the Wasm module root
 
 The `WASM module root` is a 32-byte hash, created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new Wasm module root is generated due to modifications in the State Transition Function. This new wasm module root must be set in the rollup contract on the parent chain. To implement the upgrade, you should utilize the [setWasmModuleRoot](https://github.com/OffchainLabs/nitro-contracts/blob/38a70a5e14f8b52478eb5db08e7551a82ced14fe/src/rollup/RollupAdminLogic.sol#L321) method by calling the `Rollup proxy` contract. As the `upgrade executor` contract on the parent chain is the designated owner of the rollup contract, it is necessary for the **chain owner account** to initiate a call to the upgrade executor. This call should include the correct calldata for setting the new wasm module root through the setWasmModuleRoot function within the rollup contract. For example, the wasm module root for ArbOS 11 is `0xf4389b835497a910d7ba3ebfb77aa93da985634f3c052de1290360635be40c4a`. 
 :::tip Backward compatibility
