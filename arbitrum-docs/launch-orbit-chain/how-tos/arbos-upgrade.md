@@ -11,7 +11,6 @@ sidebar_position: 3
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
 
 
-### ArbOS upgrade
 Similar to other software, ArbOS may undergo periodic upgrades to introduce new features or modify existing ones. In the event of an upgrade, owners of Orbit chains have the discretion to either update their chain and ArbOS version to the latest, benefiting from new features, or maintain their current setup.
 
 The process of upgrading ArbOS on an Orbit chain involves specific steps, which are outlined in the following section.
