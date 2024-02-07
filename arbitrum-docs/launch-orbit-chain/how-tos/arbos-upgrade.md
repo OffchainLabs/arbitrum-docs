@@ -15,7 +15,7 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 
 
-#### Step 1: Update Nodes and Validators
+#### Step 1: Update Nitro on nodes and validators
 
 To ensure compatibility with the new ArbOS version, the Orbit chain's nodes need an upgrade. 
 
