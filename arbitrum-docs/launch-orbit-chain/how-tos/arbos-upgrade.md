@@ -22,7 +22,7 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 All remaining orbit nodes must be upgraded prior to activating the new ArbOS version, specifically before the **deadline** established for the ArbOS update (timestamp set in the ArbOS update schedule). 
 
-For example, if your upgrade targets ArbOS 11, you should look for node version `v2.2.2`. The Docker image to use for this version is `offchainlabs/nitro-node:v2.2.2-8f33fea`. Completing this step guarantees that your nodes are prepared and will function smoothly with the ArbOS update.
+For example, if your upgrade targets ArbOS 11, you should look for node version `v2.2.2`. The Docker image to use for this version is `offchainlabs/nitro-node:v2.2.2-8f33fea`.
 
 #### Step 2: Upgrade the Wasm module root
 
