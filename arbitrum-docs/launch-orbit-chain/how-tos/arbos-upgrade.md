@@ -14,7 +14,6 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 
 
-To upgrade ArbOS on an Orbit chain, follow these steps:
 
 #### Step 1: Update Nodes and Validators
 
