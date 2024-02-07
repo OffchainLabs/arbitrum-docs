@@ -13,7 +13,6 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 
 
-Before delving into the steps for upgrading, it's important to understand the concept of chain ownership and the methods through which a chain owner can upgrade their chain. These topics are comprehensively covered in the [Chain Ownership](../concepts/chain-ownership.md) section of the documentation.
 
 To upgrade ArbOS on an Orbit chain, follow these steps:
 
