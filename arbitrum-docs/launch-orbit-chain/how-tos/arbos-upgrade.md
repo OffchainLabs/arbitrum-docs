@@ -17,7 +17,6 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 #### Step 1: Update Nitro on nodes and validators
 
-To ensure compatibility with the new ArbOS version, the Orbit chain's nodes need an upgrade. 
 
 **Validators** should be the first to receive this update. It's crucial to upgrade the software on validator nodes to the latest Nitro version supporting the new ArbOS before proceeding to set a new Wasm Module Root (step 2). Chain owners should prioritize this to ensure their validators are equipped with the necessary updates.
 
