@@ -16,7 +16,7 @@ ArbOS is an essential part of the Nitro stack. Visit [this page to learn more ab
 # Naming and numbering scheme
 ArbOS releases starting from 20 onwards will use the name of plantery moons in our solar system, descending in alphabetical order (i.e. the next ArbOS upgrade after ArbOS 20 "Atlas" will be a planetary moon that begins with the letter "B"). 
 
-The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e. the next ArbOS upgrade after ArbOS 20 will be ArbOS 30). This was done because there are teams who have customized their Orbit chain's [behavior](../../launch-orbit-chain/how-tos/customize-stf.mdx) or [precompiles](../../launch-orbit-chain/how-tos/customize-precompile.mdx) and who may wish to use ArbOS naming schema.
+The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e. the next ArbOS upgrade after ArbOS 20 will be ArbOS 30). This was done because there are teams who have customized their Orbit chain's [behavior](../../launch-orbit-chain/how-tos/customize-stf.mdx) or [precompiles](../../launch-orbit-chain/how-tos/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g. ArbOS 11 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
 
 # ArbOS 20: Atlas [Upcoming]
 ArbOS 20 is an upcoming upgrade to ArbOS that will be shipped in a future version of Nitro. The Nitro version will be available as a Docker image on Docker Hub when finalized. For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
