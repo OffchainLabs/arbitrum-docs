@@ -103,15 +103,14 @@ For this example, we'll use the method `NodeInterface.gasEstimateComponents()` t
 const gasComponents = await arbGasInfo.callStatic.getPricesInWei();
 
 // And the estimations from NodeInterface.GasEstimateComponents()
-const gasEstimateComponents =
-  await nodeInterface.callStatic.gasEstimateComponents(
-    destinationAddress,
-    false,
-    txData,
-    {
-      blockTag: 'latest',
-    }
-  );
+const gasEstimateComponents = await nodeInterface.callStatic.gasEstimateComponents(
+  destinationAddress,
+  false,
+  txData,
+  {
+    blockTag: 'latest',
+  },
+);
 ```
 
 With this, we can now get the values of the 4 variables we'll use in our formula:
@@ -119,9 +118,7 @@ With this, we can now get the values of the 4 variables we'll use in our formula
 ```ts
 // Getting useful values for calculating the formula
 const l1GasEstimated = gasEstimateComponents.gasEstimateForL1;
-const l2GasUsed = gasEstimateComponents.gasEstimate.sub(
-  gasEstimateComponents.gasEstimateForL1
-);
+const l2GasUsed = gasEstimateComponents.gasEstimate.sub(gasEstimateComponents.gasEstimateForL1);
 const l2EstimatedPrice = gasEstimateComponents.baseFee;
 const l1EstimatedPrice = gasEstimateComponents.l1BaseFeeEstimate.mul(16);
 

@@ -23,10 +23,9 @@ If you are looking to write and deploy Stylus programs, please see the following
 
 The Stylus SDKs are open-source, allowing anyone to build their own! The following SDKs have been developed from the ecosystem of Stylus developers.
 
-| Repo                           |
-| :----------------------------- |
-| [Zig SDK][Zig]                 |
-
+| Repo           |
+| :------------- |
+| [Zig SDK][Zig] |
 
 [Rust]: https://github.com/OffchainLabs/stylus-sdk-rs
 [C]: https://github.com/OffchainLabs/stylus-sdk-c
