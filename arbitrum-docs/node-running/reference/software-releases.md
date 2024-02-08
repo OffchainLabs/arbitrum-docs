@@ -1,6 +1,6 @@
 ---
-title: 'Node software releases'
-sidebar_label: 'Node software releases'
+title: 'ArbOS software releases'
+sidebar_label: 'ArbOS software releases'
 author: dlee
 ---
 
@@ -31,7 +31,7 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 ### Special notes on ArbOS 20: Atlas support for EIP-4844
 - Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e. the whole chain opts-in with ArbOS 20 “Atlas”).
 - ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like L1 Ethereum, that support the blob transaction type. This includes Arbitrum One and Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that any L3 Orbit chain settling to an L2 Arbitrum chain will post data to the underlying L2 Arbitrum chain as calldata. The L2 Arbitrum chain will then be able to post data to a L1 data availability layer like Ethereum using blobs.
-- There currently aren’t estimates on what the end-user gas savings of using blob data will be yet. This topic is something being actively worked on and monitored. Without mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will generally reduce the cost of using Arbitrum L2s.
+- There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s.
 
 ### Reference links
 - Original DAO proposal: [AIP: ArbOS Version 20 "Atlas"](https://forum.arbitrum.foundation/t/aip-arbos-version-20-atlas/20957)
@@ -46,7 +46,7 @@ ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the 
 - Fixes an issue where the [`ArbOwnerPublic` precompile](../../for-devs/dev-tools-and-resources/precompiles.mdx#arbownerpublic) returned the incorrect list of chain owners. This does not change the parties who are able to perform chain owner actions. As intended, only the Arbitrum DAO is able to take chain owner actions for Arbitrum One and Nova. 
 - Resolves an issue where the [`arbBlockHash` method](../../for-devs/dev-tools-and-resources/precompiles.mdx#arbsys) would take up all the gas when reverting. The previous incorrect behavior meant that if a transaction calls `arbBlockHash` with an out-of-range block number, then the transaction would consume all the gas when reverting.
 - Addition of the [`L1RewardReceipient`](../../for-devs/dev-tools-and-resources/precompiles.mdx##arbgasinfo) and [`L1RewardRate`](../../for-devs/dev-tools-and-resources/precompiles.mdx##arbgasinfo) precompile methods to view L1 pricing parameters and make it easier to view the current chain configuration.
-- Fix the `ArbOwner` precompile to disallow emitting logs in STATICCALL contexts, bringing this in line with how the EVM is expected to behave as STATICCALLs should never be able to emit logs. The previous incorrect behavior would mean that a log was emitted when a chain owner made a STATICCALL on the `ArbOwner` precompile.
+- Fix the `ArbOwner` precompile to disallow emitting logs in STATICCALL contexts, bringing this in line with how the EVM is expected to behave as STATICCALLs should never be able to emit logs. The previous incorrect behavior would mean that a log was emitted when a chain owner made a `STATICCALL` on the `ArbOwner` precompile.
 
 ### Reference links
 - [Nitro v2.2.0 Release details on Github](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0)
