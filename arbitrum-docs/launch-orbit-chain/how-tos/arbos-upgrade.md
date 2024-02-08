@@ -17,12 +17,11 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 #### Step 1: Update Nitro on nodes and validators
 
+Refer to the release notes supporting the ArbOS version that you're upgrading to. You'll find a specific version of the Nitro software stack specified. For example, if your upgrade targets ArbOS 11, you'd use Nitro `v2.2.2` (Docker image: `offchainlabs/nitro-node:v2.2.2-8f33fea`). This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes.
 
-First, update your validator nodes to the latest Nitro version compatible with the version of ArbOS that you're upgrading to.
+Begin by upgrading your validator node(s) to the specified Nitro version, then update each remaining Orbit node to match this version.
 
-All remaining orbit nodes must be upgraded prior to activating the new ArbOS version, specifically before the **deadline** established for the ArbOS update (timestamp set in the ArbOS update schedule). 
-
-For example, if your upgrade targets ArbOS 11, you should look for node version `v2.2.2`. The Docker image to use for this version is `offchainlabs/nitro-node:v2.2.2-8f33fea`.
+Note that this update *must occur* before the deadline established for the target ArbOS upgrade. Refer to the timestamp in the ArbOS upgrade schedule for a precise deadline.
 
 #### Step 2: Upgrade the Wasm module root
 
