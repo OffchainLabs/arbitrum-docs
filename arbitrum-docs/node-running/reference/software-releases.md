@@ -5,7 +5,7 @@ author: dlee
 ---
 
 :::info
-This page is meant to give a high level summary of node software releases, with particular emphasis on releases that bump the ArbOS version. To find information on the all releases of Nitro, including the latest release, and accompanying changelogs, please visit the [Nitro Github Repository](https://github.com/OffchainLabs/nitro/releases).
+This page is meant to give a high level summary of node software releases, with particular emphasis on releases that bump the ArbOS version. To find information on all releases of Nitro, including the latest release, and accompanying changelogs, please visit the [Nitro Github Repository](https://github.com/OffchainLabs/nitro/releases).
 
 :::
 
