@@ -38,7 +38,7 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 - [AIP: ArbOS Version 20 "Atlas" Snapshot Vote](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0x813a366e287a872ada13d4f8348e771c7aa2d8c3cb00b2be31539ceab5627513)
 
 # ArbOS 11
-ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.2.0-f7dc9de`. This release of Nitro is a mandatory release for Arbitrum One and Nova, pending governance approval. 
+ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.2.0-f7dc9de`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators.
 
 ### High-level description of ArbOS 11 changes
 - Addition of EVM changes made on L1 Ethereum as part of the [Shanghai upgrade](https://ethereum.org/history#shanghai), including support for the `PUSH0` opcode.
