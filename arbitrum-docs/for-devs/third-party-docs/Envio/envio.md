@@ -24,7 +24,7 @@ HyperSync is an accelerated data query layer for the Arbitrum networks, providin
 
 HyperSync is also available as a standalone API for data analytic use cases. Data analysts can interact with the HyperSync API using JavaScript, Python, or Rust clients and extract data in JSON, Arrow, or Parquet formats. For more information, visit the HyperSync documentation [here](https://docs.envio.dev/docs/overview-hypersync).
 
-## HyperIndex Key Features
+## HyperIndex key features
 
 - Contract Import: Autogenerate the key boilerplate for an entire Indexer project off a single or multiple smart contracts. Deploy within minutes.
 
