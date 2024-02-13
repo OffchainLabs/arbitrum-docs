@@ -34,7 +34,7 @@ HyperSync is also available as a standalone API for data analytic use cases. Dat
 
 - Quickstart Templates: Use pre-defined indexing logic for popular OpenZeppelin contracts (e.g. ERC-20).
 
-## Getting Started
+## Getting started
 
 Users can choose whether they want to start from a quickstart template, perform a subgraph migration, or use the contract import feature to get started with Envio HyperIndex.
 
@@ -46,11 +46,11 @@ The following files are required to run the Envio indexer:
 
 These files are auto-generated according to the template and language chosen by running the `envio init` command.
 
-### Contract Import Tutorial
+### Contract import tutorial
 
 This walkthrough explains how to initialize an indexer using a single or multiple contracts that are already deployed on Arbitrum. This process allows a user to quickly and easily start up a basic indexer and a queryable GraphQL API for their application in less than 3 minutes.
 
-### Intialize your indexer
+### Initialize your indexer
 
 `cd` into the folder of your choice and run
 
@@ -105,7 +105,7 @@ v polygon
 [↑↓ to move, enter to select, type to filter]
 ```
 
-#### Enter in the address of the contract to import
+#### Enter the address of the contract to import
 
 ```bash
 ? What is the address of the contract?
@@ -140,12 +140,12 @@ The `Contract Import` process will prompt the user whether they would like to fi
 
 For more information on contract import feature, visit the documentation [here](https://docs.envio.dev/docs/contract-import).
 
-## Envio Examples
+## Envio examples
 
 Click [here](https://docs.envio.dev/docs/example-uniswap-v3) for Envio HyperIndex examples.
 Click [here](https://docs.envio.dev/docs/hypersync-clients) for Envio HyperSync examples.
 
-## Getting Help
+## Getting help
 
 Indexing can be a rollercoaster, especially for more complex use cases. Our engineers are available to help you with your data availability needs.
 
