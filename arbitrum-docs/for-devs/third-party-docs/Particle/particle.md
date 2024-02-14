@@ -39,7 +39,7 @@ The user flow with Particle Network begins with social logins (using either a cu
 
 This document will go through the high-level process of creating a demo application on Arbitrum Sepolia using Particle Network's Smart Wallet-as-a-Service (specifically the Particle Auth Core SDK alongside Particle's AA SDK). Within the app, we'll onboard a user into a SimpleAccount instance via a social login and execute a gasless (sponsored) transaction.
 
-## Getting Started
+## Getting started
 
 Throughout this guide, we'll be segmenting the configuration and utilization of these SDKs between two files: `index.tsx` and `App.tsx`. Thus, we'll be building an application through a standard `create-react-app` structure. However, if you intend to use an alternative framework, such as Next.js, this same process will be largely applicable (extrapolating to your setup).
 
