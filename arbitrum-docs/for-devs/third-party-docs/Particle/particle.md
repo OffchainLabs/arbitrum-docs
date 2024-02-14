@@ -161,7 +161,7 @@ Outside of `provider`, we'll pass the following parameters into our new instance
 - `aaOptions`, used to configure the smart account implementation you'd like to use. This contains `accountContracts`, which takes:
     - `SIMPLE` (or `BICONOMY`, `LIGHT`, `CYBERCONNECT`), containing:
         - `chainIds`, the chains you plan on using. In this case, we'll use `ArbitrumSepolia.id`.
-        - `version`, the version of the smart account you're using. Similar to `AuthCoreContexrProvider`, this should be `1.0.0` unless you use Biconomy V2.
+        - `version`, the version of the smart account you're using. Similar to `AuthCoreContextProvider`, this should be `1.0.0` unless you use Biconomy V2.
 
 Therefore, your instance of `SmartAccount` should follow the structure within the example below.
 
