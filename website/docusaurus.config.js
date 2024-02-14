@@ -225,7 +225,7 @@ const config = {
               },
               {
                 label: 'Privacy Policy',
-                to: 'https://www.iubenda.com/privacy-policy/76750372',
+                to: 'https://arbitrum.io/privacy',
               },
               {
                 label: 'Terms of Service',

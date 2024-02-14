@@ -5,7 +5,7 @@ description: 'SDK support for custom gas token Orbit chains'
 author: Mehdi Salehi
 sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 0
+sidebar_position: 2
 ---
 
 Arbitrum SDK is a TypeScript library for client-side interactions with Arbitrum. It provides common helper functionality as well as access to the underlying smart contract interfaces.
@@ -18,11 +18,19 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 ### Custom gas token SDK
 
-The following custom gas token APIs are available under the `orbit-custom-fee-token` SDK tag:
+The `orbit-custom-fee-token` SDK feature introduces a suite of APIs designed for the specific purpose of facilitating **bridging** operations. These APIs are tailored for use cases where there is a need to transfer a native token or an ERC20 token from the parent chain to an orbit chain utilizing a `custom gas token`. The process involves an initial step of authorizing the native token on the parent chain. To streamline this, our APIs provide functionalities for token approval and offer a mechanism to verify the current status of this approval. Detailed below is a guide to how each of these APIs can be effectively utilized for distinct purposes:
 
-- `getApproveFeeTokenRequest` and `approveFeeToken` on [EthBridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-a977cd005aca51be6f05bc7e1c7c1bf6d734b62b2c45c84b05e2eb0c3c3c6fff)
-- `getApproveFeeTokenRequest` and `approveFeeToken` on [Erc20Bridger](https://github.com/OffchainLabs/arbitrum-sdk/pull/310/files#diff-b1894b842df6f4794b6623dc57e9e14c2519fbe5fa5c5dd63403f1185f305cbb)
+1. **EthBridger Context:**
 
-If you're using a custom gas token, you'll need to use each of these; on custom gas token chains, token approval is required when transferring ERC20 tokens (while Orbit chains that use ETH do not have this requirement).
+   - **APIs:** `getApproveFeeTokenRequest` and `approveFeeToken`.
+   - **Purpose:** These APIs are essential for the bridging of native tokens to the Orbit chain. They facilitate the necessary approval for native tokens, allowing contracts to manage fund movements. This process includes escrowing a specified amount of the native token on the parent chain and subsequently bridging it to the Orbit chain.
 
-Note that everything else is under the hood, and the custom gas token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
+2. **Erc20Bridger Context:**
+   - **APIs:** `getApproveFeeTokenRequest` and `approveFeeToken`.
+   - **Purpose:** In the scenario of bridging ERC20 assets to an Orbit chain, these APIs play a crucial role. Token Bridging on Arbitrum Nitro stack uses Retryable tickets and needs specific amount of fees to be paid for creation and redemption of the ticket. For more information about retryable tickets please take a look at [this](https://docs.arbitrum.io/arbos/l1-to-l2-messaging#retryable-tickets) part of our docs. The Orbit chain operates as a custom gas token network, necessitating the payment of fees in native tokens for the creation of retryable tickets and their redemption on the Orbit chain. To cover the submission and execution fees associated with retryable tickets on the Orbit chain, an adequate amount of native tokens must be approved and allocated on the parent chain to cover the fees.
+
+**Note** that these APIs are just needed for `custom gas token` orbit chains and for ETH-powered rollup and anytrust orbit chains, you don't need to use them.
+
+**Note** that when native tokens are transferred to the custom gas token orbit chain, they function equivalently to ETH on EVM chains. This means that these tokens will exhibit behavior identical to that of ETH, which is the native currency on EVM chains. This similarity in functionality is a key feature to consider in transactions and operations within the orbit chain.
+
+**Note** that everything else is under the hood, and the custom gas token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
