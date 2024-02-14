@@ -137,7 +137,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 )
 ```
 
-## Building The Application
+## Building the application
 
 Now that you've set up your project, installed the relevant dependencies, and configured Particle Auth Core, you're ready to move over to your `App.tsx` file.
 
