@@ -18,7 +18,7 @@ Note that every Nitro release is backwards compatible. In other words, the lates
 :::info How often should I be upgrading my ArbOS version?
 It is strongly recommended to keep your Nitro's node software up-to-date as best you can to ensure you are benefting from the latest improvements to the Arbitrum technology stack. 
 
-For governance approved and mandated (i.e. the DAO) ArbOS upgrades for Arbitrum One and Arbitrum Nova are required to ensure the continued production and validation of legimitate assertions of L2 state. For Arbitrum Orbit chains, the chain owner has full discretion over the timing and specific upgrades to pick up, though we still recommend being as up-to-date as possible.
+For governance approved and mandated (i.e. the DAO) ArbOS upgrades for Arbitrum One and Arbitrum Nova are required to ensure the continued production and validation of legitimate assertions of L2 state. For Arbitrum Orbit chains, the chain owner has full discretion over the timing and specific upgrades to pick up, though we still recommend being as up-to-date as possible.
 :::
 
 ArbOS upgrades are carried out by the chain's owner; in the case of Arbitrum One and Nova, the owner is the Arbitrum DAO and so an upgrade will require a governance proposal and vote to pass to complete the upgrade. [This is an example of a Nitro release that contains an ArbOS version bump, specifically to ArbOS 11](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0).

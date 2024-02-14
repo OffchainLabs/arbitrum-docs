@@ -10,10 +10,11 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
 
+:::info How often should I be upgrading my ArbOS version?
+It is strongly recommended to keep your Nitro's node software up-to-date as best you can to ensure you are benefting from the latest improvements to the Arbitrum technology stack. ArbOS version bumps are especially important because these upgrades change how Arbitrum nodes produce and validate assertions on a rollup's state.
 
-
-
-
+For Arbitrum Orbit chains, the chain owner has full discretion over the timing and specific upgrades to pick up, though we still recommend being as up-to-date as possible.
+:::
 
 #### Step 1: Update Nitro on nodes and validators
 
