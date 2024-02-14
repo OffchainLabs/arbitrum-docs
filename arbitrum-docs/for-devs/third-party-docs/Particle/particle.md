@@ -55,7 +55,7 @@ Understanding this, you'll need to install the following libraries:
 To do this, run one of the two following commands at the root of your project:
 
 ```shell
-yarn add @particle-network/auth-core-modal `@particle-network/aa` `@particle-network/chains`
+yarn add @particle-network/auth-core-modal @particle-network/aa @particle-network/chains
 
 # OR
 
