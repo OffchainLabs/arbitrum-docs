@@ -14,7 +14,7 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 :::caution
 
-Stylus is undergoing major upgrades, and some improvements are expected to require a chain reset. Prior to a reset, developers on the testnet are recommened to withdraw their testnet ETH (there is no 7-day delay since this is a testnet, withdrawals are processed in minutes) and redeploy their contracts on the new chain. There will be advanced warning of any resets. Stay up-to-date by joining the Stylus channel in [Discord](https://discord.com/invite/arbitrum).
+Stylus is undergoing major upgrades, and some improvements are expected to require a chain reset. Prior to a reset, developers on the testnet are recommended to withdraw their testnet ETH (there is no 7-day delay since this is a testnet, withdrawals are processed in minutes) and redeploy their contracts on the new chain. There will be advanced warning of any resets. Stay up-to-date by joining the Stylus channel in [Discord](https://discord.com/invite/arbitrum).
 
 :::
 
@@ -42,8 +42,6 @@ Below you can find faucets for obtaining testnet ETH. If using a faucet on Ether
 | ------------------ | ----------------------------------------------------- | ---------------- |
 | Bware Labs         | https://bwarelabs.com/faucets/arbitrum-stylus-testnet | Stylus Testnet   |
 | QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia         | Arbitrum Sepolia |
-| LearnWeb3          | https://learnweb3.io/faucets/arbitrum_sepolia         | Arbitrum Sepolia |
-| LearnWeb3          | https://learnweb3.io/faucets/sepolia                  | Ethereum Sepolia |
 | Alchemy            | https://sepoliafaucet.com/                            | Ethereum Sepolia |
 | Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/                      | Ethereum Sepolia |
 
