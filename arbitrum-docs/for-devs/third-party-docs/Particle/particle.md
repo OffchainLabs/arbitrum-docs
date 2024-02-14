@@ -256,7 +256,7 @@ This transaction will be gasless because we're meeting two conditions. The first
 
 ## Conclusion
 
-Building an application on Arbitrum that takes advantage of social logins and smart accounts simultaneously. It only takes a few lines of code and is even more succinct if you're already using Ethers, Web3.js, or any other standard library that supports EIP-1193 providers.
+Building an application on Arbitrum that takes advantage of social logins and smart accounts simultaneously only takes a few lines of code, and is even more succinct if you're already using Ethers, Web3.js, or any other standard library that supports EIP-1193 providers.
 
 To view the complete demo application leveraging the code snippets covered throughout this document, take a look at the GitHub repository [here](https://github.com/TABASCOatw/particle-arbitrum-demo).
 
