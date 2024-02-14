@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L55"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L55"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L27"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L27"
           target="_blank"
         >
           Implementation
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L45"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L45"
           target="_blank"
         >
           Implementation
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L50"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L50"
           target="_blank"
         >
           Implementation
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L59"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L59"
           target="_blank"
         >
           Implementation
@@ -144,7 +144,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L32"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L32"
           target="_blank"
         >
           Implementation
@@ -168,7 +168,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L37"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L37"
           target="_blank"
         >
           Implementation
@@ -192,7 +192,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbDebug.go#L0"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.4/precompiles/ArbDebug.go#L0"
           target="_blank"
         >
           Implementation
