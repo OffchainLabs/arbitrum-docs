@@ -252,7 +252,7 @@ const executeUserOp = async () => {
   };
 ```
 
-This transaction will be gasless because we're meeting two conditions The first is whether or not we've expressed that this transaction should be sponsored (done earlier by including `SendTransactionMode.Gasless` within `AAWrapProvider`). The second condition is the existence of adequate funds to sponsor the transaction. Because we're on a Testnet (Arbitrum Sepolia), all transactions are automatically sponsored without the need to deposit USDT. However, if this were on Arbitrum One or Arbitrum Nova, the Paymaster shown on the [Particle dashboard](https://dashboard.particle.network) would need to be funded.
+This transaction will be gasless because we're meeting two conditions. The first is whether or not we've expressed that this transaction should be sponsored (done earlier by including `SendTransactionMode.Gasless` within `AAWrapProvider`). The second condition is the existence of adequate funds to sponsor the transaction. Because we're on a Testnet (Arbitrum Sepolia), all transactions are automatically sponsored without the need to deposit USDT. However, if this were on Arbitrum One or Arbitrum Nova, the Paymaster shown on the [Particle dashboard](https://dashboard.particle.network) would need to be funded.
 
 ## Conclusion
 
