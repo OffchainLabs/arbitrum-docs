@@ -59,7 +59,7 @@ yarn add @particle-network/auth-core-modal @particle-network/aa @particle-networ
 
 # OR
 
-npm install @particle-network/auth-core-modal `@particle-network/aa` `@particle-network/chains`
+npm install @particle-network/auth-core-modal @particle-network/aa @particle-network/chains
 ```
 
 ### Setting up the Particle dashboard
