@@ -307,42 +307,75 @@ curl -X POST \
 
 The RPC interface of the DAS validates that requests to store data are signed by the sequencer's ECDSA key, identified via a call to the `SequencerInbox` contract on the parent chain. It can also be configured to accept store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure.
 
-Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
+Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval. We show here a short guide on how to do that.
 
-First, generate an ECDSA keypair with `datool keygen`:
+#### Step 1: Generate an ECDSA keypair
+
+First we'll generate an ECDSA keypair with `datool keygen`. Create a folder inside `/some/local/dir` to store the ECDSA keypair, for example `/some/local/dir/keys`. Then run `datool keygen`:
 
 ```bash
-datool keygen --dir /dir-to-store-the-key-pair/ --ecdsa
+datool keygen --dir /some/local/dir/keys --ecdsa
 ```
 
-Then add the following configuration parameter to `daserver`:
+You can also use the `docker run` command as follows:
 
 ```bash
---data-availability.extra-signature-checking-public-key "/dir-to-store-the-key-pair/ecdsa.pub"
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @latestNitroNodeImage@ keygen --dir /home/user/data/keys --ecdsa
+```
+
+#### Step 2: Change the DAS configuration and restart the server
+
+Add the following configuration parameter to `daserver`:
+
+```bash
+--data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
+```
 
 OR
 
+```bash
 --data-availability.extra-signature-checking-public-key "0x<contents of ecdsa.pub>"
 ```
+
+And then restart it.
+
+#### Step 3: Store data signed with the ECDSA private key
 
 Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
 ```bash
-datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "/dir-to-store-the-key-pair/ecdsa"
+datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
+```
 
 OR
 
+```bash
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
-
 ```
 
-The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data (notice that you must have the REST interface enabled in the DAS):
+You can also use the `docker run` command:
 
 ```bash
-datool client rest getbyhash --url http://localhost:9877 --data-hash <0xDataHash>
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @latestNitroNodeImage@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
-If we set `<0xDataHash>` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
+The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
+
+#### Step 4: Retrieve the stored data
+
+Use again the `datool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
+
+```bash
+datool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+```
+
+You can also use the `docker run` command:
+
+```bash
+docker run --rm -it --network="host" --entrypoint datool @latestNitroNodeImage@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+```
+
+If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
 
 The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
 
@@ -353,7 +386,7 @@ The REST interface has a health check on the path `/health` which will return 
 Example:
 
 ```bash
-curl -I <YOUR REST ENDPOINT>
+curl -I <YOUR REST ENDPOINT>/health
 ```
 
 ## Running a mirror DAS
