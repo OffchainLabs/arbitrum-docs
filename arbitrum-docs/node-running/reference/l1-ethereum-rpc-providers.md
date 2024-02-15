@@ -25,8 +25,10 @@ To run a validator for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, a
 | Provider                                                                             | Beacon chain APIs? | Historical blob data? |
 | ------------------------------------------------------------------------------------ | ------------------ | --------------------- |
 | [Chainbase](https://chainbase.com/)                                                  | ✅                 |                       |
+| [Conduit](https://conduit.xyz/)*                                                     | ✅                 | ✅                    |
 | [Lava Network](https://docs.lavanet.xyz/gateway-access)                              | ✅                 | ✅                    |
 | [Nirvana Labs](https://nirvanalabs.io)                                               | ✅                 | ✅                    |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                                    | ✅                 | ✅                    |
+| [Quicknode](https://www.quicknode.com/docs/ethereum)                                 | ✅                 | ✅                    |
 
 Please reach out if you need assistance with setting any of the above providers.
+***Case-by-case basis**
