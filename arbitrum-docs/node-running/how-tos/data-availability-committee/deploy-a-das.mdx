@@ -96,7 +96,7 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 ### Step 1: Generate the BLS keypair
 
-Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The bls private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
+Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
 The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
