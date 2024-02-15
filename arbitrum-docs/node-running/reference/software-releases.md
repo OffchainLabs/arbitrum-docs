@@ -4,8 +4,9 @@ sidebar_label: 'ArbOS software releases'
 author: dlee
 ---
 
-:::info
-This reference document provides an overview of Nitro node software releases that upgrade ArbOS. Visit the [Nitro Github Repository](https://github.com/OffchainLabs/nitro/releases) for a detailed index of Nitro releases.
+:::info LATEST STABLE RELEASE
+<!-- todo: iterate on messaging RE Nitro vs ArbOS; partialize this if adopted -->
+The latest stable release of Nitro is [v2.2.4](https://github.com/OffchainLabs/nitro/releases/latest). We strongly encourage node runners and chain operators to upgrade their nodes to this version.
 
 :::
 
