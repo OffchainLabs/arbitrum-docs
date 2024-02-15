@@ -8,7 +8,14 @@ target_audience: 'Developers maintaining Orbit chains.'
 sidebar_position: 3
 ---
 
-This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
+This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade Nitro / ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
+
+:::info LATEST STABLE RELEASE
+<!-- todo: iterate on messaging RE Nitro vs ArbOS -->
+The latest stable release of Nitro is [v2.2.4](https://github.com/OffchainLabs/nitro/releases/latest). We strongly encourage node runners and chain operators to upgrade their nodes to this version.
+
+:::
+
 
 #### Step 1: Update Nitro on nodes and validators
 
