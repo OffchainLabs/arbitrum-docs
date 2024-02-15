@@ -105,7 +105,8 @@ When running the key generator, we'll specify the `--dir` parameter with the abs
 Here's an example of how to use the `datool keygen` utility inside docker and store the key that will be used by the DAS in the next step.
 
 ```bash
-docker run -v $(pwd)/bls_keys:/data/keys --entrypoint /usr/local/bin/datool offchainlabs/nitro-node:v2.2.4-8517340 keygen --dir /data/keys
+docker run -v $(pwd)/bls_keys:/data/keys --entrypoint /usr/local/bin/datool \
+offchainlabs/nitro-node:v2.2.4-8517340 keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
