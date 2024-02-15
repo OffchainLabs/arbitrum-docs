@@ -170,8 +170,8 @@ const sidebars = {
         },
         {
           type: 'link',
-          label: 'Nitro / ArbOS releases',
-          href: 'https://github.com/OffchainLabs/nitro/releases',
+          label: 'Nitro / ArbOS v2.2.4',
+          href: 'https://github.com/OffchainLabs/nitro/releases/latest',
         }
       ],
     },
@@ -485,6 +485,11 @@ const sidebars = {
         },
       ],
     },
+    {
+       type: 'link',
+       label: 'Nitro / ArbOS v2.2.4',
+       href: 'https://github.com/OffchainLabs/nitro/releases/latest',
+    }
   ],
   learnMoreSidebar: [
     {
