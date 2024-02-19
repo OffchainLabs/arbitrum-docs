@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbInfo.sol#L11"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbInfo.sol#L11"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbInfo.go#L17"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbInfo.go#L17"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/precompiles/ArbInfo.sol#L14"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbInfo.sol#L14"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/precompiles/ArbInfo.go#L25"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbInfo.go#L25"
           target="_blank"
         >
           Implementation
