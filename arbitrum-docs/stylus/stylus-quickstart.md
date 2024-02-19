@@ -1,6 +1,5 @@
 ---
 title: 'Quickstart: Write a smart contract in Rust using Stylus'
-sidebar_label: 'Quickstart (Rust, Stylus)'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512
 sme: chrisco512
