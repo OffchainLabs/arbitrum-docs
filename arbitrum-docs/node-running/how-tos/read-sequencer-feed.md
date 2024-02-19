@@ -2,7 +2,7 @@
 title: 'How to read the Sequencer feed'
 description: Learn how to read the sequencer feed
 sidebar_position: 9
-content-type: how-to
+content_type: how-to
 todos:
   - Follow convention and style guide
   - Communicate "who this is for" and "under which scenarios this is useful".

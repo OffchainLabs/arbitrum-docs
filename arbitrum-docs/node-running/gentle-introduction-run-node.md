@@ -1,5 +1,5 @@
 ---
-title: 'A gentle introduction to Arbitrum nodes'
+title: 'Arbitrum nodes overview'
 description: "Arbitrum is a suite of Ethereum L2 scaling solutions supported by a decentralized network of nodes. This guide introduces you to Arbitrum's node types and how they work together to scale Ethereum."
 author: mahsamoosavi
 ---
