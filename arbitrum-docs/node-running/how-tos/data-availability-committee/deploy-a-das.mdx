@@ -106,7 +106,7 @@ Here's an example of how to use the `datool keygen` utility inside Docker and st
 
 ```bash
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
-offchainlabs/nitro-node:v2.2.4-8517340 keygen --dir /data/keys
+@latestNitroNodeImage@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
