@@ -1,10 +1,10 @@
 import CodeBlock from '@theme/CodeBlock';
 
-### 1. Install prerequisites
+## Step 1. Install prerequisites
 
 You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](https://docs.docker.com/compose/) to run your node. Follow the instructions in their site to install them.
 
-### 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
+## Step 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 <p>
   You'll need the <code>{props.branch}</code> branch.
@@ -14,13 +14,13 @@ You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](h
   {`git clone -b ${props.branch} --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`}
 </CodeBlock>
 
-### 3. Run your node
+## Step 3. Run your node
 
 ```bash
 ./test-node.bash --init
 ```
 
-### 4. Successive runs
+## Step 4. Successive runs
 
 To relaunch the node after the first installation, run the following command.
 
@@ -28,9 +28,41 @@ To relaunch the node after the first installation, run the following command.
 ./test-node.bash
 ```
 
-⚠️ Note that running with the --init flag will clear all chain data and redeploy!
+:::info Clear local data
 
-### Additional arguments
+Note that running with the --init flag will clear all chain data and redeploy!
+
+:::
+
+## Token bridge
+
+An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running `docker compose run --entrypoint sh tokenbridge -c "cat network.json"`.
+
+## Running an L3 chain
+
+An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3node`. Its deployment configuration can be found by running `docker exec nitro-testnode-sequencer-1 cat /config/l3deployment.json`.
+
+<!-- This is a temporary block since these parameters are only available in the "release" branch for now. -->
+<!-- Once the "stylus" branch is updated, we should remove this conditional and move the HTML format to MD -->
+
+<div>
+  {props.branch == 'release' && (
+    <div>
+      <p>When deploying an L3 chain, the following parameters are also available:</p>
+      <ul>
+        <li>
+          <code>--l3-fee-token</code>: Uses a custom gas token for the L3 (symbol $APP), deployed on
+          L2 at address <code>0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e</code>
+        </li>
+        <li>
+          <code>--l3-token-bridge</code>: Deploys an L2-L3 token bridge
+        </li>
+      </ul>
+    </div>
+  )}
+</div>
+
+## Additional arguments
 
 You can find a list of additional arguments to use with `test-node.bash` by using `--help`.
 
@@ -38,7 +70,7 @@ You can find a list of additional arguments to use with `test-node.bash` by usin
 ./test-node.bash --help
 ```
 
-### Helper scripts
+## Helper scripts
 
 The repository includes a set of helper scripts for basic actions like funding accounts or bridging funds. You can see a list of the available scripts by running:
 
@@ -58,7 +90,7 @@ Here's an example of how to run the script that funds an address on L2. Replace 
 ./test-node.bash script send-l2 --to address_0x11223344556677889900 --ethamount 5
 ```
 
-### Blockscout
+## Blockscout
 
 Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explorer. To access it, add the param `--blockscout` when running your node.
 
@@ -68,9 +100,15 @@ Nitro comes with a local [Blockscout](https://www.blockscout.com/) block explore
 
 The block explorer will be available at `http://localhost:4000`
 
-### Default endpoints and addresses
+## Default endpoints and addresses
 
-The L1 Geth devnet will be running at `http://localhost:8545` and the L2 Nitro devnet at `http://localhost:8547` and `ws://localhost:8548`.
+Node RPC endpoints are available at:
+
+| Node                  | Chain id | RPC endpoint                                      |
+| --------------------- | -------- | ------------------------------------------------- |
+| L1 geth devnet        | 1337     | `http://localhost:8545`                           |
+| L2 nitro devnet       | 412346   | `http://localhost:8547` and `ws://localhost:8548` |
+| L3 nitro (if enabled) | 333333   | `http://localhost:3347`                           |
 
 The following accounts will be prefunded with Ether:
 
@@ -80,12 +118,12 @@ The following accounts will be prefunded with Ether:
 
 You can fund other addresses by using the scripts `send-l1` and `send-l2` as explained [here](#helper-scripts).
 
-### How to get the core contracts
+## How to get the core contracts
 
 For addresses of the deployed core protocol contracts, run
 
 ```bash
-docker exec nitro-testnode_sequencer_1  cat /config/deployment.json
+docker exec nitro-testnode-sequencer-1  cat /config/deployment.json
 ```
 
 For the outbox address, run (replace "PUT_THE_ROLLUP_ADDRESS_HERE" with rollup address):
