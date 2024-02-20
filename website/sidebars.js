@@ -222,7 +222,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Developer reference',
+          label: 'Reference',
           items: [
             {
               type: 'doc',
@@ -728,6 +728,16 @@ const sidebars = {
       label: 'Audit reports',
       id: 'audit-reports',
     },
+    {
+      type: 'link',
+      label: 'DAO docs',
+      href: 'https://docs.arbitrum.foundation/gentle-intro-dao-governance',
+    },
+    {
+      type: 'link',
+      label: 'Prysm docs',
+      href: 'https://docs.prylabs.network/docs/install/install-with-script',
+    },
     /*
     {
       type: "doc",
@@ -736,9 +746,6 @@ const sidebars = {
     },
     */
   ],
-  bridgeTokensSidebar: [],
-  runNodesSidebar: [],
-  learnMoreSidebar: [],
 };
 
 module.exports = sidebars;

@@ -21,7 +21,7 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Arbitrum nodes](/node-running/how-tos/running-a-full-node)       | **Machines** that run Nitro in order to service and/or interact with an Arbitrum chain.             |
 | [Arbitrum One](https://portal.arbitrum.io/?chains=arbitrum-one)   | A public Rollup **chain**.                                                                          |
 | [Arbitrum Nova](https://portal.arbitrum.io/?chains=arbitrum-nova) | A public AnyTrust **chain**.                                                                        |
-| [Arbitrum Bridge](https://bridge.arbitrum.io/)                    | Lets you move ERC-20 tokens between Ethereum and Arbitrum.                                          |
+| [Arbitrum bridge](https://bridge.arbitrum.io/)                    | Lets you move ERC-20 tokens between Ethereum and Arbitrum.                                          |
 | [Arbitrum Orbit](https://orbit.arbitrum.io/)                      | Lets you run your own Rollup and AnyTrust chains.                                                   |
 | [Stylus](/stylus/stylus-gentle-introduction)                      | Lets you write EVM-compatible smart contracts in Rust and any other language that compiles to Wasm. |
 
@@ -29,7 +29,7 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 ## Arbitrum for users
 
-**Users** can interact with Arbitrum either through the Arbitrum Bridge or by using dApps that have been deployed to an Arbitrum chain.
+**Users** interact with Arbitrum either through the Arbitrum bridge or by using dApps that have been deployed to an Arbitrum chain.
 
 | Resource                                       | Description                                                     |
 | ---------------------------------------------- | --------------------------------------------------------------- |
@@ -40,7 +40,7 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 ## Arbitrum for developers
 
-**Developers** can build Arbitrum dApps by deploying smart contracts to an Arbitrum chain.
+**Developers** build Arbitrum dApps by deploying smart contracts to an Arbitrum chain.
 
 | Resource                                                                 | Description                                                                                              |
 | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
@@ -70,7 +70,7 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 
 
-## Arbitrum for curious readers
+## How it works
 
 | Resource                                                                                           | Description                                       |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
