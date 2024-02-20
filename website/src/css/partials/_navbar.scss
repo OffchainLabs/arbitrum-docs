@@ -1,13 +1,9 @@
 @use './_fonts.scss' as *;
 
-.navbar__inner{
-    display: flex; // old, may stay
+.navbar__inner {
     position: relative;
 
-    // target the first child 
-
-    > .navbar__items:first-child {
-        // todo: I want this to be tucked to the left, the way the other is tucked to the right
+    >.navbar__items:first-child {
         position: absolute;
         display: block;
         left: 10px;
@@ -15,19 +11,15 @@
         flex: 0;
     }
 
-    > .navbar__items--right {
-        // todo: I want these items to be centered
+    >.navbar__items--right {
         display: flex;
         flex: 1;
-        justify-content: center; // Centers the items within the flex container
 
-        #search_input_react{
-            border-radius: 5px;
-            min-width: 400px;
-            height: 2.5rem;
+        #search_input_react {
+            justify-content: flex-end;
         }
 
-        .DocSearch-Button-Keys{
+        .DocSearch-Button-Keys {
             display: none;
         }
     }
