@@ -24,12 +24,15 @@ To run a validator for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, a
 ### List of Ethereum beacon chain RPC providers
 | Provider                                                                             | Beacon chain APIs? | Historical blob data? |
 | ------------------------------------------------------------------------------------ | ------------------ | --------------------- |
+| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/)          | ✅                 | ✅                    |
+| [Bware Labs](https://bwarelabs.com/blockchain-api)                                   | ✅                 | ✅                    |
 | [Chainbase](https://chainbase.com/)                                                  | ✅                 |                       |
 | [Conduit](https://conduit.xyz/)*                                                     | ✅                 | ✅                    |
 | [Lava Network](https://docs.lavanet.xyz/gateway-access)                              | ✅                 | ✅                    |
 | [Nirvana Labs](https://nirvanalabs.io)                                               | ✅                 | ✅                    |
+| [NodeReal](https://nodereal.io/)                                                     | ✅                 |                       |
 | [Quicknode](https://www.quicknode.com/docs/ethereum)                                 | ✅                 | ✅                    |
 
-Please reach out if you need assistance with setting any of the above providers.
+Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
 ***Case-by-case basis, please contact them directly for help**
