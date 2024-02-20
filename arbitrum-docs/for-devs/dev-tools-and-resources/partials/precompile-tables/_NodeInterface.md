@@ -17,7 +17,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L25"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L25"
           target="_blank"
         >
           Interface
@@ -25,7 +25,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L116"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L142"
           target="_blank"
         >
           Implementation
@@ -39,7 +39,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L44"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L44"
           target="_blank"
         >
           Interface
@@ -47,7 +47,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L164"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L190"
           target="_blank"
         >
           Implementation
@@ -61,7 +61,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L60"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L60"
           target="_blank"
         >
           Interface
@@ -69,7 +69,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L61"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L64"
           target="_blank"
         >
           Implementation
@@ -83,7 +83,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L71"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L71"
           target="_blank"
         >
           Interface
@@ -91,7 +91,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L69"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L72"
           target="_blank"
         >
           Implementation
@@ -107,7 +107,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L84"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L84"
           target="_blank"
         >
           Interface
@@ -115,7 +115,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L485"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L511"
           target="_blank"
         >
           Implementation
@@ -129,7 +129,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L112"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L112"
           target="_blank"
         >
           Interface
@@ -137,7 +137,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L447"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L473"
           target="_blank"
         >
           Implementation
@@ -151,7 +151,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L139"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L139"
           target="_blank"
         >
           Interface
@@ -159,7 +159,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L562"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L588"
           target="_blank"
         >
           Implementation
@@ -173,7 +173,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L157"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L157"
           target="_blank"
         >
           Interface
@@ -181,7 +181,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L56"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L59"
           target="_blank"
         >
           Implementation
@@ -195,7 +195,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L161"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L161"
           target="_blank"
         >
           Interface
@@ -203,7 +203,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L607"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L633"
           target="_blank"
         >
           Implementation
@@ -217,7 +217,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/0a149d2af9aee566c4abf493479ec15e5fc32d98/src/node-interface/NodeInterface.sol#L170"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/node-interface/NodeInterface.sol#L170"
           target="_blank"
         >
           Interface
@@ -225,7 +225,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.2/nodeInterface/NodeInterface.go#L631"
+          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/nodeInterface/NodeInterface.go#L657"
           target="_blank"
         >
           Implementation

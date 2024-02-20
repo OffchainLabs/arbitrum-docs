@@ -100,13 +100,13 @@ Next, we'll generate a BLS keypair. The private key will be used to sign the <a 
 
 The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
-When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in. 
+When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in.
 
 Here's an example of how to use the `datool keygen` utility inside Docker and store the key that will be used by the DAS in the next step.
 
 ```bash
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
-offchainlabs/nitro-node:v2.2.4-8517340 keygen --dir /data/keys
+@latestNitroNodeImage@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
