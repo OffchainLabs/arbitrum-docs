@@ -31,6 +31,12 @@ Beginning with ArbOS 20, ArbOS releases use the name of planetary moons in our s
 
 The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e. the next ArbOS upgrade after ArbOS 20 will be ArbOS 30). This was done because there are teams who have customized their Orbit chain's [behavior](../../launch-orbit-chain/how-tos/customize-stf.mdx) or [precompiles](../../launch-orbit-chain/how-tos/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g. ArbOS 12 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
 
+### Stay up to date with the latest information on the status of network upgrades
+To stay up to date with proposals, timelines, and statuses of network upgrades to Arbitrum One and Nova:
+- Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
+- Join both the `#dev-announcements` and `#node-runners` Discord channels in the [Arbitrum Discord server](https://discord.gg/arbitrum)
+- Follow the official Arbitrum ([`@Arbitrum`](https://twitter.com/arbitrum)) and Arbitrum Developers ([`@ArbitrumDevs`](https://twitter.com/ArbitrumDevs)) X accounts, formerly Twitter.
+
 ## ArbOS 20: Atlas [Upcoming]
 
 ArbOS 20 is an upcoming upgrade to ArbOS that will be shipped in a future version of Nitro. The Nitro version will be available as a Docker image on Docker Hub when finalized. For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
