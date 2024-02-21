@@ -34,13 +34,35 @@ Note that running with the --init flag will clear all chain data and redeploy!
 
 :::
 
+## Rollup contract addresses and chain configuration
+
+You can obtain the rollup chain configuration by running the following command. The chain configuration also includes the addresses of the core contracts.
+
+```bash
+docker exec nitro-testnode-sequencer-1 cat /config/l2_chain_info.json
+```
+
+You can find other available configuration files by running:
+
+```bash
+docker exec nitro-testnode-sequencer-1 ls /config
+```
+
 ## Token bridge
 
-An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running `docker compose run --entrypoint sh tokenbridge -c "cat network.json"`.
+An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running:
+
+```bash
+docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
+```
 
 ## Running an L3 chain
 
-An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3node`. Its deployment configuration can be found by running `docker exec nitro-testnode-sequencer-1 cat /config/l3deployment.json`.
+An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3node`. Its chain configuration can be found by running:
+
+```bash
+docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
+```
 
 <!-- This is a temporary block since these parameters are only available in the "release" branch for now. -->
 <!-- Once the "stylus" branch is updated, we should remove this conditional and move the HTML format to MD -->
@@ -55,7 +77,9 @@ An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3
           L2 at address <code>0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e</code>
         </li>
         <li>
-          <code>--l3-token-bridge</code>: Deploys an L2-L3 token bridge
+          <code>--l3-token-bridge</code>: Deploys an L2-L3 token bridge. The list of contracts can
+          be found by running{' '}
+          <code>docker compose run --entrypoint sh tokenbridge -c "cat l2l3_network.json"</code>.
         </li>
       </ul>
     </div>
@@ -110,66 +134,21 @@ Node RPC endpoints are available at:
 | L2 nitro devnet       | 412346   | `http://localhost:8547` and `ws://localhost:8548` |
 | L3 nitro (if enabled) | 333333   | `http://localhost:3347`                           |
 
-The following accounts will be prefunded with Ether:
+Some important addresses:
 
-- L2 Nitro devnet: `0x683642c22feDE752415D4793832Ab75EFdF6223c` with private key `0xe887f7d17d07cc7b8004053fb8826f6657084e88904bb61590e498ca04704cf2`
-
-- Both networks (L1 and L2): `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` with private key `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659`
+| Role                                             | Public address                               | Private key                                                          |
+| ------------------------------------------------ | -------------------------------------------- | -------------------------------------------------------------------- |
+| Sequencer                                        | `0xe2148eE53c0755215Df69b2616E552154EdC584f` | `0xcb5790da63720727af975f42c79f69918580209889225fa7128c92402a6d3a65` |
+| Validator                                        | `0x6A568afe0f82d34759347bb36F14A6bB171d2CBe` | `0x182fecf15bdf909556a0f617a63e05ab22f1493d25a9f1e27c228266c772a890` |
+| L2 rollup owner                                  | `0x5E1497dD1f08C87b2d8FE23e9AAB6c1De833D927` | `0xdc04c5399f82306ec4b4d654a342f40e2e0620fe39950d967e1e574b32d4dd36` |
+| L3 rollup owner (if enabled)                     | `0x863c904166E801527125D8672442D736194A3362` | `0xecdf21cb41c65afb51f91df408b7656e2c8739a5877f2814add0afd780cc210e` |
+| L3 sequencer (if enabled)                        | `0x3E6134aAD4C4d422FF2A4391Dc315c4DDf98D1a5` | `0x90f899754eb42949567d3576224bf533a20857bf0a60318507b75fcb3edc6f5f` |
+| Dev account (prefunded with ETH in all networks) | `0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E` | `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659` |
 
 You can fund other addresses by using the scripts `send-l1` and `send-l2` as explained [here](#helper-scripts).
 
-## How to get the core contracts
+:::danger Private keys publicly known
 
-For addresses of the deployed core protocol contracts, run
+Do not use any of these addresses in a production environment.
 
-```bash
-docker exec nitro-testnode-sequencer-1  cat /config/deployment.json
-```
-
-For the outbox address, run (replace "PUT_THE_ROLLUP_ADDRESS_HERE" with rollup address):
-
-```bash
-curl 'http://localhost:8545/' -H 'Content-Type: application/json' -d '{"jsonrpc":"2.0","id":0,"method":"eth_call","params":[{"to":"PUT_THE_ROLLUP_ADDRESS_HERE","data":"0xce11e6ab"},"latest"]}'
-```
-
----
-
-Some default addresses can be found here:
-
-```
-"l2Network": {
-    "chainID": 412346,
-    "confirmPeriodBlocks": 20,
-    "ethBridge": {
-      "bridge": "0x2b360a9881f21c3d7aa0ea6ca0de2a3341d4ef3c",
-      "inbox": "0xff4a24b22f94979e9ba5f3eb35838aa814bad6f1",
-      "outbox": "0x49940929c7cA9b50Ff57a01d3a92817A414E6B9B",
-      "rollup": "0x65a59d67da8e710ef9a01eca37f83f84aedec416",
-      "sequencerInbox": "0xe7362d0787b51d8c72d504803e5b1d6dcda89540"
-    },
-    "explorerUrl": "",
-    "isArbitrum": true,
-    "isCustom": true,
-    "name": "ArbLocal",
-    "partnerChainID": 1337,
-    "retryableLifetimeSeconds": 604800,
-    "nitroGenesisBlock": 0,
-    "depositTimeout": 900000,
-    "tokenBridge": {
-      "l1CustomGateway": "0x3DF948c956e14175f43670407d5796b95Bb219D8",
-      "l1ERC20Gateway": "0x4A2bA922052bA54e29c5417bC979Daaf7D5Fe4f4",
-      "l1GatewayRouter": "0x525c2aBA45F66987217323E8a05EA400C65D06DC",
-      "l1MultiCall": "0xDB2D15a3EB70C347E0D2C2c7861cAFb946baAb48",
-      "l1ProxyAdmin": "0xe1080224B632A93951A7CFA33EeEa9Fd81558b5e",
-      "l1Weth": "0x408Da76E87511429485C32E4Ad647DD14823Fdc4",
-      "l1WethGateway": "0xF5FfD11A55AFD39377411Ab9856474D2a7Cb697e",
-      "l2CustomGateway": "0x525c2aBA45F66987217323E8a05EA400C65D06DC",
-      "l2ERC20Gateway": "0xe1080224B632A93951A7CFA33EeEa9Fd81558b5e",
-      "l2GatewayRouter": "0x1294b86822ff4976BfE136cB06CF43eC7FCF2574",
-      "l2Multicall": "0xDB2D15a3EB70C347E0D2C2c7861cAFb946baAb48",
-      "l2ProxyAdmin": "0xda52b25ddB0e3B9CC393b0690Ac62245Ac772527",
-      "l2Weth": "0x408Da76E87511429485C32E4Ad647DD14823Fdc4",
-      "l2WethGateway": "0x4A2bA922052bA54e29c5417bC979Daaf7D5Fe4f4"
-    }
-}
-```
+:::
