@@ -8,8 +8,8 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 <PublicPreviewBannerPartial />
 
-:::info
-This reference document provides an overview of Ethereum beacon chain RPC providers for Arbitrum validators to use for accessing blob data. The list curated here is **not comprehensive and in no way does Offchain Labs endorse or benefit from your use of any of these providers.**
+:::info Note
+This reference document provides an overview of Ethereum beacon chain RPC providers for Arbitrum validators to use for accessing blob data following Ethereum's Dencun upgrade in March 2024. The list curated here is **not comprehensive and in no way does Offchain Labs endorse or benefit from your use of any of these providers.**
 :::
 
 Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EIPS/eip-7569), Layer 2 blockchains like Arbitrum will be able to roll up and post batches of transaction data on Ethereum in the form of a new transaction format called a Blob. This Blob data will be part of the beacon chain and is fully downloadable by all consensus nodes. This means that data stored in blobs are inaccessible by the EVM, unlike Calldata.
