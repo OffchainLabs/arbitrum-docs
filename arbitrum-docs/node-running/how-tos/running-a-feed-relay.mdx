@@ -5,9 +5,17 @@ sidebar_position: 8
 content_type: how-to
 ---
 
-⚠️ If running a single node, there is no need to run a feed relay. When running more that one node, it is strongly suggested to run a single feed relay per datacenter, which will reduce ingress fees and improve stability.
+:::caution
 
-⚠️ Feed endpoints will soon require compression with a custom dictionary, so if connecting to feed with anything other than a standard node, it is strongly suggested to run a local feed relay which will provide an uncompressed feed by default.
+If running a single node, there is no need to run a feed relay. When running more that one node, it is strongly suggested to run a single feed relay per datacenter, which will reduce ingress fees and improve stability.
+
+:::
+
+:::caution 
+
+Feed endpoints will soon require compression with a custom dictionary, so if connecting to feed with anything other than a standard node, it is strongly suggested to run a local feed relay which will provide an uncompressed feed by default.
+
+:::
 
 The feed relay is in the same docker image as the Nitro node.
 

@@ -76,6 +76,10 @@ $child-sidebar-item-font-size: 14px;
     .menu__link {
       font-size: $child-sidebar-item-font-size;
       font-weight: 400;
+
+      &.menu__list-item {
+        margin-top: 0.25rem;
+      }
     }
   }
 }

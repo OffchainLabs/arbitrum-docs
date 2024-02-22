@@ -60,11 +60,42 @@ const sidebars = {
           id: 'node-running/how-tos/running-a-validator',
           label: 'Run a validator',
         },
-
         {
           type: 'doc',
           id: 'node-running/how-tos/local-dev-node',
           label: 'Run a local dev node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/reference/software-releases',
+          label: 'ArbOS software releases',
+        },
+        {
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/introduction',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              label: 'Deploy a mirror DAS',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
         },
         {
           type: 'category',
@@ -152,10 +183,11 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link" href="/node-running/how-tos/local-dev-node">Run a local dev node</a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/local-dev-node">Run a local dev node</a>',
           // q: why use an anchor html tag here?
-          // a: we don't want multiple sections of the sidebar to be opened at once when the user visits this page
-          //    because this page lives in both the "build dapps" and "run nodes" sections, we pick one to be the "canonical" location for the page in the sidebar
+          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+          //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+          //    if we use an absolute link, localhost won't work
         },
         {
           type: 'doc',
@@ -447,6 +479,11 @@ const sidebars = {
           label: 'Source code repository',
           href: 'https://github.com/OffchainLabs/stylus',
         },
+        {
+          type: 'doc',
+          label: 'Public preview',
+          id: 'stylus/concepts/public-preview-expectations',
+        },
       ],
     },
     {
@@ -470,24 +507,67 @@ const sidebars = {
           label: 'Run a full Orbit node',
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-          label: `Customize chain config`,
+          type: 'category',
+          label: 'Customize your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
+              label: `Deployment config`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-stf',
+              label: `Behavior`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-precompile',
+              label: `Precompiles`,
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/how-tos/customize-stf',
-          label: `Customize chain behavior`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/how-tos/customize-precompile',
-          label: `Customize chain precompiles`,
+          type: 'category',
+          label: 'ArbOS',
+          collapsed: true,
+          items: [
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/node-running/reference/software-releases">ArbOS software releases</a>',
+              // q: why use an anchor html tag here?
+              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+              //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+              //    if we use an absolute link, localhost won't work
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/arbos-upgrade',
+              label: `Upgrade ArbOS`,
+            },
+          ],
         },
         {
           type: 'doc',
           id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees</a>',
+          // q: why use an anchor html tag here?
+          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+          //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+          //    if we use an absolute link, localhost won't work
+        },
+
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
+          label: 'Keyset generation (AnyTrust chains)',
         },
         {
           type: 'doc',
@@ -500,26 +580,19 @@ const sidebars = {
           label: 'Troubleshooting',
         },
         {
-          type: 'category',
-          label: 'Reference',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
-              label: 'SDK support for chains with custom gas tokens',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/command-line-options',
-              label: 'Command-line options',
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/concepts/public-preview-expectations',
-              label: 'Orbit public preview',
-            },
-          ],
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/command-line-options',
+          label: 'Command-line options',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/public-preview-expectations',
+          label: 'Public preview',
         },
       ],
     },
