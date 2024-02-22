@@ -255,7 +255,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Get started',
+              label: 'Use oracles in your app',
               id: 'devs-how-tos/how-to-use-oracles',
             },
             {
