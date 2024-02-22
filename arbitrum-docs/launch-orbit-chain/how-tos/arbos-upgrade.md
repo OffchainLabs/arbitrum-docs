@@ -10,7 +10,7 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
-import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.md';
+import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
