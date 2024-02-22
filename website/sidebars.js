@@ -158,6 +158,21 @@ const sidebars = {
           //    because this page lives in both the "build dapps" and "run nodes" sections, we pick one to be the "canonical" location for the page in the sidebar
         },
         {
+          type: 'doc',
+          label: 'Estimate gas',
+          id: 'devs-how-tos/how-to-estimate-gas',
+        },
+        {
+          type: 'doc',
+          label: 'Chains and testnets',
+          id: 'for-devs/concepts/public-chains',
+        },
+        {
+          type: 'doc',
+          label: 'Cross-chain messaging',
+          id: 'for-devs/cross-chain-messsaging',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -183,18 +198,7 @@ const sidebars = {
             },
           ],
         },
-        {
-          type: 'category',
-          label: 'Gas and fees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Estimate gas',
-              id: 'devs-how-tos/how-to-estimate-gas',
-            },
-          ],
-        },
+
         {
           type: 'category',
           label: 'Oracles',
@@ -232,34 +236,22 @@ const sidebars = {
               label: 'Reference',
               id: 'for-devs/dev-tools-and-resources/precompiles',
             },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'NodeInterface',
+          collapsed: true,
+          items: [
             {
               type: 'doc',
-              label: 'NodeInterface',
+              label: 'Overview',
               id: 'for-devs/concepts/nodeinterface',
             },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Chains and testnets',
-          collapsed: true,
-          items: [
             {
               type: 'doc',
-              label: 'Overview',
-              id: 'for-devs/concepts/public-chains',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Cross-chain messaging',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'for-devs/cross-chain-messsaging',
+              label: 'Reference',
+              id: 'for-devs/dev-tools-and-resources/nodeinterface',
             },
           ],
         },
@@ -305,11 +297,7 @@ const sidebars = {
             },
           ],
         },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-devs/troubleshooting-building',
-        },
+
         {
           type: 'category',
           label: 'Reference',
@@ -328,11 +316,6 @@ const sidebars = {
               type: 'doc',
               label: 'Chain parameters',
               id: 'for-devs/chain-params',
-            },
-            {
-              type: 'doc',
-              label: 'NodeInterface',
-              id: 'for-devs/dev-tools-and-resources/nodeinterface',
             },
             {
               type: 'doc',
@@ -362,7 +345,11 @@ const sidebars = {
             },
           ],
         },
-
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'for-devs/troubleshooting-building',
+        },
         {
           type: 'link',
           label: 'Arbitrum SDK',
