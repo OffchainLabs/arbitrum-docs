@@ -13,7 +13,11 @@ Arbitrum chains are powered by Arbitrum nodes running the Nitro software stack. 
 
 Although Nitro is updated regularly, only a subset of Nitro releases carry ArbOS upgrades. These releases are significant because ArbOS upgrades are Arbitrum's equivalent to a hard fork - they can alter a node's ability to produce valid Arbitrum blocks. This is why validator nodes supporting a public Arbitrum chain (One, Nova) **must update Nitro** whenever a new ArbOS version is released.
 
-Note that every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade.
+Note that every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade. 
+
+import PublicPreviewBannerPartial from '../partials/_upgrade-cadence-recommendations-partial.mdx';
+
+<PublicPreviewBannerPartial />
 
 ArbOS upgrades are carried out by the chain's owner; in the case of Arbitrum One and Nova, the owner is the Arbitrum DAO and so an upgrade will require a governance proposal and vote to pass to complete the upgrade. [This is an example of a Nitro release that contains an ArbOS version bump, specifically to ArbOS 11](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0).
 
@@ -24,6 +28,12 @@ Visit [Inside Arbitrum Nitro](../../inside-arbitrum-nitro/inside-arbitrum-nitro.
 Beginning with ArbOS 20, ArbOS releases use the name of planetary moons in our solar system, ascending in alphabetical order (i.e. the next ArbOS upgrade after ArbOS 20 "Atlas" will be a planetary moon that begins with the letter "B").
 
 The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e. the next ArbOS upgrade after ArbOS 20 will be ArbOS 30). This was done because there are teams who have customized their Orbit chain's [behavior](../../launch-orbit-chain/how-tos/customize-stf.mdx) or [precompiles](../../launch-orbit-chain/how-tos/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g. ArbOS 12 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
+
+### Stay up to date
+To stay up to date with proposals, timelines, and statuses of network upgrades to Arbitrum One and Nova:
+- Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
+- Join both the `#dev-announcements` and `#node-runners` Discord channels in the [Arbitrum Discord server](https://discord.gg/arbitrum)
+- Follow the official Arbitrum ([`@Arbitrum`](https://twitter.com/arbitrum)) and Arbitrum Developers ([`@ArbitrumDevs`](https://twitter.com/ArbitrumDevs)) X accounts, formerly Twitter.
 
 ## ArbOS 20: Atlas [Upcoming]
 
@@ -37,19 +47,22 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 - Addition of the `TSTORE` and `TLOAD` EVM opcodes introduced in [EIP-1153](https://eips.ethereum.org/EIPS/eip-1153) offering a cheaper option than storage for data that’s discarded at the end of a transaction.
 - Addition of the `MCOPY` EVM opcode introduced in [EIP-5656](https://eips.ethereum.org/EIPS/eip-5656) for cheaper memory copying.
 - Changes to the `SELFDESTRUCT` EVM opcode to reflect the behavior on L1 Ethereum, as outlined in [EIP-6780](https://eips.ethereum.org/EIPS/eip-6780).
+- Addition of a batch poster manager role that will have the ability to grant and revoke batch-posting affordances. This role is assigned to the operator of the sequencer to allow the batch poster manager perform key rotations for the batch posters. The DAO will continue to have the ability to revoke the seqauencer role, meaning there is no change to the current system's trust model since the DAO ca update the batch poster manager at any time (along with any batch posters).
+- Increasing the max block height that a batch can be posted, relative to the current block, to 64 bringing this in line with Ethereum's finality guarantees. The current value of 12 was set prior to the Ethereum merge and could mean that a small L1 reorg can cause an otherwise valid batch to revert.
 
 ### Special notes on ArbOS 20: Atlas support for EIP-4844
 
 - Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e. the whole chain opts-in with ArbOS 20 “Atlas”).
 - ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like L1 Ethereum, that support the blob transaction type. This includes Arbitrum One and Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that any L3 Orbit chain settling to an L2 Arbitrum chain will post data to the underlying L2 Arbitrum chain as calldata. The L2 Arbitrum chain will then be able to post data to a L1 data availability layer like Ethereum using blobs.
-- There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s.
+- There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for L2 users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
 
-### Reference links
-
+### Reference links for ArbOS 20 Atlas
+=======
 - Original DAO proposal: [AIP: ArbOS Version 20 "Atlas"](https://forum.arbitrum.foundation/t/aip-arbos-version-20-atlas/20957)
 - [AIP: ArbOS Version 20 "Atlas" Snapshot Vote](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0x813a366e287a872ada13d4f8348e771c7aa2d8c3cb00b2be31539ceab5627513)
+- [Formal Tally (on-chain) vote for AIP: ArbOS Version 20](https://www.tally.xyz/gov/arbitrum/proposal/46905320292877192134536823079608810426433248493109520384601548724615383601450)
 
-# ArbOS 11
+## ArbOS 11
 
 ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.2.0-f7dc9de`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators.
 
@@ -62,7 +75,7 @@ ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the 
 - Addition of the [`L1RewardReceipient`](../../for-devs/dev-tools-and-resources/precompiles.mdx##arbgasinfo) and [`L1RewardRate`](../../for-devs/dev-tools-and-resources/precompiles.mdx##arbgasinfo) precompile methods to view L1 pricing parameters and make it easier to view the current chain configuration.
 - Fix the `ArbOwner` precompile to disallow emitting logs in `STATICCALL` contexts, bringing this in line with how the EVM is expected to behave as `STATICCALL` invocations should never be able to emit logs. The previous incorrect behavior would mean that a log was emitted when a chain owner made a `STATICCALL` on the `ArbOwner` precompile.
 
-### Reference links
+### Reference links for ArbOS 11
 
 - [Nitro v2.2.0 Release details on Github](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0)
 - Original DAO proposal: [AIP: ArbOS Version 11](https://forum.arbitrum.foundation/t/aip-arbos-version-11/19696)
