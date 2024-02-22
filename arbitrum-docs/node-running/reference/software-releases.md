@@ -15,11 +15,9 @@ Although Nitro is updated regularly, only a subset of Nitro releases carry ArbOS
 
 Note that every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade. 
 
-:::info How often should I be upgrading my ArbOS version?
-It is strongly recommended to keep your Nitro's node software up-to-date as best you can to ensure you are benefting from the latest improvements to the Arbitrum technology stack. 
+import PublicPreviewBannerPartial from '../partials/_upgrade-cadence-recommendations-partial.mdx';
 
-For governance approved and mandated (i.e. the DAO) ArbOS upgrades for Arbitrum One and Arbitrum Nova are required to ensure the continued production and validation of legitimate assertions of L2 state. For Arbitrum Orbit chains, the chain owner has full discretion over the timing and specific upgrades to pick up, though we still recommend being as up-to-date as possible.
-:::
+<PublicPreviewBannerPartial />
 
 ArbOS upgrades are carried out by the chain's owner; in the case of Arbitrum One and Nova, the owner is the Arbitrum DAO and so an upgrade will require a governance proposal and vote to pass to complete the upgrade. [This is an example of a Nitro release that contains an ArbOS version bump, specifically to ArbOS 11](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0).
 
