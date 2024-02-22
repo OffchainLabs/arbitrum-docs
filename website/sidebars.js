@@ -22,6 +22,103 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Run an Arbitrum node',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'node-running/gentle-introduction-run-node',
+          label: 'Overview',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/quickstart-running-a-node',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-daserver',
+          label: 'Run a Data Availability Server (DAS)',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-full-node',
+          label: 'Run a full node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-classic-node',
+          label: 'Run a Classic node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-an-archive-node',
+          label: 'Run an archive node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-validator',
+          label: 'Run a validator',
+        },
+
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/local-dev-node',
+          label: 'Run a local dev node',
+        },
+        {
+          type: 'category',
+          label: 'Sequencers',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-feed-relay',
+              label: 'Run a feed relay',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/read-sequencer-feed',
+              label: 'Read the sequencer feed',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              label: 'Run a sequencer coordination manager',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Nitro',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/build-nitro-locally',
+              label: 'Build Nitro locally',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              label: 'Migrate to Nitro from Classic',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'node-running/troubleshooting-running-nodes',
+          label: 'Troubleshooting',
+        },
+        {
+          type: 'doc',
+          label: 'FAQ',
+          id: 'node-running/faq',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Arbitrum bridge',
       collapsed: true,
       items: [
@@ -135,6 +232,11 @@ const sidebars = {
               label: 'Reference',
               id: 'for-devs/dev-tools-and-resources/precompiles',
             },
+            {
+              type: 'doc',
+              label: 'NodeInterface',
+              id: 'for-devs/concepts/nodeinterface',
+            },
           ],
         },
         {
@@ -200,18 +302,6 @@ const sidebars = {
               type: 'doc',
               label: 'Bridging ERC-20 tokens',
               id: 'for-devs/concepts/token-bridge/token-bridge-erc20',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Advanced',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'NodeInterface',
-              id: 'for-devs/concepts/nodeinterface',
             },
           ],
         },
@@ -446,117 +536,7 @@ const sidebars = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'Run an Arbitrum node',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'node-running/gentle-introduction-run-node',
-          label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/quickstart-running-a-node',
-          label: 'Quickstart',
-        },
-        {
-          type: 'category',
-          label: 'Data availability servers',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-daserver',
-              label: 'Run a Data Availability Server (DAS)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Sequencers',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
-              label: 'Run a feed relay',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
-              label: 'Read the sequencer feed',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
-              label: 'Run a sequencer coordination manager',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Other node types',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-full-node',
-              label: 'Run a full node',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
-              label: 'Run a Classic node',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
-              label: 'Run an archive node',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
-              label: 'Run a validator',
-            },
 
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/local-dev-node',
-              label: 'Run a local dev node',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
-          label: 'Troubleshooting',
-        },
-        {
-          type: 'doc',
-          label: 'FAQ',
-          id: 'node-running/faq',
-        },
-      ],
-    },
     {
       type: 'category',
       label: 'How Arbitrum works',
