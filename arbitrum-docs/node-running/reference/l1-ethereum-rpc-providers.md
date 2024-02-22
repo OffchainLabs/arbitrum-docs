@@ -27,7 +27,7 @@ To run a validator for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, a
 | [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/)          | ✅                 | ✅                    |
 | [Bware Labs](https://bwarelabs.com/blockchain-api)                                   | ✅                 | ✅                    |
 | [Chainbase](https://chainbase.com/)                                                  | ✅                 |                       |
-| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)                     | ✅                 |                       |
+| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)                     | ✅                 | ✅                    |
 | [Conduit](https://conduit.xyz/)*                                                     | ✅                 | ✅                    |
 | [Lava Network](https://docs.lavanet.xyz/gateway-access)                              | ✅                 | ✅                    |
 | [Nirvana Labs](https://nirvanalabs.io)                                               | ✅                 | ✅                    |
