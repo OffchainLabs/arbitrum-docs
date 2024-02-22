@@ -257,7 +257,9 @@ import { GenerateTroubleshootingReportWidget } from '@site/src/components/Genera
 <GenerateTroubleshootingReportWidget />
 
 <div className="troubleshooting-report-area">
-  <p>Node startup command</p>
+  <p>
+    Node startup command (make sure to remove any sensitive information like, i.e., private keys)
+  </p>
   <textarea
     id="vn-cmd"
     rows="3"

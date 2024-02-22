@@ -94,81 +94,22 @@ In terms of hardware requirements, these are the minimum specs that your infrast
 Depending on the storage backend you use for your DAS, you'll need to configure the appropriate infrastructure: for example, an S3 bucket if you choose S3, or a local volume if you choose any of the local backend options. When using a local volume, it is recommended to use …
 -->
 
-### Step 1: Set up a persistent volume
+### Step 1: Generate the BLS keypair
 
-First, we'll set up a volume to store the DAS database and the BLS keypair that we generate in the next step.
-
-In k8s, we can use a configuration like this:
-
-```yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-name: das-server
-spec:
-accessModes:
-  - ReadWriteOnce
-resources:
-  requests:
-  storage: 200Gi
-storageClassName: gp2
-```
-
-### Step 2: Generate the BLS keypair
-
-Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS.
+Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
 The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
-When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in. That directory will need to exist before running the tool.
+When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in.
 
-Here's an example of how to use a k8s deployment to run the `datool keygen` utility and store the key on the volume that we created in the previous step (and that will be used by the DAS in the next step). Note that after this deployment has run once, the deployment can be torn down and deleted:
+Here's an example of how to use the `datool keygen` utility inside Docker and store the key that will be used by the DAS in the next step.
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-name: das-server
-spec:
-replicas: 1
-selector:
-    matchLabels:
-    app: das-server
-template:
-    metadata:
-    labels:
-        app: das-server
-    spec:
-    containers:
-    - command:
-        - bash
-        - -c
-        - |
-        mkdir -p /home/user/data/keys
-        /usr/local/bin/datool keygen --dir /home/user/data/keys
-        sleep infinity
-        image: @latestNitroNodeImage@
-        imagePullPolicy: Always
-        resources:
-        limits:
-            cpu: "4"
-            memory: 10Gi
-        requests:
-            cpu: "4"
-            memory: 10Gi
-        ports:
-        - containerPort: 9876
-        protocol: TCP
-        volumeMounts:
-        - mountPath: /home/user/data/
-        name: data
-    volumes:
-    - name: data
-        persistentVolumeClaim:
-        claimName: das-server
+```bash
+docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
+@latestNitroNodeImage@ keygen --dir /data/keys
 ```
 
-### Step 3: Deploy the DAS
+### Step 2: Deploy the DAS
 
 To run the DAS, we'll use the `daserver` tool and we'll configure the following parameters:
 
@@ -366,42 +307,75 @@ curl -X POST \
 
 The RPC interface of the DAS validates that requests to store data are signed by the sequencer's ECDSA key, identified via a call to the `SequencerInbox` contract on the parent chain. It can also be configured to accept store requests signed with another ECDSA key of your choosing. This could be useful for running load tests, canaries, or troubleshooting your own infrastructure.
 
-Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval.
+Using this facility, a load test could be constructed by writing a script to store arbitrary amounts of data at an arbitrary rate; a canary could be constructed to store and retrieve data on some interval. We show here a short guide on how to do that.
 
-First, generate an ECDSA keypair with `datool keygen`:
+#### Step 1: Generate an ECDSA keypair
+
+First we'll generate an ECDSA keypair with `datool keygen`. Create a folder inside `/some/local/dir` to store the ECDSA keypair, for example `/some/local/dir/keys`. Then run `datool keygen`:
 
 ```bash
-datool keygen --dir /dir-to-store-the-key-pair/ --ecdsa
+datool keygen --dir /some/local/dir/keys --ecdsa
 ```
 
-Then add the following configuration parameter to `daserver`:
+You can also use the `docker run` command as follows:
 
 ```bash
---data-availability.extra-signature-checking-public-key "/dir-to-store-the-key-pair/ecdsa.pub"
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @latestNitroNodeImage@ keygen --dir /home/user/data/keys --ecdsa
+```
+
+#### Step 2: Change the DAS configuration and restart the server
+
+Add the following configuration parameter to `daserver`:
+
+```bash
+--data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
+```
 
 OR
 
+```bash
 --data-availability.extra-signature-checking-public-key "0x<contents of ecdsa.pub>"
 ```
+
+And then restart it.
+
+#### Step 3: Store data signed with the ECDSA private key
 
 Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
 ```bash
-datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "/dir-to-store-the-key-pair/ecdsa"
+datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
+```
 
 OR
 
+```bash
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
-
 ```
 
-The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data (notice that you must have the REST interface enabled in the DAS):
+You can also use the `docker run` command:
 
 ```bash
-datool client rest getbyhash --url http://localhost:9877 --data-hash <0xDataHash>
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @latestNitroNodeImage@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
-If we set `<0xDataHash>` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
+The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
+
+#### Step 4: Retrieve the stored data
+
+Use again the `datool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
+
+```bash
+datool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+```
+
+You can also use the `docker run` command:
+
+```bash
+docker run --rm -it --network="host" --entrypoint datool @latestNitroNodeImage@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+```
+
+If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
 
 The retention period defaults to 24 hours, but can be configured when calling `datool client rpc store` with the parameter `--das-retention-period` and the number of milliseconds for the retention period.
 
@@ -412,7 +386,7 @@ The REST interface has a health check on the path `/health` which will return 
 Example:
 
 ```bash
-curl -I <YOUR REST ENDPOINT>
+curl -I <YOUR REST ENDPOINT>/health
 ```
 
 ## Running a mirror DAS
