@@ -8,14 +8,11 @@ target_audience: 'Developers maintaining Orbit chains.'
 sidebar_position: 3
 ---
 
-This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected.
+This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
-:::info How often should I be upgrading my ArbOS version?
-Orbit chain operators are strongly encouraged to run the latest stable Nitro release, and to update nodes promptly when a new stable release is available.
+import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.md';
 
-ArbOS version bumps are especially important because these upgrades can change the way that assertions are produced and validated.
-
-:::
+<PublicPreviewBannerPartial />
 
 #### Step 1: Update Nitro on nodes and validators
 
