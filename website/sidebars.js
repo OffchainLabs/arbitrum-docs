@@ -47,21 +47,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/running-a-classic-node',
-          label: 'Run a Classic node',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/running-an-archive-node',
-          label: 'Run an archive node',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/running-a-validator',
-          label: 'Run a validator',
-        },
-        {
-          type: 'doc',
           id: 'node-running/how-tos/local-dev-node',
           label: 'Run a local dev node',
         },
@@ -69,6 +54,33 @@ const sidebars = {
           type: 'doc',
           id: 'node-running/reference/software-releases',
           label: 'ArbOS software releases',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/reference/l1-ethereum-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
+        },
+        {
+          type: 'category',
+          label: 'More node types',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-classic-node',
+              label: 'Run a Classic node',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-an-archive-node',
+              label: 'Run an archive node',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-validator',
+              label: 'Run a validator',
+            },
+          ],
         },
         {
           type: 'category',
@@ -88,7 +100,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
-              label: 'Deploy a mirror DAS',
+              label: 'Deploy a mirror Data Availability Server',
             },
             {
               type: 'doc',
