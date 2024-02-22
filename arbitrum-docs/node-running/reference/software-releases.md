@@ -1,6 +1,7 @@
 ---
 title: 'ArbOS software releases'
 sidebar_label: 'ArbOS software releases'
+sidebar_position: 1
 author: dlee
 ---
 
@@ -52,6 +53,7 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 
 ### Special notes on ArbOS 20: Atlas support for EIP-4844
 
+- For validators of Arbitrum chains that settle to Etheruem, upgrading to the Atlas ArbOS release will require access to L1 Ethereum beacon chain endpoints to retrieve blob data for validating L2 state. [Please visit this page to view a list of beacon chain RPC providers](./l1-ethereum-rpc-providers.md).
 - Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e. the whole chain opts-in with ArbOS 20 “Atlas”).
 - ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like L1 Ethereum, that support the blob transaction type. This includes Arbitrum One and Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that any L3 Orbit chain settling to an L2 Arbitrum chain will post data to the underlying L2 Arbitrum chain as calldata. The L2 Arbitrum chain will then be able to post data to a L1 data availability layer like Ethereum using blobs.
 - There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for L2 users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
