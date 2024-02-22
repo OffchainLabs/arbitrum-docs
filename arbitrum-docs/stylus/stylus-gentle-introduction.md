@@ -122,7 +122,7 @@ While many developers will be drawn to the net new use cases, rebuilding existin
 
 If you're a developer interested in Stylus, visit the [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart), join the [Discord channel](https://discord.com/invite/arbitrum), and start building!
 
-### Wen mainnet?
+### When mainnet?
 
 Stylus is in `alpha`, which means there are a lot of planned improvements on the roadmap! A few high-level next steps for Stylus include:
 
