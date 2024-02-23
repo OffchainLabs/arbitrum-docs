@@ -589,7 +589,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'Troubleshooting',
+          label: 'FAQ',
         },
         {
           type: 'doc',
