@@ -127,7 +127,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
-              label: 'Run a sequencer coordination manager',
+              label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
         },
