@@ -1,5 +1,5 @@
 ---
-title: 'How to read the Sequencer feed'
+title: 'How to read the sequencer feed'
 description: Learn how to read the sequencer feed
 sidebar_position: 9
 content_type: how-to
