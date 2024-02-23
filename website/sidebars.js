@@ -193,15 +193,6 @@ const sidebars = {
           label: 'Quickstart (Solidity)',
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/local-dev-node">Run a local dev node</a>',
-          // q: why use an anchor html tag here?
-          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-          //    if we use a fully qualified link, localhost won't work
-        },
-        {
           type: 'doc',
           label: 'Estimate gas',
           id: 'devs-how-tos/how-to-estimate-gas',
