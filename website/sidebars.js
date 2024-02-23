@@ -111,7 +111,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Sequencers',
+          label: 'Sequencer',
           collapsed: true,
           items: [
             {
