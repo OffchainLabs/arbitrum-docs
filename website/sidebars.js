@@ -198,8 +198,8 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/local-dev-node">Run a local dev node</a>',
           // q: why use an anchor html tag here?
           // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-          //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-          //    if we use an absolute link, localhost won't work
+          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+          //    if we use a fully qualified link, localhost won't work
         },
         {
           type: 'doc',
@@ -551,8 +551,8 @@ const sidebars = {
                 '<a class="menu__link menu__list-item" href="/node-running/reference/software-releases">ArbOS software releases</a>',
               // q: why use an anchor html tag here?
               // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-              //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-              //    if we use an absolute link, localhost won't work
+              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+              //    if we use a fully qualified link, localhost won't work
             },
             {
               type: 'doc',
@@ -572,8 +572,8 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees</a>',
           // q: why use an anchor html tag here?
           // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-          //    if we link to them both via id, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-          //    if we use an absolute link, localhost won't work
+          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+          //    if we use a fully qualified link, localhost won't work
         },
 
         {
