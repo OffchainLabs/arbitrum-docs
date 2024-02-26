@@ -2,15 +2,17 @@
 title: 'Quickstart: Launch an Orbit chain'
 description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
+author: greatsoshiant
+sme: greatsoshiant
+editor: symbolpunk
 target_audience: developers who want to create their own self-managed AnyTrust or One chain
-sidebar_label: 'Quickstart'
 ---
 
 This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/).
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Goerli or Sepolia testnets**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
 
-If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
+If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.md).
 
 import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
 

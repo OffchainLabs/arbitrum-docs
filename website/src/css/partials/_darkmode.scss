@@ -65,3 +65,11 @@
     }
   }
 }
+
+[data-theme='light'] {
+  .theme-doc-sidebar-menu {
+    .menu__link {
+      color: #111;
+    }
+  }
+}

@@ -1,9 +1,8 @@
 ---
 title: 'Troubleshooting: Building Arbitrum dApps'
-sidebar_label: 'Troubleshooting'
 description: List of questions and answers frequently asked by developers
-reader_audience: developers who want to build on Ethereum/Arbitrum
-content-type: faq
+user_story: As a developer, I want to understand how to troubleshoot common issues when building dApps on Arbitrum.
+content_type: troubleshooting
 ---
 
 import FAQStructuredData from '@site/src/components/FAQStructuredData';
