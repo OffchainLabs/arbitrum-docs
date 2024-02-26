@@ -37,11 +37,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/running-a-daserver',
-          label: 'Run a Data Availability Server (DAS)',
-        },
-        {
-          type: 'doc',
           id: 'node-running/how-tos/running-a-full-node',
           label: 'Run a full node',
         },
