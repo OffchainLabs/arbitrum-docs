@@ -26,7 +26,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Arbitrum Stylus](/stylus/stylus-gentle-introduction)             | Lets you write EVM-compatible smart contracts in Rust and any other language that compiles to Wasm. |
 
 
-
 ## Arbitrum for users
 
 **Users** interact with Arbitrum either through the Arbitrum bridge or by using dApps that have been deployed to an Arbitrum chain.
