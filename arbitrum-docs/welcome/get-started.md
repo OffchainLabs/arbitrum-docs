@@ -73,7 +73,8 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 | Resource                                                                                           | Description                                       |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [Inside Nitro](/inside-arbitrum-nitro)                                                             | A technical deep dive into Nitro's architecture.  |
+| [Inside AnyTrust](/inside-anytrust)                                                                | A technical deep dive into the AnyTrust protocol. |
 | [Arbitrum whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf) | The original whitepaper that introduced Nitro.    |
 | [DAO docs](https://docs.arbitrum.foundation/gentle-intro-dao-governance)                           | Docs that support members of the Arbitrum DAO.    |
-| [Inside AnyTrust](/inside-anytrust)                                                                | A technical deep dive into the AnyTrust protocol. |
-| [Inside Nitro](/inside-arbitrum-nitro)                                                             | A technical deep dive into Nitro's architecture.  |
+
