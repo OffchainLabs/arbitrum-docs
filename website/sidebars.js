@@ -47,24 +47,36 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/reference/software-releases',
-          label: 'ArbOS software releases',
+          id: 'node-running/reference/ethereum-beacon-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
         },
         {
-          type: 'doc',
-          id: 'node-running/reference/l1-ethereum-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
+          type: 'category',
+          label: 'ArbOS software releases',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/overview',
+              label: 'Overview'
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos20',
+              label: 'ArbOS 20 Atlas'
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos11',
+              label: 'ArbOS 11'
+            }
+          ]
         },
         {
           type: 'category',
           label: 'More node types',
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
-              label: 'Run a Classic node',
-            },
             {
               type: 'doc',
               id: 'node-running/how-tos/running-an-archive-node',
@@ -75,6 +87,11 @@ const sidebars = {
               id: 'node-running/how-tos/running-a-validator',
               label: 'Run a validator',
             },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-classic-node',
+              label: 'Run a Classic node',
+            }
           ],
         },
         {
