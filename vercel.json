@@ -1,6 +1,11 @@
 {
     "redirects": [
         {
+            "source": "/",
+            "destination": "/welcome/get-started",
+            "permanent": false
+        },
+        {
             "source": "/(arb-specific-things/?)",
             "destination": "/for-devs/concepts/differences-between-arbitrum-ethereum/overview",
             "permanent": false
@@ -127,7 +132,7 @@
         },
         {
             "source": "/docs/developer_quickstart",
-            "destination": "/",
+            "destination": "/welcome/get-started",
             "permanent": false
         },
         {
@@ -297,7 +302,7 @@
         },
         {
             "source": "/faqs/the-merge",
-            "destination": "/",
+            "destination": "/welcome/get-started",
             "permanent": false
         },
         {
