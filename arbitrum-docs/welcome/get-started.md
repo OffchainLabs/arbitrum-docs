@@ -23,7 +23,7 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Arbitrum Nova](https://portal.arbitrum.io/?chains=arbitrum-nova) | A public AnyTrust **chain**.                                                                        |
 | [Arbitrum bridge](https://bridge.arbitrum.io/)                    | Lets you move ERC-20 tokens between Ethereum and Arbitrum.                                          |
 | [Arbitrum Orbit](https://orbit.arbitrum.io/)                      | Lets you run your own Rollup and AnyTrust chains.                                                   |
-| [Stylus](/stylus/stylus-gentle-introduction)                      | Lets you write EVM-compatible smart contracts in Rust and any other language that compiles to Wasm. |
+| [Arbitrum Stylus](/stylus/stylus-gentle-introduction)                      | Lets you write EVM-compatible smart contracts in Rust and any other language that compiles to Wasm. |
 
 
 
