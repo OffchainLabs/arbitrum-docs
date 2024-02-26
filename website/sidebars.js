@@ -517,17 +517,17 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Deployment config`,
+              label: `Customize deployment config`,
             },
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `Behavior`,
+              label: `Customize behavior`,
             },
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `Precompiles`,
+              label: `Customize precompiles`,
             },
           ],
         },
