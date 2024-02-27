@@ -23,12 +23,12 @@ $child-sidebar-item-font-size: 14px;
     }
 
     // style the root level items
-    >li.theme-doc-sidebar-item-link-level-1,
-    >li.theme-doc-sidebar-item-category-level-1 {
+    > li.theme-doc-sidebar-item-link-level-1,
+    > li.theme-doc-sidebar-item-category-level-1 {
       margin-top: 14px;
 
-      >div.menu__list-item-collapsible>a.menu__link,
-      >a.menu__link {
+      > div.menu__list-item-collapsible > a.menu__link,
+      > a.menu__link {
         font-size: $root-sidebar-item-font-size;
       }
     }
@@ -36,7 +36,6 @@ $child-sidebar-item-font-size: 14px;
     // style all sidebar items
     .theme-doc-sidebar-item-link,
     .theme-doc-sidebar-item-category {
-
       a.menu__link {
         opacity: 0.9;
 
@@ -51,13 +50,12 @@ $child-sidebar-item-font-size: 14px;
       }
     }
 
-    >.theme-doc-sidebar-item-category {
-
-      >div {
+    > .theme-doc-sidebar-item-category {
+      > div {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
 
-        >a {
+        > a {
           font-weight: 400;
           font-size: $root-sidebar-item-font-size;
           border-bottom-left-radius: 0;
@@ -68,7 +66,7 @@ $child-sidebar-item-font-size: 14px;
         }
       }
 
-      >ul {
+      > ul {
         padding-left: 20px !important;
       }
     }
