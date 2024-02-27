@@ -3,7 +3,7 @@
         {
             "source": "/node-running/reference/software-releases",
             "destination": "/node-running/reference/arbos-software-releases/overview",
-            "permanent": true
+            "permanent": false
         },
         {
             "source": "/",
