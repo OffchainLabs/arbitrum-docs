@@ -48,7 +48,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section">🠗</span></a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">🠗</span></a>',
           // q: why use an anchor html tag here?
           // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
           //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
