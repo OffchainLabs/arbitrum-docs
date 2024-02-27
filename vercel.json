@@ -3,7 +3,7 @@
         {
             "source": "/intro",
             "destination": "/welcome/arbitrum-gentle-introduction",
-            "permanent": true
+            "permanent": false
         },
         {
             "source": "/for-devs/gentle-introduction-dapps",
