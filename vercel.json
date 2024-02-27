@@ -1,6 +1,12 @@
 {
     "redirects": [
         {
+
+            "source": "/node-running/reference/software-releases",
+            "destination": "/node-running/reference/arbos-software-releases/overview",
+            "permanent": false
+        },
+        {
             "source": "/intro",
             "destination": "/welcome/arbitrum-gentle-introduction",
             "permanent": false
@@ -8,7 +14,7 @@
         {
             "source": "/for-devs/gentle-introduction-dapps",
             "destination": "/welcome/arbitrum-gentle-introduction",
-            "permanent": true
+            "permanent": false
         },
         {
             "source": "/",
