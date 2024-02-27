@@ -1,3 +1,5 @@
+// If you are making any changes to these docs, please ensure you run "yarn generate_precompiles_ref_tables"!
+
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
@@ -12,7 +14,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.2.5-a20a1c7',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.3.0-3e14543',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
