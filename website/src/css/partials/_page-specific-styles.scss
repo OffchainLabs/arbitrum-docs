@@ -1,24 +1,6 @@
 @use './_mixins.scss' as *;
 
-[class*='launch-a-chain'] {
-  table {
-    @include medium-table;
-  }
-}
-
-[class*='orbit-quickstart'],
-[class*='orbit-gentle-introduction'],
-[class*='contribute'],
-[class*='opcode-hostio-pricing'] {
-  table {
-    @include small-table;
-  }
-}
-
 [class*='quickstart-solidity-hardhat'] {
-  table {
-    @include small-table;
-  }
 
   .vending-machine {
     border-radius: 5px;
@@ -109,7 +91,7 @@
       margin: 0;
       font-family: monospace;
 
-      > span:first-child {
+      >span:first-child {
         font-weight: 600;
         padding-right: 5px;
       }
@@ -143,6 +125,7 @@
 }
 
 [data-faq-origin-slug='node-faq'] {
+
   /* CSS properties */
   h3 {
     font-size: 16px;
