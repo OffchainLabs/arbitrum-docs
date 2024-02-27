@@ -1,6 +1,5 @@
 ---
-title: 'Stylus Rust SDK: Feature overview'
-sidebar_label: 'Stylus Rust SDK: Feature overview'
+title: 'Stylus Rust SDK overview'
 description: 'An in-depth overview of the features provided by the Stylus Rust SDK'
 author: rachel-bousfield
 sme: rachel-bousfield

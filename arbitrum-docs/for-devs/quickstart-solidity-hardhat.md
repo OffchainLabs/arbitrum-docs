@@ -1,17 +1,16 @@
 ---
-title: 'Quickstart: Build a decentralized app with Arbitrum (Solidity, Hardhat)'
-sidebar_label: Quickstart (Solidity, Hardhat)
-description: This quickstart will walk you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
+title: 'Quickstart: Build a decentralized app (Solidity)'
+description: This quickstart walks you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
-author-objective: build a shareable quickstart that onboards web2 developers into Arbitrum
-reader-audience: web developers who haven't ever built on Ethereum/Arbitrum
-reader-task: deploy my first smart contract directly to L2 with a confident understanding of Arbitrum's value prop
-content-type: quickstart
+user_story: As a web2 developer, I want to onboard into Arbitrum by building and deploying my first smart contract.
+content_type: quickstart
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+:::info Want to use Rust instead?
 
-<PublicPreviewBannerPartial />
+Head over to [the Stylus quickstart](/stylus/stylus-quickstart) if you'd like to use Rust instead of Solidity.
+
+:::
 
 This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and `yarn` is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 

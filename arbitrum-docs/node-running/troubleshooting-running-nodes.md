@@ -1,5 +1,6 @@
 ---
 title: 'Troubleshooting: Run a node'
+author: symbolpunk
 ---
 
 import Tabs from '@theme/Tabs';

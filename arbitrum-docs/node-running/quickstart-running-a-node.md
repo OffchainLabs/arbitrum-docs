@@ -4,7 +4,7 @@ description: Learn more about what type of ARb node one needs to run.
 author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
 reader-task: Run a node with minimal effort and maximum understanding
-content-type: quickstart
+content_type: quickstart
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
