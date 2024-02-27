@@ -2,16 +2,9 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. This includes documentation for:
+The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
-1. [Developers](/for-devs/quickstart-solidity-hardhat.md)
-2. [Users (bridge)](/getting-started-users.mdx)
-3. [Node runners](/node-running/quickstart-running-a-node.md)
-4. [How it works](/intro)
-
-Contributions to each of these content areas are welcome from the entire Ethereum community.
-
-This document shows you how to craft, organize, and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
 
 ### Add a new core document
 
