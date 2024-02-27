@@ -2,8 +2,8 @@
 # Learn more here: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # recursively assign all markdown files to @foo @bar
-**/*.md @symbolpunk @tucksondev @mahsamoosavi @amarrazza @hkalodner
-**/*.mdx @symbolpunk @tucksondev @mahsamoosavi @amarrazza @hkalodner
+**/*.md @symbolpunk @tucksondev @mahsamoosavi @anegg0 @hkalodner
+**/*.mdx @symbolpunk @tucksondev @mahsamoosavi @anegg0 @hkalodner
 
 # assign ownership of `sidebars.js` to @foo @bar
-./website/sidebars.js @symbolpunk @tucksondev @mahsamoosavi @amarrazza @hkalodner
+./website/sidebars.js @symbolpunk @tucksondev @mahsamoosavi @anegg0 @hkalodner

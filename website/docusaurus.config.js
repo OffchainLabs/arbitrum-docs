@@ -100,7 +100,7 @@ const config = {
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
-          href: '/for-devs/gentle-introduction-dapps',
+          href: '/welcome/arbitrum-gentle-introduction',
         },
         items: [],
       },
