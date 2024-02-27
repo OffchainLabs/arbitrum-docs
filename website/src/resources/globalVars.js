@@ -1,3 +1,5 @@
+// @dev If you are changing anything in this file, please make sure you also run `yarn generate_precompiles_ref_tables`
+
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
