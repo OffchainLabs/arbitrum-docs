@@ -22,180 +22,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Arbitrum node',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'node-running/gentle-introduction-run-node',
-          label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/quickstart-running-a-node',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/running-a-full-node',
-          label: 'Run a full node',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/local-dev-node',
-          label: 'Run a local dev node',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/reference/ethereum-beacon-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
-        },
-        {
-          type: 'category',
-          label: 'ArbOS software releases',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/overview',
-              label: 'Overview'
-            },
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos20',
-              label: 'ArbOS 20 Atlas'
-            },
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos11',
-              label: 'ArbOS 11'
-            }
-          ]
-        },
-        {
-          type: 'category',
-          label: 'More node types',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
-              label: 'Run an archive node',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
-              label: 'Run a validator',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
-              label: 'Run a Classic node',
-            }
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
-              label: 'Configure a Data Availability Committee (DAC)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Sequencer',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
-              label: 'Run a feed relay',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
-              label: 'Read the sequencer feed',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
-              label: 'Run a Sequencer Coordination Manager (SQM)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
-          label: 'Troubleshooting',
-        },
-        {
-          type: 'doc',
-          label: 'FAQ',
-          id: 'node-running/faq',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Arbitrum bridge',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'getting-started-users',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-users/troubleshooting-users',
-        },
-        {
-          type: 'doc',
-          id: 'bridge-tokens/concepts/usdc-concept',
-          label: 'USDC on Arbitrum One',
-        },
-      ],
-    },
-    {
-      type: 'category',
       label: 'Build decentralized apps',
       collapsed: true,
       items: [
@@ -411,98 +237,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Write Stylus contracts',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
-          label: 'A gentle introduction',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/stylus-quickstart',
-          label: 'Quickstart (Rust)',
-        },
-        {
-          type: 'doc',
-          label: 'Run a local dev node',
-          id: 'stylus/how-tos/local-stylus-dev-node',
-        },
-        {
-          type: 'doc',
-          label: 'Testnets',
-          id: 'stylus/reference/testnet-information',
-        },
-        {
-          type: 'category',
-          label: 'Gas and ink',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'stylus/concepts/stylus-gas',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas and ink costs',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Stylus SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'SDK repositories',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'stylus/troubleshooting-building-stylus',
-        },
-
-        {
-          type: 'doc',
-          label: 'Add a new smart contract language',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-        },
-        {
-          type: 'doc',
-          label: 'Reduce the size of WASM binaries',
-          id: 'stylus/how-tos/optimizing-binaries',
-        },
-        {
-          type: 'link',
-          label: 'Rust crate docs',
-          href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-        },
-        {
-          type: 'link',
-          label: 'Source code repository',
-          href: 'https://github.com/OffchainLabs/stylus',
-        },
-        {
-          type: 'doc',
-          label: 'Public preview',
-          id: 'stylus/concepts/public-preview-expectations',
-        },
-      ],
-    },
-    {
-      type: 'category',
       label: 'Run an Orbit chain',
       collapsed: true,
       items: [
@@ -611,7 +345,272 @@ const sidebars = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Write Stylus contracts',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'stylus/stylus-gentle-introduction',
+          label: 'A gentle introduction',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/stylus-quickstart',
+          label: 'Quickstart (Rust)',
+        },
+        {
+          type: 'doc',
+          label: 'Run a local dev node',
+          id: 'stylus/how-tos/local-stylus-dev-node',
+        },
+        {
+          type: 'doc',
+          label: 'Testnets',
+          id: 'stylus/reference/testnet-information',
+        },
+        {
+          type: 'category',
+          label: 'Gas and ink',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'stylus/concepts/stylus-gas',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/opcode-hostio-pricing',
+              label: 'Gas and ink costs',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Stylus SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/rust-sdk-guide',
+              label: 'Rust SDK overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/stylus-sdk',
+              label: 'SDK repositories',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'stylus/troubleshooting-building-stylus',
+        },
 
+        {
+          type: 'doc',
+          label: 'Add a new smart contract language',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+        },
+        {
+          type: 'doc',
+          label: 'Reduce the size of WASM binaries',
+          id: 'stylus/how-tos/optimizing-binaries',
+        },
+        {
+          type: 'link',
+          label: 'Rust crate docs',
+          href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+        },
+        {
+          type: 'link',
+          label: 'Source code repository',
+          href: 'https://github.com/OffchainLabs/stylus',
+        },
+        {
+          type: 'doc',
+          label: 'Public preview',
+          id: 'stylus/concepts/public-preview-expectations',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Run an Arbitrum node',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'node-running/gentle-introduction-run-node',
+          label: 'Overview',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/quickstart-running-a-node',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-a-full-node',
+          label: 'Run a full node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/local-dev-node',
+          label: 'Run a local dev node',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/reference/ethereum-beacon-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
+        },
+        {
+          type: 'category',
+          label: 'ArbOS software releases',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/overview',
+              label: 'Overview'
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos20',
+              label: 'ArbOS 20 Atlas'
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos11',
+              label: 'ArbOS 11'
+            }
+          ]
+        },
+        {
+          type: 'category',
+          label: 'More node types',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-an-archive-node',
+              label: 'Run an archive node',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-validator',
+              label: 'Run a validator',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-classic-node',
+              label: 'Run a Classic node',
+            }
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/introduction',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              label: 'Deploy a mirror Data Availability Server',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Sequencer',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-feed-relay',
+              label: 'Run a feed relay',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/read-sequencer-feed',
+              label: 'Read the sequencer feed',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              label: 'Run a Sequencer Coordination Manager (SQM)',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Nitro',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/build-nitro-locally',
+              label: 'Build Nitro locally',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              label: 'Migrate to Nitro from Classic',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'node-running/troubleshooting-running-nodes',
+          label: 'Troubleshooting',
+        },
+        {
+          type: 'doc',
+          label: 'FAQ',
+          id: 'node-running/faq',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Arbitrum bridge',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'getting-started-users',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          label: 'Troubleshooting',
+          id: 'for-users/troubleshooting-users',
+        },
+        {
+          type: 'doc',
+          id: 'bridge-tokens/concepts/usdc-concept',
+          label: 'USDC on Arbitrum One',
+        },
+      ],
+    },
     {
       type: 'category',
       label: 'How Arbitrum works',
