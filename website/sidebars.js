@@ -46,6 +46,15 @@ const sidebars = {
           label: 'Run a local dev node',
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section">🠗</span></a>',
+          // q: why use an anchor html tag here?
+          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+          //    if we use a fully qualified link, localhost won't work
+        }, 
+        {
           type: 'doc',
           id: 'node-running/reference/ethereum-beacon-rpc-providers',
           label: 'L1 Ethereum RPC providers',
@@ -551,7 +560,7 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases</a>',
+                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">🠕</span></a>',
               // q: why use an anchor html tag here?
               // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
               //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
@@ -572,7 +581,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees</a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">🠕</span></a>',
           // q: why use an anchor html tag here?
           // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
           //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
