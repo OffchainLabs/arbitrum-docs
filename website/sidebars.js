@@ -10,7 +10,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'for-devs/gentle-introduction-dapps',
+          id: 'welcome/arbitrum-gentle-introduction',
           label: 'A gentle introduction',
         },
         {
