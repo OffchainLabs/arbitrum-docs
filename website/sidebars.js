@@ -67,19 +67,19 @@ const sidebars = {
             {
               type: 'doc',
               id: 'node-running/reference/arbos-software-releases/overview',
-              label: 'Overview'
+              label: 'Overview',
             },
             {
               type: 'doc',
               id: 'node-running/reference/arbos-software-releases/arbos20',
-              label: 'ArbOS 20 Atlas'
+              label: 'ArbOS 20 Atlas',
             },
             {
               type: 'doc',
               id: 'node-running/reference/arbos-software-releases/arbos11',
-              label: 'ArbOS 11'
-            }
-          ]
+              label: 'ArbOS 11',
+            },
+          ],
         },
         {
           type: 'category',
@@ -100,7 +100,7 @@ const sidebars = {
               type: 'doc',
               id: 'node-running/how-tos/running-a-classic-node',
               label: 'Run a Classic node',
-            }
+            },
           ],
         },
         {
