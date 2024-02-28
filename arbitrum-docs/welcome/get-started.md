@@ -6,8 +6,9 @@ user_story: As a curious reader, I'd like to be quickly guided towards first ste
 content_type: quickstart
 ---
 
-<a data-quicklook-from='arbitrum'>Arbitrum</a> is a suite of Ethereum scaling solutions that make it easy to build and use decentralized applications. This document provides a high-level overview of the Arbitrum suite along with onboarding guidance tailored to specific audiences.
-
+<a data-quicklook-from="arbitrum">Arbitrum</a> is a suite of Ethereum scaling solutions that make it
+easy to build and use decentralized applications. This document provides a high-level overview of the
+Arbitrum suite along with onboarding guidance tailored to specific audiences.
 
 ## The Arbitrum suite
 
@@ -25,7 +26,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Arbitrum Orbit](https://orbit.arbitrum.io/)                      | Lets you run your own Rollup and AnyTrust chains.                                                   |
 | [Arbitrum Stylus](/stylus/stylus-gentle-introduction)             | Lets you write EVM-compatible smart contracts in Rust and any other language that compiles to Wasm. |
 
-
 ## Arbitrum for users
 
 **Users** interact with Arbitrum either through the Arbitrum bridge or by using dApps that have been deployed to an Arbitrum chain.
@@ -35,7 +35,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Arbitrum bridge](https://bridge.arbitrum.io/) | Lets you move ETH and ERC-20 tokens between Ethereum, Arbitrum, and select Orbit chains. |
 | [Arbitrum Portal](https://portal.arbitrum.io/) | A directory of dApps on Arbitrum.                                                        |
 | [Quickstart (bridge)](/getting-started-users)  | Provides step-by-step instructions for first-time bridge users.                          |
-
 
 ## Arbitrum for developers
 
@@ -47,7 +46,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Quickstart (Solidity)](/for-devs/quickstart-solidity-hardhat)             | Targeted at web2 developers who want to deploy their first Solidity smart contract to Arbitrum.          |
 | [Quickstart (Rust)](/stylus/stylus-quickstart)                             | Targeted at web3 developers who want to deploy their first Rust smart contract to Arbitrum using Stylus. |
 
-
 ## Arbitrum for node runners
 
 **Node runners** run the machines that support the Arbitrum ecosystem.
@@ -56,7 +54,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | [Run a full node](/node-running/how-tos/running-a-full-node)                                              | Targeted at node runners who want to access Arbitrum chains without having to connect to a third-party node.          |
 | [Configure a Data Availability Committee](/node-running/how-tos/data-availability-committee/introduction) | Targeted at Data Availability Committee members and Orbit chain operators who want to run a Data Availability Server. |
-
 
 ## Arbitrum for chain operators
 
@@ -67,8 +64,6 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Orbit gentle introduction](/launch-orbit-chain/orbit-gentle-introduction) | Targeted at readers who want to understand Orbit's value proposition and use cases.             |
 | [Orbit quickstart](/launch-orbit-chain/orbit-quickstart)                   | Targeted at chain operators who want to deploy their first Arbitrum chain using Arbitrum Orbit. |
 
-
-
 ## How it works
 
 | Resource                                                                                           | Description                                       |
@@ -77,4 +72,3 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 | [Inside AnyTrust](/inside-anytrust)                                                                | A technical deep dive into the AnyTrust protocol. |
 | [Arbitrum whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf) | The original whitepaper that introduced Nitro.    |
 | [DAO docs](https://docs.arbitrum.foundation/gentle-intro-dao-governance)                           | Docs that support members of the Arbitrum DAO.    |
-
