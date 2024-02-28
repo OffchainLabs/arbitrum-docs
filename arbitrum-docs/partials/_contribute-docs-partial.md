@@ -60,26 +60,28 @@ The following style guidelines provide a number of loose recommendations that he
 1.  **Casing**
     - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
 2.  **Linking**
-    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links.
-3.  **Separate procedural from conceptual (most of the time)**
+    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+3.  **Titling**
+    - Titles should balance brevity with precision - *Node running overview* is preferred to *Overview*. This helps with SEO and reader UX.
+4.  **Separate procedural from conceptual (most of the time)**
     - Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
-4.  **Voice**
+5.  **Voice**
     - Address the reader as "you".
     - Write like you'd speak to a really smart friend who's in a rush.
     - Opt for short, clear sentences that use translation-friendly, plain language.
     - Use contractions wherever it feels natural - this can help convey a friendly and conversational tone.
-5.  **Formality**
+6.  **Formality**
     - Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
-6.  **Targeting**
+7.  **Targeting**
     - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) who has a _specific need_.
     - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit in the beginning of your document.
-7.  **Flow**
+8.  **Flow**
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
     - **Value up front**: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
-8.  **Cross-linking**
+9.  **Cross-linking**
     - We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
-9.  **Things to avoid**
+10. **Things to avoid**
     - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
     - **Jargon**: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
 
