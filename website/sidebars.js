@@ -808,5 +808,5 @@ module.exports = sidebars;
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
 //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-//    if we use a fully qualified link, localhost won't work
+//    if we use a fully qualified link, the remote/published page will display when visiting from localhost or preview deployments
 //    we also want to include a unicode arrow to indicate that we're routing the user to another section, in a way that's distinct from the icon that indicates "this href pulls you out of docs"
