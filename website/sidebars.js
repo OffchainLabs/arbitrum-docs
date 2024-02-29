@@ -48,11 +48,9 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">🠗</span></a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
-          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-          //    if we use a fully qualified link, localhost won't work
+          // a: see note at end of file
         }, 
         {
           type: 'doc',
@@ -353,7 +351,6 @@ const sidebars = {
             },
           ],
         },
-
         {
           type: 'category',
           label: 'Reference',
@@ -560,11 +557,9 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">🠕</span></a>',
+                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">↑</span></a>',
               // q: why use an anchor html tag here?
-              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-              //    if we use a fully qualified link, localhost won't work
+              // a: see note at end of file
             },
             {
               type: 'doc',
@@ -581,13 +576,10 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">🠕</span></a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
-          // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-          //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-          //    if we use a fully qualified link, localhost won't work
+          // a: see note at end of file
         },
-
         {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
@@ -812,3 +804,9 @@ const sidebars = {
 };
 
 module.exports = sidebars;
+
+// note RE html sidebar links:
+//    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+//    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+//    if we use a fully qualified link, localhost won't work
+//    we also want to include a unicode arrow to indicate that we're routing the user to another section, in a way that's distinct from the icon that indicates "this href pulls you out of docs"
