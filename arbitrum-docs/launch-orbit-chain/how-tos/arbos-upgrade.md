@@ -10,13 +10,15 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
+The specific upgrade requirements for each ArbOS release are located in [ArbOS Releases: Overview](../../node-running/reference/arbos-software-releases/overview.mdx).
+
 import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
 #### Step 1: Update Nitro on nodes and validators
 
-Refer to the release notes for the [Nitro release](https://github.com/OffchainLabs/nitro/releases) supporting the ArbOS version that you're upgrading to. You'll find a specific version of the Nitro software stack specified. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.0` (Docker image: `offchainlabs/nitro-node:v2.3.0-3e14543`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
+Refer to the [requirements for the targeted ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.0` (Docker image: `offchainlabs/nitro-node:v2.3.0-3e14543`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
 
 Begin by upgrading your validator node(s) to the specified Nitro version, then update each remaining Orbit node to match this version.
 
@@ -26,9 +28,9 @@ Note that upgrading your node version _must occur_ before the deadline establish
 While every ArbOS upgrade will require an update to the Wasm module root, not every ArbOS upgrade will require an upgrade to the chain's `nitro-contracts` version. 
 If necessary, as defined in the release notes for each ArbOS release, you may need to deploy new versions of Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, fraud proof contracts, and interfaces for interacting with Nitro precompiles. 
 
-To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs:
-- The WASM module root, obtained from the corresponding consensus version (e.g. for ArbOS 20 Atlas, this is `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4` as per the [Consensus v20 release](https://github.com/OffchainLabs/nitro/releases/tag/consensus-v20)), and optionally,
-- The required `nitro-contracts` version (listed on the Github release notes for the Nitro release). For example, ArbOS 20 Atlas requires `nitro-contracts` version 1.2.1 or higher
+To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs (obtained from the [requirements for the targeted ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx)):
+- The WASM module root, and if necessary,
+- The required `nitro-contracts` version
 
 Once you have the WASM module root and have identified the required `nitro-contracts` version, if any, [please follow the instructions in this guide](https://github.com/OffchainLabs/orbit-actions?tab=readme-ov-file#nitro-contracts-upgrades) for specific actions based on the `nitro-contracts` version you are deploying. Note that each ArbOS release will require performing this step with a different Wasm module root and may potentially require a different version of `nitro-contracts`. The guide linked above will be kept updated with the instructions for each specific ArbOS release.
 
