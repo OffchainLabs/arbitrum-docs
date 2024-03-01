@@ -24,7 +24,7 @@ Note that upgrading your node version _must occur_ before the deadline establish
 
 #### Step 2: Upgrade the Wasm module root & your chain's Nitro contracts
 While every ArbOS upgrade will require an update to the Wasm module root, not every ArbOS upgrade will require an upgrade to the chain's `nitro-contracts` version. 
-If necessary, as defined in the release notes for each ArbOS release, you may need dto deploy new versions of Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, fraud proof contracts, and interfaces for interacting with Nitro precompiles. 
+If necessary, as defined in the release notes for each ArbOS release, you may need to deploy new versions of Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, fraud proof contracts, and interfaces for interacting with Nitro precompiles. 
 
 To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs:
 - The WASM module root, obtained from the corresponding consensus version (e.g. for ArbOS 20 Atlas, this is `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4` as per the [Consensus v20 release](https://github.com/OffchainLabs/nitro/releases/tag/consensus-v20)), and optionally,
