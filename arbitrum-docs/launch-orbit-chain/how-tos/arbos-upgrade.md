@@ -16,17 +16,23 @@ import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cad
 
 #### Step 1: Update Nitro on nodes and validators
 
-Refer to the release notes supporting the ArbOS version that you're upgrading to. You'll find a specific version of the Nitro software stack specified. For example, if your upgrade targets ArbOS 11, you'd use Nitro `v2.2.2` (Docker image: `offchainlabs/nitro-node:v2.2.2-8f33fea`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes.
+Refer to the release notes supporting the ArbOS version that you're upgrading to. You'll find a specific version of the Nitro software stack specified. For example, if your upgrade targets ArbOS 11, you'd use Nitro `v2.3.0` (Docker image: `offchainlabs/nitro-node:v2.3.0-3e14543`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes.
 
 Begin by upgrading your validator node(s) to the specified Nitro version, then update each remaining Orbit node to match this version.
 
 Note that this update _must occur_ before the deadline established for the target ArbOS upgrade. Refer to the timestamp in the ArbOS upgrade schedule for a precise deadline.
 
-#### Step 2: Upgrade the Wasm module root
+#### Step 2: Upgrade the Wasm module root & your chain's Nitro contracts
 
-The `WASM module root` is a 32-byte hash, created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new Wasm module root is generated due to modifications in the State Transition Function. This new Wasm module root must be set in the rollup contract on the parent chain. To set the new Wasm module root, use the `Rollup proxy` contract's [setWasmModuleRoot](https://github.com/OffchainLabs/nitro-contracts/blob/38a70a5e14f8b52478eb5db08e7551a82ced14fe/src/rollup/RollupAdminLogic.sol#L321) method.
+To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, please [follow the instructions in this guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/contract-upgrades/1.2.1). Note that each ArbOS release will require performing this step with a different Wasm module root and a different version of `nitro-contracts`. The guide linked above will be kept updated with the instructions for each specific ArbOS release.
 
-Note that the `upgrade executor` contract on the parent chain is the designated owner of the rollup contract, so the **chain owner account** needs to initiate a call to the `upgrade executor` contract in order to perform the upgrade. This call should include the correct calldata for setting the new Wasm module root. For example, the Wasm module root for ArbOS 11 is `0xf4389b835497a910d7ba3ebfb77aa93da985634f3c052de1290360635be40c4a`.
+The `WASM module root` is a 32-byte hash, created from the Merkelized Go replay binary and its dependencies. When ArbOS is upgraded, a new Wasm module root is generated due to modifications in the State Transition Function. This new Wasm module root must be set in the rollup contract on the parent chain. You can find the Wasm module root of an ArbOS upgrade in the Github release notee. For example, the Wasm module root for ArbOS 20 Atlas is `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`.
+
+Additionally, for each ArbOS upgrade, you will need to deploy new versions of Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, fraud proof contracts, and interfaces for interacting with Nitro precompiles. 
+
+To set the Wasm module root manually (i.e. not using the above guide), use the `Rollup proxy` contract's [setWasmModuleRoot](https://github.com/OffchainLabs/nitro-contracts/blob/38a70a5e14f8b52478eb5db08e7551a82ced14fe/src/rollup/RollupAdminLogic.sol#L321) method.
+
+Note that the `upgrade executor` contract on the parent chain is the designated owner of the rollup contract, so the **chain owner account** needs to initiate a call to the `upgrade executor` contract in order to perform the upgrade. This call should include the correct calldata for setting the new Wasm module root. 
 
 :::tip Backward compatibility
 
@@ -36,12 +42,12 @@ Wasm module roots are backward compatible, so upgrading them before an ArbOS ver
 
 #### Step 3: Schedule the ArbOS version upgrade
 
-To schedule an ArbOS version upgrade, call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61) function on the `ArbOwner` precompile of the Orbit chain(s) you're upgrading. This function requires two inputs:
+To schedule an ArbOS version upgrade for your Orbit chain, [follow this guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/arbos-upgrades/at-timestamp). In addition to the upgrade action contract address and the account address for the chain owner account, you will need the following inputs:
 
-1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g. `11`).
+1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g. `20`).
 2. **`timestamp`**: Set the exact Unix timestamp at which you want your Orbit chain to transition to the new ArbOS version.
 
-Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
+If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61) function on the `ArbOwner` precompile of the Orbit chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
 
 :::tip Immediate upgrades
 
