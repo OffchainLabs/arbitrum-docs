@@ -18,7 +18,7 @@ import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cad
 
 #### Step 1: Update Nitro on nodes and validators
 
-Refer to the [requirements for the targeted ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.0` (Docker image: `offchainlabs/nitro-node:v2.3.0-3e14543`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
+Refer to the [requirements for the targeted ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.1` (Docker image: `offchainlabs/nitro-node:v2.3.1-26fad6f`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
 
 Begin by upgrading your validator node(s) to the specified Nitro version, then update each remaining Orbit node to match this version.
 
