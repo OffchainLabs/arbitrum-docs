@@ -601,6 +601,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/infra-options-orbit-chains',
+          label: '3rd Party Infrastructure Providers',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/reference/command-line-options',
           label: 'Command-line options',
         },
