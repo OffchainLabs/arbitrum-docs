@@ -19,9 +19,9 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 ### Architecture
 
-Chain ownership affordance is handled via [**Upgrade Executor**](https://github.com/OffchainLabs/upgrade-executor) contracts.
+Chain ownership affordance is handled via <a data-quicklook-from='upgrade-executor'>Upgrade Executors</a> contracts.
 
-Each Orbit chain is deployed with two Upgrade Executors — one on the Orbit chain itself, and one on its <a data-quicklook-from='parent-chain'>parent chain.</a> At deployment, the chain's critical affordances are given to the Upgrade Executor contracts.
+Each Orbit chain is deployed with two upgrade executors. — one on the Orbit chain itself, and one on its <a data-quicklook-from='parent-chain'>parent chain.</a> At deployment, the chain's critical affordances are given to the Upgrade Executor contracts.
 
 Some examples:
 
