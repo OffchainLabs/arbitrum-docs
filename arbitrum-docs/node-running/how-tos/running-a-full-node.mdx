@@ -45,7 +45,8 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 ### Required parameters
 
 - L1 RPC URL
-  - Use the parameter `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>`
+  - Use the parameter `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` for execution layer
+  - Use the parameter `--parent-chain.blob-client.beacon-url=<Layer 1 Ethereum Beacon RPC URL>` for consensus layer
   - It must provide a standard layer 1 node RPC endpoint that you run yourself or from a node provider
   - Note: this parameter was called --l1.url in versions prior to `v2.1.0`
 - L2 chain id or name
