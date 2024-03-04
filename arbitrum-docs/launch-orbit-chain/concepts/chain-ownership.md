@@ -7,7 +7,7 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 0
 ---
 
-A **chain owner** of an <a data-quicklook-from='arbitrum-orbit'>Orbit</a> chain is an entity that can carry out critical upgrades to the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding & removing other chain owners.
+A **chain owner** of an <a data-quicklook-from='arbitrum-orbit'>Orbit</a> chain is an entity that can carry out critical upgrades within the chain's core protocol; this includes upgrading protocol contracts, setting core system parameters, and adding & removing other chain owners.
 
 An Orbit chain's initial chain owner is set by the chain's creator when the chain is deployed.
 
@@ -27,7 +27,7 @@ Some examples:
 
 - The parent chain's core protocol contracts are upgradeable proxies that are controlled by a proxy admin; the proxy admin is owned by the Upgrade Executor on the parent chain.
 - The core Rollup contract's admin role is given to the Upgrade Executor on the parent chain.
-- The affordance to call setters on the ArbOwner procompile — which allows for setting system gas parameters and scheduling ArbOS upgrades (among other things) — is given to the Upgrade Executor on the Orbit chain.
+- The affordance to call setters on the ArbOwner precompile — which allows for setting system gas parameters and scheduling   <a data-quicklook-from='arbos'>ArbOS.</a> upgrades (among other things) — is given to the Upgrade Executor on the Orbit chain.
 
 Calls to an Upgrade Executor can only be made by chain owners; e.g., entities granted the `EXECUTOR_ROLE` affordance on the Upgrade Executor. Upgrade executors also have the `ADMIN_ROLE` affordance granted to themselves, which lets chain owners add or remove chain owners.
 
