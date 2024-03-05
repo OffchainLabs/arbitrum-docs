@@ -100,33 +100,9 @@ const config = {
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
+          href: '/welcome/arbitrum-gentle-introduction',
         },
-        items: [
-          {
-            type: 'doc',
-            docId: 'for-devs/quickstart-solidity-hardhat',
-            position: 'left',
-            label: 'Developers',
-          },
-          {
-            type: 'doc',
-            docId: 'getting-started-users',
-            position: 'left',
-            label: 'Users (Bridge)',
-          },
-          {
-            type: 'doc',
-            docId: 'node-running/quickstart-running-a-node',
-            label: 'Node runners',
-            position: 'left',
-          },
-          {
-            type: 'doc',
-            docId: 'intro/intro',
-            position: 'left',
-            label: 'How it works',
-          },
-        ],
+        items: [],
       },
       // todo: descriptive footer
       footer: {
@@ -234,11 +210,6 @@ const config = {
       },
       prism: {
         additionalLanguages: ['solidity', 'rust'],
-      },
-      announcementBar: {
-        id: 'support_us',
-        content: `Arbitrum Orbit is mainnet-ready! Start building a customized chain by visiting the <a href='/launch-orbit-chain/orbit-quickstart'>Orbit docs</a>.`,
-        isCloseable: false,
       },
       liveCodeBlock: {
         /**

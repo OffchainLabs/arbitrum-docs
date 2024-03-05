@@ -1,6 +1,5 @@
 ---
 title: 'SDK support for custom gas token Orbit chains'
-sidebar_label: 'Custom gas token SDK'
 description: 'SDK support for custom gas token Orbit chains'
 author: Mehdi Salehi
 sme: Mehdi Salehi

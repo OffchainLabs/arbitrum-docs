@@ -1,9 +1,8 @@
 ---
 title: 'Precompiles reference'
-sidebar_label: Precompiles reference
 description: A reference page of all precompiles available on Arbitrum chains
-reader-audience: developers who want to build on Ethereum/Arbitrum
-content-type: reference
+user_story: As a developer, I want to understand the most useful precompiles available on Arbitrum chains and how to use them.
+content_type: reference
 ---
 
 ArbOS provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. This reference page exhaustively documents the specific calls ArbOS makes available through precompiles. For a more conceptual description of what precompiles are and how they work, please refer to the [precompiles conceptual page](/for-devs/concepts/precompiles.mdx).
@@ -28,7 +27,7 @@ This section is divided into two tables. We first list precompiles we expect use
 | Precompile                            | Address | Solidity interface                           | Go implementation                                      | Purpose                                            |
 | ------------------------------------- | ------- | -------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
 | [ArbAddressTable](#arbaddresstable)   | `0x66`  | [Interface][arbaddresstable_link_interface]  | [Implementation][arbaddresstable_link_implementation]  | Supporting compression of addresses                |
-| ArbBLS                                | `0x67`  | -                                            | -                                                      | **Disabled** (Former registry of BLS public keys)  |
+| ArbBLS                                | -       | -                                            | -                                                      | **Disabled** (Former registry of BLS public keys)  |
 | [ArbDebug](#arbdebug)                 | `0xff`  | [Interface][arbdebug_link_interface]         | [Implementation][arbdebug_link_implementation]         | Testing tools                                      |
 | [ArbFunctionTable](#arbfunctiontable) | `0x68`  | [Interface][arbfunctiontable_link_interface] | [Implementation][arbfunctiontable_link_implementation] | No longer used                                     |
 | [ArbInfo](#arbinfo)                   | `0x65`  | [Interface][arbinfo_link_interface]          | [Implementation][arbinfo_link_implementation]          | Info about accounts                                |
@@ -70,6 +69,8 @@ This section is divided into two tables. We first list precompiles we expect use
 
 ArbAddressTable ([Interface][arbaddresstable_link_interface] | [Implementation][arbaddresstable_link_implementation]) provides the ability to create short-hands for commonly used accounts.
 
+Precompile address: `0x0000000000000000000000000000000000000066`
+
 import ArbAddressTableRef from './partials/precompile-tables/_ArbAddressTable.md';
 
 <ArbAddressTableRef />
@@ -79,6 +80,8 @@ import ArbAddressTableRef from './partials/precompile-tables/_ArbAddressTable.md
 ArbAggregator ([Interface][arbaggregator_link_interface] | [Implementation][arbaggregator_link_implementation]) provides aggregators and their users methods for configuring how they participate in L1 aggregation. Arbitrum One's default aggregator is the Sequencer, which a user will prefer unless `SetPreferredAggregator` is invoked to change it.
 
 Compression ratios are measured in basis points. Methods that are checkmarked are access-controlled and will revert if not called by the aggregator, its fee collector, or a chain owner.
+
+Precompile address: `0x000000000000000000000000000000000000006D`
 
 import ArbAggregatorRef from './partials/precompile-tables/_ArbAggregator.md';
 
@@ -96,6 +99,8 @@ This precompile has been disabled. It previously provided a registry of BLS publ
 
 ArbDebug ([Interface][arbdebug_link_interface] | [Implementation][arbdebug_link_implementation]) provides mechanisms useful for testing. The methods of `ArbDebug` are only available for chains with the `AllowDebugPrecompiles` chain parameter set. Otherwise, calls to this precompile will revert.
 
+Precompile address: `0x00000000000000000000000000000000000000ff`
+
 import ArbDebugRef from './partials/precompile-tables/_ArbDebug.md';
 
 <ArbDebugRef />
@@ -103,6 +108,8 @@ import ArbDebugRef from './partials/precompile-tables/_ArbDebug.md';
 ### ArbFunctionTable
 
 ArbFunctionTable ([Interface][arbfunctiontable_link_interface] | [Implementation][arbfunctiontable_link_implementation]) provides aggregators the ability to manage function tables, to enable one form of transaction compression. The Nitro aggregator implementation does not use these, so these methods have been stubbed and their effects disabled. They are kept for backwards compatibility.
+
+Precompile address: `0x0000000000000000000000000000000000000068`
 
 import ArbFunctionTableRef from './partials/precompile-tables/_ArbFunctionTable.md';
 
@@ -112,6 +119,8 @@ import ArbFunctionTableRef from './partials/precompile-tables/_ArbFunctionTable.
 
 ArbGasInfo ([Interface][arbgasinfo_link_interface] | [Implementation][arbgasinfo_link_implementation]) provides insight into the cost of using the chain. These methods have been adjusted to account for Nitro's heavy use of calldata compression. Of note to end-users, we no longer make a distinction between non-zero and zero-valued calldata bytes.
 
+Precompile address: `0x000000000000000000000000000000000000006C`
+
 import ArbGasInfoRef from './partials/precompile-tables/_ArbGasInfo.md';
 
 <ArbGasInfoRef />
@@ -120,6 +129,8 @@ import ArbGasInfoRef from './partials/precompile-tables/_ArbGasInfo.md';
 
 ArbInfo ([Interface][arbinfo_link_interface] | [Implementation][arbinfo_link_implementation]) provides the ability to lookup basic info about accounts and contracts.
 
+Precompile address: `0x0000000000000000000000000000000000000065`
+
 import ArbInfoRef from './partials/precompile-tables/_ArbInfo.md';
 
 <ArbInfoRef />
@@ -127,6 +138,8 @@ import ArbInfoRef from './partials/precompile-tables/_ArbInfo.md';
 ### ArbosTest
 
 ArbosTest ([Interface][arbostest_link_interface] | [Implementation][arbostest_link_implementation]) provides a method of burning arbitrary amounts of gas, which exists for historical reasons. In Classic, `ArbosTest` had additional methods only the zero address could call. These have been removed since users don't use them and calls to missing methods revert.
+
+Precompile address: `0x0000000000000000000000000000000000000069`
 
 import ArbosTestRef from './partials/precompile-tables/_ArbosTest.md';
 
@@ -142,6 +155,8 @@ Most of Arbitrum Classic's owner methods have been removed since they no longer 
 - ArbOS upgrades happen with the rest of the system rather than being independent
 - Exemptions to address aliasing are no longer offered. Exemptions were intended to support backward compatibility for contracts deployed before aliasing was introduced, but no exemptions were ever requested.
 
+Precompile address: `0x0000000000000000000000000000000000000070`
+
 import ArbOwnerRef from './partials/precompile-tables/_ArbOwner.md';
 
 <ArbOwnerRef />
@@ -149,6 +164,8 @@ import ArbOwnerRef from './partials/precompile-tables/_ArbOwner.md';
 ### ArbOwnerPublic
 
 ArbOwnerPublic ([Interface][arbownerpublic_link_interface] | [Implementation][arbownerpublic_link_implementation]) provides non-owners with info about the current chain owners.
+
+Precompile address: `0x000000000000000000000000000000000000006b`
 
 import ArbOwnerPublicRef from './partials/precompile-tables/_ArbOwnerPublic.md';
 
@@ -158,6 +175,8 @@ import ArbOwnerPublicRef from './partials/precompile-tables/_ArbOwnerPublic.md';
 
 ArbRetryableTx ([Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation]) provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](arbos#Retryables).
 
+Precompile address: `0x000000000000000000000000000000000000006E`
+
 import ArbRetryableTxRef from './partials/precompile-tables/_ArbRetryableTx.md';
 
 <ArbRetryableTxRef />
@@ -166,6 +185,8 @@ import ArbRetryableTxRef from './partials/precompile-tables/_ArbRetryableTx.md';
 
 ArbStatistics ([Interface][arbstatistics_link_interface] | [Implementation][arbstatistics_link_implementation]) provides statistics about the chain as of just before the Nitro upgrade. In Arbitrum Classic, this was how a user would get info such as the total number of accounts, but there are better ways to get that info in Nitro.
 
+Precompile address: `0x000000000000000000000000000000000000006F`
+
 import ArbStatisticsRef from './partials/precompile-tables/_ArbStatistics.md';
 
 <ArbStatisticsRef />
@@ -173,6 +194,8 @@ import ArbStatisticsRef from './partials/precompile-tables/_ArbStatistics.md';
 ### ArbSys
 
 ArbSys ([Interface][arbsys_link_interface] | [Implementation][arbsys_link_implementation]) provides system-level functionality for interacting with L1 and understanding the call stack.
+
+Precompile address: `0x0000000000000000000000000000000000000064`
 
 import ArbSysRef from './partials/precompile-tables/_ArbSys.md';
 

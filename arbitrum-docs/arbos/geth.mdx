@@ -1,3 +1,7 @@
+---
+author: dzgoldman
+---
+
 # Geth
 
 Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This document will explore the relationship between Geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
@@ -103,10 +107,10 @@ The [`EndTxHook`][endtxhook_link] is called after the [`EVM`][evm_link] has retu
 
 ### [`APIBackend`][apibackend_link]
 
-APIBackend implements the [`ethapi.Bakend`][ethapi.bakend_link] interface, which allows simple integration of the Arbitrum chain to existing Geth API. Most calls are answered using the Backend member.
+APIBackend implements the [`ethapi.Backend`][ethapi.backend_link] interface, which allows simple integration of the Arbitrum chain to existing Geth API. Most calls are answered using the Backend member.
 
 [apibackend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34
-[ethapi.bakend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/internal/ethapi/backend.go#L42
+[ethapi.backend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/internal/ethapi/backend.go#L42
 
 ### [`Backend`][backend_link]
 

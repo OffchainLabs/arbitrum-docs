@@ -4,7 +4,6 @@ description: A reference providing details about the Stylus testnet and faucets 
 author: amarrazza
 sme: amarrazza
 target_audience: Developers building on the Stylus testnet
-sidebar_label: 'Testnet information'
 sidebar_position: 9
 ---
 

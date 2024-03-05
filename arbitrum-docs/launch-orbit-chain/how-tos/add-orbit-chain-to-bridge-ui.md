@@ -1,6 +1,5 @@
 ---
 title: "How to add your testnet Orbit chain to Arbitrum's bridge"
-sidebar_label: "Add your testnet chain to Arbitrum's bridge"
 description: "Learn how to add your testnet Orbit chain to Arbitrum's bridge."
 author: ojurkowitz
 sidebar_position: 2
