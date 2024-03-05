@@ -601,6 +601,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+          label: `Additional configuration parameters`,
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/reference/command-line-options',
           label: 'Command-line options',
         },
