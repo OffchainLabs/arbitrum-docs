@@ -10,18 +10,7 @@ sidebar_position: 2
 
 ### Anytrust Deployment
 
-Having previously covered the essentials of deploying Arbitrum Orbit chains and specifically focusing on Rollup Orbit chains, we now turn our attention to setting up an Anytrust Orbit chain. Anytrust chains represent a different model within the Arbitrum Orbit ecosystem, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains, please refer to the preceding sections or the dedicated page [here](#).
-
-#### Key Differences Between Rollup and Anytrust Chains
-
-Before diving into the deployment process, it's important to understand the key differences between Rollup and Anytrust chains:
-   
-1. **Data Availability**: The approach to data availability in Anytrust chains is distinct. On Anytrust members of a Data Availability Committee is responsible to keep the data of transactions but in Rollup chains, the data would be sent back the parent chain.
-
-2. **Security Guarantees**: Anytrust chains provide a different level of security guarantees, which might be more suitable for certain types of applications, such as gaming and social media.
-   
-3. **Fee Cost**: Anytrust chain is way more cheaper than Rollups because on Anytrust there's no need to send the data to the parent chain. This will open up opportunities for chains to host applications that need cheaper fees.
-   
+Having previously covered the essentials of deploying Arbitrum Orbit chains and specifically focusing on Rollup Orbit chains, we now turn our attention to setting up an Anytrust Orbit chain. Anytrust chains represent a different model within the Arbitrum Orbit ecosystem, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains, please refer to the preceding sections or the dedicated page [here](Introduction.md).
 
 #### Setting Up an Anytrust Orbit Chain Using Orbit SDK
 
