@@ -10,9 +10,9 @@ sidebar_position: 1
 
 **AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer.
 
-The DAC has _N_ members; the AnyTrust protocol assumes that a minimum of _H_ DAC members maintain integrity. _H_ is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for store to be considered successful.
+The DAC has _N_ members; the AnyTrust protocol assumes that a minimum of _H_ _DAC_ members maintain integrity. _H_ is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for storage to be considered successful.
 
-Each DAC member gets their own set of BLS public and private keys. It's important for every member to create their own new and secure BLS keys. They should do this on their own and make sure these keys are random and only for their use. If you need help generating BLS keys, check out our guide [here](https://docs.arbitrum.io/node-running/how-tos/running-a-daserver#generate-key).
+Each DAC member gets their own set of BLS public and private keys. It's important for every member to create their own new and secure BLS keys. They should do this on their own and make sure these keys are random and only for their use. If you need help generating BLS keys, please refer to our guide on generating keys in the Arbitrum documentation: [Generating BLS Keys](https://docs.arbitrum.io/node-running/how-tos/running-a-daserver#generate-key).
 
 The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a Data Availability Certificate. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See [Inside Anytrust](https://docs.arbitrum.io/inside-arbitrum-nitro/#inside-anytrust) for more information.
 
@@ -24,9 +24,9 @@ In the following section, we will provide a detailed guide on the generation of 
 
 AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro Batch Poster, you need to provide specific information for each committee member. This includes their URL, BLS public key, a unique single-bit identifier (bitmask) for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
 
-To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where N is the total number of committee members and H is the minimum number of members assumed to be honest.
+To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where _N_ is the total number of committee members and _H_ is the minimum number of members assumed to be honest.
 
-Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [here](https://developer.arbitrum.io/das/daserver-instructions#generate-key).
+Someone setting up an AnyTrust L3 would need to first set up the committee of Data Availability Servers, including generating their BLS keys. How to do that is described [in this guide](https://developer.arbitrum.io/das/daserver-instructions#generate-key).
 
 Here is a sample of the JSON configuration, taken from a past configuration of Arbitrum Nova, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`, and `signer-mask` fields. `pubkey` is the base64 encoded BLS public key of the committee member, and `signer-mask` should be a power of 2, starting from 2^0, 2^1, etc.
 
@@ -47,7 +47,7 @@ Here is a sample of the JSON configuration, taken from a past configuration of A
 
 ### Keyset Generation
 
-For the Batch Poster to be able to post batches, the keyset corresponding to the configuration it is using must be enabled on the Inbox contract. You’ll need to generate the keyset and keyset hash binary blobs to pass to the SetValidKeyset call on the Inbox contract. Here’s an example using the same Nova @Keyset 8 configuration as before, and the datool utility which is distributed with Nitro:
+For the Batch Poster to be able to post batches, the keyset corresponding to the configuration it is using must be enabled on the Inbox contract. You’ll need to generate the keyset and keyset hash binary blobs to pass to the `SetValidKeyset` call on the Inbox contract. Here’s an example using the same Nova @Keyset 8 configuration as before, and the datool utility which is distributed with Nitro:
 
 ```shell
 {
@@ -66,7 +66,7 @@ KeysetHash: 0xf8bb9a67839d1767e79afe52d21e97a04ee0bf5f816d5b52c10df60cccb7f822
 
 ### Example with single private key = zero
 
-For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and Sequencer configuration can be established as detailed below.
+For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and Sequencer configuration can be set as detailed below.
 
 #### Key
 
@@ -78,7 +78,7 @@ YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 #### Keyset
 
-Once in possession of the keys, it is imperative to generate the Keyset as previously outlined. For example, in the scenario involving a zero-valued private key, the Keyset configuration would be as follows:
+Once you've generated the keys, it is imperative to generate the Keyset as previously outlined. For example, in the scenario involving a zero-valued private key, the Keyset configuration would be as follows:
 
 ```shell
 Keyset: 0x00000000000000010000000000000001012160000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -89,7 +89,7 @@ Upon successfully generating the Keyset, it is essential to establish it within 
 
 The Keyset can be configured by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/bridge/SequencerInbox.sol#L466) method within the SequencerInbox contract.
 
-**Note** that only rollup owner can call this method to set the new valid keyset.
+**Note:** Only rollup owner(s) can call this method to set the new valid keyset.
 
 #### Sequencer Configuration
 
