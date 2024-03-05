@@ -12,7 +12,7 @@ sidebar_position: 0
 
 Dive into the forefront of decentralized blockchain development with the Arbitrum Orbit SDK, a comprehensive toolkit designed for developers eager to explore the innovative Arbitrum Orbit platform. This SDK facilitates the creation and management of your own Orbit chain using the advanced capabilities of Viem, a modern alternative to traditional Ethereum libraries like ethers.js and web3.js.
 
-## Embracing Flexibility and Power with Arbitrum Orbit
+## Arbitrum Orbit chains
 
 With the Arbitrum Orbit SDK, you have the flexibility to establish your Orbit chain as a Layer 3 (L3) chain settling transactions with any Layer 2 (L2) chains, or as a Layer 2 (L2) chain directly settling on Layer 1 (L1) chains. This adaptability opens up a realm of possibilities for application development and blockchain use cases.
 
