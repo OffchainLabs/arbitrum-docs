@@ -27,28 +27,37 @@ The SDK is developed using TypeScript, providing a strong foundation for your de
 
 By choosing the Arbitrum Orbit SDK, you're not just accessing a set of development tools; you're unlocking a universe of opportunities to create bespoke blockchain projects tailored to your needs. Stay tuned for more exciting updates and features as we continue to enhance the Arbitrum Orbit SDK, making it an even more powerful resource for developers.
 
+Below, you will find detailed information about the steps for setting up an Orbit chain and how to utilize the Orbit SDK throughout the process:
+
 ### 1. Orbit Chain Deployment
-The main functionality of Orbit SDK would be deployment of a new Orbit chain. The first step to setup an Orbit chain would be deciding which kind of Orbit fits your needs. We generally have four different types of Orbit chains:
-1. **Rollup Orbit chains**: This is the most straight kind of Orbit chains. In these types of orbit chains, the transaction data would be batched and compressed and posted to the parent chain. These chains would be similar to Arbitrum One chain as a rollup chain. You can find steps of a rollup chain deployment on [this](deployment-rollup.md) page.
-2. **Anytrust Orbit chains**: In Anytrust Orbit chains, the logic would be the same as a rollup but batches would not be posted to the parent chain directly. It would be stored in a Data Availability Committee (DAC) to reduce the fees need to be paid for transactions. The main differences between an Anytrust chain and a rollup chain is:
-   
-   1. **Data Availability**: The approach to data availability in Anytrust chains is distinct. On Anytrust members of a Data Availability Committee is responsible to keep the data of transactions but in Rollup chains, the data would be sent back the parent chain.
 
-   2. **Security Guarantees**: Anytrust chains provide a different level of security guarantees, which might be more suitable for certain types of applications, such as gaming and social media.
-   
-   3. **Fee Cost**: Anytrust chain is way more cheaper than Rollups because on Anytrust there's no need to send the data to the parent chain. This will open up opportunities for chains to host applications that need cheaper fees.
-   
-   You can find steps of a rollup chain deployment on [this](deployment-anytrust.md) page.
+A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer four distinct types of Orbit chains:
 
-3. **Custom gas token Orbit chains**: Deploying a Custom Gas Token Orbit chain introduces a unique aspect to the standard Orbit chain setup – the ability to pay transaction fees using a specific ERC20 token instead of ETH. While the setup process largely mirrors that of a standard Rollup Orbit chain (as detailed on [this](deployment-rollup.md) page), there are key differences to account for when configuring a Custom Gas Token Orbit chain. You can find the details for setup Custpm gas token orbit chain [here](deployment-custom-gas-token.md)
-**Important Note** Custom gas token Orbit chains can be just Anytrust chains and you cannot have a Rollup Orbit with custom gas fee token.
-4. **Orbit chains with outsourced DA layers**: The other type of Orbit chains would be advantaging 3rd party Data Availability (DA) layers to send the transaction data instead of posting them to parent chain (rollup chains) or keeping them on a DAC Committee (Anytrust chains). There are some solutions that you can use and support Orbit chains for this purpose such as Celestia.
+1. **Rollup Orbit Chains**: These are the most straightforward Orbit chains. In this type, transaction data is batched, compressed, and posted to the parent chain, akin to the Arbitrum One chain as a rollup chain. Detailed steps for deploying a rollup chain can be found [here](deployment-rollup.md).
+
+2. **Anytrust Orbit Chains**: Anytrust Orbit chains share a similar logic with rollup chains but with a key difference: batches are not posted directly to the parent chain. Instead, they are stored by a Data Availability Committee (DAC) to reduce transaction fees. The main differences between an Anytrust chain and a rollup chain are:
+   
+   - **Data Availability**: Anytrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
+
+   - **Security Guarantees**: Anytrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
+
+   - **Fee Cost**: Anytrust chains are significantly cheaper than Rollup chains because there's no need to send data to the parent chain, facilitating cheaper transaction fees for applications.
+   
+   Steps for deploying an Anytrust chain are available [here](deployment-anytrust.md).
+
+3. **Custom Gas Token Orbit Chains**: This type allows transaction fees to be paid with a specific ERC20 token instead of ETH. Although the setup process is similar to that of a standard Rollup Orbit chain, there are important distinctions to consider. Details for setting up a Custom Gas Token Orbit chain can be found [here](deployment-custom-gas-token.md). 
+**Important Note**: Custom Gas Token Orbit chains can only be Anytrust chains; a Rollup Orbit chain cannot use a custom gas fee token.
+
+4. **Orbit Chains with Outsourced DA Layers**: These chains leverage third-party Data Availability (DA) layers for transmitting transaction data, instead of posting them directly to the parent chain (as in rollup chains) or storing them on a DAC (as in Anytrust chains). Solutions like Celestia can be used to support Orbit chains for this purpose.
 
 ### 2. Node Configuration Preparation
-After the deployment phase, the next step would be initializing the chain. To initialize the chain, you need to create a config JSON file based on your chain deployment setup. In this [page](node-config-preparation.md) we explained how to generate node config for your chain using Orbit SDK.
+
+Following the deployment phase, the next step involves initializing the chain. This requires creating a configuration JSON file based on your chain deployment setup. We explain how to generate a node config for your chain using the Orbit SDK on [this page](node-config-preparation.md).
 
 ### 3. Token Bridge Deployment
-To bridge ERC-20 tokens in and out of Arbitrum chains, we have a set of contracts to handle this bridging. More information about Token Bridging can be found on our [docs](../../for-devs/concepts/token-bridge/token-bridge-erc20.mdx).
-So to enable token bridging on an Orbit chain the fist step would be deployment of token bridge contracts which is explained on this [page](token-bridge-deployment.md).
+
+To facilitate the bridging of ERC-20 tokens in and out of Arbitrum chains, we utilize a set of contracts designed for this purpose. Detailed information about token bridging is available in our [docs](../../for-devs/concepts/token-bridge/token-bridge-erc20.mdx). The first step to enable token bridging on an Orbit chain is the deployment of token bridge contracts, as explained [here](token-bridge-deployment.md).
+
 ### 4. Orbit Chain Configuration
-After chain deployment, initializing the chain and token bridge deploytment the chain owner needs to configure their Orbit chain based on the desired setup. On this [page](orbit-chain-configuration.md) we explained how you can configure your orbit chain.
+
+After deploying the chain, initializing it, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. We detail how you can configure your Orbit chain on [this page](orbit-chain-configuration.md).
