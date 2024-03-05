@@ -1,3 +1,5 @@
+// If you are making any changes to these docs, please ensure you run "yarn generate_precompiles_ref_tables"!
+
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
@@ -12,7 +14,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.2.4-8517340',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.3.0-3e14543',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -29,14 +31,14 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v2.2.4',
+  nitroVersionTag: 'v2.2.5',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '0a149d2af9aee566c4abf493479ec15e5fc32d98',
+  nitroContractsCommit: '9a6bfad2363322099d399698751551ff044c7a72',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
-  goEthereumCommit: '1e2855b24d6555c8cfaf471bd9e2c3d19ab5c32c',
+  goEthereumCommit: '657dcf66263e940e86f9e89325c5100899d5ab58',
 
   nitroPathToArbosState: 'arbos/arbosState',
   nitroPathToStorage: 'arbos/storage',
@@ -87,6 +89,9 @@ const globalVars = {
   novaBlockGasLimit: '32,000,000',
   goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
+
+  // portal application form
+  portalApplicationForm: 'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
 };
 
 function blocksToMinutes(blocks) {

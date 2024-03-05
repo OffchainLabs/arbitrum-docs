@@ -1,25 +1,6 @@
 @use './_mixins.scss' as *;
 
-[class*='launch-a-chain'] {
-  table {
-    @include medium-table;
-  }
-}
-
-[class*='orbit-quickstart'],
-[class*='orbit-gentle-introduction'],
-[class*='contribute'],
-[class*='opcode-hostio-pricing'] {
-  table {
-    @include small-table;
-  }
-}
-
 [class*='quickstart-solidity-hardhat'] {
-  table {
-    @include small-table;
-  }
-
   .vending-machine {
     border-radius: 5px;
     display: flex;

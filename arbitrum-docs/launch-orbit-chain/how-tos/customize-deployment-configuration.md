@@ -1,7 +1,6 @@
 ---
-title: "How (and when) to customize your Orbit chain's deployment configuration"
-sidebar_label: "Customize your chain's deployment config"
-description: "Learn how (and when) to customize your Orbit chain's deployment configuration in the Orbit chain deployment portal."
+title: "How to customize your Orbit chain's deployment configuration"
+description: "Learn how to customize your Orbit chain's deployment configuration in the Orbit chain deployment portal."
 author: symbolpunk
 sidebar_position: 1
 ---
@@ -9,10 +8,6 @@ sidebar_position: 1
 import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
-
-import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md';
-
-<UnderConstructionPartial />
 
 When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
 
@@ -42,7 +37,7 @@ Note that the challenge period is measured in blocks on the underlying L1 chain,
 
 <!-- todo: revisit and discuss defaults -->
 
-### Gas Token
+### Gas token
 
 The `Gas Token` parameter specifies the token (ETH or an ERC-20 token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the gas token is ETH. Orbit chains that are configured as AnyTrust chains can specify a different gas token as long as it falls within certain requirements.
 
@@ -88,6 +83,6 @@ Note that **you'll have to fund this address** with enough ETH to cover the gas 
 
 When deploying your Orbit chain, this address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
 
-## Additional Configuration Parameters
+## Additional configuration parameters
 
 There are a number of [additional parameters](/launch-orbit-chain/reference/additional-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.

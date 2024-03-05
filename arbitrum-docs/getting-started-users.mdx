@@ -1,12 +1,10 @@
 ---
-title: 'Quickstart: Bridge funds using the Arbitrum bridge'
+title: 'Quickstart: Arbitrum bridge'
 description: "Learn how to use Arbitrum's bridge to transfer ETH or ERC-20 tokens between a parent chain and a child chain"
 author: mahsamoosavi
+user_story: As a user, I want to learn how to use Arbitrum's bridge to transfer ETH or ERC-20 tokens between a parent chain and a child chain
+content_type: quickstart
 ---
-
-import PublicPreviewBannerPartial from './partials/_public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 This quickstart is for users who want to "deposit" ETH or any ERC-20 tokens from a parent chain to a child chain (for example, from Ethereum to Arbitrum One, or from Arbitrum One to a Layer 3 Orbit chain), or "withdraw" from a child chain to a parent chain, using [Arbitrum's bridge](https://bridge.arbitrum.io/).
 
@@ -46,7 +44,11 @@ Here we display the information of the most common Arbitrum chains, but you can 
 
 To bridge your ETH or ERC-20 tokens to a different chain, start by visiting [bridge.arbitrum.io](https://bridge.arbitrum.io/). Log in to the bridge with your wallet and make sure you are connected to the source network (from where you want to deposit your assets) at the top of the page. Then, select the destination network (where you want your assets to go), e.g., Arbitrum One or Arbitrum Nova.
 
-⚠️ Note that testnets like Arbitrum Sepolia or Arbitrum Goerli only appear if you are connected to the appropriate parent testnet network (Ethereum Sepolia or Ethereum Goerli).
+:::caution
+
+Note that testnets like Arbitrum Sepolia or Arbitrum Goerli only appear if you are connected to the appropriate parent testnet network (Ethereum Sepolia or Ethereum Goerli).
+
+:::
 
 ![Add the desired network to your web3 wallet](assets/getting_started_users_2.png)
 
@@ -78,7 +80,11 @@ For more details, see [here](https://docs.arbitrum.io/for-users/troubleshooting-
 
 To bridge your funds back to the parent chain, you'll need to be logged in to the [Arbitrum bridge](https://bridge.arbitrum.io/) with your wallet and make sure you are connected to the source network (from where you want to withdraw assets) at the top of the page. Then, select the destination network (where you want your assets to go), e.g., Ethereum mainnet.
 
-⚠️ Note that testnets like Ethereum Sepolia or Ethereum Goerli only appear if you are connected to the appropriate child testnet network (Arbitrum Sepolia or Arbitrum Goerli).
+:::caution
+
+Note that testnets like Ethereum Sepolia or Ethereum Goerli only appear if you are connected to the appropriate child testnet network (Arbitrum Sepolia or Arbitrum Goerli).
+
+:::
 
 ![Select the token to withdraw](assets/getting_started_users_5.png)
 

@@ -1,9 +1,8 @@
 ---
-title: 'Oracles'
-sidebar_label: Oracles
+title: 'Oracles reference'
 description: An overview of popular oracles that exist in the Arbitrum ecosystem
-reader-audience: developers who want to build on Ethereum/Arbitrum
-content-type: overview
+user_story: As a developer, I want to understand what oracles are available in the Arbitrum ecosystem.
+content_type: overview
 ---
 
 import KnowMoreToolsBox from '../partials/_know-more-tools-box-partial.md';
@@ -12,26 +11,9 @@ import KnowMoreToolsBox from '../partials/_know-more-tools-box-partial.md';
 
 The following [oracles](../../for-devs/concepts/oracles.mdx) will help you integrate off-chain data into your decentralized apps (dApps):
 
-## Chainlink
-
-[Chainlink](https://chain.link/) is a widely-recognized Web3 services platform that specializes in decentralized oracle networks. It lets you build Ethereum and Arbitrum dApps that connect to a variety of off-chain data feeds and APIs, including those that provide asset prices, weather data, random number generation, and more.
-
-You can find an example on how to use Chainlink in your project in [this page](../../devs-how-tos/how-to-use-oracles.mdx).
-
-## API3
-
-[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for Airnodes to push off-chain data to on-chain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through dAPIs (data feeds of up-to-date off-chain data).
-
-You can find an example on how to use API3 in your project in [this page](../../devs-how-tos/how-to-use-oracles.mdx).
-
-## Tellor
-
-[Tellor](https://tellor.io/) is a decentralized oracle network that incentivizes an open, permissionless network of data reporting and validation, ensuring that any verifiable data can be brought on-chain. It supports basic spot prices, sophisticated pricing specs (TWAP/VWAP), Snapshot Vote Results, and custom data needs.
-
-You can find an example on how to use Tellor in your project in [this page](../../devs-how-tos/how-to-use-oracles.mdx).
-
-## Supra
-
-[Supra](https://supraoracles.com/) is a novel, high-throughput Oracle & IntraLayer: A vertically integrated toolkit of cross-chain solutions (data oracles, asset bridges, automation network, and more) that interlink all blockchains, public (L1s and L2s) or private (enterprises).
-
-Learn more [here](https://supraoracles.com/docs/overview/).
+| Name      | Description                                                                                                                                                                                                                                                                                  | Example/Documentation                                                       |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Chainlink | Chainlink is a widely-recognized Web3 services platform specializing in decentralized oracle networks. It enables building Ethereum and Arbitrum dApps that connect to a variety of off-chain data feeds and APIs, including asset prices, weather data, random number generation, and more. | [How to use Chainlink](../../devs-how-tos/how-to-use-oracles.mdx#chainlink) |
+| API3      | API3 is a collaborative project delivering traditional API services to smart contract platforms in a decentralized and trust-minimized way. It offers technology for Airnodes to push off-chain data to on-chain contracts, and the data can be queried directly through Airnodes or dAPIs.  | [How to use API3](../../devs-how-tos/how-to-use-oracles.mdx#api3)           |
+| Tellor    | Tellor is a decentralized oracle network that incentivizes data reporting and validation. It supports a range of data types, including basic spot prices, sophisticated pricing specs (TWAP/VWAP), Snapshot Vote Results, and custom data needs.                                             | [How to use Tellor](../../devs-how-tos/how-to-use-oracles.mdx#tellor)       |
+| Supra     | Supra is an Oracle & IntraLayer offering a toolkit of cross-chain solutions such as data oracles, asset bridges, and automation networks. It aims to interlink all blockchains, whether public (L1s and L2s) or private (enterprises).                                                       | [Supra Overview](https://supraoracles.com/docs/overview/)                   |

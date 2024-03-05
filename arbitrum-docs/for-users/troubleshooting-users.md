@@ -1,9 +1,9 @@
 ---
-title: 'Troubleshooting: Bridge funds using the Arbitrum Bridge'
-sidebar_label: 'Troubleshooting'
+title: 'Troubleshooting: Arbitrum bridge'
 description: List of questions and answers frequently asked by users
-reader_audience: end users who want to use, or are using, Arbitrum
-content-type: faq
+author: dzgoldman
+user_story: As an Arbitrum bridge user, I want to understand how to troubleshoot common issues.
+content_type: troubleshooting
 ---
 
 import FAQStructuredData from '@site/src/components/FAQStructuredData';

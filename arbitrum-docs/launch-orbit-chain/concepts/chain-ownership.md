@@ -1,6 +1,5 @@
 ---
 title: 'Orbit chain ownership'
-sidebar_label: 'Chain ownership'
 description: 'Overview of the technical architecture of chain ownership affordances on Orbit chains.'
 author: dzgoldman
 sme: dzgoldman
