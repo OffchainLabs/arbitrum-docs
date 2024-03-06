@@ -8,7 +8,11 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 1
 ---
 
-### Orbit Core Contracts Deployment (Rollup)
+This section is tailored for developers eager to initiate a `Rollup Orbit` chain. The deployment process involves a series of essential steps, meticulously outlined in the forthcoming documentation.
+
+For those inclined towards a hands-on approach, preferring to dive directly into coding without an extensive tutorial, we recommend exploring [this example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) found in the Orbit SDK repository. It provides a practical demonstration of deploying a Rollup Orbit chain from the ground up.
+
+### Rollup Orbit chain deployment
 The primary and most crucial function of our Orbit SDK is to streamline the deployment of core contracts essential for Orbit chains. Each Orbit chain requires a set of fundamental contracts to be deployed on its parent chain. This set includes Bridge contracts, Rollup contracts, and contracts designed to handle fraud proofs. These smart contracts are the backbone of the Arbitrum Nitro stack, ensuring its robust and efficient operation. You can explore these contracts in detail in the GitHub repository: [OffchainLabs/nitro-contracts](https://github.com/OffchainLabs/nitro-contracts). Beyond the deployment stage, the Orbit SDK also takes charge of the necessary initializations and configurations. This means that after the core contracts are successfully deployed, the SDK facilitates their setup and fine-tuning, ensuring that your Orbit chain is not only up and running but also optimized for performance and functionality. This comprehensive approach by the Orbit SDK makes the process of launching and managing an Orbit chain more accessible and efficient.
 
 To streamline the deployment process and make it more efficient, we've developed a key smart contract known as the [RollupCreator contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCreator.sol). This contract plays a vital role in setting up Orbit chains and has two primary functions:
