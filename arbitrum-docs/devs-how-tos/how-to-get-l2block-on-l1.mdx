@@ -1,0 +1,171 @@
+---
+title: 'How to verify child chain state on parent chain'
+description: Learn how to integrate oracles into your Arbitrum dapp
+user_story: As a developer, I want to understand how to verify child chain state on parent chain.
+content_type: how-to
+---
+
+Arbitrum implements fraud proof system. This system can ensure that the state of child chain will be safely maintained by parent chain. In this system, the validator will send the state information on child chain to parent chain from time to time.
+Used by the challenge system, those information is included in a structure called rblock and assertion (see the [documentation](../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#arbitrum-rollup-protocol) for details), so we can read and decode the rblock/assertion on parent chain to extract the information which can be used for the parent chain on-chain contract or off-chain tool validation.
+
+Before we begin, we will introduce the key component: rblock, assertion and send roots.
+
+# Rblock and Assertion
+
+The rollup contract contains a series of components used to maintain the operation of the layer2 network, including rblocks.
+
+Here is what an rblock contains:
+
+```
+struct Node {
+    // Hash of the state of the chain as of this node
+    bytes32 stateHash;
+    // Hash of the data that can be challenged
+    bytes32 challengeHash;
+    // Hash of the data that will be committed if this node is confirmed
+    bytes32 confirmData;
+    // Index of the node previous to this one
+    uint64 prevNum;
+    // Deadline at which this node can be confirmed
+    uint64 deadlineBlock;
+    // Deadline at which a child of this node can be confirmed
+    uint64 noChildConfirmedBeforeBlock;
+    // Number of stakers staked on this node. This includes real stakers and zombies
+    uint64 stakerCount;
+    // Number of stakers staked on a child node. This includes real stakers and zombies
+    uint64 childStakerCount;
+    // This value starts at zero and is set to a value when the first child is created. After that it is constant until the node is destroyed or the owner destroys pending nodes
+    uint64 firstChildBlock;
+    // The number of the latest child of this node to be created
+    uint64 latestChildNumber;
+    // The block number when this node was created
+    uint64 createdAtBlock;
+    // A hash of all the data needed to determine this node's validity, to protect against reorgs
+    bytes32 nodeHash;
+}
+```
+
+When creating a new rblock, a new assertion will be made too:
+
+```
+struct Assertion {
+    ExecutionState beforeState;
+    ExecutionState afterState;
+    uint64 numBlocks;
+}
+```
+
+As we can see above, an rblock has a series of field, they are useful when validators try to challenge or confirm this rblock.
+What we can use here is the `confirmData`, the `confirmData` is the keccak256 hash of child chain block Hash and sendRoot.
+As for Assertion, it has 2 `ExecutionState` which is the start state and the end state of this assertion, and `ExecutionState` contains the information about child chain blockhash and related sendroot, so we can extract `blockhash` from there.
+
+# Send roots
+
+The send root mapping is stored in the outbox contract. This mapping is used to store the Merkle root of each batch of child chain -> parent chain transactions called send root and its corresponding child chain block hash.
+
+When an rblock is confirmed, the corresponding send root will be recorded to outbox contract from rollup contract so when an user wants to triger the child chain -> parent chain transaction on parent chain the transaction requests can be verified.
+
+```
+mapping(bytes32 => bytes32) public roots; // maps root hashes => child chain block hash
+```
+
+This mapping will save the `blockhash`, so we can get the child chain blockhash from the outbox contract too.
+
+# Verify child chain state on parent chain
+
+Assume that there is a contract called `foo` on child chain, and its contract address is `fooAddress`, now we want to prove its state value at storage `slot`.
+
+To verify the state, we need a Merkle Trie Verifier contract, one example is [Lib_MerkleTrie.sol](https://github.com/ethereum-optimism/optimism-legacy/blob/8205f678b7b4ac4625c2afe351b9c82ffaa2e795/packages/contracts/contracts/libraries/trie/Lib_MerkleTrie.sol).
+
+## 1. How to verify a confirmed child chain block hash
+
+For the security of verification, we will use the latest confirmation instead of the latest proposed rblock for verification:
+
+- Obtain the latest confirmed rblock from rollup contract: `nodeIndex = rollup.latestConfirmed()`, this step will return the corresponding rblock number: `nodeIndex`
+- Filter the event with the obtained rblock number: `nodeEvent = NodeCreated(nodeIndex)`, and get the corresponding assertion information: `assertion = nodeEvents[0].args.assertion`
+- Fetch blockhash via `blockhash = GlobalStateLib.getBlockHash(assertion.afterState.globalState)` (As mentioned above, you can also get the block hash from the outbox contract)
+- Fetch sendRoot via `sendRoot = GlobalStateLib.getSendRoot(assertion.afterState.globalState)`
+- After getting the blockhash, we need to compare it with the confirmdata in rblock, to get the confirm data: `confirmdata = keccak256(solidityPack(['bytes32','bytes32'], [blockHash, sendRoot]))`
+- Get the corresponding rblock: `rblock = rollup.getNode(nodeIndex)`
+- Compare if they have the same value: `rblock.confirmData == confirmdata`
+
+## 2. Proof the state root belong to the child chain block hash by supplying the blockheader
+
+After we obtain the block hash, we can obtain the corresponding block information from child chain provider: `l2blockRaw = eth_getBlockByHash (blockhash)`
+
+Next, we need to manually derive blockhash by hashing block header fields.
+
+```
+blockarray = [
+    l2blockRaw.parentHash,
+    l2blockRaw.sha3Uncles,
+    l2blockRaw.miner,
+    l2blockRaw.stateroot,
+    l2blockRaw.transactionsRoot,
+    l2blockRaw.receiptsRoot,
+    l2blockRaw.logsBloom,
+    BigNumber.from(l2blockRaw.difficulty).toHexString(),
+    BigNumber.from(l2blockRaw.number).toHexString(),
+    BigNumber.from(l2blockRaw.gasLimit).toHexString(),
+    BigNumber.from(l2blockRaw.gasUsed).toHexString(),
+    BigNumber.from(l2blockRaw.timestamp).toHexString(),
+    l2blockRaw.extraData,
+    l2blockRaw.mixHash,
+    l2blockRaw.nonce,
+    BigNumber.from(l2blockRaw.baseFeePerGas).toHexString(),
+    ]
+```
+
+- Calculate the block hash to verify whether the information in the obtained block is correct: `calculated_blockhash = keccak256(RLP.encode(blockarray))`
+- Verify whether the block hash is same with what we got from assertion or outbox contract: `calculated_blockhash === blockHash`
+
+If it is same, it can be used to prove that the information in the block header, especially the stateroot, is correct.
+
+## 3. Proof the account storage inside the state root
+
+After we obtain the correct state root, we can continue to verify the storage slot.
+
+- First, we need to obtain the proof of the corresponding state root from child chain:
+
+```
+proof = l2provider.send('eth_getProof', [
+    fooAddress,
+    [slot],
+    {blockHash}
+  ]);
+```
+
+- Get account proof: `accountProof = RLP.encode(proof.accountProof)`
+- Get proofKey: `proofKey = ethers.utils.keccak256(fooAddress)`
+- Call the verifier contract to verify:
+
+```
+[acctExists, acctEncoded] = verifier.get(
+    proofKey, accountProof, stateroot
+  )
+```
+
+- Check for equality: `acctExists == true`
+
+## 4. Proof the storage slot is in the account root
+
+- Get storage root: `storageRoot = RLP.decode(acctEncoded)[2]`
+- Get storage slot key: `slotKey = ethers.utils.keccak256(slot)`
+- Get storageProof: `storageProof = ethers.utils.RLP.encode((proof.storageProof as any[]).filter((x)=>x.key===slot)[0].proof)`
+- Call the merkle verifier contract to verify:
+
+```
+const [storageExists, storageEncoded] = await verifier.get(
+    slotKey, storageProof, storageRoot
+  )
+```
+
+- Check for equality: `storageExists == true`
+- Obtain the value of the storage as `slot`: `storageValue = ethers.utils.RLP.decode(storageEncoded)`
+
+Then we can successfuly prove and get a certain state value at a specific block height on child chain through parent chain.
+
+### Let's check this value on child chain directly
+
+- Call child chain rpc provider to get the value of the corresponding block number: `actualValue = l2provider.getStorageAt(fooAddress, slot, l2blockRaw.number)`
+- Check for equality: `storageValue === BigNumber.from(actualValue).toHexString()`
