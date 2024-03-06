@@ -160,7 +160,7 @@ In this section, we'll provide detailed explanations of the various chain config
 
 While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to contact us for further details and support.
 
-### Configuration of Rollup Params and Deployment on Orbit SDK
+<h3 id="rollup-config-param">Configuration of Rollup Params and Deployment on Orbit SDK</h3>
 
 In order to facilitate the configuration and deployment of Rollup parameters for an Orbit chain, the Orbit SDK provides two essential APIs: `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
 
