@@ -10,7 +10,7 @@ sidebar_position: 2
 
 ### Anytrust Deployment
 
-Having previously covered the essentials of deploying Arbitrum Orbit chains and specifically focusing on Rollup Orbit chains (on rollup deployment [doc](deployment-rollup.md)), we now turn our attention to setting up an Anytrust Orbit chain. Anytrust chains represent a different model within the Arbitrum Orbit ecosystem, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the difference between Orbit chain types, please refer the [introduction](Introduction.md) page.
+Having previously covered the essentials of deploying Arbitrum Orbit chains and specifically focusing on Rollup Orbit chains (on rollup deployment [doc](deployment-rollup.md)), we now turn our attention to setting up an Anytrust Orbit chain. Anytrust chains represent a different model within the Arbitrum Orbit ecosystem, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the difference between Orbit chain types, please refer the [introduction](introduction.md) page.
 
 #### Setting Up an Anytrust Orbit Chain Using Orbit SDK
 
