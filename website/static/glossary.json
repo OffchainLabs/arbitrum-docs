@@ -383,10 +383,6 @@
         "title": "Underlying Chain",
         "text": "<p>Synonymous with <a href=\"/intro/glossary#parent-chain\">Parent chain</a>.</p>"
     },
-    "upgrade-executor": {
-        "title": "Upgrade Executor",
-        "text": "<p>A reusable smart contract which can be used to set up a system for performing upgrades on Orbit chains; Refer to  <a href=\"https://github.com/OffchainLabs/upgrade-executor\">The Upgrade Executor GitHub repository</a> to learn more.</p>"
-    },
     "validator": {
         "title": "Validator",
         "text": "<p>An <a href=\"/intro/glossary#arbitrum-full-node\">Arbitrum Full Node</a> that tracks the status of the chains' <a href=\"/intro/glossary#assertion\">Assertion</a>s. A validator may be a <a href=\"/intro/glossary#watchtower-validator\">Watchtower Validator</a>, a <a href=\"/intro/glossary#defensive-validator\">Defensive Validator</a>, or an <a href=\"/intro/glossary#active-validator\">Active Validator</a>. </p>"
