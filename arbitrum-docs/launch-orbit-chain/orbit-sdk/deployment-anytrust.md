@@ -7,6 +7,9 @@ sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 2
 ---
+This section is crafted specifically for developers who are prepared to embark on the `Anytrust Orbit` chain implementation. The deployment procedure encompasses a sequence of critical steps, which are elaborately delineated in the subsequent documentation.
+
+For individuals who favor an immediate hands-on coding experience, [this example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) located in the Orbit SDK repository illustrates the process of setting a keyset for their chain. The process of Anytrust chain deployment is very similar to the [Rollup Orbit deployment example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) but with some differences that will be explained below.
 
 ### Anytrust Deployment
 
