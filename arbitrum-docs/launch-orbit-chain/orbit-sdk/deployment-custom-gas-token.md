@@ -7,6 +7,9 @@ sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 3
 ---
+For developers ready to start setting up a `Custom gas token Orbit` chain, this part of the document outlines the necessary steps for deployment in a straightforward manner.
+
+If you prefer to learn by code and want to skip the detailed guides, we recommend checking out [this example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) in the Orbit SDK repository. It's a practical, step-by-step guide to getting a Custom gas token Orbit chain running from scratch.
 
 ### Custom gas token Orbit Deployment
 Deploying a Custom Gas Token Orbit chain introduces a unique aspect to the standard Orbit chain setup – the ability to pay transaction fees using a specific ERC20 token instead of ETH. While the setup process largely mirrors that of a standard Rollup Orbit chain (as detailed on the page 1), there are key differences to account for when configuring a Custom Gas Token Orbit chain.
