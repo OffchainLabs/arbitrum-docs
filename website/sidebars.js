@@ -211,6 +211,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Verify state on parent chain',
+          id: 'devs-how-tos/how-to-get-l2block-on-l1',
+        },
+        {
+          type: 'doc',
           label: 'Chains and testnets',
           id: 'for-devs/concepts/public-chains',
         },
