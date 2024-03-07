@@ -49,7 +49,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - If the chain is running [ArbOS 20](/node-running/reference/arbos-software-releases/arbos20.mdx), additionally use the parameter `--parent-chain.blob-client.beacon-url=<Layer 1 Ethereum Beacon RPC URL>` for consensus layer. You can find a list of beacon chain RPC providers [here](/node-running/reference/ethereum-beacon-rpc-providers.mdx).
   - It must provide a standard layer 1 node RPC endpoint that you run yourself or from a node provider.
   - Note: this parameter was called `--l1.url` in versions prior to `v2.1.0`
-  - Note: the ethereum consensus layer client Caplin is not compatible with nitro node due to some response type format reasons
+  - Note: the Ethereum consensus layer client Caplin is not compatible with Nitro node software due to an issue with response type formatting.
 - L2 chain id or name
   - Use the parameter `--chain.id=<L2 chain ID>` to set the L2 chain from its chain id. See [RPC endpoints and providers](/node-running/node-providers.mdx#rpc-endpoints) for a list of Arbitrum chains and their respective L2 chain ids.
   - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the L2 chain from its name (options are: `arb1`, `nova`, `sepolia-rollup` and `goerli-rollup`)
