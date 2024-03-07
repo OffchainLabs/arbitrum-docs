@@ -48,9 +48,33 @@ In the above example, `rollupContractAddress` refers to the Orbit chain's rollup
 Following the creation of the raw transaction, the next steps involve signing it and broadcasting it to the relevant blockchain network to complete the deployment process.
 
 ### 2. Transaction recipient and checking for deployment on child chain
-createTokenBridgePrepareTransactionReceipt
+Following the dispatch of the deployment transaction, it's crucial to retrieve the transaction receipt and verify the successful deployment of the contracts on both the parent and child chains. Our Orbit SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient. An illustrative use of this API is as follows:
 
-waitForRetryables
+```bash
+const txReceipt = createTokenBridgePrepareTransactionReceipt(
+  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
+);
+```
+
+In this scenario, **txHash** represents the hash of the deployment transaction initiated in the previous step. The `waitForTransactionReceipt` API from Viem is utilized to capture the transaction's recipient on the parent chain. The `createTokenBridgePrepareTransactionReceipt` API enhances the basic functionality provided by Viem's `waitForTransactionReceipt`, introducing a specialized method named `waitForRetryables` to handle the outcome (in this case, **txReceipt**).
+
+By employing the `waitForRetryables` method, one can ascertain the success of Retryable tickets on the parent chain. Here is how to use this API effectively:
+
+```bash
+const orbitChainRetryableReceipts = await txReceipt.waitForRetryables({
+  orbitPublicClient: orbitChainPublicClient,
+});
+
+if (orbitChainRetryableReceipts[0].status !== 'success') {
+  throw new Error(
+    `Retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`,
+  );
+}
+
+console.log(`Retryable executed successfully`);
+```
+
+In this example, the `waitForRetryables` method is invoked on the **txReceipt** to monitor the execution of Retryable tickets and verify their status. A status of "success" indicates that the Retryable tickets have been executed successfully, ensuring the contracts' deployment. It's important to note that this process involves two Retryable tickets, and a more comprehensive walkthrough is available in [this segment](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1e39d21eef57d204bfa609c4c29284528ddf05ac/examples/create-token-bridge-eth/index.ts#L78-L104) of the example. This enhanced approach not only simplifies the retrieval of transaction receipts but also provides a reliable method for verifying contract deployment across chains.
 
 ### 3. Deployment information and contract addresses
 getTokenBridgeContracts
