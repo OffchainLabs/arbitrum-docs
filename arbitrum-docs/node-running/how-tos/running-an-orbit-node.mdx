@@ -8,17 +8,17 @@ content_type: how-to
 
 This how-to provides step-by-step instructions for running an Orbit node on your local machine.
 
-### Minimum hardware configuration
+## Minimum hardware configuration
 
 - **RAM**: 8-16 GB
 - **CPU**: 2-4 core CPU (For AWS: t3 xLarge)
 - **Storage**: It depends on the Orbit chain and its traffic during the time.
 
-### Prerequisites
+## Prerequisites
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
-### Required parameters
+## Required parameters
 
 - Parent chain RPC URL
   - Use the parameter `--parent-chain.connection.url=<Parent chain RPC URL>`
@@ -30,7 +30,7 @@ This how-to provides step-by-step instructions for running an Orbit node on your
   - `--chain.name=<My Arbitrum L3 Chain>` must be provided, and it must match the chain name that is used in `--chain.info-json` content.
   - For an Anytrust chain, it is essential to provide `--node.data-availability.enable`.
 
-### Important ports
+## Important ports
 
 - RPC: `8547`
 - Sequencer Feed: `9642`
@@ -40,7 +40,7 @@ This how-to provides step-by-step instructions for running an Orbit node on your
     - --ws.addr=0.0.0.0
     - --ws.origins=\*
 
-### Putting it all together
+## Putting it all together
 
 - When running docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
 - Here is an example of how to run a node for an Orbit chain:
@@ -67,10 +67,19 @@ This how-to provides step-by-step instructions for running an Orbit node on your
   docker stop --time=300 $(docker ps -aq)
   ```
 
-### Note on permissions
+## Note on permissions
 
-- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders
-  ```shell
-  mkdir /data/arbitrum
-  chmod -fR 777 /data/arbitrum
-  ```
+The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders
+
+```shell
+mkdir /data/arbitrum
+chmod -fR 777 /data/arbitrum
+```
+
+## Optional parameters
+
+We show here a list of the parameters that are most commonly used when running your Orbit node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
+
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.md';
+
+<OptionalOrbitCompatibleCLIFlagsPartial />
