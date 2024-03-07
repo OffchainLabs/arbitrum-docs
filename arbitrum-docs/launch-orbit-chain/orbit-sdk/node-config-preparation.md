@@ -7,6 +7,8 @@ sme: Mehdi Salehi
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 4
 ---
+This document provides an insightful guide on utilizing a Node Config JSON file for configuring an Arbitrum Node, encompassing essential settings for optimal operation, including batch-poster, validator, and overall chain configurations. Through illustrative examples and detailed explanations, it offers a comprehensive roadmap for effectively initiating and managing an Orbit chain, highlighting the critical steps and parameters involved in the configuration process.
+
 ### Node Configuration
 
 Once you have successfully deployed and initialized the Orbit core contracts, the next crucial step is configuring and running your Orbit chain using a Node Config JSON file. This file is a comprehensive JSON object containing all necessary configurations for the Arbitrum Node, which includes settings for the Batch-poster, Validator, and the chain itself.
