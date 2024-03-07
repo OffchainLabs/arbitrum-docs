@@ -71,7 +71,6 @@ const sidebars = {
             },
           ],
         },
-
         {
           type: 'category',
           label: 'Oracles',
@@ -170,7 +169,6 @@ const sidebars = {
             },
           ],
         },
-
         {
           type: 'category',
           label: 'Reference',
@@ -312,7 +310,6 @@ const sidebars = {
           //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
           //    if we use a fully qualified link, localhost won't work
         },
-
         {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
@@ -337,6 +334,11 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/reference/command-line-options',
           label: 'Command-line options',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+          label: 'Additional configuration parameters',
         },
         {
           type: 'doc',
@@ -601,8 +603,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Troubleshooting',
           id: 'for-users/troubleshooting-users',
+          label: 'Troubleshooting'
         },
         {
           type: 'doc',

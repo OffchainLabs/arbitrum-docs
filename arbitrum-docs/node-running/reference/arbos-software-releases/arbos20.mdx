@@ -5,9 +5,12 @@ sidebar_position: 2
 author: dlee
 ---
 
-ArbOS 20 Atlas is shipped via Nitro v2.3.0, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.0-3e14543`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators.For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
+ArbOS 20 Atlas is shipped via Nitro v2.3.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.1-26fad6f`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators.For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
 
-Formal release notes can be found [here](https://github.com/OffchainLabs/nitro/releases/tag/v2.3.0).
+### Requirements:
+- [Nitro v2.3.1](https://github.com/OffchainLabs/nitro/releases/tag/v2.3.1) or higher
+- [nitro-contracts v1.2.1](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v1.2.1) or higher
+- Wasm module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`
 
 ### High-level description of ArbOS 20 changes
 
@@ -28,6 +31,7 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 - There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for L2 users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
 
 ### Reference links for ArbOS 20 Atlas
+
 - [Nitro v2.3.0 Release details on Github](https://github.com/OffchainLabs/nitro/releases/tag/v2.3.0)
 - Original DAO proposal: [AIP: ArbOS Version 20 "Atlas"](https://forum.arbitrum.foundation/t/aip-arbos-version-20-atlas/20957)
 - [AIP: ArbOS Version 20 "Atlas" Snapshot Vote](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0x813a366e287a872ada13d4f8348e771c7aa2d8c3cb00b2be31539ceab5627513)

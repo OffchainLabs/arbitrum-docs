@@ -1,6 +1,6 @@
 @use './_mixins.scss' as *;
 
-main>.container {
+main > .container {
   padding-top: 70px !important;
 }
 
@@ -14,8 +14,8 @@ article {
       font-size: 24px;
     }
 
-    >h3,
-    >.faq-question>h3 {
+    > h3,
+    > .faq-question > h3 {
       font-size: 21px;
       margin-top: 50px;
       margin-bottom: 15px;
@@ -95,7 +95,7 @@ article {
       @include small-table; // target section wrappers around tables
     }
 
-    p>code {
+    p > code {
       font-size: 13px;
       padding: 3px 6px;
       border-radius: 3px;

@@ -89,6 +89,10 @@ const globalVars = {
   novaBlockGasLimit: '32,000,000',
   goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
+
+  // portal application form
+  portalApplicationForm:
+    'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
 };
 
 function blocksToMinutes(blocks) {
