@@ -10,7 +10,7 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
-The specific upgrade requirements for each ArbOS release are located in [ArbOS Releases: Overview](../../node-running/reference/arbos-software-releases/overview.mdx).
+The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx#list-of-available-arbos-releases).
 
 import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
 
@@ -66,5 +66,10 @@ You can obtain the current ArbOS version of your chain by calling `ArbSys.ArbOSV
 When scheduling the ArbOS upgrade through `ArbOwner.scheduleArbOSUpgrade` you must use the actual ArbOS version you're upgrading to. For example, if you're upgrading to ArbOS 11, you will pass `11` when calling this function.
 
 :::
+
+#### Step 4: Enable ArbOS specific configurations or feature flags (not always required)
+For some ArbOS upgrades, such as [ArbOS 20 Atlas](../../node-running/reference/arbos-software-releases/arbos20.mdx), there may be additional requirements or steps that need to be satisified to ensure your Orbit chain can use all of the new features and improvements made available in that particular ArbOS release.
+
+If there are additional requirements for the targeted ArbOS release you're attempting to upgrade to, the additional requirements will be listed on the reference pages for [the targeted ArbOS release](../../node-running/reference/arbos-software-releases/overview.mdx#list-of-available-arbos-releases). For example, the additional requirements for Orbit chains upgrading to ArbOS 20 can be found [here on the ArbOS 20 docs](../../node-running/reference/arbos-software-releases/arbos20.mdx#additional-requirements-for-arbitrum-orbit-chain-operators).
 
 Congratulations! You've upgraded your Orbit chain(s) to the specified ArbOS version.
