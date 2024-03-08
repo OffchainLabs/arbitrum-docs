@@ -77,10 +77,51 @@ console.log(`Retryable executed successfully`);
 In this example, the `waitForRetryables` method is invoked on the **txReceipt** to monitor the execution of Retryable tickets and verify their status. A status of "success" indicates that the Retryable tickets have been executed successfully, ensuring the contracts' deployment. It's important to note that this process involves two Retryable tickets, and a more comprehensive walkthrough is available in [this segment](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1e39d21eef57d204bfa609c4c29284528ddf05ac/examples/create-token-bridge-eth/index.ts#L78-L104) of the example. This enhanced approach not only simplifies the retrieval of transaction receipts but also provides a reliable method for verifying contract deployment across chains.
 
 ### 3. Deployment information and contract addresses
-getTokenBridgeContracts
+After deployment par finished and we are assure that the retryable tickets are successfult it's time to get the deployment information and all token bridge contract addresses.
+To get these information we have an API on Orbit SDK named `getTokenBridgeContracts`. This is a method for the token bridge recipient that you can use to retrieve the informtion.
+An example to get the contract addresses from the `txReceipt` generated on previous steps is as below:
+```bash
+  const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
+    parentChainPublicClient,
+  });
+```
 
-### 4. Setting up the WETH gateway
-createTokenBridgePrepareSetWethGatewayTransactionRequest
-createTokenBridgePrepareSetWethGatewayTransactionReceipt
+### 4. Setting up the WETH gateway (for ETH-based Orbit chains)
+The last step to setup the token bridge for an Orbit chain is to set up the WETH Gateway. In our canonical bridge design, we have a separate custom gateway for WETH to bridge it in and out of the Orbit chain. You can find more info about WETH gateway on our [docs](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
 
-waitForRetryables
+So after deployment of the token bridge and when you are assure about the success on the deployment on the both parent and child chain, it's time to set the WETH Gateway on both parent and child chain. To handle that we have two APIs on our Orbit SDK:
+
+**1. createTokenBridgePrepareSetWethGatewayTransactionRequest:**
+This API helps you to create the raw transaction which handles the set up of WETH gateway on both parent and child chain. An example to use this API is below:
+```bash
+  const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: rollupContractAddress,
+    parentChainPublicClient,
+    orbitChainPublicClient,
+    account: rollupOwnerAddress,
+    retryableGasOverrides: {
+      gasLimit: {
+        percentIncrease: 200n,
+      },
+    },
+  });
+```
+In this example **rollupContractAddress** is the address of Orbit chain's rollup contract, **rollupOwnerAddress** is the address of rollup owner, **parentChainPublicClient** and **orbitChainPublicClient** are the parent and orbit chain public clients. Also this API has optional fields to override the Retryable ticket setups. In this example **percentIncrease** is the buffer to increase the gas limit for the retryable ticket to be sure about the success of the ticket.
+After creating the raw transaction you need to use Viem to sign and broadcast the transaction to the network.
+**2. createTokenBridgePrepareSetWethGatewayTransactionReceipt**
+After sending the transaction, you need get the recept of the transaction to be able to check about the success of the retryable tickets created on step 1, which is going to set WETH gateway on the Orbit chain. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and also `waitForRetryables` method of it to check for the retryable ticket status. For the example in this doc we can use this API as follow:
+
+```bash
+  const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethGatewayTxHash }),
+  );
+    const orbitChainSetWethGatewayRetryableReceipt = await setWethGatewayTxReceipt.waitForRetryables({
+    orbitPublicClient: orbitChainPublicClient,
+  });
+    if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
+    throw new Error(
+      `Retryable status is not success: ${orbitChainSetWethGatewayRetryableReceipt[0].status}. Aborting...`,
+    );
+      console.log(`Retryables executed successfully`);
+```
+In this example **setWethGatewayTxHash** is the hash of the transaction you sent to set the WETH gateway.
