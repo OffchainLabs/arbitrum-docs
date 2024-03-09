@@ -22,7 +22,7 @@ These resources are designed for users who prefer a hands-on learning experience
 The Arbitrum Nitro stack, designed without native support for specific token bridging standards at the protocol level but Offchain Labs crafted a "canonical bridge," a sophisticated mechanism designed to ensure seamless token transfers between the parent and child chain. This strategic development enhances the interoperability of the Arbitrum Orbit ecosystem. 
 The token bridge architecture is meticulously engineered, comprising contracts situated on the parent chain as well as a complementary set of contracts on the child chain. These entities communicate via the Retryable Ticket protocol, ensuring efficient and secure interactions. For an in-depth exploration of the token bridge mechanism, interested parties are encouraged to consult the following [documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20). This resource provides comprehensive insights into the design and operational dynamics of the bridge.
 
-Following the deployment and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent chain and the child chain. To establish and configure the token bridge effectively, the process can be broken down into the following steps. **Note** that the token bridge deployment process depends on the type of Orbit chain. In the following steps the main flow is same for all different types of Orbit chain except step 1 which is just needed for **Custom fee token** Orbit chains and step 4 is just for ETH-based Orbit chains.
+Following the deployment and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent chain and the child chain. To establish and configure the token bridge effectively, the process can be broken down into the following steps. **Note** that the token bridge deployment process depends on the type of Orbit chain. In the following steps the main flow is same for all different types of Orbit chain except step 1 which is just needed for **Custom fee token** Orbit chains and step 5 is just for ETH-based Orbit chains.
 
 ### 1. Token Approval (just for Custom fee token Orbit chains)
 Initiating the deployment of a token bridge for **Custom Fee Token** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two essential APIs:
@@ -110,7 +110,7 @@ An example to get the contract addresses from the `txReceipt` generated on previ
   });
 ```
 
-### 4. Setting up the WETH gateway (just for ETH-based Orbit chains)
+### 5. Setting up the WETH gateway (just for ETH-based Orbit chains)
 The last step to setup the token bridge for an ETH-based Orbit chain is to set up the WETH Gateway. **Note** that step is just for ETH-based Orbit chains and not for Custom fee token orbit chains. In our canonical bridge design, we have a separate custom gateway for WETH to bridge it in and out of the Orbit chain. You can find more info about WETH gateway on our [docs](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
 
 So after deployment of the token bridge and when you are assure about the success on the deployment on the both parent and child chain, it's time to set the WETH Gateway on both parent and child chain. To handle that we have two APIs on our Orbit SDK:
