@@ -23,7 +23,7 @@ To streamline the deployment process and make it more efficient, we've developed
 
 These functionalities within the RollupCreator contract significantly simplify the deployment process, providing a smoother and more user-friendly experience for chain deployer. We will delve into the specifics of the inputs and configurations required for the createRollup function and how to use Orbit-SDK for chain deployment in the following sections.
 
-### Rollup Deployment Parameters Configuration
+<h3 id="rollup-deployment-parameter">Rollup Deployment Parameters Configuration</h3>
 
 The `createRollup` function in the [RollupCreator contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is a crucial component for deploying Orbit chains. It takes a complex input named `deployParams`, structured to encapsulate various configurable parameters essential for customizing the Orbit chain. Let's break down the structure of these parameters:
 
