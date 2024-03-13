@@ -18,7 +18,7 @@
 | `--init.url="<snapshot file>"`           | (Non-Orbit Nitro nodes only) URL to download the genesis database from. Required only for the first startup of an Arbitrum One node. Reference to [snapshots](https://snapshot.arbitrum.foundation/index.html) and [archive node guide](/node-running/how-tos/running-an-archive-node). |
 | `--init.download-path="/path/to/dir"`    | (Non-Orbit Nitro nodes only) Temporarily saves the downloaded database snapshot. Defaults to `/tmp/`. Used with `--init.url`.                                                                                                                                                           |
 
-| `--node.batch-poster.post-4844-blobs`  | Boolean. Default: `false`. Used to enable or disable the posting of transaction data using Blobs to L1 Ethereum. If using calldata is more expensive and if the parent chain supports EIP4844 blobs, the batch poster will use blobs when this flag is set to `true`. Can be `true` or `false`. |
+| `--node.batch-poster.post-4844-blobs` | Boolean. Default: `false`. Used to enable or disable the posting of transaction data using Blobs to L1 Ethereum. If using calldata is more expensive and if the parent chain supports EIP4844 blobs, the batch poster will use blobs when this flag is set to `true`. Can be `true` or `false`. |
 
 | `--node.batch-poster.ignore-blob-price` | Boolean. Default: `false`. If the parent chain supports EIP4844 blobs and `ignore-blob-price` is set to `true`, the batch poster will use EIP4844 blobs even if using calldata is cheaper. Can be `true` or `false`. |
 
