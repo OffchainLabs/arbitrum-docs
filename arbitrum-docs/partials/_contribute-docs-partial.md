@@ -2,16 +2,9 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. This includes documentation for:
+The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
-1. [Developers](/for-devs/quickstart-solidity-hardhat.md)
-2. [Users (bridge)](/getting-started-users.mdx)
-3. [Node runners](/node-running/quickstart-running-a-node.md)
-4. [How it works](/intro)
-
-Contributions to each of these content areas are welcome from the entire Ethereum community.
-
-This document shows you how to craft, organize, and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
 
 ### Add a new core document
 
@@ -50,7 +43,7 @@ Every document should be a specific _type_ of document. Each type of document ha
 
 | Document type       | Purpose                                                                            | Example(s) to refer to                                                                                                                                          |
 | ------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](../launch-orbit-chain/orbit-gentle-introduction.md)                                                                            |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             | [A gentle introduction to Orbit](/launch-orbit-chain/orbit-gentle-introduction.md)                                                                              |
 | Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/for-devs/quickstart-solidity-hardhat.md)                                                                                             |
 | How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](../node-running/how-tos/local-dev-node.mdx)                                                                                       |
 | Concept             | Explain what things are and how they work                                          | [Token bridging](../for-devs/concepts/token-bridge/token-bridge-erc20.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
@@ -67,26 +60,28 @@ The following style guidelines provide a number of loose recommendations that he
 1.  **Casing**
     - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
 2.  **Linking**
-    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links.
-3.  **Separate procedural from conceptual (most of the time)**
+    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+3.  **Titling**
+    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
+4.  **Separate procedural from conceptual (most of the time)**
     - Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
-4.  **Voice**
+5.  **Voice**
     - Address the reader as "you".
     - Write like you'd speak to a really smart friend who's in a rush.
     - Opt for short, clear sentences that use translation-friendly, plain language.
     - Use contractions wherever it feels natural - this can help convey a friendly and conversational tone.
-5.  **Formality**
+6.  **Formality**
     - Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
-6.  **Targeting**
+7.  **Targeting**
     - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) who has a _specific need_.
     - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit in the beginning of your document.
-7.  **Flow**
+8.  **Flow**
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
     - **Value up front**: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
-8.  **Cross-linking**
+9.  **Cross-linking**
     - We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
-9.  **Things to avoid**
+10. **Things to avoid**
     - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
     - **Jargon**: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
 
@@ -158,40 +153,6 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 :::
 ```
-
-### Organization conventions
-
-Our published docs are generally organized like this in the sidebar:
-
-```
-📄 Gentle introduction
-📄 Quickstart
-📂 How-tos
-  📄 Write a smart contract
-📂 Concepts
-  📄 Smart contract
-📁 Reference
-📄 Troubleshooting
-📄 FAQ
-📄 Glossary
-📄 Contribute docs
-📂 Third-party content
-  📁 Product A
-  📂 Product B
-    📄 How to test your smart contract using Product B
-```
-
-- This isn't a strict requirement; it's a loose guideline.
-- Not all product areas have all types of content.
-- Deviating from this pattern can make important content more discoverable to readers. For example, the **Developer reference** section in the [Developers menu](/for-devs/quickstart-solidity-hardhat) sidebar is a root-level collection of reference-type content.
-- The sidebar structure that you see in our published docs is determined by the [`sidebars.js` file](https://github.com/OffchainLabs/arbitrum-docs/blob/master/website/sidebars.js) located at the root of the `website` directory.
-  - You may notice that our sidebars are currently organized using plain-old objects that specify individual files and folders.
-  - We're moving away from this "manual configuration" and towards convention-based [auto-generated sidebars](https://docusaurus.io/docs/sidebar/autogenerated).
-  - To ensure that this new approach works with your docs, **all net-new content should be organized within a folder structure that matches the desired sidebar structure**.
-
-<br />
-
----
 
 ### Frequently asked questions
 

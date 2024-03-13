@@ -1,6 +1,5 @@
 ---
 title: 'Gas and ink in Stylus'
-sidebar_label: 'Gas and ink'
 description: 'A conceptual overview of gas and ink, the primitives that Stylus uses to measure the cost of WASM activation, compute, memory, and storage.'
 author: rachel-bousfield
 sme: rachel-bousfield

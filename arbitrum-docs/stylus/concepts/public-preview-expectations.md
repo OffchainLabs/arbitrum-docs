@@ -1,6 +1,5 @@
 ---
 title: 'Public preview: What to expect'
-sidebar_label: 'Public preview'
 description: 'Stylus is currently tagged as an `alpha` release supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
 author: symbolpunk
 sidebar_position: 10

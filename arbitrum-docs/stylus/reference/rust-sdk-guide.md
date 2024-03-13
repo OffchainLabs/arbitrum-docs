@@ -1,6 +1,5 @@
 ---
-title: 'Stylus Rust SDK: Feature overview'
-sidebar_label: 'Stylus Rust SDK: Feature overview'
+title: 'Stylus Rust SDK overview'
 description: 'An in-depth overview of the features provided by the Stylus Rust SDK'
 author: rachel-bousfield
 sme: rachel-bousfield
@@ -267,7 +266,7 @@ As in Solidity, methods may accept ETH as call value.
 #[external]
 impl Contract {
     #[payable]
-    pub fn credit(&mut self) -> Result<(), Vec<u8> {
+    pub fn credit(&mut self) -> Result<(), Vec<u8>> {
         self.erc20.add_balance(msg::sender(), msg::value())
     }
 }

@@ -1,6 +1,5 @@
 ---
 title: 'A gentle introduction to Stylus'
-sidebar_label: 'A gentle introduction to Stylus'
 description: 'An educational introduction that provides a high-level understanding of Stylus, a new way to write EVM-compatible smart contracts using your favorite programming languages.'
 author: amarrazza
 sme: amarrazza
