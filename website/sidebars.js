@@ -22,187 +22,6 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Arbitrum node',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'node-running/gentle-introduction-run-node',
-          label: 'Overview',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/quickstart-running-a-node',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/running-a-full-node',
-          label: 'Run a full node',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/local-dev-node',
-          label: 'Run a local dev node',
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
-        }, 
-        {
-          type: 'doc',
-          id: 'node-running/reference/ethereum-beacon-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
-        },
-        {
-          type: 'category',
-          label: 'ArbOS software releases',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/overview',
-              label: 'Overview',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos20',
-              label: 'ArbOS 20 Atlas',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos11',
-              label: 'ArbOS 11',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'More node types',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
-              label: 'Run an archive node',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
-              label: 'Run a validator',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
-              label: 'Run a Classic node',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
-              label: 'Configure a Data Availability Committee (DAC)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Sequencer',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
-              label: 'Run a feed relay',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
-              label: 'Read the sequencer feed',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
-              label: 'Run a Sequencer Coordination Manager (SQM)',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-          ],
-        },
-        {
-          type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
-          label: 'Troubleshooting',
-        },
-        {
-          type: 'doc',
-          label: 'FAQ',
-          id: 'node-running/faq',
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Arbitrum bridge',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'getting-started-users',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshooting',
-          id: 'for-users/troubleshooting-users',
-        },
-        {
-          type: 'doc',
-          id: 'bridge-tokens/concepts/usdc-concept',
-          label: 'USDC on Arbitrum One',
-        },
-      ],
-    },
-    {
-      type: 'category',
       label: 'Build decentralized apps',
       collapsed: true,
       items: [
@@ -252,7 +71,6 @@ const sidebars = {
             },
           ],
         },
-
         {
           type: 'category',
           label: 'Oracles',
@@ -417,6 +235,116 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Run an Orbit chain',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/orbit-gentle-introduction',
+          label: 'A gentle introduction',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/orbit-quickstart',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'node-running/how-tos/running-an-orbit-node',
+          label: 'Run a full Orbit node',
+        },
+        {
+          type: 'category',
+          label: 'Customize your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
+              label: `Customize deployment config`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-stf',
+              label: `Customize behavior`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-precompile',
+              label: `Customize precompiles`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'ArbOS',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/arbos-upgrade',
+              label: `Upgrade ArbOS`,
+            },
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">↓</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
+          label: `Add your chain to the bridge`,
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
+          label: 'Keyset generation (AnyTrust chains)',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/chain-ownership',
+          label: 'Orbit chain ownership',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/troubleshooting-building-orbit',
+          label: 'FAQ',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
+          label: 'Custom gas token SDK',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/command-line-options',
+          label: 'Command-line options',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+          label: 'Additional configuration parameters',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/public-preview-expectations',
+          label: 'Public preview',
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Write Stylus contracts',
       collapsed: true,
       items: [
@@ -509,115 +437,185 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Orbit chain',
+      label: 'Run an Arbitrum node',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-gentle-introduction',
-          label: 'A gentle introduction',
+          id: 'node-running/gentle-introduction-run-node',
+          label: 'Overview',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
+          id: 'node-running/quickstart-running-a-node',
           label: 'Quickstart',
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/running-an-orbit-node',
-          label: 'Run a full Orbit node',
-        },
-        {
-          type: 'category',
-          label: 'Customize your chain',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Customize deployment config`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `Customize behavior`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `Customize precompiles`,
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'ArbOS',
-          collapsed: true,
-          items: [
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">↑</span></a>',
-              // q: why use an anchor html tag here?
-              // a: see note at end of file
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/arbos-upgrade',
-              label: `Upgrade ArbOS`,
-            },
-          ],
+          id: 'node-running/how-tos/running-a-full-node',
+          label: 'Run a full node',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
-          label: `Add your chain to the bridge`,
+          id: 'node-running/how-tos/local-dev-node',
+          label: 'Run a local dev node',
         },
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↑</span></a>',
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
+        }, 
+        {
+          type: 'doc',
+          id: 'node-running/reference/ethereum-beacon-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
+        },
+        {
+          type: 'category',
+          label: 'ArbOS software releases',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/overview',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos20',
+              label: 'ArbOS 20 Atlas',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/reference/arbos-software-releases/arbos11',
+              label: 'ArbOS 11',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'More node types',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-an-archive-node',
+              label: 'Run an archive node',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-validator',
+              label: 'Run a validator',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-classic-node',
+              label: 'Run a Classic node',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/introduction',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              label: 'Deploy a mirror Data Availability Server',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Sequencer',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-feed-relay',
+              label: 'Run a feed relay',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/read-sequencer-feed',
+              label: 'Read the sequencer feed',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              label: 'Run a Sequencer Coordination Manager (SQM)',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Nitro',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/build-nitro-locally',
+              label: 'Build Nitro locally',
+            },
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              label: 'Migrate to Nitro from Classic',
+            },
+          ],
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
-          label: 'Keyset generation (AnyTrust chains)',
+          id: 'node-running/troubleshooting-running-nodes',
+          label: 'Troubleshooting',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/chain-ownership',
-          label: 'Orbit chain ownership',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/troubleshooting-building-orbit',
           label: 'FAQ',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
-          label: 'Custom gas token SDK',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-          label: `Additional configuration parameters`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/command-line-options',
-          label: 'Command-line options',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/concepts/public-preview-expectations',
-          label: 'Public preview',
+          id: 'node-running/faq',
         },
       ],
     },
-
+    {
+      type: 'category',
+      label: 'Arbitrum bridge',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'getting-started-users',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'for-users/troubleshooting-users',
+          label: 'Troubleshooting',
+        },
+        {
+          type: 'doc',
+          id: 'bridge-tokens/concepts/usdc-concept',
+          label: 'USDC on Arbitrum One',
+        },
+      ],
+    },
     {
       type: 'category',
       label: 'How Arbitrum works',
@@ -809,6 +807,8 @@ const sidebars = {
 };
 
 module.exports = sidebars;
+
+
 
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
