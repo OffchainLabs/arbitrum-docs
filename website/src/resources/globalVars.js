@@ -44,7 +44,7 @@ const globalVars = {
   nitroPathToStorage: 'arbos/storage',
 
   // gas floor
-  arbOneGasFloorGwei: '0.1',
+  arbOneGasFloorGwei: '0.01',
   novaGasFloorGwei: '0.01',
   goerliGasFloorGwei: '0.1',
   sepoliaGasFloorGwei: '0.1',
