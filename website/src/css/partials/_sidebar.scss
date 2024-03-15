@@ -30,6 +30,8 @@ $child-sidebar-item-font-size: 14px;
       > div.menu__list-item-collapsible > a.menu__link,
       > a.menu__link {
         font-size: $root-sidebar-item-font-size;
+
+        
       }
     }
 
@@ -45,7 +47,17 @@ $child-sidebar-item-font-size: 14px;
         }
 
         &.menu__link--active {
-          font-weight: 600;
+          font-weight: 600; 
+        }
+
+        .other-section-icon{
+          margin-left: auto; 
+          margin-right: 5px; 
+          margin-top: -2px;
+          opacity: 0.6;
+          font-size: 17px;
+          max-height: 18px;
+          overflow: visible;
         }
       }
     }
