@@ -1,0 +1,78 @@
+{
+  "link.item.label.Arbitrum.io": {
+    "message": "Arbitrum.io",
+    "description": "The label of footer link with label=Arbitrum.io linking to https://arbitrum.io/"
+  },
+  "link.item.label.Arbitrum Rollup": {
+    "message": "Arbitrum Rollup",
+    "description": "The label of footer link with label=Arbitrum Rollup linking to https://arbitrum.io/rollup"
+  },
+  "link.item.label.Arbitrum AnyTrust": {
+    "message": "Arbitrum AnyTrust",
+    "description": "The label of footer link with label=Arbitrum AnyTrust linking to https://arbitrum.io/anytrust"
+  },
+  "link.item.label.Arbitrum Orbit": {
+    "message": "Arbitrum Orbit",
+    "description": "The label of footer link with label=Arbitrum Orbit linking to https://arbitrum.io/orbit"
+  },
+  "link.item.label.Arbitrum Stylus": {
+    "message": "Arbitrum Stylus",
+    "description": "The label of footer link with label=Arbitrum Stylus linking to https://arbitrum.io/stylus"
+  },
+  "link.item.label.Nitro whitepaper": {
+    "message": "Nitro whitepaper",
+    "description": "The label of footer link with label=Nitro whitepaper linking to https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf"
+  },
+  "link.item.label.Network status": {
+    "message": "Network status",
+    "description": "The label of footer link with label=Network status linking to https://status.arbitrum.io/"
+  },
+  "link.item.label.Portal": {
+    "message": "Portal",
+    "description": "The label of footer link with label=Portal linking to https://portal.arbitrum.io/"
+  },
+  "link.item.label.Bridge": {
+    "message": "Bridge",
+    "description": "The label of footer link with label=Bridge linking to https://bridge.arbitrum.io/"
+  },
+  "link.item.label.Community": {
+    "message": "Community",
+    "description": "The label of footer link with label=Community linking to https://arbitrum.io/community"
+  },
+  "link.item.label.Careers": {
+    "message": "Careers",
+    "description": "The label of footer link with label=Careers linking to https://offchainlabs.com/careers/"
+  },
+  "link.item.label.Support": {
+    "message": "Support",
+    "description": "The label of footer link with label=Support linking to https://support.arbitrum.io/"
+  },
+  "link.item.label.Discord": {
+    "message": "Discord",
+    "description": "The label of footer link with label=Discord linking to https://discord.gg/ZpZuw7p"
+  },
+  "link.item.label.Twitter": {
+    "message": "Twitter",
+    "description": "The label of footer link with label=Twitter linking to https://twitter.com/ArbitrumDevs"
+  },
+  "link.item.label.Youtube": {
+    "message": "Youtube",
+    "description": "The label of footer link with label=Youtube linking to https://www.youtube.com/@Arbitrum"
+  },
+  "link.item.label.Research forum": {
+    "message": "Research forum",
+    "description": "The label of footer link with label=Research forum linking to https://research.arbitrum.io/"
+  },
+  "link.item.label.Medium Blog": {
+    "message": "Medium Blog",
+    "description": "The label of footer link with label=Medium Blog linking to https://medium.com/offchainlabs"
+  },
+  "link.item.label.Governance docs": {
+    "message": "Governance docs",
+    "description": "The label of footer link with label=Governance docs linking to https://medium.com/offchainlabs"
+  },
+  "copyright": {
+    "message": "© 2023 Offchain Labs",
+    "description": "The footer copyright"
+  }
+}
