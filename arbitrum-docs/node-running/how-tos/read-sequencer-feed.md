@@ -15,7 +15,7 @@ todos:
 
 When connected to websocket port `9642` of the local relay, you'll receive feed data that looks something like this:
 
-```
+```go
 {
   "version": 1,
   "messages": [{
@@ -41,7 +41,7 @@ When connected to websocket port `9642` of the local relay, you'll receive feed 
 
 Breaking this down a bit: the top-level data structure is defined by the [BroadcastMessage struct](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/broadcaster/broadcaster.go#L42):
 
-```
+```go
 type BroadcastMessage struct {
 	Version int `json:"version"`
 	// Note: "Messages" is slightly ambiguous naming since there are different types of messages
@@ -52,7 +52,7 @@ type BroadcastMessage struct {
 
 The `messages` field is the [BroadcastFeedMessage struct](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/broadcaster/broadcaster.go#L49):
 
-```
+```go
 type BroadcastFeedMessage struct {
 	SequenceNumber arbutil.MessageIndex         `json:"sequenceNumber"`
 	Message        arbstate.MessageWithMetadata `json:"message"`
@@ -61,6 +61,7 @@ type BroadcastFeedMessage struct {
 ```
 
 Each `message` conforms to [arbstate.MessageWithMetadata](https://github.com/OffchainLabs/nitro/blob/a05f768d774f60468a58a6a94fcc1be18e4d8fae/arbstate/inbox.go#L42):
+
 
 ```
 type MessageWithMetadata struct {
@@ -71,7 +72,7 @@ type MessageWithMetadata struct {
 
 Finally, we get the transaction's information in the `message` subfield as an [L1IncomingMessage](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/arbos/incomingmessage.go#L61):
 
-```
+```go
 type L1IncomingMessage struct {
 	Header *L1IncomingMessageHeader `json:"header"`
 	L2msg  []byte                   `json:"l2Msg"`
