@@ -11,9 +11,9 @@ todos:
   - Align on what we want to treat as proper nouns vs common nouns
 ---
 
-[Running an Arbitrum relay locally as a feed relay](/node-running/how-tos/running-a-feed-relay.mdx) lets you subscribe to an uncompressed sequencer feed for real-time data as the sequencer accepts and orders transactions off-chain.
+[Running an Arbitrum relay locally as a feed relay](/node-running/how-tos/running-a-feed-relay.mdx) lets you subscribe to an uncompressed sequencer feed<a data-quicklook-from="sequencer-feed">sequencer feed</a> for real-time data as the sequencer accepts and orders transactions off-chain.
 
-When connected to websocket port `9642` of the local relay, you'll receive feed data that looks something like this:
+When connected to websocket port `9642` of the local relay, you'll receive a data feed that looks something like this:
 
 ```go
 {
@@ -44,7 +44,7 @@ Breaking this down a bit: the top-level data structure is defined by the [Broadc
 ```go
 type BroadcastMessage struct {
 	Version int `json:"version"`
-	// Note: "Messages" is slightly ambiguous naming since there are different types of messages
+	// Note: the "Messages" object naming is slightly ambiguous: since there are different types of messages
 	Messages                       []*BroadcastFeedMessage         `json:"messages,omitempty"`
 	ConfirmedSequenceNumberMessage *ConfirmedSequenceNumberMessage `json:"confirmedSequenceNumberMessage,omitempty"`
 }
