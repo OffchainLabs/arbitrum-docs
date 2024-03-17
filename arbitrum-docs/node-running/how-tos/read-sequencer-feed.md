@@ -83,7 +83,7 @@ type L1IncomingMessage struct {
 
 You can use the [`ParseL2Transactions`](https://github.com/OffchainLabs/nitro/blob/9b1e622102fa2bebfd7dffd327be19f8881f1467/arbos/incomingmessage.go#L227) function to decode the message.
 
-### Using the feed relay, you can also retrieve the `L2 block number` of a message:
-
-- On Arbitrum One, this can be done by adding the Arbitrum One genesis block number (22207817) to the sequence number of the feed message. 
-- It's important to note that in the case of Arbitrum Nova, the Nitro genesis number is 0, and therefore, it is not necessary to include it when adding to the feed message's sequence number.
+Using the feed relay, you can also retrieve the `L2 block number` of a message:
+   
+- On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, this can be done by adding the Arbitrum One genesis block number (22207817) to the sequence number of the feed message. 
+- It's important to note that in the case of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, the Nitro genesis number is 0, and therefore, it is not necessary to include it when adding to the feed message's sequence number.
