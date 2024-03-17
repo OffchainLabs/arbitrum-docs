@@ -65,7 +65,7 @@ Once your node is running, you can call `ArbSys.sol` either directly using `curl
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547\
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x0000000000000000000000000000000000000064","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
@@ -140,7 +140,7 @@ Once your node is running, you can call `ArbHi.sol` either directly using `curl`
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547 \
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x000000000000000000000000000000000000011a","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
