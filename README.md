@@ -54,7 +54,7 @@ yarn start
 
 ### Update submodules
 
-SDK repo:
+Sdk repo:
 
 ```
 git submodule update --remote arbitrum-sdk
