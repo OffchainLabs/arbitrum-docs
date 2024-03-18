@@ -24,3 +24,5 @@ yarn-error.log*
 
 # yarn cache
 .yarn
+
+/i18n/*/docusaurus-plugin-content-docs/current/*
