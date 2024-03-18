@@ -12,7 +12,7 @@ Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the fo
 
 :::
 
-[**Particle Network**](https://particle.network) is the Intent-Centric, Modular Access Layer of Web3. With Particle's Wallet-as-a-Service, developers can curate a Web2-like user experience through modular and customizable embedded wallet components. Using [MPC-TSS for key management](https://blog.particle.network/particle-network-101-developer-experience-edition), Particle can streamline user onboarding via familiar Web2 accounts—such as Google accounts, email addresses, and phone numbers.
+[Particle Network](https://particle.network)'s Wallet Abstraction services enable universal, Web2-adjacent onboarding and interactions through social logins. Its core technology, [Smart Wallet-as-a-Service](https://blog.particle.network/announcing-our-smart-wallet-as-a-service-modular-stack-upgrading-waas-with-erc-4337) (WaaS) aims to onboard users into MPC-secured smart accounts supporting any chain. It also allows developers to offer an improved user experience through modular, fully customizable EOA/AA embedded wallets. Particle supports its Smart Wallet-as-a-Service through a Modular L1 powering chain abstraction, acting as a settlement layer across chains for a seamless multi-chain experience.
 
 Arbitrum was one of the first blockchains supported by Particle Network's Smart Wallet-as-a-Service. Because of this, Particle Network has extensive support for:
 
