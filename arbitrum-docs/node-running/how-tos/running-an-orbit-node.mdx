@@ -74,16 +74,16 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
 
 ### 4. Putting it all together
 
-- When running a docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
+- When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be `/home/user/.arbitrum`
 
 
 - Example:
 
   ```bash wordWrap=true
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
+  Docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
   ```
 
-    - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
+    - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
 
     - When using the flag `--chain.info-json=<Orbit Chain's chain info>`, it is essential to replace `<Orbit Chain's chain info>` with the specific `chain info` JSON string of the Orbit chain for which you wish to run the node: 
 
@@ -112,15 +112,15 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
     ```
 
 
-- When shutting down the docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
+- When shutting down the Docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running
 
   ```bash
-  docker stop --time=300 $(docker ps -aq)
+  Docker stop --time=300 $(Docker ps -aq)
   ```
 
 ### Note on permissions
 
-- The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders:
+- The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
 
   ```bash
   mkdir /data/arbitrum
