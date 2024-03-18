@@ -105,7 +105,7 @@ For Anytrust chains, it is essential to add the following to the command or conf
 --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
 ```
 
-When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running:
+When shutting down the Docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running:
 
 ```bash
 docker stop --time=300 $(docker ps -aq)
