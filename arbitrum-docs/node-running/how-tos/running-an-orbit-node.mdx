@@ -113,7 +113,7 @@ docker stop --time=300 $(docker ps -aq)
 
 ### Note on permissions
 
-The Docker image is configured to run as **non-root** `UID 1000`. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders:
+The Docker image is configured to run as **non-root** `UID 1000`. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
 
 ```bash
 mkdir /data/arbitrum
