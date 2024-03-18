@@ -39,11 +39,11 @@ The RPC endpoint must direct to <a data-quicklook-from="arbitrum-one">Arbitrum O
 ### 2. Child chain parameters 
 
 
-In the Arbitrum Orbit context the child chain is a L3 Orbit chain, and the required parameters are `chain-info` and `chain-name`
+In the Arbitrum Orbit context, the child chain is an L3 Orbit chain, and the required parameters are `chain-info` and `chain-name`
 
 #### 1. `chain.info`
 
-`--chain.info-json` is a json string that contains required information about the Orbit chain. 
+`--chain.info-json` is a JSON string that contains required information about the Orbit chain. 
 
   ```bash
 --chain.info-json=<Orbit Chain's chain info>
@@ -72,7 +72,7 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
     - `--ws.addr=0.0.0.0`
     - `--ws.origins=\*`
 
-### 4.Putting it all together
+### 4. Putting it all together
 
 - When running a docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
 
@@ -83,9 +83,9 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
   ```
 
-    - Ensure that `/some/local/dir/arbitrum` already exists, otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
+    - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
-    - When using the flag `--chain.info-json=<Orbit Chain's chain info>`, it is essential to replace `<Orbit Chain's chain info>` with the specific `chain info` json string of the Orbit chain for which you wish to run the node: 
+    - When using the flag `--chain.info-json=<Orbit Chain's chain info>`, it is essential to replace `<Orbit Chain's chain info>` with the specific `chain info` JSON string of the Orbit chain for which you wish to run the node: 
 
 - Example:
 
@@ -112,7 +112,7 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
     ```
 
 
-- When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
+- When shutting down the docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
   ```bash
   docker stop --time=300 $(docker ps -aq)
