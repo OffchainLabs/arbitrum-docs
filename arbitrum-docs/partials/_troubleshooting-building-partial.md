@@ -50,7 +50,7 @@ To let's find out which is custom error this signature represents, we can use th
 
 
 ### How is the L1 portion of an Arbitrum transaction's gas fee computed?  {#how-is-the-l1-portion-of-an-arbitrum-transactions-gas-fee-computed-}
-<p>The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile. You can find more information about gas calculations in <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">Understanding Arbitrum: 2-Dimensional Fees</a> and <a href="/build-decentralized-apps/how-to-estimate-gas">How to estimate gas in Arbitrum</a>.</p>
+<p>The L1 fee that a transaction is required to pay is determined by compressing its data with brotli and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>precompile. You can find more information about gas calculations in <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">Understanding Arbitrum: 2-Dimensional Fees</a> and <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">How to estimate gas in Arbitrum</a>.</p>
 
 <p></p>
 
