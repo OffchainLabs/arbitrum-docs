@@ -50,6 +50,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - It must provide a standard layer 1 node RPC endpoint that you run yourself or from a node provider.
   - Note: this parameter was called `--l1.url` in versions prior to `v2.1.0`
   - Note: the Ethereum consensus layer client Caplin is not compatible with Nitro node software due to an issue with response type formatting.
+  - Note: 8545 is usually the default port for the execution layer. For the Beacon endpoint port, you should connect to the correct port that is set on your parent chain's consensus client.
 - L2 chain id or name
   - Use the parameter `--chain.id=<L2 chain ID>` to set the L2 chain from its chain id. See [RPC endpoints and providers](/node-running/node-providers.mdx#rpc-endpoints) for a list of Arbitrum chains and their respective L2 chain ids.
   - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the L2 chain from its name (options are: `arb1`, `nova`, `sepolia-rollup` and `goerli-rollup`)
