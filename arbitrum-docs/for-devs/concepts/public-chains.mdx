@@ -27,11 +27,9 @@ Arbitrum Sepolia serves as a testnet chain replicating the capabilities of Arbit
 
 ### Arbitrum Goerli
 
-Arbitrum Goerli is a testnet chain that mirrors the functionality of the Arbitrum One mainnet. It's connected to the Ethereum Goerli testnet, allowing developers to test their smart contracts in a risk-free environment before deploying them on the mainnet.
+Arbitrum Goerli was a testnet chain that mirrored the functionality of the Arbitrum One mainnet and was connected to the Ethereum Goerli testnet. It was deprecated on November 18th 2023, and deactivated on March 18th, 2024.
 
 :::caution
-
-Ethereum Goerli was deprecated in Q1 2023 but will be supported until Q1 2024. We are currently phasing out the usage of Arbitrum Goerli. Support for Arbitrum Goerli will cease prior to the conclusion of Ethereum Goerli.
 
 The old testnet RinkArby was deprecated on December 20th, 2022.
 
@@ -59,7 +57,7 @@ Finally, Arbitrum Sepolia is a testnet chain. It's designed for testing purposes
 
 ### Nitro
 
-Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with Anytrust configuration), Arbitrum Sepolia, and Arbitrum Goerli. It's designed to offer high throughput and low cost, making it ideal for scaling Ethereum applications. Nitro is a major upgrade to the “Classic” stack, offering several improvements including advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more. You can find more information about Nitro in [Inside Arbitrum Nitro](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx).
+Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with Anytrust configuration),and Arbitrum Sepolia. It's designed to offer high throughput and low cost, making it ideal for scaling Ethereum applications. Nitro is a major upgrade to the “Classic” stack, offering several improvements including advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more. You can find more information about Nitro in [Inside Arbitrum Nitro](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx).
 
 ### AnyTrust (variant of Nitro)
 
