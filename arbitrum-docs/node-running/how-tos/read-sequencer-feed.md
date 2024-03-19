@@ -15,7 +15,7 @@ todos:
 
 When connected to websocket port `9642` of the local relay, you'll receive a data feed that looks something like this:
 
-```go
+```json
 {
   "version": 1,
   "messages": [{
