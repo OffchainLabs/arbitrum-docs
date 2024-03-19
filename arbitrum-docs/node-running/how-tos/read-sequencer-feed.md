@@ -86,4 +86,4 @@ You can use the [`ParseL2Transactions`](https://github.com/OffchainLabs/nitro/bl
 Using the feed relay, you can also retrieve the `L2 block number` of a message:
    
 - On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, this can be done by adding the Arbitrum One genesis block number (22207817) to the sequence number of the feed message. 
-- It's important to note that in the case of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, the Nitro genesis number is 0, and therefore, it is not necessary to include it when adding to the feed message's sequence number.
+- Note that in the case of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, the Nitro genesis number is `0`, so it doesn't need to be included when adding to the feed message's sequence number.
