@@ -169,7 +169,7 @@ You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Confi
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
-A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
+A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost/](http://localhost/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
 ## Step 11: Finish setting up your chain
 
