@@ -1,4 +1,4 @@
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/\_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -32,6 +32,75 @@ See [Contribute third-party docs](/for-devs/third-party-docs/contribute) for det
 ### Request an update
 
 If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+
+### Add a new translation page
+
+If you would like to participate in translating the Arbitrum docs, you can:
+
+1. Check whether `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
+
+```
+cd ./website
+npm run write-translations -- --locale fr
+```
+
+It will help generate folder `website/i18n/fr`.
+
+2. Create the folders `current` and `translated` under the newly generated folder `website/i18n/fr/docusaurus-plugin-content-docs`.
+
+```
+mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/translated
+```
+
+3. Translate documentation in `/arbitrum-docs`
+
+4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`, for example, if you translated `/arbitrum-docs/arbos/arbos.mdx`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/arbos/arbos.mdx`
+
+Test run:
+
+1. Check that the i18n settings in `website/docusaurus.config.js` have included your new language
+
+```
+i18n: {
+    defaultLocale: 'en',
+    // locales: ['en', 'ja', 'zh'],
+    locales: ['en'], // You can add your new language to this array
+  },
+```
+
+2. Check whether the `locale Dropdown` component exists in navbar, if not, add it
+
+```
+navbar: {
+    title: 'Arbitrum Docs',
+    logo: {
+        alt: 'My Site Logo',
+        src: 'img/logo.svg',
+        href: '/welcome/arbitrum-gentle-introduction',
+    },
+    items: [
+        // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
+        //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
+        //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
+        {
+        type: 'localeDropdown',
+        position: 'right',
+        }
+    ],
+},
+```
+
+2. Build translation and docs
+
+```
+yarn build_translation && yarn build
+```
+
+6. Start docs
+
+```
+npm run serve
+```
 
 <br />
 
