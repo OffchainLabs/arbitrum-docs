@@ -261,13 +261,13 @@ Note that in the context of this quickstart, "account" refers to a public wallet
 
 Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
-![Connect Metamask to Localhost 8545](./assets/quickstart-localhost-metamask.png)
+![Connect Metamask to Localhost 8545](./images/quickstart-localhost-metamask.png)
 
 <!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
-![Connect Metamask to Localhost 8545](./assets/quickstart-import-metamask.png)
+![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
 You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
 
@@ -294,7 +294,7 @@ Ensure that the `Localhost` network is selected within Metamask. Then copy and p
 
 Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional n-tier web application architecture:
 
-![Architecture diagram](./assets/quickstart-vending-machine-architecture.png)
+![Architecture diagram](./images/quickstart-vending-machine-architecture.png)
 
 The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers.
 
@@ -514,7 +514,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 <!--todo: figure out what next steps they're actually looking for by performing content tests -->
 
-- Visit [How to estimate gas](../devs-how-tos/how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
+- Visit [How to estimate gas](/build-decentralized-apps/how-to-estimate-gas) to learn how to estimate the gas cost of your smart contract transactions.
 - Visit [RPC endpoints and providers](/node-running/node-providers.mdx#rpc-endpoints) for a list of public chains that you can deploy your smart contracts to.
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).

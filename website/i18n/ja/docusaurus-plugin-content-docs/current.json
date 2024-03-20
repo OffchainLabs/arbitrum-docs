@@ -73,7 +73,7 @@
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Estimate gas": {
     "message": "Estimate gas",
-    "description": "The label for the doc item Estimate gas in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/how-to-estimate-gas"
+    "description": "The label for the doc item Estimate gas in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/how-to-estimate-gas"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Use oracles": {
     "message": "Use oracles",
@@ -81,11 +81,11 @@
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Arbitrum chains": {
     "message": "Arbitrum chains",
-    "description": "The label for the doc item Arbitrum chains in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/concepts/public-chains"
+    "description": "The label for the doc item Arbitrum chains in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/public-chains"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Cross-chain messaging": {
     "message": "Cross-chain messaging",
-    "description": "The label for the doc item Cross-chain messaging in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/cross-chain-messsaging"
+    "description": "The label for the doc item Cross-chain messaging in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/cross-chain-messaging"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Precompiles": {
     "message": "Precompiles",
