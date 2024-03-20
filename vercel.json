@@ -1,7 +1,26 @@
 {
     "redirects": [
         {
-
+            "source": "/(for-devs/cross-chain-messsaging/?)",
+            "destination": "/build-decentralized-apps/cross-chain-messaging",
+            "permanent": false
+        },
+        {
+            "source": "/(for-devs/concepts/public-chains/?)",
+            "destination": "/build-decentralized-apps/public-chains",
+            "permanent": false
+        },
+        {
+            "source": "/(devs-how-tos/how-to-estimate-gas/?)",
+            "destination": "/build-decentralized-apps/how-to-estimate-gas",
+            "permanent": false
+        },
+        {
+            "source": "/(for-devs/quickstart-solidity-hardhat/?)",
+            "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/reference/software-releases/?)",
             "destination": "/node-running/reference/arbos-software-releases/overview",
             "permanent": false

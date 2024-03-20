@@ -27,23 +27,23 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'for-devs/quickstart-solidity-hardhat',
+          id: 'build-decentralized-apps/quickstart-solidity-hardhat',
           label: 'Quickstart (Solidity)',
         },
         {
           type: 'doc',
           label: 'Estimate gas',
-          id: 'devs-how-tos/how-to-estimate-gas',
+          id: 'build-decentralized-apps/how-to-estimate-gas',
         },
         {
           type: 'doc',
           label: 'Chains and testnets',
-          id: 'for-devs/concepts/public-chains',
+          id: 'build-decentralized-apps/public-chains',
         },
         {
           type: 'doc',
           label: 'Cross-chain messaging',
-          id: 'for-devs/cross-chain-messsaging',
+          id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
           type: 'category',
