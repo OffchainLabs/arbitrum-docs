@@ -752,6 +752,32 @@ const sidebars = {
                 },
               ],
             },
+            {
+              type: 'category',
+              label: 'The BOLD dispute protocol',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'bold/bold-gentle-introduction',
+                  label: 'A gentle introduction',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
+                  label: 'Whitepaper on BOLD',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold',
+                  label: 'BOLD specification on Github',
+                },
+                {
+                  type: 'doc',
+                  id: 'bold/concepts/public-preview-expectations',
+                  label: 'Public preview',
+                },
+              ],
+            },
           ],
         },
       ],
