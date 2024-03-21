@@ -65,7 +65,7 @@ Once your node is running, you can call `ArbSys.sol` either directly using `curl
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547\
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x0000000000000000000000000000000000000064","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
@@ -98,7 +98,7 @@ First, navigate to the [precompiles implementation][precompile_impl_dir_link] di
 ```go
 package precompiles
 
-// ArbGasInfo provides insight into the cost of using the rollup.
+// ArbHi provides a friendly greeting to anyone who calls it.
 type ArbHi struct {
 	Address addr // 0x11a, for example
 }
@@ -140,7 +140,7 @@ Once your node is running, you can call `ArbHi.sol` either directly using `curl`
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547 \
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x000000000000000000000000000000000000011a","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
@@ -393,7 +393,7 @@ Result 2:
 
 Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
-To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas).
+To learn more about the gas cost model, see [how to estimate gas](/build-decentralized-apps/how-to-estimate-gas).
 
 ## Option 5: Call and modify state
 
@@ -474,7 +474,7 @@ This time, we'll add two new methods to read and write the ArbOS state:
 ```
 package precompiles
 
-// ArbGasInfo provides insight into the cost of using the rollup.
+// ArbHi provides a friendly greeting to anyone who calls it.
 type ArbHi struct {
 	Address addr // 0x11a, for example
 }

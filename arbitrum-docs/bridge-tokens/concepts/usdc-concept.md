@@ -46,7 +46,7 @@ Arbitrum One supports two different types of USDC:
   <tr>
     <td>Benefits</td>
     <td>CEX Support, directly redeemable 1:1 for U.S dollars</td>
-    <td>More liquidity, compatibility with DeFi protocols</td>
+    <td></td>
   </tr>
 </table>
 

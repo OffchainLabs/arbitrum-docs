@@ -19,7 +19,7 @@ This how-to will walk you through the process of adding your testnet Orbit chain
 ## Procedure
 
 1. Navigate to https://bridge.arbitrum.io/.
-2. Connect to Arbitrum Goerli or Sepolia using your wallet. The bridge UI will automatically switch to the correct testnet view.
+2. Connect to Arbitrum Sepolia using your wallet. The bridge UI will automatically switch to the correct testnet view.
    - If you're connected to mainnet, and don't want to switch networks manually in your wallet, then you can enable testnet mode in the bridge by clicking on your address in the top right corner -> Settings -> Turn on testnet mode.
 3. Go to Settings (on the bridge UI) and scroll down to "Add Testnet Orbit Chain":
    ![Orbit Bridge](../assets/orbit_bridge.png)

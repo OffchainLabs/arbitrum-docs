@@ -14,7 +14,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.3.0-3e14543',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.3.2-064fa11',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -44,7 +44,7 @@ const globalVars = {
   nitroPathToStorage: 'arbos/storage',
 
   // gas floor
-  arbOneGasFloorGwei: '0.1',
+  arbOneGasFloorGwei: '0.01',
   novaGasFloorGwei: '0.01',
   goerliGasFloorGwei: '0.1',
   sepoliaGasFloorGwei: '0.1',
@@ -91,7 +91,8 @@ const globalVars = {
   sepoliaBlockGasLimit: '32,000,000',
 
   // portal application form
-  portalApplicationForm: 'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
+  portalApplicationForm:
+    'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
 };
 
 function blocksToMinutes(blocks) {

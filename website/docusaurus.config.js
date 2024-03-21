@@ -21,22 +21,21 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'OffchainLabs', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
+    // locales: ['en', 'ja', 'zh'],
     locales: ['en'],
   },
-
   presets: [
     [
       '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: '../arbitrum-docs/',
+          path: '../arbitrum-docs',
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
@@ -102,9 +101,16 @@ const config = {
           src: 'img/logo.svg',
           href: '/welcome/arbitrum-gentle-introduction',
         },
-        items: [],
+        items: [
+          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
+          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
+          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          // }
+        ],
       },
-      // todo: descriptive footer
       footer: {
         style: 'dark',
         links: [
@@ -224,6 +230,11 @@ const config = {
           flowchart: {
             curve: 'basis',
           },
+        },
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
         },
       },
     }),

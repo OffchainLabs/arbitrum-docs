@@ -104,10 +104,10 @@ To run the mirror DAS, we'll use the `daserver` tool and we'll configure the fol
 
 To enable caching, you can use the following parameters:
 
-| Parameter                                  | Description                                                             |
-| ------------------------------------------ | ----------------------------------------------------------------------- |
-| --data-availability.local-cache.enable     | Enables local in-memory caching of sequencer batch data                 |
-| --data-availability.local-cache.expiration | Expiration time for in-memory cached sequencer batches (default 1h0m0s) |
+| Parameter                                | Description                                                                        |
+|------------------------------------------|------------------------------------------------------------------------------------|
+| --data-availability.local-cache.enable   | Enables local in-memory caching of sequencer batch data                            |
+| --data-availability.local-cache.capacity | Maximum number of entries (up to 64KB each) to store in the cache. (default 20000) |
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
