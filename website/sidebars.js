@@ -139,33 +139,39 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Get started',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview',
-            },
-            {
-              type: 'doc',
-              label: 'Use the standard gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard',
-            },
-            {
-              type: 'doc',
-              label: 'Use the generic-custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom',
-            },
-            {
-              type: 'doc',
-              label: 'Use the custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway',
-            },
-            {
-              type: 'doc',
-              label: 'Bridging Ether',
+              label: 'ETH bridging',
               id: 'for-devs/concepts/token-bridge/token-bridge-ether',
             },
             {
               type: 'doc',
-              label: 'Bridging ERC-20 tokens',
+              label: 'ERC-20 token bridging',
               id: 'for-devs/concepts/token-bridge/token-bridge-erc20',
+            },
+            {
+              type: 'category',
+              label: 'Bridge tokens programmatically',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Get started',
+                  id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the standard gateway',
+                  id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the generic-custom gateway',
+                  id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the custom gateway',
+                  id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway',
+                },
+              ],
             },
           ],
         },
@@ -466,7 +472,7 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        }, 
+        },
         {
           type: 'doc',
           id: 'node-running/reference/ethereum-beacon-rpc-providers',
@@ -807,8 +813,6 @@ const sidebars = {
 };
 
 module.exports = sidebars;
-
-
 
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar

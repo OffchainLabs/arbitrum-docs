@@ -1,5 +1,5 @@
 ---
-title: 'Bridging ERC-20 tokens'
+title: 'ERC-20 token bridging'
 description: Describes how bridging ERC-20 tokens works on Arbitrum and the architecture of the token bridge
 author: dzgoldman
 user_story: As a developer, I want to understand how ERC-20 token bridging works on Arbitrum, and the architecture of the token bridge.
@@ -104,7 +104,15 @@ Your token on L1 should conform to the [ICustomToken](https://github.com/Offchai
 
 **1. Deploy your token on Arbitrum**
 
-Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [TestArbCustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestArbCustomToken.sol).
+Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [L2GatewayToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
+
+:::info Token compatibility with available tooling
+
+If you want your token to be compatible out of the box with all the tooling available (e.g., the [Arbitrum bridge](https://bridge.arbitrum.io/)), we recommend that you keep the implementation of the IArbToken interface as close as possible to the [L2GatewayToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol) implementation example.
+
+For example, if an allowance check is added to the `bridgeBurn()` function, the token will not be easily withdrawable through the Arbitrum bridge UI, as the UI does not prompt an approval transaction of tokens by default (it expects the tokens to follow the recommended L2GatewayToken implementation).
+
+:::
 
 **2. Register your token on L1 to your token on L2 via the L1CustomGateway contract**
 
