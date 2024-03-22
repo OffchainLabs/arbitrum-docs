@@ -68,7 +68,7 @@ Note that unlike the EVM, which charges for gas before running each opcode, the 
 
 The ink price, which measures the amount of ink a single EVM gas buys, is configurable by the chain owner. By default, the exchange rate is `1:10000`, but this may be adjusted as the EVM and Stylus VM improve over time.
 
-For example, if the Stylus VM becomes 2x faster, instead of cutting the nominal cost of each operation 2x, the ink price may instead be doubled, allowing 1 EVM gas to buy twice as much ink. This provides an elegant mechanism for smoothly repricing resources between the two VMs as each makes independent progress.
+For example, if the Stylus VM becomes 2x faster, instead of cutting the nominal cost of each operation, the ink price may instead be halved, allowing 1 EVM gas to buy twice as much ink. This provides an elegant mechanism for smoothly repricing resources between the two VMs as each makes independent progress.
 
 ### User experience
 

@@ -21,9 +21,9 @@ Many of the affordances use macros. Though this document details what each does,
 
 :::
 
-Additionally, the Stylus SDK supports `#[no_std]` for contracts that wish to opt out of the standard library. In fact, the entire SDK is available from `#[no_std]`, so no special feature flag is required. This can be helpful for reducing binary size, and may be preferable in pure-compute use cases like cryptography.
+Stylus programs should use #[no_std] to avoid including the Rust standard library and keep code small. Many crates that build without the standard library make for great dependencies to use in Stylus programs, as long as the total, compressed WASM size is within the 24Kb code size limit.
 
-Most users will want to use the standard library, which is available since the Stylus VM supports `rustc`'s `wasm32-unknown-unknown` target triple. In the future we may add `wasm32-wasi` too, along with floating point and SIMD, which the Stylus VM does not yet support.
+Stylus VM supports `rustc`'s `wasm32-unknown-unknown` target triple. In the future we may add `wasm32-wasi` too, along with floating point and SIMD, which the Stylus VM does not yet support.
 
 ## Storage
 

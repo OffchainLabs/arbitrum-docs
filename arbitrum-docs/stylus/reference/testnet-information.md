@@ -111,6 +111,7 @@ The following precompiles are deployed on the Stylus testnet.
 | ArbRetryableTx   | <AEL address="0x000000000000000000000000000000000000006E" chainID={23011913} /> |
 | ArbStatistics    | <AEL address="0x000000000000000000000000000000000000006F" chainID={23011913} /> |
 | ArbSys           | <AEL address="0x0000000000000000000000000000000000000064" chainID={23011913} /> |
+| ArbWasm          | <AEL address="0x0000000000000000000000000000000000000071" chainID={23011913} /> |
 | NodeInterface    | <AEL address="0x00000000000000000000000000000000000000C8" chainID={23011913} /> |
 
 ### Misc
