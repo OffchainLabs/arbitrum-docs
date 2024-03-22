@@ -341,6 +341,48 @@ const sidebars = {
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
+        {
+          type: 'category',
+          label: 'Orbit SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              label: `Anytrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
+        },
       ],
     },
     {
@@ -466,53 +508,11 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        }, 
+        },
         {
           type: 'doc',
           id: 'node-running/reference/ethereum-beacon-rpc-providers',
           label: 'L1 Ethereum RPC providers',
-        },
-        {
-          type: 'category',
-          label: 'Orbit SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/introduction',
-              label: `Introduction`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/deployment-rollup',
-              label: `Rollup Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/deployment-anytrust',
-              label: `Anytrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/deployment-custom-gas-token',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/node-config-preparation',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/token-bridge-deployment',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk/orbit-chain-configuration',
-              label: `Orbit Chain Configuration`,
-            },
-          ],
         },
         {
           type: 'category',
@@ -837,13 +837,11 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://docs.prylabs.network/docs/install/install-with-script',
-    }
+    },
   ],
 };
 
 module.exports = sidebars;
-
-
 
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
