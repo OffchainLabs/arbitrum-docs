@@ -85,9 +85,11 @@ If you’re intrigued by what BOLD can unlock for Arbitrum chains, we encourage 
 * Reading the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf)** and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold) to understand how BOLD works under the hood.
 
 ## Wen mainnet?
-BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD include:
+BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD's journey to being deployed to Arbitrum chains include:
 - A comprehensive, third-party audit of the [BOLD source code](https://github.com/OffchainLabs/bold) to ensure the effectiveness and safety of the design.
 - Tools and frameworks for the smooth migration of existing validators and a seamless on-boarding for new validators to use BOLD for their respective Arbitrum chains.
+- Monitoring stack for people to use to see on-going challenges on the testnet
+- A mechanism for the community to pool funds together to stake on assertions made by validators
 - The launch of a public bounty program for white hat auditors and security professionals to help test and secure the BOLD protocol design.
 - Proposing, to the Arbitrum DAO, that the BOLD protocol be adopted - first for Arbitrum Sepolia and then eventually for Arbitrum One and Arbitrum Nova.
 - Cutting a GA release of Nitro that enables BOLD validation.
