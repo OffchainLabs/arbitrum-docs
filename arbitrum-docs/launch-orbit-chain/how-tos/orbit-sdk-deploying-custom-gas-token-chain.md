@@ -1,5 +1,5 @@
 ---
-title: 'How to deploy a custom gas token chain using the Orbit SDK'
+title: 'How to Deploy a Custom Gas Token Chain Using the Orbit SDK'
 sidebar_label: 'Custom Gas Token Orbit Deployment'
 description: 'How to deploy a custom gas token chain using the Orbit SDK'
 author: Mehdi Salehi

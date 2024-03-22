@@ -1,5 +1,5 @@
 ---
-title: 'How to configure a node using the Orbit SDK'
+title: 'How to Configure a Node Using the Orbit SDK'
 sidebar_label: 'Node Config Generation'
 description: 'How to configure a node using the Orbit SDK'
 author: Mehdi Salehi

@@ -1,5 +1,5 @@
 ---
-title: 'How to deploy a Rollup chain using the Orbit SDK'
+title: 'How to Deploy a Rollup Chain Using the Orbit SDK'
 sidebar_label: 'Rollup Orbit Deployment'
 description: 'How to deploy a Rollup chain using the Orbit SDK '
 author: Mehdi Salehi

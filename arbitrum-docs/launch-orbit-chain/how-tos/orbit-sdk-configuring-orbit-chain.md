@@ -1,5 +1,5 @@
 ---
-title: 'How to configure an Orbit chain using the Orbit SDK'
+title: 'How to Configure an Orbit Chain Using the Orbit SDK'
 sidebar_label: 'Orbit Chain Configuration'
 description: 'How to configure an Orbit chain using the Orbit SDK '
 author: Mehdi Salehi

@@ -1,5 +1,5 @@
 ---
-title: 'How to deploy a token bridge using the Orbit SDK'
+title: 'How to Deploy a Token Bridge Using the Orbit SDK'
 sidebar_label: 'Token bridge deployment'
 description: 'How to deploy a token bridge using the Orbit SDK '
 author: Mehdi Salehi

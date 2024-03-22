@@ -1,5 +1,5 @@
 ---
-title: 'How to deploy an Anytrust chain using the Orbit SDK'
+title: 'How to Deploy an Anytrust Chain Using the Orbit SDK'
 sidebar_label: 'Anytrust Orbit Deployment'
 description: 'How to deploy an Anytrust chain using the Orbit SDK '
 author: Mehdi Salehi
