@@ -34,7 +34,7 @@ For starters, here's a sampling of exciting perks dapps get with the Nitro upgra
 
 - **No more storage gas**: there is no more concept of a separate pool of storage gas, and opcodes are priced identically to the L1 EVM.
 
-- **New L2 to L1 event signature**: The function signature for the L2 to L1 event emitted by [ArbSys](/for-devs/dev-tools-and-resources/precompiles.mdx#arbsys) has now changed.
+- **New L2 to L1 event signature**: The function signature for the L2 to L1 event emitted by [ArbSys](/build-decentralized-apps/precompiles/reference#arbsys) has now changed.
 
 - **Lower contract code size limit**: Contracts of up to 48KB were deployable, but now only up to 24KB are deployable (as specified in [EIP 170](https://eips.ethereum.org/EIPS/eip-170)). Previously deployed contracts above the limit will be maintained (but contracts deployed by these legacy contracts are capped by the new size).
 
@@ -62,7 +62,7 @@ For starters, here's a sampling of exciting perks dapps get with the Nitro upgra
     - bridge.sol contract will be redeployed and not the whole Bridge.
     - The [bridge contract address](https://etherscan.io/address/0x011B6E24FfB0B5f5fCc564cf4183C5BBBc96D515) was be changed.
 
-For addresses of protocol contracts, see [Smart contract addresses](/for-devs/useful-addresses.mdx).
+For addresses of protocol contracts, see [Smart contract addresses](/build-decentralized-apps/reference/useful-addresses).
 
 Also, worth mentioning that the address of the Delayed Inbox contract and Token Bridge contracts (Router and Gateways) weren't changed after the migration.
 
