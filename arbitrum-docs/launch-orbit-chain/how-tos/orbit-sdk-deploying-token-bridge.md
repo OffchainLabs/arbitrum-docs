@@ -17,7 +17,7 @@ For an in-depth exploration of the token bridge mechanism, feel free to consult 
 
 ### Token Bridge Deployment Steps
 
-Following the [deployment](deploying-token-bridge-with-sdk.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains. 
+Following the [deployment](orbit-sdk-deploying-token-bridge.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains. 
 
 To establish and configure the token bridge effectively, the process can be broken down into the following steps: 
 

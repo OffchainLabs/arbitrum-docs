@@ -99,7 +99,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
     ```
 ### Deployment Process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](deploying-rollup-chain-with-sdk.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](orbit-sdk-deploying-rollup-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
@@ -121,4 +121,4 @@ const txRequest = await createRollupPrepareTransactionRequest({
 });
 ```
 
-All other parts would be the same as explained in the [Rollup Orbit chain deployment page](deploying-rollup-chain-with-sdk.md).
+All other parts would be the same as explained in the [Rollup Orbit chain deployment page](orbit-sdk-deploying-rollup-chain.md).

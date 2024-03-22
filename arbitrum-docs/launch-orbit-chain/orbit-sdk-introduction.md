@@ -8,7 +8,7 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 0
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -36,7 +36,7 @@ Below, you will find detailed information about the steps for setting up an Orbi
 
 A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer four distinct types of Orbit chains:
 
-1. **Rollup Orbit Chains**: These are the most straightforward Orbit chains. In this type, transaction data is batched, compressed, and posted to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/orbit-sdk/how-tos/deploying-rollup-chain-with-sdk.md).
+1. **Rollup Orbit Chains**: These are the most straightforward Orbit chains. In this type, transaction data is batched, compressed, and posted to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
 
 2. **Anytrust Orbit Chains**: Anytrust Orbit chains share a similar logic with rollup chains but with a key difference: batches are not posted directly to the parent chain. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an Anytrust chain and a rollup chain are:
    
@@ -48,9 +48,9 @@ A primary function of the Orbit SDK is the deployment of a new Orbit chain. The 
    
 ###### Learn more about [ Anytrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
 
-###### Jump right into the [ Anytrust Orbit chain deployment guide ](/launch-orbit-chain/orbit-sdk/how-tos/deploying-anytrust-chain-with-sdk.md)
+###### Jump right into the [ Anytrust Orbit chain deployment guide ](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)
 
-3. **Custom Gas Token Orbit Chains**: This type allows transaction fees to be paid with a specific `ERC-20` token instead of `ETH`. Although the setup process is similar to a standard Rollup Orbit chain, there are important distinctions to consider. Feel free to consult the [Custom Gas Token Orbit chain deployment guide](/launch-orbit-chain/orbit-sdk/how-tos/deploying-custom-gas-token-chain-with-sdk.md). 
+3. **Custom Gas Token Orbit Chains**: This type allows transaction fees to be paid with a specific `ERC-20` token instead of `ETH`. Although the setup process is similar to a standard Rollup Orbit chain, there are important distinctions to consider. Feel free to consult the [Custom Gas Token Orbit chain deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md). 
 
 :::important
 
@@ -62,17 +62,17 @@ Custom Gas Token Orbit chains can only be Anytrust chains; a Rollup Orbit chain 
 
 ### 2. Node Configuration Preparation
 
-Once the chain has been deployed, it needs to be initialized. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/orbit-sdk/how-tos/preparing-node-config-with-sdk.md) will help you use the Orbit SDK to generate a node configuration.
+Once the chain has been deployed, it needs to be initialized. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md) will help you use the Orbit SDK to generate a node configuration.
 
 ### 3. Token Bridge Deployment
 
 To enable `ERC-20` tokens in and out of your orbit chain, you will need to deploy a bridge instance, which consists of a set of contracts.
-To do this, follow the steps outlined in the [token bridge contract deployment guide](/launch-orbit-chain/orbit-sdk/how-tos/deploying-token-bridge-with-sdk.md).
+To do this, follow the steps outlined in the [token bridge contract deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md).
 
 You can also learn more about our bridge design in the [`ERC-20` token bridge orverview](/build-decentralized-apps/token-bridging/07-token-bridge-erc20.md) 
 
 ### 4. Orbit Chain Configuration
 
 After deploying the chain, initializing it, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. 
-Read more on [how to configure your Orbit chain](/launch-orbit-chain/orbit-sdk/how-tos/configuring-orbit-chain-with-sdk.md).
+Read more on [how to configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md).
    
