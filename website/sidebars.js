@@ -474,7 +474,49 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'ArbOS software releases',
+          label: 'Orbit SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/deployment-rollup',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/deployment-anytrust',
+              label: `Anytrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/deployment-custom-gas-token',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/node-config-preparation',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/token-bridge-deployment',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk/orbit-chain-configuration',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Customize your chain',
           collapsed: true,
           items: [
             {
