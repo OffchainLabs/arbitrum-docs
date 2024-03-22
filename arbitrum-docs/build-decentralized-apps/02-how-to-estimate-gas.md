@@ -66,7 +66,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We'll use one resource available in Arbitrum: the [NodeInterface](/for-devs/dev-tools-and-resources/nodeinterface.mdx).
+We'll use one resource available in Arbitrum: the [NodeInterface](/build-decentralized-apps/nodeinterface/reference).
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at @arbOneGasFloorGwei@ gwei on Arbitrum One (@novaGasFloorGwei@ gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
   - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.

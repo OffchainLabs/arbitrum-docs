@@ -21,7 +21,7 @@ Stylus is undergoing major upgrades, and some improvements are expected to requi
 
 This table provides an overview of the available public RPC endpoints for the Stylus testnet and necessary details to interact with them.
 
-| Name           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
+| Name           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                   |
 | -------------- | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | -------------- | ------------------------------------- | ------------------------------------------------ |
 | Stylus testnet | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | Nitro (Rollup) | wss://stylus-testnet.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
 
@@ -31,7 +31,7 @@ Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction
 
 :::
 
-For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](/node-running/node-providers#rpc-endpoints).
+For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](/build-decentralized-apps/reference/node-providers#rpc-endpoints).
 
 ## Faucets
 
@@ -54,7 +54,7 @@ Stylus is undergoing major upgrades, and some improvements are expected to requi
 
 :::
 
-Here we list the addresses of the smart contracts related to the protocol, the token bridge and precompiles of the Stylus testnet. For the addresses of these contracts deployed on other Arbitrum chains, see our reference page [Smart contract addresses](/for-devs/useful-addresses).
+Here we list the addresses of the smart contracts related to the protocol, the token bridge and precompiles of the Stylus testnet. For the addresses of these contracts deployed on other Arbitrum chains, see our reference page [Smart contract addresses](/build-decentralized-apps/reference/useful-addresses).
 
 ### Protocol smart contracts
 

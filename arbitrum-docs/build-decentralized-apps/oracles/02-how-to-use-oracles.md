@@ -7,7 +7,7 @@ content_type: how-to
 
 Oracles are web services that provide a connection between smart contracts and the outside world. They let decentralized apps (dApps) interact with off-chain data and services.
 
-Familiarity with [oracles](../for-devs/concepts/oracles.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/quickstart-solidity-hardhat) before proceeding.
+Familiarity with [oracles](/build-decentralized-apps/oracles/overview), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/quickstart-solidity-hardhat) before proceeding.
 
 ## Chainlink
 
