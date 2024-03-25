@@ -8,30 +8,28 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 1
 ---
 
-This section explains how to leverage the Orbit SDK methods to deploy a <a data-quicklook-from="arbitrum-rollup-chain">`Rollup Orbit chain`</a>:
+This section explains how to use the Orbit SDK to deploy a <a data-quicklook-from="arbitrum-rollup-chain">`Rollup Orbit chain`</a>:
 
-###### For those who prefer diving directly into coding without an extensive tutorial, we recommend exploring the "create-rollup-eth"  [example]( https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) 
+###### For those who prefer diving directly into coding without an extensive tutorial, we recommend exploring the ["create-rollup-eth"  example]( https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) 
 
-The main benefit of the Orbit SDK is that it facilitates the deployment and fine-tuning of Orbit chains core Smart-Contracts. 
+The main benefit of the Orbit SDK lies in facilitating the deployment and fine-tuning of Orbit chains core Smart-Contracts. 
 
-These contracts are deployed on parent chains, they are:
+These contracts are deployed on <a data-quicklook-from="parent-chain">`parent chains`</a>, they are:
 
 - <a data-quicklook-from="bridge">Bridge contracts</a>
 - Rollup contracts
 - Contracts handling <a data-quicklook-from="fraud-proof">fraud proofs</a> 
 
-Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
+Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
 
 
 To streamline the deployment process and make it more efficient, we've developed a key contract called [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCreator.sol). This contract has two primary functions:
 
 1. [setTemplates](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L63C14-L63C26): specifies which versions of core contract should be deployed and ensures your Orbit chain runs the latest, most efficient contracts versions.
 
-2. [createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance. It uses the templates you set with `setTemplates` so that you can customize each deployment.
+2. [createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance. It uses `setTemplates` so that you can customize each deployment.
 
-These functionalities within the `RollupCreator` provide with a smoother and more user-friendly experience. 
-
-Now, let's review the inputs and configurations required by `createRollup` for a faster chain deployment.
+Let's review the inputs and configurations required by `createRollup` for a faster chain deployment.
 
 ### Rollup Deployment Parameters Configuration
 
