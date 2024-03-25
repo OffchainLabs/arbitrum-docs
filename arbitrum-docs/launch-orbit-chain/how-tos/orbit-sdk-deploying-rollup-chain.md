@@ -33,7 +33,9 @@ Let's review the inputs and configurations required by `createRollup` for a fast
 
 ### Rollup Deployment Parameters Configuration
 
-The `createRollup` function in the [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is a crucial component for deploying Orbit chains. It takes a complex input named `deployParams`, structured to encapsulate various configurable parameters customizing the Orbit chain. Let's break down the structure of these parameters:
+The `createRollup` function in the [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) takes a complex input named `deployParams`, structured to encapsulate various configurable parameters customizing the Orbit chain.
+
+Breaking down the structure of these parameters:
 
 #### 1. RollupDeploymentParams Struct
 
@@ -84,9 +86,11 @@ This nested `struct` within `Config` specifies time variations related to block 
 
 #### 4. chainConfig
 
-The `chainConfig` parameter within the `Config` `struct` is critical for customizing the Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network. Here's a brief overview of the `JSON` structure:
+The `chainConfig` parameter within the `Config` `struct` allow you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
 
-   ```solidity
+Here's a brief overview of `chainConfig`:
+
+   ```json
    {
      chainId: number;
      homesteadBlock: number;
@@ -120,7 +124,7 @@ The `chainConfig` parameter within the `Config` `struct` is critical for customi
    }
    ```
 
-Out of these parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. While part of the `chainConfig`, the other parameters typically use default values and are less frequently modified. We will detail these  parameters in the [Chain Config Parameter](#chain-config-parameter) section. Additionally, we'll guide you through using the Orbit SDK to effectively set and customize these configurations, ensuring that your Orbit chain is tailored to your specific requirements and operational needs.
+Out of these parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. While part of the `chainConfig`, the other parameters typically use default values and are less frequently modified. We will detail these  parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. Additionally, we'll guide you through using the Orbit SDK to effectively set and customize these configurations, ensuring that your Orbit chain is tailored to your specific requirements and operational needs.
 
 All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each parameter represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
 
@@ -180,9 +184,9 @@ The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPr
 
 #### **createRollupPrepareConfig API**: 
 
-   This API is designed to take parameters defined in the Config structure and fill in the rest with default values. It outputs a complete Config structure that is ready for use. 
+   This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use. 
    
-   For example, to create a Config structure with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
+   For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
 
    ```js
    import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
@@ -196,7 +200,7 @@ The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPr
 
 #### <a name="createRollupPrepareTransactionRequest-api"></a>**createRollupPrepareTransactionRequest API**: 
 
-   This API accepts parameters defined in the `RollupDeploymentParams` structure, applying defaults where necessary, and constructs the `RollupDeploymentParams`. This structure is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
+   This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
 
    For instance, to deploy using the Orbit SDK with a Config equal to `config`, a `batchPoster`, and a set of validators such as `[validator]`, the process would look like this:
 
@@ -219,9 +223,9 @@ These APIs in the Orbit SDK make the complex process of configuring and deployin
 
 ### Getting the Orbit Chain Information After Deployment
 
-Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment. The Orbit SDK provides a convenient way to do this through the `createRollupPrepareTransactionReceipt` API. This API allows you to extract vital data about your newly deployed Orbit chain's core contracts and other  aspects.
+Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment. The Orbit SDK provides a convenient way to do this through the `createRollupPrepareTransactionReceipt` API. 
 
-After sending the signed transaction and receiving the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other  information.
+After sending the signed transaction and receiving the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other information.
 
 Here's an example of how to use the Orbit SDK to get data from a deployed Orbit chain:
 
