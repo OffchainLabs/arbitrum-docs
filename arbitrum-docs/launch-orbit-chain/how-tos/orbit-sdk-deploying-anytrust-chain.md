@@ -14,7 +14,7 @@ This section explains how to to initiate an <a data-quicklook-from="arbitrum-any
 
 ### About Anytrust Orbit
 
-Anytrust chains represent a different model than Rollup chains, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the differences between Orbit chain types, please refer to [Orbit SDK introduction](../orbit-sdk-introduction.md) page.
+Anytrust chains follow a different model than Rollup chains, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the differences between Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md) page.
 
 ### Deployment Steps 
 
@@ -22,31 +22,47 @@ The deployment process of Anytrust chains is very similar to that of [Rollup cha
 
 Here are the steps involved in the deployment process:
 
-1. **Configuring The Deployment Parameters**
-2. **Deploying Your Anytrust chain**
+1. **[Setting Up the Chain Parameters](#1-setting-up-the-chain-parameters)**
+2. **[Deploying Your Anytrust chain](#2-deploying-your-anytrust-chain)**
+3. **Setting Valid Keyset on Parent Chain**
+4. **Getting the Anytrust Orbit Chain Information After Deployment**
 
-4. **Setting Anytrust Keyset**
+The deployment of an Anytrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset, comprising keys from the appointed members of the DAC, is essential for ensuring data availability and integrity. Once you have selected your committee members and gathered their keys, these keys are then configured into a keyset using the Orbit SDK. This keyset is subsequently embedded into the chain, serving as a verification mechanism to maintain the trust and security of the Anytrust chain. The proper configuration and deployment of this keyset are vital for the effective operation and reliability of the Anytrust model within the Arbitrum Orbit framework.
 
-      In the deployment of an Anytrust Orbit chain, a crucial step involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset, comprising keys from the appointed members of the DAC, is essential for ensuring data availability and integrity. Once you have selected your committee members and gathered their keys, these keys are then configured into a keyset using the Orbit SDK. This keyset is subsequently embedded into the chain, serving as a verification mechanism to maintain the trust and security of the Anytrust chain. The proper configuration and deployment of this keyset are vital for the effective operation and reliability of the Anytrust model within the Arbitrum Orbit framework.
+Let's go through each step:
 
-We will explain each step on the coming sections:
+### 1. Setting Up the Chain Parameters 
 
-### 1. Deployment Configuration Parameters 
+Similarly to the Rollup chain, you'll need to prepare the Anytrust chain configuration, including the core contracts and operational parameters that govern the chain's functionality, focusing on parameters that are specific to Anytrust chains.
 
-Similar to the Rollup chain, you'll need to prepare the chain configuration, focusing on parameters that are specific to Anytrust chains.
-
-Deploying an Anytrust Orbit chain involves a series of steps that mirror those required for a Rollup Orbit chain, with certain specificities unique to the Anytrust model. 
-
-Here’s an overview of the steps involved in configuring and deploying an Anytrust Orbit chain:
-
-1. **Chain Config Parameter**: Start by setting up the chain configuration parameters. This includes defining key elements like:
-- `chainId` 
-- `DataAvailabilityCommittee`
-- `InitialChainOwner`
-- `MaxCodeSize`
-- `MaxInitCodeSize`
+   ```solidity
+   struct Config {
+       uint64 confirmPeriodBlocks;
+       uint64 extraChallengeTimeBlocks;
+       address stakeToken;
+       uint256 baseStake;
+       bytes32 wasmModuleRoot;
+       address owner;
+       address loserStakeEscrow;
+       uint256 chainId;
+       string chainConfig;
+       uint64 genesisBlockNum;
+       ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
+   }
+   ```
 
 The `chainConfig` parameter within the `Config` structure is an essential element for tailoring your Orbit chain according to specific needs. This parameter is particularly significant when setting up an Anytrust Orbit chain, as it includes configurations that distinguish it from a Rollup chain. The key parameter that differentiates an Anytrust chain in this context is the `DataAvailabilityCommittee`.
+
+Start by setting up the chain configuration parameters. This includes defining key elements like:
+
+| Parameter              | Description                                                                          |
+|:------------------------|:-------------------------------------------------------------------------------------|
+|`chainId`            | Your Orbit chain's unique identifier. It differentiates your chain from others in the ecosystem. |
+|`DataAvailabilityCommittee`            |    Set to `false`, this boolean makes your chain as a Rollup, set to `true` configures it as an Anytrust chain. |
+|`InitialChainOwner`          |  Identifies who owns and controls the chain. |
+|`MaxCodeSize  `|   Sets the maximum size for contract bytecodes on the Orbit chain. e.g. Ethereum mainnet has a limit of 24,576 Bytes. |
+|`MaxInitCodeSize`    |   Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. e.g. Ethereum mainnet limit is 49,152 Bytes. |
+
 
 For an Anytrust chain, you need to set the `DataAvailabilityCommittee` to **true**. This setting is crucial as it indicates the chain's reliance on a committee for data availability, which is a hallmark of the Anytrust model.
 
@@ -65,51 +81,34 @@ In this example, you set up the chain configuration with a specific `chainId`, t
 
 These parameters tailor the chain to your specific requirements and operational context.
 
-2. **Configuration of `RollupCreator` Params and Deployment of Anytrust on Orbit SDK**:
+The Orbit SDK has a helper to execute this part:
 
-    Uses the Orbit SDK's functionalities to configure the `RollupCreator` parameters. 
-    This step involves preparing the deployment settings for the Anytrust chain, including the core contracts and operational parameters that govern the chain's functionality.
-
-The process of configuring and deploying an Anytrust Orbit chain closely parallels that of a Rollup Orbit chain, as detailed on the Rollup deployment page. The key lies in utilizing specific APIs provided by the Orbit SDK, which are instrumental in preparing and executing the deployment. These APIs are:
-
-  1. `createRollupPrepareConfig` API: This API is used to set up the configuration for your Anytrust chain. It takes in the parameters defined in the Config structure, applies them, and fills in any remaining details with default values. The output is a fully-formed Config structure that is ready for deployment.
-
-  2. `createRollupPrepareTransactionRequest` API: After configuring your chain with the `createRollupPrepareConfig` API, the next step is to use the `createRollupPrepareTransactionRequest` API. This API is designed to take the parameters defined in the `RollupDeploymentParams`, along with the configuration generated by the `createRollupPrepareConfig` API, to prepare a transaction request. This request is then used to invoke the `createRollup` function of the `RollupCreator` contract, which effectively deploys and initializes the core contracts of your Anytrust Orbit chain.
-
-Both of these APIs are critical in the setup process and were previously discussed with examples provided on the  [Rollup deployment page](orbit-sdk-deploying-rollup-chain.md#rollup-config-param). 
-
-By following those examples and instructions, you can apply the same methods to set up an Anytrust chain, ensuring a seamless and efficient deployment process using the Orbit SDK.
-
-3. **Getting the Anytrust Orbit Chain Information After Deployment**:
-
-    After deploying the Anytrust chain, it's crucial to retrieve detailed information about the deployment. This includes data about the core contracts, the configuration settings, and other relevant operational details. The Orbit SDK provides tools for extracting this information efficiently.
-
-4. **Setting Valid Keyset on Parent Chain**:
-
-    A unique aspect of the Anytrust model is setting up a valid keyset for the <a data-quicklook-from="arbitrum-rollup-chain">`Data Availability Committee (DAC)`</a> on the parent chain. This step involves defining and deploying a set of cryptographic keys that will be used by the DAC to ensure data availability and integrity.
-
-Each of these steps plays a vital role in the successful deployment and operation of an Anytrust Orbit chain. The upcoming sections will provide detailed explanations and guidance on how to accomplish each step, ensuring a smooth and effective deployment process. By following these guidelines, developers can leverage the capabilities of the Orbit SDK to set up an Anytrust chain that meets their specific needs and aligns with their project goals.
+For an easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK documentation](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 
-#### 2. Configuration of `RollupCreator` Params and Deployment of Anytrust on Orbit SDK
+### 2. Deploying Your Anytrust chain
+
+After configuring your chain with the `createRollupPrepareConfig` API, the next step is to use the `createRollupPrepareTransactionRequest` API. This API is designed to take the parameters defined in the `RollupDeploymentParams`, along with the configuration generated by the `createRollupPrepareConfig` API, to prepare a transaction request. This request is then used to invoke the `createRollup` function of the `RollupCreator` contract, which effectively deploys and initializes the core contracts of your Anytrust Orbit chain.
 
 
-### 3. Getting the Anytrust Orbit Chain Information After Deployment:
+   For instance, to deploy using the Orbit SDK with a Config equal to `config`, a `batchPoster`, and a set of validators such as `[validator]`, the process would look like this:
 
-The procedure for retrieving information about your deployed Anytrust Orbit chain is identical to the method used for Rollup Orbit chains, as detailed on the Rollup Orbit page. This consistency in approach ensures a streamlined process, regardless of the type of Orbit chain you are working with.
+   ```js
+   import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
 
-To extract detailed information about your Anytrust Orbit chain post-deployment, you will use the same API and steps as you would for a Rollup Orbit chain. Here's a reminder of the example:
+   const request = await createRollupPrepareTransactionRequest({
+       params: {
+           config,
+           batchPoster,
+           validators: [validator],
+       },
+       account: deployer_address,
+       publicClient,
+   });
+   ```
 
-```js
-import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
-
-const data = createRollupPrepareTransactionReceipt(txReceipt);
-```
-
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the Anytrust chain. By inputting this receipt into the `createRollupPrepareTransactionReceipt` function, you can access comprehensive data about your deployment, including details about the core contracts and configuration settings.
-
-
-### 4. Setting Valid Keyset on Parent Chain:
+After creating the raw transaction, you need to sign and broadcast it to the network.
+### 3. Setting Valid Keyset on Parent Chain:
 
 The final step in deploying your Anytrust Orbit chain is to set up the valid keyset for your Data Availability Committee (DAC) on the parent chain. This keyset is essential for ensuring that the parent chain can verify the data from your Orbit chain. The process of generating keys and the keyset for your committee is comprehensively explained in our documentation (referenced as '#'). Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
 
@@ -132,3 +131,19 @@ const txRequest = await setValidKeysetPrepareTransactionRequest({
 In this example, `upgradeExecutor_address` and `sequencerInbox_address` are placeholders for the actual addresses of the respective contracts in your Orbit chain. `keyset` is the keyset you generated for your committee, and `deployer.address` refers to the owner's account address.
 
 After you create the transaction request using the above API, the next step is to sign and send the transaction. This action will effectively set the keyset on the parent chain, allowing it to recognize and verify the valid keyset for your Anytrust Orbit chain. This step is crucial for the operational integrity and security of your Anytrust chain, ensuring that the data verified by the DAC is recognized and accepted by the parent chain.
+
+### 4. Getting the Anytrust Orbit Chain Information After Deployment:
+
+The procedure for retrieving information about your deployed Anytrust Orbit chain is identical to the method used for Rollup Orbit chains, as detailed on the Rollup Orbit page. This consistency in approach ensures a streamlined process, regardless of the type of Orbit chain you are working with.
+
+To extract detailed information about your Anytrust Orbit chain post-deployment, you will use the same API and steps as you would for a Rollup Orbit chain. Here's a reminder of the example:
+
+```js
+import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
+
+const data = createRollupPrepareTransactionReceipt(txReceipt);
+```
+
+In this example, `txReceipt` refers to the transaction receipt you received after deploying the Anytrust chain. By inputting this receipt into the `createRollupPrepareTransactionReceipt` function, you can access comprehensive data about your deployment, including details about the core contracts and configuration settings.
+
+
