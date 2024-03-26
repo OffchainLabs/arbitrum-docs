@@ -38,7 +38,7 @@ Here are the steps you can take to create an Orbit chain with the Orbit SDK:
 
 A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer four distinct types of Orbit chains:
 
-1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)**: These are the most straightforward Orbit chains. In this type, transaction data is batched, compressed, and posted to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
+1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)**: These Orbit chains offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
 
 2. **[Anytrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)**: Anytrust Orbit chains share a similar logic with rollup chains but with a key difference: batches are not posted directly to the parent chain. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an Anytrust chain and a rollup chain are:
    
