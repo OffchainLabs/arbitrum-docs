@@ -31,7 +31,7 @@ You can use these setter functions to configure the child chain parameters:
 
 - `removeChainOwner`: Enables you to remove an existing owner from the list of chain owners.
 
-- `setMinimumL2BaseFee`: Sets the minimum base fee on the child chain. The minimum base fee is the lowest amount that the base fee on the child chain can ever be. For example, the current minimum base fee on Arbitrum One is 0.1 gwei, and on Arbitrum Nova, it is 0.01 gwei.
+- `setMinimumL2BaseFee`: Sets the minimum base fee on the child chain. The minimum base fee is the lowest amount that the base fee on the child chain can ever be. For example, the current minimum base fee on Arbitrum One and Arbitrum Nova is 0.01 gwei.
 
 - `setSpeedLimit`: The fee mechanism on the Arbitrum Nitro stack differs from the Ethereum blockchain. The Nitro stack has a parameter called the speed limit, which targets the number of gas consumed on the child chain per second. If the amount of gas per second exceeds this pre-specified amount, the base fee on the child chain will increase, and vice versa. The current speed limit on Arbitrum One is 7 million gas per second, meaning if the Arbitrum One chain consumes more than 7 million gas per second, its base fee will increase. For more information on the speed limit, please refer to this [document explaining the concept of speed limit in the Nitro stack](https://docs.arbitrum.io/inside-arbitrum-nitro/#the-speed-limit).
 
