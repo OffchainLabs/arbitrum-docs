@@ -85,17 +85,18 @@ This API gets related inputs and creates the transaction request to secure enoug
 Example:
 
 ```js
-import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
+import { createRollupEnoughCustomFeeTokenAllowance } from "@arbitrum/orbit-sdk";
 
 const allowanceParams = {
-nativeToken,
-account: deployer.address,
-publicClient: parentChainPublicClient,
+  nativeToken,
+  account: deployer.address,
+  publicClient: parentChainPublicClient,
 };
 
-const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
+const approvalTxRequest =
+  await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
     allowanceParams,
-);
+  );
 ```
 ### 4. Deployment Process
 
@@ -111,13 +112,14 @@ Example:
 
 ```js
 const txRequest = await createRollupPrepareTransactionRequest({
-    params: {
+  params: {
     config,
     batchPoster,
     validators: [validator],
-    nativeToken},
-    account: deployer.address,
-    publicClient: parentChainPublicClient,
+    nativeToken,
+  },
+  account: deployer.address,
+  publicClient: parentChainPublicClient,
 });
 ```
 
