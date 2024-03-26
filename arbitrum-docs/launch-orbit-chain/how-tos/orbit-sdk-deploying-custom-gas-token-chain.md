@@ -100,7 +100,7 @@ const approvalTxRequest =
 ```
 ### 4. Deployment Process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](orbit-sdk-deploying-rollup-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
