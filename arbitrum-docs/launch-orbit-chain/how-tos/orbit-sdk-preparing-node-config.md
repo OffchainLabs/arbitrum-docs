@@ -10,7 +10,7 @@ sidebar_position: 4
 
 This guide will walk you through configuring an Orbit node supporting a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust</a> chain.
 
-- Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain#rollup-deployment-parameter) section of the rollup deployment guide.
+- Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain) section of the rollup deployment guide.
 
 Once you have successfully deployed and initialized the Orbit core contracts, the next step is configuring and running your Orbit chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
 
