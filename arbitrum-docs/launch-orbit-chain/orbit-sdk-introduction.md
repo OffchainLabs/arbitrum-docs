@@ -15,7 +15,7 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 The Arbitrum Orbit SDK is a comprehensive toolkit designed for intermediate blockchain developers interested in building on the Arbitrum Orbit platform.
 
-This SDK facilitates the creation and management of your own Orbit chain using the advanced capabilities of Viem, a modern alternative to traditional Ethereum libraries like _ethers.js_ and _web3.js_.
+This SDK facilitates the creation and management of your own Orbit chain using the advanced capabilities of [Viem](https://viem.sh), a modern alternative to traditional Ethereum libraries like _ethers.js_ and _web3.js_.
 
 ## Arbitrum Orbit Chains
 
