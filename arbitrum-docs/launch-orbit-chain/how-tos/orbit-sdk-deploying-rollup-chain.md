@@ -219,8 +219,6 @@ The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPr
    ```
     After creating the raw transaction, you need to sign and broadcast it to the network.
 
-These APIs in the Orbit SDK make the complex process of configuring and deploying an Orbit chain more manageable and user-friendly. By abstracting the intricacies of contract interactions and deployment logistics, the SDK allows developers to focus more on their specific use cases and less on the underlying blockchain mechanics.
-
 ### Getting the Orbit Chain Information After Deployment
 
 Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment. The Orbit SDK provides a convenient way to do this through the `createRollupPrepareTransactionReceipt` API. 
