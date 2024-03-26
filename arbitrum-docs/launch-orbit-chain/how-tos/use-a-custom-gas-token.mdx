@@ -29,7 +29,7 @@ There are other important considerations to keep in mind when deciding to use a 
 
 There are several parameter changes required to ensure proper functioning of an Orbit chain configured to use a custom gas token.
 
-After deploying the chain, you must reset the base fees of the parent chain by calling the following functions in the [ArbOwner](/for-devs/dev-tools-and-resources/precompiles.mdx#arbowner) precompile:
+After deploying the chain, you must reset the base fees of the parent chain by calling the following functions in the [ArbOwner](/build-decentralized-apps/precompiles/reference#arbowner) precompile:
 
 - `SetL1PricePerUnit`, setting `pricePerUnit` to `0`
 - `SetL1PricingRewardRate`, setting `perUnitReward` to `0`
