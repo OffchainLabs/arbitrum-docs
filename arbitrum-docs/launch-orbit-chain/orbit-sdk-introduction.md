@@ -54,7 +54,7 @@ A primary function of the Orbit SDK is the deployment of a new Orbit chain. The 
 
 :::important
 
-Custom Gas Token Orbit chains can only be Anytrust chains; a Rollup Orbit chain cannot use a custom gas fee token.
+Custom Gas Token Orbit chains can only be Anytrust chains; currently, a Rollup Orbit chain cannot use a custom gas fee token.
 
 :::
 
