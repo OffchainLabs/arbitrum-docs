@@ -410,6 +410,10 @@ Taking that into account, there's a risk of Denial of Service attacks on those s
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
 
+## Other considerations
+
+- When using [nginx](https://www.nginx.com/) in the networking stack, a DAS might fail receiving batches that are over a certain size. If this happens, the DAS won't be able to sign any more certificates and the batch poster will receive an error `413 Request Entity Too Large`. To prevent this behavior, the parameter `client_max_body_size` from nginx configuration should be configured with a higher value than the default 1M. It's recommended to set it to at least 50M.
+
 ## What to do next?
 
 Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:

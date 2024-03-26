@@ -249,11 +249,6 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
-          type: 'doc',
-          id: 'node-running/how-tos/running-an-orbit-node',
-          label: 'Run a full Orbit node',
-        },
-        {
           type: 'category',
           label: 'Customize your chain',
           collapsed: true,
@@ -261,17 +256,27 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Customize deployment config`,
+              label: `Customize your chain's deployment`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `Customize behavior`,
+              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+              label: `Additional configuration parameters`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/use-a-custom-gas-token',
+              label: `Use a custom gas token`,
             },
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `Customize precompiles`,
+              label: `Customize your chain's precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-stf',
+              label: `Customize your chain's behavior`,
             },
           ],
         },
@@ -281,23 +286,20 @@ const sidebars = {
           collapsed: true,
           items: [
             {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases</a>',
+              // q: why use an anchor html tag here?
+              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+              //    if we use a fully qualified link, localhost won't work
+            },
+            {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/arbos-upgrade',
               label: `Upgrade ArbOS`,
             },
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">↓</span></a>',
-              // q: why use an anchor html tag here?
-              // a: see note at end of file
-            },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
-          label: `Add your chain to the bridge`,
         },
         {
           type: 'html',
@@ -313,13 +315,23 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/chain-ownership',
-          label: 'Orbit chain ownership',
+          id: 'launch-orbit-chain/reference/monitoring-tools-and-considerations',
+          label: 'Monitoring tools and considerations',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ',
+          id: 'node-running/how-tos/running-an-orbit-node',
+          label: 'Run a full Orbit node',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
+          label: `Add your chain to the bridge`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/chain-ownership',
+          label: 'Orbit chain ownership',
         },
         {
           type: 'doc',
@@ -328,18 +340,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/reference/command-line-options',
-          label: 'Command-line options',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-          label: 'Additional configuration parameters',
-        },
-        {
-          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/troubleshooting-building-orbit',
+          label: 'FAQ',
         },
       ],
     },
@@ -466,7 +473,7 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        }, 
+        },
         {
           type: 'doc',
           id: 'node-running/reference/ethereum-beacon-rpc-providers',
@@ -800,8 +807,6 @@ const sidebars = {
 };
 
 module.exports = sidebars;
-
-
 
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
