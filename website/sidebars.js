@@ -52,22 +52,22 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Comparison overview',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/overview',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
             },
             {
               type: 'doc',
               label: 'Block numbers and time',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
               type: 'doc',
               label: 'RPC methods',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
             },
             {
               type: 'doc',
               label: 'Solidity support',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
             },
           ],
         },
@@ -79,17 +79,17 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/oracles',
+              id: 'build-decentralized-apps/oracles/overview',
             },
             {
               type: 'doc',
               label: 'Use oracles in your app',
-              id: 'devs-how-tos/how-to-use-oracles',
+              id: 'build-decentralized-apps/oracles/how-to-use-oracles',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/oracles',
+              id: 'build-decentralized-apps/oracles/reference',
             },
           ],
         },
@@ -101,12 +101,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/precompiles',
+              id: 'build-decentralized-apps/precompiles/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/precompiles',
+              id: 'build-decentralized-apps/precompiles/reference',
             },
           ],
         },
@@ -118,12 +118,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/nodeinterface',
+              id: 'build-decentralized-apps/nodeinterface/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/nodeinterface',
+              id: 'build-decentralized-apps/nodeinterface/reference',
             },
           ],
         },
@@ -135,37 +135,37 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/token-bridge/token-bridge-overview',
+              id: 'build-decentralized-apps/token-bridging/overview',
             },
             {
               type: 'doc',
               label: 'Get started',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview',
+              id: 'build-decentralized-apps/token-bridging/get-started',
             },
             {
               type: 'doc',
               label: 'Use the standard gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard',
+              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard',
             },
             {
               type: 'doc',
               label: 'Use the generic-custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom',
+              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom',
             },
             {
               type: 'doc',
               label: 'Use the custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway',
+              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway',
             },
             {
               type: 'doc',
               label: 'Bridging Ether',
-              id: 'for-devs/concepts/token-bridge/token-bridge-ether',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
             },
             {
               type: 'doc',
               label: 'Bridging ERC-20 tokens',
-              id: 'for-devs/concepts/token-bridge/token-bridge-erc20',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
           ],
         },
@@ -175,43 +175,43 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/node-providers',
+              id: 'build-decentralized-apps/reference/node-providers',
               label: 'RPC endpoints and providers',
             },
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'for-devs/useful-addresses',
+              id: 'build-decentralized-apps/reference/useful-addresses',
             },
             {
               type: 'doc',
               label: 'Chain parameters',
-              id: 'for-devs/chain-params',
+              id: 'build-decentralized-apps/reference/chain-params',
             },
             {
               type: 'doc',
               label: 'Development frameworks',
-              id: 'for-devs/dev-tools-and-resources/development-frameworks',
+              id: 'build-decentralized-apps/reference/development-frameworks',
             },
             {
               type: 'doc',
               label: 'Web3 libraries and tools',
-              id: 'for-devs/dev-tools-and-resources/web3-libraries-tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
             },
             {
               type: 'doc',
               label: 'Monitoring tools and block explorers',
-              id: 'for-devs/dev-tools-and-resources/monitoring-tools-block-explorers',
+              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
             },
             {
               type: 'doc',
               label: 'Debugging tools',
-              id: 'for-devs/dev-tools-and-resources/debugging-tools',
+              id: 'build-decentralized-apps/reference/debugging-tools',
             },
 
             {
               type: 'doc',
-              id: 'mainnet-risks',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
               label: 'Mainnet risks',
             },
           ],
@@ -802,14 +802,7 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://docs.prylabs.network/docs/install/install-with-script',
-    },
-    /*
-    {
-      type: "doc",
-      id: "node-running/node-providers",
-      label: "Third-party node providers"
-    },
-    */
+    }
   ],
 };
 
