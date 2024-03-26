@@ -46,7 +46,7 @@ To use the `prepareChainConfig` method as shown in the example above, some input
 | Parameter                   | Type         |  Description                                                                                                                                 |
 |-----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | `chainId`                   |  `number`    |  Your Orbit chain's `chainId`.                                                                                                               |
-| `nativeToken`               |  `Address`   |  The contract address of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
+| `nativeToken`               |  `Address`   |  The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
 | `DataAvailabilityCommittee` |  `boolean`   |  Should be set to `true` since only Anytrust chains can accept `ERC-20` tokens.                                                              |
 
 
