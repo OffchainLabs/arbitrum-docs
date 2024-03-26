@@ -19,12 +19,6 @@ This SDK facilitates the creation and management of your own Orbit chain using t
 
 ## Arbitrum Orbit Chains
 
-The Arbitrum Orbit SDK helps you to spin up an <a data-quicklook-from="arbitrum-orbit">Orbit</a> chain as a <a data-quicklook-from="layer-3-l3">Layer 3 (L3)</a> chain settling transactions with any <a data-quicklook-from="layer-2-l2">Layer 2 (L2)</a> chains, or as a Layer 2 (L2) chain directly settling on <a data-quicklook-from="layer-1-l1">Layer 1 (L1)</a> chains. This adaptability opens up a realm of possibilities for application development and blockchain use cases.
-
-### Enhanced Development Experience
-
-The SDK is developed using _TypeScript_, providing a solid foundation for your development efforts. At the core of our SDK is _Viem_, which elevates the development experience by offering a streamlined, efficient, and modular approach to interacting with Ethereum's blockchain and smart contracts. _Viem_ and the Arbitrum Orbit SDK offer a smooth transition and easy comparison to understand the benefits and similarities between the platforms, especially with resources like [Viem's ethers.js migration guide](https://viem.sh/docs/ethers-migration.html).
-
 ### Capabilities of the SDK:
 
 - **Configuration and Deployment**: Simplifies the process of configuring and deploying Orbit chain's core contracts.
