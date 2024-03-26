@@ -14,7 +14,7 @@ Deploying a Custom Gas Token Orbit chain introduces a unique aspect to the stand
 
 :::important
 
-Custom gas tokens are only supported on Orbit Anytrust chains - this feature is **not available** on Rollup Orbit chains.
+Custom gas tokens are only supported on Orbit Anytrust chains, currently. This feature is **not available yet** on Rollup Orbit chains.
 
 :::
 
