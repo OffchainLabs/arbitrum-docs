@@ -160,7 +160,7 @@ In this section, we'll provide detailed explanations of the various chain config
 |`nativeToken`          |  Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains. |
 |`confirmPeriodBlocks`  |   Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count. |
 |`baseStake`  |   Orbit chain validator nodes must stake a certain amount to incentivize honest participation. The `basestake` parameter specifies this amount. |
-|`stakeToken`    |  Token in which  the `basestake` is required. It can be `ETH` or in `ERC-20` tokens. |
+|`stakeToken`    |  Token in which  the `basestake` is required. It represents the token's address on the parent chain. Can be `ETH` or a `ERC-20`token |
 |`owner`  |   Account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain. |
 |`chainId`    |   Sets the unique chain ID of your Orbit chain. |
 
