@@ -110,7 +110,7 @@ After configuring your chain with the `createRollupPrepareConfig` API, the next 
 After creating the raw transaction, you need to sign and broadcast it to the network.
 ### 3. Setting Valid Keyset on Parent Chain:
 
-The final step in deploying your Anytrust Orbit chain is to set up the valid keyset for your Data Availability Committee (DAC) on the parent chain. This keyset is essential for ensuring that the parent chain can verify the data from your Orbit chain. The process of generating keys and the keyset for your committee is comprehensively explained in our documentation (referenced as '#'). Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
+The final step in deploying your Anytrust Orbit chain is to set up the valid keyset for your Data Availability Committee (DAC) on the parent chain. This keyset is essential for ensuring the integrity of the certificates that the DAC signs when storing Orbit chain's data. The process of generating keys and the keyset for your committee is comprehensively explained in our documentation. Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
 
 To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API aids in setting the keyset on the parent chain. To use this API, you need specific information that you gathered in step 3. This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the account of the owner.
 
