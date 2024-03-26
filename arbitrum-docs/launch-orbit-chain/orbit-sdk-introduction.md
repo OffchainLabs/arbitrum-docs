@@ -58,8 +58,6 @@ Custom Gas Token Orbit chains can only be Anytrust chains; currently, a Rollup O
 
 :::
 
-4. **Orbit Chains with Outsourced DA Layers**: These chains leverage third-party Data Availability (DA) layers to transmit transaction data instead of posting it directly to the parent chain (as in rollup chains) or storing it on a DAC (as in Anytrust chains). Solutions like Celestia can support Orbit chains for this purpose.
-
 ### 2. [Node Configuration Preparation](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md)
 
 Once the chain has been deployed, you need to start up your node. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md) will help you use the Orbit SDK to generate a node configuration.
