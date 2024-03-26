@@ -62,7 +62,7 @@ Custom Gas Token Orbit chains can only be Anytrust chains; currently, a Rollup O
 
 ### 2. [Node Configuration Preparation](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md)
 
-Once the chain has been deployed, it needs to be initialized. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md) will help you use the Orbit SDK to generate a node configuration.
+Once the chain has been deployed, you need to start up your node. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md) will help you use the Orbit SDK to generate a node configuration.
 
 ### 3. [Token Bridge Deployment](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md)
 
@@ -73,6 +73,6 @@ You can also learn more about our bridge design in the [`ERC-20` token bridge or
 
 ### 4. [Orbit Chain Configuration](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md)
 
-After deploying the chain, initializing it, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. 
+After deploying the chain, starting your node up, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. 
 Read more on [how to configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md).
    
