@@ -13,7 +13,7 @@ This section offers a series of conceptual documents explaining how asset bridgi
 
 This section is divided in 2 main pages:
 
-- [ETH bridging](/for-devs/concepts/token-bridge/token-bridge-ether.mdx): explains how Arbitrum handles bridging ETH, the native token of Ethereum and the Arbitrum chains, between L1 and L2.
-- [ERC-20 token bridging](/for-devs/concepts/token-bridge/token-bridge-erc20.mdx): explains the architecture of the token bridge for this type of asset, describing the different options available to make a token bridgeable.
+- [ETH bridging](/build-decentralized-apps/token-bridging/token-bridge-ether): explains how Arbitrum handles bridging ETH, the native token of Ethereum and the Arbitrum chains, between L1 and L2.
+- [ERC-20 token bridging](/build-decentralized-apps/token-bridging/token-bridge-erc20): explains the architecture of the token bridge for this type of asset, describing the different options available to make a token bridgeable.
 
-For a more practical approach, there are [How-to pages](/devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview.mdx) that go over the process of making an ERC-20 token bridgeable using the different types of gateway available in the token bridge.
+For a more practical approach, there are [How-to pages](/build-decentralized-apps/token-bridging/get-started) that go over the process of making an ERC-20 token bridgeable using the different types of gateway available in the token bridge.
