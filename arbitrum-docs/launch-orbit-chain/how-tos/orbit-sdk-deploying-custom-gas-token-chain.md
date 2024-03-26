@@ -74,7 +74,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
 
 | Parameter                   | Type            |  Description                                                                                                                               |
 |-----------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `nativeToken`               |  `Address`      |  The contract address of the `ERC-20` token your chain will use for `gas` fees.                                                              |
+| `nativeToken`               |  `Address`      |  The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.                                          |
 | `account`                   |  `Address`      |  The  address  Orbit chain's|
 | `publicClient`              |  `PublicClient` |  The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html).                                       |
 
