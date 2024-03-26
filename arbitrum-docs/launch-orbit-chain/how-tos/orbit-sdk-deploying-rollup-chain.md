@@ -27,7 +27,7 @@ To streamline the deployment process and make it more efficient, we've developed
 
 1. [setTemplates](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L63C14-L63C26): specifies which versions of core contract should be deployed and ensures your Orbit chain runs the latest, most efficient contracts versions.
 
-2. [createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance. It uses `setTemplates` so that you can customize each deployment.
+2. [createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance.
 
 Let's review the inputs and configurations required by `createRollup` for a faster chain deployment.
 
