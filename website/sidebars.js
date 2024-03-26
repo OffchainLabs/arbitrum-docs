@@ -139,26 +139,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Get started',
-              id: 'build-decentralized-apps/token-bridging/get-started',
-            },
-            {
-              type: 'doc',
-              label: 'Use the standard gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard',
-            },
-            {
-              type: 'doc',
-              label: 'Use the generic-custom gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom',
-            },
-            {
-              type: 'doc',
-              label: 'Use the custom gateway',
-              id: 'build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway',
-            },
-            {
-              type: 'doc',
               label: 'Bridging Ether',
               id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
             },
@@ -166,6 +146,32 @@ const sidebars = {
               type: 'doc',
               label: 'Bridging ERC-20 tokens',
               id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
+            },
+            {
+              type: 'category',
+              label: 'Bridge tokens programmatically',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Get started',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the generic-custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
+                },
+              ],
             },
           ],
         },
