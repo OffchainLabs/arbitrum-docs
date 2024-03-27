@@ -80,7 +80,7 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
 - Example:
 
   ```bash wordWrap=true
-  Docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<L3ChainId> --chain.name=<My Arbitrum L3 Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
   ```
 
     - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
