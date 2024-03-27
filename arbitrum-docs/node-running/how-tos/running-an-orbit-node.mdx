@@ -39,7 +39,7 @@ The RPC endpoint must direct to <a data-quicklook-from="arbitrum-one">Arbitrum O
 ### 2. Child chain parameters 
 
 
-In the Arbitrum Orbit context, the child chain is an L3 Orbit chain, and the required parameters are `chain-info` and `chain-name`
+In the Arbitrum Orbit context, the child chain is an L2 or an L3 Orbit chain, and the required parameters are `chain-info` and `chain-name`
 
 #### 1. `chain.info`
 
@@ -64,13 +64,13 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
 
 ### 3.Important ports
 
-- RPC: `8547`
-- Sequencer Feed: `9642`
-- WebSocket: `8548`
-  - WS port `8548` needs extra args to be opened. Please use these flags:
-    - `--ws.port=8548`
-    - `--ws.addr=0.0.0.0`
-    - `--ws.origins=\*`
+    
+   | Protocol       | Port  | arg 1 (required) | arg 2 (required)  | arg 3 (required)  |
+   |----------------|-------|----------------- |-------------------|-------------------|
+   | RPC            | `8547`|                  |                   |                   |
+   | Sequencer Feed | `9642`|                  |                   |                   |
+   | WebSocket      | `8548`|`--ws.port=8548`  |`--ws.addr=0.0.0.0`|`--ws.origins=\*`  |
+    
 
 ### 4. Putting it all together
 
