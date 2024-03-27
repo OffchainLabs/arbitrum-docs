@@ -60,7 +60,25 @@ An example of `chain-info` is available in the next section.
 --chain.name=<My Arbitrum L3 Chain> 
 ```
 
-For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it is essential to provide `--node.data-availability.enable`.
+#### 3. AnyTrust Chains
+
+  For <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chains</a>, you need to to add the following flags to the command or configuration:
+
+    ```shell 
+    --node.data-availability.enable
+    ```
+
+    And: 
+
+    ```shell 
+    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>
+    ```
+    
+    Or: 
+    
+    ```shell
+    --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
+    ```
 
 ### 3.Important ports
 
@@ -85,32 +103,13 @@ For an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, it i
 
     - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
 
-    - When using the flag `--chain.info-json=<Orbit Chain's chain info>`, it is essential to replace `<Orbit Chain's chain info>` with the specific `chain info` JSON string of the Orbit chain for which you wish to run the node: 
+    - When using the flag `--chain.info-json=<Orbit Chain's chain info>`, replace `<Orbit Chain's chain info>` with the specific `chain info` JSON string of the Orbit chain for which you wish to run the node: 
 
 - Example:
 
   ```shell wordWrap=true
   --chain.info-json="[{\"chain-id\":94692861356,\"parent-chain-id\":421614,\"chain-name\":\"My Arbitrum L3 Chain\",\"chain-config\":{\"chainId\":94692861356,\"homesteadBlock\":0,\"daoForkBlock\":null,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"berlinBlock\":0,\"londonBlock\":0,\"clique\":{\"period\":0,\"epoch\":0},\"arbitrum\":{\"EnableArbOS\":true,\"AllowDebugPrecompiles\":false,\"DataAvailabilityCommittee\":false,\"InitialArbOSVersion\":10,\"InitialChainOwner\":\"0xAde4000C87923244f0e95b41f0e45aa3C02f1Bb2\",\"GenesisBlockNum\":0}},\"rollup\":{\"bridge\":\"0xde835286442c6446E36992c036EFe261AcD87F6d\",\"inbox\":\"0x0592d3861Ea929B5d108d915c36f64EE69418049\",\"sequencer-inbox\":\"0xf9d77199288f00440Ed0f494Adc0005f362c17b1\",\"rollup\":\"0xF5A42aDA664E7c2dFE9DDa4459B927261BF90E09\",\"validator-utils\":\"0xB11EB62DD2B352886A4530A9106fE427844D515f\",\"validator-wallet-creator\":\"0xEb9885B6c0e117D339F47585cC06a2765AaE2E0b\",\"deployed-at\":1764099}}]"
   ```
-
-  - Please note: for Anytrust chains, it is essential to add the following flags to the command or configuration:
-
-    ```shell 
-    --node.data-availability.enable
-    ```
-
-    And: 
-
-    ```shell 
-    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>
-    ```
-    
-    Or: 
-    
-    ```shell
-    --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
-    ```
-
 
 - When shutting down the Docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running
 
