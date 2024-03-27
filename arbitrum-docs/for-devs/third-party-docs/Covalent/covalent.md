@@ -1,6 +1,6 @@
 ---
 title: 'Quickstart - Covalent Indexing and Querying API'
-description: 'Learn how to use Covalent's APIs to access Arbitrum One, Nova and Orbit chain data including balances, transactions, NFTs, DEX and core blockchain data.'
+description: 'Learn how to use the Covalent APIs to access Arbitrum One, Nova and Orbit chain data including balances, transactions, NFTs, DEX and core blockchain data.'
 author: harishraisinghani
 sme: harishraisinghani
 sidebar_label: 'Covalent'
@@ -68,19 +68,24 @@ There are 3 primary developer tools for using the APIs:
 
 1. [**Unified API**](https://www.covalenthq.com/docs/api/?utm_source=arbitrum&utm_medium=partner-docs) - enterprise-grade endpoints to use with any programming language. Switch blockchains with one path parameter.
 
-    ```bash
+    ```
     curl -X GET https://api.covalenthq.com/v1/arbitrum-mainnet/address/0xf977814e90da44bfa03b6295a0616a897441acec/balances_v2/ \
         -H 'Content-Type: application/json' \
         -u YOUR_API_KEY:
     ```
 
 2. [**Client SDKs**](https://www.covalenthq.com/docs/unified-api/sdk/?utm_source=arbitrum&utm_medium=partner-docs) - official client libraries including TypeScript, Go and Python.
-    ```jsx
+
+    TypeScript example:
+    ```
     npm install @covalenthq/client-sdk
     ```
+    or:
+    ```
+    yarn add @covalenthq/client-sdk
+    ```
 
-
-    ```jsx
+    ```
     import { CovalentClient } from "@covalenthq/client-sdk";
 
     (async () => {
