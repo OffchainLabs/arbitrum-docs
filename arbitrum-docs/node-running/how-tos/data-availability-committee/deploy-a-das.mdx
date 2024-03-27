@@ -80,7 +80,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 Gather the following information:
 
 - The latest Nitro docker image: `@latestNitroNodeImage@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/node-running/node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/node-providers#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
 
@@ -127,10 +127,10 @@ To run the DAS, we'll use the `daserver` tool and we'll configure the following 
 
 To enable caching, you can use the following parameters:
 
-| Parameter                                | Description                                                                         |
-|------------------------------------------|-------------------------------------------------------------------------------------|
-| --data-availability.local-cache.enable   | Enables local in-memory caching of sequencer batch data                             |
-| --data-availability.local-cache.capacity | Maximum number of entries (up to 64KB each) to store in the cache. (default 20000)  |
+| Parameter                                | Description                                                                        |
+| ---------------------------------------- | ---------------------------------------------------------------------------------- |
+| --data-availability.local-cache.enable   | Enables local in-memory caching of sequencer batch data                            |
+| --data-availability.local-cache.capacity | Maximum number of entries (up to 64KB each) to store in the cache. (default 20000) |
 
 
 To enable the REST aggregator, use the following parameters:
@@ -409,6 +409,10 @@ A DAS should strive not to miss any batch of information sent by the sequencer. 
 Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
+
+## Other considerations
+
+- When using [nginx](https://www.nginx.com/) in the networking stack, a DAS might fail receiving batches that are over a certain size. If this happens, the DAS won't be able to sign any more certificates and the batch poster will receive an error `413 Request Entity Too Large`. To prevent this behavior, the parameter `client_max_body_size` from nginx configuration should be configured with a higher value than the default 1M. It's recommended to set it to at least 50M.
 
 ## What to do next?
 

@@ -14,7 +14,7 @@ This how-to provides step-by-step instructions for running an Orbit node on your
 - **CPU**: 2-4 core CPU (For AWS: t3 xLarge)
 - **Storage**: This depends on the Orbit chain and its traffic overtime.
 
-### Prerequisites
+## Prerequisites
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
@@ -27,8 +27,8 @@ The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM 
 ```shell
 --parent-chain.connection.url=<Parent chain RPC URL>
 ```
-
 The RPC endpoint must direct to <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, or<a data-quicklook-from="arbitrum-sepolia">Arbitrum Sepolia</a>.
+
 
 :::note
 
@@ -117,6 +117,7 @@ An example of `chain-info` is available in the next section.
   docker stop --time=300 $(docker ps -aq)
   ```
 
+
 ### Note On Permissions
 
 - The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
@@ -124,4 +125,4 @@ An example of `chain-info` is available in the next section.
   ```shell
   mkdir /data/arbitrum
   chmod -fR 777 /data/arbitrum
-  ```
+

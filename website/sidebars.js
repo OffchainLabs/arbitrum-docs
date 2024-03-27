@@ -27,23 +27,23 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'for-devs/quickstart-solidity-hardhat',
+          id: 'build-decentralized-apps/quickstart-solidity-hardhat',
           label: 'Quickstart (Solidity)',
         },
         {
           type: 'doc',
           label: 'Estimate gas',
-          id: 'devs-how-tos/how-to-estimate-gas',
+          id: 'build-decentralized-apps/how-to-estimate-gas',
         },
         {
           type: 'doc',
           label: 'Chains and testnets',
-          id: 'for-devs/concepts/public-chains',
+          id: 'build-decentralized-apps/public-chains',
         },
         {
           type: 'doc',
           label: 'Cross-chain messaging',
-          id: 'for-devs/cross-chain-messsaging',
+          id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
           type: 'category',
@@ -52,22 +52,22 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Comparison overview',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/overview',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview',
             },
             {
               type: 'doc',
               label: 'Block numbers and time',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
               type: 'doc',
               label: 'RPC methods',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods',
             },
             {
               type: 'doc',
               label: 'Solidity support',
-              id: 'for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support',
+              id: 'build-decentralized-apps/arbitrum-vs-ethereum/solidity-support',
             },
           ],
         },
@@ -79,17 +79,17 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/oracles',
+              id: 'build-decentralized-apps/oracles/overview',
             },
             {
               type: 'doc',
               label: 'Use oracles in your app',
-              id: 'devs-how-tos/how-to-use-oracles',
+              id: 'build-decentralized-apps/oracles/how-to-use-oracles',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/oracles',
+              id: 'build-decentralized-apps/oracles/reference',
             },
           ],
         },
@@ -101,12 +101,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/precompiles',
+              id: 'build-decentralized-apps/precompiles/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/precompiles',
+              id: 'build-decentralized-apps/precompiles/reference',
             },
           ],
         },
@@ -118,12 +118,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/nodeinterface',
+              id: 'build-decentralized-apps/nodeinterface/overview',
             },
             {
               type: 'doc',
               label: 'Reference',
-              id: 'for-devs/dev-tools-and-resources/nodeinterface',
+              id: 'build-decentralized-apps/nodeinterface/reference',
             },
           ],
         },
@@ -135,37 +135,43 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Overview',
-              id: 'for-devs/concepts/token-bridge/token-bridge-overview',
+              id: 'build-decentralized-apps/token-bridging/overview',
             },
             {
               type: 'doc',
-              label: 'Get started',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview',
+              label: 'ETH bridging',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
             },
             {
               type: 'doc',
-              label: 'Use the standard gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard',
+              label: 'ERC-20 token bridging',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
             {
-              type: 'doc',
-              label: 'Use the generic-custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom',
-            },
-            {
-              type: 'doc',
-              label: 'Use the custom gateway',
-              id: 'devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway',
-            },
-            {
-              type: 'doc',
-              label: 'Bridging Ether',
-              id: 'for-devs/concepts/token-bridge/token-bridge-ether',
-            },
-            {
-              type: 'doc',
-              label: 'Bridging ERC-20 tokens',
-              id: 'for-devs/concepts/token-bridge/token-bridge-erc20',
+              type: 'category',
+              label: 'Bridge tokens programmatically',
+              items: [
+                {
+                  type: 'doc',
+                  label: 'Get started',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the standard gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the generic-custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom',
+                },
+                {
+                  type: 'doc',
+                  label: 'Use the custom gateway',
+                  id: 'build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway',
+                },
+              ],
             },
           ],
         },
@@ -175,43 +181,43 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/node-providers',
+              id: 'build-decentralized-apps/reference/node-providers',
               label: 'RPC endpoints and providers',
             },
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'for-devs/useful-addresses',
+              id: 'build-decentralized-apps/reference/useful-addresses',
             },
             {
               type: 'doc',
               label: 'Chain parameters',
-              id: 'for-devs/chain-params',
+              id: 'build-decentralized-apps/reference/chain-params',
             },
             {
               type: 'doc',
               label: 'Development frameworks',
-              id: 'for-devs/dev-tools-and-resources/development-frameworks',
+              id: 'build-decentralized-apps/reference/development-frameworks',
             },
             {
               type: 'doc',
               label: 'Web3 libraries and tools',
-              id: 'for-devs/dev-tools-and-resources/web3-libraries-tools',
+              id: 'build-decentralized-apps/reference/web3-libraries-tools',
             },
             {
               type: 'doc',
               label: 'Monitoring tools and block explorers',
-              id: 'for-devs/dev-tools-and-resources/monitoring-tools-block-explorers',
+              id: 'build-decentralized-apps/reference/monitoring-tools-block-explorers',
             },
             {
               type: 'doc',
               label: 'Debugging tools',
-              id: 'for-devs/dev-tools-and-resources/debugging-tools',
+              id: 'build-decentralized-apps/reference/debugging-tools',
             },
 
             {
               type: 'doc',
-              id: 'mainnet-risks',
+              id: 'build-decentralized-apps/reference/mainnet-risks',
               label: 'Mainnet risks',
             },
           ],
@@ -249,11 +255,6 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
-          type: 'doc',
-          id: 'node-running/how-tos/running-an-orbit-node',
-          label: 'Run a full Orbit node',
-        },
-        {
           type: 'category',
           label: 'Customize your chain',
           collapsed: true,
@@ -261,17 +262,27 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Customize deployment config`,
+              label: `Customize your chain's deployment`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `Customize behavior`,
+              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+              label: `Additional configuration parameters`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/use-a-custom-gas-token',
+              label: `Use a custom gas token`,
             },
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `Customize precompiles`,
+              label: `Customize your chain's precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-stf',
+              label: `Customize your chain's behavior`,
             },
           ],
         },
@@ -281,23 +292,20 @@ const sidebars = {
           collapsed: true,
           items: [
             {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases</a>',
+              // q: why use an anchor html tag here?
+              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
+              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
+              //    if we use a fully qualified link, localhost won't work
+            },
+            {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/arbos-upgrade',
               label: `Upgrade ArbOS`,
             },
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases <span class="other-section-icon">↓</span></a>',
-              // q: why use an anchor html tag here?
-              // a: see note at end of file
-            },
           ],
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
-          label: `Add your chain to the bridge`,
         },
         {
           type: 'html',
@@ -313,13 +321,23 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/chain-ownership',
-          label: 'Orbit chain ownership',
+          id: 'launch-orbit-chain/reference/monitoring-tools-and-considerations',
+          label: 'Monitoring tools and considerations',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ',
+          id: 'node-running/how-tos/running-an-orbit-node',
+          label: 'Run a full Orbit node',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
+          label: `Add your chain to the bridge`,
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/concepts/chain-ownership',
+          label: 'Orbit chain ownership',
         },
         {
           type: 'doc',
@@ -328,18 +346,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/reference/command-line-options',
-          label: 'Command-line options',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-          label: 'Additional configuration parameters',
-        },
-        {
-          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/troubleshooting-building-orbit',
+          label: 'FAQ',
         },
       ],
     },
@@ -466,7 +479,7 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        }, 
+        },
         {
           type: 'doc',
           id: 'node-running/reference/ethereum-beacon-rpc-providers',
@@ -795,20 +808,11 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://docs.prylabs.network/docs/install/install-with-script',
-    },
-    /*
-    {
-      type: "doc",
-      id: "node-running/node-providers",
-      label: "Third-party node providers"
-    },
-    */
+    }
   ],
 };
 
 module.exports = sidebars;
-
-
 
 // note RE html sidebar links:
 //    because the linked page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
