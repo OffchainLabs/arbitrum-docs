@@ -34,21 +34,21 @@ A primary function of the Orbit SDK is the deployment of a new Orbit chain. The 
 
 1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)**: These Orbit chains offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
 
-2. **[Anytrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)**: Anytrust Orbit chains are implementations of the Rollup protocol that lower costs by accepting a mild trust assumption. <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an Anytrust chain and a rollup chain are:
+2. **[AnyTrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)**: AnyTrust Orbit chains are implementations of the Rollup protocol that lower costs by accepting a mild trust assumption. <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an AnyTrust chain and a rollup chain are:
    
-   - **Data Availability**: Anytrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
+   - **Data Availability**: AnyTrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
 
-   - **Security Guarantees**: Anytrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
+   - **Security Guarantees**: AnyTrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
 
-   - **Fee Cost**: Anytrust chains are significantly cheaper than Rollup chains because there's no need to send data to the parent chain, facilitating cheaper transaction fees.
+   - **Fee Cost**: AnyTrust chains are significantly cheaper than Rollup chains because there's no need to send data to the parent chain, facilitating cheaper transaction fees.
    
-###### Learn more about [ Anytrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
+###### Learn more about [ AnyTrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
 
 3. **[Custom Gas Token Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md)**: This type allows transaction fees to be paid with a specific `ERC-20` token instead of `ETH`. Although the setup process is similar to a standard Rollup Orbit chain, there are important distinctions to consider. Feel free to consult the [Custom Gas Token Orbit chain deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md). 
 
 :::important
 
-Custom Gas Token Orbit chains can only be Anytrust chains; currently, a Rollup Orbit chain cannot use a custom gas fee token.
+Custom Gas Token Orbit chains can only be AnyTrust chains; currently, a Rollup Orbit chain cannot use a custom gas fee token.
 
 :::
 
