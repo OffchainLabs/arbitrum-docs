@@ -8,7 +8,7 @@ content_type: how-to
 
 This how-to provides step-by-step instructions for running an Orbit node on your local machine.
 
-### Minimum hardware configuration
+### Minimum Hardware Configuration
 
 - **RAM**: 8-16 GB
 - **CPU**: 2-4 core CPU (For AWS: t3 xLarge)
@@ -18,9 +18,9 @@ This how-to provides step-by-step instructions for running an Orbit node on your
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 
-## Required parameters
+## Required Parameters
 
-### 1. Parent chain parameters
+### 1. Parent Chain Parameters
 
 The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider:
 
@@ -36,7 +36,7 @@ The RPC endpoint must direct to <a data-quicklook-from="arbitrum-one">Arbitrum O
 
 ::: 
 
-### 2. Child chain parameters 
+### 2. Child Chain Parameters 
 
 
 In the Arbitrum Orbit context, the child chain is an L2 or an L3 Orbit chain, and the required parameters are `chain-info` and `chain-name`
@@ -80,7 +80,7 @@ An example of `chain-info` is available in the next section.
     --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
     ```
 
-### 3.Important ports
+### 3.Important Ports
 
     
    | Protocol       | Port  | arg 1 (required) | arg 2 (required)  | arg 3 (required)  |
@@ -90,7 +90,7 @@ An example of `chain-info` is available in the next section.
    | WebSocket      | `8548`|`--ws.port=8548`  |`--ws.addr=0.0.0.0`|`--ws.origins=\*`  |
     
 
-### 4. Putting it all together
+### 4. Putting It All Together
 
 - When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be `/home/user/.arbitrum`
 
@@ -117,7 +117,7 @@ An example of `chain-info` is available in the next section.
   docker stop --time=300 $(docker ps -aq)
   ```
 
-### Note on permissions
+### Note On Permissions
 
 - The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
 
