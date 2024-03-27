@@ -2,19 +2,30 @@
 title: 'How to Deploy a Custom Gas Token Chain Using the Orbit SDK'
 sidebar_label: 'Custom Gas Token Orbit Deployment'
 description: 'How to deploy a custom gas token chain using the Orbit SDK'
-author: Mehdi Salehi
-sme: Mehdi Salehi
+author: GreatSoshiant
+sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 3
 ---
 
-###### If you prefer to learn by coding and want to skip the detailed guides, we recommend checking out the [ create a rollup custom fee token example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) in the Orbit SDK repository. It's a practical, step-by-step guide to getting a Custom gas token Orbit chain running from scratch.
+:::caution UNDER CONSTRUCTION
+
+This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+
+:::
+
+:::info
+
+See the ["create a rollup custom fee token" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) in the Orbit SDK repository for additional guidance.
+
+:::
+
 
 Deploying a Custom Gas Token Orbit chain introduces a unique aspect to the standard Orbit chain setup: the ability to pay transaction fees using a specific `ERC-20` token instead of `ETH`. While the setup process largely mirrors that of a standard <a data-quicklook-from="arbitrum-rollup-chain">Rollup Orbit chain</a>, as detailed in the [introduction](../orbit-sdk-introduction.md), there are key differences to account for when configuring a Custom Gas Token Orbit chain.
 
 :::important
 
-Custom gas tokens are only supported on Orbit Anytrust chains, currently. This feature is **not available yet** on Rollup Orbit chains.
+Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This feature is **not available yet** on Rollup Orbit chains.
 
 :::
 
@@ -43,11 +54,11 @@ const chainConfig = prepareChainConfig({
 
 To use the `prepareChainConfig` method as shown in the example above, some inputs need to be defined:
 
-| Parameter                   | Type         |  Description                                                                                                                                 |
-|-----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `chainId`                   |  `number`    |  Your Orbit chain's `chainId`.                                                                                                               |
-| `nativeToken`               |  `Address`   |  The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
-| `DataAvailabilityCommittee` |  `boolean`   |  Should be set to `true` since only Anytrust chains can accept `ERC-20` tokens.                                                              |
+| Parameter                   | Type      | Description                                                                                                                                                     |
+| --------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                   | `number`  | Your Orbit chain's `chainId`.                                                                                                                                   |
+| `nativeToken`               | `Address` | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
+| `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
 
 
 ### 3. Token Approval Before Deployment Process
@@ -72,11 +83,11 @@ const enough Allowance = createRollupEnoughCustomFeeTokenAllowance(allowancePara
 
 To build the `allowanceParams` object as shown in the example above, you need to provide with the following:
 
-| Parameter                   | Type            |  Description                                                                                                                               |
-|-----------------------------|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| `nativeToken`               |  `Address`      |  The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.                                          |
-| `account`                   |  `Address`      |  The  address  Orbit chain's|
-| `publicClient`              |  `PublicClient` |  The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html).                                       |
+| Parameter      | Type           | Description                                                                                           |
+| -------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
+| `nativeToken`  | `Address`      | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.    |
+| `account`      | `Address`      | The  address  Orbit chain's                                                                           |
+| `publicClient` | `PublicClient` | The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html). |
 
 #### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
    

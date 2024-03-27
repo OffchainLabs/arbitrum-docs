@@ -368,7 +368,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
-              label: `Anytrust Orbit Deployment`,
+              label: `AnyTrust Orbit Deployment`,
             },
             {
               type: 'doc',
