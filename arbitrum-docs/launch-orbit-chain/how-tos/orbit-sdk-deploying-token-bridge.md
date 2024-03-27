@@ -20,7 +20,7 @@ This document is under construction and may change significantly as we incorpora
 
 :::info
 
-See the [`ERC-20` token bridge overview](/for-devs/concepts/token-bridge/token-bridge-erc20) for more information about the token bridge's design and operational dynamics.
+See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md) for more information about the token bridge's design and operational dynamics.
 
 :::
 
