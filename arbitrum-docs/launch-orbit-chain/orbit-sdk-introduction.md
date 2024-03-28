@@ -17,24 +17,24 @@ The Arbitrum Orbit SDK is a comprehensive toolkit designed for intermediate bloc
 
 This SDK facilitates the creation and management of your own Orbit chain using the advanced capabilities of [Viem](https://viem.sh), a modern alternative to traditional Ethereum libraries like _ethers.js_ and _web3.js_.
 
-## Arbitrum Orbit Chains
-
 ### Capabilities of the SDK:
 
 - **Configuration and Deployment**: Simplifies the process of configuring and deploying Orbit chain's core contracts.
 - **Initialization and Management**: After deployment, the SDK helps you initialize your chain and adjust configuration parameters.
-- **Ongoing Support and Updates**: Future releases will bring new features, such as tools for creating custom dashboards and monitoring systems for your Orbit chain. Feel free to return to this page regularly for updates!
+- **Ongoing Support and Updates**: Future releases will bring new features, such as tools for creating custom dashboards and monitoring systems for your Orbit chain. Feel free to return to this page regularly for updates.
 
 
 Here are the steps you can take to create an Orbit chain with the Orbit SDK:
 
 ### 1. Orbit Chain Deployment
 
-A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer four distinct types of Orbit chains:
+A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer three distinct types of Orbit chains:
 
-1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)**: These Orbit chains offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
+1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)** offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> with Ethereum mainnet. You can learn how to deploy an Orbit Rollup chain on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
 
-2. **[AnyTrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)**: AnyTrust Orbit chains are implementations of the Rollup protocol that lower costs by accepting a mild trust assumption. <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an AnyTrust chain and a rollup chain are:
+2. **[AnyTrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)** are implementations of the <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust protocol</a>, they rely on an external <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to store data and provide it on-demand instead of using their <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. That mild trust assumption reduces transaction fees. 
+
+   The main differences between AnyTrust and rollup chains are:
    
    - **Data Availability**: AnyTrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
 
