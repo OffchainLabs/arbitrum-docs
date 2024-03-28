@@ -15,7 +15,7 @@ import PublicPreviewBannerPartial from '../partials/\_orbit-public-preview-banne
 
 ### Custom gas token APIs
 
-The custom gas token support in the Arbitrum SDK introduces a suite of APIs designed for the specific purpose of facilitating **bridging** operations. These APIs are tailored for use cases where there is a need to transfer a native token or an ERC-20 token from the parent chain to an orbit chain utilizing a `custom gas token`. The process involves an initial step of authorizing the native token on the parent chain. To streamline this, our APIs provide functionalities for token approval and offer a mechanism to verify the current status of this approval. Detailed below is a guide to how each of these APIs can be effectively utilized for distinct purposes:
+Custom gas token support in the Arbitrum SDK introduces a suite of APIs designed for the specific purpose of facilitating **bridging** operations. These APIs are tailored for use cases where there is a need to transfer a native token or an ERC-20 token from the parent chain to an orbit chain utilizing a `custom gas token`. The process involves an initial step of authorizing the native token on the parent chain. To streamline this, our APIs provide functionalities for token approval and offer a mechanism to verify the current status of this approval. Detailed below is a guide to how each of these APIs can be effectively utilized for distinct purposes:
 
 1. **EthBridger Context:**
 
