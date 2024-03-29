@@ -46,7 +46,7 @@ A primary function of the Orbit SDK is the deployment of a new Orbit chain. The 
 
 :::important
 
-Custom Gas Token Orbit chains can only be AnyTrust chains; currently, a Rollup Orbit chain cannot use a custom gas fee token.
+Custom Gas Token Orbit chains can only be AnyTrust chains; a Rollup Orbit chain currently cannot use a custom gas fee token.
 
 :::
 
@@ -63,6 +63,5 @@ You can also learn more about our bridge design in the [`ERC-20` token bridge ov
 
 ### 4. [Orbit Chain Configuration](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md)
 
-After deploying the chain, starting your node up, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. 
-Read more on [how to configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md).
+After deploying the chain, starting your node, and deploying the token bridge, the chain owner must configure their Orbit chain according to the desired setup. 
    
