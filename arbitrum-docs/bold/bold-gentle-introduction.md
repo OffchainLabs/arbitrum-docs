@@ -89,7 +89,7 @@ Today, BOLD is deployed on a public testnet using Ethereum Sepolia as a base lay
 
 If you’re intrigued by what BOLD can unlock for Arbitrum chains, we encourage you to interact with BOLD by:
 * [Following this guide](https://github.com/OffchainLabs/bold-validator-starter-kit) to deploy a BOLD validator to test & explore, first hand, how BOLD works to secure Arbitrum chains.
-* Reading the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf)** and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold) to understand how BOLD works under the hood.
+* Reading the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf) and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold) to understand how BOLD works under the hood.
 
 ## Wen mainnet?
 BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD's journey to being deployed to Arbitrum chains include:
