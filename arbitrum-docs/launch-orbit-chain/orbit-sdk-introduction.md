@@ -26,13 +26,13 @@ Here are the recommended steps to create an Orbit chain with the Orbit SDK:
 
 Deployment of a new Orbit chain is a primary function of the Orbit SDK. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer three distinct types of Orbit chains:
 
-1. **Rollup Orbit Chains** offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> with Ethereum mainnet. You can learn how to deploy an Orbit Rollup chain on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
+1. **Rollup Orbit Chains** offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to <a data-quicklook-from="arbitrum-one">Arbitrum One</a> with Ethereum mainnet. You can learn how to deploy an Orbit Rollup chain on the [orbit Rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
 
 2. **AnyTrust Orbit Chains** are implementations of the <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust protocol</a>, they rely on an external <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to store data and provide it on-demand instead of using their <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. That mild trust assumption reduces transaction fees. 
 
-   The main differences between AnyTrust and rollup chains are:
+   The main differences between AnyTrust and Rollup chains are:
    
-   - **Data Availability**: AnyTrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
+   - **Data Availability**: AnyTrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas Rollup chains send the data back to the parent chain.
 
    - **Security Guarantees**: AnyTrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
 
