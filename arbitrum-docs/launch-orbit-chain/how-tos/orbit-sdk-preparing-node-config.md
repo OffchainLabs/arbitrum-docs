@@ -1,6 +1,6 @@
 ---
-title: "Configure your Orbit chain's node using the Orbit SDK"
-sidebar_label: 'Node Config Generation'
+title: "How to configure your Orbit chain's node using the Orbit SDK"
+sidebar_label: "Configure your chain's node"
 description: 'How to configure a node using the Orbit SDK'
 author: GreatSoshiant
 sme: GreatSoshiant
