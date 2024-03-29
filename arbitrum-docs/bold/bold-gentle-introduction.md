@@ -19,7 +19,7 @@ BOLD will eventually replace the current, permissioned fraud proof mechanism tha
 
 - BOLD, an acronym for Bounded Liquidity Delay, is a new challenge protocol for Arbitrum chains that ensures disputes will take, at most, 1 challenge period (6.4 days) to get resolved. BOLD effectively eliminates delay attacks by enforcing a upper time-bound for dispute resolution.
 - Validation for Arbitrum One and Nova is currently is limited to a [permissioned set of parties maintained by the Arbitrum DAO](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators) to reduce the risks of *[delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a)* where malicious entities can indefinitely open disputes and delay confirmations of assertions about Arbitrum states.
-- However, BOLD mitigates the risks for delay attacks and therefore paves the way for permissionless validation of Arbitrum chains. Having validation be permisionless is key milestone on [Arbitrum’s journey to becoming a Stage 2 Rollup](https://docs.arbitrum.foundation/state-of-progressive-decentralization) - the most advanced and mature rollup technology categorization. With BOLD, **any honest party can stake on the correct L2 state and will always win disputes against any number of malicious entities.**
+- However, BOLD mitigates the risks for delay attacks and therefore paves the way for permissionless validation of Arbitrum chains. Having validation be permisionless is key milestone on [Arbitrum’s journey to becoming a Stage 2 Rollup](https://docs.arbitrum.foundation/state-of-progressive-decentralization) - the most advanced and mature rollup technology categorization. With BOLD, **any honest party can stake on the correct L2 state and will always win disputes against malicious entities.**
 - BOLD is currently considered to be in `alpha` release and is deployed on a public testnet. [Follow this guide](https://github.com/OffchainLabs/bold-validator-starter-kit) to deploy a BOLD validator to test & explore, first hand, how BOLD works to secure Arbitrum chains. To learn more about BOLD, please check out the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf)** and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold).
 
 ## What _exactly_ is BOLD?
@@ -33,11 +33,9 @@ A BOLD-enabled validator’s responsibilities are to:
 - Challenge invalid claims made by other validators, and
 - Confirm valid claims - either by timing other validators out or by winning a challenge
 
-The goal of BOLD is ensure the maximum challenge period is 6.4 days, effectively removing the risk of delay attacks and making L2 to L1 withdrawals more secure. BOLD accomplishes this by introducing a new dispute system that lets a single entity secure Arbitrum against any number of malicious parties - effectively allowing anyone to validate Arbitrum’s state without needing permission to do so.
+The goal of BOLD is ensure the maximum challenge period is 6.4 days, effectively removing the risk of delay attacks and making L2 to L1 withdrawals more secure. BOLD accomplishes this by introducing a new dispute system that lets a single entity secure Arbitrum against malicious parties - effectively allowing anyone to validate Arbitrum’s state without needing permission to do so.
 
 Now that you have a high level undertanding what BOLD is, you might now be wondering: so what? Good question. BOLD is a groundbreaking design meant to secure Arbitrum chains and allows anyone, including yourself, to play your part in securing Arbitrum chains. 
-
-## TODO INSERT GRAPHIC #1 HERE 
 
 ## Why does Arbitrum need a new dispute protocol?
 
@@ -47,12 +45,14 @@ Under the hood, the reason why BOLD can offer time-bound, permissionless validat
 
 To summarize with an analogy: Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against each unique challenger sequentially, like in a *“1v1 tournament”*. BOLD, on the other hand, enables any single honest party to defend the correct state and be guaranteed to win, similar to an *“all-vs-all battle royale”* where there must and will always be a single winner in the end.
 
-## TODO INSERT GRAPHIC #2 HERE 
+## TODO INSERT GRAPHIC #1 HERE 
 
 ### BOLD makes withdrawals to L1 Ethereum safer
 Today, the rollup protocol for Arbitrum chains works by posting both transaction data & the resulting state from those transactions to a data availability layer, like Ethereum. Then, there is a period of time called the “challenge period” where any validator can open a dispute on a given state - this is what makes Arbitrum an optimistic rollup. This challenge period is why you must wait ~1 week (6.4 days to be exact) to withdraw assets from Arbitrum One, for example. 
 
 While this is quite secure, this design is susceptible to [delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a), where malicious actors continuously open disputes to extend that challenge period for as long as they’re willing to sacrifice stakes - effectively extending the challenge period indefinitely. This risk is not ideal nor safe and is why validation for Arbitrum One and Nova is confined to a permissioned set of entities overseen by the Arbitrum DAO.
+
+![bold-safer-withdrawals](./assets/safer-withdrawals-with-bold.png)
 
 BOLD addresses these challenges head-on by introducing a time limit on the existing rollup protocol for resolving disputes, effectively ensuring that challenges conclude within a 7-day window (this window can be decreased by the DAO). This is possible due to two reasons: (1) BOLD’s design allows for challenges between the honest party and any number of malicious adversaries to happen in parallel, and (2) the use of a time limit that will automatically confirm the honest party’s claims if the challenger fails to respond.
 
@@ -60,9 +60,12 @@ BOLD addresses these challenges head-on by introducing a time limit on the exist
 
 Inspired by [Vitalik’s proposed milestones](https://ethereum-magicians.org/t/proposed-milestones-for-rollups-taking-off-training-wheels/11571), the team over at L2Beat has assembled a widely recognized framework for evaluating the development Ethereum Rollups. Both Vitalik and the [L2Beat framework](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe) refer to the the final stage of rollup development as *“Stage 2 - No Training Wheels”*. A critical criterion for being considered a Stage 2 rollup is to allow anyone to validate the L2 state and post fraud proofs to Ethereum without restraints. This is considered a key requirement for Stage 2 because it ensures *[“that the system is not controlled by a limited set of entities and instead is subject to the collective scrutiny of the entire community”](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe).* 
 
-BOLD enables permissionless validation by allowing *anyone* to challenge incorrect Arbitrum state assertions and therefore unlocks new avenues for participation in securing the network, fostering greater inclusivity and resilience. This is made possible because BOLD guarantees that a single, honest entity staked on the correct Arbitrum state assertion will always win against malicious adversaries.
+BOLD enables permissionless validation by allowing *anyone* to challenge incorrect Arbitrum state assertions and therefore unlocks new avenues for participation in securing the network, fostering greater inclusivity and resilience. This is made possible because BOLD guarantees that a single, honest entity staked on the correct Arbitrum state assertion will always win against malicious adversaries. The research and work to bring BOLD to life underscores Arbitrum's commitment to scaling Ethereum without compromising on security. 
 
-The research and work to bring BOLD to life underscores Arbitrum's commitment to scaling Ethereum without compromising on security. With BOLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup, contributing to a more decentralized, efficient, and robust rollup ecosystem while cementing the Arbitrum stack as the most mature and advanced rollup technology out there. And if that’s not amazing enough, L2 Orbit chains launched with BOLD will be Stage 2 rollups themselves right out-of-the-box while existing Arbitrum chains will become Stage 2 rollups simply by adopting BOLD to secure their chains.
+![pie-slice](./assets/l2beat-pie-chart.png)
+
+With BOLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BOLD contributes to a more decentralized, efficient, and robust rollup ecosystem while cementing the Arbitrum stack as the most mature and advanced rollup technology out there. And if that’s not amazing enough, L2 Orbit chains launched with BOLD will have permissionless validation available for them right-out-the-box simply by upgrading their Nitro node software.
+
 
 ### How is this possible?
 The BOLD protocol provides the guardrails and rules for how validators produce, validate, and challenge claims about the state of an Arbitrum chain. Since Arbitrum’s state is deterministic, there will always be only 1 correct state for a given input of on-chain operations and transactions. The beauty of BOLD’s design is centered around this very fact: that there is only 1 correct state on Arbitrum and therefore anyone defending that correct state will always prevail.
