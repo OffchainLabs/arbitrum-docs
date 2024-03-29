@@ -1,11 +1,11 @@
 ---
-title: 'How to Configure a Node Using the Orbit SDK'
+title: "Configure your Orbit chain's node using the Orbit SDK"
 sidebar_label: 'Node Config Generation'
 description: 'How to configure a node using the Orbit SDK'
 author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 4
+content_type: how-to
 ---
 
 This guide will walk you through configuring an Orbit node supporting a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain.
