@@ -38,7 +38,7 @@ Deployment of a new Orbit chain is a primary function of the Orbit SDK. The init
 
    - **Fee Cost**: AnyTrust chains are significantly cheaper than Rollup chains because there's no need to send data to the parent chain, facilitating cheaper transaction fees.
    
-###### Learn more about [ AnyTrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
+###### Learn more about [ AnyTrust consensus mechanism ]( /inside-arbitrum-nitro#inside-anytrust)
 
 3. **[Custom Gas Token Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md)**: This type allows transaction fees to be paid with a specific `ERC-20` token instead of `ETH`. Although the setup process is similar to a standard Rollup Orbit chain, there are important distinctions to consider. Feel free to consult the [Custom Gas Token Orbit chain deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md). 
 
