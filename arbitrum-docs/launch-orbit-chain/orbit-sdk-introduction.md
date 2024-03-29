@@ -31,7 +31,7 @@ There are three types of Orbit chains. Review the following table to determine w
 
 ## 2. Deploy your chain
 
-After selecting a chain type, you need to deploy your Orbit chain. Visit the deployment guide for your chosen chain type:
+After selecting a chain type, you need to deploy your Orbit chain. Visit the deployment guide for your selected chain type:
 
 - [Deploy a Rollup Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)
 - [Deploy an AnyTrust Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)
