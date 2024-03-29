@@ -1,6 +1,6 @@
 ---
 title: 'Get started with the Arbitrum Orbit SDK'
-sidebar_label: 'Orbit SDK: Get started'
+sidebar_label: 'Get started'
 description: 'Learn how to deploy and manage your Orbit chain with the Arbitrum Orbit SDK.'
 author: GreatSoshiant
 sme: GreatSoshiant
