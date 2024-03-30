@@ -70,7 +70,7 @@ If the user attempts to purchase compute gas in excess of ArbOS's per-block gas 
 
 ### [`PushCaller`][pushcaller_link]{#PushCaller}
 
-These hooks track the callers within the EVM callstack, pushing and popping as calls are made and complete. This provides [`ArbSys`](/for-devs/dev-tools-and-resources/precompiles.mdx#arbsys) with info about the callstack, which it uses to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
+These hooks track the callers within the EVM callstack, pushing and popping as calls are made and complete. This provides [`ArbSys`](/build-decentralized-apps/precompiles/reference#arbsys) with info about the callstack, which it uses to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
 
 ### [`L1BlockHash`][l1blockhash_link]
 
@@ -107,10 +107,10 @@ The [`EndTxHook`][endtxhook_link] is called after the [`EVM`][evm_link] has retu
 
 ### [`APIBackend`][apibackend_link]
 
-APIBackend implements the [`ethapi.Bakend`][ethapi.bakend_link] interface, which allows simple integration of the Arbitrum chain to existing Geth API. Most calls are answered using the Backend member.
+APIBackend implements the [`ethapi.Backend`][ethapi.backend_link] interface, which allows simple integration of the Arbitrum chain to existing Geth API. Most calls are answered using the Backend member.
 
 [apibackend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34
-[ethapi.bakend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/internal/ethapi/backend.go#L42
+[ethapi.backend_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/internal/ethapi/backend.go#L42
 
 ### [`Backend`][backend_link]
 
@@ -180,7 +180,7 @@ Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#Arbit
 
 ### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
-These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/for-devs/dev-tools-and-resources/precompiles.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](arbos#Retryables) for more info.
+These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/reference#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](arbos#Retryables) for more info.
 
 ### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
@@ -207,11 +207,11 @@ A [geth message][geth_message_link] may be processed for various purposes. For e
 
 A message [derived from a transaction][asmessage_link] will carry that transaction in a field accessible via its [`UnderlyingTransaction`][underlying_link] method. While this is related to the way a given message is used, they are not one-to-one. The table below shows the various run modes and whether each could have an underlying transaction.
 
-| Run Mode                                 | Scope                   | Carries an Underlying Tx?                                                                               |
-| :--------------------------------------- | :---------------------- | :------------------------------------------------------------------------------------------------------ |
-| [`MessageCommitMode`][mc0]               | state transition &nbsp; | always                                                                                                  |
-| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/for-devs/dev-tools-and-resources/nodeinterface.mdx) or when scheduled |
-| [`MessageEthcallMode`][mc2]              | eth_calls               | never                                                                                                   |
+| Run Mode                                 | Scope                   | Carries an Underlying Tx?                                                                             |
+| :--------------------------------------- | :---------------------- | :---------------------------------------------------------------------------------------------------- |
+| [`MessageCommitMode`][mc0]               | state transition &nbsp; | always                                                                                                |
+| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/build-decentralized-apps/nodeinterface/reference) or when scheduled |
+| [`MessageEthcallMode`][mc2]              | eth_calls               | never                                                                                                 |
 
 [mc0]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654
 [mc1]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L655
@@ -265,7 +265,7 @@ Retryables are mostly implemented in [ArbOS](arbos#retryables). Some modificatio
 
 Added [`UnderlyingTransaction`][underlyingtransaction_link] to Message interface
 Added [`GetCurrentTxLogs`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state/statedb_arbitrum.go) to StateDB
-We created the AdvancedPrecompile interface, which executes and charges gas with the same function call. This is used by [Arbitrum's precompiles](/for-devs/concepts/precompiles.mdx), and also wraps Geth's standard precompiles.
+We created the AdvancedPrecompile interface, which executes and charges gas with the same function call. This is used by [Arbitrum's precompiles](/build-decentralized-apps/precompiles/overview), and also wraps Geth's standard precompiles.
 
 ### WASM build support
 

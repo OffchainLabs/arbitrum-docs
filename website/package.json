@@ -9,6 +9,7 @@
     "generate_precompiles_ref_tables": "ts-node src/scripts/precompile-reference-generator.ts",
     "start": "yarn generate_sdk_docs && yarn start_nitro_docs",
     "start_nitro_docs": "docusaurus start",
+    "build_translation": "yarn ts-node ./src/scripts/move-untranslated-files.ts",
     "build": "yarn generate_sdk_docs && docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
