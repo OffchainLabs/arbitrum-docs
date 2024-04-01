@@ -2,7 +2,10 @@
 title: 'A gentle introduction: BOLD'
 sidebar_label: 'A gentle introduction'
 description: 'An educational introduction that provides a high-level understanding of BOLD, a new dispute protocol to enable permissionless validation for Arbitrum chains.'
-target_audience: 'Users and researchers who want to learn about our next-generation dispute protocol that enables permissionless validation'
+user_story: 'As a user or researcher of Arbitrum's suite, I want to learn about BOLD, a next-generation dispute protocol that enables permissionless validation.'
+content_type: gentle-introduction
+author: leeederek
+sme: leeederek
 ---
 
 import PublicPreviewBannerPartial from './partials/_bold-public-preview-banner-partial.md';
@@ -11,7 +14,7 @@ import PublicPreviewBannerPartial from './partials/_bold-public-preview-banner-p
 
 This introduction is for those who want to learn about BOLD: a new dispute protocol for Optimistic Rollups that can enable **permissionless validation for Arbitrum chains**. BOLD stands for Bounded Liquidity Delay and is currently deployed on a public testnet for anyone to join and test how challenges will work. 
 
-This next-generation dispute protocol technology will soon be available for any Arbitrum chain, and pending a governance vote, will eventually be made available on Arbitrum Sepolia, Arbitrum One and, Arbitrum Nova.
+This next-generation dispute protocol technology will soon be available for any Arbitrum chain, and pending a governance vote, will eventually be made available on Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova.
 
 BOLD will eventually replace the current, permissioned fraud proof mechanism that powers Arbitrum chains today.
 
@@ -19,13 +22,13 @@ BOLD will eventually replace the current, permissioned fraud proof mechanism tha
 
 - BOLD, an acronym for Bounded Liquidity Delay, is a new challenge protocol for Arbitrum chains that ensures disputes will take, at most, 1 challenge period (6.4 days) to get resolved. BOLD effectively eliminates delay attacks by enforcing a upper time-bound for dispute resolution.
 - Validation for Arbitrum One and Nova is currently is limited to a [permissioned set of parties maintained by the Arbitrum DAO](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators) to reduce the risks of *[delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a)* where malicious entities can indefinitely open disputes and delay confirmations of assertions about Arbitrum states.
-- However, BOLD mitigates the risks for delay attacks and therefore paves the way for permissionless validation of Arbitrum chains. Having validation be permisionless is key milestone on [Arbitrum’s journey to becoming a Stage 2 Rollup](https://docs.arbitrum.foundation/state-of-progressive-decentralization) - the most advanced and mature rollup technology categorization. With BOLD, **any honest party can stake on the correct L2 state and will always win disputes against malicious entities.**
+- However, BOLD mitigates the risks for delay attacks and therefore paves the way for permissionless validation of Arbitrum chains. Permissionless validation is a key milestone on [Arbitrum’s journey to becoming a Stage 2 Rollup](https://docs.arbitrum.foundation/state-of-progressive-decentralization) - the most advanced and mature rollup technology categorization. With BOLD, **any honest party can stake on the correct L2 state and will always win disputes against malicious entities.**
 - BOLD is currently considered to be in `alpha` release and is deployed on a public testnet. [Follow this guide](https://github.com/OffchainLabs/bold-validator-starter-kit) to deploy a BOLD validator to test & explore, first hand, how BOLD works to secure Arbitrum chains. To learn more about BOLD, please check out the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf) and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold).
 
 ## What _exactly_ is BOLD?
 BOLD, an acronym for Bounded Liquidity Delay Protocol, is a set of rules used by validators to open and resolve disputes about Arbitrum’s state to ensure only valid states get confirmed to an Arbitrum chain’s data availability layer, such as Ethereum, for example. BOLD is shipped as part of the Nitro tech stack - the software that powers every Arbitrum validator node. 
 
-In-short, BOLD secures the process of withdrawing assets from Arbitrum back to Ethereum.
+In short, BOLD secures the process of withdrawing assets from Arbitrum back to Ethereum.
 
 A BOLD-enabled validator’s responsibilities are to:
 
@@ -35,11 +38,10 @@ A BOLD-enabled validator’s responsibilities are to:
 
 The goal of BOLD is ensure the maximum challenge period is 6.4 days, effectively removing the risk of delay attacks and making L2 to L1 withdrawals more secure. BOLD accomplishes this by introducing a new dispute system that lets a single entity secure Arbitrum against malicious parties - effectively allowing anyone to validate Arbitrum’s state without needing permission to do so.
 
-Now that you have a high level undertanding what BOLD is, you might now be wondering: so what? Good question. BOLD is a groundbreaking design meant to secure Arbitrum chains and allows anyone, including yourself, to play your part in securing Arbitrum chains. 
 
 ## Why does Arbitrum need a new dispute protocol?
 
-While Arbitrum chains today have working fraud proofs to secure withdrawals, BOLD introduces a few subtle but innovative changes to enable *anyone* to challenge and win disputes on - all within a fixed time period. In other words, Arbitrum chains will continue to be secured with an interactive proving game between validators, but with the added benefit of this game being completely permissionless and time-bounded to 1 challenge period (currently set at 6.4 days).
+While Arbitrum chains today have working fraud proofs to secure withdrawals, BOLD introduces a few subtle but innovative changes that let *anyone* challenge and win disputes - all within a fixed time period. In other words, Arbitrum chains will continue to be secured with an interactive proving game between validators, but with the added benefit of this game being completely permissionless and time-bounded to 1 challenge period (currently set at 6.4 days).
 
 Under the hood, the reason why BOLD can offer time-bound, permissionless validation is because a correct Arbitrum state assertion is **not tied to a single staker or entity**. Instead, because L2 states are completely deterministic and can eventually be proven on Ethereum, any party can stake on this correct, deterministic state and, through interactive fraud proofs, can prove that their claim is correct. This means that a single honest party staking on the correct state assertion will always win, guaranteed. 
 
@@ -64,7 +66,7 @@ BOLD enables permissionless validation by allowing *anyone* to challenge incorre
 
 ![pie-slice](./assets/l2beat-pie-chart.png)
 
-With BOLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BOLD contributes to a more decentralized, efficient, and robust rollup ecosystem while cementing the Arbitrum stack as the most mature and advanced rollup technology out there. And if that’s not amazing enough, L2 Orbit chains launched with BOLD will have permissionless validation available for them right-out-the-box simply by upgrading their Nitro node software.
+With BOLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BOLD contributes to a more decentralized, efficient, and robust rollup ecosystem. Additionally, L2 Orbit chains launched with BOLD will have permissionless validation available for them out of the box by upgrading their Nitro node software.
 
 
 ### How is this possible?
