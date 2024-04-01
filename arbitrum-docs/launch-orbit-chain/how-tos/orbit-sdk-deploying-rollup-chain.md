@@ -26,8 +26,8 @@ The main benefit of the Orbit SDK lies in facilitating the deployment and fine-t
 
 These contracts are deployed on <a data-quicklook-from="parent-chain">`parent chains`</a>, they are:
 
-- <a data-quicklook-from="bridge">Bridge contracts</a>
 - Rollup contracts
+- <a data-quicklook-from="bridge">Bridge contracts</a>
 - Contracts handling <a data-quicklook-from="fraud-proof">fraud proofs</a> 
 
 Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
