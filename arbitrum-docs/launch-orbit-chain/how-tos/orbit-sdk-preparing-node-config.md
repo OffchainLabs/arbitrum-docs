@@ -17,6 +17,12 @@ This document is under construction and may change significantly as we incorpora
 :::
 
 
+:::info
+
+See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/prepare-node-config) in the Orbit SDK repository for additional guidance.
+
+:::
+
 - Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain) section of the rollup deployment guide.
 
 Once you have successfully deployed and initialized the Orbit core contracts, the next step is configuring and running your Orbit chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
