@@ -1,5 +1,5 @@
 ---
-title: 'Bridging ether'
+title: 'ETH bridging'
 description: Describes how bridging ether works on Arbitrum
 author: dzgoldman
 user_story: As a developer, I want to understand how bridging ether works on Arbitrum
@@ -14,7 +14,7 @@ Ether (ETH) is the native currency of Ethereum and all Arbitrum chains. It is us
 
 ## Depositing ether
 
-To move ETH from L1 to L2, you execute a deposit transaction via `Inbox.depositEth`. This transfers funds to the Bridge contract on the L1 and credits the same funds to you inside the Arbitrum chain at the specified address.
+To move ETH from L1 to L2, you execute a deposit transaction via `Inbox.depositEth`. This transfers funds to the Bridge contract on the L1 and credits the same funds to you inside the Arbitrum chain at the specified address.
 
 ```sol
 function depositEth(address destAddr) external payable override returns (uint256)
@@ -28,7 +28,7 @@ As far as the L1 knows, all deposited funds are held by Arbitrum's Bridge contra
 
 ## Withdrawing ether
 
-Withdrawing ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/reference#arbsys)'s `withdrawEth` method:
+Withdrawing ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/reference#arbsys)'s `withdrawEth` method:
 
 ```sol
 ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
@@ -36,7 +36,7 @@ ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
 
 Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will later be made available on the Ethereum side.
 
-`ArbSys.withdrawEth` is actually a convenience function which is equivalent to calling `ArbSys.sendTxToL1` with empty calldataForL1. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on L1 after the dispute period elapses for the user to finalize claiming their funds on L1 (see ["L2 to L1 Messages"](/arbos/l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's Ether balance will be credited on L1.
+`ArbSys.withdrawEth` is actually a convenience function which is equivalent to calling `ArbSys.sendTxToL1` with empty calldataForL1. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on L1 after the dispute period elapses for the user to finalize claiming their funds on L1 (see ["L2 to L1 Messages"](/arbos/l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's Ether balance will be credited on L1.
 
 The following diagram depicts the process that funds follow during a withdraw operation.
 
