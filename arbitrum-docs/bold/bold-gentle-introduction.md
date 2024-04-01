@@ -2,7 +2,7 @@
 title: 'A gentle introduction: BOLD'
 sidebar_label: 'A gentle introduction'
 description: 'An educational introduction that provides a high-level understanding of BOLD, a new dispute protocol to enable permissionless validation for Arbitrum chains.'
-target_audience: 'As a user or researcher of Arbitrum's suite, I want to learn about BOLD, a next-generation dispute protocol that enables permissionless validation.'
+user_story: 'As a user or researcher of the Arbitrum product suite, I want to learn about BOLD, a next-generation dispute protocol that enables permissionless validation.'
 content_type: gentle-introduction
 author: leeederek
 sme: leeederek
