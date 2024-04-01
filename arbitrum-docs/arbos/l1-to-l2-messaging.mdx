@@ -32,7 +32,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 - `address to`: The destination L2 address
 - `uint256 l2CallValue`: The callvalue for retryable L2 message that is supplied within the deposit (l1CallValue)
 - `uint256 maxSubmissionCost`: The maximum amount of ETH to be paid for submitting the ticket. This amount is (1) supplied within the deposit (l1CallValue) to be later deducted from sender's L2 balance and is (2) directly proportional to the size of the retryable’s data and L1 basefee
-- `address excessFeeRefundAddress`: The L2 address to which the excess fee is credited (l1CallValue - (autoredeem ? ticket execution cost : submission cost) - l2CallValue)
+- `address excessFeeRefundAddress`: gasLimit x maxFeePerGas - execution cost gets credited here on L2 balance
 - `address callValueRefundAddress`: The L2 address to which the l2CallValue is credited if the ticket times out or gets cancelled (this is also called the `beneficiary`, who's got a critical permission to cancel the ticket)
 - `uint256 gasLimit`: Maximum amount of gas used to cover L2 execution of the ticket
 - `uint256 maxFeePerGas`: The gas price bid for L2 execution of the ticket that is supplied within the deposit (l1CallValue)
