@@ -40,7 +40,7 @@ A primary function of the Orbit SDK is the deployment of a new Orbit chain. The 
 
    - **Security Guarantees**: AnyTrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
 
-   - **Fee Cost**: AnyTrust chains are significantly cheaper than Rollup chains because there's no need to send data to the parent chain, facilitating cheaper transaction fees.
+   - **Fee Cost**: AnyTrust chains are significantly cheaper than Rollup chains because there's no need to send the full transaction data to the parent chain, facilitating cheaper transaction fees.
    
 ###### Learn more about [ AnyTrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
 
