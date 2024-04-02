@@ -24,11 +24,11 @@ This how-to provides step-by-step instructions for running an Orbit node on your
   - Use the parameter `--parent-chain.connection.url=<Parent chain RPC URL>`
   - It must provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider
     - Would be set to appropriate Arbitrum One, Arbitrum Nova, or Arbitrum Sepolia RPC URL
-  - Note: [Arbitrum RPC endpoints](/build-decentralized-apps/reference/node-providers#rpc-endpoints) rate limit connections, So you will need to run a local node for the parent chain or rely on third-party RPC providers
+  - Note: [Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.md#rpc-endpoints) rate limit connections, So you will need to run a local node for the parent chain or rely on third-party RPC providers
 - L3 Orbit chain info and chain name
   - Providing the flag --chain.info-json=<Orbit Chain's chain info> is mandatory. The chain info json string contains vital information about the Orbit chain, which is necessary for the node to commence operations. An example of the chain info json string is available in the subsequent sections.
   - `--chain.name=<My Arbitrum L3 Chain>` must be provided, and it must match the chain name that is used in `--chain.info-json` content.
-  - For an Anytrust chain, it is essential to provide `--node.data-availability.enable`.
+  - For an AnyTrust chain, it is essential to provide `--node.data-availability.enable`.
 
 ## Important ports
 
@@ -59,7 +59,7 @@ This how-to provides step-by-step instructions for running an Orbit node on your
 
   ```
 
-  - Note for Anytrust chains, it is essential to add `--node.data-availability.enable`, and `--node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>` or `--node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>` to the command or configuration.
+  - Note for AnyTrust chains, it is essential to add `--node.data-availability.enable`, and `--node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>` or `--node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>` to the command or configuration.
 
 - When shutting down docker image, it is important to allow for a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
