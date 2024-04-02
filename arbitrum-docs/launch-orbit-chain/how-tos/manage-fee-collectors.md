@@ -25,7 +25,7 @@ There are 4 fee types that are collected on every transaction of an Orbit chain:
 
 - **Parent chain base fee**: relative fees paid for posting the transaction on the parent chain. This is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
 
-- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the batch poster for sending the data of this transaction to the parent chain.
+- **Parent chain surplus fee**: if configured, these are extra fees rewarded to the batch poster.
 
 You can find more detailed information about these fee types in these pages:
 
@@ -265,4 +265,42 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-## How to use the distribution contracts?
+## How to use the fee distribution contracts?
+
+For now, we've described how to set the individual collector addresses for each of the fee types. Some chains may require to have multiple addresses receive the collected fees of any of the available types. For those cases, there's the possibility of using a distributor contract that can gather all fees of a specific type and distribute those among multiple addresses.
+
+This section shows how to configure a distributor contract to manage the fees of a specific type.
+
+:::info Distributor contracts currently not supported in the Orbit SDK
+
+Currently, the Orbit SDK doesn't support deploying and configuring distribution contracts, but will soon be added. So for now, this section will only show examples using `cast send`.
+
+:::
+
+### Step 1. Deploy the distributor contract
+
+An example implementation of a distributor contract can be found [here](https://github.com/OffchainLabs/fund-distribution-contracts/blob/main/src/RewardDistributor.sol). You'll have to deploy this contract on your Orbit chain.
+
+### Step 2. Set the contract address as the desired fee type collector address
+
+Use the instructions provided in the previous section to set the address of the deployed distributor contract as the collector of the desired fee type. For example, if you want the distributor contract to manage the Orbit surplus fees, set the `networkFeeAccount` to the address of the deployed contract.
+
+### Step 3. Configure the recipients of fees in the contract
+
+Now you can set the different addresses that will be receiving fees from that distributor contract. To do that, you can call the method `setRecipients(address[], uint256[])` of the distributor contract, and specify the list of addresses that will be receiving fees, and the proportion of fees for each address.
+
+For example, if you want to set 2 addresses as receivers, with the first one receiving 80% of the fees, and the second one receiving 20% of the fees, you'll use the following parameters:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "setRecipients(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]", "[8000, 2000]"
+```
+
+### Step 4. Trigger the distribution of fees
+
+With the recipients configured in the distributor contract, and with the contract having collected some fees, you can now trigger the distribution of fees to the recipients by using the method `distributeRewards(address[], uint256[])` of the distributor contract, and specifying the list of addresses that are configured, and the proportion of fees for each address. The parameters passed must match the information that is set in the contract (i.e., you can't specify different addresses or proportions than what's been configured beforehand).
+
+For example, if you want to distribute the fees to the 2 addresses specified before, you'll use the following parameters:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "distributeRewards(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]", "[8000, 2000]"
+```
