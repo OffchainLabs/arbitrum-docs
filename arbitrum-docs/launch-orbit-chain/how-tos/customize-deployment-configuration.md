@@ -29,7 +29,7 @@ This name provides a way for people to distinguish your Orbit chain from other O
 
 ### Challenge period (blocks)
 
-The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the current state of the chain posted to your Orbit chain's base chain on L2 (Arbitrum Sepolia for now; settlement to One and Nova mainnet chains isn't supported yet).
+The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the current state of the chain posted to your Orbit chain's base chain on L2.
 
 A longer challenge period means that your chain's nodes will have more time to dispute fraudulent states, but it also means that your chain's users will have to wait longer to withdraw their assets from your chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your chain.
 
