@@ -26,15 +26,11 @@ The main benefit of the Orbit SDK lies in facilitating the deployment and fine-t
 
 These contracts are deployed on <a data-quicklook-from="parent-chain">`parent chains`</a>, they are:
 
-- <a data-quicklook-from="bridge">Bridge contracts</a>
 - Rollup contracts
+- <a data-quicklook-from="bridge">Bridge contracts</a>
 - Contracts handling <a data-quicklook-from="fraud-proof">fraud proofs</a> 
 
 Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
-
-[createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance.
-
-Let's review the inputs and configurations required by `createRollup` for a faster chain deployment.
 
 ### Rollup Deployment Parameters Configuration
 
@@ -165,12 +161,12 @@ In this section, we'll provide detailed explanations of the various chain config
 
 | Parameter             | Description                                                                                                                                                                                                                                                                                                          |
 | :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `batchPoster`         | Sets the batch poster address of your Orbit chain. The batch poster account batches and compresses transactions on the Orbit chain and transmits them back to the parent chain. `batchPoster` is measured in L1 blocks, we recommend a value of 45818                                                                |
+| `batchPoster`         | Sets the batch poster address of your Orbit chain. The batch poster account batches and compresses transactions on the Orbit chain and transmits them back to the parent chain.                                                                 |
 | `validators`          | Array of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting Rollup Blocks (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty RBlocks submitted by other validators. |
 | `nativeToken`         | Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains.                                                                                                                                     |
-| `confirmPeriodBlocks` | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count.                                                                                |
+| `confirmPeriodBlocks` | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count. `confirmPeriodBlocks` is measured in L1 blocks, we recommend a value of `45818`                                                                                |
 | `baseStake`           | Orbit chain validator nodes must stake a certain amount to incentivize honest participation. The `basestake` parameter specifies this amount.                                                                                                                                                                        |
-| `stakeToken`          | Token in which  the `basestake` is required. It represents the token's address on the parent chain. Can be `ETH` or a `ERC-20`token                                                                                                                                                                                  |
+| `stakeToken`          | Token in which  the `basestake` is required. It represents the token's address on the parent chain. Can be `ETH` or a `ERC-20`token. Note that the use of an `ERC-20` token as the `stakeToken` is currently not supported by Nitro, but will be soon.                                                                                                                                                                                  |
 | `owner`               | Account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.                                                                                                                                                                                               |
 | `chainId`             | Sets the unique chain ID of your Orbit chain.                                                                                                                                                                                                                                                                        |
 

@@ -31,7 +31,7 @@ Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This f
 
 ## Key Differences for Custom Gas Token Orbit Chain Deployment
 
-### 1. Fee Token Specification 
+### 1. Custom gas token specification 
 
 The most significant difference is the specification of the `ERC-20` token on the parent chain to be used as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one to be used specifically for transaction fees on your Orbit chain.
     
