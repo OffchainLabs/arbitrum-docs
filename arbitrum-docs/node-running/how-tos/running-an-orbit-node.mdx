@@ -20,9 +20,9 @@ This how-to provides step-by-step instructions for running an Orbit node on your
 | **Storage**: Depends on the Orbit chain and its traffic overtime |
 
 
-## Required Parameters
+## Required parameters
 
-### 1. Parent Chain Parameters
+### 1. Parent chain parameters
 
 The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider:
 
@@ -35,7 +35,7 @@ The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM 
 
 ::: 
 
-### 2. Child Chain Parameters 
+### 2. Child chain parameters 
 
 
 In the Arbitrum Orbit context, the child chain is an L2 or an L3 Orbit chain, and the required parameters are `chain.info-json` and `chain.name`
@@ -59,7 +59,7 @@ An example of `chain.info-json` is available in the next section.
 --chain.name=<My Arbitrum L3 Chain> 
 ```
 
-#### 3. AnyTrust Chains
+#### 3. AnyTrust chains
 
 For <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chains</a>, you need to to add the following flags to the command or configuration:
 
@@ -79,7 +79,7 @@ Or:
 --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
 ```
 
-### 3.Important Ports
+### 3.Important ports
 
     
    | Protocol       | Port  | arg 1 (required) | arg 2 (required)  | arg 3 (required)  |
@@ -89,7 +89,7 @@ Or:
    | WebSocket      | `8548`|`--ws.port=8548`  |`--ws.addr=0.0.0.0`|`--ws.origins=\*`  |
     
 
-### 4. Putting It All Together
+### 4. Putting it all together
 
 - When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be `/home/user/.arbitrum`
 
@@ -117,7 +117,7 @@ Or:
   ```
 
 
-### Note On Permissions
+### Note on permissions
 
 - The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
 
