@@ -1,71 +1,56 @@
 ---
-title: 'Introduction to the Arbitrum Orbit SDK'
-sidebar_label: 'Orbit SDK: Introduction'
-description: 'introduction to the Arbitrum Orbit SDK'
-author: Mehdi Salehi
-sme: Mehdi Salehi
-target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 0
+title: 'Get started with the Arbitrum Orbit SDK'
+sidebar_label: 'Get started'
+description: 'Learn how to deploy and manage your Orbit chain with the Arbitrum Orbit SDK.'
+author: GreatSoshiant
+sme: GreatSoshiant
+user_story: As a current or prospective Orbit chain owner, I need to onboard into the Orbit SDK by understanding the available onboarding paths, and how to select the path that meets my needs.
+content_type: get-started
 ---
 
 import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
+The Arbitrum Orbit SDK lets you programmatically create and manage your own Orbit chain(s). Its capabilities include:
 
-The Arbitrum Orbit SDK is a comprehensive toolkit designed for intermediate blockchain developers interested in building on the Arbitrum Orbit platform.
-
-This SDK facilitates the creation and management of your own Orbit chain using the advanced capabilities of [Viem](https://viem.sh), a modern alternative to traditional Ethereum libraries like _ethers.js_ and _web3.js_.
-
-## Arbitrum Orbit Chains
-
-### Capabilities of the SDK:
-
-- **Configuration and Deployment**: Simplifies the process of configuring and deploying Orbit chain's core contracts.
-- **Initialization and Management**: After deployment, the SDK helps you initialize your chain and adjust configuration parameters.
-- **Ongoing Support and Updates**: Future releases will bring new features, such as tools for creating custom dashboards and monitoring systems for your Orbit chain. Feel free to return to this page regularly for updates!
+- Configuration and deployment of your Orbit chain's core contracts
+- Initialization of your chain and management of its configuration post-deployment
 
 
-Here are the steps you can take to create an Orbit chain with the Orbit SDK:
+## 1. Select a chain type
 
-### 1. Orbit Chain Deployment
+There are three types of Orbit chains. Review the following table to determine which type best fits your needs:
 
-A primary function of the Orbit SDK is the deployment of a new Orbit chain. The initial step in setting up an Orbit chain involves determining the type that best fits your needs. We offer three distinct types of Orbit chains:
-
-1. **[Rollup Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)**: These Orbit chains offer Ethereum-grade security by batching, compressing, and posting data to the parent chain, akin to the <a data-quicklook-from="arbitrum-one">Arbitrum One</a> chain as a rollup chain. You can read more on the [orbit rollup deployment page](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md).
-
-2. **[AnyTrust Orbit Chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)**: AnyTrust Orbit chains are implementations of the Rollup protocol that lower costs by accepting a mild trust assumption. <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data Availability Committee (DAC) to store data and provide it on-demand instead of using its <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. Instead, they are stored by a <a data-quicklook-from="data-availability-committee-dac">Data Availability Committee (DAC)</a> to reduce transaction fees. The main differences between an AnyTrust chain and a rollup chain are:
-   
-   - **Data Availability**: AnyTrust chains utilize a unique approach, with members of a Data Availability Committee responsible for keeping transaction data, whereas rollup chains send the data back to the parent chain.
-
-   - **Security Guarantees**: AnyTrust chains offer different security levels that might be more suited for specific applications, like gaming and social media.
-
-   - **Fee Cost**: AnyTrust chains are significantly cheaper than Rollup chains because there's no need to send the full transaction data to the parent chain, facilitating cheaper transaction fees.
-   
-   - **Gas fees in `ERC-20`**: AnyTrust chains can be configured to accept gas fees in `ERC-20` token instead of `ETH`. Feel free to learn more in the [Custom Gas Token Orbit chain deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md). 
-
-:::important
-
-Custom Gas Token Orbit chains can only be AnyTrust chains; currently, a Rollup Orbit chain cannot use a custom gas fee token.
-
-:::
-
-###### Learn more about [ AnyTrust consensus mechanism ]( /inside-arbitrum-nitro/#inside-anytrust )
+| Chain Type           | Description                                                                                                                                                                                                                                                                                                                               | Use Case                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **Rollup**           | Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to [Arbitrum One](https://arbitrum.io/).                                                                                                                                                                                         | Ideal for applications that require high security guarantees.                         |
+| **AnyTrust**         | Implements the [AnyTrust protocol](/inside-arbitrum-nitro/#inside-anytrust), relying on an external [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) to store data and provide it on-demand instead of using their [parent chain](/intro/glossary/#parent-chain) as the Data Availability (DA) layer. | Suitable for applications that require lower transaction fees.                        |
+| **Custom gas token** | An AnyTrust Orbit chain with the ability to specify a custom `ERC-20` gas token.                                                                                                                                                                                                                                                          | Ideal for applications that require custom gas fee tokens and lower transaction fees. |
 
 
-### 2. [Node Configuration Preparation](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md)
+## 2. Deploy your chain
 
-Once the chain has been deployed, you need to start up your node. This step requires creating a configuration `JSON` file based on your chain deployment setup. The [preparation guide](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md) will help you use the Orbit SDK to generate a node configuration.
+After selecting a chain type, you need to deploy your Orbit chain. Visit the deployment guide for your selected chain type:
 
-### 3. [Token Bridge Deployment](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md)
+- [Deploy a Rollup Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)
+- [Deploy an AnyTrust Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)
+- [Deploy a Custom Gas Token Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md)
 
-To enable `ERC-20` tokens in and out of your orbit chain, you will need to deploy a bridge instance, which consists of a set of contracts.
-To do this, follow the steps outlined in the [token bridge contract deployment guide](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md).
 
-You can also learn more about our bridge design in the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md) 
+## 3. Configure your Orbit chain's node
 
-### 4. [Orbit Chain Configuration](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md)
+After selecting a chain type, you need to specify your Orbit chain's node configuration by creating a `JSON` file. Visit [Configure your Orbit chain's node](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md), then proceed to the next step.
 
-After deploying the chain, starting your node up, and deploying the token bridge, the chain owner must configure their Orbit chain based on the desired setup. 
-Read more on [how to configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md).
-   
+## 4. Deploy your Orbit chain's token bridge
+
+Your Orbit chain's token bridge contracts allow ERC-20 tokens to move between your Orbit chain and its underlying parent chain. See [Deploy your Orbit chain's token bridge](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md), then proceed to the next step.
+
+## 5. Configure your Orbit chain
+
+With your node configuration specified and token bridge deployed, you'll be ready to configure your Orbit chain. Visit [Configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md) to complete this final step.
+
+## See also
+
+- Learn more about the [AnyTrust consensus mechanism](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#inside-anytrust)
+- Learn more about the [`ERC-20` token bridge architecture](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md)
