@@ -1,6 +1,6 @@
 ---
-title: 'How to Deploy a Custom Gas Token Chain Using the Orbit SDK'
-sidebar_label: 'Custom Gas Token Orbit Deployment'
+title: 'How to deploy a custom gas token chain using the Orbit SDK'
+sidebar_label: 'Deploy a custom gas token chain'
 description: 'How to deploy a custom gas token chain using the Orbit SDK'
 author: GreatSoshiant
 sme: GreatSoshiant

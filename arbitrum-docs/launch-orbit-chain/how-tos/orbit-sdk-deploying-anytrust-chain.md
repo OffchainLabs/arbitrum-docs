@@ -1,6 +1,6 @@
 ---
-title: 'How to Deploy an AnyTrust Chain Using the Orbit SDK'
-sidebar_label: 'AnyTrust Orbit Deployment'
+title: 'How to Deploy an AnyTrust chain using the Orbit SDK'
+sidebar_label: 'Deploy an AnyTrust chain'
 description: 'How to deploy an AnyTrust chain using the Orbit SDK '
 author: GreatSoshiant
 sme: GreatSoshiant
