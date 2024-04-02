@@ -45,9 +45,10 @@ While Arbitrum chains today have working fraud proofs to secure withdrawals, BOL
 
 Under the hood, the reason why BOLD can offer time-bound, permissionless validation is because a correct Arbitrum state assertion is **not tied to a single staker or entity**. Instead, because L2 states are completely deterministic and can eventually be proven on Ethereum, any party can stake on this correct, deterministic state and, through interactive fraud proofs, can prove that their claim is correct. This means that a single honest party staking on the correct state assertion will always win, guaranteed. 
 
-To summarize with an analogy: Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against each unique challenger sequentially, like in a *“1v1 tournament”*. BOLD, on the other hand, enables any single honest party to defend the correct state and be guaranteed to win, similar to an *“all-vs-all battle royale”* where there must and will always be a single winner in the end.
+To summarize with an analogy and the diagram below: Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against each unique challenger sequentially, like in a *“1v1 tournament”*. BOLD, on the other hand, enables any single honest party to defend the correct state and be guaranteed to win, similar to an *“all-vs-all battle royale”* where there must and will always be a single winner in the end.
 
-## TODO INSERT GRAPHIC #1 HERE 
+![before-and-after-with-bold](./assets/before-vs-after-with-bold.png)
+*Note that the timer/clocks above are arbitrary and instead represent the duration of challenges and how challenges are sequential today but can take place in parallel with BOLD. The duration of challenges are independent from one another.*
 
 ### BOLD makes withdrawals to L1 Ethereum safer
 Today, the rollup protocol for Arbitrum chains works by posting both transaction data & the resulting state from those transactions to a data availability layer, like Ethereum. Then, there is a period of time called the “challenge period” where any validator can open a dispute on a given state - this is what makes Arbitrum an optimistic rollup. This challenge period is why you must wait ~1 week (6.4 days to be exact) to withdraw assets from Arbitrum One, for example. 
