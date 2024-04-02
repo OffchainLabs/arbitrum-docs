@@ -106,6 +106,14 @@ BOLD is in `alpha`, which means there are a lot of planned improvements on the r
 
 ## Frequently asked questions about BOLD (FAQ):
 
+**How does staking work?**
+
+- Like how Nitro works today, a stake of monetary value is required for a BOLD-enabled validator to make an on-chain assertion about the chain's latest state. It follows, then, that this stake is required to post rival assertions against invalid assertions (i.e. open a challenge) to defend an Arbitrum chain. This stake can be any ERC20 token and should be set to a large enough value (e.g. 100 ETH) to make it economically infeasible for an advesary to attack an Arbitrum chain and to mitigate against spam (that would otherwise delay confirmations up to, but not exceeding, 1 challenge period). Setting such a high value, however, means that the cost for an honest party to defend Arbitrum is proportional to the number of malicious entities and on-going challenges at any given point in time. To address this, there is a [contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a staking pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum but who may not individually be able to put up the large upfront stake itself.
+
+**What is the user flow for using the assertion staking pool contract?**
+
+- Anyone can deploy an assertion staking pool using this [`AssertionStakingPoolCreator.sol`]([contract](https://github.com/OffchainLabs/bold/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol)) as a means to crowdsource funds for staking on an assertion. To defend Arbitrum using a staking pool, an entity would first deploy this pool with the assertion that they believe is correct and wish to stake on to challenge an advesary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's State Transition Function (STF). If other parties agree on the assertion being correct, then they can deposit their funds into the contract. When enough funds have been deposited, anyone can permissionlessly trigger the creation of the assertion on-chain to start the challenge. Finally, once the honest parties' assertion is confirmed by the dispute protocol, all involved entities will get their funds reimbursed and can withdraw.
+
 **Are there any incentives to run a BOLD validator to secure Arbitrum chains?**
 
 - Running a BOLD validator secures their respective Arbitrum chain and protects the assets on the chain from malicious actors - all you need is 1 honest party. Other than this critical piece, there are currently no financial incentives for parties to run a BOLD validator. Any future decisions or changes to this design can be proposed to and voted on by the Arbitrum DAO.
