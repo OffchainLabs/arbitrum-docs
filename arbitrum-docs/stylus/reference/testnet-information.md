@@ -31,7 +31,7 @@ Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction
 
 :::
 
-For information on other mainnet and testnet Arbitrum chains, visit the Node Runners [section of the docs](/build-decentralized-apps/reference/01-node-providers.md#rpc-endpoints).
+For information on other mainnet and testnet Arbitrum chains, visit the [Node Runners](/build-decentralized-apps/reference/01-node-providers.md#rpc-endpoints) section of the docs.
 
 ## Faucets
 
