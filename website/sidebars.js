@@ -352,7 +352,49 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ',
+          label: 'FAQ'
+        },
+        {
+          type: 'category',
+          label: 'Orbit SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              label: `AnyTrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
         },
       ],
     },
@@ -487,7 +529,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'ArbOS software releases',
+          label: 'Customize your chain',
           collapsed: true,
           items: [
             {
@@ -808,7 +850,7 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://docs.prylabs.network/docs/install/install-with-script',
-    }
+    },
   ],
 };
 
