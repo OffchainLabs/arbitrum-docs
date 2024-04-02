@@ -292,7 +292,7 @@ Now you can set the different addresses that will be receiving fees from that di
 For example, if you want to set 2 addresses as receivers, with the first one receiving 80% of the fees, and the second one receiving 20% of the fees, you'll use the following parameters:
 
 ```shell
-cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "setRecipients(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]", "[8000, 2000]"
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "setRecipients(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]" "[8000, 2000]"
 ```
 
 ### Step 4. Trigger the distribution of fees
@@ -302,5 +302,5 @@ With the recipients configured in the distributor contract, and with the contrac
 For example, if you want to distribute the fees to the 2 addresses specified before, you'll use the following parameters:
 
 ```shell
-cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "distributeRewards(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]", "[8000, 2000]"
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "distributeRewards(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]" "[8000, 2000]"
 ```
