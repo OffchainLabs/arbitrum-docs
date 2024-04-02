@@ -32,10 +32,6 @@ These contracts are deployed on <a data-quicklook-from="parent-chain">`parent ch
 
 Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
 
-[createRollup](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107): deploys a new set of core contracts for each Orbit chain instance.
-
-Let's review the inputs and configurations required by `createRollup` for a faster chain deployment.
-
 ### Rollup Deployment Parameters Configuration
 
 The `createRollup` function in the [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) takes a complex input named `deployParams`, structured to encapsulate various configurable parameters customizing the Orbit chain.
