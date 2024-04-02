@@ -777,7 +777,7 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-                  label: 'How to deploy a BOLD validator on testnet!',
+                  label: 'Deploy a BOLD validator on testnet',
                 },
                 {
                   type: 'link',
