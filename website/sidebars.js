@@ -284,6 +284,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/customize-stf',
               label: `Customize your chain's behavior`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
+              label: `Manage the fee collectors`,
+            },
           ],
         },
         {
@@ -808,7 +813,7 @@ const sidebars = {
       type: 'link',
       label: 'Prysm docs',
       href: 'https://docs.prylabs.network/docs/install/install-with-script',
-    }
+    },
   ],
 };
 
