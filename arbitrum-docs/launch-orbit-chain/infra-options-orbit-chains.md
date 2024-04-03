@@ -11,6 +11,18 @@ Many application developers do not have the subject matter expertise required to
 - [AltLayer](https://altlayer.io/)
 - [Gelato](https://www.gelato.network/)
 
+## Explorers
+
+Explorers are a basic requirement for any functional blockchain, providing a transparent view of transactions, blocks, and addresses on the blockchain. They can be accessed by users and developers to verify transactions, check the status of network activity, and ensure that transactions are being processed correctly. Some providers that can offer an explorer to Orbit developers are:
+
+- [Blockscout] (https://www.blockscout.com/)
+- [Socialscan] (https://socialscan.io/)
+- [Lore] (https://www.lorescan.com/)
+- [Routescan] (https://routescan.io/)
+
+Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan] (https://blobscan.com/) to see which blob/block included a given transaction.
+
+
 ## Bridges
 
 Orbit chains are easily launched with a canonical token bridge which permits transfers to and from their chain via Arbitrum One, Nova, or Ethereum. However, some applications may desire the ability to transfer to additional chains outside of the Orbit ecosystem or want to offer the ability to transfer across chain more quickly, without waiting for complete finality. In these instances, the following 3rd party bridging providers offer services to meet those needs:
