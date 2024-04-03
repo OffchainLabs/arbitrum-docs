@@ -284,6 +284,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/customize-stf',
               label: `Customize your chain's behavior`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              label: `Configure delayed inbox finality`,
+            },
           ],
         },
         {
