@@ -26,9 +26,9 @@ BOLD will eventually replace the current, permissioned fraud proof mechanism tha
 - BOLD is currently considered to be in `alpha` release and is deployed on a public testnet. [Follow this guide](https://github.com/OffchainLabs/bold-validator-starter-kit) to deploy a BOLD validator to test and explore, first hand, how BOLD works to secure Arbitrum chains. To learn more about BOLD, please check out the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf) and [BOLD's code and specifications on Github](https://github.com/OffchainLabs/bold).
 
 ## What _exactly_ is BOLD?
-BOLD, an acronym for Bounded Liquidity Delay Protocol, is a set of rules used by validators to open and resolve disputes about Arbitrum’s state to ensure only valid states get confirmed on an Arbitrum chain’s parent chain, such as Ethereum, for example. BOLD is shipped as part of the Nitro tech stack - the software that powers every Arbitrum validator node. 
+BOLD, an acronym for Bounded Liquidity Delay Protocol, is an upgrade to Arbitrum's existing challenge protocol - specifically the set of rules used by validators to open and resolve disputes about Arbitrum’s state to ensure only valid states get confirmed on an Arbitrum chain’s parent chain, such as Ethereum.
 
- BOLD is an upgrade to Arbitrum's existing challenge protocol - which has working fraud proofs and is used in production today by Arbitrum chains. The new changes BOLD brings enhances the security around withdrawals to L1 by enabling anyone to participate in the validation of the state of the chain.
+The current challenge protocol has working fraud proofs and is used in production today by Arbitrum chains. The changes BOLD brings enhances the security around withdrawals to L1 by enabling anyone to participate in the validation of the state of the chain.
 
 In short, BOLD further strengthens the secure withdrawal assets from Arbitrum back to Ethereum.
 
