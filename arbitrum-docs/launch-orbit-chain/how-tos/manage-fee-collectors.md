@@ -11,19 +11,19 @@ import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-As part of the activity of an Orbit chain, different fees are collected with every transaction. All these fees are collected as a single amount (the transaction fees), but are internally split into different components depending on their purpose. Each component can also be transferred to a different fee collector address that can be configured on your chain.
+As part of the activity of an Orbit chain, different fees are collected with every transaction. These fees are collected as a single amount (the transaction fees) but are internally split into different components depending on their purpose. Each component can also be transferred to a different fee collector address that can be configured on your chain.
 
-This guide describes the different fees that are collected, and explains how to specify the fee collector address on your chain for each specific fee type.
+This guide describes the different fees that are collected, and explains how to specify the fee collector address on your chain for each fee type.
 
 ## What fees are collected on an Orbit chain?
 
-There are 4 fee types that are collected on every transaction of an Orbit chain:
+There are four fee types that are collected on every transaction of an Orbit chain:
 
-- **Orbit base fee**: fees paid for the execution of the transaction on the chain based on the minimum base price configured.
+- **Orbit base fee**: fees paid for executing the transaction on the chain based on the minimum base price configured.
 
-- **Orbit surplus fee**: if the chain is congested (i.e., the base price paid for the transaction is higher than the minimum base price), these fees account for the execution of the transaction on the chain based on any gas price paid above the minimum base price configured.
+- **Orbit surplus fee**: if the chain is congested (i.e., the base price paid for the transaction is higher than the minimum base price), these fees account for executing the transaction on the chain based on any gas price paid above the minimum base price configured.
 
-- **Parent chain base fee**: relative fees paid for posting the transaction on the parent chain. This is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
+- **Parent chain base fee**: relative fees paid for posting the transaction on the parent chain. This amount is calculated based on the transaction's estimated size and the current view of the parent chain's base fee.
 
 - **Parent chain surplus fee**: if configured, these are extra fees rewarded to the batch poster.
 
@@ -34,11 +34,11 @@ You can find more detailed information about these fee types in these pages:
 
 ## How to configure the fee collector addresses?
 
-Let's now look at how to configure the collector addresses for each of the fee types.
+Let's now look at how to configure the collector addresses for each fee type.
 
 ### Orbit base fee
 
-Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can get the current address configured, by calling the method `getInfraFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.md#arbownerpublic) precompile. For example:
+Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.md#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
@@ -46,7 +46,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B 
 
 _Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile also has a `getInfraFeeAccount()` method that can be used, but only by the owner of the chain._
 
-Alternatively, you can use the Orbit SDK to get the current address configured as infraFeeAccount, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile:
+Alternatively, you can use the Orbit SDK to retrieve the current address configured as `infraFeeAccount`, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -88,7 +88,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Orbit surplus fee
 
-Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can get the current address configured, by calling the method `getNetworkFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.md#arbownerpublic) precompile. For example:
+Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.md#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getNetworkFeeAccount() (address)"
@@ -96,7 +96,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B 
 
 _Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile also has a `getNetworkFeeAccount()` method that can be used, but only by the owner of the chain._
 
-Alternatively, you can use the Orbit SDK to get the current address configured as networkFeeAccount, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile:
+Alternatively, you can use the Orbit SDK to retrieve the current address configured as `networkFeeAccount`, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompile:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -140,7 +140,7 @@ await orbitChainClient.sendRawTransaction({
 
 :::info ArbAggregator currently not supported in the Orbit SDK
 
-Reading information from the ArgAggregator precompile, or using it to set new information is currently not supported in the Orbit SDK, but will soon be added. So for now, this subsection will only show examples using `cast call` and `cast send`.
+Reading information from the `ArgAggregator` precompile or using it to set new information is currently not supported by the Orbit SDK but will be added soon. So, for now, this subsection will only show examples using `cast call` and `cast send`.
 
 :::
 
@@ -156,7 +156,7 @@ This list has to also be verified against the `SequencerInbox` contract living o
 cast call --rpc-url $PARENT_CHAIN_RPC $SEQUENCER_INBOX_ADDRESS "isBatchPoster(address) (bool)" $BATCH_POSTER_ADDRESS
 ```
 
-Once we have the current batch poster, we can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.md#arbaggregator) precompile and passing the address of the batch poster.
+Once you have the current batch poster, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.md#arbaggregator) precompile and passing the address of the batch poster.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
@@ -267,13 +267,13 @@ await orbitChainClient.sendRawTransaction({
 
 ## How to use the fee distribution contracts?
 
-For now, we've described how to set the individual collector addresses for each of the fee types. Some chains may require to have multiple addresses receive the collected fees of any of the available types. For those cases, there's the possibility of using a distributor contract that can gather all fees of a specific type and distribute those among multiple addresses.
+For now, we've described how to set the individual collector addresses for each fee type. Some chains may require multiple addresses to receive the collected fees of any of the available types. In those cases, there's the possibility of using a distributor contract that can gather all fees of a specific type and distribute those among multiple addresses.
 
 This section shows how to configure a distributor contract to manage the fees of a specific type.
 
 :::info Distributor contracts currently not supported in the Orbit SDK
 
-Currently, the Orbit SDK doesn't support deploying and configuring distribution contracts, but will soon be added. So for now, this section will only show examples using `cast send`.
+Currently, the Orbit SDK doesn't support deploying and configuring distribution contracts, but it will soon be added. So, for now, this section will only show examples using `cast send`.
 
 :::
 
@@ -289,7 +289,7 @@ Use the instructions provided in the previous section to set the address of the 
 
 Now you can set the different addresses that will be receiving fees from that distributor contract. To do that, you can call the method `setRecipients(address[], uint256[])` of the distributor contract, and specify the list of addresses that will be receiving fees, and the proportion of fees for each address.
 
-For example, if you want to set 2 addresses as receivers, with the first one receiving 80% of the fees, and the second one receiving 20% of the fees, you'll use the following parameters:
+For example, if you want to set two addresses as receivers, with the first one receiving 80% of the fees and the second one receiving 20% of the fees, you'll use the following parameters:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "setRecipients(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]" "[8000, 2000]"
@@ -299,7 +299,7 @@ cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUT
 
 With the recipients configured in the distributor contract, and with the contract having collected some fees, you can now trigger the distribution of fees to the recipients by using the method `distributeRewards(address[], uint256[])` of the distributor contract, and specifying the list of addresses that are configured, and the proportion of fees for each address. The parameters passed must match the information that is set in the contract (i.e., you can't specify different addresses or proportions than what's been configured beforehand).
 
-For example, if you want to distribute the fees to the 2 addresses specified before, you'll use the following parameters:
+For example, if you want to distribute the fees to the two addresses specified before, you'll use the following parameters:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $DISTRIBUTOR_CONTRACT_ADDRESS "distributeRewards(address[],uint256[]) ()" "[$RECEIVER_1, $RECEIVER_2]" "[8000, 2000]"
