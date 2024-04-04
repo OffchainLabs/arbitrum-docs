@@ -82,11 +82,16 @@ Or:
 ### 3.Important ports
 
     
-   | Protocol       | Port  | arg 1 (required) | arg 2 (required)  | arg 3 (required)  |
-   |----------------|-------|----------------- |-------------------|-------------------|
-   | RPC            | `8547`|                  |                   |                   |
-   | Sequencer Feed | `9642`|                  |                   |                   |
-   | WebSocket      | `8548`|`--ws.port=8548`  |`--ws.addr=0.0.0.0`|`--ws.origins=\*`  |
+   | Protocol         | Port  |
+   |------------------|-------|
+   | `RPC`/`http`   | `8547`|
+   | `RPC`/`websocket`    | `8547`|
+   | `Sequencer Feed` | `9642`|
+
+   * Please note: the `RPC`/`websocket` protocol requires some ports to be enabled, you can use the following flags:
+        - `--ws.port=8548`
+        - `--ws.addr=0.0.0.0`
+        - `--ws.origins=\*`
     
 
 ### 4. Putting it all together
