@@ -15,11 +15,12 @@ Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EI
 
 ### What does this mean for node operators?
 
-Validators for Arbitrum chains posting data to L1 Ethereum (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains) will require access to blob data to produce and confirm L2 state assertions (read more about how this works on our [Deep dive: Inside Arbitrum"](../../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx) page).
+To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](../how-tos/running-a-full-node.mdx).
 
-Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to historical blob data to sync up to the latest state of Arbitrum. Offchain Labs has plans to reduce a Nitro validator's reliance on historical blob data and will share updates on this effort in the future.
+Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to *historical* blob data to sync up to the latest state of their Arbitrum chain. 
 
-To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), you will need access to blob data. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](../how-tos/running-a-full-node.mdx).
+Offchain Labs has plans to reduce a Nitro validator's reliance on historical blob data and will share updates on this effort in the future.
+
 ### List of Ethereum beacon chain RPC providers
 
 | Provider                                                                    | Beacon chain APIs? | Historical blob data? |
