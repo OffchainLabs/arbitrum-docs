@@ -62,7 +62,7 @@ Here are some inputs details from the example above:
 | `http`         | Configuration parameters fot the HTTP server.                                 |
 | `node`         | Specific node settings, including sequencer and batch-poster configurations.  |
 
-### Additional Configuration for AnyTrust Orbit Chains:
+### Additional configuration for AnyTrust Orbit chains:
 
 For AnyTrust Orbit chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
 - Sequencer's inbox address
@@ -92,17 +92,17 @@ Example addition for AnyTrust Node Config:
 };
 ```
 
-### Preparing Your Node Config File
+### Preparing your node config file
 
 The Node Config file includes three types of fields:
 
-1. **Information from the Orbit Deployment Chain**: Such as the addresses of the core contracts.
-2. **Parameters Configurable by the Chain Deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
-3. **Fields Not Typically Configured**: Like the HTTP section, which usually remains standard.
+1. **Information from the Orbit deployment chain**: Such as the addresses of the core contracts.
+2. **Parameters configurable by the chain deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
+3. **Fields not typically configured**: Like the HTTP section, which usually remains standard.
 
 Let's explore the parameters allowing you to set up a stable, and secure Orbit chain tailored to your project's requirements:
 
-### Node Config Generation With Orbit SDK
+### Node config generation with Orbit SDK
 
 Generating a Node Config `JSON` file to initiate your Orbit chain is a step in the deployment process. The Orbit SDK simplifies this task with an API named `prepareNodeConfig`. This API takes specific parameters for your Orbit chain and returns a `JSON` file that can be used as the Node Config to initiate the chain.
 
