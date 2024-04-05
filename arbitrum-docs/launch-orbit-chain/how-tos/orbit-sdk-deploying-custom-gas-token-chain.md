@@ -29,7 +29,7 @@ Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This f
 
 :::
 
-## Key Differences for Custom Gas Token Orbit Chain Deployment
+## Key differences for custom gas token Orbit chain deployment
 
 ### 1. Custom gas token specification 
 
@@ -37,7 +37,7 @@ The most significant difference is the specification of the `ERC-20` token on th
     
 **Note:** Currently, only `ERC-20` tokens with 18 decimals are acceptable as gas tokens on Orbit chains.
 
-### 2. Chain Configuration
+### 2. Chain configuration
 
 You can configure your Orbit chain using the `prepareChainConfig` method and assigning it to a `chainConfig` variable.
 
@@ -61,7 +61,7 @@ To use the `prepareChainConfig` method as shown in the example above, some input
 | `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
 
 
-### 3. Token Approval Before Deployment Process
+### 3. Token approval before deployment process
 
 In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `RollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
 
@@ -109,7 +109,7 @@ const approvalTxRequest =
     allowanceParams,
   );
 ```
-### 4. Deployment Process
+### 4. Deployment process
 
 The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
