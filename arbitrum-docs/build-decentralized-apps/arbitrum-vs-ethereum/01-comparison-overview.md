@@ -14,15 +14,15 @@ This section describes the differences, perks, and gotchas that devs are advised
 
 ## Block numbers and time
 
-Time in L2s is tricky. The timing assumptions one is used to making about Ethereum blocks don't exactly carry over into the timing of Arbitrum blocks. See [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time) for details about how block numbers and time are handled in Arbitrum.
+Time in L2s is tricky. The timing assumptions one is used to making about Ethereum blocks don't exactly carry over into the timing of Arbitrum blocks. See [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.md) for details about how block numbers and time are handled in Arbitrum.
 
 ## RPC methods
 
-Although the majority of RPC methods follow the same behavior than in Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. You can find more information about these differences in [RPC methods](/build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods).
+Although the majority of RPC methods follow the same behavior than in Ethereum, some methods might produce a different result, or add more information, when used on an Arbitrum chain. You can find more information about these differences in [RPC methods](/build-decentralized-apps/arbitrum-vs-ethereum/03-rpc-methods.md).
 
 ## Solidity support
 
-You can deploy Solidity contracts onto Arbitrum just like you do Ethereum. There are only a few minor differences in behavior. Find more information about it in [Solidity support](/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support).
+You can deploy Solidity contracts onto Arbitrum just like you do Ethereum. There are only a few minor differences in behavior. Find more information about it in [Solidity support](/build-decentralized-apps/arbitrum-vs-ethereum/04-solidity-support.md).
 
 ## Fees
 
@@ -36,8 +36,8 @@ Similarly, Arbitrum chains can also send messages to the parent chain. Find more
 
 ## Precompiles
 
-Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/overview).
+Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.md).
 
 ## NodeInterface
 
-The Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that is only accessible via RPCs (it's not actually deployed on-chain, and thus can't be called by smart contracts). Find more information about this interface in [NodeInterface](/build-decentralized-apps/nodeinterface/overview).
+The Arbitrum Nitro software includes a special `NodeInterface` contract available at address `0xc8` that is only accessible via RPCs (it's not actually deployed on-chain, and thus can't be called by smart contracts). Find more information about this interface in [NodeInterface](/build-decentralized-apps/nodeinterface/01-overview.md).
