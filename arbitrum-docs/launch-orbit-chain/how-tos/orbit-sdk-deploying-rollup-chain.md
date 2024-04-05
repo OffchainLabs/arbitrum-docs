@@ -32,13 +32,13 @@ These contracts are deployed on <a data-quicklook-from="parent-chain">`parent ch
 
 Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
 
-### Rollup Deployment Parameters Configuration
+### Rollup deployment parameters configuration
 
 The `createRollup` function in the [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) takes a complex input named `deployParams`, structured to encapsulate various configurable parameters customizing the Orbit chain.
 
 Breaking down the structure of these parameters:
 
-#### 1. RollupDeploymentParams Struct
+#### 1. RollupDeploymentParams struct
 
    ```solidity
    struct RollupDeploymentParams {
@@ -53,7 +53,7 @@ Breaking down the structure of these parameters:
    ```
 This Solidity `struct` includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
 
-#### 2. Config Struct
+#### 2. Config struct
 
    ```solidity
    struct Config {
@@ -73,7 +73,7 @@ This Solidity `struct` includes key settings like the chain configuration (`Conf
 
 The `Config` `struct` defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
-#### 3. MaxTimeVariation Struct
+#### 3. MaxTimeVariation struct
 
    ```solidity
    struct MaxTimeVariation {
@@ -154,7 +154,7 @@ const chainConfig = prepareChainConfig({
 });
 ```
 
-### Rollup Configuration Parameters
+### Rollup configuration parameters
 
 In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. Understanding these parameters is critical to customizing your Orbit chain to suit your needs.
 
@@ -179,7 +179,7 @@ In this section, we'll provide detailed explanations of the various chain config
 While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to [contact us on our Discord server](https://discord.com/channels/585084330037084172/1116812793606328340/1205801459518804018) for further details and support.
 
 
-### Configuration of Rollup Params and Deployment on Orbit SDK
+### Configuration of Rollup params and deployment on Orbit SDK
 
 The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
 
@@ -220,7 +220,7 @@ The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPr
    ```
     After creating the raw transaction, you need to sign and broadcast it to the network.
 
-### Getting the Orbit Chain Information After Deployment
+### Getting the Orbit chain information after deployment
 
 Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment. The Orbit SDK provides a convenient way to do this through the `createRollupPrepareTransactionReceipt` API. 
 
