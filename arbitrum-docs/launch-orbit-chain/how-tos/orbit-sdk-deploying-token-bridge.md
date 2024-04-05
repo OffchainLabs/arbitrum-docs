@@ -24,17 +24,17 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 :::
 
-### Token Bridge Deployment Steps
+### Token bridge deployment steps
 
 Following the [deployment](orbit-sdk-deploying-rollup-chain.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains. 
 
 To establish and configure the token bridge effectively, the process can be broken down into the following steps: 
 
-1. **[Token Approval](#step-1)**
-2. **[ Token Bridge Contract Deployment ](#step-2)**
-3. **[ Transaction Recipient and Checking for Deployment on Child Chain ](#step-3)**
-4. **[ Deployment Information and Contract Addresses ](#step-4)**
-5. **[ Setting Up the WETH Gateway ](#step-5)**
+1. **[Token approval](#step-1)**
+2. **[ Token bridge contract deployment ](#step-2)**
+3. **[ Transaction recipient and checking for deployment on child chain ](#step-3)**
+4. **[ Deployment information and contract addresses ](#step-4)**
+5. **[ Setting up the WETH gateway ](#step-5)**
 
 :::info
 
@@ -42,7 +42,7 @@ The token bridge deployment process depends on the type of Orbit chain. In the f
 
 :::
 
-### 1. Token Approval (Custom fee token Orbit chains only){#step-1}
+### 1. Token approval (custom fee token Orbit chains only){#step-1}
 Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two essential APIs:
 
 1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This API is designed to verify that the deployer's address has enough allowance to pay for the fees associated with the bridge token deployment.
@@ -66,7 +66,7 @@ In this scenario, `allowanceParams` includes the native token details, the roll-
 
 It is important to note that after generating the raw transaction, the deployer must sign and broadcast it to the network to finalize the approval process.
 
-### 2. Token Bridge Contract Deployment{#step-2}
+### 2. Token bridge contract deployment{#step-2}
 
 The deployment of token bridge contracts constitutes the foundational step in establishing a bridge between the parent and the Orbit chain. This process mirrors the deployment methodology used for orbit chain contracts, where a primary contract, named `RollupCreator`, facilitates the deployment of core contracts. In the context of token bridge contracts, the `TokenBridgeCreator` contract assumes a similar pivotal role by orchestrating the deployment across both the parent and the Orbit chain. Feel free to take a look at the [`TokenBridgeCreator` Solidity code](https://github.com/OffchainLabs/token-bridge-contracts/blob/b3894ecc8b6185b2d505c71c9a7851725f53df15/contracts/tokenbridge/ethereum/L1AtomicTokenBridgeCreator.sol#L4).
 
@@ -90,7 +90,7 @@ In the above example, `rollupContractAddress` refers to the Orbit chain's rollup
 
 Following the creation of the raw transaction, the next steps involve signing it and broadcasting it to the relevant blockchain network to complete the deployment process.
 
-### 3. Transaction Recipient and Checking for Deployment on Child Chain{#step-3}
+### 3. Transaction recipient and checking for deployment on child chain{#step-3}
 
 Following the dispatch of the deployment transaction, retrieving the transaction receipt and verifying the successful deployment of the contracts on both the parent and child chains is crucial. Our Orbit SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient. An illustrative use of this API is as follows:
 
@@ -120,7 +120,7 @@ console.log(`Retryable executed successfully`);
 
 In this example, the `waitForRetryables` method is invoked on the `txReceipt` to monitor the execution of Retryable Tickets and verify their status. A `success` status indicates that the Retryable Tickets have been executed successfully, ensuring the contracts' deployment. It's important to note that this process involves two Retryable Tickets. You can check out a [more comprehensive walkthrough](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1e39d21eef57d204bfa609c4c29284528ddf05ac/examples/create-token-bridge-eth/index.ts#L78-L104) of the example. This enhanced approach not only simplifies the retrieval of transaction receipts but also provides a reliable method for verifying contract deployment across chains.
 
-### 4. Deployment Information and Contract Addresses{#step-4}
+### 4. Deployment information and contract addresses{#step-4}
 
 Once we are done with the deployment and are assured that the Retryable Tickets are successful, it's time to get the deployment information and all token bridge contract addresses.
 To get this information, we have an API on Orbit SDK named `getTokenBridgeContracts`. You can use this method to retrieve the data for the token bridge recipient.
@@ -133,7 +133,7 @@ Here's an example of how to get the contract addresses from the `txReceipt` gene
   });
 ```
 
-### 5. Setting Up the WETH Gateway (ETH-based Orbit chains only){#step-5}
+### 5. Setting up the WETH gateway (ETH-based Orbit chains only){#step-5}
 The last step in spinning up the token bridge for an ETH-based Orbit chain consists of setting up the `WETH Gateway`. 
 
 :::note
