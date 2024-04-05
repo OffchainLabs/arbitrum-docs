@@ -17,15 +17,15 @@ This document is under construction and may change significantly as we incorpora
 :::
 
 
-## 1. Parent Chain Configuration
+## 1. Parent chain configuration
 Configuring the parent chain is an essential initial step in setting up your Orbit chain. Most of these configurations are specified during the setup phase. Detailed instructions can be found in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain#rollup-deployment-parameter) section of the rollup deployment guide. 
 
 After the initial setup, the chain owner can modify configurations as needed. For instance, the validator set can be updated by invoking the [`setValidKeyset`](https://github.com/OffchainLabs/nitro-contracts/blob/90037b996509312ef1addb3f9352457b8a99d6a6/src/bridge/SequencerInbox.sol#L751) function with a new set of validators. This adaptability facilitates continuous optimization and management of the chain.
 
-## 2. Node Configuration
+## 2. Node configuration
 This category includes settings adjustable within the `nodeConfig.json` file, directly impacting the operation of the chain's nodes, including special nodes like validators and sequencers. These settings are vital for tailoring the node's functionality to specific requirements or performance criteria. The chain owner can modify these configurations during the node config generation process, ensuring that each node operates with the desired settings from the start. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
 
-## 3. Child Chain Parameter Configuration
+## 3. Child chain parameter configuration
 The final configuration type involves setting parameters on the child chain. This level of configuration is primarily achieved through the [ArbOwner precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol) on the child chain. These configurations are typically applied post-chain initialization and after the deployment of the token bridge. This guide will help you configure child chain parameters using the Orbit SDK, providing insights into effective management and optimization strategies for your child chain operations.
 
 The child chain configuration can be performed after the chain initialization. These parameters are configurable via setter functions in the [ArbOwner precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol). Additionally, there are various getter functions in the ArbOwner precompile that you can use to read the current configuration. Below, we explain several methods in the ArbOwner precompile that you can use to configure the parameters or read their current state.
@@ -45,7 +45,7 @@ You can use these setter functions to configure the child chain parameters:
 | `scheduleArbOSUpgrade` | If you plan to upgrade the <a data-quicklook-from="arbos">ArbOS</a> version of your chain, this method can help you schedule the upgrade. For a complete guide on this matter, please refer to the explanation of the [arbos upgrade](arbos-upgrade.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `setChainConfig`       | We discussed the chainConfig in the [Rollup deployment guide](orbit-sdk-deploying-rollup-chain.md#chain-config-parameter) in detail. If you wish to change any field of the `chainConfig`, you need to use this method on the child chain.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 
-### Getter Functions
+### Getter functions
 
 | Parameter              | Description                                                            |
 | :--------------------- | :--------------------------------------------------------------------- |
@@ -54,7 +54,7 @@ You can use these setter functions to configure the child chain parameters:
 | `getInfraFeeAccount`   | Returns the infrastructure fee account address.                        |
 | `getNetworkFeeAccount` | Returns the network fee account address.                               |
 
-### Configuring the Child Chain Using the Orbit SDK
+### Configuring the child chain using the Orbit SDK
 
 In the Orbit SDK, we use the [Client Extension](https://viem.sh/docs/clients/custom#extending-with-actions-or-configuration) feature of Viem to extend the public client. In the Orbit SDK, we defined `arbOwnerPublicActions` to use it and extend the client on Viem. An example of creating a public client extended with arbOwner public actions is:
 
