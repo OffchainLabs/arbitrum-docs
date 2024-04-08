@@ -30,7 +30,7 @@ The final configuration type involves setting parameters on the child chain. Thi
 
 The child chain configuration can be performed after the chain initialization. These parameters are configurable via setter functions in the [ArbOwner precompile](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol). Additionally, there are various getter functions in the ArbOwner precompile that you can use to read the current configuration. Below, we explain several methods in the ArbOwner precompile that you can use to configure the parameters or read their current state.
 
-### Setter Functions
+### Setter functions
 You can use these setter functions to configure the child chain parameters:
 
 
