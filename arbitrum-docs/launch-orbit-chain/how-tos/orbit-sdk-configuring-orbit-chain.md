@@ -6,6 +6,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 6
+user_story: As a current or prospective Orbit chain deployer, I need to onboard into the Orbit SDK by understanding how to configure an Orbit node.
+content_type: how-to
 ---
 
 In this how-to, you'll learn how to configure your Orbit chain using the Orbit SDK. This includes **parent chain**, **node**, and **child chain parameter** configuration.
