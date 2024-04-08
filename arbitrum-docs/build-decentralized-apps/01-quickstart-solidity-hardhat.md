@@ -37,7 +37,7 @@ Centralized third-party intermediaries represent a **single point of failure** t
 
 This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, _decentralized_ network of nodes[^2] while keeping costs low for you and your users.
 
-Let's implement the "web3" version of the above vending machine using Arbitrum.
+Let's implement the "Web3" version of the above vending machine using Arbitrum.
 
 ### Prerequisites
 
