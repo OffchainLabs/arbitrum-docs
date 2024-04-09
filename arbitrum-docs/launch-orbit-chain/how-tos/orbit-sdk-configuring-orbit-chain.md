@@ -24,6 +24,7 @@ Configuring the parent chain is the initial step to setting up your Orbit chain.
 
 After the initial setup, the chain owner can modify configurations as needed. For instance, the validator set can be updated by invoking the [`setValidKeyset`](https://github.com/OffchainLabs/nitro-contracts/blob/90037b996509312ef1addb3f9352457b8a99d6a6/src/bridge/SequencerInbox.sol#L751) function with a new set of validators. This adaptability facilitates your chain's optimization and management.
 
+
 ## 2. Node configuration
 This category includes settings adjustable within the `nodeConfig.json` file, directly impacting the operation of the chain's nodes, including special nodes like validators and sequencers. These settings help you tailor the node's functionality to specific requirements or performance criteria. The chain owner can modify these configurations during the node config generation process, ensuring that each node operates with the desired settings from the start. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
 
@@ -35,6 +36,7 @@ The child chain configuration can be performed after the chain initialization. T
 ### Setter functions
 You can use these setter functions to configure the child chain parameters:
 
+You can use these setter functions to configure the child chain parameters:
 
 | Parameter              | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | :---------------------- | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -60,7 +62,6 @@ You can use these setter functions to configure the child chain parameters:
 
 In the Orbit SDK, we use the [Client Extension](https://viem.sh/docs/clients/custom#extending-with-actions-or-configuration) feature of Viem to extend the public client. In the Orbit SDK, we defined `arbOwnerPublicActions` to use it and extend the client on [Viem](https://viem.sh/docs/clients/custom#extending-with-actions-or-configuration). An example of creating a public client extended with `arbOwner` public actions is:
 
-
 ```js
 import { createPublicClient, http } from "viem";
 import { arbOwnerPublicActions } from "@arbitrum/orbit-sdk";
@@ -73,15 +74,14 @@ const client = createPublicClient({
 
 With `arbOwnerPublicActions` and the public client in the Orbit SDK, we've added two new methods to the public clients:
 
-
-#### 1. arbOwnerReadContract 
+#### 1. arbOwnerReadContract
 
 This method can be used to read the parameters of the child chain discussed in the [previous section](#getter-functions). An example of using this method with the `client` defined in the previous section is:
 
 ```js
-  const result = await client.arbOwnerReadContract({
-    functionName: 'getAllChainOwners',
-  });
+const result = await client.arbOwnerReadContract({
+  functionName: 'getAllChainOwners',
+});
 ```
 
 Changing the function names in the list in [the Getter functions section](#getter-functions) will give you the other parameters.
@@ -117,20 +117,18 @@ To use this method as shown in the example above, some inputs need to be defined
 If an `upgradeExecutor` contract governs your chain, then you need to use the `arbOwnerPrepareTransactionRequest` method, similar to the example below:
 
 ```js
-  // Adding a random address as chain owner using the upgrade executor
-  const transactionRequest = await client.arbOwnerPrepareTransactionRequest({
-    functionName: 'addChainOwner',
-    args: [randomAccountAddress],
-    upgradeExecutor: upgradeExecutorAddress,
-    account: owner.address,
-  });
+// Adding a random address as chain owner using the upgrade executor
+const transactionRequest = await client.arbOwnerPrepareTransactionRequest({
+  functionName: 'addChainOwner',
+  args: [randomAccountAddress],
+  upgradeExecutor: upgradeExecutorAddress,
+  account: owner.address,
+});
 
-  // Submitting the transaction to add a chain owner
-  await client.sendRawTransaction({
-    serializedTransaction: await owner.signTransaction(transactionRequest),
-  });
+// Submitting the transaction to add a chain owner
+await client.sendRawTransaction({
+  serializedTransaction: await owner.signTransaction(transactionRequest),
+});
 ```
 
-
 In this example, all the fields are the same as in the first example, except the `upgradeExecutor` field, which you need to set to the `upgradeExecutor` address, and the `account` parameter, which needs to be set to the owner of the `upgradeExecutor` contract.
-

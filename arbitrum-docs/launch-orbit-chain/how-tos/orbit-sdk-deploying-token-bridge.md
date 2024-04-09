@@ -8,9 +8,9 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 5
 ---
 
-The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> was designed without native support for specific token bridging standards at the protocol level, but Offchain Labs crafted a "canonical bridge" that ensures seamless token transfers between the parent and child chain. 
+The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> was designed without native support for specific token bridging standards at the protocol level, but Offchain Labs crafted a "canonical bridge" that ensures seamless token transfers between the parent and child chain.
 
-The token bridge architecture includes contracts located on the  <a data-quicklook-from='parent-chain'>parent chain</a> as well as a complementary set of contracts on the <a data-quicklook-from='child-chain'>child chain</a>. These entities communicate via the <a data-quicklook-from='retryable-ticket'>Retryable Ticket </a> protocol, ensuring efficient and secure interactions. 
+The token bridge architecture includes contracts located on the <a data-quicklook-from='parent-chain'>parent chain</a> as well as a complementary set of contracts on the <a data-quicklook-from='child-chain'>child chain</a>. These entities communicate via the <a data-quicklook-from='retryable-ticket'>Retryable Ticket </a> protocol, ensuring efficient and secure interactions.
 
 :::caution UNDER CONSTRUCTION
 
@@ -26,9 +26,9 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 ### Token Bridge Deployment Steps
 
-Following the [deployment](orbit-sdk-deploying-rollup-chain.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains. 
+Following the [deployment](orbit-sdk-deploying-rollup-chain.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains.
 
-To establish and configure the token bridge effectively, the process can be broken down into the following steps: 
+To establish and configure the token bridge effectively, the process can be broken down into the following steps:
 
 1. **[Token Approval](#step-1)**
 2. **[ Token Bridge Contract Deployment ](#step-2)**
@@ -43,6 +43,7 @@ The token bridge deployment process depends on the type of Orbit chain. In the f
 :::
 
 ### 1. Token Approval (Custom fee token Orbit chains only){#step-1}
+
 Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two essential APIs:
 
 1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This API is designed to verify that the deployer's address has enough allowance to pay for the fees associated with the bridge token deployment.
@@ -57,8 +58,9 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
-  const approvalTxRequest =
-    await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(allowanceParams);
+  const approvalTxRequest = await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
+    allowanceParams,
+  );
 }
 ```
 
@@ -128,17 +130,18 @@ To get this information, we have an API on Orbit SDK named `getTokenBridgeContra
 Here's an example of how to get the contract addresses from the `txReceipt` generated in the previous steps:
 
 ```js
-  const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
-    parentChainPublicClient,
-  });
+const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
+  parentChainPublicClient,
+});
 ```
 
 ### 5. Setting Up the WETH Gateway (ETH-based Orbit chains only){#step-5}
-The last step in spinning up the token bridge for an ETH-based Orbit chain consists of setting up the `WETH Gateway`. 
+
+The last step in spinning up the token bridge for an ETH-based Orbit chain consists of setting up the `WETH Gateway`.
 
 :::note
 
-That step only applies to ETH-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for WETH to bridge it in and out of the Orbit chain. 
+That step only applies to ETH-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for WETH to bridge it in and out of the Orbit chain.
 
 You can find more info about WETH gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
 
@@ -147,22 +150,23 @@ You can find more info about WETH gateways in our ["other gateways flavors" docu
 So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH Gateway` on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
 
 #### 1. `createTokenBridgePrepareSetWethGatewayTransactionRequest`:
-This API helps you create the raw transaction, which handles the WETH gateway on both parent and child chains. 
+
+This API helps you create the raw transaction, which handles the WETH gateway on both parent and child chains.
 
 Here's an example of how to use this API:
 
 ```js
-  const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-    rollup: rollupContractAddress,
-    parentChainPublicClient,
-    orbitChainPublicClient,
-    account: rollupOwnerAddress,
-    retryableGasOverrides: {
-      gasLimit: {
-        percentIncrease: 200n,
-      },
+const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+  rollup: rollupContractAddress,
+  parentChainPublicClient,
+  orbitChainPublicClient,
+  account: rollupOwnerAddress,
+  retryableGasOverrides: {
+    gasLimit: {
+      percentIncrease: 200n,
     },
-  });
+  },
+});
 ```
 
 In this example `rollupContractAddress` is the address of Orbit chain's rollup contract, `rollupOwnerAddress` is the address of rollup owner, **parentChainPublicClient** and **orbitChainPublicClient** are the parent and orbit chain public clients. Also this API has optional fields to override the Retryable ticket setups. In this example **percentIncrease** is the buffer to increase the gas limit for the retryable ticket to be sure about the success of the ticket.
