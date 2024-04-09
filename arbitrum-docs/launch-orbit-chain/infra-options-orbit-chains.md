@@ -45,7 +45,7 @@ Deployers of Orbit chains may offer cheaper fees on their chain by storing the d
 
 ## Indexers
 
-In order to surface necessary application information, teams frequently require additional indexing capabilities. Fetching application specific or historical information is difficult or impossible to do directly from an RPC. Fortunately, there are multiple data services providers that are familiar with operating this type of infrastructure, and may be willing to do so for your chain.
+Teams frequently require additional indexing capabilities to retrieve historic or application-specific data, but doing so directly from an RPC endpoint is difficult or impossible. Fortunately, multiple data services providers are familiar with operating this type of infrastructure and may be willing to do so for your chain.
 
 - [Alchemy](https://www.alchemy.com/)
 - [The Graph](https://thegraph.com/)
