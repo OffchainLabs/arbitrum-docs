@@ -37,8 +37,9 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 ### Rollup deployment parameters configuration
 
 [`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
+`createRollup` takes a complex input named `deployParams`defining the characteristics of an Orbit Rollup chain 
 
-`createRollup` takes a complex input named `deployParams`defining the characteristics of an Orbit Rollup chain, the following will walk you through the properties you will use to configure your chain:
+The following will walk you through the methods and properties that you will use to configure your chain. 
 
 #### 1. RollupDeploymentParams struct
 
@@ -89,11 +90,11 @@ This nested struct within `Config` specifies time variations related to block se
 
 #### 4. chainConfig
 
-The `chainConfig` parameter within the `Config` struct allow you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
+The `chainConfig` parameter within the `Config` struct allows you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
 
 Here's a brief overview of `chainConfig`:
 
-   ```json
+   ```json {2,24,26,28,29}
    {
      chainId: number;
      homesteadBlock: number;
@@ -127,12 +128,11 @@ Here's a brief overview of `chainConfig`:
    }
    ```
 
-Out of these parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. While part of the `chainConfig`, the other parameters typically use default values and are less frequently modified. We will detail these  parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. Additionally, we'll guide you through using the Orbit SDK to effectively set and customize these configurations, ensuring that your Orbit chain is tailored to your specific requirements and operational needs.
+Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will go through these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. 
 
-All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values. In the upcoming sections, we will dive deeper into what each parameter represents and how you can utilize the Orbit SDK to configure them effectively for your Orbit chain deployment.
+All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values.
 
-
-For an easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK documentation](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+For an easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 Here are the parameters you can use with `prepareChainConfig`:
 
