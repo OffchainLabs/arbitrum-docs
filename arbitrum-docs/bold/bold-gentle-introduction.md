@@ -1,4 +1,4 @@
-<img width="569" alt="image" src="https://github.com/OffchainLabs/arbitrum-docs/assets/103802618/a4268caf-2f40-4b7a-b7d0-d27b9dd082e7">---
+---
 title: 'A gentle introduction: BOLD'
 sidebar_label: 'A gentle introduction'
 description: 'An educational introduction that provides a high-level understanding of BOLD, a new dispute protocol to enable permissionless validation for Arbitrum chains.'
