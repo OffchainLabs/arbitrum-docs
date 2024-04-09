@@ -30,14 +30,14 @@ AnyTrust chains follow a different protocol than Rollup chains, offering differe
 
 ### Deployment steps 
 
-The deployment process of AnyTrust chains is very similar to that of [Rollup chain](orbit-sdk-deploying-rollup-chain.md#rollup-config-param) but with some differences that we'll go through in this guide.
+The deployment process of AnyTrust chains is very similar to that of [Rollup chains](orbit-sdk-deploying-rollup-chain.md#rollup-config-param) but with some differences that we'll go through in this guide.
 
 Here are the steps involved in the deployment process:
 
 1. **[Setting up the chain parameters](#1-setting-up-the-chain-parameters)**
 2. **[Deploying your AnyTrust chain](#2-deploying-your-anytrust-chain)**
-3. **Getting the AnyTrust Orbit chain information after deployment**
-4. **Setting valid key set on parent chain**
+3. **[Getting the AnyTrust Orbit chain information after deployment](#3-getting-the-anytrust-orbit-chain-information-after-deployment)**
+4. **[Setting a valid key set on parent chain](#4-setting-valid-key-set-on-parent-chain)**
 
 The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This key set includes keys from the appointed members of the DAC. They are required to ensure the chain's data availability and integrity. Once you have selected your committee members and gathered their keys, the Orbit SDK helps you configure these keys into a keyset. 
 This key set is then embedded into the chain, serving as a verification mechanism.
