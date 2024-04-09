@@ -50,11 +50,35 @@ docker exec nitro-testnode-sequencer-1 ls /config
 
 ## Token bridge
 
-An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running:
+<!-- This is a temporary block since the tokenbridge behavior is different in the "release" and stylus branches for now. -->
+<!-- Once the "stylus" branch is updated, we should remove this conditional and move the HTML format to MD -->
 
-```bash
-docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
-```
+<div>
+  {props.branch == 'release' && (
+    <div>
+      <p>
+        An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of
+        contracts can be found by running:
+      </p>
+      <CodeBlock language="bash">
+        docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
+      </CodeBlock>
+    </div>
+  )}
+</div>
+
+<div>
+  {props.branch == 'stylus' && (
+    <div>
+      <p>
+        An L1-L2 token bridge is deployed by default. The list of contracts can be found by running:
+      </p>
+      <CodeBlock language="bash">
+        docker compose run --entrypoint sh tokenbridge -c "cat localNetwork.json"
+      </CodeBlock>
+    </div>
+  )}
+</div>
 
 ## Running an L3 chain
 
