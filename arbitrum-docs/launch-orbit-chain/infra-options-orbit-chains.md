@@ -54,7 +54,7 @@ In order to surface necessary application information, teams frequently require 
 
 ## Oracles
 
-Many applications require external data to be published on-chain in order to function properly. This data is usually either price feeds related to assets utilized in app or a source of verifiable randomness. The following oracle providers may be able to support your chain:
+Many applications require external data to be published on-chain to function properly. This data usually consists of price feeds related to assets utilized in-app or a source of verifiable randomness. The following Oracle providers may be able to support your chain:
 
 - [Chainlink](https://chain.link/)
 - [Pyth](https://pyth.network/)
