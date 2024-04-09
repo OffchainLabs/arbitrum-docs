@@ -30,9 +30,8 @@ After the initial setup, the chain owner can modify configurations as needed. Fo
 
 
 ## 2. Node configuration
-This category includes settings adjustable within the `nodeConfig.json` file, directly impacting the operation of the chain's nodes, including special nodes like validators and sequencers. These settings help you tailor the node's functionality to specific requirements or performance criteria. The chain owner can modify these configurations during the node config generation process, ensuring that each node operates with the desired settings from the start. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
 
-You can configure a node using the `nodeConfig.json` file. `nodeConfig.json` allows you to set up a node as a validator or a sequencer and specify requirements or performance criteria. The chain owner can modify these configurations during the node config generation process. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
+As a chain owner, you can configure a node during the node config generation process with the `nodeConfig.json` file. `nodeConfig.json` allows you to set up a node as a validator or a sequencer and specify requirements or performance criteria. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
 
 ## 3. Child chain parameter configuration
 The final configuration type involves setting parameters on the child chain. This level of configuration is primarily achieved through the [`ArbOwner precompile`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol) on the child chain. These configurations are typically applied post-chain initialization and after the deployment of the token bridge. This guide will help you configure child chain parameters using the Orbit SDK, providing insights into effective management and optimization strategies for your child chain operations.
