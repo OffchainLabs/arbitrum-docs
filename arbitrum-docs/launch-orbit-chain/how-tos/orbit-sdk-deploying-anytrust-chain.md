@@ -8,7 +8,7 @@ target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 2
 ---
 
-This section explains how to to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts).
+This section explains how to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts).
 
 :::caution UNDER CONSTRUCTION
 
