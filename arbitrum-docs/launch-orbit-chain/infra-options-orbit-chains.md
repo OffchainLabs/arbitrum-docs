@@ -1,6 +1,6 @@
 # Infrastructure Options for Orbit Chains
 
-A successful production-grade chain often requires additional surrounding infrastructure to enable app functionality and provide a suberb user experience for those interacting with the network. There are multiple options for various components for deployers to choose from, and the below is a non-comprehensive list of providers that Orbit teams can choose to work with if the need should arise.
+A successful production-grade chain often requires additional surrounding infrastructure to enable app functionality and provide a superb user experience for those interacting with the network. There are multiple options for various components for deployers to choose from, and the below is a non-comprehensive list of providers that Orbit teams can choose to work with if the need should arise.
 
 ## Chain Operation
 
