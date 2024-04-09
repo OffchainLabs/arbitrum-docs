@@ -21,7 +21,7 @@ Explorers are essential for any functional blockchain, providing a transparent v
 - [Lore](https://www.lorescan.com/)
 - [Routescan](https://routescan.io/)
 
-Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block included a given transaction.
+Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block includes a given transaction.
 
 
 ## Bridges
