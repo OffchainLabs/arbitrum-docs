@@ -137,7 +137,7 @@ The final step is to set up a valid key set for your Data Availability Committee
 Once created, your keyset needs to be established on your Orbit chain's `SequencerInbox` contract on the parent chain.
 To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [step three](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated key set for your committee, and the owner's account.
 
-Here's an example of how you can use the Orbit SDK to set the keyset:
+Here's an example of how you can use the Orbit SDK to write your keyset:
 
 ```js
 const txRequest = await setValidKeysetPrepareTransactionRequest({
