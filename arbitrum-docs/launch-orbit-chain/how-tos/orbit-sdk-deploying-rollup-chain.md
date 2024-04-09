@@ -6,6 +6,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 1
+user_story: As a current or prospective Orbit chain deployer, I need to configure and deploy a Rollup Orbit chain.
+content_type: how-to
 ---
 
 This document explains how to use the Orbit SDK to deploy a <a data-quicklook-from="arbitrum-rollup-chain">`Rollup Orbit chain`</a>.
