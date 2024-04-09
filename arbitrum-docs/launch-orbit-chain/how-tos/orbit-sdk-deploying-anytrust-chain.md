@@ -153,4 +153,4 @@ const txRequest = await setValidKeysetPrepareTransactionRequest({
 
 In this example, `upgradeExecutor_address` and `sequencerInbox_address` are placeholders for the Orbit chain's contract addresses. `keyset` is the key set you generated for your committee, and `deployer.address` refers to the owner's account address.
 
-Once you've created the transaction request using the above API, the next step is to sign and send the transaction. This transaction sets the key set on the parent chain, thereby enabling it to recognize and verify the valid key set for your AnyTrust Orbit chain. 
+Once you've created the transaction request using the above API, the next step is to sign and send the transaction. This transaction writes the key set to the parent chain, enabling it to recognize and verify the valid key set for your AnyTrust Orbit chain. 
