@@ -26,7 +26,7 @@ See the ["set-valid-keyset" example](https://github.com/OffchainLabs/arbitrum-or
 
 ### About AnyTrust Orbit
 
-AnyTrust chains follow a different model than Rollup chains, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the differences between Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md) page.
+AnyTrust chains follow a different protocol than Rollup chains, offering unique features and deployment processes. For a comprehensive understanding of the general principles of Orbit chains and the differences between Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md) page.
 
 ### Deployment steps 
 
@@ -39,9 +39,9 @@ Here are the steps involved in the deployment process:
 3. **Getting the AnyTrust Orbit chain information after deployment**
 4. **Setting valid keyset on parent chain**
 
-The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset, comprising keys from the appointed members of the DAC, is essential for ensuring data availability and integrity. Once you have selected your committee members and gathered their keys, these keys are then configured into a keyset using the Orbit SDK. This keyset is subsequently embedded into the chain, serving as a verification mechanism to maintain the trust and security of the AnyTrust chain. The proper configuration and deployment of this keyset are vital for the effective operation and reliability of the AnyTrust model within the Arbitrum Orbit framework.
+The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset includes keys from the appointed members of the DAC, it's required for ensuring data availability and integrity. Once you have selected your committee members and gathered their keys, these keys are then configured into a keyset using the Orbit SDK. This keyset is subsequently embedded into the chain, serving as a verification mechanism to maintain the trust and security of the AnyTrust chain.
 
-Let's go through each step:
+Let's go through each deployment step:
 
 ### 1. Setting up the chain parameters 
 
