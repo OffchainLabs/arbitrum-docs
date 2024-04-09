@@ -6,11 +6,11 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 6
-user_story: As a current or prospective Orbit chain deployer, I need to onboard into the Orbit SDK by understanding how to configure an Orbit node.
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to configure an Orbit chain using the Orbit SDK.
 content_type: how-to
 ---
 
-In this how-to, you'll learn how to configure your Orbit chain using the Orbit SDK. This includes **parent chain**, **node**, and **child chain parameter** configuration.
+In this how-to, you'll learn how to configure your Orbit chain using the Orbit SDK. This includes <a data-quicklook-from="parent-chain">parent chain</a>, **node**, and **<a data-quicklook-from="child-chain">child chain</a> parameter** configuration.
 
 :::caution UNDER CONSTRUCTION
 
@@ -93,7 +93,7 @@ This method can be used to configure the parameters on the `ArbOwner` precompile
 ```js
   // Adding a random address as chain owner using the upgrade executor
   const transactionRequest = await client.arbOwnerPrepareTransactionRequest({
-    functionName: 'addChainOwner',
+    functionName: "addChainOwner",
     args: [randomAccountAddress],
     upgradeExecutor: false,
     account: owner.address,
