@@ -35,7 +35,7 @@ Orbit chains are easily launched with a canonical token bridge which permits tra
 
 ## Data Availability
 
-Deployers of Orbit chains may offer cheaper fees on their chain by storing the data posted in batches on an alternative Data Availability solution rather than to Ethereum directly. The built in functionality in Anytrust allows these developers to easily configure the cost of transacting and will enable more powerful features with additional chains that are also using Anytrust. However, there are integrations with Orbit that are available for those that would prefer to use one of the following third party services:
+Deployers of Orbit chains may offer cheaper fees on their chain by storing the data posted in batches on an alternative Data Availability solution rather than to the parent chain directly. The built in functionality in Anytrust allows these developers to easily configure the cost of transacting and will enable more powerful features with additional chains that are also using Anytrust. However, there are integrations with Orbit that are available for those that would prefer to use one of the following third party services:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
