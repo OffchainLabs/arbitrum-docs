@@ -26,4 +26,4 @@ Note, however, that if you choose to enable fast bridging, a re-org of un-finali
 
 ## Child Chain → Parent Chain Transactions
 
-Normally, [outgoing transactions](/arbos/l2-to-l1-messaging) must wait until the assertion that includes their L2 message to confirm (~1 week) before a client can execute the message on L1. However, in the near future [Anytrust](/inside-anytrust) chains will have the ability to leverage their DAC to enable fast confirmations of withdrawals through the native token bridge. By immediately confirming assertions that have been signed by the DAC, finality can be reduced to ~15 minutes.
+Normally, [outgoing transactions](/arbos/l2-to-l1-messaging) must wait until the assertion that includes their L2 message is confirmed (~1 week) before a client can execute the message on L1. However, in the near future [Anytrust](/inside-anytrust) chains will have the ability to leverage their DAC to enable fast confirmations of withdrawals through the native token bridge. By immediately confirming assertions that have been signed by the DAC, finality can be reduced to ~15 minutes.
