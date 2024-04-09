@@ -1,6 +1,6 @@
 # Infrastructure Options for Orbit Chains
 
-A successful production-grade chain often requires additional surrounding infrastructure to enable app functionality and provide a superb user experience for those interacting with the network. There are multiple options for various components for deployers to choose from, and the below is a non-comprehensive list of providers that Orbit teams can choose to work with if the need should arise.
+A successful production-grade chain often requires additional infrastructure to enable app functionalities and provide a good user experience. You can choose from multiple options for various components. The following list is not comprehensive:
 
 ## Chain Operation
 
@@ -36,7 +36,7 @@ You can easily launch an Orbit chain with a canonical token bridge, which allows
 
 ## Data Availability
 
-Deployers of Orbit chains may offer cheaper fees on their chain by storing the data posted in batches on an alternative Data Availability solution rather than to the parent chain directly. The built in functionality in Anytrust allows these developers to easily configure the cost of transacting and will enable more powerful features with additional chains that are also using Anytrust. However, there are integrations with Orbit that are available for those that would prefer to use one of the following third party services:
+As an Orbit chain deployer, you may offer cheaper fees on your chain by storing the data posted in batches on an alternative Data Availability solution rather than storing it directly in the parent chain. AnyTrust's built-in functionality allows you to set transaction fees easily and will enable more powerful features with additional chains that also use AnyTrust. Alternatively, you can choose from the following third-party services:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
