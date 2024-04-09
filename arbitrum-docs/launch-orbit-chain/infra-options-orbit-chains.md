@@ -14,7 +14,7 @@ In these cases, we highly recommend working with one of the following RaaS (Roll
 
 ## Explorers
 
-Explorers are a basic requirement for any functional blockchain, providing a transparent view of transactions, blocks, and addresses on the blockchain. They can be accessed by users and developers to verify transactions, check the status of network activity, and ensure that transactions are being processed correctly. Some providers that can offer an explorer to Orbit developers are:
+Explorers are essential for any functional blockchain, providing a transparent view of transactions, blocks, and addresses on the blockchain. Users and developers can access them to verify transactions, check network activity status, and ensure that transactions are being processed correctly. Here are some of the explorer providers you can choose from:
 
 - [Blockscout](https://www.blockscout.com/)
 - [Socialscan](https://socialscan.io/)
