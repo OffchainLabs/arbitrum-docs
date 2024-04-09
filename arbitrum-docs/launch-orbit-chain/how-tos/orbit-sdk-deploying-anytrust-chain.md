@@ -10,7 +10,7 @@ user_story: As a current or prospective Orbit chain deployer, I need to configur
 content_type: how-to
 ---
 
-This section explains how to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts).
+This section explains how to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk).
 
 :::caution UNDER CONSTRUCTION
 
