@@ -48,7 +48,7 @@ Let's go through each deployment step:
 
 Similarly to the Rollup chain, you'll need to prepare the AnyTrust chain configuration, including the core contracts and operational parameters that govern the chain's functionality, focusing on parameters that are specific to AnyTrust chains.
 
-```solidity
+```solidity {10}
 struct Config {
     uint64 confirmPeriodBlocks;
     uint64 extraChallengeTimeBlocks;
@@ -94,7 +94,7 @@ const chainConfig = prepareChainConfig({
 
 In this example, you need to set up the chain configuration with a unique `chainId`, the `InitialChainOwner` as the deployer's address, and importantly, you must set the `DataAvailabilityCommittee` as `true`.
 
-The Orbit SDK has a helper to execute this part: the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK documentation](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+The Orbit SDK has a helper to execute this part: the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK Repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 ### 2. Deploying your AnyTrust chain
 
