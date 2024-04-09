@@ -36,13 +36,13 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 
 ### Rollup deployment parameters configuration
 
-The `createRollup` function in the [`RollupCreator` contract](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) takes a complex input named `deployParams`, structured to encapsulate various configurable parameters customizing the Orbit chain.
+[`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
 
-Breaking down the structure of these parameters:
+`createRollup` takes a complex input named `deployParams`defining the characteristics of an Orbit Rollup chain, the following will walk you through the properties you will use to configure your chain:
 
 #### 1. RollupDeploymentParams struct
 
-   ```solidity
+   ```solidity {2,4,6}
    struct RollupDeploymentParams {
        Config config;
        address batchPoster;
@@ -53,11 +53,11 @@ Breaking down the structure of these parameters:
        uint256 maxFeePerGasForRetryables;
    }
    ```
-This Solidity `struct` includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
+This Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
 
 #### 2. Config struct
 
-   ```solidity
+   ```solidity {2,4,5,9}
    struct Config {
        uint64 confirmPeriodBlocks;
        uint64 extraChallengeTimeBlocks;
@@ -73,7 +73,7 @@ This Solidity `struct` includes key settings like the chain configuration (`Conf
    }
    ```
 
-The `Config` `struct` defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
+The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
 #### 3. MaxTimeVariation struct
 
@@ -85,11 +85,11 @@ The `Config` `struct` defines the chain's core settings, including block confirm
        uint256 futureSeconds;
    }
    ```
-This nested `struct` within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
+This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
 #### 4. chainConfig
 
-The `chainConfig` parameter within the `Config` `struct` allow you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
+The `chainConfig` parameter within the `Config` struct allow you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
 
 Here's a brief overview of `chainConfig`:
 
