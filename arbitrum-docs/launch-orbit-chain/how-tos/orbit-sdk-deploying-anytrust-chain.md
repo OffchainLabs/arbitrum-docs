@@ -6,6 +6,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 2
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy an Orbit Rollup chain the Orbit SDK by understanding the available onboarding paths.
+content_type: how-to
 ---
 
 This section explains how to to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts).
