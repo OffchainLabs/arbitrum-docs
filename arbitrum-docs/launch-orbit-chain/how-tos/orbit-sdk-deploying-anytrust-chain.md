@@ -116,7 +116,7 @@ After creating the raw transaction, you can sign and broadcast it to the network
 
 ### 3. Getting the AnyTrust Orbit chain information after deployment
 
-To extract detailed information about your AnyTrust Orbit chain post-deployment, you will use the same API and steps as you would for a Rollup Orbit chain. Here's a reminder of the example:
+To extract detailed information about your AnyTrust Orbit chain post-deployment, you can use the same API and steps as you would for a Rollup Orbit chain. Here's a reminder of the example:
 
 ```js
 import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
@@ -128,8 +128,9 @@ In this example, `txReceipt` refers to the transaction receipt you received afte
 
 ### 4. Setting valid keyset on parent chain:
 
-The final step in deploying your AnyTrust Orbit chain is to set up the valid keyset for your Data Availability Committee (DAC) on the parent chain. This keyset is essential for ensuring the integrity of the certificates that the DAC signs when storing Orbit chain's data. The process of generating keys and the keyset for your committee is comprehensively explained in our documentation. Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
+The final step consists in setting up a valid keyset for your Data Availability Committee (DAC) on the parent chain. You can find more in our documentation about [ generating keys and the keyset for your committee ]( /launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation.md ) is comprehensively explained in our documentation. 
 
+Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
 To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API aids in setting the keyset on the parent chain. To use this API, you need specific information that you gathered in step 3. This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the account of the owner.
 
 Here's an example of how you can use the Orbit SDK to set the keyset:
