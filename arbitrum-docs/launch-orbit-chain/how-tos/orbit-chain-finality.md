@@ -8,7 +8,8 @@ Generally, transactions executed through the sequencer on Orbit chains [achieve 
 
 Messages being sent through the delayed inbox of a parent chain as [retryable tickets](/arbos/l1-to-l2-messaging.mdx#retryable-tickets), including deposits through token bridges, are released by the [sequencer](/inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#if-the-sequencer-is-well-behaved) once it has good confidence of finality on the parent chain. For example, on an L2 chain settling to Ethereum, the sequencer will release delayed messages to the inbox after 40 blocks. Following this, the transaction will need to complete another finality period for the Ethereum transaction that promoted it to achieve finality.
 
-Orbit L3s may configure the finality of transactions executed through the delayed inbox to depend on different layers of finality. By default, Orbit chains will rely on the number of L1 block confirmations, effectively finalizing an L3 deposit as soon as L1 finalizes the batch posted by Arbitrum One or when a DACert is posted by Arbitrum Nova. This would be on the order of tens of minutes.
+Orbit L3s may configure the finality of transactions executed through the delayed inbox to depend on different layers of finality. By default, Orbit chains will rely on the number of L1 block confirmations, effectively finalizing an L3 deposit as soon as L1 finalizes the batch posted by <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or when a <a data-quicklook-from="data-availability-certificate">DACert</a> is posted by <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. This would be on the order of tens of minutes.
+
 
 However, in the instance of an L3 settling to Arbitrum One or Nova an L3 may also choose to rely only on L2 finality by configuring their sequencer as follows:
 
