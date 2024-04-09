@@ -158,7 +158,7 @@ const chainConfig = prepareChainConfig({
 
 ### Rollup configuration parameters
 
-In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. Understanding these parameters is critical to customizing your Orbit chain to suit your needs.
+In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. 
 
 
 | Parameter             | Description                                                                                                                                                                                                                                                                                                           |
