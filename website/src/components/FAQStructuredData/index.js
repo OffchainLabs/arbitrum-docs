@@ -58,7 +58,7 @@ export default function FAQStructuredData(props) {
       />
 
       {faqs.map((faq) => (
-        <div className="faq-question" key={faq.key} id={faq.key}>
+        <div data-search-children className="faq-question" key={faq.key} id={faq.key}>
           <h3>
             {faq.question}
             <a className="hash-link" href={'#' + faq.key}></a>
