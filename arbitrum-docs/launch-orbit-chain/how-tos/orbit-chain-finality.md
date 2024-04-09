@@ -1,6 +1,6 @@
 # Orbit Chain Confirmation and Finality
 
-## Child Chain Transactions
+## Child chain transactions
 
 Generally, transactions executed through the sequencer on Orbit chains [achieve finality](/tx-lifecycle) equivalent to their parent chain once the relevant transaction data has been [posted in a batch](/sequencer). This means that transactions on Orbit chains are considered final in minutes.
 
