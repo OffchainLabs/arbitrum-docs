@@ -26,7 +26,7 @@ Additionally, Orbit chains leveraging blobs for data availability may use tools 
 
 ## Bridges
 
-Orbit chains are easily launched with a canonical token bridge which permits transfers to and from their chain via Arbitrum One, Nova, or Ethereum. However, some applications may desire the ability to transfer to additional chains outside of the Orbit ecosystem or want to offer the ability to transfer across chain more quickly, without waiting for complete finality. In these instances, the following 3rd party bridging providers offer services to meet those needs:
+You can easily launch an Orbit chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain. However, some applications may require the ability to transfer to chains outside the Orbit ecosystem or across chains faster, without waiting for complete finality. In these instances, the following 3rd party bridging providers offer services meeting those needs:
 
 - [LayerZero](https://layerzero.network/)
 - [Connext](https://www.connext.network/)
