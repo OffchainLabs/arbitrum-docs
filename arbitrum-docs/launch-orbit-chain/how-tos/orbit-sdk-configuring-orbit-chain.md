@@ -18,7 +18,7 @@ This document is under construction and may change significantly as we incorpora
 
 :::
 
-Orbit chains have three areas of configurations:
+Orbit chains have three areas of configuration:
 1. [<a data-quicklook-from="parent-chain">Parent chain</a> configuration](#1-parent-chain-configuration)
 2. [ **Node** configuration ]( #2-node-configuration )
 3. [ <a data-quicklook-from="child-chain">Child chain</a> configuration ](#3-child-chain-parameter-configuration)
