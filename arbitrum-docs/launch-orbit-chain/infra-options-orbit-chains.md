@@ -4,7 +4,8 @@ A successful production-grade chain often requires additional surrounding infras
 
 ## Chain Operation
 
-Many application developers do not have the subject matter expertise required to deploy, operate, and maintain an independent production-grade network. In these cases, we highly recommend working with one of the following RaaS providers who will manage the necessary infrastructure and ensure a high degree of performance and security for your chain:
+You may not yet have experience deploying, operating, and maintaining an independent, production-grade network. 
+In these cases, we highly recommend working with one of the following RaaS (Rollup as a Service) providers who will manage the necessary infrastructure and ensure a high degree of performance and security for your chain:
 
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
