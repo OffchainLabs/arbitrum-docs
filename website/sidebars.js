@@ -352,7 +352,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ'
+          label: 'FAQ',
         },
         {
           type: 'category',
