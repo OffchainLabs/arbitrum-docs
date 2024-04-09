@@ -128,8 +128,8 @@ In this example, `txReceipt` refers to the transaction receipt you received afte
 
 ### 4. Setting valid keyset on parent chain:
 
-The final step consists in setting up a valid keyset for your Data Availability Committee (DAC) on the parent chain. You can find more in our documentation about [ generating keys and the keyset for your committee ]( /launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation.md ) is comprehensively explained in our documentation. 
-
+The final step consists in setting up a valid keyset for your Data Availability Committee (DAC) on the parent chain. You can find more in our documentation about [ generating keys and the keyset for your committee ]( /launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation ) is comprehensively explained in our documentation. 
+/launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation.md
 Once you have your keyset, it needs to be established on the `SequencerInbox` contract of your Orbit chain on the parent chain.
 To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API aids in setting the keyset on the parent chain. To use this API, you need specific information that you gathered in step 3. This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the account of the owner.
 
