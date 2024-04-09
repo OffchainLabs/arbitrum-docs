@@ -10,7 +10,7 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: how-to
 ---
 
-In this how-to, you'll learn how to configure your Orbit chain using the Orbit SDK. This includes <a data-quicklook-from="parent-chain">parent chain</a>, **node**, and **<a data-quicklook-from="child-chain">child chain</a> parameter** configuration.
+In this how-to, you'll learn how to configure your Orbit chain using the Orbit SDK. 
 
 :::caution UNDER CONSTRUCTION
 
@@ -18,9 +18,13 @@ This document is under construction and may change significantly as we incorpora
 
 :::
 
+Orbit chains have three areas of configurations:
+1. [<a data-quicklook-from="parent-chain">Parent chain</a> configuration](#1-parent-chain-configuration)
+2. [ **node** configuration ]( #2-node-configuration )
+3. [ <a data-quicklook-from="child-chain">Child chain</a> configuration ](#3-child-chain-parameter-configuration)
 
 ## 1. Parent chain configuration
-Configuring the parent chain is the initial step to setting up your Orbit chain. Most of the parent chain configurations are specified during the setup phase. Detailed instructions can be found in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain#rollup-deployment-parameter) section of the rollup deployment guide. 
+Configuring the parent chain is the initial step to setting up your Orbit chain. Most of the parent chain configurations are specified during the setup phase. Detailed instructions can be found in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain#rollup-deployment-parameter) section of the Rollup deployment guide. 
 
 After the initial setup, the chain owner can modify configurations as needed. For instance, the validator set can be updated by invoking the [`setValidKeyset`](https://github.com/OffchainLabs/nitro-contracts/blob/90037b996509312ef1addb3f9352457b8a99d6a6/src/bridge/SequencerInbox.sol#L751) function with a new set of validators. This adaptability facilitates your chain's optimization and management.
 
