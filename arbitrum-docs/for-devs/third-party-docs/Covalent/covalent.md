@@ -6,7 +6,7 @@ sme: harishraisinghani
 sidebar_label: 'Covalent'
 ---
 
-[Covalent](https://www.covalenthq.com/?utm_source=arbitrum&utm_medium=partner-docs) is a hosted blockchain data solution providing access to historical and current onchain data for [200+ supported blockchains](https://www.covalenthq.com/docs/networks/?utm_source=arbitrum&utm_medium=partner-docs), including Arbitrum One, Nova and Orbit chains. 
+[Covalent](https://www.covalenthq.com/?utm_source=arbitrum&utm_medium=partner-docs) is a hosted blockchain data solution providing access to historical and current onchain data for [200+ supported blockchains](https://www.covalenthq.com/docs/networks/?utm_source=arbitrum&utm_medium=partner-docs), including Arbitrum One, Nova and Orbit chains.
 
 Covalent maintains a full replica of every supported blockchain, meaning you have access to:
 
@@ -68,46 +68,48 @@ There are 3 primary developer tools for using the APIs:
 
 1. [**Unified API**](https://www.covalenthq.com/docs/api/?utm_source=arbitrum&utm_medium=partner-docs) - enterprise-grade endpoints to use with any programming language. Switch blockchains with one path parameter.
 
-    ```
-    curl -X GET https://api.covalenthq.com/v1/arbitrum-mainnet/address/0xf977814e90da44bfa03b6295a0616a897441acec/balances_v2/ \
-        -H 'Content-Type: application/json' \
-        -u YOUR_API_KEY:
-    ```
+   ```
+   curl -X GET https://api.covalenthq.com/v1/arbitrum-mainnet/address/0xf977814e90da44bfa03b6295a0616a897441acec/balances_v2/ \
+       -H 'Content-Type: application/json' \
+       -u YOUR_API_KEY:
+   ```
 
 2. [**Client SDKs**](https://www.covalenthq.com/docs/unified-api/sdk/?utm_source=arbitrum&utm_medium=partner-docs) - official client libraries including TypeScript, Go and Python.
 
-    TypeScript example:
-    ```
-    npm install @covalenthq/client-sdk
-    ```
-    or:
-    ```
-    yarn add @covalenthq/client-sdk
-    ```
+   TypeScript example:
 
-    ```
-    import { CovalentClient } from "@covalenthq/client-sdk";
+   ```
+   npm install @covalenthq/client-sdk
+   ```
 
-    (async () => {
-    try {
-        const client = new CovalentClient("YOUR_API_KEY");
-        const transactions = client.TransactionService.getAllTransactionsForAddress("arbitrum-mainnet", "0xf977814e90da44bfa03b6295a0616a897441acec");
+   or:
 
-        for await (const tx of transactions) {
-        console.log("tx", tx);
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-    })();
-    ```
+   ```
+   yarn add @covalenthq/client-sdk
+   ```
+
+   ```
+   import { CovalentClient } from "@covalenthq/client-sdk";
+
+   (async () => {
+   try {
+       const client = new CovalentClient("YOUR_API_KEY");
+       const transactions = client.TransactionService.getAllTransactionsForAddress("arbitrum-mainnet", "0xf977814e90da44bfa03b6295a0616a897441acec");
+
+       for await (const tx of transactions) {
+       console.log("tx", tx);
+       }
+   } catch (error) {
+       console.log(error.message);
+   }
+   })();
+   ```
 
 3. [**GoldRush Kit**](https://github.com/covalenthq/goldrush-kit/?utm_source=arbitrum&utm_medium=partner-docs) - beautifully designed React components for your dApp frontend
-    [![GoldRush Component Example](https://www.datocms-assets.com/86369/1711147954-goldrush_wallet_ui_example.png)](https://goldrush-wallet-portfolio-ui.vercel.app/dashboard/balance/0xfc43f5f9dd45258b3aff31bdbe6561d97e8b71de/transfers/eth-mainnet/0xf8c3527cc04340b208c854e985240c02f7b7793f)
+   [![GoldRush Component Example](https://www.datocms-assets.com/86369/1711147954-goldrush_wallet_ui_example.png)](https://goldrush-wallet-portfolio-ui.vercel.app/dashboard/balance/0xfc43f5f9dd45258b3aff31bdbe6561d97e8b71de/transfers/eth-mainnet/0xf8c3527cc04340b208c854e985240c02f7b7793f)
 
 ## Get started
 
 - **[API Key](https://www.covalenthq.com/platform/auth/register/?utm_source=arbitrum&utm_medium=partner-docs)** - sign up for free
 - [**Docs**](https://www.covalenthq.com/docs/unified-api/?utm_source=arbitrum&utm_medium=partner-docs) - comprehensive knowledge base for all things Covalent
 - **[Guides](https://www.covalenthq.com/docs/unified-api/guides/?utm_source=arbitrum&utm_medium=partner-docs)** - learn how to build for various use cases and expand your onchain knowledge
-
