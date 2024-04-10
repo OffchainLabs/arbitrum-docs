@@ -32,18 +32,16 @@ Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit 
 :::note
 
 - Custom gas tokens are **not supported yet** on Rollup Orbit chains, only on Orbit AnyTrust chains.
-- Only `ERC-20` tokens with 18 decimals are acceptable as gas tokens on Orbit chains.
+- `ERC-20` tokens need to have 18 decimals to operate as gas tokens on Orbit chains.
 
 :::
 
-## Key differences for custom gas token Orbit chain deployment
-
-### 1. Custom gas token specification 
+## 1. Custom gas token specification 
 
 The most significant difference is the `ERC-20` token specification on the parent chain for use as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one for use specifically for transaction fees on your Orbit chain.
     
 
-### 2. Chain configuration
+## 2. Chain configuration
 
 You can configure your Orbit chain using the  [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
 
@@ -67,7 +65,7 @@ To use the `prepareChainConfig` method as shown in the example above, some input
 | `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
 
 
-### 3. Token approval before deployment process
+## 3. Token approval before deployment process
 
 In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `RollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
 
@@ -97,7 +95,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
 
 #### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
    
-This API gets related inputs and creates the transaction request to secure enough Allowance from the owner to the `RollupCreator` to spend `nativeToken` on the deployment process.
+This API gets related inputs and creates the transaction request to secure enough allowance from the owner to the `RollupCreator` to spend `nativeToken` on the deployment process.
 
 Example:
 
@@ -115,7 +113,7 @@ const approvalTxRequest =
     allowanceParams,
   );
 ```
-### 4. Deployment process
+## 4. Deployment process
 
 The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
