@@ -10,9 +10,9 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: how-to
 ---
 
-The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> was designed without native support for specific token bridging standards at the protocol level, but Offchain Labs crafted a "canonical bridge" that ensures seamless token transfers between the parent and child chain.
+The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical bridge" that ensures seamless token transfers between the parent and child chains.
 
-The token bridge architecture includes contracts located on the <a data-quicklook-from='parent-chain'>parent chain</a> as well as a complementary set of contracts on the <a data-quicklook-from='child-chain'>child chain</a>. These entities communicate via the <a data-quicklook-from='retryable-ticket'>Retryable Ticket </a> protocol, ensuring efficient and secure interactions.
+The token bridge architecture includes contracts deployed on the <a data-quicklook-from='parent-chain'>parent chain</a> and on the <a data-quicklook-from='child-chain'>child chain</a>. These entities communicate via the <a data-quicklook-from='retryable-ticket'>Retryable Ticket </a> protocol, ensuring efficient and secure interactions.
 
 :::caution UNDER CONSTRUCTION
 
@@ -28,9 +28,7 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 ### Token bridge deployment steps
 
-Following the [deployment](orbit-sdk-deploying-rollup-chain.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains.
-
-To establish and configure the token bridge effectively, the process can be broken down into the following steps:
+Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains, this is a five step-process:
 
 1. **[Token approval](#step-1)**
 2. **[ Token bridge contract deployment ](#step-2)**
@@ -40,16 +38,20 @@ To establish and configure the token bridge effectively, the process can be brok
 
 :::info
 
-The token bridge deployment process depends on the type of Orbit chain. In the following steps, the main flow is the same for all different kinds of Orbit chains except [step 1](#step-1), which is only needed for **Custom fee token** Orbit chains, and [step 5](#step-5), just for `ETH`-based Orbit chains.
+The token bridge deployment process is the same for all Orbit chains types except for:
+- **Custom fee token Orbit chains** which require [token approval](#step-1).
+- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#step-5).
 
 :::
 
-### 1. Token approval (custom fee token Orbit chains only){#step-1}
+### 1. Token approval {#step-1}
 
-Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two essential APIs:
+##### Reminder: this step in only required for custom fee token Orbit chains.
 
-1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This API is designed to verify that the deployer's address has enough allowance to pay for the fees associated with the bridge token deployment.
-2. **`createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest`**: This API assists in generating the raw transaction required to approve the native token for the `TokenBridgeCreator` contract.
+Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two  APIs:
+
+1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: Verifies that the deployer's address has enough allowance to pay for the fees associated with the bridge token deployment.
+2. **`createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest`**: Assists in generating the raw transaction required to approve the native token for the `TokenBridgeCreator` contract.
 
 The following example demonstrates how to leverage these APIs effectively to check for and, if necessary, grant approval to the `TokenBridgeCreator` contract:
 
@@ -66,7 +68,7 @@ if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
 }
 ```
 
-In this scenario, `allowanceParams` includes the native token details, the roll-up owner's address, and the public client for the parent chain. Initially, the `createTokenBridgeEnoughCustomFeeTokenAllowance` API checks if the deployer's allowance is sufficient. If the allowance is inadequate, the `createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest` API is called to create the necessary approval transaction.
+In this scenario, `allowanceParams` includes the native token details, the roll-up owner's address, and the public client for the parent chain. Initially, the `createTokenBridgeEnoughCustomFeeTokenAllowance` API checks if the deployer has been granted enough allowance. If the allowance is insufficien t, the `createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest` API is called to create the necessary approval transaction.
 
 It is important to note that after generating the raw transaction, the deployer must sign and broadcast it to the network to finalize the approval process.
 
