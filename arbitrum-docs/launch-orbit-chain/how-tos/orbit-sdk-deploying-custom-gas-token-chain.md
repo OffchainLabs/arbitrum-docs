@@ -38,7 +38,7 @@ Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit 
 
 ## 1. Custom gas token specification 
 
-The most significant difference is the `ERC-20` token specification on the parent chain for use as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one for use specifically for transaction fees on your Orbit chain.
+The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as gas. This requires selecting an existing `ERC-20` token or deploying a new one on the parent chain for use specifically for transaction fees on your Orbit chain.
 
 ## 2. Chain configuration
 
