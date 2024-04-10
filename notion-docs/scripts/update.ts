@@ -251,6 +251,14 @@ const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
   return '[\n' + faqs.map(printItem).join(',\n') + '\n]'
 }
 
+const renderFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
+  const printItem = (faq: RenderedKnowledgeItem) => {
+    return `### ${faq.title}` + '\n' + `${faq.text}`
+  }
+
+  return faqs.map(printItem).join('\n')
+}
+
 async function generateFiles() {
   const linkableTerms: LinkableTerms = {}
 
@@ -299,6 +307,10 @@ async function generateFiles() {
   fs.writeFileSync(
     '../website/static/building-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
+  )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-building-partial.md',
+    renderFAQStructuredData(cmsContents.buildingFAQs)
   )
 
   fs.writeFileSync(
