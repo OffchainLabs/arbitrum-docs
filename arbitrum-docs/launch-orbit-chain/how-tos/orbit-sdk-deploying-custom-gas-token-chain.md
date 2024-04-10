@@ -22,8 +22,12 @@ See the ["create a rollup custom fee token" example](https://github.com/Offchain
 
 :::
 
+This guide will guide you through configuring and deploying a custom gas token Orbit chain.
 
-Deploying a Custom Gas Token Orbit chain introduces a unique aspect to the standard Orbit chain setup: the ability to pay transaction fees using a specific `ERC-20` token instead of `ETH`. While the setup process largely mirrors that of a standard <a data-quicklook-from="arbitrum-rollup-chain">Rollup Orbit chain</a>, as detailed in the [introduction](../orbit-sdk-introduction.md), there are key differences to account for when configuring a Custom Gas Token Orbit chain.
+Custom gas token orbit chains let participants pay transaction fees in `ERC-20` token instead of `ETH`, which is ideal for use-cases requiring this feature as well as low transaction fees. You can learn more in our page covering [custom gas token requirements and configuration](use-a-custom-gas-token.mdx).
+
+Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit chain with some additional steps, we recommend reading How to configure and deploy [Rollup Orbit chains](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust Orbit chains](orbit-sdk-deploying-anytrust-chain.md) to fully leverage the methods of the Orbit SDK. 
+
 
 :::important
 
@@ -41,7 +45,7 @@ The most significant difference is the specification of the `ERC-20` token on th
 
 ### 2. Chain configuration
 
-You can configure your Orbit chain using the `prepareChainConfig` method and assigning it to a `chainConfig` variable.
+You can configure your Orbit chain using the  [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
 
 Example:
 ```js
@@ -113,7 +117,7 @@ const approvalTxRequest =
 ```
 ### 4. Deployment process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [Rollup deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
