@@ -6,6 +6,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 5
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy a token bridge using the Orbit SDK.
+content_type: how-to
 ---
 
 The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> was designed without native support for specific token bridging standards at the protocol level, but Offchain Labs crafted a "canonical bridge" that ensures seamless token transfers between the parent and child chain.
