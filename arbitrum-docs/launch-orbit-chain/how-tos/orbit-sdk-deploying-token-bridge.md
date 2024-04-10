@@ -34,7 +34,7 @@ To establish and configure the token bridge effectively, the process can be brok
 2. **[ Token bridge contract deployment ](#step-2)**
 3. **[ Transaction recipient and checking for deployment on child chain ](#step-3)**
 4. **[ Deployment information and contract addresses ](#step-4)**
-5. **[ Setting up the WETH gateway ](#step-5)**
+5. **[ Setting up the `WETH` gateway ](#step-5)**
 
 :::info
 
@@ -136,21 +136,20 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 ```
 
 ### 5. Setting up the WETH gateway (ETH-based Orbit chains only){#step-5}
-The last step in spinning up the token bridge for an ETH-based Orbit chain consists of setting up the `WETH Gateway`. 
+The last step in spinning up the token bridge for an `ETH`-based Orbit chain consists of setting up the `WETH` Gateway`. 
 
 :::note
 
-That step only applies to ETH-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for WETH to bridge it in and out of the Orbit chain.
+That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain. 
 
-You can find more info about WETH gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
+You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
 
 :::
 
-So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH Gateway` on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
+So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the ``WETH` Gateway` on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
 
 #### 1. `createTokenBridgePrepareSetWethGatewayTransactionRequest`:
-
-This API helps you create the raw transaction, which handles the WETH gateway on both parent and child chains.
+This API helps you create the raw transaction, which handles the `WETH` gateway on both parent and child chains. 
 
 Here's an example of how to use this API:
 
@@ -173,7 +172,7 @@ After creating the raw transaction you need to use Viem to sign and broadcast th
 
 #### 2. `createTokenBridgePrepareSetWethGatewayTransactionReceipt`
 
-After sending the transaction, you need get the recept of the transaction to be able to check about the success of the Retryable Tickets created on step 1, which is going to set WETH gateway on the Orbit chain. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and also `waitForRetryables` method of it to check for the retryable ticket status. For the example in this doc we can use this API as follow:
+After sending the transaction, you need get the recept of the transaction to be able to check about the success of the Retryable Tickets created on step 1, which is going to set `WETH` gateway on the Orbit chain. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and also `waitForRetryables` method of it to check for the retryable ticket status. For the example in this doc we can use this API as follow:
 
 ```js
   const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
@@ -189,4 +188,4 @@ After sending the transaction, you need get the recept of the transaction to be 
       console.log(`Retryables executed successfully`);
 ```
 
-In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent to set the WETH gateway.
+In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent to set the `WETH` gateway.
