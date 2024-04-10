@@ -32,7 +32,7 @@ Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orb
 :::note
 
 - Custom gas tokens are **not supported yet** on Rollup Orbit chains, only on Orbit AnyTrust chains.
-- `ERC-20` tokens need to have 18 decimals to operate as gas tokens on Orbit chains.
+- `ERC-20` tokens need 18 decimals to operate as gas tokens on Orbit chains.
 
 :::
 
