@@ -26,7 +26,7 @@ This guide will help you configure and deploy a custom gas token Orbit chain.
 
 Custom gas token orbit chains let participants pay transaction fees in `ERC-20` token instead of `ETH`, which is ideal for use cases requiring this feature and low transaction fees. You can learn more on our page covering [custom gas token requirements and configuration](use-a-custom-gas-token.mdx).
 
-Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit chain with additional steps. We recommend reading How to configure and deploy [Rollup Orbit chains](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust Orbit chains](orbit-sdk-deploying-anytrust-chain.md) to fully leverage the methods of the Orbit SDK. 
+Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit chain with additional steps. We recommend reading our short guides about  [Rollup](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust](orbit-sdk-deploying-anytrust-chain.md) configuration to take full advantage the Orbit SDK.
 
 
 :::note
@@ -67,11 +67,11 @@ To use the `prepareChainConfig` method as shown in the example above, some input
 
 ## 3. Token approval before deployment process
 
-In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `RollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
+In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `rollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
 
 #### A. createRollupEnoughCustomFeeTokenAllowance
    
-This API gets related inputs and checks if the `rollupCreator` contract has enough allowance on the token from the owner:
+This API gets related inputs and checks if the `rollupCreator` contract has enough token `Allowance` from the owner:
    
 ```js
 import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
@@ -90,7 +90,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
 | Parameter      | Type           | Description                                                                                           |
 | -------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
 | `nativeToken`  | `Address`      | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.    |
-| `account`      | `Address`      | The address Orbit chain's                                                                             |
+| `account`      | `Address`      | The address Orbit chain's.                                                                            |
 | `publicClient` | `PublicClient` | The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html). |
 
 #### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
