@@ -6,6 +6,8 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 3
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy a custom gas token chain using the Orbit SDK.
+content_type: how-to
 ---
 
 :::caution UNDER CONSTRUCTION
