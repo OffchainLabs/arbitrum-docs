@@ -39,7 +39,7 @@ Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This f
 
 ### 1. Custom gas token specification 
 
-The most significant difference is the `ERC-20` token specification on the parent chain for use as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one for use specifically for transaction fees on your Orbit chain.
+The most significant difference is the specification of the `ERC-20` token on the parent chain to be used as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one to be used specifically for transaction fees on your Orbit chain.
     
 **Note:** Currently, only `ERC-20` tokens with 18 decimals are acceptable as gas tokens on Orbit chains.
 
@@ -73,7 +73,7 @@ In Custom gas token Orbit chains, the owner needs to give allowance to the `roll
 
 #### A. createRollupEnoughCustomFeeTokenAllowance
    
-This API gets related inputs and checks if the `rollupCreator` contract has enough Allowance on the token from the owner:
+This API gets related inputs and checks if the `rollupCreator` contract has enough allowance on the token from the owner:
    
 ```js
 import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
