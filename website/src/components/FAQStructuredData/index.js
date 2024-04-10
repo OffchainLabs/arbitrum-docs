@@ -57,16 +57,17 @@ export default function FAQStructuredData(props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
       />
-      
-      {props.renderFaqs && faqs.map((faq) => (
-        <div data-search-children className="faq-question" key={faq.key} id={faq.key}>
-          <h3>
-            {faq.question}
-            <a className="hash-link" href={'#' + faq.key}></a>
-          </h3>
-          <div dangerouslySetInnerHTML={{ __html: faq.answer }}></div>
-        </div>
-      ))}
+
+      {props.renderFaqs &&
+        faqs.map((faq) => (
+          <div data-search-children className="faq-question" key={faq.key} id={faq.key}>
+            <h3>
+              {faq.question}
+              <a className="hash-link" href={'#' + faq.key}></a>
+            </h3>
+            <div dangerouslySetInnerHTML={{ __html: faq.answer }}></div>
+          </div>
+        ))}
     </>
   );
 }

@@ -242,7 +242,7 @@ const getContentFromCMS = async (): Promise<CMSContents> => {
 // Renderer for FAQs structured data in JSON
 const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
   const printItem = (faq: RenderedKnowledgeItem) => {
-    const faqQuestion = escapeForJSON(faq.title)
+    const faqQuestion = escapeForJSON(faq.titleforSort)
     const faqAnswer = escapeForJSON(faq.text)
     const faqKey = escapeForJSON(faq.key)
     return `{"question": "${faqQuestion}","answer": "${faqAnswer}","key": "${faqKey}"}`
@@ -251,7 +251,8 @@ const renderJSONFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
   return '[\n' + faqs.map(printItem).join(',\n') + '\n]'
 }
 
-const renderFAQStructuredData = (faqs: RenderedKnowledgeItem[]) => {
+// Renderer for FAQ questions and answers
+const renderFAQs = (faqs: RenderedKnowledgeItem[]) => {
   const printItem = (faq: RenderedKnowledgeItem) => {
     return `### ${faq.title}` + '\n' + `${faq.text}`
   }
@@ -294,38 +295,64 @@ async function generateFiles() {
 
   // FAQs
   // ----
+  // Get started
   fs.writeFileSync(
     '../website/static/get-started-faqs.json',
     renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
   )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-users-partial.md',
+    renderFAQs(cmsContents.getStartedFAQs)
+  )
 
+  // Node running
   fs.writeFileSync(
     '../website/static/node-running-faqs.json',
     renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
   )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-nodes-partial.md',
+    renderFAQs(cmsContents.nodeRunningFAQs)
+  )
 
+  // Building
   fs.writeFileSync(
     '../website/static/building-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
   fs.writeFileSync(
     '../arbitrum-docs/partials/_troubleshooting-building-partial.md',
-    renderFAQStructuredData(cmsContents.buildingFAQs)
+    renderFAQs(cmsContents.buildingFAQs)
   )
 
+  // Stylus
   fs.writeFileSync(
     '../website/static/building-stylus-faqs.json',
     renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
   )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-stylus-partial.md',
+    renderFAQs(cmsContents.buildingStylusFAQs)
+  )
 
+  // Orbit
   fs.writeFileSync(
     '../website/static/building-orbit-faqs.json',
     renderJSONFAQStructuredData(cmsContents.orbitFAQs)
   )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-orbit-partial.md',
+    renderFAQs(cmsContents.orbitFAQs)
+  )
 
+  // Bridging
   fs.writeFileSync(
     '../website/static/bridging-faqs.json',
     renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
+  )
+  fs.writeFileSync(
+    '../arbitrum-docs/partials/_troubleshooting-bridging-partial.md',
+    renderFAQs(cmsContents.bridgingFAQs)
   )
 }
 

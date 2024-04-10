@@ -6,6 +6,8 @@ user_story: As an Arbitrum bridge user, I want to understand how to troubleshoot
 content_type: troubleshooting
 ---
 
-import FAQStructuredData from '@site/src/components/FAQStructuredData';
+import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
+import FAQQuestions from '../partials/_troubleshooting-bridging-partial.md';
 
-<FAQStructuredData faqsId="bridging" />
+<FAQStructuredDataJsonLd faqsId="bridging" />
+<FAQQuestions />
