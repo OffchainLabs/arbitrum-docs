@@ -29,9 +29,10 @@ Custom gas token orbit chains let participants pay transaction fees in `ERC-20` 
 Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit chain with additional steps. We recommend reading How to configure and deploy [Rollup Orbit chains](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust Orbit chains](orbit-sdk-deploying-anytrust-chain.md) to fully leverage the methods of the Orbit SDK. 
 
 
-:::important
+:::note
 
-Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This feature is **not available yet** on Rollup Orbit chains.
+- Custom gas tokens are **not supported yet** on Rollup Orbit chains, only on Orbit AnyTrust chains.
+- Only `ERC-20` tokens with 18 decimals are acceptable as gas tokens on Orbit chains.
 
 :::
 
@@ -41,7 +42,6 @@ Custom gas tokens are only supported on Orbit AnyTrust chains, currently. This f
 
 The most significant difference is the `ERC-20` token specification on the parent chain for use as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one for use specifically for transaction fees on your Orbit chain.
     
-**Note:** Currently, only `ERC-20` tokens with 18 decimals are acceptable as gas tokens on Orbit chains.
 
 ### 2. Chain configuration
 
