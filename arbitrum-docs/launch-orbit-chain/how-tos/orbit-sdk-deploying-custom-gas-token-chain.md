@@ -39,13 +39,13 @@ Deploying a custom gas token Orbit chain amounts to deploying an AnyTrust Orbit 
 ## 1. Custom gas token specification 
 
 The most significant difference is the `ERC-20` token specification on the parent chain for use as the gas fee token. This requires selecting an existing `ERC-20` token or deploying a new one for use specifically for transaction fees on your Orbit chain.
-    
 
 ## 2. Chain configuration
 
 You can configure your Orbit chain using the  [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
 
 Example:
+
 ```js
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';
 
@@ -90,7 +90,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
 | Parameter      | Type           | Description                                                                                           |
 | -------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
 | `nativeToken`  | `Address`      | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.    |
-| `account`      | `Address`      | The  address  Orbit chain's                                                                           |
+| `account`      | `Address`      | The address Orbit chain's                                                                             |
 | `publicClient` | `PublicClient` | The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html). |
 
 #### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
@@ -100,7 +100,7 @@ This API gets related inputs and creates the transaction request to secure enoug
 Example:
 
 ```js
-import { createRollupEnoughCustomFeeTokenAllowance } from "@arbitrum/orbit-sdk";
+import { createRollupEnoughCustomFeeTokenAllowance } from '@arbitrum/orbit-sdk';
 
 const allowanceParams = {
   nativeToken,
@@ -108,11 +108,11 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 
-const approvalTxRequest =
-  await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-    allowanceParams,
-  );
+const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
+  allowanceParams,
+);
 ```
+
 ## 4. Deployment process
 
 The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
