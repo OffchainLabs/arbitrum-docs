@@ -5,6 +5,7 @@ description: 'How to configure a node using the Orbit SDK'
 author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to configure a node using the Orbit SDK.
 content_type: how-to
 ---
 
