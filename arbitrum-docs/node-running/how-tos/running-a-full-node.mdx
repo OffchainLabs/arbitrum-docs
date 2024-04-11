@@ -15,11 +15,18 @@ There is no protocol level incentive to run an Arbitum full node. If you’re in
 
 Minimum hardware configuration required to setup a Nitro full node (not archival):
 
-- **RAM**: 8-16 GB
-- **CPU**: 2-4 core CPU (For AWS: t3 xLarge)
+- **RAM**: 16 GB
+- **CPU**: 4 core CPU
+  - Single core performance is important. If the node is falling behind and a single core is 100% busy, it is recommended to update to a faster processor
 - **Storage (last updated on April 2024)**:
-  - Arbitrum One: 560GB SSD for a pruned node, growing at ~200GB per month
-  - Arbitrum Nova: 400GB SSD for a pruned node, growing at ~1.6TB per month
+  - Arbitrum One: 560GB for a pruned node, growing at ~200GB per month (NVMe SSD drives are recommended)
+  - Arbitrum Nova: 400GB for a pruned node, growing at ~1.6TB per month (NVMe SSD drives are recommended)
+
+:::info
+
+These minimum requirements for RAM and CPU are recommended for nodes that process a small amount of RPC requests. For nodes that require processing multiple simultaneous requests, both RAM and number of CPU cores will need to be scaled with the amount of traffic being served.
+
+:::
 
 :::info
 
