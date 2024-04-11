@@ -60,7 +60,7 @@ Here are some inputs details from the example above:
 | :------------- | :---------------------------------------------------------------------------- |
 | `chain`        | Details about the hosted chain, including chain ID, name, and core contracts. |
 | `parent-chain` | Information for connecting to the parent chain.                               |
-| `http`         | Configuration parameters fot the HTTP server.                                 |
+| `http`         | Configuration parameters for the HTTP server.                                 |
 | `node`         | Specific node settings, including sequencer and batch-poster configurations.  |
 
 ### Additional configuration for AnyTrust Orbit chains:
@@ -95,7 +95,7 @@ Example addition for AnyTrust Node Config:
 
 ### Preparing your node config file
 
-The Node Config file includes three types of fields:
+The Node Config file includes three fields types:
 
 1. **Information from the Orbit deployment chain**: Such as the addresses of the core contracts.
 2. **Parameters configurable by the chain deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
@@ -132,7 +132,7 @@ Here are some details about the parameters used in the example above:
 | `parentChainId`           | Chain ID of the parent chain where your Orbit chain is deployed.                                                                                                                                                                      |
 | `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                               |
 
-In case you do not have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
+If you don't have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
 
 Here's an example of how to extract `chainConfig` and `coreContracts` using just the transaction hash from your deployment:
 
@@ -149,4 +149,4 @@ const chainConfig: ChainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig
 const coreContracts = txReceipt.getCoreContracts();
 ```
 
-This process ensures that all necessary configurations and contract details are included in your Node Config, paving the way for a successful initiation and operation of your Orbit chain.
+This process ensures that all necessary configurations and contract details are included in your Node Config.
