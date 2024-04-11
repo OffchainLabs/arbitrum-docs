@@ -34,7 +34,7 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 2. **[Token bridge contract deployment](#step-2)**
 3. **[Transaction recipient and checking for deployment on child chain](#step-3)**
 4. **[Deployment information and contract addresses](#step-4)**
-5. **[Setting up the `WETH` gateway](#step-5)**
+5. **[Setting up the WETH gateway](#step-5)**
 
 :::info
 
@@ -54,7 +54,7 @@ This step is only required for custom fee token Orbit chains.
 
 Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two APIs:
 
-1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This method verifies that the deployer's address has enough allowance to pay for the fees associated with the bridge token deployment.
+1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This method verifies that the deployer's address has enough allowance to pay for the fees associated with the token bridge deployment.
 2. **`createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest`**: This function assists in generating the raw transaction required to approve the native token for the `TokenBridgeCreator` contract.
 
 The following example demonstrates how to leverage these APIs effectively to check for and, if necessary, grant approval to the `TokenBridgeCreator` contract:
@@ -74,8 +74,8 @@ if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
 
 In this scenario, `allowanceParams` includes:
 - The native token's details: `nativeToken`.
-- The Rollup owner's address: `owner`.
-- The parent chain's: `publicClient`.
+- The Rollup owner's address: `rollupOwner.address`.
+- The parent chain's publicClient: `parentChainPublicClient`.
 
 First, `createTokenBridgeEnoughCustomFeeTokenAllowance` checks if the deployer has been granted enough allowance. 
 
@@ -87,9 +87,11 @@ Please note that after generating the raw transaction, the deployer must still s
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain. 
 
-The deployment process is the same as orbit chain contracts, where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/arbos/l1-to-l2-messaging#retryable-ticketsO).
+The deployment process is the same as orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/arbos/l1-to-l2-messaging#retryable-ticketsO).
 
-Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment. Below is an illustrative example of how to use this API:
+Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
+
+Example:
 
 ```js
 const txRequest = await createTokenBridgePrepareTransactionRequest({
@@ -109,8 +111,8 @@ Here are the parameters used in the above example:
 | :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `rollupContractAddress`     | Orbit chain's Rollup contract address.                                                                                                          |
 | `rollupOwnerAddress`        | Rollup owner's address.                                                                                                                         |
-| `parentChainPublicClient`   | Parent chain's public clients, as defined by Viem.                                                                                              |
-| `orbitChainPublicClient`    | Orbit chain's public clients, as defined by Viem.                                                                                               |
+| `parentChainPublicClient`   | Parent chain's public client, as defined by Viem.                                                                                              |
+| `orbitChainPublicClient`    | Orbit chain's public client, as defined by Viem.                                                                                               |
 
 For more insights into these variables and their usage, consider exploring this [token bridge deployment example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts).
 
@@ -118,7 +120,9 @@ Following the creation of the raw transaction, the next steps involve signing it
 
 ### 3. Transaction recipient and checking for deployment on child chain{#step-3}
 
-Following the dispatch of the deployment transaction, retrieving the transaction receipt and verifying the successful deployment of the contracts on both the parent and child chains is crucial. Our Orbit SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient. 
+After sending the deployment transaction, you will need to retrieve the transaction receipt and verify the successful deployment of the contracts on both the parent and child chains.
+
+Our Orbit SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient.
 
 Example:
 
@@ -130,7 +134,9 @@ const txReceipt = createTokenBridgePrepareTransactionReceipt(
 
 In this scenario, `txHash` represents the hash of the deployment transaction initiated in the previous step. The `waitForTransactionReceipt` API from Viem captures the transaction's recipient on the parent chain. The `createTokenBridgePrepareTransactionReceipt` API enhances the basic functionality provided by Viem's `waitForTransactionReceipt`, introducing a specialized method named `waitForRetryables` to handle the outcome (in this case, `txReceipt`).
 
-By employing the `waitForRetryables` method, one can ascertain the success of Retryable Tickets on the parent chain. Here is how to use this API effectively:
+By employing the `waitForRetryables` method, you can ensure the success of Retryable Tickets on the parent chain. 
+
+Example:
 
 ```js
 const orbitChainRetryableReceipts = await txReceipt.waitForRetryables({
@@ -150,9 +156,7 @@ In this example, the `waitForRetryables` method is invoked on the `txReceipt` to
 
 ### 4. Deployment information and contract addresses{#step-4}
 
-Once we are done with the deployment and are assured that the Retryable Tickets are successful, it's time to get the deployment information and all token bridge contract addresses.
-
-You can use `getTokenBridgeContracts` to retrieve the contracts' addresses.
+Once you have completed the deployment and are assured that the Retryable Tickets are successful, you can use `getTokenBridgeContracts` to retrieve the deployment information and all the token bridge contracts' addresses.
 
 Here's an example of how to get the contract addresses from the `txReceipt` generated in the previous steps:
 
@@ -163,7 +167,8 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 ```
 
 ### 5. Setting up the WETH gateway (ETH-based Orbit chains only){#step-5}
-The last step in spinning up the token bridge for an `ETH`-based Orbit chain consists of setting up the `WETH` Gateway`. 
+
+The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway. 
 
 :::note
 
@@ -221,4 +226,4 @@ After sending the transaction, you need to assess if the Retryable Tickets you j
   console.log(`Retryables executed successfully`);
 ```
 
-In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent to set the `WETH` gateway, setting a `WETH` gateway on the Orbit chain
+In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent, setting the `WETH` gateway on your Orbit chain.
