@@ -194,26 +194,31 @@ const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTran
 });
 ```
 
-In this example, `rollupContractAddress` is the address of Orbit chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and orbit chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit and thus secure successful retryable tickets'.
+In this example, `rollupContractAddress` is the address of Orbit chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and orbit chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit, thus securing successful retryable tickets.
 
 After creating the raw transaction, you need to use Viem to sign it and broadcast it to the network.
 
 #### 2. `createTokenBridgePrepareSetWethGatewayTransactionReceipt`
 
-After sending the transaction, you need get the transaction receipt to check the success of the Retryable Tickets created on step 1, which is going to set `WETH` gateway on the Orbit chain. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and also `waitForRetryables` method of it to check for the retryable ticket status. For the example in this doc we can use this API as follow:
+After sending the transaction, you need to assess if the Retryable Tickets you just created have been successful.. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and the`waitForRetryables` method of it to check for the success status of retryable tickets. For the example in this doc we can use this API as follow:
 
 ```js
-  const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-    await parentChainPublicClient.waitForTransactionReceipt({ hash: setWethGatewayTxHash }),
-  );
-    const orbitChainSetWethGatewayRetryableReceipt = await setWethGatewayTxReceipt.waitForRetryables({
-    orbitPublicClient: orbitChainPublicClient,
-  });
-    if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
+  const setWethGatewayTxReceipt =
+    createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+      await parentChainPublicClient.waitForTransactionReceipt({
+        hash: setWethGatewayTxHash,
+      }),
+    );
+  const orbitChainSetWethGatewayRetryableReceipt =
+    await setWethGatewayTxReceipt.waitForRetryables({
+      orbitPublicClient: orbitChainPublicClient,
+    });
+  if (orbitChainSetWethGatewayRetryableReceipt[0].status !== "success") {
     throw new Error(
       `Retryable status is not success: ${orbitChainSetWethGatewayRetryableReceipt[0].status}. Aborting...`,
     );
-      console.log(`Retryables executed successfully`);
+  }
+  console.log(`Retryables executed successfully`);
 ```
 
-In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent to set the `WETH` gateway.
+In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent to set the `WETH` gateway, setting a `WETH` gateway on the Orbit chain
