@@ -283,6 +283,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-stf',
               label: `Customize your chain's behavior`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
+              label: `Manage the fee collectors`,
             }
           ],
         },
