@@ -1,4 +1,11 @@
-# Orbit Chain Confirmation and Finality
+---
+title: 'Orbit chains: confirmation and finality'
+description: 'Understand how confirmation and finality work on Orbit chains'
+author: leartulaj
+sme: leartulaj
+user_story: As an Orbit chain deployer, I want to understand how finality works on Orbit chains so that I can make informed decisions about my chain's configuration.
+content_type: concept
+---
 
 ## Child chain transactions
 
