@@ -286,6 +286,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              label: `Configure delayed inbox finality`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             }
