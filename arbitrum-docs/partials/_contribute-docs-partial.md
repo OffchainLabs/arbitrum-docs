@@ -1,4 +1,4 @@
-import PublicPreviewBannerPartial from '../partials/\_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
