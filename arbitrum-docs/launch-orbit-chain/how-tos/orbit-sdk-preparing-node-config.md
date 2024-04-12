@@ -17,7 +17,6 @@ This document is under construction and may change significantly as we incorpora
 
 :::
 
-
 :::info
 
 See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/prepare-node-config) in the Orbit SDK repository for additional guidance.
@@ -54,6 +53,7 @@ Example for a Rollup Orbit Chain:
   },
 };
 ```
+
 Here are some inputs details from the example above:
 
 | Parameters     | Description                                                                   |
@@ -66,6 +66,7 @@ Here are some inputs details from the example above:
 ### Additional configuration for AnyTrust Orbit chains:
 
 For AnyTrust Orbit chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
+
 - Sequencer's inbox address
 - Parent chain node URL
 - RPC aggregators
@@ -120,6 +121,7 @@ const nodeConfig = prepareNodeConfig({
   parentChainRpcUrl: parentChain_RPC_URL,
 });
 ```
+
 Here are some details about the parameters used in the example above:
 
 | Parameters                | Description                                                                                                                                                                                                                           |
@@ -140,7 +142,7 @@ Here's an example of how to extract `chainConfig` and `coreContracts` using just
 import {
   ChainConfig,
   createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt
+  createRollupPrepareTransactionReceipt,
 } from '@arbitrum/orbit-sdk';
 
 const tx = createRollupPrepareTransaction({ hash: txHash });
