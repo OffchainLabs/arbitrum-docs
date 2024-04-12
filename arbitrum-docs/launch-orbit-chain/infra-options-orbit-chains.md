@@ -1,20 +1,26 @@
-# Infrastructure Options for Orbit Chains
+---
+title: 'Infrastructure options for Orbit chains'
+description: 'A high-level overview of Orbit chain infrastructure options for production-grade chains.'
+author: leartulaj
+sme: leartulaj
+user_story: As an Orbit chain deployer, I want to know what infrastructure options are available so that I can make informed decisions about the components I need to deploy and maintain a production-grade chain.
+content_type: overview
+---
 
-A successful production-grade chain often requires additional infrastructure to enable app functionalities and provide a good user experience. You can choose from multiple options for various components. The following list is not comprehensive:
+This overview provides Orbit chain deployers with a high-level understanding of the infrastructure options available for production-grade chains. The following list is not comprehensive, but it covers the most common components you may need to deploy and maintain a successful chain.
 
-## Chain Operation
+## Rollup-as-a-Service (RaaS) providers
 
-You may not yet have experience deploying, operating, and maintaining an independent, production-grade network. 
-In these cases, we highly recommend working with one of the following RaaS (Rollup as a Service) providers who will manage the necessary infrastructure and ensure a high degree of performance and security for your chain:
+For most production use-cases, we encourage Orbit chain operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Orbit chain deployments:
 
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
 - [Gelato](https://www.gelato.network/)
 
-## Explorers
+## Chain explorers
 
-Explorers are essential for any functional blockchain, providing a transparent view of transactions, blocks, and addresses on the blockchain. Users and developers can access them to verify transactions, check network activity status, and ensure that transactions are being processed correctly. Here are some of the explorer providers you can choose from:
+Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Orbit chain. The following explorers support Orbit chains, and can be used to monitor and analyze your chain's activity:
 
 - [Blockscout](https://www.blockscout.com/)
 - [Socialscan](https://socialscan.io/)
@@ -26,7 +32,9 @@ Additionally, Orbit chains leveraging blobs for data availability may use tools 
 
 ## Bridges
 
-You can easily launch an Orbit chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain. However, some applications may require the ability to transfer to chains outside the Orbit ecosystem or across chains faster, without waiting for complete finality. In these instances, the following 3rd party bridging providers offer services meeting those needs:
+You can easily launch an Orbit chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Orbit chain settles transactions.
+
+For applications that require the ability to transfer assets to chains outside of the Orbit ecosystem or in an expedited manner (without waiting for complete finality), the following third-party bridging providers can be used:
 
 - [LayerZero](https://layerzero.network/)
 - [Connext](https://www.connext.network/)
@@ -34,18 +42,18 @@ You can easily launch an Orbit chain with a canonical token bridge, which allows
 - [Axelar](https://axelar.network/)
 - [Across](https://across.to/)
 
-## Data Availability
+## Data availability
 
-As an Orbit chain deployer, you may offer cheaper fees on your chain by storing the data posted in batches on an alternative Data Availability solution rather than storing it directly in the parent chain. AnyTrust's built-in functionality allows you to set transaction fees easily and will enable more powerful features with additional chains that also use AnyTrust. Alternatively, you can choose from the following third-party services:
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
-- [Avail](https://www.availproject.org/) (coming soon!)
+- [Avail](https://www.availproject.org/) (coming soon)
 - [Near](https://near.org/data-availability) (coming soon)
 
 ## Indexers
 
-Teams frequently require additional indexing capabilities to retrieve historic or application-specific data, but doing so directly from an RPC endpoint is difficult or impossible. Fortunately, multiple data services providers are familiar with operating this type of infrastructure and may be willing to do so for your chain.
+Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [The Graph](https://thegraph.com/)
@@ -54,7 +62,7 @@ Teams frequently require additional indexing capabilities to retrieve historic o
 
 ## Oracles
 
-Many applications require external data to be published on-chain to function properly. This data usually consists of price feeds related to assets utilized in-app or a source of verifiable randomness. The following Oracle providers may be able to support your chain:
+The following Oracle providers can be used to integrate off-chain data with your Orbit chain's smart contracts:
 
 - [Chainlink](https://chain.link/)
 - [Pyth](https://pyth.network/)
@@ -62,9 +70,9 @@ Many applications require external data to be published on-chain to function pro
 - [Randomizer](http://Randomizer.ai) (VRF only)
 - [Supra](https://supra.com/)
 
-## RPC
+## RPC endpoints
 
-RPCs are the primary interface for users and developers to interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. There is often a need for robust RPC services for public consumption as well as for specific projects with higher rate limiting requirements. The following providers may support your Orbit chain:
+RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Orbit chains:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
