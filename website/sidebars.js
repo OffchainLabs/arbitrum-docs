@@ -357,7 +357,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-orbit-chain/infra-options-orbit-chains',
-          label: '3rd Party Infrastructure',
+          label: 'Third-party infrastructure providers',
         },
         {
           type: 'doc',

@@ -1,13 +1,13 @@
 ---
-title: 'Infrastructure options for Orbit chains'
-description: 'A high-level overview of Orbit chain infrastructure options for production-grade chains.'
+title: 'Third-party Orbit infrastructure providers'
+description: 'A high-level overview of third-party Orbit chain infrastructure providers for production-grade chains.'
 author: leartulaj
 sme: leartulaj
-user_story: As an Orbit chain deployer, I want to know what infrastructure options are available so that I can make informed decisions about the components I need to deploy and maintain a production-grade chain.
+user_story: As an Orbit chain deployer, I want to know what third-party infrastructure options are available that will help me deploy and maintain a production-grade Orbit chain.
 content_type: overview
 ---
 
-This overview provides Orbit chain deployers with a high-level understanding of the infrastructure options available for production-grade chains. The following list is not comprehensive, but it covers the most common components you may need to deploy and maintain a successful chain.
+This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments. Note that this list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
 
 ## Rollup-as-a-Service (RaaS) providers
 
