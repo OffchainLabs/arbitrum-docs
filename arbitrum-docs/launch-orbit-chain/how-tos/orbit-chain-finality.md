@@ -1,4 +1,11 @@
-# Orbit Chain Confirmation and Finality
+---
+title: 'How to configure delayed inbox finality'
+description: 'Learn how to configure delayed inbox finality on your Orbit chain.'
+author: leartulaj
+sme: leartulaj
+user_story: As an Orbit chain deployer, I want to understand how to fine-tune parameters associated with delayed inbox finality on my Orbit chain.
+content_type: how-to
+---
 
 ## Child chain transactions
 
