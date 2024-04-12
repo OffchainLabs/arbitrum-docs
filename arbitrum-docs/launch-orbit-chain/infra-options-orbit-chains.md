@@ -44,7 +44,7 @@ For applications that require the ability to transfer assets to chains outside o
 
 ## Data availability
 
-Orbit chains can optionally use a Data Availability solution that stores chain data off-chain. The following third-party services can be used to store Orbit chain data:
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
