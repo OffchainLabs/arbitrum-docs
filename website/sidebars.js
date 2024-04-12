@@ -293,7 +293,7 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
-            },
+            }
           ],
         },
         {
@@ -358,6 +358,11 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/infra-options-orbit-chains',
+          label: 'Third-party infrastructure providers',
         },
         {
           type: 'doc',
