@@ -86,7 +86,7 @@ That’s it! We’ve now walked through each of the steps that validators will t
 ### BOLD's economics and spam protection
 Given that participation in BOLD is permissionless, it is recommended that the size of the bonds required to participate be high enough to disincentivize malicious actors from attacking Arbitrum One and Nova and to mitigate against spam (that would otherwise delay confirmations up to approximately 1 challenge period). High bonding values do not harm decentralization because (1) trustless bonding pools can be deployed permissionlessly to let the community open challenges and post assertions, and (2) any number of honest parties of unknown identities can emerge to bond their funds to the correct assertion and participate in the defense of Arbitrum at any time within a challenge. As with the current dispute resolution protocol, there are no protocol level incentives for parties who opt in to participate in validating Arbitrum One and Nova with BOLD. The bonds can be any ERC20 token and be set to any size for Arbitrum One and Nova, as determined by the ArbitrumDAO.
 
-The following link, [Economics of Disputes in Arbitrum BOLD](https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/Economics.pdf), covers the rationale behind the design and recommended values for the bonds. Note that the ArbitrumDAO can change these values and the type of asset used for the bonds via a governance proposal. 
+The following link, [Economics of Disputes in Arbitrum BOLD](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf), covers the rationale behind the design and recommended values for the bonds. Note that the ArbitrumDAO can change these values and the type of asset used for the bonds via a governance proposal. 
 
 BOLD makes permissionless validation possible for Arbitrum rollup chains and marks a major step towards [full decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization). This significant milestone also lays the groundwork for productive discussions about future economic incentives for those participating in the protocol since anyone can participate.
 
@@ -104,9 +104,9 @@ Today, BOLD is deployed on a public testnet using Ethereum Sepolia as a base lay
 
 If you’re intrigued by what BOLD can unlock for Arbitrum chains, we encourage you to interact with BOLD by:
 * [Following this guide](https://github.com/OffchainLabs/bold-validator-starter-kit) to deploy a BOLD validator to test and explore, first hand, how BOLD works to secure Arbitrum chains. A [BOLD testnet block explorer](https://bold-explorer.arbitrum.io/ ) is also available for you to peruse!
-* Checking out this [BOLD Technical Deep Dive](https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/TechnicalDeepDive.pdf) to learn about BOLD's implementation, alongside [the BOLD source code on Github](https://github.com/OffchainLabs/bold) to understand how BOLD works under the hood.
-* Reviewing the [Economics of Disputes in Arbitrum BOLD](https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/Economics.pdf) to learn about rationale behind the design and recommended bonding values.
-* Reading the formal specification and mathemtical proofs behind BOLD in the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/BOLDChallengeProtocol.pdf).
+* Checking out this [BOLD Technical Deep Dive](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf) to learn about BOLD's implementation, alongside [the BOLD source code on Github](https://github.com/OffchainLabs/bold) to understand how BOLD works under the hood.
+* Reviewing the [Economics of Disputes in Arbitrum BOLD](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf) to learn about rationale behind the design and recommended bonding values.
+* Reading the formal specification and mathemtical proofs behind BOLD in the [BOLD whitepaper](https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf).
 
 ## Wen mainnet?
 BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD's journey to being deployed to Arbitrum chains include:
