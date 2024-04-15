@@ -843,12 +843,12 @@ const sidebars = {
                 },
                 {
                   type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/TechnicalDeepDive.pdf',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
                   label: 'Technical deep dive on BOLD',
                 },
                 {
                   type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/Economics.pdf',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
                   label: 'Economics of disputes in Arbitrum BOLD',
                 },
                 {
