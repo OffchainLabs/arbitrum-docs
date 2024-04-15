@@ -822,6 +822,47 @@ const sidebars = {
                 },
               ],
             },
+            {
+              type: 'category',
+              label: 'The BOLD dispute protocol',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'bold/bold-gentle-introduction',
+                  label: 'A gentle introduction',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+                  label: 'Deploy a BOLD validator on testnet',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
+                  label: 'Whitepaper on BOLD',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  label: 'Technical deep dive on BOLD',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  label: 'Economics of disputes in Arbitrum BOLD',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold',
+                  label: 'BOLD specification on Github',
+                },
+                {
+                  type: 'doc',
+                  id: 'bold/concepts/public-preview-expectations',
+                  label: 'Public preview',
+                },
+              ],
+            },
           ],
         },
       ],
