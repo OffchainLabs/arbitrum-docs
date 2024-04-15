@@ -834,27 +834,27 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-                  label: 'Deploy a BOLD validator on testnet',
+                  label: 'Deploy a validator on testnet',
                 },
                 {
                   type: 'link',
                   href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
-                  label: 'Whitepaper on BOLD',
+                  label: 'BOLD Whitepaper',
                 },
                 {
                   type: 'link',
                   href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
-                  label: 'Technical deep dive on BOLD',
+                  label: 'Technical deep dive',
                 },
                 {
                   type: 'link',
                   href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
-                  label: 'Economics of disputes in Arbitrum BOLD',
+                  label: 'Economics of disputes',
                 },
                 {
                   type: 'link',
                   href: 'https://github.com/OffchainLabs/bold',
-                  label: 'BOLD specification on Github',
+                  label: 'Specification on Github',
                 },
                 {
                   type: 'doc',
