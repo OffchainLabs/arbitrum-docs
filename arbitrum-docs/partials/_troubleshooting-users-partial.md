@@ -1,42 +1,35 @@
-### Why do I need ETH to use the Arbitrum network? {#why-do-i-need-eth-to-use-the-arbitrum-network}
-<p>When moving funds (ETH and non-ETH) from Ethereum (L1) to Arbitrum (L2), you'll need to have ETH in your wallet on the corresponding Arbitrum chain. This is because ETH is the currency used for gas fees on Arbitrum and all Arbitrum transactions are powered by ETH.</p>
+### Why do I need ETH to use the Arbitrum network?
+<p>ETH is the currency used to pay gas fees on Arbitrum, and all Arbitrum transactions are powered by ETH. You can bridge ETH (and other tokens) from Ethereum to Arbitrum through <strong><a href="https://bridge.arbitrum.io/">Arbitrum's bridge</a></strong>.</p>
 
 <p></p>
 
-<p></p>
 
-
-
-### Do I need to pay a tip / Priority fee for my Arbitrum transactions? {#do-i-need-to-pay-a-tip--priority-fee-for-my-arbitrum-transactions}
+### Do I need to pay a tip or priority fee for my Arbitrum transactions?
 <p>Since transactions are processed in the order that the Sequencer receives them, no priority fee is necessary for Arbitrum transactions; if a transaction does include a priority fee, it will be refunded to the transaction's origin address at the end of the execution.</p>
 
 
-
-### How can I see the balance of my ETH / Tokens on Arbitrum in my wallet? {#how-can-i-see-the-balance-of-my-eth--tokens-on-arbitrum-in-my-wallet}
-<p>Most wallets are "connected" to one given network at a time. To view your Ether / Token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.</p>
-
-<p></p>
-
-
-
-### What happens if I send my funds to an exchange that does not support Arbitrum? {#what-happens-if-i-send-my-funds-to-an-exchange-that-does-not-support-arbitrum}
-<p>If you send the funds and the receiving wallet/exchange does not support the Arbitrum network you are sending funds through, there is unfortunately nothing that we can do to recover your funds. You would need to contact the wallet/exchange support and see if they can do anything to help you retrieve the funds.</p>
+### How can I see the balance of ETH and other tokens in my wallet on Arbitrum?
+<p>Most wallets are "connected" to one given network at a time. To view your ETH or token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.</p>
 
 <p></p>
 
 
+### What happens if I send my funds to an exchange that doesn't support Arbitrum?
+<p>If you send the funds and the receiving wallet/exchange doesn't support the Arbitrum network you are sending funds through, there is unfortunately nothing that we can do to recover your funds. You would need to contact the wallet/exchange support and see if they can do anything to help you retrieve the funds.</p>
 
-### Does Arbitrum have a mempool? {#does-arbitrum-have-a-mempool}
+<p></p>
+
+
+### Does Arbitrum have a mempool?
 <p>The Arbitrum Sequencer orders transactions on a first come, first served basis; the Sequencer inserts transactions into a queue based on the order they are received and executes them accordingly. This queue thus exists in lieu of a mempool. The Sequencer's queue has no space limit; transactions on the queue will eventually timeout and be discarded if not executed in time. Under normal conditions, the queue is empty, since transactions are executed near-instantaneously.</p>
 
 <p></p>
 
 
+### What's the difference between Arbitrum Rollup and Arbitrum AnyTrust?
+<p>Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety. For more information, see <a href="https://docs.arbitrum.io/inside-arbitrum-nitro/">Inside Arbitrum Nitro</a>.</p>
 
-### What's the difference between Arbitrum Rollup and Arbitrum AnyTrust? {#whats-the-difference-between-arbitrum-rollup-and-arbitrum-anytrust}
-<p>Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety.</p>
-
-<p>By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. We introduce some threshold, K, with the assumption that at least K members of the committee are honest. For simplicity, we'll hereby assume a committee of size 20 and a K value of 2:</p>
+<p>By contrast, Arbitrum AnyTrust introduces a trust assumption in exchange for lower fees; data availability is managed by a Data Availability Committee (DAC), a fixed, permissioned set of entities. We introduce some threshold, <code>K</code>, with the assumption that at least <code>K</code> members of the committee are honest. For simplicity, we'll hereby assume a committee of size 20 and a <code>K</code> value of 2:</p>
 
 <p>If 19 out of the 20 committee members <em>and</em> the Sequencer are malicious and colluding together, they can break the chain's safety (and, e.g., steal users' funds); this is the new trust assumption.</p>
 
@@ -51,8 +44,7 @@
 <p></p>
 
 
-
-### How can I check the status of my cross chain message? {#how-can-i-check-the-status-of-my-cross-chain-message}
+### How can I check the status of my cross chain message?
 <p>You can check the status of <em>any </em>Arbitrum cross chain message at <a href="https://retryable-dashboard.arbitrum.io/">https://retryable-dashboard.arbitrum.io/</a> (you will also be able to execute the cross chain message there, if applicable).</p>
 
 <p>You'll need the transaction hash of the "initiating transaction":  the L1 transaction hash for an L1-to-L2 message (e.g., a deposit), or the L2 transaction hash for an L2-to-L1 message (e.g., a withdrawal).</p>
@@ -64,19 +56,19 @@
 <p></p>
 
 
-
-### If there is a dispute, can my L2 transaction get reorged / thrown out / "yeeted"? {#if-there-is-a-dispute-can-my-l2-transaction-get-reorged--thrown-out--yeeted}
+### If there is a dispute, can my L2 transaction get reorged / thrown out / "yeeted"?
 <p>Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See <a href="https://developer.arbitrum.io/tx-lifecycle">Transaction Lifecycle</a>)</p>
 
+<p></p>
 
-### ...okay but if there's a dispute, will my transaction get delayed?<a href="https://developer.arbitrum.io/faqs/protocol-faqs#q-dispute-delay"></a>
+
+### ...okay but if there's a dispute, will my transaction get delayed?
 <p>The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed <em>even during a dispute</em> via trustless fast "liquidity exit" applications. See <a href="https://developer.arbitrum.io/arbos/l2-to-l1-messaging">L2-to-L1 Messages</a>).</p>
 
+<p></p>
 
-## 
 
-
-### Are "Sequencers" the same entities as "Validators"? Can a centralized Sequencer act maliciously (e.g., steal all my money)? {#are-sequencers-the-same-entities-as-validators-can-a-centralized-sequencer-act-maliciously-eg-steal-all-my-money}
+### Are "Sequencers" the same entities as "Validators"? Can a centralized Sequencer act maliciously (e.g., steal all my money)?
 <p>No and no!</p>
 
 <p>An Arbitrum Chain's Sequencer(s) and Validators and completely distinct entities, with their own distinct roles.</p>
@@ -98,31 +90,27 @@
 <p></p>
 
 
+### Why was "one week" chosen for Arbitrum One's dispute window?
+<p>Generally, some amount of time is necessary for the Arbitrum validators to dispute an invalid assertion.</p>
 
-### Why was "one week" chosen for Arbitrum One's dispute window? {#why-was-one-week-chosen-for-arbitrum-ones-dispute-window}
-<p>Generally, some amount of time is necessary for the Arbitrum validators to dispute an invalid assertion.<br />
-<br />
-A week is expected to be more than enough time for validators to carry out an interactive dispute, assuming they don't encounter difficulty in getting their transactions included on L1. One week was chosen following the general consensus among the Ethereum research community — as well as other layer 2 projects — to provide enough time for the community to socially coordinate in the case of a coordinated Ethereum-staker censorship attack.</p>
+<p>A week is expected to be more than enough time for validators to carry out an interactive dispute, assuming they don't encounter difficulty in getting their transactions included on L1. One week was chosen following the general consensus among the Ethereum research community — as well as other layer 2 projects — to provide enough time for the community to socially coordinate in the case of a coordinated Ethereum-staker censorship attack.</p>
 
 <p></p>
 
 
-
-### What's the state of Arbitrum One's decentralization? {#whats-the-state-of-arbitrum-ones-decentralization}
+### What's the state of Arbitrum One's decentralization?
 <p>See <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization">"State of Progressive Decentralization"</a></strong>, or check out the work of our friends at <strong><a href="https://l2beat.com/scaling/risk/">L2BEAT</a></strong><strong>.</strong></p>
 
 <p></p>
 
 
-
-### Are there any Fiat on-ramps that support Arbitrum? {#are-there-any-fiat-onramps-that-support-arbitrum}
+### Are there any Fiat on-ramps that support Arbitrum?
 <p>Yes, you can find a list of Fiat on-ramps that support Arbitrum <a href="https://portal.arbitrum.io/one?categories=fiat-on-ramp">on our portal</a>.</p>
 
 <p></p>
 
 
-
-### How many blocks are needed for a transaction to be confirmed/finalized in Arbitrum? {#how-many-blocks-are-needed-for-a-transaction-to-be-confirmedfinalized-in-arbitrum}
+### How many blocks are needed for a transaction to be confirmed/finalized in Arbitrum?
 <p>There are two levels of finality in a <a href="https://developer.arbitrum.io/tx-lifecycle">transaction lifecycle</a>:</p>
 
 <ul><li>Soft finality: once the Sequencer receives and processes a transaction, it emits a receipt through the Sequencer's feed. At this point, if the Sequencer is trusted, the transaction will not be reordered and the state of the chain after processing the transaction can be determined.</li>
@@ -131,36 +119,41 @@ A week is expected to be more than enough time for validators to carry out an in
 <p></p>
 
 
-
-### Where can I find stats for Arbitrum? {#where-can-i-find-stats-for-arbitrum}
+### Where can I find stats for Arbitrum?
 <p>Although we currently don't maintain any stats dashboard for Arbitrum, you can find many <a href="https://dune.com/browse/dashboards?q=arbitrum">community created dashboards</a> in Dune.</p>
 
 <p></p>
 
 
-
-### Will transactions with a higher "gas price bid" be confirmed first? {#will-transactions-with-a-higher-gas-price-bid-be-confirmed-first}
+### Will transactions with a higher "gas price bid" be confirmed first?
 <p>There is no notion of mempool on Arbitrum, transactions are processed on a first come first served basis by the Sequencer. Thus, the gas price bid parameter does not influence the order in which a transaction is processed.</p>
 
 <p></p>
 
 
-
-### Where can I find a list of the current validators of the Arbitrum chains? {#where-can-i-find-a-list-of-the-current-validators-of-the-arbitrum-chains}
+### Where can I find a list of the current validators of the Arbitrum chains?
 <p>Validation on both Arbitrum One and Arbitrum Nova is currently allow-listed to a committee of public entities. You can see the list of validators <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators">here</a></strong>. Governance currently has the power to change this status.</p>
 
 <p></p>
 
 
-
-### Where can I find the current Data Availability Committee members? {#where-can-i-find-the-current-data-availability-committee-members}
+### Where can I find the current Data Availability Committee members?
 <p>The Arbitrum Nova chain has a 7-party DAC, whose members can be seen <strong><a href="https://docs.arbitrum.foundation/state-of-progressive-decentralization#data-availability-committee-members">here</a></strong>. Governance has the ability to remove or add members to the committee.</p>
 
 <p></p>
 
 
+### Can I withdraw my funds from Arbitrum back to Ethereum without going through the Sequencer? What about funds that are in a contract?
+<p>Yes, it is possible to permissionlessly send a message from Ethereum to be executed on Arbitrum, while bypassing the Sequencer. You can do this by using the DelayedInbox contract and force-including the message after a certain amount of time has passed (currently ~24 hours). You can find more information about this behavior <a href="https://docs.arbitrum.io/sequencer#unhappyuncommon-case-sequencer-isnt-doing-its-job">here</a>.</p>
 
-### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently 24 hours) {#are-there-any-plans-to-reduce-the-time-a-transaction-needs-to-wait-before-being-able-to-be-forceincluded-from-ethereum-into-the-arbitrum-chain-bypassing-the-sequencer-currently-24-hours}
+<p>Keep in mind that you can execute any message in this way, be it a withdrawal of funds back to Ethereum, or a call to a contract.</p>
+
+<p>You can also find an example of force-inclusion in <a href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/delayedInbox-l2msg">this tutorial</a>. </p>
+
+<p></p>
+
+
+### Are there any plans to reduce the time a transaction needs to wait before being able to be force-included from Ethereum into the Arbitrum chain, bypassing the sequencer? (Currently 24 hours)
 <p>The mechanism that allows force-including transactions from Ethereum (bypassing the sequencer) is intended to be used in very rare cases, especially when it is expected that the sequencer will not be operational again, so that users have a way of interacting with Arbitrum in a trustless way.</p>
 
 <p>When using this mechanism, if the sequencer is down for longer than the time window for force-including transactions from Ethereum, the moment it is online again, it can lead to a reorganization of blocks in Arbitrum (it would have received transactions timestamped before the force-included one).</p>
@@ -172,15 +165,7 @@ A week is expected to be more than enough time for validators to carry out an in
 <p></p>
 
 
-
-### Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits? {#why-do-arbitrum-chains-enforce-a-speed-limit-isnt-it-better-that-the-speed-grows-without-limits}
-<p>The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.</p>
-
-<p></p>
-
-
-
-### What is the difference between an L2 block and a RBlock? {#what-is-the-difference-between-an-l2-block-and-a-rblock}
+### What is the difference between an L2 block and a RBlock?
 <p>An L2 block is very similar to the concept of an L1 block. These blocks are generated by validator nodes of Arbitrum by executing the state transition function on sequenced transactions. The structure of an L2 block is similar to that of an Ethereum block, with a few differences that you can <a href="https://docs.arbitrum.io/for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods#blocks">see here</a>.</p>
 
 <p>On the other hand, an RBlock is a distinctive block that is transmitted back to L1 to serve as a fingerprint of the most recent state of the Arbitrum chain. It comprises an assertion of the present state root of the Arbitrum chain and other essential information pertaining to withdrawals and challenges. The structure of RBlocks can be viewed <a href="https://github.com/OffchainLabs/nitro/blob/2436da3fbf339ce72b02f761254aff5b86efafac/contracts/src/rollup/Node.sol#L7">here</a>.</p>
@@ -190,4 +175,8 @@ A week is expected to be more than enough time for validators to carry out an in
 <p></p>
 
 
+### Why do Arbitrum chains enforce a speed limit? Isn't it better that the speed grows without limits?
+<p>The transaction lifecycle sets a limit that we have to take into account: validators have to execute each transaction, get the status of the chain, and post an assertion to Ethereum every certain amount of time. If the speed of the chain increases too much, there is a risk that validators won't have enough computation power to process all transactions in a timely manner, and will fall behind on validating them, which would cause the chain to delay confirmations of its state.</p>
+
+<p></p>
 
