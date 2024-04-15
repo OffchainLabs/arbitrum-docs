@@ -843,6 +843,16 @@ const sidebars = {
                 },
                 {
                   type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/TechnicalDeepDive.pdf',
+                  label: 'Technical deep dive on BOLD',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/v0.0.2/docs/research-specs/Economics.pdf',
+                  label: 'Economics of disputes in Arbitrum BOLD',
+                },
+                {
+                  type: 'link',
                   href: 'https://github.com/OffchainLabs/bold',
                   label: 'BOLD specification on Github',
                 },
