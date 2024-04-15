@@ -178,7 +178,7 @@ You can find more info about `WETH` gateways in our ["other gateways flavors" do
 
 :::
 
-So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the ``WETH` Gateway` on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
+So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH` gateway on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
 
 #### 1. `createTokenBridgePrepareSetWethGatewayTransactionRequest`:
 This API helps you create the raw transaction which handles the `WETH` gateway on both parent and child chains. 
