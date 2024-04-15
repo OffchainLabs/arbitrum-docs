@@ -352,7 +352,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ'
+          label: 'FAQ',
         },
         {
           type: 'category',
@@ -392,6 +392,11 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/install-with-script',
               label: `Orbit Chain Configuration`,
             },
           ],
