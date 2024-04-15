@@ -205,7 +205,7 @@ After creating the raw transaction, you need to use Viem to sign it and broadcas
 
 #### 2. `createTokenBridgePrepareSetWethGatewayTransactionReceipt`
 
-After sending the transaction, you need to assess if the Retryable Tickets you just created have been successful.. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and the`waitForRetryables` method of it to check for the success status of retryable tickets. For the example in this doc we can use this API as follow:
+After sending the transaction, you need to assess if the Retryable Tickets you just created have been successful. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and the`waitForRetryables` method of it to check for the success status of retryable tickets. For the example in this doc we can use this API as follow:
 
 ```js
   const setWethGatewayTxReceipt =
