@@ -31,7 +31,7 @@ After the initial setup, the chain owner can modify configurations as needed. Fo
 
 ## 2. Node configuration
 
-As a chain owner, you can configure a node during the node config generation process with the `nodeConfig.json` file. `nodeConfig.json` allows you to set up a node as a validator or a sequencer and specify requirements or performance criteria. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
+As a chain deployer, you can configure a node during the node config generation process with the `nodeConfig.json` file. `nodeConfig.json` allows you to set up a node as a validator or a sequencer and specify requirements or performance criteria. For more information, refer to the [Node Configuration Preparation](orbit-sdk-preparing-node-config.md) documentation.
 
 ## 3. Child chain parameter configuration
 
