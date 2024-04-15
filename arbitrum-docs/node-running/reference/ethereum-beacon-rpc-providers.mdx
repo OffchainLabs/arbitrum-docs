@@ -13,13 +13,13 @@ This reference document provides an overview of Ethereum beacon chain RPC provid
 
 Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EIPS/eip-7569), Layer 2 blockchains like Arbitrum will be able to roll up and post batches of transaction data on Ethereum in the form of a new transaction format called a Blob. This Blob data will be part of the beacon chain and is fully downloadable by all consensus nodes. This means that data stored in blobs are inaccessible by the EVM, unlike Calldata.
 
-### What does this mean for validators?
+### What does this mean for node operators?
 
-Validators for Arbitrum chains posting data to L1 Ethereum (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains) will require access to blob data to produce and confirm L2 state assertions (read more about how this works on our [Deep dive: Inside Arbitrum"](../../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx) page).
+To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](../how-tos/running-a-full-node.mdx).
 
-Furthermore, new validators joining a network or validators who come online following an extended period of offline time will require access to historical blob data to sync up to the latest state of Arbitrum. Offchain Labs has plans to reduce a Nitro validator's reliance on historical blob data and will share updates on this effort in the future.
+Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to _historical_ blob data to sync up to the latest state of their Arbitrum chain.
 
-To run a validator for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), you will need access to blob data. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade.
+Offchain Labs has plans to reduce a Nitro validator's reliance on historical blob data and will share updates on this effort in the future.
 
 ### List of Ethereum beacon chain RPC providers
 
@@ -34,8 +34,6 @@ To run a validator for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, a
 | [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                 | ✅                    |
 | [NodeReal](https://nodereal.io/)                                            | ✅                 |                       |
 | [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                 | ✅                    |
-
-_Special note that Arbitrum Nitro node software is incompatible with Erigon's Consensus Layer client, [Caplin](https://erigon.tech/), due to a formatting mismatch for a specific response type (i.e. `SecondsPerSlot` is used in Caplin instead of `SECONDS_PER_SLOT`). Therefore, if any of the providers above use Caplin, errors will occur._
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 

@@ -32,7 +32,15 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for L1 Ethereum's [Dencun up
 - Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e. the whole chain opts-in with ArbOS 20 “Atlas”).
 - ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like L1 Ethereum, that support the blob transaction type. This includes Arbitrum One and Arbitrum Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that an L3 Orbit chain on top of an Arbitrum L2 will use calldata when posting L3 transaction data to the underlying L2. The L2 Arbitrum chain will then be able to post data to a L1 data availability layer like Ethereum using blobs.
 - There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e. no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for L2 users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
-- Arbitrum Nitro node software is incompatible with Erigon's Consensus Layer client, Caplin, due to a formatting mismatch for a specific response type (i.e. `SecondsPerSlot` is used in Caplin instead of `SECONDS_PER_SLOT`).
+
+### Block explorers
+
+Below is a non-comprehensive list of explorers that support querying and viewing blob data on Ethereum that get posted by Arbitrum L2 chains.
+
+- [Blockscout](https://www.blockscout.com/). For self-deployment, blobs are supported as of blockscout v6.2.0 and blockscout-frontend v1.2.6.
+- [Arbiscan](https://arbiscan.io/)
+- [Blobscan](https://blobscan.com/)
+- [Beaconcha.in](https://beaconcha.in/)
 
 ### Additional requirement for Arbitrum Orbit L2 chain operators: enabling blob batch posting
 
@@ -51,7 +59,7 @@ To enable the posting of transaction data in Blobs to L1 Ethereum, you must set 
 | `--node.batch-poster.post-4844-blobs`   | Boolean. Default: `false`. Used to enable or disable the posting of transaction data using Blobs to L1 Ethereum. If using calldata is more expensive and if the parent chain supports EIP4844 blobs, the batch poster will use blobs when this flag is set to `true`. Can be `true` or `false`. |
 | `--node.batch-poster.ignore-blob-price` | Boolean. Default: `false`. If the parent chain supports EIP4844 blobs and `ignore-blob-price` is set to `true`, the batch poster will use EIP4844 blobs even if using calldata is cheaper. Can be `true` or `false`.                                                                            |
 
-The above configurations are also available in the [Orbit command line options reference page](../../../launch-orbit-chain/reference/command-line-options.md) and can be set using the command line or using the JSON node configuration below:
+The above configurations are also available in the [Orbit command line options reference section](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) and can be set using the command line or using the JSON node configuration below:
 
 ```json
  "node": {
