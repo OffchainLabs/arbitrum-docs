@@ -22,7 +22,7 @@ There are three types of Orbit chains. Review the following table to determine w
 | **Custom gas token** | An AnyTrust Orbit chain with the ability to specify a custom `ERC-20` gas token.                                                                                                                                                                                                                                                          | Ideal for applications that require custom gas fee tokens and lower transaction fees. |
 
 
-import MultidimensionalContentControlsPartial from '../../../../partials/_multidimensional-content-controls-partial.md';
+import MultidimensionalContentControlsPartial from './_multidimensional-content-controls-deploy-orbit-chain-partial.md';
 
 <MultidimensionalContentControlsPartial />
 

@@ -34,6 +34,11 @@ These contracts are deployed on <a data-quicklook-from="parent-chain">`parent ch
 
 Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts). 
 
+
+import QuickstartIntroPartial from './partials/_quickstart-intro.md';
+
+<QuickstartIntroPartial />
+
 ### Rollup deployment parameters
 
 [`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
