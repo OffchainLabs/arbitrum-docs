@@ -46,6 +46,20 @@
 
 <div className='hidden-in-mergeprep-guide'>
 
+
+| Parameter  | Type  | Description  |
+|---|---|---|
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+|   |   |   |
+
+
 ### Best practices
 
 - **If you're staking ETH as a validator, try this guide on a testnet first**, *then* mainnet.

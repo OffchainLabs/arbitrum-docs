@@ -11,13 +11,13 @@ import TabItem from '@theme/TabItem';
 
 <div className='quickstart'>
 
-import QuickstartIntroPartial from '../../partials/_quickstart-intro.md';
+import QuickstartIntroPartial from './partials/_quickstart-intro.md';
 
 <QuickstartIntroPartial />
 
 ## Step 1: Review prerequisites and best practices
 
-import QuickstartPrereqsPartial from '../../partials/_quickstart-prereqs.md';
+import QuickstartPrereqsPartial from './partials/_quickstart-prereqs.md';
 
 <QuickstartPrereqsPartial />
 
@@ -25,7 +25,7 @@ import QuickstartPrereqsPartial from '../../partials/_quickstart-prereqs.md';
 
 <div className='hide-tabs'>
 
-import QuickstartInstallPrysmPartial from '../../partials/_quickstart-install-prysm.md';
+import QuickstartInstallPrysmPartial from './partials/_quickstart-install-prysm.md';
 
 <QuickstartInstallPrysmPartial />
 
@@ -36,7 +36,7 @@ In this step, you'll install an execution-layer client that Prysm's beacon node 
 
 ## Step 4: Run a beacon node using Prysm
 
-import QuickstartRunBeaconNodePartial from '../../partials/_quickstart-run-beacon-node.md';
+import QuickstartRunBeaconNodePartial from './partials/_quickstart-run-beacon-node.md';
 
 <QuickstartRunBeaconNodePartial />
 
@@ -44,7 +44,7 @@ import QuickstartRunBeaconNodePartial from '../../partials/_quickstart-run-beaco
 ## Step 5: Run a validator using Prysm
 
 
-import QuickstartRunValidatorPartial from '../../partials/_quickstart-run-validator.md';
+import QuickstartRunValidatorPartial from './partials/_quickstart-run-validator.md';
 
 <QuickstartRunValidatorPartial />
 

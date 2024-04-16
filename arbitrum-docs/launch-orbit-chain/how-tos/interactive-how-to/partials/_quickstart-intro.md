@@ -5,8 +5,7 @@ import TabItem from '@theme/TabItem';
 
 If you're looking for the simplest configuration, select `Geth` and `IPC`:
 
-import MultidimensionalContentControlsPartial from './_multidimensional-content-controls-partial.md';
-
+import MultidimensionalContentControlsPartial from '../../../../partials/_multidimensional-content-controls-partial.md';
 <MultidimensionalContentControlsPartial />
 
 ## Introduction
