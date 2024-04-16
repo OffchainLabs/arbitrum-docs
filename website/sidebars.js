@@ -399,6 +399,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/interactive-how-to/install-with-script',
               label: `Orbit Chain Configuration`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/interactive-how-to/orbit-sdk-deploying-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
           ],
         },
       ],
