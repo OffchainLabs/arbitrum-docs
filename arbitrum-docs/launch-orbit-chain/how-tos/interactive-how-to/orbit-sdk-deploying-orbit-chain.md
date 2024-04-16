@@ -24,54 +24,24 @@ See the ["create-rollup-eth" example](https://github.com/OffchainLabs/arbitrum-o
 
 :::
 
+<div className='quickstart'>
+
 import ChainSelectorPartial from './partials/_deploy-orbit-chain-select-chain.md';
 
 <ChainSelectorPartial />
+
+
+<div className='hide-tabs'>
+
+
+import ChainHelpers from './partials/_deploy-orbit-chain-helpers.md';
+
+<ChainHelpers />
 
 import ChainParameters from './partials/_deploy-orbit-chain-parameters.md';
 
 <ChainParameters />
 
-### Configuration and deployment helpers
-
-The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
-
-#### **createRollupPrepareConfig API**: 
-
-   This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use. 
-   
-   For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
-
-   ```js
-   import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
-
-   const config = createRollupPrepareConfig({
-       chainId: BigInt(chainId),
-       owner: deployer.address,
-       chainConfig,
-   });
-   ```
-
-#### createRollupPrepareTransactionRequest API: 
-
-   This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
-
-   For instance, to deploy using the Orbit SDK with a Config equal to `config`, a `batchPoster`, and a set of validators such as `[validator]`, the process would look like this:
-
-   ```js
-   import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
-
-   const request = await createRollupPrepareTransactionRequest({
-       params: {
-           config,
-           batchPoster,
-           validators: [validator],
-       },
-       account: deployer_address,
-       publicClient,
-   });
-   ```
-After creating the raw transaction, you need to sign and broadcast it to the network.
 
 ### Getting the Orbit chain information after deployment
 
@@ -88,3 +58,6 @@ const data = createRollupPrepareTransactionReceipt(txReceipt);
 ```
 
 In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can access your Orbit chain's information. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
+
+</div>
+</div>

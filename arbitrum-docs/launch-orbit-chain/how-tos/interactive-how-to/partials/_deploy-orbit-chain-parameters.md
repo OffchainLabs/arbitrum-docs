@@ -8,6 +8,8 @@ The following will walk you through the methods and properties that you will use
 
 #### 1. RollupDeploymentParams struct
 
+The `RollupDeploymentParams` Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
+
    ```solidity {2,4,6}
    struct RollupDeploymentParams {
        Config config;
@@ -19,9 +21,10 @@ The following will walk you through the methods and properties that you will use
        uint256 maxFeePerGasForRetryables;
    }
    ```
-This Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
 
 #### 2. Config struct
+
+The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
    ```solidity {2,4,5,9}
    struct Config {
@@ -39,9 +42,10 @@ This Solidity struct includes key settings like the chain configuration (`Config
    }
    ```
 
-The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
 #### 3. MaxTimeVariation struct
+
+This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
    ```solidity
    struct MaxTimeVariation {
@@ -51,7 +55,6 @@ The `Config` struct defines the chain's core settings, including block confirmat
        uint256 futureSeconds;
    }
    ```
-This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
 #### 4. chainConfig
 
@@ -97,37 +100,14 @@ Out of `chainConfig`'s parameters, a few are particularly important and are like
 
 All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values.
 
-For an easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
-
-Here are the parameters you can use with `prepareChainConfig`:
-
-| Parameter                   | Description                                                                                                                                     |
-| :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                   | Your Orbit chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                |
-| `DataAvailabilityCommittee` | Set to `false`, this boolean makes your chain as a Rollup, set to `true` configures it as an AnyTrust chain.                                    |
-| `InitialChainOwner`         | Identifies who owns and controls the chain.                                                                                                     |
-| `MaxCodeSize  `             | Sets the maximum size for contract bytecodes on the Orbit chain. e.g. Ethereum mainnet has a limit of 24,576 Bytes.                             |
-| `MaxInitCodeSize`           | Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. e.g. Ethereum mainnet limit is 49,152 Bytes. |
-
-
-Below is an example of how to use `prepareChainConfig` to set up a Rollup chain with a specific `chainId`, an `InitialChainOwner` (named as `deployer_address`):
-
-```js
-import { prepareChainConfig } from '@arbitrum/orbit-sdk';
-
-const chainConfig = prepareChainConfig({
-    chainId: Some_Chain_ID,
-    arbitrum: { InitialChainOwner: deployer_address, DataAvailabilityCommittee: false },
-});
-```
 
 ### Rollup configuration parameters
-
+   
 In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. 
 
 
 | Parameter             | Description                                                                                                                                                                                                                                                                                                           |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|:----------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `batchPoster`         | Sets the batch poster address of your Orbit chain. The batch poster account batches and compresses transactions on the Orbit chain and transmits them back to the parent chain.                                                                                                                                       |
 | `validators`          | Array of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting Rollup Blocks (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty RBlocks submitted by other validators.  |
 | `nativeToken`         | Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains.                                                                                                                                      |
