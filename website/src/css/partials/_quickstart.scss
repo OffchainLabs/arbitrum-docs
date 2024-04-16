@@ -1,0 +1,161 @@
+:root {
+  --prysm-pink: #c72a7d;
+  --tab-active-color: #3578e5;
+  --tab-active-color-hover: hsl(217, 58%, 36%);
+  --tab-gray: #ddd;
+  --prysm-pink-light: #da77ab;
+}
+html[data-theme="dark"] {
+  --prysm-pink: var(--prysm-pink-light);
+  --tab-gray: #aaa;
+}
+html[data-theme="dark"] .quickstart-tabs .tabs__item:first-child {
+  color: #eee;
+}
+html[data-theme="dark"] .quickstart-tabs .tabs__item:first-child:hover {
+  background-color: transparent !important;
+}
+html[data-theme="dark"] .troubleshooting-report-area > span {
+  color: #ddd !important;
+}
+.navbar__link--active {
+  color: var(--prysm-pink-light) !important;
+}
+.hidden,
+.hide-tabs,
+.quickstart .hidden-in-quickstart,
+.jwt-guide .hidden-in-jwt-guide,
+.mergeprep-guide .hidden-in-mergeprep-guide,
+.docker-guide .hidden-in-docker-guide,
+.status-guide .enbn-tabgroup,
+.status-guide .hidden-in-status-guide,
+.execution-node-guide .hidden-in-execution-guide,
+.bazel-guide .os-tabgroup,
+.bazel-guide .enbn-tabgroup,
+.bazel-guide .el-tabgroup,
+.port-guide .enbn-tabgroup,
+.port-guide .network-tabgroup,
+.port-guide .el-tabgroup {
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.port-guide .quickstart-tabs {
+  margin-bottom: 5px !important;
+}
+.port-guide .tabgroup-with-label::after {
+  display: none !important;
+}
+.quickstart-tabs,
+.quickstart-tabs .tabgroup-with-label,
+.quickstart-tabs .tabgroup-with-label .tabs__item {
+  font-size: 13px;
+  font-weight: 500;
+}
+.quickstart-tabs {
+  position: relative;
+  margin-bottom: 25px;
+}
+.quickstart-tabs .tabgroup-with-label {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  overflow: hidden;
+  position: static;
+  margin-bottom: 10px;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item {
+  border-top: 1px solid var(--tab-gray);
+  border-bottom: 1px solid var(--tab-gray);
+  padding: 10px 15px;
+  border-radius: 0px !important;
+  position: relative;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item:first-child {
+  cursor: default !important;
+  color: black;
+  width: 150px;
+  border: 1px solid transparent !important;
+  border-right: 0px !important;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item:first-child:hover {
+  background-color: transparent !important;
+  cursor: default !important;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item:nth-child(2) {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+  border-left: 1px solid var(--tab-gray);
+  border-right: 0px !important;
+  z-index: 2;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item:last-child {
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  border-right: 1px solid var(--tab-gray);
+  border-top: 1px solid var(--tab-gray);
+  border-bottom: 1px solid var(--tab-gray);
+  border-left: 0px;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item.tabs__item--active {
+  background-color: var(--tab-active-color) !important;
+  border-color: var(--tab-active-color) !important;
+  color: white !important;
+}
+.quickstart-tabs .tabgroup-with-label .tabs__item.disabled-tab {
+  color: #999 !important;
+}
+.quickstart-tabs .tabgroup-with-label:after {
+  padding: 10px 15px;
+  position: relative;
+  border-color: transparent !important;
+  transition: all 0.15s linear;
+  background: transparent;
+  color: transparent;
+  display: inline-block;
+  content: "Content updated!";
+}
+.quickstart-tabs .tabgroup-with-label.updated:after {
+  color: var(--tab-active-color);
+}
+.troubleshooting-report-area {
+  text-align: left;
+}
+.troubleshooting-report-area > p {
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 16px;
+}
+.troubleshooting-report-area > span {
+  display: block;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 13px;
+  color: #333;
+}
+.troubleshooting-report-area > textarea {
+  -ms-overflow-style: none;
+  /* for Internet Explorer, Edge */
+  scrollbar-width: none;
+  /* for Firefox */
+  overflow-x: scroll;
+  padding: 15px;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  background-color: #f6f6f6;
+  color: #444 !important;
+  text-align: left;
+  border-radius: 5px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  width: 100%;
+  min-width: 100%;
+  border: 1px solid #c2c2c2 !important;
+  white-space: pre;
+}
+.troubleshooting-report-area > textarea::-webkit-scrollbar {
+  display: none;
+  /* for Chrome, Safari, and Opera */
+}
