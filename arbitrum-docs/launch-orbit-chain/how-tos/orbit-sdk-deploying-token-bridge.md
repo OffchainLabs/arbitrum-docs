@@ -24,6 +24,10 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 :::
 
+### Prerequisites
+
+In this section, we will deploy the token bridges on both the parent and child chains, so before we introduce how to deploy, you need to run your sequencer node first. You can follow the step 1 to step 2 in [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) by using the node config file (You don't need `orbitSetupScriptConfig.json` file here) to start the related docker conatiners. You can check if your node is running by `docker-compose logs -f nitro`.
+
 ### Token Bridge Deployment Steps
 
 Following the [deployment](orbit-sdk-deploying-rollup-chain.md) and initialization of the Orbit chain, the subsequent phase involves deploying contracts on both the parent and child chains.
@@ -58,9 +62,10 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
-  const approvalTxRequest = await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
-    allowanceParams,
-  );
+  const approvalTxRequest =
+    await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
+      allowanceParams
+    );
 }
 ```
 
@@ -98,7 +103,7 @@ Following the dispatch of the deployment transaction, retrieving the transaction
 
 ```js
 const txReceipt = createTokenBridgePrepareTransactionReceipt(
-  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
+  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash })
 );
 ```
 
@@ -113,7 +118,7 @@ const orbitChainRetryableReceipts = await txReceipt.waitForRetryables({
 
 if (orbitChainRetryableReceipts[0].status !== 'success') {
   throw new Error(
-    `Retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`,
+    `Retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`
   );
 }
 
@@ -156,17 +161,18 @@ This API helps you create the raw transaction, which handles the WETH gateway on
 Here's an example of how to use this API:
 
 ```js
-const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-  rollup: rollupContractAddress,
-  parentChainPublicClient,
-  orbitChainPublicClient,
-  account: rollupOwnerAddress,
-  retryableGasOverrides: {
-    gasLimit: {
-      percentIncrease: 200n,
+const setWethGatewayTxRequest =
+  await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: rollupContractAddress,
+    parentChainPublicClient,
+    orbitChainPublicClient,
+    account: rollupOwnerAddress,
+    retryableGasOverrides: {
+      gasLimit: {
+        percentIncrease: 200n,
+      },
     },
-  },
-});
+  });
 ```
 
 In this example `rollupContractAddress` is the address of Orbit chain's rollup contract, `rollupOwnerAddress` is the address of rollup owner, **parentChainPublicClient** and **orbitChainPublicClient** are the parent and orbit chain public clients. Also this API has optional fields to override the Retryable ticket setups. In this example **percentIncrease** is the buffer to increase the gas limit for the retryable ticket to be sure about the success of the ticket.
