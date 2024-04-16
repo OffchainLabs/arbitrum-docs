@@ -1,7 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-import PublicPreviewBannerPartial from '../../../../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/_orbit-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
