@@ -293,7 +293,7 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
-            }
+            },
           ],
         },
         {
@@ -842,13 +842,13 @@ const sidebars = {
                   label: 'BOLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-economics-of-disputes',
                   label: 'Economics of disputes',
                 },
                 {
