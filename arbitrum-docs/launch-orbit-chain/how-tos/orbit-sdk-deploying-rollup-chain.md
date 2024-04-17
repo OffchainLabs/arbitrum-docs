@@ -37,9 +37,9 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 ### Rollup deployment parameters
 
 [`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
-`createRollup` takes a complex input named `deployParams`defining the characteristics of an Orbit Rollup chain 
+`createRollup` takes a complex input named `deployParams', which defines the characteristics of an Orbit Rollup chain. 
 
-The following will walk you through the methods and properties that you will use to configure your chain. 
+The following will walk you through the methods and properties you will use to configure your chain. 
 
 #### 1. RollupDeploymentParams struct
 
@@ -129,11 +129,11 @@ Here's a brief overview of `chainConfig`:
    }
    ```
 
-Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will go through these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. 
+Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will review these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. 
 
 All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values.
 
-For an easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+For easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 Here are the parameters you can use with `prepareChainConfig`:
 
@@ -234,4 +234,4 @@ import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
 const data = createRollupPrepareTransactionReceipt(txReceipt);
 ```
 
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can access your Orbit chain's information. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
+In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. You can access your Orbit chain's information by passing this receipt to the `createRollupPrepareTransactionReceipt` function. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
