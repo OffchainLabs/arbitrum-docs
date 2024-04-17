@@ -200,7 +200,7 @@ We believe strongly that interactive proving is the superior approach, for the f
 
 ### Interactive proving drives the design of Arbitrum
 
-Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why questions" about Arbitrum relate to interactive proving.
+Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why" questions about Arbitrum relate to interactive proving.
 
 ## Arbitrum Rollup Protocol
 
@@ -231,12 +231,12 @@ Each RBlock contains:
 - the RBlock number
 - the predecessor RBlock number: RBlock number of the last RBlock before this one that is (claimed to be) correct
 - the number of L2 blocks that have been created in the chain's history
-- the number of inbox messages have been consumed in the chain’s history
+- the number of inbox messages that have been consumed in the chain’s history
 - a hash of the outputs produced over the chain’s history.
 
 Except for the RBlock number, the contents of the RBlock are all just claims by the RBlock's proposer. Arbitrum doesn’t know at first whether any of these fields are correct. If all of these fields are correct, the protocol should eventually confirm the RBlock. If one or more of these fields are incorrect, the protocol should eventually reject the RBlock.
 
-An RBlock is implicitly claiming that its predecessor RBlock is correct. This implies, transitively, that an RBlock implicitly claims the correctness of a complete history of the chain: a sequence of ancestor RBlock that reaches all the way back to the birth of the chain.
+An RBlock is implicitly claiming that its predecessor RBlock is correct. This implies, transitively, that an RBlock implicitly claims the correctness of a complete history of the chain: a sequence of ancestor RBlocks that reaches all the way back to the birth of the chain.
 
 An RBlock is also implicitly claiming that its older siblings (older RBlocks with the same predecessor), if there are any, are incorrect. If two RBlocks are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 

@@ -73,27 +73,27 @@
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Estimate gas": {
     "message": "Estimate gas",
-    "description": "The label for the doc item Estimate gas in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/how-to-estimate-gas"
+    "description": "The label for the doc item Estimate gas in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/how-to-estimate-gas"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Use oracles": {
     "message": "Use oracles",
-    "description": "The label for the doc item Use oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/how-to-use-oracles"
+    "description": "The label for the doc item Use oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/oracles/how-to-use-oracles"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Arbitrum chains": {
     "message": "Arbitrum chains",
-    "description": "The label for the doc item Arbitrum chains in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/concepts/public-chains"
+    "description": "The label for the doc item Arbitrum chains in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/public-chains"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Cross-chain messaging": {
     "message": "Cross-chain messaging",
-    "description": "The label for the doc item Cross-chain messaging in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/cross-chain-messsaging"
+    "description": "The label for the doc item Cross-chain messaging in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/cross-chain-messaging"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Precompiles": {
     "message": "Precompiles",
-    "description": "The label for the doc item Precompiles in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/precompiles"
+    "description": "The label for the doc item Precompiles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/precompiles/reference"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Oracles": {
     "message": "Oracles",
-    "description": "The label for the doc item Oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/oracles"
+    "description": "The label for the doc item Oracles in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/oracles/reference"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
@@ -101,51 +101,51 @@
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Overview": {
     "message": "Overview",
-    "description": "The label for the doc item Overview in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview"
+    "description": "The label for the doc item Overview in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/get-started"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Standard gateway": {
     "message": "Standard gateway",
-    "description": "The label for the doc item Standard gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard"
+    "description": "The label for the doc item Standard gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Generic-custom gateway": {
     "message": "Generic-custom gateway",
-    "description": "The label for the doc item Generic-custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom"
+    "description": "The label for the doc item Generic-custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Custom gateway": {
     "message": "Custom gateway",
-    "description": "The label for the doc item Custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway"
+    "description": "The label for the doc item Custom gateway in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.RPC endpoints and providers": {
     "message": "RPC endpoints and providers",
-    "description": "The label for the doc item RPC endpoints and providers in sidebar buildDecentralizedAppsSidebar, linking to the doc node-running/node-providers"
+    "description": "The label for the doc item RPC endpoints and providers in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/node-providers"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Smart contract addresses": {
     "message": "Smart contract addresses",
-    "description": "The label for the doc item Smart contract addresses in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/useful-addresses"
+    "description": "The label for the doc item Smart contract addresses in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/useful-addresses"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Chain Params": {
     "message": "Chain Params",
-    "description": "The label for the doc item Chain Params in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/chain-params"
+    "description": "The label for the doc item Chain Params in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/chain-params"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Development frameworks": {
     "message": "Development frameworks",
-    "description": "The label for the doc item Development frameworks in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/development-frameworks"
+    "description": "The label for the doc item Development frameworks in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/development-frameworks"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Web3 libraries and tools": {
     "message": "Web3 libraries and tools",
-    "description": "The label for the doc item Web3 libraries and tools in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/web3-libraries-tools"
+    "description": "The label for the doc item Web3 libraries and tools in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/web3-libraries-tools"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Monitoring tools and block explorers": {
     "message": "Monitoring tools and block explorers",
-    "description": "The label for the doc item Monitoring tools and block explorers in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/monitoring-tools-block-explorers"
+    "description": "The label for the doc item Monitoring tools and block explorers in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/monitoring-tools-block-explorers"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Debugging tools": {
     "message": "Debugging tools",
-    "description": "The label for the doc item Debugging tools in sidebar buildDecentralizedAppsSidebar, linking to the doc for-devs/dev-tools-and-resources/debugging-tools"
+    "description": "The label for the doc item Debugging tools in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/debugging-tools"
   },
   "sidebar.buildDecentralizedAppsSidebar.doc.Mainnet risks": {
     "message": "Mainnet risks",
-    "description": "The label for the doc item Mainnet risks in sidebar buildDecentralizedAppsSidebar, linking to the doc mainnet-risks"
+    "description": "The label for the doc item Mainnet risks in sidebar buildDecentralizedAppsSidebar, linking to the doc build-decentralized-apps/reference/mainnet-risks"
   },
   "sidebar.bridgeTokensSidebar.category.Get started": {
     "message": "Get started",
