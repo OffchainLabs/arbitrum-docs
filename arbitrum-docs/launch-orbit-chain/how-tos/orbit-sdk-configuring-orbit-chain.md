@@ -35,7 +35,7 @@ As a chain deployer, you can configure a node during the node config generation 
 
 ## 3. Child chain parameter configuration
 
-The child chain configuration can be performed last, after the chain has been initialized and the token bridge deployed. Child chains' parameters are configurable via setter functions in the [`ArbOwner precompile`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol). Additionally, there are various getter functions in the `ArbOwner precompile` that you can use to read the current configuration. 
+The child chain configuration can be performed after the chain has been initialized and the token bridge has been deployed. Child chains' parameters are configurable via setter functions in the [`ArbOwner precompile`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/precompiles/ArbOwner.sol). Additionally, there are various getter functions in the `ArbOwner precompile` that you can use to read the current configuration. 
 
 Below, we explain several methods in the `ArbOwner precompile` that you can use to configure the parameters or read their current state.
 
@@ -51,7 +51,7 @@ You can use these setter functions to configure the child chain parameters:
 | `setSpeedLimit`        | The fee mechanism on the Arbitrum Nitro stack differs from the Ethereum blockchain. The Nitro stack has a parameter called the speed limit, which targets the number of gas consumed on the child chain per second. If the amount of gas per second exceeds this pre-specified amount, the base fee on the child chain will increase, and vice versa. The current speed limit on Arbitrum One is 7 million gas per second, meaning if the Arbitrum One chain consumes more than 7 million gas per second, its base fee will increase. For more information on the speed limit, please refer to this [document explaining the concept of speed limit in the Nitro stack](https://docs.arbitrum.io/inside-arbitrum-nitro/#the-speed-limit). |
 | `setInfraFeeAccount`   | Sets the infrastructure fee account address, which receives all fees collected on the child chain. It is meant to receive the minimum base fee, with any amount above that going to the network fee account.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `setNetworkFeeAccount` | Sets the network fee account address. As mentioned, this address collects all fees above the base fee. Note that if you set this amount to the 0 address on your chain, all fees will be deposited into the infrastructure fee account.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `scheduleArbOSUpgrade` | If you plan to upgrade the <a data-quicklook-from="arbos">ArbOS</a> version of your chain, this method can help you schedule the upgrade. For a complete guide on this matter, please refer to the explanation of the [arbos upgrade](arbos-upgrade.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `scheduleArbOSUpgrade` | If you plan to upgrade the <a data-quicklook-from="arbos">ArbOS</a> version of your chain, this method can help you schedule the upgrade. For a complete guide, please refer to the explanation for the [arbos upgrade](arbos-upgrade.md).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | `setChainConfig`       | We discussed the `chainConfig` in the [Rollup deployment guide](orbit-sdk-deploying-rollup-chain.md#chain-config-parameter) in detail. If you wish to change any field of the `chainConfig`, you need to use this method on the child chain.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 
 ### Getter functions
@@ -89,7 +89,7 @@ const result = await client.arbOwnerReadContract({
 });
 ```
 
-Changing the function names in the list in [the Getter functions section](#getter-functions) will give you the other parameters.
+The other parameters can be obtained by changing the function names in the [the Getter functions section](#getter-functions) list.
 
 #### 2. `arbOwnerPrepareTransactionRequest`
 
@@ -110,16 +110,16 @@ This method can be used to configure the parameters on the `ArbOwner` precompile
   });
 ```
 
-To use this method as shown in the example above, some inputs need to be defined:
+To use this method, as shown in the example above, some inputs need to be defined:
 
 | Parameter         | Description                                                                                                                                                           |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `functionName`    | The name of the method you want to use to set the parameter, which can be found in [the Setter functions section](#setter-functions).                                 |
 | `args`            | The arguments for the defined function.                                                                                                                               |
-| `upgradeExecutor` | Specifies whether an `upgradeExecutor` contract governs your chain. If it is not using an `upgradeExecutor`, you can set it to `false`, similar to the example above. |
+| `upgradeExecutor` | Specifies whether a `upgradeExecutor` contract governs your chain. If it is not using a `upgradeExecutor`, you can set it to `false`, similar to the example above. |
 | `account`         | Defines the chain owner if an `upgradeExecutor` does not govern the chain.                                                                                            |
 
-If an `upgradeExecutor` contract governs your chain, then you need to use the `arbOwnerPrepareTransactionRequest` method, similar to the example below:
+If a `upgradeExecutor` contract governs your chain, then you need to use the `arbOwnerPrepareTransactionRequest` method, similar to the example below:
 
 ```js
 // Adding a random address as chain owner using the upgrade executor
