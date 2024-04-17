@@ -1,6 +1,21 @@
 {
     "redirects": [
         {
+            "source": "/(bridge-tokens/concepts/usdc-concept/?)",
+            "destination": "/arbitrum-bridge/usdc-arbitrum-one",
+            "permanent": false
+        },
+        {
+            "source": "/(for-users/troubleshooting-users/?)",
+            "destination": "/arbitrum-bridge/troubleshooting",
+            "permanent": false
+        },
+        {
+            "source": "/(getting-started-users/?)",
+            "destination": "/arbitrum-bridge/quickstart",
+            "permanent": false
+        },
+        {
             "source": "/(mainnet-risks/?)",
             "destination": "/build-decentralized-apps/reference/mainnet-risks",
             "permanent": false
