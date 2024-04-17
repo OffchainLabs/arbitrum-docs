@@ -33,7 +33,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Bridge tokens',
     Svg: require('@site/static/img/bridge_token.svg').default,
-    href: '/getting-started-users',
+    href: '/arbitrum-bridge/quickstart',
     description:
       "Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using Arbitrum Bridge.",
   },
