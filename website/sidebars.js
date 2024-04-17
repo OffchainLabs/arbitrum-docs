@@ -671,19 +671,19 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'getting-started-users',
+          id: 'arbitrum-bridge/quickstart',
           label: 'Quickstart',
         },
         {
           type: 'doc',
-          id: 'for-users/troubleshooting-users',
-          label: 'Troubleshooting',
+          id: 'arbitrum-bridge/usdc-arbitrum-one',
+          label: 'USDC on Arbitrum One',
         },
         {
           type: 'doc',
-          id: 'bridge-tokens/concepts/usdc-concept',
-          label: 'USDC on Arbitrum One',
-        },
+          id: 'arbitrum-bridge/troubleshooting',
+          label: 'Troubleshooting',
+        }
       ],
     },
     {
