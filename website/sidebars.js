@@ -286,9 +286,14 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              label: `Configure delayed inbox finality`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
-            },
+            }
           ],
         },
         {
@@ -353,6 +358,11 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/infra-options-orbit-chains',
+          label: 'Third-party infrastructure providers',
         },
         {
           type: 'doc',
@@ -809,6 +819,47 @@ const sidebars = {
                   type: 'doc',
                   id: 'proving/wavm-modules',
                   label: 'WAVM modules',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'The BOLD dispute protocol',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'bold/bold-gentle-introduction',
+                  label: 'A gentle introduction',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+                  label: 'Deploy a validator on testnet',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
+                  label: 'BOLD Whitepaper',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  label: 'Technical deep dive',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  label: 'Economics of disputes',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold',
+                  label: 'Specification on Github',
+                },
+                {
+                  type: 'doc',
+                  id: 'bold/concepts/public-preview-expectations',
+                  label: 'Public preview',
                 },
               ],
             },
