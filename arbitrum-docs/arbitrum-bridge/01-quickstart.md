@@ -28,7 +28,7 @@ There are several ways to obtain the native currency:
 
 You'll also need to add the desired chain's RPC endpoint to your wallet. Here we provide an example for doing this using MetaMask, although the process should be similar for other wallets. You need to first click on the MetaMask extension on your browser, click the network selector dropdown on the top-left corner, and then click the `Add Network` button at the bottom. Click "Add a network manually" and then provide the information corresponding to the chain you want to send your assets to.
 
-![Add the desired destination network to your MetaMask wallet](assets/getting_started_users_1.png)
+![Add the desired destination network to your MetaMask wallet](images/getting_started_users_1.png)
 
 Here we display the information of the most common Arbitrum chains, but you can find a more exhaustive list in our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.md) page.
 
@@ -50,11 +50,11 @@ Note that testnets like Arbitrum Sepolia only appear if you are connected to the
 
 :::
 
-![Add the desired network to your web3 wallet](assets/getting_started_users_2.png)
+![Add the desired network to your web3 wallet](images/getting_started_users_2.png)
 
 Select the token you want to bridge in the token drop-down menu. You can also enable/disable the token lists by clicking `Manage token lists` button on the bottom right corner of the drop-down menu.
 
-![Select the token to bridge](assets/getting_started_users_3.png)
+![Select the token to bridge](images/getting_started_users_3.png)
 
 Enter the amount of ETH or ERC-20 tokens you want to bridge over in the **From** box and then press `Move funds`. Follow the prompts on your web3 wallet.
 
@@ -64,7 +64,7 @@ Please make sure you leave enough ETH on your wallet to pay for the transaction,
 
 :::
 
-![Enter the amount of tokens to bridge](assets/getting_started_users_4.png)
+![Enter the amount of tokens to bridge](images/getting_started_users_4.png)
 
 After you submit the transaction through your web3 wallet you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on the chain congestion).
 
@@ -74,7 +74,7 @@ Also make sure your wallet is set to the destination chain so you can see your f
 
 :::info There's at least a 7 day withdrawal period for Arbitrum One and Nova networks
 Once you withdraw your funds from Arbitrum One or Nova through the Arbitrum bridge, you will have to wait for at least 7 days to receive them on Ethereum mainnet.
-For more details, see [here](https://docs.arbitrum.io/for-users/troubleshooting-users#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-withdrawal-from-arbitrum-chains-one-and-nova).
+For more details, see [Arbitrum Bridge: Troubleshooting](/arbitrum-bridge/03-troubleshooting.md#how-long-does-it-take-before-i-receive-my-funds-when-i-initiate-withdrawal-from-arbitrum-chains-one-and-nova).
 
 :::
 
@@ -86,7 +86,7 @@ Note that testnets like Ethereum Sepolia only appear if you are connected to the
 
 :::
 
-![Select the token to withdraw](assets/getting_started_users_5.png)
+![Select the token to withdraw](images/getting_started_users_5.png)
 
 Select the token you want to bridge in the token drop-down menu. You can also enable/disable the token lists by clicking `Manage token lists` button on the bottom right corner of the drop-down menu. Enter the amount of ETH or ERC-20 tokens you want to bridge over in the **from** box and then press `Move funds`. Follow the prompts on your web3 wallet.
 
@@ -96,13 +96,13 @@ Please make sure you leave enough ETH on your wallet to pay for the transaction,
 
 :::
 
-![Enter the amount of token to withdraw](assets/getting_started_users_6.png)
+![Enter the amount of token to withdraw](images/getting_started_users_6.png)
 
 A countdown will pop up stating that you’ll get your funds in 7-8 days.
 
 You can check the status of your withdrawal by clicking on your profile on the top right and opening the `Transactions` tab, and claim it there when it’s ready.
 
-![See the transaction history](assets/getting_started_users_7.png)
+![See the transaction history](images/getting_started_users_7.png)
 
 Once the countdown is done, switch to the destination network on your wallet and press the `Claim` button, that has now turned blue, to receive your funds!
 
