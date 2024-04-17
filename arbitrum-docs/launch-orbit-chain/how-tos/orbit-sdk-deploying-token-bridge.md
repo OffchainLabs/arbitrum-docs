@@ -30,11 +30,11 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
 
-1. **[Token approval](#step-1)**
-2. **[Token bridge contract deployment](#step-2)**
-3. **[Transaction recipient and checking for deployment on child chain](#step-3)**
-4. **[Deployment information and contract addresses](#step-4)**
-5. **[Setting up the WETH gateway](#step-5)**
+1. **[Token approval](#1-token-approval)**
+2. **[Token bridge contract deployment](#2-token-bridge-contract-deployment )**
+3. **[Transaction recipient and checking for deployment on child chain](#3-transaction-recipient-and-checking-for-deployment-on-child-chain)**
+4. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
+5. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
 
 :::info
 
@@ -44,7 +44,7 @@ The token bridge deployment process is the same for all Orbit chains types excep
 
 :::
 
-### 1. Token approval {#step-1}
+### 1. Token approval
 
 :::note
 
@@ -83,7 +83,7 @@ If the allowance is insufficient, `createTokenBridgePrepareCustomFeeTokenApprova
 
 Please note that after generating the raw transaction, the deployer must still sign and broadcast it to the network to finalize the approval process.
 
-### 2. Token bridge contract deployment{#step-2}
+### 2. Token bridge contract deployment
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain. 
 
@@ -118,7 +118,7 @@ For more insights into these variables and their usage, consider exploring this 
 
 Following the creation of the raw transaction, the next steps involve signing it and broadcasting it to the relevant blockchain network to complete the deployment process.
 
-### 3. Transaction recipient and checking for deployment on child chain{#step-3}
+### 3. Transaction recipient and checking for deployment on child chain
 
 After sending the deployment transaction, you will need to retrieve the transaction receipt and verify the successful deployment of the contracts on both the parent and child chains.
 
@@ -154,7 +154,7 @@ console.log(`Retryable executed successfully`);
 
 In this example, the `waitForRetryables` method is invoked on the `txReceipt` to monitor the execution of Retryable Tickets and verify their status. A `success` status indicates that the Retryable Tickets have been executed successfully, ensuring the contracts' deployment. It's important to note that this process involves two Retryable Tickets. You can check out a [more comprehensive walkthrough](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1e39d21eef57d204bfa609c4c29284528ddf05ac/examples/create-token-bridge-eth/index.ts#L78-L104) of the example. This enhanced approach not only simplifies the retrieval of transaction receipts but also provides a reliable method for verifying contract deployment across chains.
 
-### 4. Deployment information and contract addresses{#step-4}
+### 4. Deployment information and contract addresses
 
 Once you have completed the deployment and are assured that the Retryable Tickets are successful, you can use `getTokenBridgeContracts` to retrieve the deployment information and all the token bridge contracts' addresses.
 
@@ -166,7 +166,7 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 });
 ```
 
-### 5. Setting up the WETH gateway (ETH-based Orbit chains only){#step-5}
+### 5. Setting up the WETH gateway
 
 The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway. 
 
