@@ -100,7 +100,8 @@ If you're running into unexpected outputs or errors, the following checklist may
               </TabItem>
               <TabItem value="localhost">
                 <p>
-                  The <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a>{' '}
+                  The{' '}
+                  <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
