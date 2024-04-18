@@ -293,7 +293,7 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
-            }
+            },
           ],
         },
         {
@@ -512,17 +512,17 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'node-running/gentle-introduction-run-node',
+          id: 'run-arbitrum-node/overview',
           label: 'Overview',
         },
         {
           type: 'doc',
-          id: 'node-running/quickstart-running-a-node',
+          id: 'run-arbitrum-node/quickstart',
           label: 'Quickstart',
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/running-a-full-node',
+          id: 'run-arbitrum-node/run-full-node',
           label: 'Run a full node',
         },
         {
@@ -683,7 +683,7 @@ const sidebars = {
           type: 'doc',
           id: 'arbitrum-bridge/troubleshooting',
           label: 'Troubleshooting',
-        }
+        },
       ],
     },
     {
