@@ -838,7 +838,7 @@ const sidebars = {
                 },
                 {
                   type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/BOLDChallengeProtocol.pdf',
+                  href: 'https://arxiv.org/abs/2404.10491',
                   label: 'BOLD Whitepaper',
                 },
                 {
