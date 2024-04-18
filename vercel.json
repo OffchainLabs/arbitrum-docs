@@ -1,6 +1,11 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/how-tos/running-a-full-node/?)",
+            "destination": "/run-arbitrum-node/run-full-node",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/quickstart-running-a-node/?)",
             "destination": "/run-arbitrum-node/quickstart",
             "permanent": false
