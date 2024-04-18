@@ -29,7 +29,6 @@ Chain explorers let you view transactions, blocks, addresses, and network activi
 
 Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block includes a given transaction.
 
-
 ## Bridges
 
 You can easily launch an Orbit chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Orbit chain settles transactions.

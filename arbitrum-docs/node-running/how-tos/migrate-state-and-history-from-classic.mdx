@@ -1,9 +1,9 @@
 ---
-title: "How to migrate state and history from a classic (pre-Nitro) node to a Nitro node"
+title: 'How to migrate state and history from a classic (pre-Nitro) node to a Nitro node'
 description: This how-to provides step-by-step instructions for migrating the state and history from a classic (pre-Nitro) node to a Nitro node
 author: jose-franco
 sme: jose-franco
-target_audience: "Node runners interested in creating the full state of the Arbitrum One chain on their own (i.e., without an initial database)"
+target_audience: 'Node runners interested in creating the full state of the Arbitrum One chain on their own (i.e., without an initial database)'
 content_type: how-to
 sidebar_position: 11
 ---

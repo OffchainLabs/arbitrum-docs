@@ -74,10 +74,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem className="unclickable-element" value="label"></TabItem>
               <TabItem value="arb-one-nitro">
                 <p>
-                  The{' '}
-                  <a href="/run-arbitrum-node/run-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
@@ -91,19 +88,13 @@ If you're running into unexpected outputs or errors, the following checklist may
               </TabItem>
               <TabItem value="arb-nova">
                 <p>
-                  The{' '}
-                  <a href="/run-arbitrum-node/run-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="arb-sepolia">
                 <p>
-                  The{' '}
-                  <a href="/run-arbitrum-node/run-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
