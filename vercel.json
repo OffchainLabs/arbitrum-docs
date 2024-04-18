@@ -1,6 +1,16 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/quickstart-running-a-node/?)",
+            "destination": "/run-arbitrum-node/quickstart",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/gentle-introduction-run-node/?)",
+            "destination": "/run-arbitrum-node/overview",
+            "permanent": false
+        },
+        {
             "source": "/(bridge-tokens/concepts/usdc-concept/?)",
             "destination": "/arbitrum-bridge/usdc-arbitrum-one",
             "permanent": false
@@ -277,22 +287,22 @@
         },
         {
             "source": "/docs/running_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_goerli_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_rinkeby_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
@@ -317,7 +327,7 @@
         },
         {
             "source": "/docs/installation",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
@@ -577,7 +587,7 @@
         },
         {
             "source": "/node-running/running-a-node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {

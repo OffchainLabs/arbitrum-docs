@@ -1,9 +1,9 @@
 ---
-title: 'L1 Ethereum beacon chain RPC providers'
+title: "L1 Ethereum beacon chain RPC providers"
 author: dlee
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../../partials/_public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
@@ -15,7 +15,7 @@ Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EI
 
 ### What does this mean for node operators?
 
-To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](../how-tos/running-a-full-node.mdx).
+To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](/run-arbitrum-node/03-run-full-node.md).
 
 Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to _historical_ blob data to sync up to the latest state of their Arbitrum chain.
 

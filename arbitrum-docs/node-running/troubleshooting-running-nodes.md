@@ -75,7 +75,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem value="arb-one-nitro">
                 <p>
                   The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
+                  <a href="/run-arbitrum-node/run-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
@@ -92,7 +92,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem value="arb-nova">
                 <p>
                   The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
+                  <a href="/run-arbitrum-node/run-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
@@ -101,7 +101,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem value="arb-sepolia">
                 <p>
                   The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
+                  <a href="/run-arbitrum-node/run-full-node">
                     How to run a full node (Nitro)
                   </a>{' '}
                   may address your issue.
