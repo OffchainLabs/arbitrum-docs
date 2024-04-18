@@ -53,7 +53,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 - L1 RPC URL
   - Use the parameter `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` for execution layer.
-  - If the chain is running [ArbOS 20](/node-running/reference/arbos-software-releases/arbos20.mdx), additionally use the parameter `--parent-chain.blob-client.beacon-url=<Layer 1 Ethereum Beacon RPC URL>` for consensus layer. You can find a list of beacon chain RPC providers [here](/node-running/reference/ethereum-beacon-rpc-providers.mdx).
+  - If the chain is running [ArbOS 20](/node-running/reference/arbos-software-releases/arbos20.mdx), additionally use the parameter `--parent-chain.blob-client.beacon-url=<Layer 1 Ethereum Beacon RPC URL>` for consensus layer. You can find a list of beacon chain RPC providers [here](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.md).
     - It must provide a standard layer 1 node RPC endpoint that you run yourself or from a node provider.
     - Note: historical blob data is required for chains running [ArbOS 20](/node-running/reference/arbos-software-releases/arbos20.mdx) to properly sync up if they are new or have been offline for more than 18 days. This means that the consensus layer RPC endpoint you use may need to also provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/node-running/reference/arbos-software-releases/arbos20.mdx#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
   - Note: this parameter was called `--l1.url` in versions prior to `v2.1.0`

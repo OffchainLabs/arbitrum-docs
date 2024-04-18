@@ -527,10 +527,10 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/local-dev-node',
+          id: 'run-arbitrum-node/run-local-dev-node',
           label: 'Run a local dev node',
         },
-        {
+        { 
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
@@ -539,7 +539,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'node-running/reference/ethereum-beacon-rpc-providers',
+          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
         },
         {
