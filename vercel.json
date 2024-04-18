@@ -1,6 +1,21 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos20",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/arbos-software-releases/arbos11/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos11",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/arbos-software-releases/overview/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/overview",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/reference/ethereum-beacon-rpc-providers/?)",
             "destination": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
             "permanent": false
@@ -192,7 +207,7 @@
         },
         {
             "source": "/(node-running/reference/software-releases/?)",
-            "destination": "/node-running/reference/arbos-software-releases/overview",
+            "destination": "/run-arbitrum-node/arbos-releases/overview",
             "permanent": false
         },
         {

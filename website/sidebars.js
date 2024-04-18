@@ -304,11 +304,9 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases</a>',
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/arbos-releases/overview">ArbOS software releases</a>',
               // q: why use an anchor html tag here?
-              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-              //    if we use a fully qualified link, localhost won't work
+              // a: see note at end of file
             },
             {
               type: 'doc',
@@ -544,22 +542,22 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Customize your chain',
+          label: 'ArbOS software releases',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/overview',
+              id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
             },
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos20',
+              id: 'run-arbitrum-node/arbos-releases/arbos20',
               label: 'ArbOS 20 Atlas',
             },
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos11',
+              id: 'run-arbitrum-node/arbos-releases/arbos11',
               label: 'ArbOS 11',
             },
           ],
