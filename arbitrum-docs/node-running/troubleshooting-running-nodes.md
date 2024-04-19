@@ -74,10 +74,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem className="unclickable-element" value="label"></TabItem>
               <TabItem value="arb-one-nitro">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
@@ -91,25 +88,20 @@ If you're running into unexpected outputs or errors, the following checklist may
               </TabItem>
               <TabItem value="arb-nova">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="arb-sepolia">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="localhost">
                 <p>
-                  The <a href="/node-running/how-tos/local-dev-node">How to run a local dev node</a>{' '}
+                  The{' '}
+                  <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
