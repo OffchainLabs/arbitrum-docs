@@ -6,7 +6,7 @@ The Arbitrum Orbit SDK lets you programmatically create and manage your own Orbi
 - Configuration and deployment of your Orbit chain's core contracts
 - Initialization of your chain and management of its configuration post-deployment
 
-## 1. Select a chain type
+## Select a chain type
 
 There are three types of Orbit chains. Review the following table to determine which type best fits your needs:
 
