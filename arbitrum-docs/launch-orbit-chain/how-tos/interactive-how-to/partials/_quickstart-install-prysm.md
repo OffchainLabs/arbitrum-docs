@@ -34,7 +34,6 @@ curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.sh --out
   </TabItem>
 </Tabs>
 
-
 <Tabs groupId="protocol" defaultValue="jwt" values={[
         {label: 'JWT', value: 'jwt'},
         {label: 'IPC', value: 'ipc'}
@@ -43,9 +42,5 @@ curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.sh --out
 
 <h3>Generate JWT Secret</h3>
 
-
-    
   </TabItem>
 </Tabs>
-
-

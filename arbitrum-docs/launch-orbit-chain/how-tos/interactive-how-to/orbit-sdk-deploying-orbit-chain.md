@@ -30,9 +30,7 @@ import ChainSelectorPartial from './partials/_deploy-orbit-chain-select-chain.md
 
 <ChainSelectorPartial />
 
-
 <div className='hide-tabs'>
-
 
 import ChainHelpers from './partials/_deploy-orbit-chain-helpers.md';
 
@@ -42,10 +40,9 @@ import ChainParameters from './partials/_deploy-orbit-chain-parameters.md';
 
 <ChainParameters />
 
-
 ### Getting the Orbit chain information after deployment
 
-Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment, which you can do with the `createRollupPrepareTransactionReceipt` API. 
+Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment, which you can do with the `createRollupPrepareTransactionReceipt` API.
 
 After sending the signed transaction and receiving the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other information.
 
@@ -57,7 +54,7 @@ import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
 const data = createRollupPrepareTransactionReceipt(txReceipt);
 ```
 
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can access your Orbit chain's information. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
+In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can access your Orbit chain's information. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference.
 
 </div>
 </div>
