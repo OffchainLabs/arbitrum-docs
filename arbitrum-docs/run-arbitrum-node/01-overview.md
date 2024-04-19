@@ -11,8 +11,8 @@ In order to be able to _interact with_ or _build applications on_ any of the Arb
 
 Here, you can find resources that help you run different types of Arbitrum nodes:
 
-- Step-by-step instructions for running different Arbitrum nodes, including [full Nitro node](./how-tos/running-a-full-node.mdx), [full Classic node](./how-tos/running-a-classic-node.mdx), [local dev node](./how-tos/local-dev-node.mdx), [feed relay](./how-tos/running-a-feed-relay.mdx), and [validator](./how-tos/running-a-validator.mdx)
-- Step-by-step instructions for how to [read the sequencer feed](./how-tos/read-sequencer-feed.md), [build the Nitro locally](./how-tos/build-nitro-locally.md) and [run the sequencer coordinator manager UI tool](./how-tos/running-a-sequencer-coordinator-manager.mdx)
+- Step-by-step instructions for running different Arbitrum nodes, including [full Nitro node](/run-arbitrum-node/03-run-full-node.md), [full Classic node](/node-running/how-tos/running-a-classic-node.mdx), [local dev node](/run-arbitrum-node/04-run-local-dev-node.md), [feed relay](/node-running/how-tos/running-a-feed-relay.mdx), and [validator](/node-running/how-tos/running-a-validator.mdx)
+- Step-by-step instructions for how to [read the sequencer feed](/node-running/how-tos/read-sequencer-feed.md), [build the Nitro locally](/node-running/how-tos/build-nitro-locally.md) and [run the sequencer coordinator manager UI tool](/node-running/how-tos/running-a-sequencer-coordinator-manager.mdx)
 - Step-by-step instructions for [how to configure a Data Availability Committee](/node-running/how-tos/data-availability-committee/introduction.mdx)
-- [Troubleshooting page](./troubleshooting-running-nodes.md)
-- [Frequently asked questions](./faq.md)
+- [Troubleshooting page](/node-running/troubleshooting-running-nodes.md)
+- [Frequently asked questions](/node-running/faq.md)

@@ -181,11 +181,11 @@
   },
   "sidebar.runNodesSidebar.doc.A gentle introduction": {
     "message": "A gentle introduction",
-    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc node-running/gentle-introduction-run-node"
+    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/overview"
   },
   "sidebar.runNodesSidebar.doc.Quickstart": {
     "message": "Quickstart",
-    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc node-running/quickstart-running-a-node"
+    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/quickstart"
   },
   "sidebar.runNodesSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",

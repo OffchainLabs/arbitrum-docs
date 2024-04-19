@@ -28,7 +28,6 @@ Custom gas token orbit chains let participants pay transaction fees in `ERC-20` 
 
 Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orbit chain but with additional steps. To take advantage of all the chains configurations supported by Orbit, we recommend reading our short guides about [Rollup](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust](orbit-sdk-deploying-anytrust-chain.md) configuration.
 
-
 :::note
 
 - Custom gas tokens are **not supported yet** on Rollup Orbit chains, only on Orbit AnyTrust chains.
@@ -36,13 +35,13 @@ Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orb
 
 :::
 
-## 1. Custom gas token specification 
+## 1. Custom gas token specification
 
-The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as gas. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain. 
+The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as gas. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
 
 ## 2. Chain configuration
 
-You can configure your Orbit chain using the  [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
+You can configure your Orbit chain using the [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
 
 Example:
 
@@ -64,15 +63,14 @@ To use the `prepareChainConfig` method as shown in the example above, some input
 | `nativeToken`               | `Address` | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
 | `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
 
-
 ## 3. Token approval before deployment process
 
 In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `rollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
 
 #### A. createRollupEnoughCustomFeeTokenAllowance
-   
+
 This API gets related inputs and checks if the `rollupCreator` contract has enough token `Allowance` from the owner:
-   
+
 ```js
 import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
 
@@ -94,7 +92,7 @@ To build the `allowanceParams` object as shown in the example above, you need to
 | `publicClient` | `PublicClient` | The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html). |
 
 #### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
-   
+
 This API gets related inputs and creates the transaction request to secure enough allowance from the owner to the `RollupCreator` to spend `nativeToken` on the deployment process.
 
 Example:
