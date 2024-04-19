@@ -1,6 +1,21 @@
 {
     "redirects": [
         {
+            "source": "/node-running/how-tos/running-a-classic-node",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
+            "permanent": false
+        },
+        {
+            "source": "/node-running/how-tos/running-a-validator",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-an-archive-node/?)",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
             "destination": "/run-arbitrum-node/arbos-releases/arbos20",
             "permanent": false
@@ -582,12 +597,12 @@
         },
         {
             "source": "/node-running/running-a-classic-node",
-            "destination": "/node-running/how-tos/running-a-classic-node",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
             "permanent": false
         },
         {
             "source": "/node-running/running-an-archive-node",
-            "destination": "/node-running/how-tos/running-an-archive-node",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
             "permanent": false
         },
         {
@@ -602,7 +617,7 @@
         },
         {
             "source": "/node-running/running-a-validator",
-            "destination": "/node-running/how-tos/running-a-validator",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
             "permanent": false
         },
         {

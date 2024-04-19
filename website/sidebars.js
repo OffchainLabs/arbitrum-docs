@@ -569,17 +569,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
+              id: 'run-arbitrum-node/more-types/run-archive-node',
               label: 'Run an archive node',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
+              id: 'run-arbitrum-node/more-types/run-validator-node',
               label: 'Run a validator',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
+              id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
           ],
