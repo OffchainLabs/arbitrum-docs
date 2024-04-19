@@ -130,11 +130,11 @@ Collections like [`StorageVec`][StorageVec] and [`StorageMap`][StorageMap] are d
 
 ```rust
 impl SubStruct {
-    pub fn add_delegate(&mut self, delegate: Delegate) -> Result<(), Vec<u8>> {
+   pub fn add_delegate(&mut self, delegate: Address) {
         self.delegates.push(delegate);
     }
 
-    pub fn track_balance(&mut self, address: Address) -> Result<U256, Vec<u8>> {
+    pub fn track_balance(&mut self, address: Address) {
         self.balances.insert(address, address.balance());
     }
 }
