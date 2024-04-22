@@ -12,14 +12,19 @@ import TabItem from '@theme/TabItem';
 
 import InfoRollupChainPartial from './_info-rollup-chain-partial.md';
 
+import InfoAnytrustChainPartial from './_info-anytrust-chain-partial.md';
+
+import InfoCustomTokenChainPartial from './_info-custom-token-chain-partial.md';
+
 <Tabs>
-  <TabItem value="rollup-chain">
+  <TabItem value="rollup-chain" label="Rollup chain">
     <InfoRollupChainPartial/>
   </TabItem>
-  <TabItem value="anytrust-chain">
-  
-  this is a larch.
+  <TabItem value="anytrust-chain" label="AnyTrust chain">
+    <InfoAnytrustChainPartial/>
   </TabItem>
-  <TabItem value="custom-token-chain"></TabItem>
+  <TabItem value="custom-token-chain" label="Custom token chain">
+    <InfoCustomTokenChainPartial/>
+</TabItem>
 </Tabs>
 
