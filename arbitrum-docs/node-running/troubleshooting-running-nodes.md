@@ -217,7 +217,7 @@ Common troubleshooting scenarios and solutions are detailed below.
     </tr>
     <tr>
       <td>
-        You see <code>failed to get blobs: expected at least 6 blobs for slot 8702476 but only got 0</code>
+        You see <code>failed to get blobs: expected at least 6 blobs for slot {slot_number} but only got 0</code>
       </td>
       <td>
         This often happens when you connect to a beacon chain endpoint while the blob you are querying is expired, you need to connect to a beacon endpoint which supports historical blob data. (list [here](/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers))
