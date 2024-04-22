@@ -8,10 +8,9 @@ author: leeederek
 target_audience: 'Developers, users and researchers interested in the Arbitrum product suite.'
 sme: leeederek
 sidebar_position: 1
-
 ---
 
-*The following document explains the economics and denial-of-service mechanisms built into Arbitrum BoLD. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way.*
+_The following document explains the economics and denial-of-service mechanisms built into Arbitrum BoLD. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way._
 
 ## Background
 
@@ -19,7 +18,7 @@ sidebar_position: 1
 
 However, Arbitrum has not yet achieved its full promise of decentralization. Currently, withdrawals from Arbitrum One back to Ethereum are verified by a permissioned list of validators. These validators can still challenge invalid withdrawals, but the system prevents anyone outside this list from holding them accountable. This limits Arbitrum One to being categorized as a Stage 1 rollup, according to the [L2Beat website](https://l2beat.com/scaling/summary), meaning it still has training wheels preventing it from reaching its full potential.
 
-The reason why Arbitrum One is called “optimistic” is because claims about its state settle to Ethereum after a period of ~7 days, in which they can be disputed. To make an analogy, a check can be cashed right away, but can be taken to court to dispute if there is a problem within a certain time frame. Because Arbitrum’s state is deterministic, a validator that is running a node and following the chain will always know if a posted claim is invalid. A key decentralization property is allowing **anyone** that knows the correct claim to challenge invalid claims and ***win***. This preserves the correct history of Arbitrum settling to Ethereum and protects the integrity of users’ funds along with their withdrawals using a “single honest party” property. As long as there is a single entity following the chain and willing to dispute a claim, Arbitrum’s security guarantees are maintained.
+The reason why Arbitrum One is called “optimistic” is because claims about its state settle to Ethereum after a period of ~7 days, in which they can be disputed. To make an analogy, a check can be cashed right away, but can be taken to court to dispute if there is a problem within a certain time frame. Because Arbitrum’s state is deterministic, a validator that is running a node and following the chain will always know if a posted claim is invalid. A key decentralization property is allowing **anyone** that knows the correct claim to challenge invalid claims and **_win_**. This preserves the correct history of Arbitrum settling to Ethereum and protects the integrity of users’ funds along with their withdrawals using a “single honest party” property. As long as there is a single entity following the chain and willing to dispute a claim, Arbitrum’s security guarantees are maintained.
 
 Today, the security properties of Arbitrum One are defined by the size of the permissioned set of validators it has. Validators could collude, could settle an incorrect history, and users have no recourse aside from the Arbitrum One security council stepping in. To elevate Arbitrum One’s decentralization, it needs a different approach.
 
@@ -100,7 +99,7 @@ When thinking about how to price the bonds required to make claims within disput
 
 In BOLD, the space of disagreements between parties is of max size 2^43. As such, the dispute game has to be played at different levels of granularity to make it computationally feasible.
 
-For instance, say we have two, 1 meter sticks that seem identical, and we want to figure out where they differ. It turns out that they seem identical at the centimeter level, so we need to go down to the millimeter level, then the micrometer level, and then figure out where they differ at the *nanometer* level.
+For instance, say we have two, 1 meter sticks that seem identical, and we want to figure out where they differ. It turns out that they seem identical at the centimeter level, so we need to go down to the millimeter level, then the micrometer level, and then figure out where they differ at the _nanometer_ level.
 
 This is what BOLD does over the space of disputes. Parties play the same game at different levels of granularity. At the centimeter level, each centimeter could trigger a millimeter dispute, and each millimeter dispute could have many micrometer disputes, etc. This fans out to a large number of potential dispute games unless spam is discouraged.
 
@@ -128,7 +127,7 @@ If we desire a constant resource ratio of evil to honest costs > 1, the required
 
 Having a 1000x resource ratio would be nice in theory, but would unfortunately require a bond of 1M ETH ($3.5bn) to open a challenge in the first place, which is unreasonable. Instead, we can explore a more feasible ratio of 10x.
 
-The tradeoff here is the higher the resource ratio we want, the more expensive it is for both honest and evil parties to make claims in disputes. However, claims can **always be made** through a **trustless pool**. Honest parties can pool together funds to participate in disputes. 
+The tradeoff here is the higher the resource ratio we want, the more expensive it is for both honest and evil parties to make claims in disputes. However, claims can **always be made** through a **trustless pool**. Honest parties can pool together funds to participate in disputes.
 
 #### The Sweet Spot
 
@@ -136,7 +135,7 @@ We estimate that at a resource ratio of 10x, the cost of resolving a single adve
 
 ## Thinking About Incentives
 
-Although we have made claims with hard numbers about how to price disputes and withdrawal delays in Arbitrum BOLD, we also take a step back and think about the game theoretical assumptions we are making. Arbitrum One is a complex protocol used by many groups of people, with many different incentives.  The research team at Offchain Labs, has spent considerable effort studying the game theory of validators in Optimistic Rollup. Honest parties represent everyone that has funds onchain, and they have a huge amount to gain by winning the challenge - as they can prevent the loss of their assets rather than losing them.
+Although we have made claims with hard numbers about how to price disputes and withdrawal delays in Arbitrum BOLD, we also take a step back and think about the game theoretical assumptions we are making. Arbitrum One is a complex protocol used by many groups of people, with many different incentives. The research team at Offchain Labs, has spent considerable effort studying the game theory of validators in Optimistic Rollup. Honest parties represent everyone that has funds onchain, and they have a huge amount to gain by winning the challenge - as they can prevent the loss of their assets rather than losing them.
 
 A more complex model is proposed which considers all parties staking and their associated costs created by [Akaki Mamageishvili](mailto:amamageishvili@offchainlabs.com)and Ed Felten in their paper [“Incentive Schemes for Rollup Validators”](https://arxiv.org/abs/2308.02880). The paper looks at what incentives are needed to get parties to check whether assertions are correct. It finds that there is no pure strategy Nash equilibrium, and only a mixed equilibrium if there is no incentive for honest validators. However, the research showed a pure strategy equilibrium can be reached if honest parties are incentivized to **check** results. The problem of honest validators “freeriding” and not checking is well-documented as the [verifier’s dilemma](https://www.smithandcrown.com/glossary/verifiers-dilemma). We believe future iterations of BOLD could include “attention challenges” that reward honest validators for also doing their job.
 
