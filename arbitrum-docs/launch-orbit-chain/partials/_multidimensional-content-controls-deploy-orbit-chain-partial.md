@@ -23,17 +23,11 @@ import DeployOrbitChainParametersPartial from './_deploy-orbit-chain-parameters-
 
 import GetDeployedChainInfoPartial from './_get-deployed-chain-info-partial.md'
 
-import MultidimensionalContentControlsDeployOrbitChainPartial from './_multidimensional-content-controls-deploy-orbit-chain-partial.md'
-
-import OrbitPublicPreviewBannerPartial from './_orbit-public-preview-banner-partial.md'
+import PrepareChainConfigParameterForRollupPartial from './_prepare-chainConfig-parameter-for-Rollup-partial.md'
 
 import PrepareChainConfigParameterForAnyTrustPartial from './_prepare-chainConfig-parameter-for-AnyTrust-partial.md'
 
-import PrepareChainConfigParameterForRollupPartial from './_prepare-chainConfig-parameter-for-Rollup-partial.md'
-
 import PrepareConfigParameterPartial from './_prepare-config-parameter-partial.md'
-
-import SelectOrbitChainPartial from './_select-orbit-chain-partial.md'
 
 import SendDeployTokenBridgeTransactionPartial from './_send-deploy-token-bridge-transaction-partial.md'
 
@@ -44,11 +38,24 @@ import SetDacKeysetPartial from './_set-dac-keyset-partial.md'
 <Tabs>
   <TabItem value="rollup-chain" label="Rollup chain">
     <InfoRollupChainPartial />
+    <PrepareChainConfigParameterForRollupPartial />
+    <PrepareConfigParameterPartial />
+    <SendOrbitChainDeploymentTransactionPartial />
+    <GetDeployedChainInfoPartial />
+
   </TabItem>
   <TabItem value="anytrust-chain" label="AnyTrust chain">
     <InfoAnytrustChainPartial />
+    <PrepareChainConfigParameterForAnyTrustPartial />
+    <PrepareConfigParameterPartial />
   </TabItem>
   <TabItem value="custom-token-chain" label="Custom token chain">
     <InfoCustomTokenChainPartial />
+    <PrepareChainConfigParameterForAnyTrustPartial />
+    <PrepareConfigParameterPartial />
+    <ApproveErc20TokenPartial />
+    <SendOrbitChainDeploymentTransactionPartial />
+    <GetDeployedChainInfoPartial />
+    <SetDacKeysetPartial />
   </TabItem>
 </Tabs>
