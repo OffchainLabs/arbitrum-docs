@@ -26,19 +26,10 @@ See the ["create-rollup-eth" example](https://github.com/OffchainLabs/arbitrum-o
 
 <div className='quickstart'>
 
-import ChainSelectorPartial from './partials/_deploy-orbit-chain-select-chain.md';
+import ChainSelectorPartial from './partials/_select-orbit-chain-partial.md';
 
 <ChainSelectorPartial />
 
-<div className='hide-tabs'>
-
-import ChainHelpers from './partials/_deploy-orbit-chain-helpers.md';
-
-<ChainHelpers />
-
-import ChainParameters from './partials/_deploy-orbit-chain-parameters.md';
-
-<ChainParameters />
 
 ### Getting the Orbit chain information after deployment
 
@@ -56,5 +47,4 @@ const data = createRollupPrepareTransactionReceipt(txReceipt);
 
 In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. By passing this receipt to the `createRollupPrepareTransactionReceipt` function, you can access your Orbit chain's information. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference.
 
-</div>
 </div>
