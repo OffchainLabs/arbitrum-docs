@@ -9,7 +9,6 @@ import { MultiDimensionalContentWidget } from '@site/src/components/MultiDimensi
 
 <!-- todo: end the annoyance of this file not being clearly tightly coupled to the MultiDimensionalContentWidget.js file that lives somewhere else; probably move this file next to that other file -->
 
-{' '}
 <Tabs
   className="tabgroup-with-label"
   groupId="chain-type"
