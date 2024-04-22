@@ -2,7 +2,7 @@
 title: 'Economics of Disputes in Arbitrum BOLD'
 sidebar_label: 'Economics of Disputes'
 description: 'An in-depth explanation on BoLD economic mechanisms.'
-user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand how the BoLD protocol operates from an economic standpoint.'
+user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand BoLD economics mechanisms.'
 content_type: concept
 author: leeederek
 target_audience: 'Developers, users and researchers interested in the Arbitrum product suite.'
