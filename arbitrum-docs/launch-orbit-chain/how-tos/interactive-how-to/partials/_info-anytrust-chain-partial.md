@@ -1,0 +1,2 @@
+- Implements the [AnyTrust protocol](/inside-arbitrum-nitro/#inside-anytrust), relying on an external [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) to store data and provide it on-demand instead of using their [parent chain](/intro/glossary/#parent-chain) as the Data Availability (DA) layer.
+- **Use case**: Suitable for applications that require lower transaction fees.
