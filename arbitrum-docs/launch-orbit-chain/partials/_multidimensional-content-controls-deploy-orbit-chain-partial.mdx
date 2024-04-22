@@ -1,0 +1,56 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+import InfoRollupChainPartial from './_info-rollup-chain-partial.mdx';
+
+import InfoAnytrustChainPartial from './_info-anytrust-chain-partial.mdx';
+
+import InfoCustomTokenChainPartial from './_info-custom-token-chain-partial.mdx';
+
+import ApproveErc20TokenPartial from './_approve-erc20-token-partial.mdx'
+
+import DeployOrbitChainHelpersPartial from './_deploy-orbit-chain-helpers-partial.mdx'
+
+import DeployOrbitChainParametersPartial from './_deploy-orbit-chain-parameters-partial.mdx'
+
+import GetDeployedChainInfoPartial from './_get-deployed-chain-info-partial.mdx'
+
+import PrepareChainConfigParameterForRollupPartial from './_prepare-chainConfig-parameter-for-Rollup-partial.mdx'
+
+import PrepareChainConfigParameterForAnyTrustPartial from './_prepare-chainConfig-parameter-for-AnyTrust-partial.mdx'
+
+import PrepareConfigParameterPartial from './_prepare-config-parameter-partial.mdx'
+
+import SendDeployTokenBridgeTransactionPartial from './_send-deploy-token-bridge-transaction-partial.mdx'
+
+import SendOrbitChainDeploymentTransactionPartial from './_send-orbit-chain-deployment-transaction-partial.mdx'
+
+import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx'
+
+
+<Tabs>
+  <TabItem value="rollup-chain" label="Rollup chain">
+    <summary>
+    </summary>
+    <InfoRollupChainPartial />
+    <PrepareChainConfigParameterForRollupPartial />
+    <PrepareConfigParameterPartial />
+    <SendOrbitChainDeploymentTransactionPartial />
+    <GetDeployedChainInfoPartial />
+  </TabItem>
+  <TabItem value="anytrust-chain" label="AnyTrust chain">
+    <InfoAnytrustChainPartial />
+    <PrepareChainConfigParameterForAnyTrustPartial />
+    <PrepareConfigParameterPartial />
+  </TabItem>
+  <TabItem value="custom-token-chain" label="Custom token chain">
+    <InfoCustomTokenChainPartial />
+    <PrepareChainConfigParameterForAnyTrustPartial />
+    <PrepareConfigParameterPartial />
+    <ApproveErc20TokenPartial />
+    <SendOrbitChainDeploymentTransactionPartial />
+    <GetDeployedChainInfoPartial />
+    <SetDacKeysetPartial />
+  </TabItem>
+</Tabs>
