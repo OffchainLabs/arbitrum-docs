@@ -26,7 +26,7 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 ### Prerequisites
 
-In this section, we will deploy the token bridges on both the parent and child chains, so before we introduce how to deploy, you need to run your sequencer node first. You can follow the step 1 to step 2 in [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) by using the node config file (You don't need `orbitSetupScriptConfig.json` file here) to start the related docker conatiners. You can check if your node is running by `docker-compose logs -f nitro`.
+ - A running **sequencer node**. See steps 1-2 in the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) to start the related Docker containers (note that you don't need the `orbitSetupScriptConfig.json` file here). Use `docker-compose logs -f nitro` to verify that your node is running.
 
 ### Token Bridge Deployment Steps
 
