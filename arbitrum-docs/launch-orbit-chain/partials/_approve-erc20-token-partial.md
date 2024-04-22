@@ -1,4 +1,4 @@
-## Approve ERC-20 token 
+## Approve ERC-20 token
 
 Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.md)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two APIs:
 
@@ -21,11 +21,12 @@ if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
 ```
 
 In this scenario, `allowanceParams` includes:
+
 - The native token's details: `nativeToken`.
 - The Rollup owner's address: `rollupOwner.address`.
 - The parent chain's publicClient: `parentChainPublicClient`.
 
-First, `createTokenBridgeEnoughCustomFeeTokenAllowance` checks if the deployer has been granted enough allowance. 
+First, `createTokenBridgeEnoughCustomFeeTokenAllowance` checks if the deployer has been granted enough allowance.
 
 If the allowance is insufficient, `createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest` is called to create the necessary approval transaction.
 

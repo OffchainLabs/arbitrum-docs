@@ -18,9 +18,6 @@ This document is under construction and may change significantly as we incorpora
 
 :::
 
-
-
 import ChainSelectorPartial from './partials/_select-orbit-chain-partial.md';
-
 
 <ChainSelectorPartial />
