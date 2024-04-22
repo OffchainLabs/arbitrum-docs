@@ -1,6 +1,6 @@
 ---
 title: 'How to Deploy an Orbit chain using the Orbit SDK'
-sidebar_label: 'Deploy an Orbit chain using the Orbit SDK'
+sidebar_label: 'Orbit SDK'
 description: 'How to Deploy an Orbit chain using the Orbit SDK'
 author: anegg0
 sme: anegg0

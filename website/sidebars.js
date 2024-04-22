@@ -346,6 +346,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/orbit-sdk-deploying-orbit-chain',
+          label: `Orbit SDK`,
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
@@ -353,18 +358,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
           label: 'FAQ',
-        },
-        {
-          type: 'category',
-          label: 'Orbit SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-deploying-orbit-chain',
-              label: `Introduction`,
-            },
-          ],
         },
       ],
     },
