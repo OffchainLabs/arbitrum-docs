@@ -361,43 +361,8 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              id: 'launch-orbit-chain/orbit-sdk-deploying-orbit-chain',
               label: `Introduction`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
-              label: `Rollup Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
-              label: `AnyTrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
-              label: `Orbit Chain Configuration`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/interactive-how-to/orbit-sdk-deploying-orbit-chain',
-              label: `Orbit Chain Configuration`,
             },
           ],
         },
