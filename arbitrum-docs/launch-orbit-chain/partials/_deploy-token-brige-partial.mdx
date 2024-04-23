@@ -13,7 +13,6 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 3. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
 4. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
 
-
 ### 1. Token bridge contract deployment
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain.
@@ -48,6 +47,7 @@ Here are the parameters used in the above example:
 For more insights into these variables and their usage, consider exploring this [token bridge deployment example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts).
 
 Following the creation of the raw transaction, the next steps involve signing it and broadcasting it to the relevant blockchain network to complete the deployment process.
+
 ### 2. Transaction recipient and checking for deployment on child chain
 
 After sending the deployment transaction, you will need to retrieve the transaction receipt and verify the successful deployment of the contracts on both the parent and child chains.
@@ -156,4 +156,3 @@ console.log(`Retryables executed successfully`);
 ```
 
 In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent, setting the `WETH` gateway on your Orbit chain.
-  
