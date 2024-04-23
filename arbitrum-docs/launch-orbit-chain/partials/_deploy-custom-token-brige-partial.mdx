@@ -24,7 +24,6 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 2. **[Token bridge contract deployment](#2-token-bridge-contract-deployment)**
 3. **[Transaction recipient and checking for deployment on child chain](#3-transaction-recipient-and-checking-for-deployment-on-child-chain)**
 4. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
-5. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
 
 ### 1. Token approval
 
@@ -148,64 +147,3 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
   parentChainPublicClient,
 });
 ```
-
-### 5. Setting up the WETH gateway
-
-The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway.
-
-:::note
-
-That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain.
-
-You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
-
-:::
-
-So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH` gateway on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
-
-#### 1. `createTokenBridgePrepareSetWethGatewayTransactionRequest`:
-
-This API helps you create the raw transaction which handles the `WETH` gateway on both parent and child chains.
-
-Example:
-
-```js
-const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-  rollup: rollupContractAddress,
-  parentChainPublicClient,
-  orbitChainPublicClient,
-  account: rollupOwnerAddress,
-  retryableGasOverrides: {
-    gasLimit: {
-      percentIncrease: 200n,
-    },
-  },
-});
-```
-
-In this example, `rollupContractAddress` is the address of Orbit chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and orbit chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit, thus securing successful retryable tickets.
-
-After creating the raw transaction, you need to use Viem to sign it and broadcast it to the network.
-
-#### 2. `createTokenBridgePrepareSetWethGatewayTransactionReceipt`
-
-After sending the transaction, you need to assess if the Retryable Tickets you just created have been successful. To do that we are using `createTokenBridgePrepareSetWethGatewayTransactionReceipt` API and the`waitForRetryables` method of it to check for the success status of retryable tickets. For the example in this doc we can use this API as follow:
-
-```js
-const setWethGatewayTxReceipt = createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-  await parentChainPublicClient.waitForTransactionReceipt({
-    hash: setWethGatewayTxHash,
-  }),
-);
-const orbitChainSetWethGatewayRetryableReceipt = await setWethGatewayTxReceipt.waitForRetryables({
-  orbitPublicClient: orbitChainPublicClient,
-});
-if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
-  throw new Error(
-    `Retryable status is not success: ${orbitChainSetWethGatewayRetryableReceipt[0].status}. Aborting...`,
-  );
-}
-console.log(`Retryables executed successfully`);
-```
-
-In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent, setting the `WETH` gateway on your Orbit chain.
