@@ -28,11 +28,16 @@ import SendOrbitChainDeploymentTransactionPartial from './_send-orbit-chain-depl
 
 import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx'
 
+<div className='dynamic-content-tabs'>
 
-<Tabs>
+<Tabs className="tabgroup-with-label" defaultValue="rollup-chain" groupId="chain-type" values={[
+    {label: 'Chain type:', value: 'label'},
+    {label: 'Rollup chain', value: 'rollup-chain'},
+    {label: 'AnyTrust chain', value: 'anytrust-chain'},
+    {label: 'Custom token chain', value: 'custom-token-chain'}
+  ]}>
+  <TabItem className="unclickable-element" value="label"></TabItem>
   <TabItem value="rollup-chain" label="Rollup chain">
-    <summary>
-    </summary>
     <InfoRollupChainPartial />
     <PrepareChainConfigParameterForRollupPartial />
     <PrepareConfigParameterPartial />
@@ -54,3 +59,4 @@ import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx'
     <SetDacKeysetPartial />
   </TabItem>
 </Tabs>
+</div>
