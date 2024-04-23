@@ -30,6 +30,10 @@ import ConfigRollupNodePartial from './_config-rollup-node-partial.mdx'
 
 import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.mdx'
 
+import DeployTokenBrigePartial from './_deploy-token-brige-partial.mdx'
+
+import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.mdx'
+
 
 
 <div className='dynamic-content-tabs'>
@@ -47,12 +51,16 @@ import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.mdx'
     <SendOrbitChainDeploymentTransactionPartial />
     <GetDeployedChainInfoPartial />
     <ConfigRollupNodePartial />
+    <DeployTokenBrigePartial />
   </TabItem>
   <TabItem value="anytrust-chain" label="AnyTrust chain">
     <InfoAnytrustChainPartial />
     <PrepareConfigParameterForAnyTrustPartial />
-    <ConfigRollupNodePartial />
-
+    <SendOrbitChainDeploymentTransactionPartial />
+    <GetDeployedChainInfoPartial />
+    <SetDacKeysetPartial />
+    <ConfigAnytrustNodePartial />
+    <DeployTokenBrigePartial />
   </TabItem>
   <TabItem value="custom-token-chain" label="Custom token chain">
     <InfoCustomTokenChainPartial />
@@ -62,6 +70,8 @@ import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.mdx'
     <SendOrbitChainDeploymentTransactionPartial />
     <GetDeployedChainInfoPartial />
     <SetDacKeysetPartial />
+    <ConfigAnytrustNodePartial />
+    <DeployCustomTokenBrigePartial />
   </TabItem>
 </Tabs>
 </div>
