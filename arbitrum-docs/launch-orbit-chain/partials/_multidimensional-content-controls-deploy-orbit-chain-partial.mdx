@@ -16,17 +16,21 @@ import DeployOrbitChainParametersPartial from './_deploy-orbit-chain-parameters-
 
 import GetDeployedChainInfoPartial from './_get-deployed-chain-info-partial.mdx'
 
-import PrepareChainConfigParameterForRollupPartial from './_prepare-chainConfig-parameter-for-Rollup-partial.mdx'
+import PrepareConfigParameterForRollupPartial from './_prepare-config-parameter-for-rollup-partial.mdx'
 
-import PrepareChainConfigParameterForAnyTrustPartial from './_prepare-chainConfig-parameter-for-AnyTrust-partial.mdx'
-
-import PrepareConfigParameterPartial from './_prepare-config-parameter-partial.mdx'
+import PrepareConfigParameterForAnyTrustPartial from './_prepare-config-parameter-for-anytrust-partial.mdx'
 
 import SendDeployTokenBridgeTransactionPartial from './_send-deploy-token-bridge-transaction-partial.mdx'
 
 import SendOrbitChainDeploymentTransactionPartial from './_send-orbit-chain-deployment-transaction-partial.mdx'
 
 import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx'
+
+import ConfigRollupNodePartial from './_config-rollup-node-partial.mdx'
+
+import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.mdx'
+
+
 
 <div className='dynamic-content-tabs'>
 
@@ -39,15 +43,16 @@ import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx'
   <TabItem className="unclickable-element" value="label"></TabItem>
   <TabItem value="rollup-chain" label="Rollup chain">
     <InfoRollupChainPartial />
-    <PrepareChainConfigParameterForRollupPartial />
-    <PrepareConfigParameterPartial />
+    <PrepareConfigParameterForRollupPartial />
     <SendOrbitChainDeploymentTransactionPartial />
     <GetDeployedChainInfoPartial />
+    <ConfigRollupNodePartial />
   </TabItem>
   <TabItem value="anytrust-chain" label="AnyTrust chain">
     <InfoAnytrustChainPartial />
-    <PrepareChainConfigParameterForAnyTrustPartial />
-    <PrepareConfigParameterPartial />
+    <PrepareConfigParameterForAnyTrustPartial />
+    <ConfigRollupNodePartial />
+
   </TabItem>
   <TabItem value="custom-token-chain" label="Custom token chain">
     <InfoCustomTokenChainPartial />
