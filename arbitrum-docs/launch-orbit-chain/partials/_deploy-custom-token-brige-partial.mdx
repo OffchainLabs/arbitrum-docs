@@ -1,14 +1,4 @@
----
-title: 'Deploy a token bridge using the Orbit SDK'
-sidebar_label: 'Deploy a token bridge'
-description: 'How to deploy a token bridge using the Orbit SDK '
-author: GreatSoshiant
-sme: GreatSoshiant
-target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 5
-user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy a token bridge using the Orbit SDK.
-content_type: how-to
----
+## Deploy your custom token brige
 
 The <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro stack</a> doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical bridge" that ensures seamless token transfers between the parent and child chains.
 
@@ -35,15 +25,6 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 3. **[Transaction recipient and checking for deployment on child chain](#3-transaction-recipient-and-checking-for-deployment-on-child-chain)**
 4. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
 5. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
-
-:::info
-
-The token bridge deployment process is the same for all Orbit chains types except for the following:
-
-- **Custom fee token Orbit chains** which require [token approval](#step-1).
-- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#step-5).
-
-:::
 
 ### 1. Token approval
 
