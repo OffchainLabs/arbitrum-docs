@@ -37,10 +37,10 @@ Here are the steps involved in the deployment process:
 1. **[Setting up the chain parameters](#1-setting-up-the-chain-parameters)**
 2. **[Deploying your AnyTrust chain](#2-deploying-your-anytrust-chain)**
 3. **[Getting the AnyTrust Orbit chain information after deployment](#3-getting-the-anytrust-orbit-chain-information-after-deployment)**
-4. **[Setting a valid key set on parent chain](#4-setting-valid-key-set-on-parent-chain)**
+4. **[Setting a valid keyset on parent chain](#4-setting-valid-key-set-on-parent-chain)**
 
-The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This key set includes keys from the appointed members of the DAC. They are required to ensure the chain's data availability and integrity. Once you have selected your committee members and gathered their keys, the Orbit SDK helps you configure these keys into a keyset. 
-This key set is then embedded into the chain, serving as a verification mechanism.
+The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset includes keys from the appointed members of the DAC. They are required to ensure the chain's data availability and integrity. Once you have selected your committee members and gathered their keys, the Orbit SDK helps you configure these keys into a keyset. 
+This keyset is then embedded into the chain, serving as a verification mechanism.
 
 Let's go through each deployment step:
 
@@ -130,12 +130,12 @@ const data = createRollupPrepareTransactionReceipt(txReceipt);
 
 In this example, `txReceipt` refers to the transaction receipt you received after deploying the AnyTrust chain. By inputting this receipt into the `createRollupPrepareTransactionReceipt` function, you can access comprehensive data about your deployment, including details about the core contracts and configuration settings.
 
-### 4. Setting valid key set on parent chain:
+### 4. Setting valid keyset on parent chain:
 
-The final step is to set up a valid key set for your Data Availability Committee (DAC) on the parent chain. You can find more in our documentation about [ generating keys and the key set for your committee ]( /launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation ). 
+The final step is to set up a valid keyset for your Data Availability Committee (DAC) on the parent chain. You can find more in our documentation about [ generating keys and the keyset for your committee ]( /launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation ). 
 
 Once created, your keyset needs to be established on your Orbit chain's `SequencerInbox` contract on the parent chain.
-To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [step three](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated key set for your committee, and the owner's account.
+To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [step three](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the owner's account.
 
 Here's an example of how you can use the Orbit SDK to write your keyset:
 
@@ -151,6 +151,6 @@ const txRequest = await setValidKeysetPrepareTransactionRequest({
 });
 ```
 
-In this example, `upgradeExecutor_address` and `sequencerInbox_address` are placeholders for the Orbit chain's contract addresses. `keyset` is the key set you generated for your committee, and `deployer.address` refers to the owner's account address.
+In this example, `upgradeExecutor_address` and `sequencerInbox_address` are placeholders for the Orbit chain's contract addresses. `keyset` is the keyset you generated for your committee, and `deployer.address` refers to the owner's account address.
 
-Once you've created the transaction request using the above API, the next step is to sign and send the transaction. This transaction writes the keyset to the parent chain, enabling it to recognize and verify the valid key set for your AnyTrust Orbit chain. 
+Once you've created the transaction request using the above API, the next step is to sign and send the transaction. This transaction writes the keyset to the parent chain, enabling it to recognize and verify the valid keyset for your AnyTrust Orbit chain. 
