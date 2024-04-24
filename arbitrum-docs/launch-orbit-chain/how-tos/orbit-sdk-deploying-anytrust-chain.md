@@ -94,7 +94,7 @@ const chainConfig = prepareChainConfig({
 
 In this example, you need to set up the chain configuration with a unique `chainId`, the `InitialChainOwner` as the deployer's address, and, importantly, you must set the `DataAvailabilityCommittee` as `true`.
 
-The Orbit SDK has a helper to execute this part: the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK Repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+The Orbit SDK has a helper to execute this part: the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 ### 2. Deploying your AnyTrust chain
 
