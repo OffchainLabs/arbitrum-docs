@@ -34,40 +34,40 @@ import DeployTokenBrigePartial from './_deploy-token-brige-partial.mdx';
 import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.mdx';
 
 <div className='dynamic-content-tabs'>
-
-<Tabs className="tabgroup-with-label" defaultValue="rollup-chain" groupId="chain-type" values={[
-    {label: 'Chain type:', value: 'label'},
-    {label: 'Rollup chain', value: 'rollup-chain'},
-    {label: 'AnyTrust chain', value: 'anytrust-chain'},
-    {label: 'Custom token chain', value: 'custom-token-chain'}
-  ]}>
-  <TabItem className="unclickable-element" value="label"></TabItem>
-  <TabItem value="rollup-chain" label="Rollup chain">
-    <InfoRollupChainPartial />
-    <PrepareConfigParameterForRollupPartial />
-    <SendOrbitChainDeploymentTransactionPartial />
-    <GetDeployedChainInfoPartial />
-    <ConfigRollupNodePartial />
-    <DeployTokenBrigePartial />
-  </TabItem>
-  <TabItem value="anytrust-chain" label="AnyTrust chain">
-    <InfoAnytrustChainPartial />
-    <PrepareConfigParameterForAnyTrustPartial />
-    <SendOrbitChainDeploymentTransactionPartial />
-    <GetDeployedChainInfoPartial />
-    <SetDacKeysetPartial />
-    <ConfigAnytrustNodePartial />
-    <DeployTokenBrigePartial />
-  </TabItem>
-  <TabItem value="custom-token-chain" label="Custom token chain">
-    <InfoCustomTokenChainPartial />
-    <PrepareConfigParameterForAnyTrustPartial />
-    <ApproveErc20TokenPartial />
-    <SendOrbitChainDeploymentTransactionPartial />
-    <GetDeployedChainInfoPartial />
-    <SetDacKeysetPartial />
-    <ConfigAnytrustNodePartial />
-    <DeployCustomTokenBrigePartial />
-  </TabItem>
-</Tabs>
+  <Tabs className="tabgroup-with-label" defaultValue="rollup-chain" groupId="chain-type" values={[
+      {label: 'Chain type:', value: 'label'},
+      {label: 'Rollup chain', value: 'rollup-chain'},
+      {label: 'AnyTrust chain', value: 'anytrust-chain'},
+      {label: 'Custom token chain', value: 'custom-token-chain'}
+    ]}>
+    <TabItem className="unclickable-element" value="label"></TabItem>
+    <TabItem value="rollup-chain" label="Rollup chain">
+      <InfoRollupChainPartial />
+      <PrepareConfigParameterForRollupPartial />
+      <SendOrbitChainDeploymentTransactionPartial />
+      <GetDeployedChainInfoPartial />
+      <ConfigRollupNodePartial />
+      <DeployTokenBrigePartial />
+    </TabItem>
+    <TabItem value="anytrust-chain" label="AnyTrust chain">
+      <InfoAnytrustChainPartial />
+      <PrepareConfigParameterForAnyTrustPartial />
+      <SendOrbitChainDeploymentTransactionPartial />
+      <GetDeployedChainInfoPartial />
+      <SetDacKeysetPartial />
+      <ConfigAnytrustNodePartial />
+      <DeployTokenBrigePartial />
+    </TabItem>
+    <TabItem value="custom-token-chain" label="Custom token chain">
+      <InfoCustomTokenChainPartial />
+      <PrepareConfigParameterForAnyTrustPartial />
+      <ApproveErc20TokenPartial />
+      <SendOrbitChainDeploymentTransactionPartial />
+      <GetDeployedChainInfoPartial />
+      <SetDacKeysetPartial />
+      <ConfigAnytrustNodePartial />
+      <DeployCustomTokenBrigePartial />
+    </TabItem>
+  </Tabs>
 </div>
+
