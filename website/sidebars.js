@@ -606,7 +606,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
               label: 'Configure a Data Availability Committee (DAC)',
             },
           ],

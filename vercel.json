@@ -1,6 +1,11 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
             "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
             "permanent": false
