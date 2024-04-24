@@ -50,10 +50,10 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 **Node runners** run the machines that support the Arbitrum ecosystem.
 
-| Resource                                                                                                  | Description                                                                                                           |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| [Run a full node](/run-arbitrum-node/03-run-full-node.md)                                                 | Targeted at node runners who want to access Arbitrum chains without having to connect to a third-party node.          |
-| [Configure a Data Availability Committee](/node-running/how-tos/data-availability-committee/introduction) | Targeted at Data Availability Committee members and Orbit chain operators who want to run a Data Availability Server. |
+| Resource                                                                                                     | Description                                                                                                           |
+| ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| [Run a full node](/run-arbitrum-node/03-run-full-node.md)                                                    | Targeted at node runners who want to access Arbitrum chains without having to connect to a third-party node.          |
+| [Configure a Data Availability Committee](/run-arbitrum-node/data-availability-committees/01-get-started.md) | Targeted at Data Availability Committee members and Orbit chain operators who want to run a Data Availability Server. |
 
 ## Arbitrum for chain operators
 
