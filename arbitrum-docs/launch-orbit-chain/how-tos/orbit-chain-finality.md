@@ -17,7 +17,6 @@ Messages being sent through the delayed inbox of a parent chain as [retryable ti
 
 Orbit L3s may configure the finality of transactions executed through the delayed inbox to depend on different layers of finality. By default, Orbit chains will rely on the number of L1 block confirmations, effectively finalizing an L3 deposit as soon as L1 finalizes the batch posted by <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or when a <a data-quicklook-from="data-availability-certificate">DACert</a> is posted by <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. This would be on the order of tens of minutes.
 
-
 However, in the instance of an L3 settling to Arbitrum One or Nova an L3 may also choose to rely only on L2 finality by configuring their sequencer as follows:
 
 ```
