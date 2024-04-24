@@ -318,7 +318,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↓</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
         },
@@ -591,17 +591,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
               label: 'Get started',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
               label: 'Deploy a Data Availability Server (DAS)',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
             },
             {

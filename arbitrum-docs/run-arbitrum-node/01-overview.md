@@ -13,6 +13,6 @@ Here, you can find resources that help you run different types of Arbitrum nodes
 
 - Step-by-step instructions for running different Arbitrum nodes, including [full Nitro node](/run-arbitrum-node/03-run-full-node.md), [full Classic node](/run-arbitrum-node/more-types/03-run-classic-node.md), [local dev node](/run-arbitrum-node/04-run-local-dev-node.md), [feed relay](/node-running/how-tos/running-a-feed-relay.mdx), and [validator](/run-arbitrum-node/more-types/02-run-validator-node.md)
 - Step-by-step instructions for how to [read the sequencer feed](/node-running/how-tos/read-sequencer-feed.md), [build the Nitro locally](/node-running/how-tos/build-nitro-locally.md) and [run the sequencer coordinator manager UI tool](/node-running/how-tos/running-a-sequencer-coordinator-manager.mdx)
-- Step-by-step instructions for [how to configure a Data Availability Committee](/node-running/how-tos/data-availability-committee/introduction.mdx)
+- Step-by-step instructions for [how to configure a Data Availability Committee](/run-arbitrum-node/data-availability-committees/01-get-started.md)
 - [Troubleshooting page](/node-running/troubleshooting-running-nodes.md)
 - [Frequently asked questions](/node-running/faq.md)

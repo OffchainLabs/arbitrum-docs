@@ -1,12 +1,27 @@
 {
     "redirects": [
         {
-            "source": "/node-running/how-tos/running-a-classic-node",
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/introduction/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-classic-node/?)",
             "destination": "/run-arbitrum-node/more-types/run-classic-node",
             "permanent": false
         },
         {
-            "source": "/node-running/how-tos/running-a-validator",
+            "source": "/(node-running/how-tos/running-a-validator/?)",
             "destination": "/run-arbitrum-node/more-types/run-validator-node",
             "permanent": false
         },
@@ -637,12 +652,12 @@
         },
         {
             "source": "/das/daserver-instructions",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {
             "source": "/node-running/how-tos/running-a-daserver",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {
