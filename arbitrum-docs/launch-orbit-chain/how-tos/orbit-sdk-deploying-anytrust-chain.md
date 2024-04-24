@@ -6,7 +6,7 @@ author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
 sidebar_position: 2
-user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy an Orbit Rollup chain the Orbit SDK by understanding the available onboarding paths.
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy an Orbit Rollup chain using the Orbit SDK.
 content_type: how-to
 ---
 
