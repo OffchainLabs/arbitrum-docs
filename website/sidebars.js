@@ -618,7 +618,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
+              id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },
             {

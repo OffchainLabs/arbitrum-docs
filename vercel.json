@@ -1,6 +1,11 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/how-tos/running-a-feed-relay/?)",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
             "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
             "permanent": false
@@ -632,7 +637,7 @@
         },
         {
             "source": "/node-running/running-a-feed-relay",
-            "destination": "/node-running/how-tos/running-a-feed-relay",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
             "permanent": false
         },
         {
