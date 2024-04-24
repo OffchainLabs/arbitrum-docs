@@ -318,7 +318,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↓</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
         },
@@ -569,17 +569,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
+              id: 'run-arbitrum-node/more-types/run-archive-node',
               label: 'Run an archive node',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
+              id: 'run-arbitrum-node/more-types/run-validator-node',
               label: 'Run a validator',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
+              id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
           ],
@@ -591,22 +591,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
               label: 'Get started',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
               label: 'Deploy a Data Availability Server (DAS)',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
               label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
@@ -618,17 +618,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
+              id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
+              id: 'run-arbitrum-node/sequencer/read-sequencer-feed',
               label: 'Read the sequencer feed',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-coordination-manager',
               label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
@@ -640,19 +640,19 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
+              id: 'run-arbitrum-node/nitro/build-nitro-locally',
               label: 'Build Nitro locally',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
+          id: 'run-arbitrum-node/troubleshooting',
           label: 'Troubleshooting',
         },
         {

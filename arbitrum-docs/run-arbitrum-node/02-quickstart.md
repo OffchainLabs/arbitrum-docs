@@ -43,13 +43,13 @@ For detailed instructions on how to run an Arbitrum full node, see [here](/run-a
 
 While full nodes offer numerous advantages, there are situations where running an archive node may be more appropriate. Archive nodes store the complete history of the Arbitrum network, making them suitable for users who require extensive historical data access or advanced analytical purposes. However, it's important to note that archive nodes are more resource-intensive, requiring significant storage capacity and computational power.
 
-For detailed instructions on how to run an Arbitrum archive node, see [here](/node-running/how-tos/running-an-archive-node.mdx).
+For detailed instructions on how to run an Arbitrum archive node, see [here](/run-arbitrum-node/more-types/01-run-archive-node.md).
 
 ### Considerations for running an Arbitrum classic node
 
-The significance of running an Arbitrum classic node is mainly applicable to individuals with specific needs for an archive node and access to classic-related commands. More details can be found [here](/node-running/how-tos/running-an-archive-node.mdx).
+The significance of running an Arbitrum classic node is mainly applicable to individuals with specific needs for an archive node and access to classic-related commands. More details can be found [here](/run-arbitrum-node/more-types/01-run-archive-node.md).
 
-For detailed instructions on how to run an Arbitrum classic node, see [here](/node-running/how-tos/running-a-classic-node.mdx).
+For detailed instructions on how to run an Arbitrum classic node, see [here](/run-arbitrum-node/more-types/03-run-classic-node.md).
 
 ### Considerations for running a feed relay
 
@@ -57,4 +57,4 @@ If you are running a single node, there is no requirement to set up a feed relay
 
 In the near future, feed endpoints will mandate compression using a custom dictionary. Therefore, if you plan to connect to a feed using anything other than a standard node, it is strongly advised to run a local feed relay. This will ensure that you have access to an uncompressed feed by default, maintaining optimal performance and compatibility.
 
-For detailed instructions on how to run a feed relay, see [here](/node-running/how-tos/running-a-feed-relay.mdx).
+For detailed instructions on how to run a feed relay, see [here](/run-arbitrum-node/sequencer/01-run-feed-relay.md).
