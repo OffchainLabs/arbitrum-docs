@@ -623,12 +623,12 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
+              id: 'run-arbitrum-node/sequencer/read-sequencer-feed',
               label: 'Read the sequencer feed',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-coordination-manager',
               label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
@@ -640,19 +640,19 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
+              id: 'run-arbitrum-node/nitro/build-nitro-locally',
               label: 'Build Nitro locally',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
+          id: 'run-arbitrum-node/troubleshooting',
           label: 'Troubleshooting',
         },
         {

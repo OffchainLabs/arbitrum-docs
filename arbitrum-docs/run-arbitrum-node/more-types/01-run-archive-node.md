@@ -113,4 +113,4 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 ### Troubleshooting
 
-If you run into any issues, visit the [node-running troubleshooting guide](/node-running/troubleshooting-running-nodes.md).
+If you run into any issues, visit the [node-running troubleshooting guide](/run-arbitrum-node/06-troubleshooting.md).
