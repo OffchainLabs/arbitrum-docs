@@ -33,24 +33,34 @@ import DeployTokenBrigePartial from './_deploy-token-brige-partial.mdx';
 
 import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.mdx';
 
-<div className='dynamic-content-tabs-toc'>
-  <Tabs className="tabgroup-with-label" defaultValue="rollup-chain" groupId="chain-type" values={[
-      {label: 'Rollup chain', value: 'rollup-chain'},
-      {label: 'AnyTrust chain', value: 'anytrust-chain'},
-      {label: 'Custom token chain', value: 'custom-token-chain'}
-    ]}>
+<div className="dynamic-content-tabs-toc">
+  <Tabs
+    className="tabgroup-with-label"
+    defaultValue="rollup-chain"
+    groupId="chain-type"
+    values={[
+      { label: 'Rollup chain', value: 'rollup-chain' },
+      { label: 'AnyTrust chain', value: 'anytrust-chain' },
+      { label: 'Custom token chain', value: 'custom-token-chain' },
+    ]}
+  >
     <TabItem value="rollup-chain" label="Rollup chain">
-      <div className='dynamic-content-tabs-toc'>
-        <Tabs className="tabgroup-with-label" defaultValue="1" groupId="rollup" values={[
-            {label: 'Chain type info', value: '1'},
-            {label: 'Prepare config', value: '2'},
-            {label: 'Deploy chain', value: '3'},
-            {label: 'Get chain info', value: '4'},
-            {label: 'Configure node', value: '5'},
-            {label: 'Deploy token bridge', value: '6'},
-          ]}>
+      <div className="dynamic-content-tabs-toc">
+        <Tabs
+          className="tabgroup-with-label"
+          defaultValue="1"
+          groupId="rollup"
+          values={[
+            { label: 'Chain type info', value: '1' },
+            { label: 'Prepare config', value: '2' },
+            { label: 'Deploy chain', value: '3' },
+            { label: 'Get chain info', value: '4' },
+            { label: 'Configure node', value: '5' },
+            { label: 'Deploy token bridge', value: '6' },
+          ]}
+        >
           <TabItem value="1" label="Chain type info">
-            <InfoRollupChainPartial/>
+            <InfoRollupChainPartial />
           </TabItem>
           <TabItem value="2" label="Prepare config">
             <PrepareConfigParameterForRollupPartial />
@@ -71,16 +81,21 @@ import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.
       </div>
     </TabItem>
     <TabItem value="anytrust-chain" label="AnyTrust chain">
-      <div className='dynamic-content-tabs-toc'>
-        <Tabs className="tabgroup-with-label" defaultValue="1" groupId="rollup" values={[
-            {label: 'Chain type info', value: '1'},
-            {label: 'Prepare config', value: '2'},
-            {label: 'Deploy chain', value: '3'},
-            {label: 'Get chain info', value: '4'},
-            {label: 'Set DAC keyset', value: '5'},
-            {label: 'Configure node', value: '6'},
-            {label: 'Deploy token bridge', value: '7'},
-          ]}>
+      <div className="dynamic-content-tabs-toc">
+        <Tabs
+          className="tabgroup-with-label"
+          defaultValue="1"
+          groupId="rollup"
+          values={[
+            { label: 'Chain type info', value: '1' },
+            { label: 'Prepare config', value: '2' },
+            { label: 'Deploy chain', value: '3' },
+            { label: 'Get chain info', value: '4' },
+            { label: 'Set DAC keyset', value: '5' },
+            { label: 'Configure node', value: '6' },
+            { label: 'Deploy token bridge', value: '7' },
+          ]}
+        >
           <TabItem value="1" label="Chain type info">
             <InfoAnytrustChainPartial />
           </TabItem>
@@ -106,16 +121,21 @@ import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.
       </div>
     </TabItem>
     <TabItem value="anytrust-chain" label="AnyTrust chain">
-      <div className='dynamic-content-tabs-toc'>
-        <Tabs className="tabgroup-with-label" defaultValue="1" groupId="rollup" values={[
-            {label: 'Chain type info', value: '1'},
-            {label: 'Prepare config', value: '2'},
-            {label: 'Approve token', value: '3'},
-            {label: 'Deploy chain', value: '4'},
-            {label: 'Get chain info', value: '5'},
-            {label: 'Configure node', value: '6'},
-            {label: 'Deploy token bridge', value: '7'},
-          ]}>
+      <div className="dynamic-content-tabs-toc">
+        <Tabs
+          className="tabgroup-with-label"
+          defaultValue="1"
+          groupId="rollup"
+          values={[
+            { label: 'Chain type info', value: '1' },
+            { label: 'Prepare config', value: '2' },
+            { label: 'Approve token', value: '3' },
+            { label: 'Deploy chain', value: '4' },
+            { label: 'Get chain info', value: '5' },
+            { label: 'Configure node', value: '6' },
+            { label: 'Deploy token bridge', value: '7' },
+          ]}
+        >
           <TabItem value="1" label="Chain type info">
             <InfoCustomTokenChainPartial />
           </TabItem>
