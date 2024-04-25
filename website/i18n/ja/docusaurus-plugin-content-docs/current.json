@@ -193,7 +193,7 @@
   },
   "sidebar.runNodesSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
-    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc node-running/troubleshooting-running-nodes"
+    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/troubleshooting"
   },
   "sidebar.runNodesSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",
