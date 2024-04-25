@@ -159,17 +159,13 @@
     "message": "More",
     "description": "The label for category More in sidebar bridgeTokensSidebar"
   },
-  "sidebar.bridgeTokensSidebar.doc.A gentle introduction": {
-    "message": "A gentle introduction",
-    "description": "The label for the doc item A gentle introduction in sidebar bridgeTokensSidebar, linking to the doc bridge-tokens/gentle-introduction-bridge"
-  },
   "sidebar.bridgeTokensSidebar.doc.Quickstart": {
     "message": "Quickstart",
-    "description": "The label for the doc item Quickstart in sidebar bridgeTokensSidebar, linking to the doc getting-started-users"
+    "description": "The label for the doc item Quickstart in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/quickstart"
   },
   "sidebar.bridgeTokensSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
-    "description": "The label for the doc item Troubleshooting in sidebar bridgeTokensSidebar, linking to the doc for-users/troubleshooting-users"
+    "description": "The label for the doc item Troubleshooting in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/troubleshooting"
   },
   "sidebar.runNodesSidebar.category.Get started": {
     "message": "Get started",
@@ -185,15 +181,15 @@
   },
   "sidebar.runNodesSidebar.doc.A gentle introduction": {
     "message": "A gentle introduction",
-    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc node-running/gentle-introduction-run-node"
+    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/overview"
   },
   "sidebar.runNodesSidebar.doc.Quickstart": {
     "message": "Quickstart",
-    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc node-running/quickstart-running-a-node"
+    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/quickstart"
   },
   "sidebar.runNodesSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
-    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc node-running/troubleshooting-running-nodes"
+    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/troubleshooting"
   },
   "sidebar.runNodesSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",

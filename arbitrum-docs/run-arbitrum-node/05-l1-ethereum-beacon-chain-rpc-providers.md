@@ -3,7 +3,7 @@ title: 'L1 Ethereum beacon chain RPC providers'
 author: dlee
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -15,7 +15,7 @@ Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EI
 
 ### What does this mean for node operators?
 
-To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](../how-tos/running-a-full-node.mdx).
+To run a node for an L2 Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L2 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum L2 chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](/run-arbitrum-node/03-run-full-node.md).
 
 Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to _historical_ blob data to sync up to the latest state of their Arbitrum chain.
 
@@ -25,15 +25,15 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 
 | Provider                                                                    | Beacon chain APIs? | Historical blob data? |
 | --------------------------------------------------------------------------- | ------------------ | --------------------- |
-| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                 | ✅                    |
-| [Bware Labs](https://bwarelabs.com/blockchain-api)                          | ✅                 | ✅                    |
-| [Chainbase](https://chainbase.com/)                                         | ✅                 |                       |
-| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                 | ✅                    |
-| [Conduit](https://conduit.xyz/)\*                                           | ✅                 | ✅                    |
-| [Lava Network](https://docs.lavanet.xyz/gateway-access)                     | ✅                 | ✅                    |
-| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                 | ✅                    |
-| [NodeReal](https://nodereal.io/)                                            | ✅                 |                       |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                 | ✅                    |
+| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                  | ✅                     |
+| [Bware Labs](https://bwarelabs.com/blockchain-api)                          | ✅                  | ✅                     |
+| [Chainbase](https://chainbase.com/)                                         | ✅                  |                       |
+| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                  |                       |
+| [Conduit](https://conduit.xyz/)\*                                           | ✅                  | ✅                     |
+| [Lava Network](https://docs.lavanet.xyz/gateway-access)                     | ✅                  | ✅                     |
+| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                  | ✅                     |
+| [NodeReal](https://nodereal.io/)                                            | ✅                  |                       |
+| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                  | ✅                     |
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 

@@ -27,13 +27,13 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Run a node',
     Svg: require('@site/static/img/node.svg').default,
-    href: '/node-running/quickstart-running-a-node',
+    href: '/run-arbitrum-node/quickstart',
     description: 'Learn how to run a node to interact with any Arbitrum network.',
   },
   {
     title: 'Quickstart: Bridge tokens',
     Svg: require('@site/static/img/bridge_token.svg').default,
-    href: '/getting-started-users',
+    href: '/arbitrum-bridge/quickstart',
     description:
       "Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using Arbitrum Bridge.",
   },

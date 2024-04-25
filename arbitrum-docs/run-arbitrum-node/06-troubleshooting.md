@@ -74,16 +74,13 @@ If you're running into unexpected outputs or errors, the following checklist may
               <TabItem className="unclickable-element" value="label"></TabItem>
               <TabItem value="arb-one-nitro">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="arb-one-classic">
                 <p>
-                  <a href="/node-running/how-tos/running-a-classic-node">
+                  <a href="/run-arbitrum-node/more-types/run-classic-node">
                     How to run a full node (Classic, pre-Nitro)
                   </a>{' '}
                   may address your issue.
@@ -91,25 +88,20 @@ If you're running into unexpected outputs or errors, the following checklist may
               </TabItem>
               <TabItem value="arb-nova">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="arb-sepolia">
                 <p>
-                  The{' '}
-                  <a href="/node-running/how-tos/running-a-full-node">
-                    How to run a full node (Nitro)
-                  </a>{' '}
+                  The <a href="/run-arbitrum-node/run-full-node">How to run a full node (Nitro)</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
               <TabItem value="localhost">
                 <p>
-                  The <a href="/node-running/how-tos/local-dev-node">How to run a local dev node</a>{' '}
+                  The{' '}
+                  <a href="/run-arbitrum-node/run-local-dev-node">How to run a local dev node</a>{' '}
                   may address your issue.
                 </p>
               </TabItem>
@@ -117,13 +109,13 @@ If you're running into unexpected outputs or errors, the following checklist may
           </TabItem>
           <TabItem value="archive-node">
             <p>
-              <a href="/node-running/how-tos/running-an-archive-node">How to run an archive node</a>{' '}
+              <a href="/run-arbitrum-node/more-types/run-archive-node">How to run an archive node</a>{' '}
               may address your issue.
             </p>
           </TabItem>
           <TabItem value="validator-node">
             <p>
-              <a href="/node-running/how-tos/running-a-validator">How to run a validator</a> may
+              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a> may
               address your issue.
             </p>
           </TabItem>
@@ -221,6 +213,14 @@ Common troubleshooting scenarios and solutions are detailed below.
       <td>
         This often happens when Cloudflare attempts to block botnets and other malicious actors, but
         accidentally ends up blocking node runners.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        You see <code>failed to get blobs: expected at least 6 blobs for slot `[slot_number]` but only got 0</code>
+      </td>
+      <td>
+        This often happens when you connect to a beacon chain endpoint while the blob you are querying is expired. To resolve this error, connect to a beacon endpoint which supports historical blob data (see <a href='/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers'>List of Ethereum beacon chain RPC providers</a>).
       </td>
     </tr>
   </tbody>

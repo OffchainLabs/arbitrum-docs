@@ -1,38 +1,40 @@
 ---
-title: 'How to deploy a mirror Data Availability Server (DAS)'
+title: "How to deploy a mirror Data Availability Server (DAS)"
 description: This how-to will help you deploy a mirror Data Availability Server (DAS)
 author: jose-franco
 sidebar_position: 3
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../../partials/_public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
 :::caution Running a regular DAS vs running a mirror DAS
 
-The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](./deploy-a-das.mdx)_ if needed.
+The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md)_ if needed.
 
 :::
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely
+  on an external Data Availability Committee (DAC) to store data and provide it
+  on-demand instead of using its{" "}
+  <a data-quicklook-from="parent-chain">parent chain</a> as the Data
+  Availability (DA) layer. The members of the DAC run a Data Availability Server
+  (DAS) to handle these operations.
 </p>
 
-In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](./introduction.mdx)_.
+In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.md)_.
 
 This how-to assumes that you're familiar with:
 
-- How a regular DAS works and what configuration options are available. Refer to _[How to deploy a DAS](./deploy-a-das.mdx)_ for a refresher.
+- How a regular DAS works and what configuration options are available. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## What is a mirror DAS?
 
-To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](./deploy-a-das.mdx#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
+To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
 
 In general, mirror DA servers serve two main purposes:
 
@@ -41,7 +43,7 @@ In general, mirror DA servers serve two main purposes:
 
 ## Configuration options
 
-A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](./deploy-a-das.mdx#configuration-options).
+A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#configuration-options).
 
 ## How to deploy a mirror DAS
 
@@ -111,12 +113,12 @@ To enable caching, you can use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import S3Parameters from './partials/parameters/_s3-parameters.mdx';
-import LocalBadgerDBParameters from './partials/parameters/_local-badger-db-parameters.mdx';
-import LocalFilesParameters from './partials/parameters/_local-files-parameters.mdx';
-import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import S3Parameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx";
+import LocalBadgerDBParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx";
+import LocalFilesParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx";
+import IPFSParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx";
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -275,8 +277,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from './partials/_das-optional-parameters.mdx';
-import DASMetrics from './partials/_das-metrics.mdx';
+import DASOptionalParameters from "../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx";
+import DASMetrics from "../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx";
 
 ## Optional parameters
 
