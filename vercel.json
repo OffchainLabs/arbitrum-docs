@@ -1,6 +1,71 @@
 {
     "redirects": [
         {
+            "source": "/(node-running/troubleshooting-running-nodes/?)",
+            "destination": "/run-arbitrum-node/troubleshooting",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/migrate-state-and-history-from-classic/?)",
+            "destination": "/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/build-nitro-locally/?)",
+            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-sequencer-coordinator-manager/?)",
+            "destination": "/run-arbitrum-node/sequencer/run-sequencer-coordination-manager",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/read-sequencer-feed/?)",
+            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-feed-relay/?)",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/introduction/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-classic-node/?)",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-validator/?)",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-an-archive-node/?)",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
+            "permanent": false
+        },
+        {
             "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
             "destination": "/run-arbitrum-node/arbos-releases/arbos20",
             "permanent": false
@@ -262,7 +327,7 @@
         },
         {
             "source": "/migration/state-migration",
-            "destination": "/node-running/how-tos/migrate-state-and-history-from-classic",
+            "destination": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
             "permanent": false
         },
         {
@@ -582,12 +647,12 @@
         },
         {
             "source": "/node-running/running-a-classic-node",
-            "destination": "/node-running/how-tos/running-a-classic-node",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
             "permanent": false
         },
         {
             "source": "/node-running/running-an-archive-node",
-            "destination": "/node-running/how-tos/running-an-archive-node",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
             "permanent": false
         },
         {
@@ -597,22 +662,22 @@
         },
         {
             "source": "/node-running/running-a-feed-relay",
-            "destination": "/node-running/how-tos/running-a-feed-relay",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
             "permanent": false
         },
         {
             "source": "/node-running/running-a-validator",
-            "destination": "/node-running/how-tos/running-a-validator",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
             "permanent": false
         },
         {
             "source": "/node-running/read-sequencer-feed",
-            "destination": "/node-running/how-tos/read-sequencer-feed",
+            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
             "permanent": false
         },
         {
             "source": "/node-running/build-nitro-locally",
-            "destination": "/node-running/how-tos/build-nitro-locally",
+            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
             "permanent": false
         },
         {
@@ -622,12 +687,12 @@
         },
         {
             "source": "/das/daserver-instructions",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {
             "source": "/node-running/how-tos/running-a-daserver",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {

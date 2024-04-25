@@ -80,7 +80,7 @@ If you're running into unexpected outputs or errors, the following checklist may
               </TabItem>
               <TabItem value="arb-one-classic">
                 <p>
-                  <a href="/node-running/how-tos/running-a-classic-node">
+                  <a href="/run-arbitrum-node/more-types/run-classic-node">
                     How to run a full node (Classic, pre-Nitro)
                   </a>{' '}
                   may address your issue.
@@ -109,13 +109,13 @@ If you're running into unexpected outputs or errors, the following checklist may
           </TabItem>
           <TabItem value="archive-node">
             <p>
-              <a href="/node-running/how-tos/running-an-archive-node">How to run an archive node</a>{' '}
+              <a href="/run-arbitrum-node/more-types/run-archive-node">How to run an archive node</a>{' '}
               may address your issue.
             </p>
           </TabItem>
           <TabItem value="validator-node">
             <p>
-              <a href="/node-running/how-tos/running-a-validator">How to run a validator</a> may
+              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a> may
               address your issue.
             </p>
           </TabItem>
