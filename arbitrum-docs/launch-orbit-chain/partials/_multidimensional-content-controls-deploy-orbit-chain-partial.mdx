@@ -45,34 +45,68 @@ import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.
     ]}
   >
     <TabItem value="rollup-chain" label="Rollup chain">
+            <InfoRollupChainPartial />
       <div className="dynamic-content-tabs-toc">
         <Tabs
           className="tabgroup-with-label"
           defaultValue="1"
           groupId="rollup"
           values={[
-            { label: 'Chain type info', value: '1' },
-            { label: 'Prepare config', value: '2' },
-            { label: 'Deploy chain', value: '3' },
-            { label: 'Get chain info', value: '4' },
-            { label: 'Configure node', value: '5' },
-            { label: 'Deploy token bridge', value: '6' },
+            { label: '1. Prepare config', value: '1' },
+            { label: '2. Deploy chain', value: '2' },
+            { label: '3. Get chain info', value: '3' },
+            { label: '4. Configure node', value: '4' },
+            { label: '5. Deploy token bridge', value: '5' },
           ]}
         >
-          <TabItem value="1" label="Chain type info">
-            <InfoRollupChainPartial />
-          </TabItem>
-          <TabItem value="2" label="Prepare config">
+          <TabItem value="1" label="Prepare config">
             <PrepareConfigParameterForRollupPartial />
           </TabItem>
-          <TabItem value="3" label="Deploy chain">
+          <TabItem value="2" label="Deploy chain">
             <SendOrbitChainDeploymentTransactionPartial />
           </TabItem>
-          <TabItem value="4" label="Get chain info">
+          <TabItem value="3" label="Get chain info">
             <GetDeployedChainInfoPartial />
           </TabItem>
-          <TabItem value="5" label="Configure node">
+          <TabItem value="4" label="Configure node">
             <ConfigRollupNodePartial />
+          </TabItem>
+          <TabItem value="5" label="Deploy token bridge">
+            <DeployTokenBrigePartial />
+          </TabItem>
+        </Tabs>
+      </div>
+    </TabItem>
+    <TabItem value="anytrust-chain" label="AnyTrust chain">
+            <InfoAnytrustChainPartial />
+      <div className="dynamic-content-tabs-toc">
+        <Tabs
+          className="tabgroup-with-label"
+          defaultValue="1"
+          groupId="rollup"
+          values={[
+            { label: '1. Prepare config', value: '1' },
+            { label: '2. Deploy chain', value: '2' },
+            { label: '3. Get chain info', value: '3' },
+            { label: '4. Set DAC keyset', value: '4' },
+            { label: '5. Configure node', value: '5' },
+            { label: '6. Deploy token bridge', value: '6' },
+          ]}
+        >
+          <TabItem value="1" label="Prepare config">
+            <PrepareConfigParameterForAnyTrustPartial />
+          </TabItem>
+          <TabItem value="2" label="Deploy chain">
+            <SendOrbitChainDeploymentTransactionPartial />
+          </TabItem>
+          <TabItem value="3" label="Get chain info">
+            <GetDeployedChainInfoPartial />
+          </TabItem>
+          <TabItem value="4" label="Set DAC keyset">
+            <SetDacKeysetPartial />
+          </TabItem>
+          <TabItem value="5" label="Configure node">
+            <ConfigAnytrustNodePartial />
           </TabItem>
           <TabItem value="6" label="Deploy token bridge">
             <DeployTokenBrigePartial />
@@ -80,27 +114,28 @@ import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.
         </Tabs>
       </div>
     </TabItem>
-    <TabItem value="anytrust-chain" label="AnyTrust chain">
+    <TabItem value="custom-token-chain" label="Custom token chain">
+              <InfoCustomTokenChainPartial />
       <div className="dynamic-content-tabs-toc">
         <Tabs
           className="tabgroup-with-label"
           defaultValue="1"
           groupId="rollup"
           values={[
-            { label: 'Chain type info', value: '1' },
-            { label: 'Prepare config', value: '2' },
-            { label: 'Deploy chain', value: '3' },
-            { label: 'Get chain info', value: '4' },
-            { label: 'Set DAC keyset', value: '5' },
-            { label: 'Configure node', value: '6' },
-            { label: 'Deploy token bridge', value: '7' },
+            { label: '1. Prepare config', value: '1' },
+            { label: '2. Approve token', value: '2' },
+            { label: '3. Deploy chain', value: '3' },
+            { label: '4. Get chain info', value: '4' },
+            { label: '5. Set DAC keyset', value: '5' },
+            { label: '6. Configure node', value: '6' },
+            { label: '7. Deploy token bridge', value: '7' },
           ]}
         >
-          <TabItem value="1" label="Chain type info">
-            <InfoAnytrustChainPartial />
-          </TabItem>
-          <TabItem value="2" label="Prepare config">
+          <TabItem value="1" label="Prepare config">
             <PrepareConfigParameterForAnyTrustPartial />
+          </TabItem>
+          <TabItem value="2" label="Approve token">
+            <ApproveErc20TokenPartial />
           </TabItem>
           <TabItem value="3" label="Deploy chain">
             <SendOrbitChainDeploymentTransactionPartial />
@@ -112,52 +147,9 @@ import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.
             <SetDacKeysetPartial />
           </TabItem>
           <TabItem value="6" label="Configure node">
-            <ConfigAnytrustNodePartial />
-          </TabItem>
-          <TabItem value="7" label="Deploy token bridge">
-            <DeployTokenBrigePartial />
-          </TabItem>
-        </Tabs>
-      </div>
-    </TabItem>
-    <TabItem value="anytrust-chain" label="AnyTrust chain">
-      <div className="dynamic-content-tabs-toc">
-        <Tabs
-          className="tabgroup-with-label"
-          defaultValue="1"
-          groupId="rollup"
-          values={[
-            { label: 'Chain type info', value: '1' },
-            { label: 'Prepare config', value: '2' },
-            { label: 'Approve token', value: '3' },
-            { label: 'Deploy chain', value: '4' },
-            { label: 'Get chain info', value: '5' },
-            { label: 'Configure node', value: '6' },
-            { label: 'Deploy token bridge', value: '7' },
-          ]}
-        >
-          <TabItem value="1" label="Chain type info">
-            <InfoCustomTokenChainPartial />
-          </TabItem>
-          <TabItem value="2" label="Prepare config">
-            <PrepareConfigParameterForAnyTrustPartial />
-          </TabItem>
-          <TabItem value="3" label="Approve token">
-            <ApproveErc20TokenPartial />
-          </TabItem>
-          <TabItem value="4" label="Deploy chain">
-            <SendOrbitChainDeploymentTransactionPartial />
-          </TabItem>
-          <TabItem value="5" label="Get chain info">
-            <GetDeployedChainInfoPartial />
-          </TabItem>
-          <TabItem value="6" label="Configure node">
             <SetDacKeysetPartial />
           </TabItem>
-          <TabItem value="7" label="Configure node">
-            <ConfigAnytrustNodePartial />
-          </TabItem>
-          <TabItem value="8" label="Deploy token bridge">
+          <TabItem value="7" label="Deploy token bridge">
             <DeployTokenBrigePartial />
           </TabItem>
         </Tabs>
