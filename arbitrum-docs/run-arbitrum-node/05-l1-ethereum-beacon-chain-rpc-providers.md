@@ -25,15 +25,13 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 
 | Provider                                                                    | Beacon chain APIs? | Historical blob data? |
 | --------------------------------------------------------------------------- | ------------------ | --------------------- |
-| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                  | ✅                     |
-| [Bware Labs](https://bwarelabs.com/blockchain-api)                          | ✅                  | ✅                     |
-| [Chainbase](https://chainbase.com/)                                         | ✅                  |                       |
-| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                  |                       |
-| [Conduit](https://conduit.xyz/)\*                                           | ✅                  | ✅                     |
-| [Lava Network](https://docs.lavanet.xyz/gateway-access)                     | ✅                  | ✅                     |
-| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                  | ✅                     |
-| [NodeReal](https://nodereal.io/)                                            | ✅                  |                       |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                  | ✅                     |
+| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                  | ✅                   |
+| [Chainbase](https://chainbase.com/)                                         | ✅                  |                      |
+| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                  |                      |
+| [Conduit](https://conduit.xyz/)\*                                           | ✅                  | ✅                   |
+| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                  | ✅                   |
+| [NodeReal](https://nodereal.io/)                                            | ✅                  |                      |
+| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                  | ✅                   |
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
