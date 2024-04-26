@@ -2,31 +2,31 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.mdx';
+import ConfigAnytrustNodePartial from './_config-anytrust-node-partial.md';
 
-import DeployOrbitChainHelpersPartial from './_deploy-orbit-chain-helpers-partial.mdx';
+import DeployOrbitChainHelpersPartial from './_deploy-orbit-chain-helpers-partial.md';
 
-import DeployOrbitChainParametersPartial from './_deploy-orbit-chain-parameters-partial.mdx';
+import DeployOrbitChainParametersPartial from './_deploy-orbit-chain-parameters-partial.md';
 
-import GetDeployedChainInfoPartial from './_get-deployed-chain-info-partial.mdx';
+import GetDeployedChainInfoPartial from './_get-deployed-chain-info-partial.md';
 
-import PrepareConfigParameterForAnyTrustPartial from './_prepare-config-parameter-for-anytrust-partial.mdx';
+import PrepareConfigParameterForAnyTrustPartial from './_prepare-config-parameter-for-anytrust-partial.md';
 
-import PrepareConfigParameterForRollupPartial from './_prepare-config-parameter-for-rollup-partial.mdx';
+import PrepareConfigParameterForRollupPartial from './_prepare-config-parameter-for-rollup-partial.md';
 
-import SendDeployTokenBridgeTransactionPartial from './_send-deploy-token-bridge-transaction-partial.mdx';
+import SendDeployTokenBridgeTransactionPartial from './_send-deploy-token-bridge-transaction-partial.md';
 
-import SendOrbitChainDeploymentTransactionPartial from './_send-orbit-chain-deployment-transaction-partial.mdx';
+import SendOrbitChainDeploymentTransactionPartial from './_send-orbit-chain-deployment-transaction-partial.md';
 
-import ConfigRollupNodePartial from './_config-rollup-node-partial.mdx';
+import ConfigRollupNodePartial from './_config-rollup-node-partial.md';
 
-import DeployTokenBrigePartial from './_deploy-token-brige-partial.mdx';
+import DeployTokenBrigePartial from './_deploy-token-brige-partial.md';
 
-import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.mdx';
+import DeployCustomTokenBrigePartial from './_deploy-custom-token-brige-partial.md';
 
-import ApproveErc20TokenPartial from './_approve-erc20-token-partial.mdx';
+import ApproveErc20TokenPartial from './_approve-erc20-token-partial.md';
 
-import SetDacKeysetPartial from './_set-dac-keyset-partial.mdx';
+import SetDacKeysetPartial from './_set-dac-keyset-partial.md';
 
 <div className="dynamic-content-tabs-toc">
   <Tabs
