@@ -176,11 +176,11 @@ Represents a user deposit from L1 to L2. This increases the user's balance by th
 
 ### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]{#ArbitrumSubmitRetryableTx}
 
-Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](arbos#Retryables) for more info.
+Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
 
 ### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
-These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](arbos#Retryables) for more info.
+These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
 
 ### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
