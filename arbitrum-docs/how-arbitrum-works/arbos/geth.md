@@ -256,7 +256,7 @@ To aid with [outbox proof construction][proof_link], the root hash and leaf coun
 
 ### Retryable Support
 
-Retryables are mostly implemented in [ArbOS](arbos#retryables). Some modifications were required in Geth to support them.
+Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/arbos/introduction.md#retryables). Some modifications were required in Geth to support them.
 
 - Added ScheduledTxes field to ExecutionResult. This lists transactions scheduled during the execution. To enable using this field, we also pass the ExecutionResult to callers of ApplyTransaction.
 - Added gasEstimation param to DoCall. When enabled, DoCall will also also executing any retryable activated by the original call. This allows estimating gas to enable retryables.
