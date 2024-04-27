@@ -1,4 +1,4 @@
-import ChallengeManagerDiagram from '../diagrams/_challenge-manager.mdx';
+import ChallengeManagerDiagram from '../../diagrams/_challenge-manager.mdx';
 
 # ChallengeManager
 

@@ -228,7 +228,7 @@ Nitro's Geth may be configured with the following [l2-specific chain parameters]
 
 ### `EnableArbos`
 
-Introduces [ArbOS](arbos.mdx), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
+Introduces [ArbOS](/how-arbitrum-works/arbos/introduction.md), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
 
 ### `AllowDebugPrecompiles`
 
