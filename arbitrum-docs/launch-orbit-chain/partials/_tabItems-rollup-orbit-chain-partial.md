@@ -34,19 +34,19 @@ import ConfigRollupNodePartial from './_config-rollup-node-partial.md';
       { label: '5. Deploy token bridge', value: '5' },
     ]}
   >
-    <TabItem value="1" label="Prepare config">
+    <TabItem value="1" label="1. Prepare config">
       <PrepareConfigParameterForRollupPartial />
     </TabItem>
-    <TabItem value="2" label="Deploy chain">
+    <TabItem value="2" label="2. Deploy chain">
       <SendOrbitChainDeploymentTransactionPartial />
     </TabItem>
-    <TabItem value="3" label="Get chain info">
+    <TabItem value="3" label="3. Get chain info">
       <GetDeployedChainInfoPartial />
     </TabItem>
-    <TabItem value="4" label="Configure node">
+    <TabItem value="4" label="4. Configure node">
       <ConfigRollupNodePartial />
     </TabItem>
-    <TabItem value="5" label="Deploy token bridge">
+    <TabItem value="5" label="5. Deploy token bridge">
       <DeployTokenBrigePartial />
     </TabItem>
   </Tabs>
