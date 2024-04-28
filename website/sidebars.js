@@ -345,9 +345,31 @@ const sidebars = {
           label: 'Custom gas token SDK',
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/orbit-sdk-deploying-orbit-chain',
-          label: `Orbit SDK`,
+          type: 'category',
+          label: 'Orbit SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-deploying-orbit-chain',
+              label: `Introduction`,
+            },
+            {
+              type: 'link',
+              label: 'Rollup chain',
+              href: '/launch-orbit-chain/orbit-sdk-deploying-orbit-chain?current-chain=rollup-chain',
+            },
+            {
+              type: 'link',
+              label: 'AnyTrust chain',
+              href: '/launch-orbit-chain/orbit-sdk-deploying-orbit-chain?current-chain=anytrust-chain',
+            },
+            {
+              type: 'link',
+              label: 'Custom token chain',
+              href: '/launch-orbit-chain/orbit-sdk-deploying-orbit-chain?current-chain=custom-token-chain',
+            },
+          ],
         },
         {
           type: 'doc',

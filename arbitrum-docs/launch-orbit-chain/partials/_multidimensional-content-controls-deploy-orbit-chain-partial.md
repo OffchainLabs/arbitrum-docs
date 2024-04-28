@@ -50,6 +50,7 @@ import TabItemsRollupOrbitChainPartialBottom from './_tabItems-rollup-orbit-chai
     className="tabgroup-with-label"
     defaultValue="rollup-chain"
     groupId="chain-type"
+    queryString="current-chain"
     values={[
       { label: 'Rollup chain', value: 'rollup-chain' },
       { label: 'AnyTrust chain', value: 'anytrust-chain' },
