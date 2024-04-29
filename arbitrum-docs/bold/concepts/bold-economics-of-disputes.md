@@ -47,7 +47,8 @@ The reason there is a dispute window for assertions about Arbitrum One on Ethere
 
 An actual dispute occurs once a party disagrees with an assertion on Ethereum, and posts their own assertion they know to be correct. This creates a “fork” in the chain of assertions, requiring a resolution process. We’ll get into the high-level details of how disputes are resolved soon.
 
-![](assets/9Pr_Image_1.png)
+![diag2](../assets/9Pr_Image_1.png)
+
 Once an actual dispute is ongoing, it will also take time to resolve, as, once again, Ethereum has no knowledge of the correctness of Arbitrum states. Ethereum must then give sufficient time for parties to provide their burden of proof and declare a winner. The new, Arbitrum BOLD protocol **guarantees that a dispute will be resolved within 7 days** so long as there is an honest party present to defend against invalid claims.
 
 As assertions have a dispute window of 7 days, and disputes require an additional 7 days to resolve, a dispute made at the last second would** delay assertion confirmation to a maximum of 14 days**, or 2 weeks. BOLD is the only dispute protocol we are aware of that guarantees this bound.
@@ -101,7 +102,7 @@ Because evil parties can submit junk that makes honest parties do work, there ha
 
 When thinking about how to price the bonds required to make claims within disputes, we essentially consider the marginal costs that the honest party incurs for each claim an evil party makes. In the BOLD research paper, this comes out to include information such as the number of adversary moves, multiplied by the gas cost of making bisections, making claims, and some estimates of the offchain computational costs. We deem this the **marginal cost** of a party in a dispute.
 
-![](assets/csI_Image_2.png)
+![diag2](../assets/csI_Image_2.png)
 
 For instance, say we have two, 1 meter sticks that seem identical, and we want to figure out where they differ. It turns out that they seem identical at the centimeter level, so we need to go down to the millimeter level, then the micrometer level, and then figure out where they differ at the *nanometer* level.
 
@@ -111,7 +112,8 @@ This is what BOLD does over the space of disputes. Parties play the same game at
 
 Given Ethereum knows nothing about which claims are honest or evil until a one step proof is reached, then how can the protocol detect spam and discourage it? A key insight is that honest parties only need to make one honest claim. Honest parties will never spam and create thousands of conflicting claims with themselves. Given this, we can put a price tag on making moves by looking at something called the “resource ratio” between honest and evil parties, as defined in the BOLD research paper
 
-![](assets/BnF_Image_3.png)
+![](../assets/BnF_Image_3.png)
+
 This ratio is essentially the gas + staking (or bonding) marginal costs of the adversary to the honest party. This means that certain values input into the equations can lead to **different ratios**. For instance, we can say the adversary has to pay **10x **the marginal costs of the honest party. However, aiming to increase this ratio significantly by plugging in different values leads to higher costs for all parties.
 
 #### Dispute Challenge Bonds
@@ -126,7 +128,8 @@ That is, if we aim to have a constant resource ratio > 1, we have to do the foll
 
 Below, we plot the bond size vs. the resource ratio of evil to honest costs. The source for these equations is both in the research paper and plotted [here](https://www.desmos.com/calculator/digjlq4vly).
 
-![](assets/CRA_Image_4.png)
+![diag2](../assets/CRA_Image_4.png)
+
 If we desire a constant resource ratio of evil to honest costs > 1, the required bond size in ETH increases as a polynomial at a particular challenge level.
 
 #### Trade Offs
