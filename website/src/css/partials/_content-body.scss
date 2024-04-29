@@ -49,6 +49,16 @@ article {
       font-weight: 600;
     }
 
+    img[alt='diag1'] {
+      width: 200px;
+    }
+    img[alt='diag2'] {
+      width: 400px;
+    }
+    img[alt='diag3'] {
+      width: 600px;
+    }
+
     .theme-admonition {
       margin-bottom: 2em;
 
