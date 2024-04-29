@@ -23,15 +23,16 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 
 ### List of Ethereum beacon chain RPC providers
 
-| Provider                                                                    | Beacon chain APIs? | Historical blob data? |
-| --------------------------------------------------------------------------- | ------------------ | --------------------- |
-| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                  | ✅                   |
-| [Chainbase](https://chainbase.com/)                                         | ✅                  |                      |
-| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                  |                      |
-| [Conduit](https://conduit.xyz/)\*                                           | ✅                  | ✅                   |
-| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                  | ✅                   |
-| [NodeReal](https://nodereal.io/)                                            | ✅                  |                      |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                  | ✅                   |
+| Provider                                                                    | Mainnet Beacon chain APIs? | Mainnet Historical blob data? | Holesky Beacon chain APIs?|
+| --------------------------------------------------------------------------- | ------------------ | --------------------- |------------------------------------------ |
+| [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                  | ✅                   |                                           |
+| [Chainbase](https://chainbase.com/)                                         | ✅                  |                      |                                           |
+| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                  |                      |                                           |
+| [Conduit](https://conduit.xyz/)\*                                           | ✅                  | ✅                   |                                           |
+| [BlastAPI](https://blastapi.io/public-api/ethereum)                         |                     |                      | ✅                                        | 
+| [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                  | ✅                   |                                           |
+| [NodeReal](https://nodereal.io/)                                            | ✅                  |                      |                                           |
+| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                  | ✅                   |                                           |
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
