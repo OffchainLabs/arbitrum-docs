@@ -54,7 +54,7 @@ mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/
 
 3. Translate one of more docs files located in `/arbitrum-docs`.
 
-4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/arbos/arbos.mdx`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/arbos/arbos.mdx`.
+4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
 
 Test run:
 
@@ -117,7 +117,7 @@ Every document should be a specific _type_ of document. Each type of document ha
 | How-to              | Provide task-oriented procedural guidance                                          | [How to run a local dev node](/run-arbitrum-node/04-run-local-dev-node.md)                                                                                               |
 | Concept             | Explain what things are and how they work                                          | [Token bridging](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
 | FAQ                 | Address frequently asked questions                                                 | [FAQ: Run a node](../node-running/faq.md)                                                                                                                                |
-| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](../node-running/troubleshooting-running-nodes.md)                                                                                          |
+| Troubleshooting     | List common troubleshooting scenarios and solutions                                | [Troubleshooting: Run a node](/run-arbitrum-node/06-troubleshooting.md)                                                                                                  |
 | Reference           | Lists and tables of things, such as API endpoints and developer resources          | [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.md)                                                                                  |
 
 This isn't an exhaustive list, but it includes most of the document types that we use.

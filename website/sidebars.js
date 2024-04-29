@@ -318,7 +318,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↓</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
         },
@@ -569,17 +569,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
+              id: 'run-arbitrum-node/more-types/run-archive-node',
               label: 'Run an archive node',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
+              id: 'run-arbitrum-node/more-types/run-validator-node',
               label: 'Run a validator',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
+              id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
           ],
@@ -591,22 +591,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
               label: 'Get started',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
               label: 'Deploy a Data Availability Server (DAS)',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
               label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
@@ -618,17 +618,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
+              id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
+              id: 'run-arbitrum-node/sequencer/read-sequencer-feed',
               label: 'Read the sequencer feed',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-coordination-manager',
               label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
@@ -640,19 +640,19 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
+              id: 'run-arbitrum-node/nitro/build-nitro-locally',
               label: 'Build Nitro locally',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
+          id: 'run-arbitrum-node/troubleshooting',
           label: 'Troubleshooting',
         },
         {
@@ -696,22 +696,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'why-nitro',
+              id: 'how-arbitrum-works/why-nitro',
               label: 'Why Nitro?',
             },
             {
               type: 'doc',
-              id: 'tx-lifecycle',
+              id: 'how-arbitrum-works/tx-lifecycle',
               label: 'Transaction lifecycle',
             },
             {
               type: 'doc',
-              id: 'sequencer',
+              id: 'how-arbitrum-works/sequencer',
               label: 'Sequencer',
             },
             {
               type: 'doc',
-              id: 'inside-anytrust',
+              id: 'how-arbitrum-works/inside-anytrust',
               label: 'AnyTrust protocol',
             },
             {
@@ -720,12 +720,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/gas',
-                  label: 'L2 gas',
+                  id: 'how-arbitrum-works/gas-fees',
+                  label: 'L2 gas and fees',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l1-pricing',
+                  id: 'how-arbitrum-works/l1-gas-pricing',
                   label: 'L1 pricing',
                 },
               ],
@@ -739,7 +739,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'inside-arbitrum-nitro/inside-arbitrum-nitro',
+              id: 'how-arbitrum-works/inside-arbitrum-nitro',
               label: 'Deep dive: Inside Arbitrum',
             },
             {
@@ -749,7 +749,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'assertion-tree',
+              id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
             },
             {
@@ -758,12 +758,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/l1-to-l2-messaging',
+                  id: 'how-arbitrum-works/arbos/l1-l2-messaging',
                   label: 'L1-to-L2 messaging',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l2-to-l1-messaging',
+                  id: 'how-arbitrum-works/arbos/l2-l1-messaging',
                   label: 'L2-to-L1 messaging',
                 },
               ],
@@ -774,12 +774,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/arbos',
+                  id: 'how-arbitrum-works/arbos/introduction',
                   label: 'ArbOS',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/geth',
+                  id: 'how-arbitrum-works/arbos/geth',
                   label: 'Geth',
                 },
               ],
@@ -790,32 +790,32 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'proving/challenge-manager',
+                  id: 'how-arbitrum-works/fraud-proofs/challenge-manager',
                   label: 'Interactive challenges',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/osp-assumptions',
+                  id: 'how-arbitrum-works/fraud-proofs/osp-assumptions',
                   label: 'One step proof assumptions',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wasm-to-wavm',
+                  id: 'how-arbitrum-works/fraud-proofs/wasm-wavm',
                   label: 'Wasm To WAVM',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-custom-opcodes',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-custom-opcodes',
                   label: 'Custom WAVM opcodes',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-floats',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-floats',
                   label: 'WAVM floats',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-modules',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-modules',
                   label: 'WAVM modules',
                 },
               ],
@@ -826,7 +826,7 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'bold/bold-gentle-introduction',
+                  id: 'how-arbitrum-works/bold/gentle-introduction',
                   label: 'A gentle introduction',
                 },
                 {
@@ -856,7 +856,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'bold/concepts/public-preview-expectations',
+                  id: 'how-arbitrum-works/bold/public-preview-expectations',
                   label: 'Public preview',
                 },
               ],

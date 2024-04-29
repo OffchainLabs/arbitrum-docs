@@ -6,6 +6,6 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-import UnderConstructionPartial from '../../../partials/_under-construction-banner-partial.md';
+import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md';
 
 <UnderConstructionPartial />

@@ -1,20 +1,22 @@
 ---
-title: 'How to deploy a Data Availability Server (DAS)'
+title: "How to deploy a Data Availability Server (DAS)"
 description: This how-to will help you deploy a Data Availability Server (DAS)
 author: jose-franco
 sidebar_position: 2
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from "../../partials/_public-preview-banner-partial.md";
 
 <PublicPreviewBannerPartial />
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
-  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
-  members of the DAC run a Data Availability Server (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely
+  on an external Data Availability Committee (DAC) to store data and provide it
+  on-demand instead of using its{" "}
+  <a data-quicklook-from="parent-chain">parent chain</a> as the Data
+  Availability (DA) layer. The members of the DAC run a Data Availability Server
+  (DAS) to handle these operations.
 </p>
 
 In this how-to, you'll learn how to deploy a DAS that exposes:
@@ -22,11 +24,11 @@ In this how-to, you'll learn how to deploy a DAS that exposes:
 1. **An RPC interface** that the sequencer uses to store batches of data on the DAS.
 2. **An HTTP REST interface** that lets the DAS respond to requests for those batches of data.
 
-For more information related to configuring a DAC, refer to the _[Introduction](./introduction.mdx)_.
+For more information related to configuring a DAC, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.md)_.
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/inside-anytrust.mdx)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.md)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?
@@ -147,12 +149,12 @@ To enable the REST aggregator, use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import S3Parameters from './partials/parameters/_s3-parameters.mdx';
-import LocalBadgerDBParameters from './partials/parameters/_local-badger-db-parameters.mdx';
-import LocalFilesParameters from './partials/parameters/_local-files-parameters.mdx';
-import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+import S3Parameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx";
+import LocalBadgerDBParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx";
+import LocalFilesParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx";
+import IPFSParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx";
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -397,7 +399,7 @@ In general, mirror DA servers serve two main purposes:
 1. Prevent the main DAS from having to serve requests for data, allowing it to focus only on storing the data received.
 2. Provide resiliency to the network in the case of a DAS going down.
 
-Find information about how to setup a mirror DAS in [How to deploy a mirror DAS](./deploy-a-mirror-das.mdx).
+Find information about how to setup a mirror DAS in [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md).
 
 ## Security considerations
 
@@ -421,8 +423,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from './partials/_das-optional-parameters.mdx';
-import DASMetrics from './partials/_das-metrics.mdx';
+import DASOptionalParameters from "../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx";
+import DASMetrics from "../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx";
 
 ## Optional parameters
 
