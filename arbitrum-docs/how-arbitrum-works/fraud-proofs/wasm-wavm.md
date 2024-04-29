@@ -3,7 +3,7 @@
 Not all WASM instructions are 1:1 with WAVM opcodes.
 This document lists those which are not, and explains how they're expressed in WAVM.
 Many of the WAVM representations use opcodes not in WASM,
-which are documented in [`wavm-custom-opcodes.md`](./wavm-custom-opcodes.mdx).
+which are documented in [`wavm-custom-opcodes.md`](/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes.md).
 
 ## `block` and `loop`
 
