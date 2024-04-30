@@ -2,10 +2,10 @@
 title: 'BoLD: a technical deep dive'
 sidebar_label: 'Technical deep dive'
 description: 'A technical deep dive into the BoLD protocol.'
-user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand the technical implementation of the BoLD protocol.'
+user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand the technical choices behind the BoLD protocol.'
 content_type: concept
 author: leeederek
-target_audience: 'Developers, users and researchers interested in the Arbitrum product suite.'
+target_audience: 'Developers, users and researchers interested in the Arbitrum BoLD protocol.'
 sme: leeederek
 sidebar_position: 1
 ---
