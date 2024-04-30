@@ -34,25 +34,25 @@ The current implementation of BoLD involves both on-chain and off-chain componen
 
 - **Arbitrum Rollup Contracts:** The set of smart contracts on Ethereum L1 that serve as both the data availability layer for Arbitrum and for confirming the rollup's state assertions after a challenge period has passed for each assertion made
 
-- **Assertions:** A claim posted to the Arbitrum rollup contracts on Ethereum L1 about the Arbitrum L2 execution state. Each claim consumes messages from the Arbitrum rollup inbox contract. Each assertion can be confirmed after a period of 6.4 days, and anyone can challenge it during that period. A BoLD challenge will add an additional upper bound of 6.4 days to confirm an assertion. If an assertion is challenged near the end of 6.4 days, an additional 6.4 days will be needed to complete the challenge. Gaining the right to post assertions requires placing a large, one-time bond, which can get taken away in the case of losing a challenge to a competing assertion. Opening challenges requires opening smaller “mini-bonds” each time.
+- **Assertions:** A claim posted to the Arbitrum Rollup contracts on Ethereum L1 about the Arbitrum L2 execution state. Each claim consumes messages from the Arbitrum Rollup inbox contract. Each assertion can be confirmed after a period of 6.4 days, and anyone can challenge it during that period. A BoLD challenge will add an additional upper bound of 6.4 days to confirm an assertion. If an assertion is challenged near the end of 6.4 days, an additional 6.4 days will be needed to complete the challenge. Gaining the right to post assertions requires placing a large, one-time bond, which can get taken away in the case of losing a challenge to a competing assertion. Opening challenges requires opening smaller “mini-bonds” each time.
 
 - **Validating Bridge:** The smart contract that leverages Ethereum's security and censorship-resistance to unlock bridged assets from L2 back to L1. Assets can be unlocked after an assertion has been posted and confirmed after a challenge period has passed
 
-- **Fraud Proofs:** Proofs of a single step of `WAVM` execution of Arbitrum's state transition function, which are submitted to Ethereum and verified in the EVM via a smart contract. These proofs allow Ethereum to be the final arbiter of disagreements over assertions in the rollup contracts, which cannot be falsified by any parties as there is only a single, correct result of executing a WASM instruction on a pre-state.
+- **Fraud Proofs:** Proofs of a single step of `WAVM` execution of Arbitrum's state transition function, which are submitted to Ethereum and verified in the EVM via a smart contract. These proofs allow Ethereum to be the final arbiter of disagreements over assertions in the Rollup contracts, which cannot be falsified by any parties as there is only a single, correct result of executing a WASM instruction on a pre-state.
 
-- **Challenge Protocol:** A set of rules through which a disagreement on an assertion is resolved using Ethereum as the final arbiter. Ethereum's VM can verify one-step proofs of deterministic computation that can confirm a challenge winner in Arbitrum's rollup contracts.
+- **Challenge Protocol:** A set of rules through which a disagreement on an assertion is resolved using Ethereum as the final arbiter. Ethereum's VM can verify one-step proofs of deterministic computation that can confirm a challenge winner in Arbitrum's Rollup contracts.
 
-- **Bonding of funds:** Creating an assertion in the rollup contracts requires the submitter to join the validator set by putting up a large bond in the form of `WETH`. Subsequent assertions posted by the same party do not require more bonds. Instead, the protocol always considers validators to be bonded to their latest posted assertion. The bonded funds are taken away if another competing assertion is confirmed. In the case of confirming an assertion, the associated bonded funds can be withdrawn
+- **Bonding of funds:** Creating an assertion in the Rollup contracts requires the submitter to join the validator set by putting up a large bond in the form of `WETH`. Subsequent assertions posted by the same party do not require more bonds. Instead, the protocol always considers validators to be bonded to their latest posted assertion. The bonded funds are taken away if another competing assertion is confirmed. In the case of confirming an assertion, the associated bonded funds can be withdrawn
 
 - **Honest Validator**: An entity that knows the correct state of the Arbitrum L2 chain and will participate in confirming assertions and challenging invalid assertions if they exist
 
 - **Challenge Period:** Window of time ([~6.4 days on Arbitrum One](https://docs.arbitrum.io/build-decentralized-apps/reference/chain-params)) over which an assertion can be challenged, after which the assertion can be confirmed. This is configurable by the DAO.
 
-- **Delay Attacks:** In a delay attack, a malicious party (or group of parties) acts within the rollup protocol, forcing the honest party to play 1-vs-1 games against them to delay the confirmation of results back to the L1 chain. BoLD has a proven, constant upper bound on confirmation times for assertions in Arbitrum, addressing the biggest flaw of the current challenge mechanism. BoLD validators don’t need to play 1-vs-1 challenges and instead can defend a single challenge against many malicious claims. With delay attacks solved, Arbitrum will be able to allow permissionless validation
+- **Delay Attacks:** In a delay attack, a malicious party (or group of parties) acts within the Rollup protocol, forcing the honest party to play 1-vs-1 games against them to delay the confirmation of results back to the L1 chain. BoLD has a proven, constant upper bound on confirmation times for assertions in Arbitrum, addressing the biggest flaw of the current challenge mechanism. BoLD validators don’t need to play 1-vs-1 challenges and instead can defend a single challenge against many malicious claims. With delay attacks solved, Arbitrum will be able to allow permissionless validation
 
-- **Permissionless Validation:** The ability for anyone to interact with the Arbitrum rollup contracts on Ethereum to both post assertions and challenge others' assertions without needing permission. With the release of BoLD, the rollup contracts on Arbitrum will no longer have a permissioned list of validators.
+- **Permissionless Validation:** The ability for anyone to interact with the Arbitrum Rollup contracts on Ethereum to both post assertions and challenge others' assertions without needing permission. With the release of BoLD, the Rollup contracts on Arbitrum will no longer have a permissioned list of validators.
 
-- **Validator Software:** Software that has knowledge of the correct Arbitrum L2 state at any point. It tracks the on-chain rollup contracts for assertions posted and will automatically initiate challenges on malicious assertions if configured to do so by the user. It will participate in new and existing challenges and make moves as required by the protocol to win against any number of malicious entities. Its goal is to ensure only honest assertions about Arbitrum's state are confirmed on Ethereum. All Arbitrum full nodes are watchtower validators by default. This means they do not post claims or assertions unless configured to do so but will warn in case invalid assertions are detected on-chain.
+- **Validator Software:** Software that has knowledge of the correct Arbitrum L2 state at any point. It tracks the on-chain Rollup contracts for assertions posted and will automatically initiate challenges on malicious assertions if configured to do so by the user. It will participate in new and existing challenges and make moves as required by the protocol to win against any number of malicious entities. Its goal is to ensure only honest assertions about Arbitrum's state are confirmed on Ethereum. All Arbitrum full nodes are watchtower validators by default. This means they do not post claims or assertions unless configured to do so but will warn in case invalid assertions are detected on-chain.
 
 ### How BoLD Uses Ethereum
 
@@ -70,17 +70,17 @@ All actors in the protocol have a local state from which they can produce valid 
 
 ### On-chain components
 
-- **Rollup Contract:** This is a smart contract that lives on Ethereum and allows validators to bond on state assertions about Arbitrum. This contract, known as  `RollupCore.sol`, is already used by Arbitrum chains to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a ChallengeManager, new in BoLD.
+- **Rollup Contract:** This is a smart contract that lives on Ethereum and allows validators to bond on state assertions about Arbitrum. This contract, known as  `RollupCore.sol`, is already used by Arbitrum chains to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a `ChallengeManager`, new in BoLD.
 
 - **ChallengeManager:** This is a contract that allows for initiating challenges on assertions within the `AssertionChain` and provides methods for anyone to participate in challenges in a permissionless fashion. This new challenge protocol will require a new `ChallengeManager` written in Solidity and deployed to Ethereum. The challenge manager contains entry points for making challenge moves, opening leaves, creating subchallenges, and confirming challenges.
 
 - **OneStepProver:** A set of contracts that implement a miniature WASM VM capable of executing one-step-proofs of computation of the L2 state transition function. This is implemented in Solidity and already exists on Ethereum. No changes to the OSP contracts are needed for BoLD.
 
-**Bonding (also referred to as Staking):** Participants in the protocol need to bond a certain amount of ETH (WETH is used in the BoLD testnet) to gain the privilege of posting assertions to the rollup contracts by locking up an ETH bond in the protocol contracts. Whenever someone wants to challenge an assertion, they must also place a smaller bond called a mini-bond in their challenge. Bonds, their rationale, and magnitude will be covered in greater detail in the Specifications section.
+**Bonding (also referred to as Staking):** Participants in the protocol need to bond a certain amount of ETH (WETH is used in the BoLD testnet) to gain the privilege of posting assertions to the Rollup contracts by locking up an ETH bond in the protocol contracts. Whenever someone wants to challenge an assertion, they must also place a smaller bond called a mini-bond in their challenge. Bonds, their rationale, and magnitude will be covered in greater detail in the Specifications section.
 
 ### Off-chain components
 
-- **Chain bindings:** Software that can interact with an Ethereum node in order to make calls and transactions to the onchain contracts needed for participating in the protocol. We utilize go-ethereum’s abigen utilities to create Go bindings to interact with the contracts above, with a few more developer-friendly wrappers
+- **Chain bindings:** Software that can interact with an Ethereum node in order to make calls and transactions to the on-chain contracts needed for participating in the protocol. We utilize go-ethereum’s abigen utilities to create Go bindings to interact with the contracts above, with a few more developer-friendly wrappers
 
 - **State manager backend:** Software that can retrieve L2 chain states and produce commitments to `WAVM` histories for Arbitrum based on an execution server. The validator client, described below, will have access to a state manager backend in order to make moves on challenge vertices.
 
@@ -96,19 +96,19 @@ A key responsibility for Arbitrum validators is to post claims about the Arbitru
 
 2. The batch number it corresponds to for the Arbitrum chain
 
-3. The number of messages in the Arbitrum inbox at the time the assertion was posted onchain
+3. The number of messages in the Arbitrum inbox at the time the assertion was posted on-chain
 
-The following assertion to be posted onchain must consume, at least, the specified number of inbox messages from its parent. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to 1 hour for BoLD.
+The following assertion to be posted on-chain must consume, at least, the specified number of inbox messages from its parent. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to 1 hour for BoLD.
 
-Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion onchain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
+Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion on-chain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
 
-Validators must first become bonders in the rollup contract before starting to post assertions. This involves placing a one-time bond of size N WETH that is locked in the contract until they choose to unbond. Validators can only unbond if their latest posted assertion has been confirmed. Each assertion a validator posts will become their latest bond assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” validators’ bonds to their latest posted assertion.
+Validators must first become bondrs in the Rollup contract before starting to post assertions. This involves placing a one-time bond of size N `WETH` that is locked in the contract until they choose to unbond. Validators can only unbond if their latest posted assertion has been confirmed. Each assertion a validator posts will become their latest bond assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” validators’ bonds to their latest posted assertion.
 
-Assertions form a chain in which there can be forks. For instance, a validator might disagree with the L2 blockhash of an assertion at a given batch. All Arbitrum Nitro nodes are configured to warn users if they observe an assertion they disagree with posted onchain. However, if a node is configured as a validator, it will be responsible for posting the correct, rival assertion to any invalid one it just observed. The validator will also initiate a challenge by posting a mini-bond and other data to the ChallengeManager, signaling it is disputing an assertion.
+Assertions form a chain in which there can be forks. For instance, a validator might disagree with the L2 blockhash of an assertion at a given batch. All Arbitrum Nitro nodes are configured to warn users if they observe an assertion they disagree with posted on-chain. However, if a node is configured as a validator, it will be responsible for posting the correct, rival assertion to any invalid one it just observed. The validator will also initiate a challenge by posting a mini-bond and other data to the `ChallengeManager`, signaling it is disputing an assertion.
 
 #### Overflow assertions
 
-Given the mandatory delay of one hour between assertions posted onchain, and each assertion is a claim to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion only supports a maximum of 2^26 Arbitrum blocks since its parent. If this value is overflowed, a follow-up overflow assertion needs to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory 1-hour delay between assertions.
+Given the mandatory delay of one hour between assertions posted on-chain, and each assertion is a claim to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion only supports a maximum of 2^26 Arbitrum blocks since its parent. If this value is overflowed, a follow-up overflow assertion needs to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory 1-hour delay between assertions.
 
 #### Trustles Bonding Pools
 
@@ -122,9 +122,9 @@ Trustless bonding pools can also be created to open challenges and make moves on
 
 ### Opening Challenges
 
-To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on Ethereum. Additionally, the validator posting the edge must attach a bond called a mini-bond to it, denominated in WETH for the BoLD testnet. This bond is much lower than the one required to become an assertion poster.
+To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on Ethereum. Additionally, the validator posting the edge must attach a bond called a mini-bond to it, denominated in `WETH` for the BoLD testnet. This bond is much lower than the one required to become an assertion poster.
 
-Anyone can open a challenge on an assertion without needing to be a bondr in the rollup contract, so long as they post a mini-bond and an edge claiming intent to start the challenge. Challenges are not tied to specific addresses or parties – instead, anyone can participate.t
+Anyone can open a challenge on an assertion without needing to be a bondr in the Rollup contract, so long as they post a mini-bond and an edge claiming intent to start the challenge. Challenges are not tied to specific addresses or parties – instead, anyone can participate.t
 
 Recall that a challenge is a fundamental disagreement about an assertion posted to the Arbitrum chain. At its core, validators disagree about the blockhash at a certain block number, essentially, and the BoLD protocol allows them to interactively narrow down their disagreement via cryptographic proofs such that Ethereum can be the final referee and claim a winner.
 
@@ -158,7 +158,7 @@ The fundamental unit in a challenge is an edge data structure.
 
 #### Initiation
 
-The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove this challenge is about a specific fork in the assertion chain in the rollup contract.
+The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove this challenge is about a specific fork in the assertion chain in the Rollup contract.
 
 #### Bisections
 
@@ -192,7 +192,7 @@ Once validators reach a single, individual step of disagreement after reaching t
 
 #### Timers
 
-Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in L1 blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain. 
+Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in L1 blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created on-chain. 
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
@@ -200,17 +200,17 @@ We believe timer inheritance from ancestor edges is fundamentally broken. Honest
 
 #### Cached timer updates
 
-An edge's "inherited timer" value exists onchain and can be updated via a transaction. Given it is a recursive definition, it can be updated via multiple transactions. First, the lowermost edges have their timers updated, then their parents, etc., up to the top. Validators can track information locally to avoid sending wasteful transactions and only propagate updates once they are confident their edge is confirmable by time.
+An edge's "inherited timer" value exists on-chain and can be updated via a transaction. Given it is a recursive definition, it can be updated via multiple transactions. First, the lowermost edges have their timers updated, then their parents, etc., up to the top. Validators can track information locally to avoid sending wasteful transactions and only propagate updates once they are confident their edge is confirmable by time.
 
 #### Confirmation
 
-Once an edge has a total onchain timer greater than or equal to a challenge period, it can be confirmed via a transaction. Not all edges need to be confirmed onchain, as simply the top-level block challenge edge is enough to confirm the claimed assertion and resolve a dispute. A challenge is not complete at the one-step proof. It is only complete once the claimed assertion of a challenge is confirmed.
+Once an edge has a total on-chain timer greater than or equal to a challenge period, it can be confirmed via a transaction. Not all edges need to be confirmed on-chain, as simply the top-level block challenge edge is enough to confirm the claimed assertion and resolve a dispute. A challenge is not complete at the one-step proof. It is only complete once the claimed assertion of a challenge is confirmed.
 
 ### Bonding in Challenges
 
 To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the parent assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a “mini-bond.”
 
-Mini-bonds are named as such because they are a lot smaller than the base bond required to become an assertion poster but still large enough that they discourage spam attacks. The mechanism of how mini-bond economics are decided is contained in the economics deep dive in this directory, which also explains the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses information such as offchain costs + gas costs + griefing ratios between honest and evil parties to discourage spam.
+Mini-bonds are named as such because they are a lot smaller than the base bond required to become an assertion poster but still large enough that they discourage spam attacks. The mechanism of how mini-bond economics are decided is contained in the economics deep dive in this directory, which also explains the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses information such as off-chain costs + gas costs + griefing ratios between honest and evil parties to discourage spam.
 
 Each subchallenge that is created requires placing a “mini-bond”. The first, unrivaled edge’s bond is kept in the challenge manager contract on Ethereum, while any subsequent rival bonds are kept in an excess bond receiver address, which can be set to the DAO treasury. Once a challenge is complete, a reimbursement process can be done for honest party bonds, while the DAO keeps evil bonds. It is important to not offer evil bonds to honest parties to prevent perverse incentives such as griefing attacks or to discourage needless competition between honest parties.
 
@@ -222,8 +222,8 @@ Lastly, reimbursement will not be made for off-chain compute costs as we view th
 
 ### Upgrade Mechanism
 
-For BoLD to be deployed on Arbitrum One and Nova, an upgrade admin action needs to be taken using an UpgradeExecutor pattern. This is a smart contract that executes actions as the rollup owner. At the upgrade, the RollupCore.sol contract will be updated to a new BoLD one, and additional contracts needed for BoLD challenges, such as an `EdgeChallengeManager.sol`, will also be deployed.
+For BoLD to be deployed on Arbitrum One and Nova, an upgrade admin action needs to be taken using an `UpgradeExecutor` pattern. This is a smart contract that executes actions as the Rollup owner. At the upgrade, the `RollupCore.sol` contract will be updated to a new BoLD one, and additional contracts needed for BoLD challenges, such as an `EdgeChallengeManager.sol`, will also be deployed.
 
-Assertions will then be posted to the new rollup contract. During the upgrade period, there could have been a very large number of blocks posted in Arbitrum batches. For this purpose, BoLD assertions support the concept of an **overflow**, allowing us to efficiently handle this situation.
+Assertions will then be posted to the new Rollup contract. During the upgrade period, there could have been a very large number of blocks posted in Arbitrum batches. For this purpose, BoLD assertions support the concept of an **overflow**, allowing us to efficiently handle this situation.
 
-The upgrade pattern for an existing Arbitrum rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [here](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
+The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [here](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
