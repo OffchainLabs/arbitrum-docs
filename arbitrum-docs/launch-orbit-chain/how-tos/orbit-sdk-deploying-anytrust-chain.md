@@ -26,7 +26,7 @@ See the ["set-valid-keyset" example](https://github.com/OffchainLabs/arbitrum-or
 
 ### About AnyTrust Orbit
 
-AnyTrust chains follow the Rollup protocol but offer different data model availability, features, and deployment processes. For an overview of Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md) page.
+AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the Arbitrum Rollup protocol. AnyTrust reduces transaction fees by introducing a minor trust assumption in the form of a permissioned set of parties responsible for managing data availability. For an overview of Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md).
 
 ### Deployment steps 
 
