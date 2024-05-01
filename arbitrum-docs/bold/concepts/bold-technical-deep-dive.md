@@ -10,6 +10,11 @@ sme: leeederek
 sidebar_position: 1
 ---
 
+import PublicPreviewBannerPartial from '../../how-arbitrum-works/bold/partials/_bold-public-preview-banner-partial.md';
+
+
+<PublicPreviewBannerPartial />
+
 ## Overview
 
 Under the hood, BoLD can offer time-bounded, permissionless validation because a correct Arbitrum state assertion is not tied to a single validator or entity. Instead, claims are tied to deterministic Merkle proofs and hashes that will be proven on Ethereum. Any party can bond on the correct state and, through interactive fraud proofs, prove their claim is correct. This means that a single honest party bonding on the correct state assertion will always win disputes, guaranteed.
@@ -60,7 +65,7 @@ When it comes to implementing the protocol, BoLD needs to be deployed on a credi
 
 A helpful mental model for understanding the system is that it uses Ethereum itself as the ultimate referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of L2 state transitions_ and provide proofs to the protocol smart contracts that show which result is correct. Because computation is deterministic, there will always be a single correct result.
 
-![diag4](../assets/KSf_Image_1.png)
+![900px-img](../assets/KSf_Image_1.png)
 
 _From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. L2 blocks are “settled to L1” after a 6.4 day period for each, during which anyone can challenge their validity on Ethereum._
 
