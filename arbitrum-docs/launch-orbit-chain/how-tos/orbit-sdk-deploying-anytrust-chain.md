@@ -64,7 +64,7 @@ struct Config {
 }
 ```
 
-The `chainConfig` parameter within the `Config` structure is crucial when setting up an AnyTrust Orbit chain. It contains configurations that are distinct from those of a Rollup chain. The most significant parameter that sets apart an AnyTrust chain is the `DataAvailabilityCommittee`. This parameter plays a pivotal role in defining the nature of your chain.
+The `chainConfig` parameter within the `Config` structure lets you configure the following:
 
 Start by setting up the chain configuration parameters. This includes defining key elements like:
 
