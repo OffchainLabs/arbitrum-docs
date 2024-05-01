@@ -845,11 +845,6 @@ const sidebars = {
                   label: 'Technical deep dive',
                 },
                 {
-                  type: 'doc',
-                  id: 'bold/concepts/bold-economics-of-disputes',
-                  label: 'Economics of disputes',
-                },
-                {
                   type: 'link',
                   href: 'https://github.com/OffchainLabs/bold',
                   label: 'Specification on Github',
