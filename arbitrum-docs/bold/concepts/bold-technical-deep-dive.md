@@ -29,11 +29,11 @@ If a claim is honest, it can be confirmed on Ethereum after a 6.4-day period (al
 
 The current implementation of BoLD involves both on-chain and off-chain components:
 
-1. Rollup contracts to be deployed on Ethereum
+1. Rollup contracts to be deployed on Ethereum.
 
-2. New challenge management contracts to be deployed on Ethereum
+2. New challenge management contracts to be deployed on Ethereum.
 
-3. [Honest validator software](https://github.com/offchainlabs/bold) equipped to submit assertions and perform challenge moves on any assertions it disagrees with. The honest validator is robust enough to win against malicious entities and always ensures honest assertions are the only ones confirmed on-chain
+3. [Honest validator software](https://github.com/offchainlabs/bold) equipped to submit assertions and perform challenge moves on any assertions it disagrees with. The honest validator is robust enough to win against malicious entities and always ensures honest assertions are the only ones confirmed on-chain.
 
 ### Key terminology
 
