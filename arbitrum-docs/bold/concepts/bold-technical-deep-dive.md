@@ -16,11 +16,11 @@ Under the hood, BoLD can offer time-bounded, permissionless validation because a
 
 To put it simply, Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against by each unique challenger. It is similar to a 1-vs-1 tournament, where the honest party may participate in one or more concurrent tournaments at any time. BoLD, on the other hand, enables an all-vs-all battle royal between two categories: Good vs Evil, where there must and will always be a single winner in the end.
 
-Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it *can* help prove their correctness. *Anyone* in the world can then initiate a challenge over any unconfirmed assertion to start the protocol’s game. 
+Validators on Arbitrum can post their claim on the validity of state roots, known as **assertions**. Ethereum, of course, does not know anything about the validity of these Arbitrum state roots, but it _can_ help prove their correctness. _Anyone_ in the world can then initiate a challenge over any unconfirmed assertion to start the protocol’s game.
 
 The assertions being disputed concern block hashes of an Arbitrum chain at a given batch/inbox position. Given that Arbitrum chains are deterministic, there is only one correct history for all parties running the standard Nitro software. Using the notion of one-step proof, Ethereum can check whether someone is making a fraudulent assertion.
 
-If a claim is honest, it can be confirmed on Ethereum after a 6.4-day period (although the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can successfully challenge it within that 6.4-day window *and always win* within a challenge period.
+If a claim is honest, it can be confirmed on Ethereum after a 6.4-day period (although the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can successfully challenge it within that 6.4-day window _and always win_ within a challenge period.
 
 The current implementation of BoLD involves both on-chain and off-chain components:
 
@@ -58,11 +58,11 @@ The current implementation of BoLD involves both on-chain and off-chain componen
 
 When it comes to implementing the protocol, BoLD needs to be deployed on a credibly-neutral, censorship-resistant backend to be fair to all participants. As such, Ethereum was chosen as the perfect candidate. Ethereum is currently the most decentralized, secure, smart contract blockchain to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol’s smart contracts.
 
-A helpful mental model for understanding the system is that it uses Ethereum itself as the ultimate referee for deciding assertion results. Participants in the challenge protocol can disagree over the *results of L2 state transitions* and provide proofs to the protocol smart contracts that show which result is correct. Because computation is deterministic, there will always be a single correct result.
+A helpful mental model for understanding the system is that it uses Ethereum itself as the ultimate referee for deciding assertion results. Participants in the challenge protocol can disagree over the _results of L2 state transitions_ and provide proofs to the protocol smart contracts that show which result is correct. Because computation is deterministic, there will always be a single correct result.
 
 ![diag4](../assets/KSf_Image_1.png)
 
-*From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. L2 blocks are “settled to L1” after a 6.4 day period for each, during which anyone can challenge their validity on Ethereum.*
+_From the **[Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf)**. L2 blocks are “settled to L1” after a 6.4 day period for each, during which anyone can challenge their validity on Ethereum._
 
 In effect, there is a miniature Arbitrum state-transition VM[ ](https://sourcegraph.com/github.com/OffchainLabs/nitro/-/blob/contracts/src/osp/OneStepProofEntry.sol)[deployed as an Ethereum smart contrac](https://sourcegraph.com/github.com/OffchainLabs/nitro/-/blob/contracts/src/osp/OneStepProofEntry.sol)t to prove which assertions are correct. However, computation on Ethereum is expensive, which is why this mini-VM is built to handle “one-step proofs” consisting of a single step of WebAssembly code. The Arbitrum state transition logic, written in Golang, is also compiled to an assembly language called WASM and will therefore obtain the same results as the VM found in the on-chain smart contract. The soundness of the protocol depends on the assumptions that computation is deterministic and equivalent between the on-chain VM and the Golang state transition compiled to WASM.
 
@@ -70,7 +70,7 @@ All actors in the protocol have a local state from which they can produce valid 
 
 ### On-chain components
 
-- **Rollup Contract:** This is a smart contract that lives on Ethereum and allows validators to bond on state assertions about Arbitrum. This contract, known as  `RollupCore.sol`, is already used by Arbitrum chains to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a `ChallengeManager`, new in BoLD.
+- **Rollup Contract:** This is a smart contract that lives on Ethereum and allows validators to bond on state assertions about Arbitrum. This contract, known as `RollupCore.sol`, is already used by Arbitrum chains to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a `ChallengeManager`, new in BoLD.
 
 - **ChallengeManager:** This is a contract that allows for initiating challenges on assertions within the `AssertionChain` and provides methods for anyone to participate in challenges in a permissionless fashion. This new challenge protocol will require a new `ChallengeManager` written in Solidity and deployed to Ethereum. The challenge manager contains entry points for making challenge moves, opening leaves, creating subchallenges, and confirming challenges.
 
@@ -182,7 +182,7 @@ The number of steps of execution at which validators could disagree within a sin
 
 The bisection game is an iterative process. Initially, validators disagree over Arbitrum blocks between two assertions. They create “edges” containing history commitments to all the blocks in between those two assertions, and commence the bisection game. As they progressively narrow down to a single block of disagreement, they then focus on identifying the point of disagreement in the actual WASM execution of the block through the Arbitrum state transition function. This marks the first “subchallenge”.
 
-The subchallenge is over a max of 2^43 hashes where validators need to narrow down their single hash of disagreement. As the space of hashes is too large, we explore this space in *ranges* of steps.
+The subchallenge is over a max of 2^43 hashes where validators need to narrow down their single hash of disagreement. As the space of hashes is too large, we explore this space in _ranges_ of steps.
 
 First, validators disagree over **Gigasteps** of WASM execution. That is, over ranges of 2^30 steps. Then, they open another subchallenge once they reach a single gigastep of disagreement. They then play games over ranges of **Megasteps**, then **Kilosteps**, until they reach a subchallenge over individual steps. The bisection game is the same at each subchallenge level, and opening a subchallenge requires placing another “mini-bond”. The magnitudes of mini-bonds are different at each subchallenge level.
 
@@ -192,7 +192,7 @@ Once validators reach a single, individual step of disagreement after reaching t
 
 #### Timers
 
-Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in L1 blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created on-chain. 
+Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in L1 blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created on-chain.
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
