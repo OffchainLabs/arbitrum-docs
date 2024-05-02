@@ -42,7 +42,7 @@ contract ARBPriceConsumer {
      * Aggregator: ARB/USD
      * Address: 0xb2A824043730FE05F3DA2efaFa1CBbe83fa548D6
      */
-		address constant PROXY = 0xb2A824043730FE05F3DA2efaFa1CBbe83fa548D6;
+    address constant PROXY = 0xb2A824043730FE05F3DA2efaFa1CBbe83fa548D6;
 
     constructor() {
         priceFeed = AggregatorV3Interface(PROXY);
