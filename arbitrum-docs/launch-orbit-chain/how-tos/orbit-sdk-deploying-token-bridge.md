@@ -26,7 +26,12 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 :::
 
-### Token bridge deployment steps
+
+### Prerequisites
+
+ - A running **sequencer node**. See steps 1-2 in the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) to start the related Docker containers (note that you don't need the `orbitSetupScriptConfig.json` file here). Use `docker-compose logs -f nitro` to verify that your node is running.
+
+### Token Bridge Deployment Steps
 
 Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
 
@@ -67,9 +72,10 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
-  const approvalTxRequest = await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
-    allowanceParams,
-  );
+  const approvalTxRequest =
+    await createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
+      allowanceParams
+    );
 }
 ```
 
@@ -89,7 +95,7 @@ Please note that after generating the raw transaction, the deployer must still s
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain.
 
-The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/arbos/l1-to-l2-messaging#retryable-ticketsO).
+The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/arbos/l1-l2-messaging.md#retryable-ticketsO).
 
 Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
 
@@ -130,7 +136,7 @@ Example:
 
 ```js
 const txReceipt = createTokenBridgePrepareTransactionReceipt(
-  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
+  await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash })
 );
 ```
 
@@ -147,7 +153,7 @@ const orbitChainRetryableReceipts = await txReceipt.waitForRetryables({
 
 if (orbitChainRetryableReceipts[0].status !== 'success') {
   throw new Error(
-    `Retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`,
+    `Retryable status is not success: ${orbitChainRetryableReceipts[0].status}. Aborting...`
   );
 }
 
@@ -189,17 +195,18 @@ This API helps you create the raw transaction which handles the `WETH` gateway o
 Example:
 
 ```js
-const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTransactionRequest({
-  rollup: rollupContractAddress,
-  parentChainPublicClient,
-  orbitChainPublicClient,
-  account: rollupOwnerAddress,
-  retryableGasOverrides: {
-    gasLimit: {
-      percentIncrease: 200n,
+const setWethGatewayTxRequest =
+  await createTokenBridgePrepareSetWethGatewayTransactionRequest({
+    rollup: rollupContractAddress,
+    parentChainPublicClient,
+    orbitChainPublicClient,
+    account: rollupOwnerAddress,
+    retryableGasOverrides: {
+      gasLimit: {
+        percentIncrease: 200n,
+      },
     },
-  },
-});
+  });
 ```
 
 In this example, `rollupContractAddress` is the address of Orbit chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and orbit chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit, thus securing successful retryable tickets.
