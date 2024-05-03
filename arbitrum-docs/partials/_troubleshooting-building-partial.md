@@ -274,7 +274,11 @@ To let's find out which is custom error this signature represents, we can use th
 
 <p></p>
 
-<p>💡 Info:<br />
-- All pre-Nitro transactions are labeled as <code>ArbitrumLegacyTxType</code> by Nitro.<br />
-- Traces are not available for pre-Nitro (Classic) transactions.</p>
+<p><br />
+<strong>Note that:</strong></p>
+
+<ul><li>All pre-Nitro transactions are labeled as <code>ArbitrumLegacyTxType</code> by Nitro.</li>
+<li>Traces are not available for pre-Nitro (Classic) transactions.</li>
+</ul>
+<p></p>
 
