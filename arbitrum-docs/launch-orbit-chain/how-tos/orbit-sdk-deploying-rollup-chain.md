@@ -37,56 +37,57 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 ### Rollup deployment parameters
 
 [`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
-`createRollup` takes a complex input named `deployParams', which defines the characteristics of an Orbit Rollup chain. 
+`createRollup` takes a complex input named `deployParams', which defines the characteristics of an Orbit Rollup chain.
 
-The following will walk you through the methods and properties you will use to configure your chain. 
+The following will walk you through the methods and properties you will use to configure your chain.
 
 #### 1. RollupDeploymentParams struct
 
+```solidity {2,4,6}
+struct RollupDeploymentParams {
+    Config config;
+    address batchPoster;
+    address[] validators;
+    uint256 maxDataSize;
+    address nativeToken;
+    bool deployFactoriesToL2;
+    uint256 maxFeePerGasForRetryables;
+}
+```
 
-   ```solidity {2,4,6}
-   struct RollupDeploymentParams {
-       Config config;
-       address batchPoster;
-       address[] validators;
-       uint256 maxDataSize;
-       address nativeToken;
-       bool deployFactoriesToL2;
-       uint256 maxFeePerGasForRetryables;
-   }
-   ```
 This Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
 
 #### 2. Config struct
 
-   ```solidity {2,4,5,9}
-   struct Config {
-       uint64 confirmPeriodBlocks;
-       uint64 extraChallengeTimeBlocks;
-       address stakeToken;
-       uint256 baseStake;
-       bytes32 wasmModuleRoot;
-       address owner;
-       address loserStakeEscrow;
-       uint256 chainId;
-       string chainConfig;
-       uint64 genesisBlockNum;
-       ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
-   }
-   ```
+```solidity {2,4,5,9}
+struct Config {
+    uint64 confirmPeriodBlocks;
+    uint64 extraChallengeTimeBlocks;
+    address stakeToken;
+    uint256 baseStake;
+    bytes32 wasmModuleRoot;
+    address owner;
+    address loserStakeEscrow;
+    uint256 chainId;
+    string chainConfig;
+    uint64 genesisBlockNum;
+    ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
+}
+```
 
 The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
 #### 3. MaxTimeVariation struct
 
-   ```solidity
-   struct MaxTimeVariation {
-       uint256 delayBlocks;
-       uint256 futureBlocks;
-       uint256 delaySeconds;
-       uint256 futureSeconds;
-   }
-   ```
+```solidity
+struct MaxTimeVariation {
+    uint256 delayBlocks;
+    uint256 futureBlocks;
+    uint256 delaySeconds;
+    uint256 futureSeconds;
+}
+```
+
 This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
 #### 4. chainConfig
@@ -95,41 +96,41 @@ The `chainConfig` parameter within the `Config` struct allows you to customize y
 
 Here's a brief overview of `chainConfig`:
 
-   ```json {2,24,26,28,29}
-   {
-     chainId: number;
-     homesteadBlock: number;
-     daoForkBlock: null;
-     daoForkSupport: boolean;
-     eip150Block: number;
-     eip150Hash: string;
-     eip155Block: number;
-     eip158Block: number;
-     byzantiumBlock: number;
-     constantinopleBlock: number;
-     petersburgBlock: number;
-     istanbulBlock: number;
-     muirGlacierBlock: number;
-     berlinBlock: number;
-     londonBlock: number;
-     clique: {
-       period: number;
-       epoch: number;
-     };
-     arbitrum: {  
-     EnableArbOS: boolean;
-     AllowDebugPrecompiles: boolean;
-     DataAvailabilityCommittee: boolean;
-     InitialArbOSVersion: number;
-     InitialChainOwner: Address;
-     GenesisBlockNum: number;
-     MaxCodeSize: number;
-     MaxInitCodeSize: number;
-     };
-   }
-   ```
+```json {2,24,26,28,29}
+{
+  chainId: number;
+  homesteadBlock: number;
+  daoForkBlock: null;
+  daoForkSupport: boolean;
+  eip150Block: number;
+  eip150Hash: string;
+  eip155Block: number;
+  eip158Block: number;
+  byzantiumBlock: number;
+  constantinopleBlock: number;
+  petersburgBlock: number;
+  istanbulBlock: number;
+  muirGlacierBlock: number;
+  berlinBlock: number;
+  londonBlock: number;
+  clique: {
+    period: number;
+    epoch: number;
+  };
+  arbitrum: {
+  EnableArbOS: boolean;
+  AllowDebugPrecompiles: boolean;
+  DataAvailabilityCommittee: boolean;
+  InitialArbOSVersion: number;
+  InitialChainOwner: Address;
+  GenesisBlockNum: number;
+  MaxCodeSize: number;
+  MaxInitCodeSize: number;
+  };
+}
+```
 
-Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will review these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section. 
+Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will review these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section.
 
 All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values.
 
@@ -158,7 +159,7 @@ const chainConfig = prepareChainConfig({
 
 ### Rollup configuration parameters
 
-In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains. 
+In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains.
 
 | Parameter             | Description                                                                                                                                                                                                                                                                                                           |
 | :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -183,46 +184,47 @@ While other configurable parameters exist, they are set to defaults, and it's ge
 
 The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
 
-#### **createRollupPrepareConfig API**: 
+#### **createRollupPrepareConfig API**:
 
-   This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use. 
-   
-   For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
+This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use.
 
-   ```js
-   import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
+For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
 
-   const config = createRollupPrepareConfig({
-       chainId: BigInt(chainId),
-       owner: deployer.address,
-       chainConfig,
-   });
-   ```
+```js
+import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
 
-#### createRollupPrepareTransactionRequest API: 
+const config = createRollupPrepareConfig({
+  chainId: BigInt(chainId),
+  owner: deployer.address,
+  chainConfig,
+});
+```
 
-   This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
+#### createRollupPrepareTransactionRequest API:
 
-   For instance, to deploy using the Orbit SDK with a Config equal to `config`, a `batchPoster`, and a set of validators such as `[validator]`, the process would look like this:
+This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
 
-   ```js
-   import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
+For instance, to deploy using the Orbit SDK with a Config equal to `config`, a `batchPoster`, and a set of validators such as `[validator]`, the process would look like this:
 
-   const request = await createRollupPrepareTransactionRequest({
-       params: {
-           config,
-           batchPoster,
-           validators: [validator],
-       },
-       account: deployer_address,
-       publicClient,
-   });
-   ```
+```js
+import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
+
+const request = await createRollupPrepareTransactionRequest({
+  params: {
+    config,
+    batchPoster,
+    validators: [validator],
+  },
+  account: deployer_address,
+  publicClient,
+});
+```
+
 After creating the raw transaction, you need to sign and broadcast it to the network.
 
 ### Getting the Orbit chain information after deployment
 
-Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment, which you can do with the `createRollupPrepareTransactionReceipt` API. 
+Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment, which you can do with the `createRollupPrepareTransactionReceipt` API.
 
 After sending the signed transaction and receiving the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other information.
 
@@ -234,4 +236,4 @@ import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
 const data = createRollupPrepareTransactionReceipt(txReceipt);
 ```
 
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. You can access your Orbit chain's information by passing this receipt to the `createRollupPrepareTransactionReceipt` function. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference. 
+In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. You can access your Orbit chain's information by passing this receipt to the `createRollupPrepareTransactionReceipt` function. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference.
