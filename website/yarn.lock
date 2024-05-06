@@ -2473,10 +2473,10 @@
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
 
-"@tsconfig/docusaurus@^1.0.6":
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/@tsconfig/docusaurus/-/docusaurus-1.0.7.tgz#a3ee3c8109b3fec091e3d61a61834e563aeee3c3"
-  integrity sha512-ffTXxGIP/IRMCjuzHd6M4/HdIrw1bMfC7Bv8hMkTadnePkpe0lG0oDSdbRpSDZb2rQMAgpbWiR10BvxvNYwYrg==
+"@tsconfig/docusaurus@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@tsconfig/docusaurus/-/docusaurus-2.0.3.tgz#08a4a65e038a499fc4154ce32b538913d9f3c90d"
+  integrity sha512-3l1L5PzWVa7l0691TjnsZ0yOIEwG9DziSqu5IPZPlI5Dowi7z42cEym8Y35GHbgHvPcBfNxfrbxm7Cncn4nByQ==
 
 "@tsconfig/node10@^1.0.7":
   version "1.0.11"
@@ -4664,6 +4664,11 @@ docusaurus-plugin-sass@^0.2.5:
   integrity sha512-Z+D0fLFUKcFpM+bqSUmqKIU+vO+YF1xoEQh5hoFreg2eMf722+siwXDD+sqtwU8E4MvVpuvsQfaHwODNlxJAEg==
   dependencies:
     sass-loader "^10.1.1"
+
+docusaurus-plugin-typedoc@^1.0.0-next.30:
+  version "1.0.0-next.30"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-typedoc/-/docusaurus-plugin-typedoc-1.0.0-next.30.tgz#c6e185dfa892bcb2553af4fb17b43d1986e82432"
+  integrity sha512-p7u3ksPTXnfKlAPmUwjUswPYwL15YEDvvmMemp7RweGMhB+iUd+nVUrdEqk0N2Cf1ldfYhZVnfttjqhfpadEIg==
 
 dom-converter@^0.2.0:
   version "0.2.0"
@@ -7699,7 +7704,7 @@ minimatch@3.1.2, minimatch@^3.0.4, minimatch@^3.0.5, minimatch@^3.1.1:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimatch@^9.0.0, minimatch@^9.0.1:
+minimatch@^9.0.1, minimatch@^9.0.3:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-9.0.4.tgz#8e49c731d1749cbec05050ee5145147b32496a51"
   integrity sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==
@@ -9417,7 +9422,7 @@ shelljs@^0.8.5:
     interpret "^1.0.0"
     rechoir "^0.6.2"
 
-shiki@^0.14.1:
+shiki@^0.14.7:
   version "0.14.7"
   resolved "https://registry.yarnpkg.com/shiki/-/shiki-0.14.7.tgz#c3c9e1853e9737845f1d2ef81b31bcfb07056d4e"
   integrity sha512-dNPAPrxSc87ua2sKJ3H5dQ/6ZaY8RNnaAqK+t0eG7p0Soi2ydiqbGOTaZCqaYvA/uZYfS1LJnemt3Q+mSfcPCg==
@@ -9951,20 +9956,20 @@ typedoc-plugin-frontmatter@^0.0.2:
   dependencies:
     yaml "^2.2.2"
 
-typedoc-plugin-markdown@4.0.0-next.17:
-  version "4.0.0-next.17"
-  resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-4.0.0-next.17.tgz#c6224fddc48fe5e6706366a27461b19c1ef12e3c"
-  integrity sha512-hzIoOt81PTkO50m+QJAo4B4tnsmp5sfv7kQfPOx/ZKRLODoa3buQzo2k6/sHGahUeKIyzHtqoiEFzB6Bl4nHQQ==
+typedoc-plugin-markdown@4.0.0-next.60:
+  version "4.0.0-next.60"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-4.0.0-next.60.tgz#2ce86ab79d628391468a43d2be8483de4a6ea0ba"
+  integrity sha512-aXuPXg3qyTYmpLGGRrpkZMIzQEE9YW5l7WwSVVInM0mj8M025k8oIefep5kYm+30e7fUFLkrftuvkP8X3Xn7ug==
 
-typedoc@^0.24.8:
-  version "0.24.8"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.24.8.tgz#cce9f47ba6a8d52389f5e583716a2b3b4335b63e"
-  integrity sha512-ahJ6Cpcvxwaxfu4KtjA8qZNqS43wYt6JL27wYiIgl1vd38WW/KWX11YuAeZhuz9v+ttrutSsgK+XO1CjL1kA3w==
+typedoc@^0.25.13:
+  version "0.25.13"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.25.13.tgz#9a98819e3b2d155a6d78589b46fa4c03768f0922"
+  integrity sha512-pQqiwiJ+Z4pigfOnnysObszLiU3mVLWAExSPf+Mu06G/qsc3wzbuM56SZQvONhHLncLUhYzOVkjFFpFfL5AzhQ==
   dependencies:
     lunr "^2.3.9"
     marked "^4.3.0"
-    minimatch "^9.0.0"
-    shiki "^0.14.1"
+    minimatch "^9.0.3"
+    shiki "^0.14.7"
 
 typescript@^4.7.4:
   version "4.9.5"
