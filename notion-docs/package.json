@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "update:all": "node --loader ts-node/esm ./scripts/update.ts",
-    "verifyQuicklooks": "node --loader ts-node/esm ./scripts/verifyQuicklooks.ts",
+    "update:all": "ts-node ./scripts/update.ts",
+    "verifyQuicklooks": "ts-node ./scripts/verifyQuicklooks.ts",
     "format": "prettier --config .prettierrc.js 'scripts/**/*.ts' --write",
     "lint": "eslint . --ext .ts"
   },
