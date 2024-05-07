@@ -101,6 +101,10 @@ Next, bridge the Sepolia ETH to the Stylus Testnet:
 
 To verify the transfer, you can track the transaction on the [Arbiscan block explorer]((https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
 
+<p align="center">
+  <img src="./assets/bridge-to-stylus.png" alt="Stylus Wallet" width="400">
+</p>
+
 To check the existence and balance of your testnet ETH, use the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0x44E623584f90D6FBaBe930221d47E0De4248e935/coin-balances#address-tabs). This tool allows you to view transaction details and confirm that your ETH is available in the testnet environment. Simply navigate to the provided link and enter your specific wallet address to see your balance and recent transactions.
 
 ## Your First Stylus Program
