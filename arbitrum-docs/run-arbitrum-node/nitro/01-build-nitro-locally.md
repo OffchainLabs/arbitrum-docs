@@ -142,7 +142,7 @@ rustup target add wasm32-wasi --toolchain 1.73
 cargo install cbindgen
 ```
 
-### Step 7. Configure Go [1.20](https://github.com/moovweb/gvm)
+### Step 7. Configure Go [1.21](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
@@ -163,8 +163,8 @@ brew install bison
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.20
-gvm use go1.20 --default
+gvm install go1.21
+gvm use go1.21 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
