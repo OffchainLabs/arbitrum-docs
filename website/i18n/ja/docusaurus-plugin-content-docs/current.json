@@ -245,7 +245,7 @@
   },
   "sidebar.learnMoreSidebar.doc.Glossary": {
     "message": "Glossary",
-    "description": "The label for the doc item Glossary in sidebar learnMoreSidebar, linking to the doc intro/glossary"
+    "description": "The label for the doc item Glossary in sidebar learnMoreSidebar, linking to the doc glossary"
   },
   "sidebar.learnMoreSidebar.doc.Why Nitro?": {
     "message": "Why Nitro?",
