@@ -16,7 +16,7 @@ The token bridge architecture includes contracts deployed on the <a data-quicklo
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/contribute.md#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
 
 :::
 
@@ -180,7 +180,7 @@ The last step in spinning up the token bridge for an `ETH`- based Orbit chain is
 
 That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain.
 
-You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
+You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#other-flavors-of-gateways).
 
 :::
 

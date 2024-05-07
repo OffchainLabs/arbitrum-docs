@@ -6,7 +6,7 @@ Arbitrum Docs, built with docusaurus; docs are live at https://developer.arbitru
 
 ## Contribution
 
-For most of the docs content, you can contribute by simply reviewing our [docs contribution guidelines](https://docs.arbitrum.io/for-devs/contribute) and opening a PR!
+For most of the docs content, you can contribute by simply reviewing our [docs contribution guidelines](https://docs.arbitrum.io/contribute) and opening a PR!
 
 The following are the only exceptions:
 
