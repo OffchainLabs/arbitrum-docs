@@ -8,7 +8,7 @@ sidebar_label: 'Particle Network'
 
 :::info Community member contribution
 
-Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the following [third-party document](/for-devs/third-party-docs/contribute)!
+Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the following [third-party document](/third-party-docs/contribute)!
 
 :::
 

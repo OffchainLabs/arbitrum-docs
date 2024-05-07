@@ -32,7 +32,7 @@ If a document isn't in a `Third-party content` sidebar node, it's a **core docum
 
 **Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
 
-See [Contribute third-party docs](/for-devs/third-party-docs/contribute) for detailed instructions.
+See [Contribute third-party docs](/third-party-docs/contribute) for detailed instructions.
 
 ### Request an update
 

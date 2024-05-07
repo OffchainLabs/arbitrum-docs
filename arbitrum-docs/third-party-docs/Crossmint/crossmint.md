@@ -8,7 +8,7 @@ sidebar_label: 'Crossmint'
 
 :::info Community member contribution
 
-Shoutout to [@rohit-710](https://github.com/rohit-710) for contributing the following [third-party document](/for-devs/third-party-docs/contribute)!
+Shoutout to [@rohit-710](https://github.com/rohit-710) for contributing the following [third-party document](/third-party-docs/contribute)!
 
 :::
 
