@@ -130,15 +130,15 @@ nvm install 16.19
 nvm use 16.19
 ```
 
-### Step 6. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
+### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.72.1
-rustup default 1.72.1
-rustup target add wasm32-unknown-unknown --toolchain 1.72.1
-rustup target add wasm32-wasi --toolchain 1.72.1
+rustup install 1.73
+rustup default 1.73
+rustup target add wasm32-unknown-unknown --toolchain 1.73
+rustup target add wasm32-wasi --toolchain 1.73
 cargo install cbindgen
 ```
 
