@@ -237,7 +237,7 @@
   },
   "sidebar.learnMoreSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",
-    "description": "The label for the doc item Frequently asked questions in sidebar learnMoreSidebar, linking to the doc learn-more/faq"
+    "description": "The label for the doc item Frequently asked questions in sidebar learnMoreSidebar, linking to the doc faq"
   },
   "sidebar.learnMoreSidebar.doc.Glossary": {
     "message": "Glossary",
