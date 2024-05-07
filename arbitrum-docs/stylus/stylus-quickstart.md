@@ -97,6 +97,7 @@ Next, bridge the Sepolia ETH to the Stylus Testnet:
 
 To verify the transfer, you can track the transaction on the [Arbiscan block explorer]((https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
 
+To check the existence and balance of your testnet ETH, use the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0x44E623584f90D6FBaBe930221d47E0De4248e935/coin-balances#address-tabs). This tool allows you to view transaction details and confirm that your ETH is available in the testnet environment. Simply navigate to the provided link and enter your specific wallet address to see your balance and recent transactions.
 
 ## Your First Stylus Program
 
@@ -225,12 +226,14 @@ cargo stylus deploy \
   --estimate-gas-only
 ```
 
-The output might look like this:
+Among other details, you'll see an estimated gas cost for deployment:
 
 ```bash
-Compressed WASM size: 3 KB
-Deploying program to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 12756792
+...
+====DEPLOYMENT====
+Deploying program to address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Base fee: 0.100000000 gwei
+Estimated gas for deployment: 11266639 gas units
 ```
 
 To proceed with the deployment, two transactions will be sent onchain:
@@ -243,16 +246,33 @@ cargo stylus deploy \
 You'll see details about the deployment process, such as:
 
 ```bash
-Compressed WASM size: 3 KB
-Deploying program to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 12756792
-Submitting tx...
-Confirmed tx 0x42db…7311, gas used 11657164
-Activating program at address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 14251759
-Submitting tx...
-Confirmed tx 0x0bdb…3307, gas used 14204908
+...
+Uncompressed WASM size: 25.0 KB
+Compressed WASM size to be deployed onchain: 9.0 KB
+Connecting to Stylus RPC endpoint: https://stylus-testnet.arbitrum.io/rpc
+Program succeeded Stylus onchain activation checks with Stylus version: 1
+Deployer address: 0x44E623584f90D6FBaBe930221d47E0De4248e935
+
+====DEPLOYMENT====
+Deploying program to address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Base fee: 0.100000000 gwei
+Estimated gas for deployment: 11266639 gas units
+Submitting deployment tx...
+Confirmed deployment tx 0xc95d7fab996934b38d2eb5e4559977aa222a658fb13e994bdea0f74746219ad5
+Gas units used 10318928, effective gas price 0.100000000 gwei
+Transaction fee: 0.001031892800000000 ETH
+
+====ACTIVATION====
+Activating program at address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Base fee: 0.100000000 gwei
+Estimated gas for activation: 14224495 gas units
+Submitting activation tx...
+Confirmed activation tx 0x908459dab815e1403c36e21838673ac55877665c9d95c9c87bfb1c4543eab0e8
+Gas units used 14184722, effective gas price 0.100000000 gwei
+Transaction fee: 0.001418472200000000 ETH
 ```
+
+You can verify the deployment and activation of your program on the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099/transactions#address-tabs).
 
 For further deployment options and transaction details, consult `cargo stylus deploy --help`.
 
