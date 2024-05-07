@@ -45,8 +45,6 @@ If you're using [MetaMask](https://metamask.io/), here’s how to set up a new a
 
 This setup ensures that your real assets are safe while you develop and test on Arbitrum.
 
-![Stylus Wallet](./assets/stylus-wallet.png)
-
 :::caution
 
 **_Never share your “secret recovery phrase” with anyone_**. Never enter it anywhere. A _private key_ is valid for an individual account only, but a _secret recovery phrase_ can be used to gain access to ALL accounts in your wallet.
