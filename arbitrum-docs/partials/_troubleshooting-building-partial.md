@@ -218,9 +218,11 @@
 <p></p>
 
 <p><br />
-<strong>Note that:</strong></p>
+<strong>Note that:</strong>
+</p>
 
-<ul><li>All pre-Nitro transactions are labeled as <code>ArbitrumLegacyTxType</code> by Nitro.</li>
+<ul>
+<li>All pre-Nitro transactions are labeled as <code>ArbitrumLegacyTxType</code> by Nitro.</li>
 <li>Traces are not available for pre-Nitro (Classic) transactions.</li>
 </ul>
 <p></p>
