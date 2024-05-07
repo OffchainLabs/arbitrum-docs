@@ -15,6 +15,8 @@ This tutorial will guide you through the process of deploying a smart contract i
 
 ## Prerequisites
 
+Before we dive into the tutorial, make sure you have the following prerequisites set up:
+
 ### Rust toolchain
 
 Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to get a full Rust toolchain installed on your system. Make sure after installation that you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred command line terminal (programs should be added to your system’s PATH, more instructions available on Rust’s website)
