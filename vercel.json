@@ -1,6 +1,56 @@
 {
     "redirects": [
         {
+            "source": "/(intro)",
+            "destination": "/welcome/arbitrum-gentle-introduction",
+            "permanent": false
+        },
+        {
+            "source": "/(for-devs/third-party-docs/:slug*)",
+            "destination": "/third-party-docs/:slug*",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-an-orbit-node/?)",
+            "destination": "/launch-orbit-chain/how-tos/running-an-orbit-node",
+            "permanent": false
+        },
+        {
+            "source": "/(learn-more/faq/?)",
+            "destination": "/faq",
+            "permanent": false
+        },
+        {
+            "source": "/(intro/glossary/?)",
+            "destination": "/glossary",
+            "permanent": false
+        },
+        {
+            "source": "/(for-devs/troubleshooting-building/?)",
+            "destination": "/build-decentralized-apps/troubleshooting-building",
+            "permanent": false
+        },
+        {
+            "source": "/(learn-more/contribute/?)",
+            "destination": "/contribute",
+            "permanent": false
+        },
+        {
+            "source": "/(for-devs/contribute/?)",
+            "destination": "/contribute",
+            "permanent": false
+        },
+        {
+            "source": "/(for-users/contribute/?)",
+            "destination": "/contribute",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/contribute/?)",
+            "destination": "/contribute",
+            "permanent": false
+        },
+        {
             "source": "/(bold/bold-gentle-introduction/?)",
             "destination": "/how-arbitrum-works/bold/gentle-introduction",
             "permanent": false

@@ -7,8 +7,8 @@ content_type: concept
 sidebar_position: 2
 ---
 
-import DepositEthDiagram from '../../diagrams/_deposit-eth.mdx';
-import WithdrawEthDiagram from '../../diagrams/_withdraw-eth.mdx';
+import DepositEthDiagram from './partials/_deposit-eth.mdx';
+import WithdrawEthDiagram from './partials/_withdraw-eth.mdx';
 
 Ether (ETH) is the native currency of Ethereum and all Arbitrum chains. It is used to pay the necessary fees to execute a transaction in those chains. Bridging ETH from Ethereum (Layer 1, or L1) to an Arbitrum chain (Layer 2, or L2) follows, thus, a different process than the one followed when bridging other types of asset.
 

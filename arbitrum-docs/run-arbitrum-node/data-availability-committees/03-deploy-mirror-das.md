@@ -50,7 +50,7 @@ A mirror DAS will use the same tool and, thus, the same configuration options as
 Gather the following information:
 
 - The latest Nitro docker image: `@latestNitroNodeImage@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.md#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.md#third-party-rpc-providers) or [run your own node](/launch-orbit-chain/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - URL of the list of REST endpoints of other DA servers to configure the REST aggregator.
 
@@ -113,10 +113,10 @@ Finally, for the storage backends you wish to configure, use the following param
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
-import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
-import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
-import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx';
+import S3Parameters from './partials/parameters/_s3-parameters.mdx';
+import LocalBadgerDBParameters from './partials/parameters/_local-badger-db-parameters.mdx';
+import LocalFilesParameters from './partials/parameters/_local-files-parameters.mdx';
+import IPFSParameters from './partials/parameters/_ipfs-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -275,8 +275,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
-import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';
+import DASOptionalParameters from './partials/_das-optional-parameters.mdx';
+import DASMetrics from './partials/_das-metrics.mdx';
 
 ## Optional parameters
 

@@ -12,7 +12,7 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md#list-of-available-arbos-releases).
 
-import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
+import PublicPreviewBannerPartial from '../../run-arbitrum-node/partials/_upgrade-cadence-recommendations-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
