@@ -8,7 +8,7 @@ sidebar_label: "Gelato VRF"
 
 # What is Gelato VRF?
 
-Gelato VRF offers real randomness for blockchain applications by leveraging Drand, a trusted decentralized source for random numbers. With Gelato VRF, developers get random values that are both genuine and can be checked for authenticity.
+Gelato VRF offers real randomness for blockchain applications on Arbitrum by leveraging Drand, a trusted decentralized source for random numbers. With Gelato VRF, developers on Arbitrum get random values that are both genuine and can be checked for authenticity. Explore Gelato VRF's support for all supported networks [here](https://docs.gelato.network/web3-services/vrf/supported-networks).
 
 ## Applications of Gelato VRF
 
