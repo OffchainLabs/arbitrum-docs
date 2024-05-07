@@ -77,8 +77,8 @@ const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, 
 const Nodes = ({ children, title }) => {
   const containerRef = useRef(null);
 
-  const htmlNodes = children.filter((child) => child.props.mdxType == "Node");
-  const connections = children.filter((child) => child.props.mdxType == "Connection");
+  const htmlNodes = children.filter((child) => child.type.name == "Node");
+  const connections = children.filter((child) => child.type.name == "Connection");
 
   const code = generateMermaidCodeFromHtmlNodesAndConnections(htmlNodes, connections, title);
 
