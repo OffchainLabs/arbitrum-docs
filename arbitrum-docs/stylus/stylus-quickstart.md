@@ -49,7 +49,9 @@ This setup ensures that your real assets are safe while you develop and test on 
 
 :::
 
-You will need to add Arbitrum Sepolia as a custom network in MetaMask to interact with the Stylus testnet. In your MetaMask plugin, click the network dropdown on the top left and select "Add Network". Fill in the following details:
+To interact with the Stylus testnet, you need to manually configure two specific networks in your MetaMask plugin. Here’s how to set them up:
+
+1. Arbitrum Sepolia:  
 
 - **Network Name**: Arbitrum Sepolia
 - **New RPC URL**: `https://sepolia-rollup.arbitrum.io/rpc`
@@ -57,23 +59,43 @@ You will need to add Arbitrum Sepolia as a custom network in MetaMask to interac
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://sepolia.arbiscan.io`
 
-Click "Save" to add the network.
+After filling in these details, click "Save" to add the Arbitrum Sepolia network.
+
+2. Arbitrum Stylus Testnet:
+
+- **Network Name**: Stylus testnet
+- **New RPC URL**: `https://stylus-testnet.arbitrum.io/rpc`
+- **Chain ID**: 23011913
+- **Currency Symbol**: ETH
+- **Block Explorer URL**: `https://stylus-testnet-explorer.arbitrum.io/`
+
+Click "Save" once you input all the details to add the Stylus testnet.
 
 
-### Testnet ETH
+### Acquiring and Bridging Testnet ETH
 
-To work on the Stylus testnet, which directly integrates with the [Arbitrum Sepolia](/build-decentralized-apps/03-public-chains.md#arbitrum-sepolia) testnet, you'll need testnet ETH. Here’s how to get it:
+To engage with the Stylus testnet, you will first need to acquire Sepolia ETH and then bridge it over:
 
-1. Go to [Bware Labs' faucet for the Arbitrum Stylus Testnet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
-2. Enter your wallet address in the provided text field.
-3. Click **`Claim`**. There might be an option to perform an additional step for more testnet tokens.
-4. After these steps, you should see Sepolia ETH in your Stylus testnet wallet.
+1. Visit a faucet such as [Bware Labs' Arbitrum Stylus Testnet faucet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
+2. Enter your wallet address.
+3. Click `Claim` to receive your testnet ETH. Some faucets may offer additional steps to get more tokens.
 
-If you need more testnet ETH, consider using other faucets for the Arbitrum Sepolia or Ethereum Sepolia networks:
+After these steps, you should see Sepolia ETH in your Sepolia testnet wallet.
+
+Alternative faucets:
 
 - [QuickNode Faucet for Arbitrum Sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
 - [Alchemy Sepolia Faucet](https://sepoliafaucet.com/)
 - [Sepolia Faucet by PK910](https://sepolia-faucet.pk910.de/)
+
+Next, bridge the Sepolia ETH to the Stylus Testnet:
+
+1. Go to the [Arbitrum Bridge](https://bridge.arbitrum.io/?destinationChain=stylus-testnet&sourceChain=arbitrum-sepolia).
+2. Choose Arbitrum Sepolia as the source and Stylus Testnet as the destination.
+3. Connect your wallet and authorize the bridge to access your tokens.
+4. Specify the amount of Sepolia ETH you want to bridge and initiate the transfer by clicking `Move funds to Stylus Testnet`. Make sure to keep some ETH in the source chain to cover transaction fees.
+
+To verify the transfer, you can track the transaction on the [Arbiscan block explorer]((https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
 
 
 ## Your First Stylus Program
