@@ -133,7 +133,7 @@ If you're running into unexpected outputs or errors, the following checklist may
         <label htmlFor="tc-3">3. Review the FAQ</label>
         <p>
           Answers to frequently asked questions can be found in{' '}
-          <a href="/node-running/faq">Frequently asked questions: Run a node</a>.
+          <a href="/run-arbitrum-node/faq">Frequently asked questions: Run a node</a>.
         </p>
       </div>
     </div>
@@ -237,13 +237,6 @@ Common troubleshooting scenarios and solutions are detailed below.
   </tbody>
 </table>
 
-<!--
-#### Troubleshooting your feed relay
-
-import FeedRelayTroubleshootingPartial from '@site/../arbitrum-docs/node-running/partials/_feed-relay-troubleshooting.md';
-
-<FeedRelayTroubleshootingPartial />
--->
 
 ### Step 3: Generate a troubleshooting report
 

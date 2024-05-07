@@ -6,7 +6,7 @@ We'll also intersperse it with "finality checks," explaining what guarantees the
 
 This overview will be focused on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/inside-anytrust.md) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
 
-For clarity on any terminology that may be unfamiliar, see our [glossary](/intro/glossary.mdx).
+For clarity on any terminology that may be unfamiliar, see our [glossary](/glossary.mdx).
 
 ### 1. Sequencer receives transaction
 

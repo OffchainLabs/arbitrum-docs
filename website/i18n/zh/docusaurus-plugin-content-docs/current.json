@@ -193,11 +193,11 @@
   },
   "sidebar.runNodesSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",
-    "description": "The label for the doc item Frequently asked questions in sidebar runNodesSidebar, linking to the doc node-running/faq"
+    "description": "The label for the doc item Frequently asked questions in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/faq"
   },
   "sidebar.runNodesSidebar.doc.Command-line options": {
     "message": "Command-line options",
-    "description": "The label for the doc item Command-line options in sidebar runNodesSidebar, linking to the doc node-running/command-line-options"
+    "description": "The label for the doc item Command-line options in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/command-line-options"
   },
   "sidebar.learnMoreSidebar.category.Get started": {
     "message": "Get started",
@@ -234,10 +234,6 @@
   "sidebar.learnMoreSidebar.link.Deeper dive: Whitepaper": {
     "message": "Deeper dive: Whitepaper",
     "description": "The label for link Deeper dive: Whitepaper in sidebar learnMoreSidebar, linking to https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf"
-  },
-  "sidebar.learnMoreSidebar.doc.A gentle introduction": {
-    "message": "A gentle introduction",
-    "description": "The label for the doc item A gentle introduction in sidebar learnMoreSidebar, linking to the doc intro/intro"
   },
   "sidebar.learnMoreSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",

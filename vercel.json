@@ -507,7 +507,7 @@
         },
         {
             "source": "/docs/glossary",
-            "destination": "/intro/glossary",
+            "destination": "/glossary",
             "permanent": false
         },
         {

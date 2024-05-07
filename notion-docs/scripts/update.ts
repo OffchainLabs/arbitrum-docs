@@ -281,7 +281,7 @@ async function generateFiles() {
   }
 
   const validGlossaryTerms = cmsContents.glossaryTerms.filter(isValid)
-  addItems(validGlossaryTerms, '/intro/glossary')
+  addItems(validGlossaryTerms, '/glossary')
   const glossaryJSON = renderGlossaryJSON(validGlossaryTerms, linkableTerms)
   fs.writeFileSync('../website/static/glossary.json', glossaryJSON)
   const definitionsHTML = `\n\n${renderGlossary(
