@@ -1,11 +1,11 @@
 ---
-title: "L1 to L2 messaging"
+title: 'L1 to L2 messaging'
 description: This concept page provides information about how arbitrary messages are passed from L1 to L2
 target_audience: developers who want to build on Arbitrum
 content_type: concept
 ---
 
-import { AddressAliasHelper } from "@site/src/components/AddressAliasHelper";
+import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
 import {
   MermaidWithHtml,
   Nodes,
@@ -13,7 +13,7 @@ import {
   Connection,
   NodeDescriptions,
   NodeDescription,
-} from "/src/components/MermaidWithHtml/MermaidWithHtml";
+} from '/src/components/MermaidWithHtml/MermaidWithHtml';
 
 ## Retryable Tickets
 
@@ -62,25 +62,23 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
       <code>🧍</code> The user who initiates an L1-L2 message
     </NodeDescription>
     <NodeDescription for="2">
-      <code>Initiating an L1-L2 message</code> A call to
-      `inbox.createRetryableTicket` function that puts the message in the L2
-      inbox that can be re-executed for some fixed amount of time if it reverts
+      <code>Initiating an L1-L2 message</code> A call to `inbox.createRetryableTicket` function that
+      puts the message in the L2 inbox that can be re-executed for some fixed amount of time if it
+      reverts
     </NodeDescription>
     <NodeDescription for="3">
-      <code>Check user's deposit</code> Logic that checks if the user have
-      enough funds to create a ticket. This is done by checking if the
-      `msg.value` provided by the user is greater than or equal to{" "}
-      <code>maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas</code>
+      <code>Check user's deposit</code> Logic that checks if the user have enough funds to create a
+      ticket. This is done by checking if the `msg.value` provided by the user is greater than or
+      equal to <code>maxSubmissionCost + l2CallValue + gasLimit * maxFeePerGas</code>
     </NodeDescription>
     <NodeDescription for="4">
-      <code>Ticket creation fails</code> Ticket creation fails and no funds are
-      deducted from the user
+      <code>Ticket creation fails</code> Ticket creation fails and no funds are deducted from the
+      user
     </NodeDescription>
     <NodeDescription for="5">
-      <code>Ticket is created</code> A ticket is created and added to the
-      retryable buffer on L2 Funds (<code>l2CallValue + submissionCost</code>)
-      are deducted to cover the callvalue from the user and placed into escrow
-      (on L2) for later use in redeeming the ticket
+      <code>Ticket is created</code> A ticket is created and added to the retryable buffer on L2
+      Funds (<code>l2CallValue + submissionCost</code>) are deducted to cover the callvalue from the
+      user and placed into escrow (on L2) for later use in redeeming the ticket
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
@@ -105,26 +103,22 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for="1">
-      <code>Does the auto-redeem succeed?</code> Logic that determines if the
-      user's L2 Balance is greater than (or equal to){" "}
-      <code>maxFeePerGas * gasLimit</code> && <code>maxFeePerGas</code> is
-      greater than (or equal to) the <code>l2Basefee</code>
+      <code>Does the auto-redeem succeed?</code> Logic that determines if the user's L2 Balance is
+      greater than (or equal to) <code>maxFeePerGas * gasLimit</code> && <code>maxFeePerGas</code>{' '}
+      is greater than (or equal to) the <code>l2Basefee</code>
     </NodeDescription>
     <NodeDescription for="2">
-      <code>Ticket is executed</code> Ticket is executed, the actual{" "}
-      <code>submissionFee</code> is refunded to the{" "}
-      <code>excessFeeRefundAddress</code> since the ticket was not kept in the
+      <code>Ticket is executed</code> Ticket is executed, the actual <code>submissionFee</code> is
+      refunded to the <code>excessFeeRefundAddress</code> since the ticket was not kept in the
       buffer on L2
     </NodeDescription>
     <NodeDescription for="3">
-      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable
-      buffer
+      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer
     </NodeDescription>
     <NodeDescription for="4">
-      <code>callValueRefundAddress gets refunded</code>{" "}
-      <code>callValueRefundAddress</code> gets refunded with{" "}
-      <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is
-      capped by <code>l1CallValue</code> in the auto-redeem
+      <code>callValueRefundAddress gets refunded</code> <code>callValueRefundAddress</code> gets
+      refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by{' '}
+      <code>l1CallValue</code> in the auto-redeem
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
@@ -154,23 +148,20 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </Nodes>
   <NodeDescriptions>
     <NodeDescription for="1">
-      <code>
-        Is the ticket manually cancelled or not redeemed within 7 days?
-      </code>{" "}
-      Logic that determines if the ticket is manually cancelled or not redeemed
-      within 7 days (i.e., is expired)
+      <code>Is the ticket manually cancelled or not redeemed within 7 days?</code> Logic that
+      determines if the ticket is manually cancelled or not redeemed within 7 days (i.e., is
+      expired)
     </NodeDescription>
     <NodeDescription for="2">
-      <code>callValueRefundAddress gets refunded</code> callValueRefundAddress
-      is refunded with the <code>l2CallValue</code>
+      <code>callValueRefundAddress gets refunded</code> callValueRefundAddress is refunded with the{' '}
+      <code>l2CallValue</code>
     </NodeDescription>
     <NodeDescription for="3">
-      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable
-      buffer
+      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer
     </NodeDescription>
     <NodeDescription for="4">
-      <code>Is the ticket manually redeemed</code> Logic that determines if the
-      ticket is manually redeemed
+      <code>Is the ticket manually redeemed</code> Logic that determines if the ticket is manually
+      redeemed
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
