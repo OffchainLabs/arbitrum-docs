@@ -86,7 +86,7 @@ To engage with the Stylus testnet, you will first need to acquire Sepolia ETH an
 
 1. Visit a faucet such as [Bware Labs' Arbitrum Stylus Testnet faucet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
 2. Enter your wallet address.
-3. Click `Claim` to receive your testnet ETH. Some faucets may offer additional steps to get more tokens.
+3. Click `Claim` to receive your testnet ETH. Some faucets may require additional steps to get more tokens.
 
 After these steps, you should see Sepolia ETH in your Sepolia testnet wallet.
 
