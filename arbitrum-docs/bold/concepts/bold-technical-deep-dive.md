@@ -17,7 +17,7 @@ import PublicPreviewBannerPartial from '../../how-arbitrum-works/bold/partials/_
 
 ## Overview
 
-Under the hood, BoLD can offer time-bounded, permissionless validation because a correct Arbitrum state assertion is not tied to a single validator or entity. Instead, claims are tied to deterministic Merkle proofs and hashes that will be proven on Ethereum. Any party can bond on the correct state and, through interactive fraud proofs, prove their claim is correct. This means that a single honest party bonding on the correct state assertion will always win disputes, guaranteed.
+Under the hood, BoLD can offer time-bounded, permissionless validation because a correct Arbitrum state assertion is not tied to a single validator or entity. Instead, claims are tied to deterministic Merkle proofs and hashes that will be proven on Ethereum. Any party can bond capital to the correct state and, through interactive fraud proofs, have their claim proven correct. This means that a single honest party bonding on the correct state assertion will always win disputes, guaranteed.
 
 To put it simply, Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against by each unique challenger. It is similar to a 1-vs-1 tournament, where the honest party may participate in one or more concurrent tournaments at any time. BoLD, on the other hand, enables an all-vs-all battle royal between two categories: Good vs Evil, where there must and will always be a single winner in the end.
 
