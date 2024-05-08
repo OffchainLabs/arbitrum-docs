@@ -27,7 +27,9 @@
 
 <p>Use the following link to view the Parity VM trace of your failed transaction (replacing the tx-hash with your own, and using the appropriate etherscan root url):</p>
 
-<p><a href="https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw">https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw</a></p>
+<p>
+<a href="https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw">https://etherscan.io/vmtrace?txhash=0x51a8088c9b319bbad649c36d9cf2b4e9b61a6099a158181676c8e79dbce2df58&type=parity#raw</a>
+</p>
 
 <p>To find out the reversion error signature, go to the "Raw Traces" tab, and scroll down to find the last "subtrace" in which your transaction is reverted. Then find "output" field of that subtrace.</p>
 
@@ -39,10 +41,10 @@
 <p>The first four bytes of the output is the custom error signature;<strong> </strong>in our example it's <code>0xfadf238a</code> . </p>
 
 <p><br />
-To let's find out which is custom error this signature represents, we can use this handy tool by Samzcsun:  <a href="https://sig.eth.samczsun.com/">https://sig.eth.samczsun.com/</a></p>
-
-<p>Checking <code>0xfadf238a</code> gives us <code>InsufficientSubmissionCost(uint256,uint256)</code>. <br />
+To let's find out which is custom error this signature represents, we can use this handy tool by Samzcsun:  <a href="https://sig.eth.samczsun.com/">https://sig.eth.samczsun.com/</a>
 </p>
+
+<p>Checking <code>0xfadf238a</code> gives us <code>InsufficientSubmissionCost(uint256,uint256)</code>.</p>
 
 <p></p>
 
@@ -279,7 +281,8 @@ To let's find out which is custom error this signature represents, we can use th
 <p></p>
 
 <p><br />
-<strong>Note that:</strong></p>
+<strong>Note that:</strong>
+</p>
 
 <ul>
 <li>All pre-Nitro transactions are labeled as <code>ArbitrumLegacyTxType</code> by Nitro.</li>
