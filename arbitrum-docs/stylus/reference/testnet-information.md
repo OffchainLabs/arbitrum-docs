@@ -28,7 +28,9 @@ This table provides an overview of the available public RPC endpoints for the St
 
 :::caution
 
-Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
+- Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
+- Stylus testnet (v1) has been deprecated. 
+- Stylus testnet (v2) will be deprecated once Stylus comes out of beta and is enabled on the Arbitrum Sepolia testnet.
 
 :::
 
