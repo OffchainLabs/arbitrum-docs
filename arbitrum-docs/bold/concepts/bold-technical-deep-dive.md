@@ -141,7 +141,7 @@ At its core, the disagreement between validators looks something like this:
 
 - Alice’s assertion: `batch 10, blockhash 0x123`
 
-- Bob’s assertion: batch 10, blockhash 0x456
+- Bob’s assertion: `batch 10, blockhash 0x456`
 
 Their disagreement is about an Arbitrum block somewhere between batch 5 and batch 10. Here’s how the actual challenge begins in this example:
 
