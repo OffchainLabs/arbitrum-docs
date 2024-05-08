@@ -191,7 +191,7 @@ The bisection game is an iterative process. Initially, validators disagree over 
 
 The subchallenge is over a max of 2^43 hashes where validators need to narrow down their single hash of disagreement. As the space of hashes is too large, we explore this space in _ranges_ of steps.
 
-First, validators disagree over **Gigasteps** of WASM execution. That is, over ranges of 2^30 steps. Then, they open another subchallenge once they reach a single gigastep of disagreement. They then play games over ranges of **Megasteps**, then **Kilosteps**, until they reach a subchallenge over individual steps. The bisection game is the same at each subchallenge level, and opening a subchallenge requires placing another “mini-bond”. The magnitudes of mini-bonds are different at each subchallenge level.
+First, validators disagree over **Gigasteps** of WASM execution. That is, over ranges of 2^30 steps. Then, they open another subchallenge once they reach a single gigastep of disagreement. They then play games over ranges of **Megasteps**, then **Kilosteps**, until they reach a subchallenge over individual steps. The bisection game is the same at each subchallenge level, and opening a subchallenge requires placing another “challenge bond”. The magnitudes of challenge bonds are different at each subchallenge level.
 
 #### One step proof
 
