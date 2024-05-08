@@ -137,7 +137,7 @@ Recall that a challenge is a fundamental disagreement about an assertion posted 
 
 At its core, the disagreement between validators looks something like this:
 
-- Common parent assertion: batch 5, blockhash 0xabc
+- Common parent assertion: `batch 5, blockhash 0xabc`
 
 - Alice’s assertion: `batch 10, blockhash 0x123`
 
