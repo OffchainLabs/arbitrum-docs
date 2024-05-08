@@ -221,7 +221,7 @@ Each subchallenge that is created requires placing a “mini-bond”. The first,
 
 ### Reimbursements of Bonds
 
-It is important to emphasize that the reimbursement of assertion bonds for honest parties will be handled “in-band” by the protocol. While reimbursing honest parties for mini-bond costs and gas costs will not be handled “in-band” on L1 and will instead be handled by the Arbitrum DAO. There will be a procedure, to be published later, that can be followed to calculate the reimbursements for mini-bond and gas costs to honest parties.
+It is important to emphasize that the reimbursement of assertion bonds and challenge bonds for honest parties will be handled “in-band” by the protocol. While reimbursing honest parties for gas costs will not be handled “in-band” on L1 and will instead be handled by the Arbitrum Foundation. There will be a procedure, to be published later, that can be followed to calculate the reimbursements for gas costs to honest parties.
 
 Lastly, reimbursement will not be made for off-chain compute costs as we view these as costs borne by the operator, alongside the maintenance and infra costs that regularly arise from running a node. It is also difficult to attribute computation, as honest validators that are not necessarily posting claims would still perform similar computations if they are following a challenge. However, the costs of the on-chain bonds to participate in challenges far exceed the cost of compute required to resolve these challenges.
 
