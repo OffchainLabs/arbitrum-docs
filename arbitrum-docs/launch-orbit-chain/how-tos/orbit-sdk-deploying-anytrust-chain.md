@@ -50,7 +50,6 @@ Similarly to the Rollup chain, you'll need to prepare the AnyTrust chain configu
 
 ```solidity {10}
 struct Config {
-
     uint64 confirmPeriodBlocks;
     uint64 extraChallengeTimeBlocks;
     address stakeToken;
@@ -62,9 +61,7 @@ struct Config {
     string chainConfig;
     uint64 genesisBlockNum;
     ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
-
 }
-
 ```
 
 The `chainConfig` parameter within the `Config` structure lets you configure the following:
@@ -76,7 +73,7 @@ Start by setting up the chain configuration parameters. This includes defining k
 | `chainId`                   | Your Orbit chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                            |
 | `DataAvailabilityCommittee` | Set to `false`, this boolean defines your chain as a Rollup; set to `true`, it configures it as an AnyTrust chain.                                          |
 | `InitialChainOwner`         | Identifies who owns and controls the chain.                                                                                                                 |
-| `MaxCodeSize`               | Sets the maximum size for contract bytecodes on the Orbit chain. e.g. Ethereum mainnet has a limit of 24,576 Bytes.                                         |
+| `MaxCodeSize  `             | Sets the maximum size for contract bytecodes on the Orbit chain. e.g. Ethereum mainnet has a limit of 24,576 Bytes.                                         |
 | `MaxInitCodeSize`           | Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. For example, the Ethereum mainnet limit is 49,152 Bytes. |
 
 For an AnyTrust chain, you need to set the `DataAvailabilityCommittee` to **true**. This setting is crucial as it indicates the chain's reliance on a committee for data availability.

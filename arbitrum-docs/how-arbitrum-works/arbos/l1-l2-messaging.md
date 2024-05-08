@@ -28,26 +28,25 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract][inbox_link]. A ticket is guaranteed to be created if this call succeeds. Here, we describe parameters that need to be carefully set. Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
 
 | Parameter                                   | Description                                                                                                                                                                                                                                                                                                    |
-| :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
 | `l1CallValue (also referred to as deposit)` | Not a real function parameter, it is rather the callValue that is sent along with the transaction                                                                                                                                                                                                              |
 | `address to`                                | The destination L2 address                                                                                                                                                                                                                                                                                     |
 | `uint256 l2CallValue`                       | The callvalue for retryable L2 message that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                                       |
 | `uint256 maxSubmissionCost`                 | The maximum amount of ETH to be paid for submitting the ticket. This amount is (1) supplied within the deposit (l1CallValue) to be later deducted from sender's L2 balance and is (2) directly proportional to the size of the retryable’s data and L1 basefee                                                 |
-| `address excessFeeRefundAddress`            | The unused gas cost and submssion cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (Note: excess deposit will transfer to the alias address of the parent chain tx's `msg.sender` rather than this address) |
+| `address excessFeeRefundAddress`            | The unused gas cost and submssion cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (Note: excess deposit will transfer to the alias address of the parent chain tx's `msg.sender` rather than this address) |     |
 | `address callValueRefundAddress`            | The L2 address to which the l2CallValue is credited if the ticket times out or gets cancelled (this is also called the `beneficiary`, who's got a critical permission to cancel the ticket)                                                                                                                    |
 | `uint256 gasLimit`                          | Maximum amount of gas used to cover L2 execution of the ticket                                                                                                                                                                                                                                                 |
 | `uint256 maxFeePerGas`                      | The gas price bid for L2 execution of the ticket that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                             |
 | `bytes calldata data`                       | The calldata to the destination L2 address                                                                                                                                                                                                                                                                     |
 
-1. Sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
+2. Sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
 
-2. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
+3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
 
 [inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol
 
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
-
     <Node id="1">🧍</Node>
     <Node id="2">Initiating an L1-L2 message</Node>
     <Node id="3">Enough deposit?</Node>
@@ -57,10 +56,8 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     <Connection from="2" to="3" />
     <Connection from="3" to="4" label="no" />
     <Connection from="3" to="5" label="yes" />
-
   </Nodes>
   <NodeDescriptions>
-
     <NodeDescription for="1">
       <code>🧍</code> The user who initiates an L1-L2 message
     </NodeDescription>
@@ -83,7 +80,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
       Funds (<code>l2CallValue + submissionCost</code>) are deducted to cover the callvalue from the
       user and placed into escrow (on L2) for later use in redeeming the ticket
     </NodeDescription>
-
   </NodeDescriptions>
 </MermaidWithHtml>
 
@@ -97,7 +93,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 <MermaidWithHtml>
   <Nodes title="Automatic Redemption of the Ticket">
-
     <Node id="1">Auto-redeem succeeds?</Node>
     <Node id="2">Ticket is executed</Node>
     <Node id="3">Ticket is deleted</Node>
@@ -105,10 +100,8 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     <Connection from="1" to="2" label="yes" />
     <Connection from="2" to="3" />
     <Connection from="1" to="4" label="no" />
-
   </Nodes>
   <NodeDescriptions>
-
     <NodeDescription for="1">
       <code>Does the auto-redeem succeed?</code> Logic that determines if the user's L2 Balance is
       greater than (or equal to) <code>maxFeePerGas * gasLimit</code> && <code>maxFeePerGas</code>{' '}
@@ -127,7 +120,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
       refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by{' '}
       <code>l1CallValue</code> in the auto-redeem
     </NodeDescription>
-
   </NodeDescriptions>
 </MermaidWithHtml>
 
@@ -144,7 +136,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 <MermaidWithHtml>
   <Nodes title="Manual Redemption of the Ticket">
-
     <Node id="1">Ticket manually cancelled or not redeemed in 7 days?</Node>
     <Node id="2">callValueRefundAddress gets refunded</Node>
     <Node id="3">Ticket is deleted</Node>
@@ -154,10 +145,8 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     <Connection from="1" to="4" label="no" />
     <Connection from="4" to="3" label="yes" />
     <Connection from="4" to="1" label="no" />
-
   </Nodes>
   <NodeDescriptions>
-
     <NodeDescription for="1">
       <code>Is the ticket manually cancelled or not redeemed within 7 days?</code> Logic that
       determines if the ticket is manually cancelled or not redeemed within 7 days (i.e., is
@@ -174,13 +163,12 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
       <code>Is the ticket manually redeemed</code> Logic that determines if the ticket is manually
       redeemed
     </NodeDescription>
-
   </NodeDescriptions>
 </MermaidWithHtml>
 
 :::caution Avoid Losing Funds!
 
-If a ticket expires after 7 days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callvalue` ) it carries could be lost without possibility of being recovered.
+If a ticket expires after 7 days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callvalue`) it carries could be lost without possibility of being recovered.
 
 :::
 
@@ -211,11 +199,11 @@ In the lifecycle of a retryable ticket, two types of L2 transaction receipts wil
 
 ### Alternative "unsafe" Retryable Ticket Creation
 
-The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their address alias (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox` 's `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
+The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their address alias (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
 
 ## Eth deposits
 
-A special message type exists for simple Eth deposits; i.e., sending Eth from L1 to L2. Eth can be deposited via a call to the `Inbox` 's `depositEth` method. If the L1 caller is EOA, the Eth will be deposited to the same EOA address on L2; the L1 caller is a contract, the funds will deposited to the contract's aliased address (see below).
+A special message type exists for simple Eth deposits; i.e., sending Eth from L1 to L2. Eth can be deposited via a call to the `Inbox`'s `depositEth` method. If the L1 caller is EOA, the Eth will be deposited to the same EOA address on L2; the L1 caller is a contract, the funds will deposited to the contract's aliased address (see below).
 
 Note that depositing Eth via `depositEth` into a contract on L2 will _not_ trigger the contract's fallback function.
 
@@ -227,7 +215,7 @@ While retryables and Eth deposits _must_ be submitted through the delayed inbox,
 
 ### Address Aliasing
 
-Unsigned messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these messages are executed on L2, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the L1 address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111` :
+Unsigned messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these messages are executed on L2, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the L1 address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111`:
 
 ```sol
 L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
