@@ -67,8 +67,6 @@ To interact with the Stylus testnet, you need to manually configure two specific
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://sepolia.arbiscan.io`
 
-After filling in these details, click "Save" to add the Arbitrum Sepolia network.
-
 2. Arbitrum Stylus Testnet:
 
 - **Network Name**: Stylus testnet
@@ -76,8 +74,6 @@ After filling in these details, click "Save" to add the Arbitrum Sepolia network
 - **Chain ID**: 23011913
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://stylus-testnet-explorer.arbitrum.io/`
-
-Click "Save" once you input all the details to add the Stylus testnet.
 
 
 ### Acquiring and Bridging Testnet ETH
