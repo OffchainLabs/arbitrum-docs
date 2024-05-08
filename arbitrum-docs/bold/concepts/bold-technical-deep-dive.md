@@ -95,7 +95,7 @@ All actors in the protocol have a local state from which they can produce valid 
 
 ### Assertions
 
-A key responsibility for Arbitrum validators is to post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions, and they contain the following information, along with some metadata not critical for this document:
+A key responsibility for Arbitrum validators is to post claims about the Arbitrum chains’ state to Ethereum at certain checkpoints. These are known as assertions. Assertions contain information, most critically:
 
 1. The L2 block hash being claimed
 
