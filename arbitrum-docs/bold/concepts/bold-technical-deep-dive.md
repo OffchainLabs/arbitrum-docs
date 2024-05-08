@@ -83,7 +83,7 @@ All actors in the protocol have a local state from which they can produce valid 
 
 - **OneStepProver:** A set of contracts that implement a miniature WASM VM capable of executing one-step-proofs of computation of the L2 state transition function. This is implemented in Solidity and already exists on Ethereum. No changes to the OSP contracts are needed for BoLD.
 
-**Bonding (also referred to as Staking):** Participants in the protocol need to bond a certain amount of ETH (WETH is used in the BoLD testnet) to gain the privilege of posting assertions to the Rollup contracts by locking up an ETH bond in the protocol contracts. Whenever someone wants to challenge an assertion, they must also place a smaller bond called a mini-bond in their challenge. Bonds, their rationale, and magnitude will be covered in greater detail in the Specifications section.
+**Bonding:** Participants in the protocol need to bond a certain amount of `ETH` (`WETH` is used in the BoLD testnet) to gain the privilege of posting assertions to the Rollup contracts by locking up an `ETH` bond in the protocol contracts. Whenever someone wants to challenge an assertion, they must also place a smaller bond called a challenge bond in their challenge. Bonds, their rationale, and magnitude will be covered in greater detail in the Specifications section.
 
 ### Off-chain components
 
