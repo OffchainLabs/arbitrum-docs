@@ -142,7 +142,7 @@ Arbitrum is an optimistic rollup. Let’s unpack that term.
 
 _Rollup_
 
-Arbitrum is a rollup, which means that the inputs to the chain -- the messages that are put into the inbox -- are all recorded on the Ethereum chain as calldata. Because of this, everyone has the information they would need to determine the current correct state of the chain -- they have the full history of the inbox, and the results are uniquely determined by the inbox history, so they can reconstruct the state of the chain based only on public information, if needed.
+As a rollup, Arbitrum packs and posts its input messages onto the Ethereum chain as calldata. This ensures that anyone can retrieve and reconstruct the correct state from the public history of the inbox.
 
 This also allows anyone to be a full participant in the Arbitrum protocol, to run an Arbitrum node or participate as a validator. Nothing about the history or state of the chain is a secret.
 
