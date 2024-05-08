@@ -77,19 +77,15 @@ To interact with the Stylus testnet, you need to manually configure two specific
 
 To engage with the Stylus testnet, you will first need to acquire Sepolia ETH and then bridge it over:
 
-1. Visit a faucet such as [Bware Labs' Arbitrum Stylus Testnet faucet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
+1. Start by visiting a faucet to get testnet ETH. Here are a few options:
+    - [Bware Labs' Arbitrum Stylus Testnet faucet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet)
+    - [QuickNode Faucet for Arbitrum Sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
+    - [Alchemy Sepolia Faucet](https://sepoliafaucet.com/)
+    - [Sepolia Faucet by PK910](https://sepolia-faucet.pk910.de/)
 2. Enter your wallet address.
-3. Click `Claim` to receive your testnet ETH. Some faucets may require additional steps to get more tokens.
+3. Click `Claim` to receive your testnet ETH. Some faucets may require additional steps.
 
-After these steps, you should see Sepolia ETH in your Sepolia testnet wallet.
-
-Alternative faucets:
-
-- [QuickNode Faucet for Arbitrum Sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
-- [Alchemy Sepolia Faucet](https://sepoliafaucet.com/)
-- [Sepolia Faucet by PK910](https://sepolia-faucet.pk910.de/)
-
-Next, bridge the Sepolia ETH to the Stylus Testnet:
+If you obtained your ETH through the Bware Labs faucet, you don't need to bridge it, as this ETH is already on the Stylus testnet. If you used other faucets, your Sepolia ETH will be in your Sepolia testnet wallet and requires bridging to the Stylus testnet:
 
 1. Go to the [Arbitrum Bridge](https://bridge.arbitrum.io/?destinationChain=stylus-testnet&sourceChain=arbitrum-sepolia).
 2. Choose Arbitrum Sepolia as the source and Stylus Testnet as the destination.
