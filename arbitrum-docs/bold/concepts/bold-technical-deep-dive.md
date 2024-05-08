@@ -219,7 +219,7 @@ To create a challenge, there must be a fork in the Arbitrum assertion chain smar
 
 Challenge bonds are named as such because they are bonds required for opening challenges. The mechanism of how challenge bond economics are decided is contained in the economics deep dive, which also explains the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses information such as off-chain costs + gas costs + grieving ratios between honest and evil parties to discourage spam.
 
-Each subchallenge that is created requires placing a “mini-bond”. The first, unrivaled edge’s bond is kept in the challenge manager contract on Ethereum, while any subsequent rival bonds are kept in an excess bond receiver address, which can be set to the DAO treasury. Once a challenge is complete, a reimbursement process can be done for honest party bonds, while the DAO keeps evil bonds. It is important to not offer evil bonds to honest parties to prevent perverse incentives such as griefing attacks or to discourage needless competition between honest parties.
+Each subchallenge that is created requires depositing a challenge bond. The first, unrivaled edge’s bond is kept in the challenge manager contract on Ethereum, while any subsequent rival bonds are kept in an excess bond receiver address, which can be set to the ArbitrumDAO treasury. Once a challenge is complete, all bonds for an honest party are automatically refunded in-protocol. It is important to not offer bonds confiscated from dishonest parties to honest parties to avoid perverse incentives, such as grieving attacks or to discourage needless competition between honest parties.
 
 ### Reimbursements of Bonds
 
