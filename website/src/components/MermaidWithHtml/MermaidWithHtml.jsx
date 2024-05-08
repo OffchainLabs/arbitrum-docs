@@ -76,9 +76,15 @@ const generateMermaidCodeFromHtmlNodesAndConnections = (htmlNodes, connections, 
 // <Nodes> is the wrapper around the mermaid diagram itself
 const Nodes = ({ children, title }) => {
   const containerRef = useRef(null);
+  const childArray = React.Children.toArray(children);
 
-  const htmlNodes = children.filter((child) => child.type.name == "Node");
-  const connections = children.filter((child) => child.type.name == "Connection");
+  const htmlNodes = childArray.filter(
+    (child) => React.isValidElement(child) && child.type === Node
+  );
+
+  const connections = childArray.filter(
+    (child) => React.isValidElement(child) && child.type === Connection
+  );
 
   const code = generateMermaidCodeFromHtmlNodesAndConnections(htmlNodes, connections, title);
 
