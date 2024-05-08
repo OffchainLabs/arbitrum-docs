@@ -215,7 +215,7 @@ Once an edge has a total on-chain timer greater than or equal to a challenge per
 
 ### Bonding in Challenges
 
-To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the parent assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a “mini-bond.”
+To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the parent assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a "challenge bond". Note that to open a new assertion-level challenge, the challenge bond is equal to the assertion bond for Arbitrum One.
 
 Mini-bonds are named as such because they are a lot smaller than the base bond required to become an assertion poster but still large enough that they discourage spam attacks. The mechanism of how mini-bond economics are decided is contained in the economics deep dive in this directory, which also explains the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses information such as off-chain costs + gas costs + griefing ratios between honest and evil parties to discourage spam.
 
