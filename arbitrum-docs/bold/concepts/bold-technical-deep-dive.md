@@ -129,7 +129,7 @@ Trustless bonding pools can also be created to open challenges and make moves on
 
 ### Opening Challenges
 
-To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on Ethereum. Additionally, the validator posting the edge must attach a bond called a mini-bond to it, denominated in `WETH` for the BoLD testnet. This bond is much lower than the one required to become an assertion poster.
+To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on Ethereum. Additionally, the validator posting the edge must attach a bond called a challenge bond to it (denominated in `WETH` for the BoLD testnet). This bond is much lower than the one required to become an assertion poster.
 
 Anyone can open a challenge on an assertion without needing to be a bondr in the Rollup contract, so long as they post a mini-bond and an edge claiming intent to start the challenge. Challenges are not tied to specific addresses or parties – instead, anyone can participate.t
 
