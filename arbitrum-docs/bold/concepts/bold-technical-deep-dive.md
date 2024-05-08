@@ -53,6 +53,8 @@ The current implementation of BoLD involves both on-chain and off-chain componen
 
 - **Challenge Period:** Window of time ([~6.4 days on Arbitrum One](https://docs.arbitrum.io/build-decentralized-apps/reference/chain-params)) over which an assertion can be challenged, after which the assertion can be confirmed. This is configurable by the DAO.
 
+- **Edge**: Edges are a portion of a claim made by a validator about the history of the chain from some end state all the way back to some initial state. Edges are the fundamental unit in a challenge.
+
 - **Delay Attacks:** In a delay attack, a malicious party (or group of parties) acts within the Rollup protocol, forcing the honest party to play 1-vs-1 games against them to delay the confirmation of results back to the L1 chain. BoLD has a proven, constant upper bound on confirmation times for assertions in Arbitrum, addressing the biggest flaw of the current challenge mechanism. BoLD validators don’t need to play 1-vs-1 challenges and instead can defend a single challenge against many malicious claims. With delay attacks solved, Arbitrum will be able to allow permissionless validation
 
 - **Permissionless Validation:** The ability for anyone to interact with the Arbitrum Rollup contracts on Ethereum to both post assertions and challenge others' assertions without needing permission. With the release of BoLD, the Rollup contracts on Arbitrum will no longer have a permissioned list of validators.
