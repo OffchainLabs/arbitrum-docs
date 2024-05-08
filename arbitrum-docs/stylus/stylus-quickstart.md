@@ -167,11 +167,11 @@ Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to
 
 Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
 
-### Checking Program Validity
+### Checking your Stylus project is valid
 
-Before deploying your program onchain, ensure its it works:
+To check whether or not your program will successfully **deploy and activate** onchain, use the `cargo stylus check` subcommand:
 
-```bash
+```
 cargo stylus check
 ```
 
