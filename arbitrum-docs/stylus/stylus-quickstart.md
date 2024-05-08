@@ -285,13 +285,11 @@ For further deployment options and transaction details, consult `cargo stylus de
 
 ## Deploying Non-Rust WASM Projects
 
-The Stylus CLI tool supports deploying WebAssembly (WASM) projects, including those not compiled from Rust. You can deploy any WASM file by using the `--wasm-file-path` flag with Stylus CLI commands.
+The Stylus CLI tool can also deploy non-Rust, WASM projects to Stylus by specifying the WASM file directly with the `--wasm-file-path` flag to any of the cargo stylus commands.
 
-### Supporting Various WASM Sources
+Even WebAssembly Text [(WAT)](https://www.webassemblyman.com/wat_webassembly_text_format.html) files are supported. This means projects that are just individual WASM files can be deployed onchain without needing to have been compiled by Rust. WASMs produced by other languages, such as C, can be used with the tool this way.
 
-The tool isn't limited to Rust-compiled WASMs. It can deploy WASM files written in other programming languages like C, or even WebAssembly Text [(WAT)](https://www.webassemblyman.com/wat_webassembly_text_format.html) files. This flexibility allows for deploying standalone WASM files that do not require Rust compilation.
-
-For instance, a simple WAT module like this:
+For example:
 
 ```wasm
 (module
@@ -301,32 +299,11 @@ For instance, a simple WAT module like this:
         i32.const 1
         i32.add))
 ```
-can be saved as `add.wat`. You can then check or deploy it using commands like:
 
-```bash
-cargo stylus check --wasm-file-path=add.wat
-```
+can be saved as `add.wat` and used as `cargo stylus check --wasm-file-path=add.wat` or `cargo stylus deploy --priv-key-path=<YOUR PRIV KEY FILE PATH> --wasm-file-path=add.wat`
 
-and
+## Exporting Solidity ABIs
 
-```bash
-cargo stylus deploy --priv-key-path=<YOUR PRIV KEY FILE PATH> --wasm-file-path=add.wat
-```
+Stylus Rust projects that use the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) have the option of exporting Solidity ABIs. The cargo stylus tool also makes this easy with the `export-abi` command:
 
-### Exporting Solidity ABIs from Rust Projects
-
-If you're working with Stylus Rust projects that utilize the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs), you also have the option to export Solidity ABIs. This can be done easily using the `export-abi` command provided by the Stylus CLI tool:
-
-```bash
-cargo stylus export-abi
-```
-
-This feature supports seamless integration of Rust-based smart contracts with other Ethereum tools and frameworks, which often rely on Solidity ABIs to interact with various contracts.
-
-# Conclusion
-
-In this tutorial, you have learned how to write and deploy smart contracts in Rust using Stylus. You now have the knowledge and skills necessary to create and deploy your own smart contracts on the Arbitrum network.
-
-Remember to always use a separate developer wallet for testing and development purposes, and never share your private keys or secret recovery phrase with anyone.
-
-You are now ready to start coding with Rust and Stylus.
+`cargo stylus export-abi`
