@@ -18,7 +18,6 @@ This tutorial will guide you through the process of deploying a smart contract i
 3. Checking the validity of your program
 4. Deploying your program
 
-
 ## Prerequisites
 
 Before we dive into the tutorial, make sure you have the following prerequisites set up:
@@ -37,7 +36,6 @@ Some helpful VS Code extensions for Rust development:
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in the code.
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects.
 - [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates): Helps manage Rust crate versions directly from the editor.
-
 
 ### Setting Up a Developer Wallet
 
@@ -75,7 +73,6 @@ To interact with the Stylus testnet, you need to manually configure two specific
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://stylus-testnet-explorer.arbitrum.io/`
 
-
 ### Acquiring and Bridging Testnet ETH
 
 To engage with the Stylus testnet, you will first need to acquire Sepolia ETH and then bridge it over:
@@ -99,11 +96,9 @@ Next, bridge the Sepolia ETH to the Stylus Testnet:
 3. Connect your wallet and authorize the bridge to access your tokens.
 4. Specify the amount of Sepolia ETH you want to bridge and initiate the transfer by clicking `Move funds to Stylus Testnet`. Make sure to keep some ETH in the source chain to cover transaction fees.
 
-To verify the transfer, you can track the transaction on the [Arbiscan block explorer]((https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
+To verify the transfer, you can track the transaction on the [Arbiscan block explorer](https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
 
-<p align="center">
-  <img src="./assets/bridge-to-stylus.png" alt="Stylus Wallet" width="400">
-</p>
+![Cargo Stylus](./assets/bridge-to-stylus.png)
 
 To check the existence and balance of your testnet ETH, use the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0x44E623584f90D6FBaBe930221d47E0De4248e935/coin-balances#address-tabs). This tool allows you to view transaction details and confirm that your ETH is available in the testnet environment. Simply navigate to the provided link and enter your specific wallet address to see your balance and recent transactions.
 
@@ -168,15 +163,9 @@ cargo stylus new <YOUR_PROJECT_NAME>
 
 This command clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) repository, which contains a Rust implementation of the Solidity `Counter` smart contract example. For further details, refer to the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) in the `stylus-hello-world` repository.
 
-For a simpler setup, especially suitable for projects that do not require the full capabilities of Solidity, you can create a minimal project structure using:
+Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing.
 
-```bash
-cargo stylus new --minimal <YOUR_PROJECT_NAME>
-```
-
-This creates a project with just the essential Stylus entrypoint locally.
-
-Continue to develop your Rust program using the features provided in the [[stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs)]. 
+Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
 
 ### Checking Program Validity
 
@@ -186,13 +175,7 @@ Before deploying your program onchain, ensure its it works:
 cargo stylus check
 ```
 
-This command verifies that your program can be deployed and activated onchain without a transaction, by connecting to a specified JSON-RPC endpoint. The defalt endpoint is the Arbitrum Stylus testnet: `https://stylus-testnet.arbitrum.io/rpc`.
-
-For additional options, consult the help guide:
-
-```bash
-cargo stylus check --help
-```
+This command verifies that your program can be deployed and activated onchain without a transaction, by connecting to a specified JSON-RPC endpoint. The default endpoint is the Arbitrum Stylus testnet: `https://stylus-testnet.arbitrum.io/rpc`. For additional options, consult the help guide: `cargo stylus check --help`.
 
 A successful validation will display something like:
 
@@ -222,7 +205,6 @@ Location:
 ```
 
 For guidelines on what constitutes a valid or invalid WASM program, refer to [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/VALID_WASM.md). 
-
 
 ### Deploying Your Program
 
@@ -283,7 +265,6 @@ Transaction fee: 0.001418472200000000 ETH
 You can verify the deployment and activation of your program on the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099/transactions#address-tabs).
 
 For further deployment options and transaction details, consult `cargo stylus deploy --help`.
-
 
 ## Deploying Non-Rust WASM Projects
 
