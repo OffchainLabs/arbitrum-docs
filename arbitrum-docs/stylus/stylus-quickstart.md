@@ -57,7 +57,7 @@ This setup ensures that your real assets are safe while you develop and test on 
 
 :::
 
-To interact with the Stylus testnet, you need to manually configure two specific networks in your MetaMask plugin. Here’s how to set them up:
+To interact with the Stylus testnet, you need to manually configure two specific networks in your MetaMask plugin. Here’s how to set them up (for more details, refer to the [MetaMask documentation](https://docs.metamask.io/wallet/how-to/manage-networks/add-network/)):
 
 1. Arbitrum Sepolia:  
 
@@ -230,7 +230,7 @@ For guidelines on what constitutes a valid or invalid WASM program, refer to [VA
 
 ### Deploying Your Program
 
-Once validated, you can deploy your program using the `cargo stylus deploy` subcommand. Start by estimating the gas required for deployment. `--private-key-path` is a text file containing your private key. You could also use the `--private-key` flag to input your private key directly but this is not recommended for security reasons. 
+Once validated, you can deploy your program using the `cargo stylus deploy` subcommand. Start by estimating the gas required for deployment. `--private-key-path` is a text file containing your private key. 
 
 ```bash
 cargo stylus deploy \
@@ -248,7 +248,7 @@ Base fee: 0.100000000 gwei
 Estimated gas for deployment: 11266639 gas units
 ```
 
-To proceed with the deployment, two transactions will be sent onchain:
+Next, attempt an actual deployment. Two transactions will be sent onchain.
 
 ```bash
 cargo stylus deploy \
