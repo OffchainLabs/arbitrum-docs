@@ -203,7 +203,7 @@ Once a validator creates an edge, and if it does not have any rival edge contest
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
-We believe timer inheritance from ancestor edges is fundamentally broken. Honest edges could have evil ancestors or vice versa, and edges could steal/claim timer credit from others to which they should not be entitled. The research specification goes in-depth into the proven lemmas of timer inheritance and why children's inheritance solves critical attack vectors.
+We believe timer inheritance from ancestor edges is fundamentally broken. Honest edges could have evil ancestors or vice versa, and edges could steal/claim timer credit from others to which they should not be entitled. The [research specification](https://arxiv.org/abs/2404.10491) goes in-depth into the proven lemmas of timer inheritance and why children's inheritance solves critical attack vectors.
 
 #### Cached timer updates
 
