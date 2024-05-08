@@ -139,7 +139,7 @@ At its core, the disagreement between validators looks something like this:
 
 - Common parent assertion: batch 5, blockhash 0xabc
 
-- Alice’s assertion: batch 10, blockhash 0x123
+- Alice’s assertion: `batch 10, blockhash 0x123`
 
 - Bob’s assertion: batch 10, blockhash 0x456
 
