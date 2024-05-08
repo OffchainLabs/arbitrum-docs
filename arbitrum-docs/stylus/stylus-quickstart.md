@@ -11,7 +11,13 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-This tutorial will guide you through the process of deploying a smart contract in Rust using Stylus. Stylus is a tool that simplifies the development and deployment of smart contracts on the Arbitrum network. By the end of this tutorial, you will understand how to create, and deploy your own smart contracts using Rust and Stylus.
+This tutorial will guide you through the process of deploying a smart contract in Rust using Styus. We'll cover the following steps:
+
+1. Setting up your development environment
+2. Creating a new Stylus project
+3. Checking the validity of your program
+4. Deploying your program
+
 
 ## Prerequisites
 
