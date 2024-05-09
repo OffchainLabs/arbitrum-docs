@@ -61,7 +61,7 @@ We'll address remaining dependencies as we go.
 - **Arbitrum**
   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
   - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the
-    <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>
+    <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>.
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
 Let's review our vending machine's Javascript implementation, then convert it into a Solidity smart contract, then deploy it to Arbitrum One.
