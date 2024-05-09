@@ -129,3 +129,67 @@
 <p></p>
 
 <p></p>
+
+### Why do I get an error "no library targets found in package" when trying to compile and old example?
+
+<p>
+  Some of the first Stylus examples were built and deployed using a previous version of{' '}
+  <a href="https://github.com/OffchainLabs/cargo-stylus">cargo-stylus</a> (<code>0.1.x</code>). In
+  that version, Stylus projects were structured as regular Rust binaries.
+</p>
+
+<p>
+  Since{' '}
+  <a href="https://github.com/OffchainLabs/cargo-stylus/releases/tag/v0.2.1">cargo-stylus v0.2.1</a>
+  , Stylus projects are structured as libraries, so when trying to compile old projects you might
+  get an error <code>no library targets found in package</code>.
+</p>
+
+<p>
+  To solve this, it's usually enough to rename the <code>main.rs</code> file to a{' '}
+  <code>lib.rs</code> file.
+</p>
+
+<p></p>
+
+### How can I generate the ABI of my Stylus contract?
+
+<p>
+  The{' '}
+  <a href="https://github.com/OffchainLabs/cargo-stylus/tree/main#exporting-solidity-abis">
+    cargo-stylus tool
+  </a>{' '}
+  has a command that allows you to export the ABI of your Stylus contract:{' '}
+  <code>cargo stylus export-abi</code>.
+</p>
+
+<p>
+  If you're using the Stylus Rust SDK, you'll need to enable the export-abi feature in your
+  Cargo.toml file like so:
+</p>
+
+```rust
+[features]
+export-abi = ["stylus-sdk/export-abi"]
+```
+
+<p>
+  You'll also need to have a <code>main.rs</code> file that selects that feature.
+</p>
+
+<p>
+  This is an example of a main.rs file that allows you to export the abi of the{' '}
+  <a href="https://github.com/OffchainLabs/stylus-hello-world">stylus-hello-world</a> example
+  project:
+</p>
+
+```rust
+#![cfg_attr(not(feature = "export-abi"), no_main)]
+
+#[cfg(feature = "export-abi")]
+fn main() {
+    stylus_hello_world::main();
+}
+```
+
+<p></p>

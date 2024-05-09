@@ -1,12 +1,12 @@
 ---
-title: "How to deploy a mirror Data Availability Server (DAS)"
+title: 'How to deploy a mirror Data Availability Server (DAS)'
 description: This how-to will help you deploy a mirror Data Availability Server (DAS)
 author: jose-franco
 sidebar_position: 3
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from "../../partials/_public-preview-banner-partial.md";
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -17,12 +17,10 @@ The main use-case for running a mirror DAS is to complement your setup as a Data
 :::
 
 <p>
-  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely
-  on an external Data Availability Committee (DAC) to store data and provide it
-  on-demand instead of using its{" "}
-  <a data-quicklook-from="parent-chain">parent chain</a> as the Data
-  Availability (DA) layer. The members of the DAC run a Data Availability Server
-  (DAS) to handle these operations.
+  <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
+  Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}
+  <a data-quicklook-from="parent-chain">parent chain</a> as the Data Availability (DA) layer. The
+  members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
 In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.md)_.
@@ -113,12 +111,12 @@ To enable caching, you can use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
-import S3Parameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx";
-import LocalBadgerDBParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx";
-import LocalFilesParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx";
-import IPFSParameters from "../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
+import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
+import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -277,8 +275,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from "../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx";
-import DASMetrics from "../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx";
+import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
+import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';
 
 ## Optional parameters
 

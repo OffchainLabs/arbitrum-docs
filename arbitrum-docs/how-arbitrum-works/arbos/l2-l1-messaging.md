@@ -1,5 +1,5 @@
 ---
-title: "L2 to L1 messaging and the outbox"
+title: 'L2 to L1 messaging and the outbox'
 description: This concept page provides information about how arbitrary messages are passed from L2 to L1
 target_audience: developers who want to build on Arbitrum
 content_type: concept
