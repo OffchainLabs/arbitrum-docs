@@ -37,7 +37,7 @@ Here are the steps involved in the deployment process:
 1. **[Setting up the chain parameters](#1-setting-up-the-chain-parameters)**
 2. **[Deploying your AnyTrust chain](#2-deploying-your-anytrust-chain)**
 3. **[Getting the AnyTrust Orbit chain information after deployment](#3-getting-the-anytrust-orbit-chain-information-after-deployment)**
-4. **[Setting valid keyset on parent chain](#4-setting-a-valid-keyset-on-parent-chain)**
+4. **[Setting valid keyset on parent chain](#4-setting-valid-keyset-on-parent-chain)**
 
 The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset includes keys from the appointed members of the DAC. They are required to ensure the chain's data availability and integrity. Once you have selected your committee members and gathered their keys, the Orbit SDK helps you configure these keys into a keyset.
 This keyset is then embedded into the chain, serving as a verification mechanism.
