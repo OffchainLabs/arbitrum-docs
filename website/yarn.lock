@@ -4665,10 +4665,10 @@ docusaurus-plugin-sass@^0.2.5:
   dependencies:
     sass-loader "^10.1.1"
 
-docusaurus-plugin-typedoc@^1.0.0-next.30:
-  version "1.0.0-next.30"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-typedoc/-/docusaurus-plugin-typedoc-1.0.0-next.30.tgz#c6e185dfa892bcb2553af4fb17b43d1986e82432"
-  integrity sha512-p7u3ksPTXnfKlAPmUwjUswPYwL15YEDvvmMemp7RweGMhB+iUd+nVUrdEqk0N2Cf1ldfYhZVnfttjqhfpadEIg==
+docusaurus-plugin-typedoc@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-typedoc/-/docusaurus-plugin-typedoc-1.0.1.tgz#a120dca36f911600fdf1b5ac2666dbc2ecfcdbae"
+  integrity sha512-q3e/XHmnMNdP361/0SMBbCQyr7oUwbSs5QMhu1BkEUvM45oKG7i1qxcKKabOefFDVDW9cmbBISWxB8XZGJAVFg==
 
 dom-converter@^0.2.0:
   version "0.2.0"
@@ -9949,17 +9949,17 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typedoc-plugin-frontmatter@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/typedoc-plugin-frontmatter/-/typedoc-plugin-frontmatter-0.0.2.tgz#2014e6507ec90602e5aa06b8c2ff3d0c5972d894"
-  integrity sha512-xPw76L4S4/zbd01Tt89CVsJdPiMxztlmkXaA2Wu/l0KEbIrsqSHPv/sGsPI1O+pkZrSpaFr94qLA3ls1MrpKKw==
+typedoc-plugin-frontmatter@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-frontmatter/-/typedoc-plugin-frontmatter-1.0.0.tgz#908ccbfb27587a64f259c0250c5992497cb59e48"
+  integrity sha512-Mqn96+RjUjPUz/42H8MOp/8eOKjE5MVIgZRFDGmSI2YuggnMZSfh5MMpvd6ykjNTpq7gV5D2iwjqLt8nYRg9rg==
   dependencies:
-    yaml "^2.2.2"
+    yaml "^2.3.4"
 
-typedoc-plugin-markdown@4.0.0-next.60:
-  version "4.0.0-next.60"
-  resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-4.0.0-next.60.tgz#2ce86ab79d628391468a43d2be8483de4a6ea0ba"
-  integrity sha512-aXuPXg3qyTYmpLGGRrpkZMIzQEE9YW5l7WwSVVInM0mj8M025k8oIefep5kYm+30e7fUFLkrftuvkP8X3Xn7ug==
+typedoc-plugin-markdown@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-4.0.1.tgz#daaa0265c3806e19f0abcb1839922b4628a157f0"
+  integrity sha512-AfuIILU7aQbLMFyhX/qPT1yLrsQE9TiIxtmDKHRoQosDuHRS9CqA3aMOJyqmfE4Gn43vEQGb7vxEDwlrl3Sw8A==
 
 typedoc@^0.25.13:
   version "0.25.13"
@@ -10585,7 +10585,7 @@ yaml@^1.7.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yaml@^2.2.2:
+yaml@^2.3.4:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.4.2.tgz#7a2b30f2243a5fc299e1f14ca58d475ed4bc5362"
   integrity sha512-B3VqDZ+JAg1nZpaEmWtTXUlBneoGx6CPM9b0TENK6aoSu5t73dItudwdgmi6tHlIZZId4dZ9skcAQ2UbcyAeVA==
