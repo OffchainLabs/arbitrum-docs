@@ -9,7 +9,9 @@
   .
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### How can I deploy an Orbit-based Layer 3 (L3) chain?
 
@@ -18,7 +20,9 @@
   learn how to launch your own Orbit chain today.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Do I need permission/license to launch an Orbit chain?
 
@@ -31,7 +35,9 @@
 
 <p>Note that launching a testnet doesn't require any license.</p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Does Arbitrum officially deploy and/or maintain L3s for external teams?
 
@@ -40,13 +46,17 @@
   (Rollup as a Service) providers that can deploy and maintain the Orbit chain for you.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Can I modify Orbit's underlying technology to customize my chain?
 
 <p>Yes, you can make any changes you require to the underlying Nitro code base.</p>
 
-<p></p>
+<p>
+
+</p>
 
 ### What Data Availability (DA) solutions are currently available for Orbit chains?
 
@@ -65,7 +75,9 @@
 </ul>
 <p>Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.</p>
 
-<p></p>
+<p>
+
+</p>
 
 ### What token is used to pay gas fees on Orbit chains?
 
@@ -74,7 +86,9 @@
   use any ERC-20 token as the gas fee token of the chain.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Can I use Ethereum toolkits to develop on my Orbit chain?
 
@@ -88,7 +102,9 @@
   .
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Do Orbit chains have any built-in AA solution?
 
@@ -102,7 +118,9 @@
   expressed interest in supporting Orbit chains.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Is there an official block explorer for Orbit chains?
 
@@ -111,7 +129,9 @@
   there are many third-party solutions that have expressed interest in supporting Orbit chains.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Is there any indexing solution that supports Orbit chains?
 
@@ -120,7 +140,9 @@
   expressed interest in supporting Orbit chains.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Can I increase the maximum contract size for my Orbit chain?
 
@@ -138,7 +160,9 @@
   .
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### How can I modify Nitro to force posting an invalid assertion and test the fraud proof mechanism?
 
@@ -153,7 +177,9 @@ go test ./system_tests/ -tags=challengetest -run=TestChallenge
 
 ```
 
-<p></p>
+<p>
+
+</p>
 
 ### What fee collectors can be configured on my chain?
 
