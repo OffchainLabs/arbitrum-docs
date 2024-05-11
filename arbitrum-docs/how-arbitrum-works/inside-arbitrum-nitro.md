@@ -154,7 +154,7 @@ Because a party who tries to cheat will lose a deposit, attempts to cheat should
 
 ## Resolving disputes using interactive fraud proofs
 
-Among optimistic rollups, the most important design decision is how to resolve disputes. Suppose Alice claims that the chain will produce a certain result and Bob disagrees. How will the protocol decide which version to accept?
+Among optimistic rollups, the most important design decision is how to resolve disputes. Suppose Alice claims that the chain will produce a certain result, but Bob disagrees. How will the protocol decide which version to accept?
 
 There are two choices: interactive proving and re-executing transactions. Arbitrum uses the former. It offers more efficiency and flexibility. Much of the design of Arbitrum follows from this fact.
 
