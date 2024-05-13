@@ -68,116 +68,50 @@ const config = {
     [
       'docusaurus-plugin-typedoc',
       {
-        // Configuration options
         id: 'arbitrum-sdk',
         tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-        // Input options
-        entryPoints: [`${sdkCodebasePath}/src/lib`, `${sdkCodebasePath}/docs/index.md`],
+        entryPoints: [`${sdkCodebasePath}/src/lib`],
         entryPointStrategy: 'expand',
-        exclude: [`**/abi/**`, `**/node_modules`, `**/tests`, `**/scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
         excludeNotDocumented: true,
         excludeInternal: true,
-        // readme: 'none',
+        excludeExternals: true,
+        readme: 'none',
+
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: '../arbitrum-docs/sdk-docs/reference',
         hideGenerator: true,
-        // Validation options
         validation: {
           notExported: false,
           invalidLink: true,
           notDocumented: true,
         },
-        // Other options
         logLevel: 'Verbose',
-        // Plugins
+        sidebar: {
+          autoConfiguration: false,
+        },
+
         plugin: [
           'typedoc-plugin-markdown',
-          // "typedoc-plugin-frontmatter",
-          // './FixErroneousEscaping.ts',
-          // "unified-prettier",
+          './src/scripts/sdkDocsHandler.ts'
         ],
+
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         outputFileStrategy: 'modules',
-        // entryFileName: 'index.md',
-        // indexFileName: 'index',
         excludeGroups: true,
         hidePageHeader: true,
         hidePageTitle: true,
-        // hideKindPrefix: true,
         hideBreadcrumbs: true,
-        // hideInPageTOC: true,
         useCodeBlocks: true,
         expandParameters: true,
-        parametersFormat: 'list',
+        parametersFormat: 'table',
         propertiesFormat: 'table',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
-        mergeReadme: true,
         sanitizeComments: true,
-        // typedoc-plugin-frontmatter options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-frontmatter/#options
-        // frontmatterGlobals: {
-        //   toc_max_heading_level: 4,
-        // },
       },
     ],
-    // [
-    //   'docusaurus-plugin-typedoc',
-    //   {
-    //     // Configuration options
-    //     tsconfig: `${sdkCodebasePath}/tsconfig.json`,
-    //     // Input options
-    //     entryPoints: [`${sdkCodebasePath}/src/lib`, `${sdkCodebasePath}/docs/index.md`],
-    //     entryPointStrategy: 'expand',
-    //     exclude: [`**/abi/**`, `**/node_modules`, `**/tests`, `**/scripts`],
-    //     excludeNotDocumented: true,
-    //     excludeInternal: true,
-    //     // readme: 'none',
-    //     // Output options
-    //     out: './sdk-docs',
-    //     hideGenerator: true,
-    //     // Validation options
-    //     validation: {
-    //       notExported: false,
-    //       invalidLink: true,
-    //       notDocumented: true,
-    //     },
-    //     // Other options
-    //     logLevel: 'Verbose',
-    //     // Plugins
-    //     plugin: [
-    //       'typedoc-plugin-markdown',
-    //       // "typedoc-plugin-frontmatter",
-    //       // './FixErroneousEscaping.ts',
-    //       // "unified-prettier",
-    //     ],
-    //     // typedoc-plugin-markdown options
-    //     // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-    //     outputFileStrategy: 'modules',
-    //     // entryFileName: 'index.md',
-    //     // indexFileName: 'index',
-    //     excludeGroups: true,
-    //     hidePageHeader: true,
-    //     hidePageTitle: true,
-    //     // hideKindPrefix: true,
-    //     hideBreadcrumbs: true,
-    //     // hideInPageTOC: true,
-    //     useCodeBlocks: true,
-    //     expandParameters: true,
-    //     parametersFormat: 'list',
-    //     propertiesFormat: 'table',
-    //     enumMembersFormat: 'table',
-    //     typeDeclarationFormat: 'table',
-    //     mergeReadme: true,
-    //     sanitizeComments: true,
-    //     // typedoc-plugin-frontmatter options
-    //     // Reference: https://github.com/tgreyuk/typedoc-plugin-frontmatter/#options
-    //     // frontmatterGlobals: {
-    //     //   toc_max_heading_level: 4,
-    //     // },
-    //   },
-    // ],
     [
       'posthog-docusaurus',
       {
