@@ -5,7 +5,7 @@ sidebar_position: 2
 author: dlee
 ---
 
-ArbOS 20 Atlas is shipped via Nitro v2.3.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.1-26fad6f`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators.For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
+ArbOS 20 Atlas is shipped via Nitro v2.3.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.1-26fad6f`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
 
 ### Requirements:
 
