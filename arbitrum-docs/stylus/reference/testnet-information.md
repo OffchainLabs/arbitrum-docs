@@ -29,7 +29,7 @@ This table provides an overview of the available public RPC endpoints for the St
 :::caution
 
 - Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
-- Stylus testnet (v1) has been deprecated. 
+- Stylus testnet (v1) has been deprecated.
 - Stylus testnet (v2) will be deprecated once Stylus comes out of beta and is enabled on the Arbitrum Sepolia testnet.
 
 :::
@@ -40,11 +40,11 @@ For information on other mainnet and testnet Arbitrum chains, visit the [Node Ru
 
 Below you can find faucets for obtaining testnet ETH. If using a faucet on Ethereum Sepolia or Arbitrum Sepolia, your testnet ETH can be bridged to the Stylus testnet on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
-| Faucet Operator    | Faucet URL                                            | Chain            |
-| ------------------ | ----------------------------------------------------- | ---------------- |
-| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia         | Arbitrum Sepolia |
-| Alchemy            | https://sepoliafaucet.com/                            | Ethereum Sepolia |
-| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/                      | Ethereum Sepolia |
+| Faucet Operator    | Faucet URL                                    | Chain            |
+| ------------------ | --------------------------------------------- | ---------------- |
+| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia | Arbitrum Sepolia |
+| Alchemy            | https://sepoliafaucet.com/                    | Ethereum Sepolia |
+| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia |
 
 ## Useful smart contract addresses
 

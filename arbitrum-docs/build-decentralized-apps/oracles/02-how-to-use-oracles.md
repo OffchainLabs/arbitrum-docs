@@ -247,5 +247,5 @@ You can adapt this contract to your needs. Just remember to use the ticker of th
 ### See also
 
 - [Tellor’s documentation](https://docs.tellor.io/) demonstrates how to query price feeds and other data feeds.
-- [How to use Supra's price feed oracle](/for-devs/third-party-docs/Supra/use-supras-price-feed-oracle)
-- [How to use Supra's VRF](/for-devs/third-party-docs/Supra/use-supras-vrf)
+- [How to use Supra's price feed oracle](/third-party-docs/Supra/use-supras-price-feed-oracle)
+- [How to use Supra's VRF](/third-party-docs/Supra/use-supras-vrf)

@@ -46,7 +46,7 @@ At the time of this quickstart's writing, the easiest way to acquire $ETH is to 
   its safety.
 </p>
 
-By contrast, <a data-quicklook-from='arbitrum-anytrust-protocol'>Arbitrum AnyTrust</a> introduces a trust assumption in exchange for lower fees. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee</a> to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1. Visit our [FAQ docs](../learn-more/faq) to learn more.
+By contrast, <a data-quicklook-from='arbitrum-anytrust-protocol'>Arbitrum AnyTrust</a> introduces a trust assumption in exchange for lower fees. Instead of requiring all Arbitrum nodes to have access to the data of every L2 transaction in the Arbitrum chain's inbox, AnyTrust relies on an external <a data-quicklook-from='data-availability-committee-dac'>Data Availability Committee</a> to store data and provide it on demand, reducing the costs of batching and posting all L2 transaction data to L1. Visit our [FAQ docs](/faq.mdx) to learn more.
 
 We generally recommend using Rollup chains for use-cases that demand the highest level of security (like decentralized exchanges and other DeFi dApps). AnyTrust chains are suitable for use-cases that require lower fees and generate lots of transactions (like gaming and social dApps).
 

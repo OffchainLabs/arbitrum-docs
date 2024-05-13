@@ -14,15 +14,20 @@ In this how-to, you'll learn how to configure your Orbit chain using the Orbit S
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/contribute.md#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
 
 :::
 
 Orbit chains have three areas of configuration:
 
-1. [<a data-quicklook-from="parent-chain">Parent chain</a> configuration](#1-parent-chain-configuration)
-2. [ **Node** configuration ](#2-node-configuration)
-3. [ <a data-quicklook-from="child-chain">Child chain</a> configuration ](#3-child-chain-parameter-configuration)
+- [1. Parent chain configuration](#1-parent-chain-configuration)
+- [2. Node configuration](#2-node-configuration)
+- [3. Child chain parameter configuration](#3-child-chain-parameter-configuration)
+  - [Setter functions](#setter-functions)
+  - [Getter functions](#getter-functions)
+  - [Configuring the child chain using the Orbit SDK](#configuring-the-child-chain-using-the-orbit-sdk)
+    - [1. arbOwnerReadContract](#1-arbownerreadcontract)
+    - [2. `arbOwnerPrepareTransactionRequest`](#2-arbownerpreparetransactionrequest)
 
 ## 1. Parent chain configuration
 

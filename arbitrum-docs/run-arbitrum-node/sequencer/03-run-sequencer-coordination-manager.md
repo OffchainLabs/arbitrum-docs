@@ -19,7 +19,7 @@ The tool offers keyboard-only support. Any changes you make are stored locally u
 If mouse support is enabled, you can use your mouse to explore the tool. Otherwise, use your keyboard to explore the UI. The `enter` key selects options; `c` switches focus between lists.
 When you bring up any form, you can navigate within the form's options using the `Tab` key and use the up/down arrow keys to select options from the dropdown menu.
 
-![seq-coordinator-manager](../../assets/seq-coordinator-manager.png)
+![seq-coordinator-manager](./images/seq-coordinator-manager.png)
 
 :::note
 One of the sequencers is marked with a `chosen` indicator. This visual cue helps you identify the current chosen sequencer.
@@ -29,14 +29,14 @@ You can click/enter on any sequencer element in the priority list to bring up a 
 
 When a sequencer is removed, it is automatically added to the `--Not in priority list but online--` list if it is online. Please remember that all changes made using this method are local and need to be saved to the Redis server by pressing `s` from the keyboard shortcuts to make them permanent.
 
-![change-priority](../../assets/change-priority.png)
+![change-priority](./images/change-priority.png)
 
 After selecting a sequencer from the non-priority list, you are given the option to add the selected sequencer to the priority list at any position of your choice. You can specify the position via a dropdown menu that lists all possible positions. Clicking `Update` will then display the updated priority list with the newly added sequencer in the chosen position.
 
-![change-priority](../../assets/add-to-priority.png)
+![change-priority](./images/add-to-priority.png)
 
 You can also add a new sequencer to the priority list by pressing `a` from the keyboard shortcuts. This action will bring up a form to enter the sequencer details. After adding the sequencer URL, you can click `Add` to see the changes or `Cancel` to abort the operation.
 
-![change-priority](../../assets/add-new-seq.png)
+![change-priority](./images/add-new-seq.png)
 
 To exit the tool, press `q` from the keyboard shortcuts.

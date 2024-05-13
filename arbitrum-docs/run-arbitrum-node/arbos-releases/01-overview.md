@@ -17,7 +17,7 @@ Although Nitro is updated regularly, only a subset of Nitro releases carry ArbOS
 
 Note that every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade.
 
-import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
+import PublicPreviewBannerPartial from '../partials/_upgrade-cadence-recommendations-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

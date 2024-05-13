@@ -14,7 +14,7 @@ This section explains how to initiate an <a data-quicklook-from="arbitrum-anytru
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/contribute.md#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
 
 :::
 
