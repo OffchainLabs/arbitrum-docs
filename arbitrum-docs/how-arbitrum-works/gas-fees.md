@@ -7,7 +7,7 @@ author: dzgoldman
 There are two parties a user pays when submitting a tx:
 
 - the poster, if reimbursable, for L1 resources such as the L1 calldata needed to post the tx
-- the network fee account for L2 resources, which include the computation, storage, and other burdens L2 nodes must bare to service the tx
+- the network fee account for L2 resources, which include the computation, storage, and other burdens L2 nodes must bear to service the tx
 
 The L1 component is the product of the transaction's estimated contribution to its batch's size — computed using Brotli on the transaction by itself — and the L2's view of the L1 data price, a value which dynamically adjusts over time to ensure the batch-poster is ultimately fairly compensated. For details, see [L1 Pricing](/how-arbitrum-works/l1-gas-pricing.md).
 
