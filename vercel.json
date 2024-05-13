@@ -6,7 +6,7 @@
             "permanent": false
         },
         {
-            "source": "/third-party-docs/:slug*",
+            "source": "/for-devs/third-party-docs/:slug*",
             "destination": "/third-party-docs/:slug*",
             "permanent": false
         },
