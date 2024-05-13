@@ -237,7 +237,6 @@ Common troubleshooting scenarios and solutions are detailed below.
   </tbody>
 </table>
 
-
 ### Step 3: Generate a troubleshooting report
 
 1.  Complete the above troubleshooting checklist.
