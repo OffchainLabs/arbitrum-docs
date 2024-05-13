@@ -109,7 +109,7 @@ Ensure that Rust is installed on your system. You can install it from [the Rust 
 Next, install the `cargo-stylus` tool by executing the following command in your terminal:
 
 ```bash
-RUSTFLAGS="-C link-args=-rdynamic" cargo install --force cargo-stylus
+cargo install --force cargo-stylus cargo-stylus-check
 ```
 
 To prepare your Rust environment for building [WebAssembly (WASM)](https://webassembly.org/) modules, add WASM as a build target with this command:
@@ -120,26 +120,26 @@ rustup target add wasm32-unknown-unknown
 
 After installation, `cargo-stylus` is accessible through the cargo command. To view the available options and commands, use:
 
-
 ```bash
-cargo stylus --help
+❯ cargo stylus --help
 ```
 
 This will display the following usage options:
 
 
-```plaintext
-Cargo command for developing Arbitrum Stylus projects
+```bash
+Cargo subcommand for developing Stylus projects
 
 Usage: cargo stylus <COMMAND>
 
 Commands:
   new         Create a new Rust project
   export-abi  Export a Solidity ABI
-  check       Check that a contract can be activated onchain
-  deploy      Deploy a stylus contract
+  check       Check a contract can be activated onchain
+  deploy      Deploy a Stylus contract
   replay      Replay a transaction in gdb
   trace       Trace a transaction
+  c-gen       Generate C code
   help        Print this message or the help of the given subcommand(s)
 
 Options:
