@@ -11,7 +11,7 @@ import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-This tutorial will guide you through the process of deploying a smart contract in Rust using Styus. We'll cover the following steps:
+This quickstart will guide you through the process of deploying a smart contract in Rust using Stylus. We'll cover the following steps:
 
 1. Setting up your development environment
 2. Creating a new Stylus project
