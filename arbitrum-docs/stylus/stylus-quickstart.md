@@ -20,7 +20,6 @@ This quickstart will guide you through the process of deploying a smart contract
 
 ## Prerequisites
 
-Before we dive into the tutorial, make sure you have the following prerequisites set up:
 
 ### Rust toolchain
 
