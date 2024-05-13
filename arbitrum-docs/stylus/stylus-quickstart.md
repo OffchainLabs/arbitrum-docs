@@ -70,7 +70,7 @@ For additional sources of testnet ETH, please use a faucet on Arbitrum Sepolia o
 `cargo-stylus` is our CLI tool for assisting with building, verifying, and deploying Arbitrum Stylus programs in Rust. This is available as a plugin to the standard `Cargo` tool used for developing Rust programs, integrating easily into common Rust workflows. Once [Rust has been installed](https://www.rust-lang.org/tools/install) on your system, install the Stylus CLI tool by running the following command:
 
 ```bash
-RUSTFLAGS="-C link-args=-rdynamic" cargo install --force cargo-stylus
+cargo install --force cargo-stylus cargo-stylus-check
 ```
 
 In addition, add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
@@ -82,15 +82,24 @@ rustup target add wasm32-unknown-unknown
 You should now have it available as a cargo command:
 
 ```bash
-cargo stylus --help
+❯ cargo stylus --help
+Cargo subcommand for developing Stylus projects
 
-Cargo command for developing Arbitrum Stylus projects
+Usage: cargo stylus <COMMAND>
 
-Usage:
-    cargo stylus new
-    cargo stylus export-abi
-    cargo stylus check
-    cargo stylus deploy
+Commands:
+  new         Create a new Rust project
+  export-abi  Export a Solidity ABI
+  check       Check a contract
+  deploy      Deploy a contract
+  replay      Replay a transaction in gdb
+  trace       Trace a transaction
+  c-gen       Generate C code
+  help        Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
 ```
 
 ### Overview
