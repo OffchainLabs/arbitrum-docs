@@ -32,7 +32,7 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 :::caution
 As of May 2024, archive node snapshots for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are no longer being updated on https://snapshot.arbitrum.foundation/index.html due to accelerated database and state growth. Teams who use these publicly available archive snapshots will need to wait longer than usual for their nodes to sync up. 
 
-The Offchain Labs team is actively exploring and working on solutions to address this and will provide an update as soon as possible. In the meantime, the Offchain Labs team continues to recommend that teams periodically create their own snapshots by stopping one of their archive nodes and backup the database.
+The Offchain Labs team is actively exploring and working on solutions to address this and will provide an update as soon as possible. In the meantime, the Offchain Labs team continues to recommend that teams periodically create their own snapshots by stopping one of their archive nodes and backing up their database.
 :::
 
 :::caution
