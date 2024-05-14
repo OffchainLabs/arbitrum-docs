@@ -7,7 +7,6 @@ See instructions <a href="https://developer.arbitrum.io/node-running/how-tos/run
 
 </p>
 
-<p>
 
 ### How  to verify the integrity of the Nitro database I currently have?
 <p>
@@ -22,19 +21,6 @@ To confirm that everything's working properly, you could just make sure that it'
 
 </p>
 
-<p>
-  To confirm that everything's working properly, you could just make sure that it's{' '}
-  <a href="https://docs.arbitrum.io/node-running/faq#how-can-i-verify-that-my-node-is-fully-synced">
-    syncing
-  </a>{' '}
-  and that the latest block is consistent with other Arbitrum nodes; e.g., you could check it
-  against <a href="https://arbiscan.io/">Arbiscan</a> (note that Arbiscan's search field doesn't
-  support searching by block hash).
-</p>
-
-<p>
-
-</p>
 
 ### How can I check if the node is running properly and diagnose the issue if it is not?
 <p>
@@ -45,9 +31,6 @@ We have trace-level logging RPC request implemented on our node. You could use 
 
 </p>
 
-<p>
-
-</p>
 
 ### Why do I need an L1 node to run an Arbitrum node?
 <p>
@@ -62,21 +45,12 @@ When fully synced, the Arbitrum node uses the State Transition Function (STF) to
 
 </p>
 
-<p>
-
-</p>
 
 ### Can I run an Arbitrum node in p2p mode?
 <p>
 Arbitrum doesn't have a consensus mechanism, so "p2p mode" doesn't apply. For nodes to sync to the latest chain state, they connect to an L1 node to sync the chain's history that's been posted in calldata and connect to the Sequencer feed for the transactions that have yet to be posted in batches. In no case do nodes need to peer up and sync with each other.
 </p>
 
-<p>
-  Arbitrum doesn't have a consensus mechanism, so "p2p mode" doesn't apply. For nodes to sync to the
-  latest chain state, they connect to an L1 node to sync the chain's history that's been posted in
-  calldata and connect to the Sequencer feed for the transactions that have yet to be posted in
-  batches. In no case do nodes need to peer up and sync with each other.
-</p>
 
 ### How do I read messages from the Sequencer feed?
 <p>
@@ -87,9 +61,6 @@ Running an Arbitrum relay locally as a <a href="https://docs.arbitrum.io/node-ru
 
 </p>
 
-<p>
-
-</p>
 
 ### How do I run a node locally for development?
 <p>
@@ -112,13 +83,6 @@ We recommend running nitro nodes via docker; to compile directly / run without d
 
 </p>
 
-<p>
-
-</p>
-
-<p>
-
-</p>
 
 ### Is there any way to retrieve pre-Nitro archive data from a Nitro node?
 <p>
@@ -137,9 +101,6 @@ Keep in mind that this information only applies to Arbitrum One nodes. Arbitrum 
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I verify that my node is syncing at a desirable speed?
 <p>
@@ -150,9 +111,6 @@ Syncing speed can vary depending on multiple factors. You can find the minimum h
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I verify that my node is fully synced?
 <p>
@@ -171,9 +129,6 @@ You can find information to understand the output of <code>eth_syncing</code> in
 
 </p>
 
-<p>
-
-</p>
 
 ### Is there an alternative to Docker when running a node?
 <p>
@@ -184,9 +139,6 @@ We recommend running Nitro nodes via Docker, using the guides provided within ou
 
 </p>
 
-<p>
-
-</p>
 
 ### What are the minimum hardware requirements to run a full node?
 <p>
@@ -197,9 +149,6 @@ You can see the minimum hardware configuration <a href="https://developer.arbitr
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I migrate the date of one synced node to a new one?
 <p>
@@ -214,7 +163,6 @@ Keep in mind that this must be done after a clean shutdown, while the node is no
 
 </p>
 
-</p>
 
 ### When querying Classic transactions from a Nitro node, I sometimes get incorrect data, like the zero address as the sender. Why is that?
 <p>
@@ -225,6 +173,3 @@ Some old Nitro genesis database snapshots didn't properly set the retry sender f
 
 </p>
 
-<p>
-
-</p>

@@ -1,3 +1,5 @@
+
+
 ### Active Validator {#active-validator}
 <p>
 A staked <a href="/intro/glossary#validator">Validator</a>  that makes disputable assertions to advance the state of an Arbitrum chain or to challenge the validity of others' assertions. (Not to be confused with the <a href="/intro/glossary#sequencer">Sequencer</a> ).
@@ -198,16 +200,6 @@ A permissioned set of parties responsible for enforcing data availability in an 
 </p>
 
 
-<p>
-  A permissioned set of parties responsible for enforcing data availability in an{' '}
-  <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a> chain. See{' '}
-  <em>
-    <a href="https://medium.com/offchainlabs/introducing-anytrust-chains-cheaper-faster-l2-chains-with-minimal-trust-assumptions-31def59eb8d7">
-      Introducing AnyTrust Chains: Cheaper, Faster L2 Chains with Minimal Trust Assumptions
-    </a>
-  </em>{' '}
-  to learn more.
-</p>
 
 ### Defensive Validator {#defensive-validator}
 <p>
@@ -531,9 +523,7 @@ This is achieved through the use of cryptographic techniques and decentralized c
 
 </p>
 
-<p>
 
-</p>
 
 ### Underlying Chain {#underlying-chain}
 <p>
@@ -575,6 +565,3 @@ Explore a mythical Spirit Realm as a young Shaman and take part in strategic tur
 </p>
 
 
-<br />
-Explore a mythical Spirit Realm as a young Shaman and take part in strategic turn-based battles to help protect Zeeverse from the looming corrupted forces.
-</p>

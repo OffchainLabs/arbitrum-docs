@@ -7,9 +7,6 @@ Both Arbitrum One and Arbitrum Nova run as layers on top of Ethereum. Thus, you 
 
 </p>
 
-<p>
-
-</p>
 
 ### What fees do I have to pay when bridging funds from L1 to L2?
 <p>
@@ -40,14 +37,6 @@ In any case, the bridge and your wallet will guide you through the process, show
 
 </p>
 
-<p>
-  In any case, the bridge and your wallet will guide you through the process, showing the
-  transaction(s) that you need to sign in order to have your tokens bridged to Arbitrum.
-</p>
-
-<p>
-
-</p>
 
 ### How long does it take before I receive my funds when I initiate a withdrawal from Arbitrum chains (One and Nova)?
 <p>
@@ -85,9 +74,6 @@ There is no way to cancel a withdrawal that has been already initiated. However,
 
 </p>
 
-<p>
-
-</p>
 
 ### Can I use a smart contract wallet in the bridge?
 <p>
@@ -102,9 +88,6 @@ ETH deposits and withdrawals using a Smart Contract Wallet are currently not sup
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I claim withdrawn funds if I don't control on L1 the address that initiated the transaction on L2?
 <p>
@@ -115,6 +98,3 @@ Once the <a href="https://developer.arbitrum.io/learn-more/faq#why-was-one-week-
 
 </p>
 
-<p>
-
-</p>

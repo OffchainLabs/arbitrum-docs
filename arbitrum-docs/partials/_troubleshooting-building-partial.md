@@ -23,9 +23,6 @@ L2 Gas price adjusts responsively to chain congestion, ala EIP 1559.
 
 </p>
 
-</p>
-
-### I tried to create a retryable ticket but the transaction reverted on L1. How can I debug the issue?
 
 ### I tried to create a retryable ticket but the transaction reverted on L1.  How can I debug the issue?
 <p>
@@ -88,10 +85,6 @@ Checking <code>0xfadf238a</code> gives us <code>InsufficientSubmissionCost(uint2
 
 </p>
 
-<p>
-  Use the following link to view the Parity VM trace of your failed transaction (replacing the
-  tx-hash with your own, and using the appropriate etherscan root url):
-</p>
 
 ### How is the L1 portion of an Arbitrum transaction's gas fee computed? 
 <p>
@@ -102,62 +95,6 @@ The L1 fee that a transaction is required to pay is determined by compressing it
 
 </p>
 
-<p>
-  (In the above example the desirable "output" is:
-  <br />
-  <code>
-    {
-      '0xfadf238a0000000000000000000000000000000000000000000000000000c4df7e2903b00000000000000000000000000000000000000000000000000000a39a1d002808'
-    }
-  </code>
-  )
-</p>
-
-<p>
-
-</p>
-
-<p>
-  The first four bytes of the output is the custom error signature;<strong> </strong>in our example
-  it's <code>0xfadf238a</code> .
-</p>
-
-<p>
-
-<br />
-To let's find out which is custom error this signature represents, we can use this handy tool by Samzcsun:  <a href="https://sig.eth.samczsun.com/">https://sig.eth.samczsun.com/</a>
-</p>
-
-<p>
-Checking <code>0xfadf238a</code> gives us <code>InsufficientSubmissionCost(uint256,uint256)</code>. 
-<br />
-
-</p>
-
-<p>
-
-</p>
-
-### How is the L1 portion of an Arbitrum transaction's gas fee computed?
-
-<p>
-  The L1 fee that a transaction is required to pay is determined by compressing its data with brotli
-  and multiplying the size of the result (in bytes) by ArbOS's current calldata price; the latter
-  value can be queried via the <code>getPricesInWei</code>method of the <code>ArbGasInfo</code>
-  precompile. You can find more information about gas calculations in{' '}
-  <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">
-    Understanding Arbitrum: 2-Dimensional Fees
-  </a>{' '}
-  and{' '}
-  <a href="https://developer.arbitrum.io/devs-how-tos/how-to-estimate-gas">
-    How to estimate gas in Arbitrum
-  </a>
-  .
-</p>
-
-<p>
-
-</p>
 
 ### What is a retryable ticket's "submission fee"? How can I calculate it? What happens if I the fee I provide is insufficient?
 <p>
@@ -168,9 +105,6 @@ A <a href="https://developer.arbitrum.io/arbos/l1-to-l2-messaging">retryable's<
 
 </p>
 
-<p>
-
-</p>
 
 ### Which method in the Inbox contract should I use to submit a retryable ticket (aka L1 to L2 message)?
 <p>
@@ -203,9 +137,6 @@ Note that if you're using Hardhat, <a href="https://github.com/NomicFoundation/h
 
 </p>
 
-<p>
-
-</p>
 
 ### Why does it look like two identical transactions consume a different amount of gas?
 <p>
@@ -232,13 +163,6 @@ See <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimension
 
 </p>
 
-<p>
-
-</p>
-
-<p>
-
-</p>
 
 ### Why am I getting error "429 Too Many Requests" when using one of Offchain Labs' Public RPCs?
 <p>
@@ -249,9 +173,6 @@ Offchain Labs offers public RPCs for free, but limits requests to prevent DOSing
 
 </p>
 
-<p>
-
-</p>
 
 ### How do block.number and block.timestamp work on Arbitrum?
 <p>
@@ -270,11 +191,6 @@ For more info, see <a href="https://docs.arbitrum.io/for-devs/concepts/differen
 
 </p>
 
-<p>
-
-</p>
-
-### Do I need to download any special npm libraries in order to use web3.js, ethers.js or viem on Arbitrum?
 
 ### Do I need to download any special npm libraries in order to use web3.js, ethers.js or viem on Arbitrum? 
 <p>
@@ -293,9 +209,6 @@ Once upon a time, Arbitrum developers were required to download supplemental pac
 
 </p>
 
-<p>
-
-</p>
 
 ### How many block numbers must we wait for in Arbitrum before we can confidently state that the transaction has reached finality?
 <p>
@@ -331,9 +244,6 @@ To learn more about the different phases of an Arbitrum transaction, from client
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I list my token on the Arbitrum Bridge?
 <p>
@@ -352,9 +262,6 @@ Currently, there isn't any L2-only token list.
 
 </p>
 
-<p>
-
-</p>
 
 ### What is a testnet or a devnet?
 <p>
@@ -373,9 +280,6 @@ Users can bridge any asset from the Sepolia testnet (L1) into the Arbitrum Sepol
 
 </p>
 
-<p>
-
-</p>
 
 ### Is there any testnet available on Arbitrum?
 <p>
@@ -386,9 +290,6 @@ Yes, there's an Arbitrum Sepolia testnet (421614) that uses the Nitro tech stack
 
 </p>
 
-<p>
-
-</p>
 
 ### When was Arbitrum One upgraded from Classic to Nitro?
 <p>
@@ -399,9 +300,6 @@ Arbitrum One <a href="https://medium.com/offchainlabs/its-nitro-time-86944693bf2
 
 </p>
 
-<p>
-
-</p>
 
 ### Do Arbitrum chains support precompiles that are present on Ethereum?
 <p>
@@ -412,9 +310,6 @@ Yes, all Arbitrum chains support all precompiles that Ethereum supports, as well
 
 </p>
 
-<p>
-
-</p>
 
 ### What's the contract code size limit in Arbitrum chains?
 <p>
@@ -425,9 +320,6 @@ As specified in <a href="https://eips.ethereum.org/EIPS/eip-170">EIP-170</a>, co
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I find the L2 block(s) that corresponds to a given L1 block?
 <p>
@@ -446,10 +338,6 @@ With that, although it might be computationally complex, you can binary search t
 If you want a more specific result, you can perform the same operation with the timestamp from the L1 block, instead of the actual block number.
 </p>
 
-<p>
-  If you want a more specific result, you can perform the same operation with the timestamp from the
-  L1 block, instead of the actual block number.
-</p>
 
 ### Why do some old transactions have extremely high gas prices when querying them?
 <p>
@@ -464,9 +352,6 @@ Instead of that, it is recommended to look at the <code>effectiveGasPrice</code>
 
 </p>
 
-<p>
-
-</p>
 
 ### What is the WASM module root?
 <p>
@@ -485,9 +370,6 @@ You can find more information in <a href="https://docs.arbitrum.io/launch-orbit-
 
 </p>
 
-<p>
-
-</p>
 
 ### Why do I get a "gas required exceeds allowance" when trying to estimate the gas costs of a request?
 <p>
@@ -498,10 +380,6 @@ During an <code>eth_estimateGas</code> call the actual request will be simulated
 Make sure you have enough funds in your wallet, and the gas fields of the request (if you're using them) are correctly set.
 </p>
 
-<p>
-  Make sure you have enough funds in your wallet, and the gas fields of the request (if you're using
-  them) are correctly set.
-</p>
 
 ### How can I verify that an L2 block has been processed as part of a specific RBlock?
 <p>
@@ -537,9 +415,6 @@ To get the exact fees paid, you can query a Classic node, which will return all 
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I update the information of my bridged token on Arbiscan?
 <p>
@@ -554,9 +429,6 @@ To update its information on Arbiscan (logo, socials, etc.), you can open a tick
 
 </p>
 
-<p>
-
-</p>
 
 ### Why does my transaction revert with InvalidFEOpcode when using Foundry?
 <p>
@@ -571,9 +443,6 @@ To rule out that possibility, it is recommended to send the transaction with a d
 
 </p>
 
-<p>
-
-</p>
 
 ### Why do I receive an "intrinsic gas too low" error when sending a transaction even with a high gas price?
 <p>
@@ -584,9 +453,6 @@ The error <code>intrinsic gas too low</code> usually refers to not providing eno
 
 </p>
 
-<p>
-
-</p>
 
 ### How can I interpret Arbitrum transaction traces?
 <p>
@@ -631,4 +497,3 @@ Notably, the sender account remains consistent across all instances of this tran
 
 </p>
 
-</p>
