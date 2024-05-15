@@ -36,7 +36,7 @@ function load(app) {
 }
 
 // Function to recursively copy files
-function copyFiles(source: string, target: string): void {
+function copyFiles(source, target) {
   if (!fs.existsSync(source)) {
     console.error(`Source path does not exist: ${source}`);
     return;
