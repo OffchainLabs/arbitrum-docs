@@ -36,7 +36,17 @@ function load(app) {
 }
 
 // Function to recursively copy files
-function copyFiles(source, target) {
+export function copyFiles(source: string, target: string): void {
+  if (!fs.existsSync(source)) {
+    console.error(`Source path does not exist: ${source}`);
+    return;
+  }
+  
+  if (!fs.lstatSync(source).isDirectory()) {
+    console.error(`Source path is not a directory: ${source}`);
+    return;
+  }
+
   fs.mkdirSync(target, { recursive: true });
   fs.readdirSync(source, { withFileTypes: true }).forEach((entry) => {
     const sourcePath = path.join(source, entry.name);
@@ -44,7 +54,11 @@ function copyFiles(source, target) {
     if (entry.isDirectory()) {
       copyFiles(sourcePath, targetPath);
     } else {
-      fs.copyFileSync(sourcePath, targetPath);
+      try {
+        fs.copyFileSync(sourcePath, targetPath);
+      } catch (err) {
+        console.error(`Failed to copy file from ${sourcePath} to ${targetPath}:`, err);
+      }
     }
   });
 }
