@@ -3,13 +3,16 @@ const path = require('path');
 const { Application, RendererEvent } = require('typedoc');
 
 /**
- * Plugin to move `arbitrum-sdk` docs files to the same folder as used by Docusaurus site.
+ * Plugin to move docs files from a target folder to the same folder as used by Docusaurus site.
  *
  * It also generates a `sidebar.js` file to be used by Docusaurus to display the sidebar.
  *
  * The plugin automatically runs when the Typedoc renderer finishes. It copies the doc files from
- * the `arbitrum-sdk` docs folder to the Docusaurus docs folder. Uses those files, plus the
- * generated files, to generate the sidebar. It should handle these options automatically.
+ * the target docs folder to the Docusaurus docs folder. Uses those files, plus the generated files,
+ * to generate the sidebar. It should handle these options automatically.
+ *
+ * Sidebar generation is based on the folder structure of the target docs folder, where it sorts
+ * files by leading numbers first then alphabetically.
  */
 function load(app) {
   app.renderer.on(RendererEvent.END, async (event) => {
@@ -17,6 +20,7 @@ function load(app) {
     const sourceDir = path.join(outputDir, '../../../arbitrum-sdk/docs');
     const targetDir = path.join(outputDir, '../');
 
+    cleanDirectory(targetDir);
     copyFiles(sourceDir, targetDir);
 
     const sidebarItems = generateSidebar(targetDir);
@@ -35,7 +39,22 @@ function load(app) {
   });
 }
 
-// Function to recursively copy files
+// Cleans all files from the target directory
+function cleanDirectory(directory) {
+  if (fs.existsSync(directory)) {
+    fs.readdirSync(directory).forEach((file) => {
+      const curPath = path.join(directory, file);
+      if (fs.lstatSync(curPath).isDirectory()) {
+        cleanDirectory(curPath);
+        fs.rmdirSync(curPath);
+      } else {
+        fs.unlinkSync(curPath);
+      }
+    });
+  }
+}
+
+// Recursively copy all files and folders from source to target
 function copyFiles(source, target) {
   if (!fs.existsSync(source)) {
     console.error(`Source path does not exist: ${source}`);
