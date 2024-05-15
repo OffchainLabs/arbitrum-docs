@@ -16,8 +16,8 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  const sourceDir = path.join(outputDir, '../../../arbitrum-sdk/docs');
-  const targetDir = path.join(outputDir, '../');
+  const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
+  const targetDir = path.join(outputDir);
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
@@ -85,8 +85,11 @@ function copyFiles(source, target) {
   });
 }
 
-// Sort entries by leading numbers, then alphabetically
+// Sort entries by leading numbers, then alphabetically, with 'index.md' first
 function sortEntries(a, b) {
+  if (a === 'index.md') return -1;
+  if (b === 'index.md') return 1;
+
   const numA = a.match(/^\d+/);
   const numB = b.match(/^\d+/);
   if (numA && numB) {

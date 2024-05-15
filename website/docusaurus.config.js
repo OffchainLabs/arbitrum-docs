@@ -79,7 +79,7 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs/reference',
+        out: '../arbitrum-docs/sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
