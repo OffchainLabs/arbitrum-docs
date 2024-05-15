@@ -15,12 +15,15 @@ const { Application, RendererEvent } = require('typedoc');
  * files by leading numbers first then alphabetically.
  */
 function load(app) {
-  app.renderer.on(RendererEvent.END, async (event) => {
-    const outputDir = app.options.getValue('out');
-    const sourceDir = path.join(outputDir, '../../../arbitrum-sdk/docs');
-    const targetDir = path.join(outputDir, '../');
+  const outputDir = app.options.getValue('out');
+  const sourceDir = path.join(outputDir, '../../../arbitrum-sdk/docs');
+  const targetDir = path.join(outputDir, '../');
 
+  app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
+  });
+  
+  app.renderer.on(RendererEvent.END, async () => {
     copyFiles(sourceDir, targetDir);
 
     const sidebarItems = generateSidebar(targetDir);
@@ -105,7 +108,6 @@ function generateSidebar(dir, basePath = '') {
   entries.sort((a, b) => sortEntries(a.name, b.name));
 
   const items = entries
-    .filter((item) => item !== undefined)
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
@@ -126,7 +128,8 @@ function generateSidebar(dir, basePath = '') {
           label: generateLabel(entry.name),
         };
       }
-    });
+    })
+    .filter((item) => !!item);
 
   return items;
 }
