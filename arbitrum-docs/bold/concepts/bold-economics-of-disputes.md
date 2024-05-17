@@ -14,7 +14,7 @@ _The following document explains the economics and denial-of-service mechanisms 
 
 ## Background
 
-[Arbitrum One](https://arbitrum.io/) is currently one of the most widely adopted Ethereum scaling solutions, with [~$18bn USD in total-value-locked](https://l2beat.com/scaling/projects/arbitrum) at the time of writing. Not only do its scaling properties, such as its 250ms block times, make it popular, but so do its security properties and approach to decentralization. Currently, Arbitrum One is governed by the Arbitrum DAO, one of the most active and robust onchain organizations.
+[<a data-quicklook-from="arbitrum-one">Arbitrum One</a>](https://arbitrum.io/) is currently one of the most widely adopted Ethereum scaling solutions, with [~$18bn USD in total-value-locked](https://l2beat.com/scaling/projects/arbitrum) at the time of writing. Not only do its scaling properties, such as its 250ms block times, make it popular, but so do its security properties and approach to decentralization. Currently, Arbitrum One is governed by the Arbitrum DAO, one of the most active and robust onchain organizations.
 
 However, Arbitrum has not yet achieved its full promise of decentralization. Currently, withdrawals from Arbitrum One back to Ethereum are verified by a permissioned list of validators. These validators can still challenge invalid withdrawals, but the system prevents anyone outside this list from holding them accountable. This limits Arbitrum One to being categorized as a Stage 1 rollup, according to the [L2Beat website](https://l2beat.com/scaling/summary), meaning it still has training wheels preventing it from reaching its full potential.
 
@@ -30,7 +30,7 @@ In this document, we'll explore the economics and trade-offs that Arbitrum must 
 
 We frequently state that "Arbitrum settles its state to Ethereum", and we'll elaborate on what that means. All Arbitrum One transactions can be recreated by reading data from Ethereum L1, as compressed batches of all L2 transactions are frequently posted to Ethereum. Once a batch transaction is included in a finalized block on Ethereum, its history will never be reverted on Arbitrum. Ethereum, however, does not know if a batch posted to it refers to a correct Arbitrum history. For verifying batch integrity, there is a separate process that confirms batch correctness on Ethereum.
 
-Separately, entities known as validators check the correctness of batches by following the Arbitrum chain. Approximately every hour, they post something called an "assertion", which attests to the validity of a batch, saying, "I have verified this batch". As Ethereum does not know what is correct on Arbitrum, it allows ~7 days for anyone to come in and dispute one of these assertions.
+Separately, entities known as validators check the correctness of batches by following the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>. Approximately every hour, they post something called an "assertion", which attests to the validity of a batch, saying, "I have verified this batch". As Ethereum does not know what is correct on Arbitrum, it allows ~7 days for anyone to come in and dispute one of these assertions.
 
 ### Withdrawing Assets Back to Ethereum from Arbitrum
 
