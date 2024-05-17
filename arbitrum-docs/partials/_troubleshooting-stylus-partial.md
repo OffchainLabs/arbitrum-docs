@@ -5,7 +5,9 @@
   verify that the produced WASM programs behave as they should inside the new virtual machine.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Is there any analogue of the fallback function from Solidity in the Rust Stylus SDK?
 
@@ -22,7 +24,9 @@
   .
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Why are constructors not yet supported for Stylus contracts?
 
@@ -37,7 +41,9 @@
   in the future. For now, we suggest calling an init method after deploying.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Is it possible to verify Stylus contracts on the block explorer?
 
@@ -47,7 +53,9 @@
   mainnet-ready status.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Do Stylus contracts compile down to EVM bytecode like prior other attempts?
 
@@ -56,7 +64,9 @@
   is then compiled down to WebAssembly.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### How is a Stylus contract deployed?
 
@@ -68,7 +78,9 @@
   it's a Stylus WASM contract.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Is there a new transaction type to deploy Stylus contracts?
 
@@ -94,7 +106,9 @@
   EVM. From a user's / explorer's perspective, it all just looks and behaves like solidity.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### Does the Stylus SDK for Rust support custom data structures?
 
@@ -126,9 +140,13 @@
   for your custom data structures.
 </p>
 
-<p></p>
+<p>
 
-<p></p>
+</p>
+
+<p>
+
+</p>
 
 ### Why do I get an error "no library targets found in package" when trying to compile and old example?
 
@@ -150,7 +168,9 @@
   <code>lib.rs</code> file.
 </p>
 
-<p></p>
+<p>
+
+</p>
 
 ### How can I generate the ABI of my Stylus contract?
 
@@ -192,4 +212,6 @@ fn main() {
 }
 ```
 
-<p></p>
+<p>
+
+</p>
