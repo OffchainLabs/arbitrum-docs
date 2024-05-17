@@ -119,7 +119,7 @@ Let's explore the limitations of making the cost to evil parties high vs. that o
 
 That is, if we aim to have a constant resource ratio > 1, we have to do the following: if the adversary makes N stakes at any level, they can force the honest party to make N stakes at the next level down where the adversary can choose not to place any stakes at all. In terms of resource ratio, to make the adversary always pay 10x in staking, we need to make the bond amount at one level 10x more than the next. As there are multiple levels, the equations for the bond size include an exponential factor on the desired constant resource ratio > 1.
 
-Below, we plot the bond size vs. the resource ratio of evil to honest costs. The source for these equations is both in the research paper and plotted [here](https://www.desmos.com/calculator/digjlq4vly).
+Below, we plot the bond size vs. the resource ratio of evil to honest costs. The source for these equations is both in the research paper and [plotted in this calculator](https://www.desmos.com/calculator/digjlq4vly).
 
 If we desire a constant resource ratio of evil to honest costs > 1, the required bond size in ETH increases as a polynomial at a particular challenge level.
 
