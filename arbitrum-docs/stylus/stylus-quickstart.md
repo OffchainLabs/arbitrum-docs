@@ -59,43 +59,42 @@ To interact with the Stylus testnet, you need to manually configure two specific
 1. Arbitrum Sepolia:  
 
 - **Network Name**: Arbitrum Sepolia
-- **New RPC URL**: `https://sepolia-rollup.arbitrum.io/rpc`
+- **RPC URL**: `https://sepolia-rollup.arbitrum.io/rpc`
 - **Chain ID**: 421614
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://sepolia.arbiscan.io`
 
-2. Arbitrum Stylus Testnet:
+1. Arbitrum Stylus Testnet V2:
 
-- **Network Name**: Stylus testnet
-- **New RPC URL**: `https://stylus-testnet.arbitrum.io/rpc`
-- **Chain ID**: 23011913
+- **Network Name**: Stylus Testnet v2
+- **RPC URL**: `https://stylusv2.arbitrum.io/rpc`
+- **Chain ID**: 13331371
 - **Currency Symbol**: ETH
-- **Block Explorer URL**: `https://stylus-testnet-explorer.arbitrum.io/`
+- **Block Explorer URL**: `https://stylusv2-explorer.arbitrum.io/`
 
 ### Acquiring and Bridging Testnet ETH
 
 To engage with the Stylus testnet, you will first need to acquire Sepolia ETH and then bridge it over:
 
 1. Start by visiting a faucet to get testnet ETH. Here are a few options:
-    - [Bware Labs' Arbitrum Stylus Testnet faucet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet)
     - [QuickNode Faucet for Arbitrum Sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
     - [Alchemy Sepolia Faucet](https://sepoliafaucet.com/)
     - [Sepolia Faucet by PK910](https://sepolia-faucet.pk910.de/)
 2. Enter your wallet address.
 3. Click `Claim` to receive your testnet ETH. Some faucets may require additional steps.
 
-If you obtained your ETH through the Bware Labs faucet, you don't need to bridge it, as this ETH is already on the Stylus testnet. If you used other faucets, your Sepolia ETH will be in your Sepolia testnet wallet and requires bridging to the Stylus testnet:
+Your Sepolia ETH will be in your Sepolia testnet wallet and requires bridging to the Stylus testnet:
 
-1. Go to the [Arbitrum Bridge](https://bridge.arbitrum.io/?destinationChain=stylus-testnet&sourceChain=arbitrum-sepolia).
-2. Choose Arbitrum Sepolia as the source and Stylus Testnet as the destination.
+1. Go to the [Arbitrum Bridge](https://bridge.arbitrum.io/?destinationChain=stylus-testnet-v2&sourceChain=arbitrum-sepolia).
+2. Choose Arbitrum Sepolia as the source and Stylus Testnet v2 as the destination.
 3. Connect your wallet and authorize the bridge to access your tokens.
-4. Specify the amount of Sepolia ETH you want to bridge and initiate the transfer by clicking `Move funds to Stylus Testnet`. Make sure to keep some ETH in the source chain to cover transaction fees.
+4. Specify the amount of Sepolia ETH you want to bridge and initiate the transfer by clicking `Move funds to Stylus Testnet v2`. Make sure to keep some ETH in the source chain to cover transaction fees.
 
-To verify the transfer, you can track the transaction on the [Arbiscan block explorer](https://sepolia.arbiscan.io/) for the source and the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/) for the destination.
+To verify the transfer, you can track the transaction on the [Arbiscan block explorer](https://sepolia.arbiscan.io/) for the source and the [Stylus testnet v2 block explorer](https://stylusv2-explorer.arbitrum.io/) for the destination.
 
 ![Cargo Stylus](./assets/bridge-to-stylus.png)
 
-To check the existence and balance of your testnet ETH, use the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0x44E623584f90D6FBaBe930221d47E0De4248e935/coin-balances#address-tabs). This tool allows you to view transaction details and confirm that your ETH is available in the testnet environment. Simply navigate to the provided link and enter your specific wallet address to see your balance and recent transactions.
+To check the existence and balance of your testnet ETH, use the [Stylus testnet block explorer](https://stylusv2-explorer.arbitrum.io/). This tool allows you to view transaction details and confirm that your ETH is available in the testnet environment. Simply navigate to the provided link and enter your specific wallet address to see your balance and recent transactions.
 
 ## Your First Stylus Program
 
@@ -170,7 +169,7 @@ To check whether or not your program will successfully **deploy and activate** o
 cargo stylus check
 ```
 
-This command verifies that your program can be deployed and activated onchain without a transaction, by connecting to a specified JSON-RPC endpoint. The default endpoint is the Arbitrum Stylus testnet: `https://stylus-testnet.arbitrum.io/rpc`. For additional options, consult the help guide: `cargo stylus check --help`.
+This command verifies that your program can be deployed and activated onchain without a transaction, by connecting to a specified JSON-RPC endpoint. The default endpoint is the Arbitrum Stylus testnet: `https://stylusv2.arbitrum.io/rpc`. For additional options, consult the help guide: `cargo stylus check --help`.
 
 A successful validation will display something like:
 
@@ -180,7 +179,7 @@ Finished `release` profile [optimized] target(s) in 0.20s
 Reading WASM file at [YOUR-DIRECTORY]/target/wasm32-unknown-unknown/release/deps/stylus_hello_world.wasm
 Uncompressed WASM size: 25.0 KB
 Compressed WASM size to be deployed onchain: 9.0 KB
-Connecting to Stylus RPC endpoint: https://stylus-testnet.arbitrum.io/rpc
+Connecting to Stylus RPC endpoint: https://stylusv2.arbitrum.io/rpc
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
 
@@ -216,7 +215,7 @@ Among other details, you'll see an estimated gas cost for deployment:
 ```bash
 ...
 ====DEPLOYMENT====
-Deploying program to address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Deploying program to address [YOUR_CONTRACT_ADDRESS]
 Base fee: 0.100000000 gwei
 Estimated gas for deployment: 11266639 gas units
 ```
@@ -234,30 +233,30 @@ You'll see details about the deployment process, such as:
 ...
 Uncompressed WASM size: 25.0 KB
 Compressed WASM size to be deployed onchain: 9.0 KB
-Connecting to Stylus RPC endpoint: https://stylus-testnet.arbitrum.io/rpc
+Connecting to Stylus RPC endpoint: https://stylusv2.arbitrum.io/rpc
 Program succeeded Stylus onchain activation checks with Stylus version: 1
-Deployer address: 0x44E623584f90D6FBaBe930221d47E0De4248e935
+Deployer address: [YOUR_DEPLOYER_ADDRESS]
 
 ====DEPLOYMENT====
-Deploying program to address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Deploying program to address [YOUR_CONTRACT_ADDRESS]
 Base fee: 0.100000000 gwei
 Estimated gas for deployment: 11266639 gas units
 Submitting deployment tx...
-Confirmed deployment tx 0xc95d7fab996934b38d2eb5e4559977aa222a658fb13e994bdea0f74746219ad5
+Confirmed deployment tx [DEPLOYMENT_TX_HASH]
 Gas units used 10318928, effective gas price 0.100000000 gwei
 Transaction fee: 0.001031892800000000 ETH
 
 ====ACTIVATION====
-Activating program at address 0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099
+Activating program at address [YOUR_CONTRACT_ADDRESS]
 Base fee: 0.100000000 gwei
 Estimated gas for activation: 14224495 gas units
 Submitting activation tx...
-Confirmed activation tx 0x908459dab815e1403c36e21838673ac55877665c9d95c9c87bfb1c4543eab0e8
+Confirmed activation tx [ACTIVATION_TX_HASH]
 Gas units used 14184722, effective gas price 0.100000000 gwei
 Transaction fee: 0.001418472200000000 ETH
 ```
 
-You can verify the deployment and activation of your program on the [Stylus testnet block explorer](https://stylus-testnet-explorer.arbitrum.io/address/0xD6bC450ED8D8054b7c971f6d42631Fc4ed59A099/transactions#address-tabs).
+You can verify the deployment and activation of your program on the [Stylus testnet block explorer](https://stylusv2-explorer.arbitrum.io/).
 
 For further deployment options and transaction details, consult `cargo stylus deploy --help`.
 
