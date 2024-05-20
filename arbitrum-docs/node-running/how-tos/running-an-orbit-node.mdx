@@ -128,16 +128,16 @@ Or:
 
 Nitro nodes can be configured to receive real time ordered transactions from the sequencer feed. If you don't set the feed input url, your node will listen to the parent chain's inbox contract to get the ordered transactions, which will cause your node to be unable to synchronize the latest state.
 
-To make your node listen to sequencer feed, you need to set those configurations to your sequencer node:
-  
-  ```shell
-  --node.feed.output.enable=true --node.feed.output.addr=<Sequencer feed url> --node.feed.output.port=<Sequencer feed port>
-  ```
-
-Then set the following configurations to your new node:
+Set the following configurations to your full node:
   
   ```shell
   --node.feed.input.url=<Sequencer feed url>
+  ```
+
+(Chain owners only) In order for a node to read the sequencer feed, the chain's sequencer needs to be configured with the following parameters:
+  
+  ```shell
+  --node.feed.output.enable=true --node.feed.output.addr=<Sequencer feed url> --node.feed.output.port=<Sequencer feed port>
   ```
 
 After that, your node can synchronize the latest state from the sequencer feed.
