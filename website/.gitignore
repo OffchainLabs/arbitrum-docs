@@ -10,7 +10,6 @@
 
 # Generated docs
 sdk-docs
-
 # Misc
 .DS_Store
 .env.local

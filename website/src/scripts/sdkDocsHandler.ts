@@ -22,7 +22,7 @@ function load(app) {
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
   });
-
+  
   app.renderer.on(RendererEvent.END, async () => {
     copyFiles(sourceDir, targetDir);
 
@@ -63,7 +63,7 @@ function copyFiles(source, target) {
     console.error(`Source path does not exist: ${source}`);
     return;
   }
-
+  
   if (!fs.lstatSync(source).isDirectory()) {
     console.error(`Source path is not a directory: ${source}`);
     return;
