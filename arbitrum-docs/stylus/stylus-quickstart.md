@@ -64,7 +64,7 @@ To interact with the Stylus testnet, you need to manually configure two specific
 - **Currency Symbol**: ETH
 - **Block Explorer URL**: `https://sepolia.arbiscan.io`
 
-1. Arbitrum Stylus Testnet V2:
+2. Arbitrum Stylus Testnet V2:
 
 - **Network Name**: Stylus Testnet v2
 - **RPC URL**: `https://stylusv2.arbitrum.io/rpc`
