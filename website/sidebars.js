@@ -415,6 +415,18 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Orbit SDK References',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/reference/every_configuration_parameter',
+          label: `Parameters`,
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'Write Stylus contracts',
       collapsed: true,
       items: [
