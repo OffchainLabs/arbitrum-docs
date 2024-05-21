@@ -10,8 +10,6 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: reference
 ---
 
-## Orbit SDK: Orbit chain parameters reference guide
-
 This page references every parameter used to configure your Orbit chain. 
 
 Before diving in individual parameters, here is a an example representing all the parameters 
@@ -62,10 +60,11 @@ Before diving in individual parameters, here is a an example representing all th
       "MaxInitCodeSize": 49152,
       "InitialChainOwner": "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0"
     },
-    "chainId": 97400766948
   }
 }
 ```
+You can inspect our code source for all these parameters [default values](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31)
+
 ### Key Parameters Explanation
 
 #### DataAvailabilityCommittee
@@ -82,11 +81,11 @@ Before diving in individual parameters, here is a an example representing all th
 
 #### MaxCodeSize
 - **Type**: `uint32`
-- **Description**: Defines the maximum allowed size for contract code on the chain. This is crucial for managing resource usage and ensuring efficient operation of the blockchain.
+- **Description**: Defines the maximum allowed size for contract code on the chain e.g. Ethereum mainnet has a limit of 24,576 Bytes.
 
 #### MaxInitCodeSize
 - **Type**: `uint32`
-- **Description**: Specifies the maximum allowed size for the initial code used to deploy a contract. This parameter helps in managing the genesis block's size.
+- **Description**:  Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. e.g. Ethereum mainnet limit is 49,152 Bytes.
 
 ### Additional Parameters to consider
 
