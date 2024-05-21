@@ -418,6 +418,11 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'launch-orbit-chain/reference/createRollupPrepareConfig-function-reference',
+          label: `createRollupPrepareConfig function reference`,
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/reference/every_configuration_parameter',
           label: `Parameters`,
         },
