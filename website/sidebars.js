@@ -1,5 +1,7 @@
 // @ts-check
 
+const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   buildDecentralizedAppsSidebar: [
@@ -228,9 +230,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'link',
+          type: 'category',
           label: 'Arbitrum SDK',
-          href: '/sdk',
+          items: sdkDocsSidebar,
         },
         {
           type: 'link',
