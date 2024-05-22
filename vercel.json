@@ -796,9 +796,9 @@
             "permanent": false
         },
         {
-            "source": "/sdk",
-            "destination": "/sdk-docs",
+            "source": "/sdk(?:/(.*))?/?",
+            "destination": "/sdk-docs/$1",
             "permanent": false
-        }
+          }
     ]
 }
