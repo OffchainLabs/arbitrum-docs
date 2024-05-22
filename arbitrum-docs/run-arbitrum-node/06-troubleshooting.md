@@ -219,7 +219,7 @@ Common troubleshooting scenarios and solutions are detailed below.
     </tr>
     <tr>
       <td>
-        You see{' '}
+        You see
         <code>
           failed to get blobs: expected at least 6 blobs for slot `[slot_number]` but only got 0
         </code>
@@ -227,7 +227,7 @@ Common troubleshooting scenarios and solutions are detailed below.
       <td>
         This often happens when you connect to a beacon chain endpoint while the blob you are
         querying is expired. To resolve this error, connect to a beacon endpoint which supports
-        historical blob data (see{' '}
+        historical blob data (see
         <a href="/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">
           List of Ethereum beacon chain RPC providers
         </a>
