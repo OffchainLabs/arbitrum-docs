@@ -221,7 +221,7 @@ Common troubleshooting scenarios and solutions are detailed below.
       <td>
         You see
         <code>
-          failed to get blobs: expected at least 6 blobs for slot ${slot_number} but only got 0
+          failed to get blobs: expected at least 6 blobs for slot {slot_number} but only got 0
         </code>
       </td>
       <td>
