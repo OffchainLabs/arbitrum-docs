@@ -794,6 +794,11 @@
             "source": "/(launch-orbit-chain/reference/command-line-options/?)",
             "destination": "/node-running/how-tos/running-an-orbit-node",
             "permanent": false
+        },
+        {
+            "source": "/sdk",
+            "destination": "/sdk-docs",
+            "permanent": false
         }
     ]
 }
