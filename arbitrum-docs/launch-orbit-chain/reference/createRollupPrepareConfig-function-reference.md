@@ -1,6 +1,6 @@
 ---
 title: 'Orbit SDK createRollupPrepareConfig function reference guide'
-sidebar_label: 'createRollupPrepareConfig function reference'
+sidebar_label: 'createRollupPrepareConfig'
 description: 'List of the most important parameters of the Orbit SDK '
 author: anegg0
 sme: GreatSoshiant
@@ -41,10 +41,7 @@ const txReceipt = createRollupPrepareTransactionReceipt(
   await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
 );
 ```
-
-`createRollupPrepareConfig` is utilized to generate the configuration parameters required for setting up the core contracts of an Orbit chain. Here's a detailed breakdown:
-
-### Orbit Chain Configuration Helper: `createRollupPrepareConfig`
+`createRollupPrepareConfig` takes parameters defined in the `Config` struct and fills in the rest with default values. It outputs a complete Config struct that is ready for use.
 
 #### Function Definition
 
