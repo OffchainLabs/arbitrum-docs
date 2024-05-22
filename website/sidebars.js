@@ -409,24 +409,24 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
               label: `Orbit Chain Configuration`,
             },
+            {
+              type: 'category',
+              label: 'SDK References',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/createRollupPrepareConfig-function-reference',
+                  label: `createRollupPrepareConfig function reference`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/every_configuration_parameter',
+                  label: `Deployment parameters`,
+                },
+              ],
+            },
           ],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Orbit SDK References',
-      collapsed: true,
-      items: [
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/createRollupPrepareConfig-function-reference',
-          label: `createRollupPrepareConfig function reference`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/reference/every_configuration_parameter',
-          label: `Parameters`,
         },
       ],
     },
