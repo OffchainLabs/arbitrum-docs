@@ -796,7 +796,7 @@
             "permanent": false
         },
         {
-            "source": "/sdk(?:/(.*))?/?",
+            "source": "/sdk/(.*)",
             "destination": "/sdk-docs/$1",
             "permanent": false
           }
