@@ -6,7 +6,7 @@ would be an extremely tricky endeavor.
 WASM specifies floating point operations as being compliant to IEEE 754-2019,
 which is not deterministic, and full of edge cases.
 
-Instead, floating point operations (apart from trivial bit-casts like i32 <-> f32)
+Instead, floating point operations (apart from trivial bit-casts like i32 \<-\> f32)
 are implemented using the C Berkeley SoftFloat-3e library running inside WAVM.
 Arbitrator links other WAVM guests against this,
 by replacing float point operations with cross module calls to the library.
@@ -20,7 +20,7 @@ are contained in bindings32.c for 32 bit integers and bindings64.c for 64 bit in
 This ensures that floating point operations are deterministic and consistent between Arbitrator and the OSP,
 as they are implemented exclusively using operations already known to be deterministic and consistent.
 However, it does not ensure that the floating point operations are perfectly compliant to the WASM specification.
-Go uses floating points in its JS<->Go WASM interface,
+Go uses floating points in its JS\<-\>Go WASM interface,
 and floating points may be used outside core state transition code for imprecise computations,
 but the former is well exercised as used in Nitro,
 and the latter generally doesn't rely on details like the minimum of NaN and infinity.

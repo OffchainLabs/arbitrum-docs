@@ -26,7 +26,11 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 :::
 
-### Token bridge deployment steps
+### Prerequisites
+
+- A running **sequencer node**. See steps 1-2 in the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) to start the related Docker containers (note that you don't need the `orbitSetupScriptConfig.json` file here). Use `docker-compose logs -f nitro` to verify that your node is running.
+
+### Token Bridge Deployment Steps
 
 Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
 
@@ -89,7 +93,7 @@ Please note that after generating the raw transaction, the deployer must still s
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain.
 
-The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/arbos/l1-to-l2-messaging#retryable-ticketsO).
+The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/arbos/l1-l2-messaging.md#retryable-ticketsO).
 
 Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
 

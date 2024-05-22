@@ -109,14 +109,16 @@ If you're running into unexpected outputs or errors, the following checklist may
           </TabItem>
           <TabItem value="archive-node">
             <p>
-              <a href="/run-arbitrum-node/more-types/run-archive-node">How to run an archive node</a>{' '}
+              <a href="/run-arbitrum-node/more-types/run-archive-node">
+                How to run an archive node
+              </a>{' '}
               may address your issue.
             </p>
           </TabItem>
           <TabItem value="validator-node">
             <p>
-              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a> may
-              address your issue.
+              <a href="/run-arbitrum-node/more-types/run-validator-node">How to run a validator</a>{' '}
+              may address your issue.
             </p>
           </TabItem>
         </Tabs>
@@ -217,10 +219,19 @@ Common troubleshooting scenarios and solutions are detailed below.
     </tr>
     <tr>
       <td>
-        You see <code>failed to get blobs: expected at least 6 blobs for slot `[slot_number]` but only got 0</code>
+        You see{' '}
+        <code>
+          failed to get blobs: expected at least 6 blobs for slot `[slot_number]` but only got 0
+        </code>
       </td>
       <td>
-        This often happens when you connect to a beacon chain endpoint while the blob you are querying is expired. To resolve this error, connect to a beacon endpoint which supports historical blob data (see <a href='/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers'>List of Ethereum beacon chain RPC providers</a>).
+        This often happens when you connect to a beacon chain endpoint while the blob you are
+        querying is expired. To resolve this error, connect to a beacon endpoint which supports
+        historical blob data (see{' '}
+        <a href="/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">
+          List of Ethereum beacon chain RPC providers
+        </a>
+        ).
       </td>
     </tr>
   </tbody>
