@@ -116,6 +116,9 @@ const config = {
           sidebar: true,
           toc_max_heading_level: 5,
         },
+        path: './sdk-docs',
+        routeBasePath: 'sdk-docs',
+        sidebarItemsGenerator: sdkSidebarGenerator,
       },
     ],
     [
