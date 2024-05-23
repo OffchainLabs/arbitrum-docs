@@ -219,4 +219,4 @@ For BoLD to be deployed on Arbitrum One and Nova, an upgrade admin action needs 
 
 Assertions will then be posted to the new Rollup contract. During the upgrade period, there could have been a very large number of blocks posted in Arbitrum batches. For this purpose, BoLD assertions support the concept of an **overflow**, allowing us to efficiently handle this situation.
 
-The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [here](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
+The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [upgrade workflow on GitHub](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
