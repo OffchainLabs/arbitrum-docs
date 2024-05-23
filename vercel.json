@@ -796,9 +796,14 @@
             "permanent": false
         },
         {
+            "source": "/sdk",
+            "destination": "/sdk-docs",
+            "permanent": false
+        },
+        {
             "source": "/sdk/(.*)",
             "destination": "/sdk-docs/$1",
             "permanent": false
-          }
+        }
     ]
 }
