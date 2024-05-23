@@ -202,11 +202,11 @@ To run your node using the generated binaries, use the following command from th
 If your node shutdown due to this error
 
 ```
-ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat 0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4: no such file or directory"
+ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
 ```
 
 Try add flag:
 
 ```bash
---validation.wasm.allowed-wasm-module-roots=0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4
+--validation.wasm.allowed-wasm-module-roots={WASM_MODULE_ROOT}
 ```
