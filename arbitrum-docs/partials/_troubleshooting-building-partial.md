@@ -497,3 +497,21 @@ Notably, the sender account remains consistent across all instances of this tran
 
 </p>
 
+
+### Why do some blocks have a total gas limit that's over the standard block gas limit?
+<p>
+The execution gas block limit of Arbitrum chains is 32 million. However, when querying a block, we might find a <code>gasLimit</code> value that exceeds that number.
+</p>
+
+<p>
+This happens because this gasLimit field accounts for both execution gas and the correspondent gas limit of the L1 costs (you can find more information about the role of the L1 costs in a transaction's gas limit on <a href="https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9">this article</a>). The gas limit corresponding to L1 costs is practically unlimited, so we might find very high values on the gasLimit field of a block. 
+</p>
+
+<p>
+The effective block gas limit (32 million) only accounts for execution gas limit. We can check the actual gas used for execution on a specific block, by checking the <code>gasUsed</code> field.
+</p>
+
+<p>
+
+</p>
+
