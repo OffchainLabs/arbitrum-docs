@@ -325,6 +325,13 @@ const sidebars = {
           // a: see note at end of file
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
+        },
+        {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
           label: 'Keyset generation (AnyTrust chains)',
