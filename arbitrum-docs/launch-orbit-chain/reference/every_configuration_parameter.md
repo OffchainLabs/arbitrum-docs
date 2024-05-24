@@ -10,10 +10,6 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: reference
 ---
 
-Thank you for the clarification. Here is the revised content with the correct formatting for the regex replacements:
-
----
-
 This page references every parameter used to configure your Orbit chain.
 
 Before diving into individual parameters, here is an example representing all the parameters. The outlined parameters are important ones.
