@@ -12,7 +12,7 @@ content_type: reference
 
 This page references every parameter used to configure your Orbit chain. 
 
-Before diving in individual parameters, here is a an example representing all the parameters 
+Before diving in individual parameters, here is a an example representing all the parameters, the outlined parameters are important ones. 
 
 ```json {15,39,42,43,44}
 {
@@ -69,11 +69,11 @@ You can inspect our code source for all these parameters [default values](https:
 
 #### DataAvailabilityCommittee
 - **Type**: `boolean`
-- **Description**: This parameter determines whether the Orbit chain functions as a Rollup or an Anytrust chain. If `true`, the chain relies on a committee to ensure data availability, classifying it as an Anytrust chain. If `false`, it utilizes the standard L2 Rollup architecture, depending on the main Ethereum chain.
+- **Description**: This parameter determines whether the Orbit chain functions as a Rollup or an Anytrust chain. If `true`, the chain relies on a Data Availability Committee (DAC) to ensure data availability, classifying it as an Anytrust chain. If `false`, it utilizes the standard L2 Rollup architecture, depending on its parent chain for data availability.
 
 #### chainId
 - **Type**: `uint64`
-- **Description**: A unique identifier for the blockchain. This value ensures network uniqueness and can prevent replay attacks across different networks.
+- **Description**: A unique identifier for the blockchain. This value ensures network uniqueness to prevent replay attacks across different networks.
 
 #### InitialChainOwner
 - **Type**: `Address`
