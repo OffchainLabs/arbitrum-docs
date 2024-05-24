@@ -73,7 +73,7 @@ You can inspect our code source for all these parameters [default values](https:
 
 #### DataAvailabilityCommittee
 - **Type**: `boolean`
-- **Description**: This parameter determines whether the Orbit chain functions as a Rollup or an AnyTrust chain. If `true`, the chain relies on a Data Availability Committee (DAC) to ensure data availability, classifying it as an AnyTrust chain. If `false`, it utilizes the standard L2 Rollup architecture, depending on its parent chain for data availability.
+- **Description**: This parameter determines whether the Orbit chain functions as a Rollup or an `AnyTrust` chain. If `true`, the chain relies on a Data Availability Committee (DAC) to ensure data availability, classifying it as an `AnyTrust` chain. If `false`, it utilizes the standard L2 Rollup architecture, depending on its parent chain for data availability.
 
 #### `chainId`
 - **Type**: `uint64`
@@ -99,10 +99,10 @@ You can inspect our code source for all these parameters [default values](https:
 | `extraChallengeTimeBlocks`      | `uint64`                 | No           | Additional time in blocks for challenge periods. Defaults to 0 if unnecessary.                                                                       |
 | `stakeToken`                    | `Address`                | No           | Address of the token used for staking.                                                                                                               |
 | `baseStake`                     | `uint256`                | No           | Minimum stake required to participate in the network.                                                                                               |
-| `wasmModuleRoot`                | `Hash`                   | No           | Root of the WebAssembly module used for execution.                                                                                                  |
+| `wasmModuleRoot`                | `Hash`                   | No           | Root of the `WebAssembly` module used for execution.                                                                                                  |
 | `loserStakeEscrow`              | `Address`                | No           | Address where the losing stakes will be escrowed.                                                                                                    |
 | `genesisBlockNum`               | `uint64`                 | No           | Number assigned to the genesis block.                                                                                                                |
-| sequencerInboxMaxTimeVariation| `object`                 | No           | Maximum time variations for the sequencer's inbox, with nested parameters for `delayBlocks`, `futureBlocks`, `delaySeconds`, and `futureSeconds`.    |
+| `sequencerInboxMaxTimeVariation`| `object`                 | No           | Maximum time variations for the sequencer's inbox, with nested parameters for `delayBlocks`, `futureBlocks`, `delaySeconds`, and `futureSeconds`.    |
 
 ### `chainConfig` Parameters
 
@@ -128,11 +128,11 @@ You can inspect our code source for all these parameters [default values](https:
 
 | **Name**                    | **Type**    | **Optional** | **Description**                                                                                                       |
 |-----------------------------|-------------|--------------|-----------------------------------------------------------------------------------------------------------------------|
-| EnableArbOS                 | `boolean`   | No           | Specifies if ArbOS should be enabled.                                                                                 |
-| AllowDebugPrecompiles       | `boolean`   | Yes          | Indicates if debug precompiles are allowed.                                                                           |
-| DataAvailabilityCommittee   | `boolean`   | No           | Determines whether the Orbit chain functions as a Rollup or an AnyTrust chain based on data availability requirements. |
-| InitialArbOSVersion         | `uint32`    | No           | Version of ArbOS at genesis.                                                                                          |
-| GenesisBlockNum             | `uint64`    | No           | Block number assigned to the genesis block.                                                                           |
-| MaxCodeSize                 | `uint32`    | No           | Maximum allowed size for contract code on the chain.                                                                  |
-| MaxInitCodeSize             | `uint32`    | No           | Maximum allowed size for the initial code used to deploy a contract.                                                   |
-| InitialChainOwner           | `Address`   | No           | Initial owner of the chain with administrative control over the parameters.                                            |
+| `EnableArbOS`                 | `boolean`   | No           | Specifies if `ArbOS` should be enabled.                                                                                 |
+| `AllowDebugPrecompiles`       | `boolean`   | Yes          | Indicates if debug precompiles are allowed.                                                                           |
+| `DataAvailabilityCommittee`   | `boolean`   | No           | Determines whether the Orbit chain functions as a Rollup or an `AnyTrust` chain based on data availability requirements. |
+| `InitialArbOSVersion`         | `uint32`    | No           | Version of `ArbOS` at genesis.                                                                                          |
+| `GenesisBlockNum`             | `uint64`    | No           | Block number assigned to the genesis block.                                                                           |
+| `MaxCodeSize`                 | `uint32`    | No           | Maximum allowed size for contract code on the chain.                                                                  |
+| `MaxInitCodeSize`             | `uint32`    | No           | Maximum allowed size for the initial code used to deploy a contract.                                                   |
+| `InitialChainOwner`           | `Address`   | No           | Initial owner of the chain with administrative control over the parameters.                                            |
