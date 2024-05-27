@@ -416,7 +416,7 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/reference/createRollupPrepareConfig-function-reference',
+                  id: 'launch-orbit-chain/reference/orbit-sdk-function-reference-createRollupPrepareConfig',
                   label: `createRollupPrepareConfig function reference`,
                 },
                 {
