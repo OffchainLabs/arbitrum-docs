@@ -1,8 +1,16 @@
-## SDK Reference Guide: `createRollupPrepareConfig`
+---
+title: 'Orbit SDK references: `createRollupPrepareConfig` function'
+sidebar_label: 'createRollupPrepareConfig'
+description: 'Describes Orbit SDK's 'createRollupPrepareConfig' function'
+author: anegg0
+sme: GreatSoshiant
+target_audience: 'Developers deploying and maintaining Orbit chains.'
+sidebar_position: 1
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to use createRollupPrepareConfig to deploy faster.
+content_type: reference
+---
 
-### Introduction
-
-The `createRollupPrepareConfig` function is essential for deploying an Orbit Chain using the Orbit SDK. It prepares the configuration needed to set up a rollup, crucial for deploying core contracts on the chain. Below is an example of its usage, sourced from the [create-rollup-eth example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth).
+The `createRollupPrepareConfig` function helps deploy an Orbit Chain using the Orbit SDK. It prepares the configuration needed to set up a rollup, crucial for deploying core contracts on the chain. Below is an example of its usage, sourced from the [create-rollup-eth example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth).
 
 ```typescript
 // prepare the transaction for deploying the core contracts
@@ -33,7 +41,7 @@ const txReceipt = createRollupPrepareTransactionReceipt(
 
 ### Function: `createRollupPrepareConfig`
 
-The `createRollupPrepareConfig` function creates a configuration object for the rollup chain deployment. It accepts parameters that define the rollup chain's properties and returns a configuration object.
+The `createRollupPrepareConfig` function creates a configuration object for the rollup chain deployment. It accepts parameters that define the rollup chain's properties, fills in the rest with default values, and returns a configuration object that is ready for use by `createRollupPrepareTransactionRequest`.
 
 #### Parameters
 
