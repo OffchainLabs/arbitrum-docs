@@ -1,7 +1,7 @@
 ---
 title: 'Orbit SDK createRollupPrepareConfig function reference guide'
 sidebar_label: 'createRollupPrepareConfig'
-description: 'List of the most important parameters of the Orbit SDK '
+description: 'Describes Orbit SDK's 'createRollupPrepareConfig' function'
 author: anegg0
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
