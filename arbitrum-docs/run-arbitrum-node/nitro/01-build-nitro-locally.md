@@ -170,19 +170,26 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 
 If you use zsh, replace `bash` with `zsh`.
 
-### Step 8. Start build
+### Step 8. Install Foundry and Forge
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
+### Step 9. Start build
 
 ```bash
 make
 ```
 
-### Step 9. Produce binaries
+### Step 10. Produce binaries
 
 ```bash
 make build
 ```
 
-### Step 10. Run your node
+### Step 11. Run your node
 
 To run your node using the generated binaries, use the following command from the `nitro` folder, with your desired parameters
 
