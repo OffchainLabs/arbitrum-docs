@@ -6,7 +6,7 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/\_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -197,7 +197,7 @@ To run your node using the generated binaries, use the following command from th
 ./target/bin/nitro <node parameters>
 ```
 
-#### WASM module root error
+#### WASM module root error (v2.3.4 or later)
 
 If your node shutdown due to this error
 
