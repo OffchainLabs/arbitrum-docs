@@ -421,6 +421,12 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-sdk-function-reference-createRollupPrepareTransactionReceipt',
+                  label: `createRollupPrepareConfig function reference`,
+                },
+
+                {
+                  type: 'doc',
                   id: 'launch-orbit-chain/reference/every_configuration_parameter',
                   label: `Deployment parameters`,
                 },
