@@ -12,7 +12,6 @@ sidebar_position: 1
 
 import PublicPreviewBannerPartial from '../../how-arbitrum-works/bold/partials/_bold-public-preview-banner-partial.md';
 
-
 <PublicPreviewBannerPartial />
 
 ## Overview
@@ -111,7 +110,8 @@ To address this, there is a [contract](https://github.com/OffchainLabs/bold/blob
 
 Anyone can deploy an assertion bonding pool using the `AssertionStakingPoolCreator.sol` contract as a means to crowdsource funds for bonding funds to an assertion. To defend Arbitrum using one of these pools, an entity would first deploy this pool with the assertion they believe is correct and wish to bond on to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's State Transition Function (`STF`). If other parties agree that the assertion is correct, they can deposit their funds into the contract. When enough funds have been deposited, anyone can trigger the creation of the assertion on-chain to start the challenge in a trustless manner. Finally, once the dispute protocol confirms the honest parties' assertion, all involved entities will get their funds reimbursed and can withdraw.
 
-<a data-quicklook-from="trustless">Trustless</a> bonding pools can also be created to open challenges and make moves on challenges without sacrificing decentralization.
+<a data-quicklook-from="trustless">Trustless</a> bonding pools can also be created to open challenges
+and make moves on challenges without sacrificing decentralization.
 
 ### Opening challenges
 
@@ -203,7 +203,11 @@ Once an edge has a total on-chain timer greater than or equal to a challenge per
 
 To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the parent assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a "challenge bond". Note that to open a new assertion-level challenge, the challenge bond is equal to the assertion bond for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>.
 
-<a data-quicklook-from="challenge">Challenge</a> bonds are named as such because they are bonds required for opening challenges. The mechanism of how challenge bond economics are decided is contained in the economics deep dive, which also explains the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses information such as off-chain costs + gas costs + grieving ratios between honest and evil parties to discourage spam.
+<a data-quicklook-from="challenge">Challenge</a> bonds are named as such because they are bonds required
+for opening challenges. The mechanism of how challenge bond economics are decided is contained in the
+economics deep dive, which also explains the cost profile and spam prevention in BoLD. In short, the
+actual cost of a bond encompasses information such as off-chain costs + gas costs + grieving ratios between
+honest and evil parties to discourage spam.
 
 Each subchallenge that is created requires depositing a challenge bond. The first, unrivaled edge’s bond is kept in the challenge manager contract on Ethereum, while any subsequent rival bonds are kept in an excess bond receiver address, which can be set to the ArbitrumDAO treasury. Once a challenge is complete, all bonds for an honest party are automatically refunded in-protocol. It is important to not offer bonds confiscated from dishonest parties to honest parties to avoid perverse incentives, such as grieving attacks or to discourage needless competition between honest parties.
 
