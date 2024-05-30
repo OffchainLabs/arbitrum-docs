@@ -6,7 +6,9 @@ content_type: how-to
 ---
 
 Arbitrum implements a **fraud proof** system that ensures that the state of any given child chain is safely maintained by its parent chain. In this system, a validator is responsible for periodically transmitting information about the child chain's state to its parent chain.
-Used by the challenge system, those information is included in a structure called rblock and assertion (see the [documentation](../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#arbitrum-rollup-protocol) for details), so we can read and decode the rblock/assertion on parent chain to extract the information which can be used for the parent chain on-chain contract or off-chain tool validation.
+This information is included in "rollup blocks", which we refer to as **RBlocks** throughout our docs. See [Inside Arbitrum Nitro](../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#arbitrum-rollup-protocol) to learn more about RBlocks.
+
+These RBlocks are effectively _assertions about the impact that a series of child chain blocks (containing transactions) ought to have on its parent chain's state_. When received by the parent chain, these RBlocks are decoded by a contract hosted by the parent chain (an "on-chain contract"); this information can then be optionally relayed to off-chain tools for arbitrary purposes (for example, off-chain validation).
 
 Before we begin, we will introduce the key component: rblock, assertion and send roots.
 
