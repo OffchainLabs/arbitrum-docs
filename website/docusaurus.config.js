@@ -95,7 +95,7 @@ const config = {
         plugin: [
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
-          './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/arbitrumSdkDocsHandler.ts',
         ],
 
         // typedoc-plugin-markdown options
