@@ -146,7 +146,11 @@ const config = {
           autoConfiguration: false,
         },
 
-        plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
+        plugin: [
+          'typedoc-plugin-markdown',
+          `typedoc-plugin-frontmatter`,
+          `./src/scripts/orbitSdkDocsHandler.ts`,
+        ],
 
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
