@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand how to verify child chain state
 content_type: how-to
 ---
 
-Arbitrum implements fraud proof system. This system can ensure that the state of child chain will be safely maintained by parent chain. In this system, the validator will send the state information on child chain to parent chain from time to time.
+Arbitrum implements a **fraud proof** system that ensures that the state of any given child chain is safely maintained by its parent chain. In this system, a validator is responsible for periodically transmitting information about the child chain's state to its parent chain.
 Used by the challenge system, those information is included in a structure called rblock and assertion (see the [documentation](../inside-arbitrum-nitro/inside-arbitrum-nitro.mdx#arbitrum-rollup-protocol) for details), so we can read and decode the rblock/assertion on parent chain to extract the information which can be used for the parent chain on-chain contract or off-chain tool validation.
 
 Before we begin, we will introduce the key component: rblock, assertion and send roots.
