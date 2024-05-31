@@ -5,24 +5,18 @@
 ### parentChainIsMainnet()
 
 ```ts
-function parentChainIsMainnet(parentChainId: 
-  | 1
-  | 1337
-  | 17000
-  | 42161
-  | 42170
-  | 412346
-  | 421614
-  | 11155111): boolean
+function parentChainIsMainnet(
+  parentChainId: 1 | 1337 | 17000 | 42161 | 42170 | 412346 | 421614 | 11155111,
+): boolean;
 ```
 
 Checks if the provided ParentChainId belongs to the mainnet or not.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `parentChainId` |  \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
+| Parameter       | Type                                                                                    |
+| :-------------- | :-------------------------------------------------------------------------------------- |
+| `parentChainId` | \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
 
 #### Returns
 

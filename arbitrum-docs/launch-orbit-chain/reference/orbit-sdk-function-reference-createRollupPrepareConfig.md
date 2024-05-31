@@ -10,7 +10,6 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: reference
 ---
 
-
 In this guide, we focus on the `createRollupPrepareConfig` function, essential for deploying an Orbit Chain using the Orbit SDK. The example code is sourced from [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/create-rollup-eth). Below is a brief example that we'll explore in detail:
 
 ```ts
@@ -21,8 +20,8 @@ const request = await createRollupPrepareTransactionRequest({
       chainId: BigInt(chainId),
       owner: deployer.address,
       chainConfig,
-      genesisBlock: "0xInitialBlock",
-      sequencer: "0xSequencerAddress",
+      genesisBlock: '0xInitialBlock',
+      sequencer: '0xSequencerAddress',
       validators: [validator],
       batchPoster,
     }),
@@ -41,6 +40,7 @@ const txReceipt = createRollupPrepareTransactionReceipt(
   await parentChainPublicClient.waitForTransactionReceipt({ hash: txHash }),
 );
 ```
+
 `createRollupPrepareConfig` takes parameters defined in the `Config` struct and fills in the rest with default values. It outputs a complete Config struct that is ready for use.
 
 #### Function Definition
@@ -61,27 +61,27 @@ This function receives an object with specific parameters which define the deplo
 
 #### Parameters
 
-| Name              | Type              | Optional | Description                                                                   |
-|-------------------|-------------------|----------|-------------------------------------------------------------------------------|
-| `chainId`         | `bigint`          | No       | The unique identifier for the Orbit Chain.                                    |
-| `owner`           | `Address`         | No       | The address initiating the deployment.                                        |
-| `chainConfig`     | `Object`          | No       | Specific chain configuration settings (e.g., `maxGas`, `allowList`).          |
-| `genesisBlock`    | `string`          | Yes      | Represents the initial block of the chain.                                    |
-| `sequencer`       | `Address`         | Yes      | The address of the sequencer responsible for ordering transactions.           |
-| `validators`      | `Array<Address>`  | Yes      | List of validator addresses.                                                  |
-| `batchPoster`     | `Address`         | Yes      | Address responsible for posting the rollup batches.                           |
+| Name           | Type             | Optional | Description                                                          |
+| -------------- | ---------------- | -------- | -------------------------------------------------------------------- |
+| `chainId`      | `bigint`         | No       | The unique identifier for the Orbit Chain.                           |
+| `owner`        | `Address`        | No       | The address initiating the deployment.                               |
+| `chainConfig`  | `Object`         | No       | Specific chain configuration settings (e.g., `maxGas`, `allowList`). |
+| `genesisBlock` | `string`         | Yes      | Represents the initial block of the chain.                           |
+| `sequencer`    | `Address`        | Yes      | The address of the sequencer responsible for ordering transactions.  |
+| `validators`   | `Array<Address>` | Yes      | List of validator addresses.                                         |
+| `batchPoster`  | `Address`        | Yes      | Address responsible for posting the rollup batches.                  |
 
 #### Example Usage
 
 ```ts
 const config = createRollupPrepareConfig({
   chainId: BigInt(97400766948),
-  owner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0",
+  owner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
   chainConfig: {
     londonBlock: 0,
     clique: {
       period: 0,
-      epoch: 0
+      epoch: 0,
     },
     arbitrum: {
       EnableArbOS: true,
@@ -89,14 +89,14 @@ const config = createRollupPrepareConfig({
       DataAvailabilityCommittee: true,
       MaxCodeSize: 24576,
       MaxInitCodeSize: 49152,
-      InitialChainOwner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0"
+      InitialChainOwner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
     },
-    chainId: 97400766948
+    chainId: 97400766948,
   },
-  genesisBlock: "0xInitialBlock",
-  sequencer: "0xSequencerAddress",
-  validators: ["0xValidatorAddress1", "0xValidatorAddress2"],
-  batchPoster: "0xBatchPosterAddress"
+  genesisBlock: '0xInitialBlock',
+  sequencer: '0xSequencerAddress',
+  validators: ['0xValidatorAddress1', '0xValidatorAddress2'],
+  batchPoster: '0xBatchPosterAddress',
 });
 ```
 
@@ -164,13 +164,13 @@ const request = await createRollupPrepareTransactionRequest({
   params: {
     config: createRollupPrepareConfig({
       chainId: BigInt(97400766948),
-      owner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0",
+      owner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
       chainConfig: {
         homesteadBlock: 0,
         daoForkBlock: null,
         daoForkSupport: true,
         eip150Block: 0,
-        eip150Hash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+        eip150Hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
         eip155Block: 0,
         eip158Block: 0,
         byzantiumBlock: 0,
@@ -182,7 +182,7 @@ const request = await createRollupPrepareTransactionRequest({
         londonBlock: 0,
         clique: {
           period: 0,
-          epoch: 0
+          epoch: 0,
         },
         arbitrum: {
           EnableArbOS: true,
@@ -192,16 +192,16 @@ const request = await createRollupPrepareTransactionRequest({
           GenesisBlockNum: 0,
           MaxCodeSize: 24576,
           MaxInitCodeSize: 49152,
-          InitialChainOwner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0"
+          InitialChainOwner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
         },
-        chainId: 97400766948
+        chainId: 97400766948,
       },
-      genesisBlock: "0xInitialBlock",
-      sequencer: "0xSequencerAddress",
-      validators: ["0xValidatorAddress1", "0xValidatorAddress2"],
-      batchPoster: "0xBatchPosterAddress"
+      genesisBlock: '0xInitialBlock',
+      sequencer: '0xSequencerAddress',
+      validators: ['0xValidatorAddress1', '0xValidatorAddress2'],
+      batchPoster: '0xBatchPosterAddress',
     }),
-    account: "0xYourAddressHere",
+    account: '0xYourAddressHere',
     publicClient: parentChainPublicClient,
   },
 });

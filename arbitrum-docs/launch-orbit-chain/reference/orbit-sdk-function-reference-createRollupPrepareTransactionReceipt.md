@@ -15,14 +15,16 @@ content_type: reference
 After sending a deployment transaction and receiving the transaction receipt, you can use `createRollupPrepareTransactionReceipt` to parse this receipt and access details about the deployed chain:contract addresses, configuration settings, and other information.
 
 ```ts
-function createRollupPrepareTransactionReceipt(receipt: TransactionReceipt): RollupTransactionReceipt
+function createRollupPrepareTransactionReceipt(
+  receipt: TransactionReceipt,
+): RollupTransactionReceipt;
 ```
 
 #### Parameters
 
-| Name      | Type                  | Optional | Description                                              |
-|-----------|-----------------------|----------|----------------------------------------------------------|
-| `receipt` | `TransactionReceipt`  | No       | The transaction receipt object returned from the blockchain client. |
+| Name      | Type                 | Optional | Description                                                         |
+| --------- | -------------------- | -------- | ------------------------------------------------------------------- |
+| `receipt` | `TransactionReceipt` | No       | The transaction receipt object returned from the blockchain client. |
 
 #### Example Usage
 
@@ -30,20 +32,24 @@ Here's an example of how to use the `createRollupPrepareTransactionReceipt` func
 
 ```ts
 // Import necessary modules from the Orbit SDK
-import { createRollupPrepareTransactionRequest, createRollupPrepareConfig, createRollupPrepareTransactionReceipt } from '@offchainlabs/arbitrum-orbit-sdk';
+import {
+  createRollupPrepareTransactionRequest,
+  createRollupPrepareConfig,
+  createRollupPrepareTransactionReceipt,
+} from '@offchainlabs/arbitrum-orbit-sdk';
 
 // prepare the transaction for deploying the core contracts
 const request = await createRollupPrepareTransactionRequest({
   params: {
     config: createRollupPrepareConfig({
       chainId: BigInt(97400766948),
-      owner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0",
+      owner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
       chainConfig: {
         homesteadBlock: 0,
         daoForkBlock: null,
         daoForkSupport: true,
         eip150Block: 0,
-        eip150Hash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+        eip150Hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
         eip155Block: 0,
         eip158Block: 0,
         byzantiumBlock: 0,
@@ -55,7 +61,7 @@ const request = await createRollupPrepareTransactionRequest({
         londonBlock: 0,
         clique: {
           period: 0,
-          epoch: 0
+          epoch: 0,
         },
         arbitrum: {
           EnableArbOS: true,
@@ -65,19 +71,19 @@ const request = await createRollupPrepareTransactionRequest({
           GenesisBlockNum: 0,
           MaxCodeSize: 24576,
           MaxInitCodeSize: 49152,
-          InitialChainOwner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0"
+          InitialChainOwner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
         },
-        chainId: 97400766948
+        chainId: 97400766948,
       },
-      genesisBlock: "0xInitialBlock",
-      sequencer: "0xSequencerAddress",
-      validators: ["0xValidatorAddress1", "0xValidatorAddress2"],
-      batchPoster: "0xBatchPosterAddress"
+      genesisBlock: '0xInitialBlock',
+      sequencer: '0xSequencerAddress',
+      validators: ['0xValidatorAddress1', '0xValidatorAddress2'],
+      batchPoster: '0xBatchPosterAddress',
     }),
-    batchPoster: "0xBatchPosterAddress",
-    validators: ["0xValidatorAddress"],
+    batchPoster: '0xBatchPosterAddress',
+    validators: ['0xValidatorAddress'],
   },
-  account: "0xYourAddressHere",
+  account: '0xYourAddressHere',
   publicClient: parentChainPublicClient,
 });
 
@@ -120,13 +126,13 @@ const request = await createRollupPrepareTransactionRequest({
   params: {
     config: createRollupPrepareConfig({
       chainId: BigInt(97400766948),
-      owner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0",
+      owner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
       chainConfig: {
         homesteadBlock: 0,
         daoForkBlock: null,
         daoForkSupport: true,
         eip150Block: 0,
-        eip150Hash: "0x0000000000000000000000000000000000000000000000000000000000000000",
+        eip150Hash: '0x0000000000000000000000000000000000000000000000000000000000000000',
         eip155Block: 0,
         eip158Block: 0,
         byzantiumBlock: 0,
@@ -138,7 +144,7 @@ const request = await createRollupPrepareTransactionRequest({
         londonBlock: 0,
         clique: {
           period: 0,
-          epoch: 0
+          epoch: 0,
         },
         arbitrum: {
           EnableArbOS: true,
@@ -148,19 +154,19 @@ const request = await createRollupPrepareTransactionRequest({
           GenesisBlockNum: 0,
           MaxCodeSize: 24576,
           MaxInitCodeSize: 49152,
-          InitialChainOwner: "0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0"
+          InitialChainOwner: '0x8BdF2e6822631664433e47a5aa8D6cF4addAc1f0',
         },
-        chainId: 97400766948
+        chainId: 97400766948,
       },
-      genesisBlock: "0xInitialBlock",
-      sequencer: "0xSequencerAddress",
-      validators: ["0xValidatorAddress1", "0xValidatorAddress2"],
-      batchPoster: "0xBatchPosterAddress"
+      genesisBlock: '0xInitialBlock',
+      sequencer: '0xSequencerAddress',
+      validators: ['0xValidatorAddress1', '0xValidatorAddress2'],
+      batchPoster: '0xBatchPosterAddress',
     }),
-    batchPoster: "0xBatchPosterAddress",
-    validators: ["0xValidatorAddress"],
+    batchPoster: '0xBatchPosterAddress',
+    validators: ['0xValidatorAddress'],
   },
-  account: "0xYourAddressHere",
+  account: '0xYourAddressHere',
   publicClient: parentChainPublicClient,
 });
 

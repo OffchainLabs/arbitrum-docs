@@ -5,7 +5,9 @@
 ### rollupAdminLogicPublicActions()
 
 ```ts
-function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(__namedParameters: TParams): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams["rollup"], TChain>
+function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(
+  __namedParameters: TParams,
+): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams['rollup'], TChain>;
 ```
 
 Returns a rollupAdminLogicActions function that provides methods to interact
@@ -14,16 +16,16 @@ transaction requests.
 
 #### Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TParams` *extends* `object` | - |
-| `TTransport` *extends* `Transport` | `Transport` |
-| `TChain` *extends* `undefined` \| `Chain` | `Chain` |
+| Type parameter                            | Value       |
+| :---------------------------------------- | :---------- |
+| `TParams` _extends_ `object`              | -           |
+| `TTransport` _extends_ `Transport`        | `Transport` |
+| `TChain` _extends_ `undefined` \| `Chain` | `Chain`     |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type      |
+| :------------------ | :-------- |
 | `__namedParameters` | `TParams` |
 
 #### Returns
@@ -32,9 +34,9 @@ transaction requests.
 
 ##### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `PublicClient`\<`TTransport`, `TChain`\> |
+| Parameter | Type                                     |
+| :-------- | :--------------------------------------- |
+| `client`  | `PublicClient`\<`TTransport`, `TChain`\> |
 
 ##### Returns
 

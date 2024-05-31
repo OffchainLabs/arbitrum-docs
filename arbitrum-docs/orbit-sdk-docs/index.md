@@ -1,17 +1,13 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
-
 ## Modules
 
-- [createRollup](createRollup.md)
-- [createTokenBridge](createTokenBridge.md)
-- [decorators/sequencerInboxActions](decorators/sequencerInboxActions.md)
-- [generated](generated.md)
-- [types/NodeConfig.generated](types/NodeConfig.md)
-- [upgradeExecutorFetchPrivilegedAccounts](upgradeExecutorFetchPrivilegedAccounts.md)
-- [upgradeExecutorPrepareAddExecutorTransactionRequest](upgradeExecutorPrepareAddExecutorTransactionRequest.md)
-- [upgradeExecutorPrepareRemoveExecutorTransactionRequest](upgradeExecutorPrepareRemoveExecutorTransactionRequest.md)
-- [utils/getArbOSVersion](utils/getArbOSVersion.md)
+- [createRollup](createRollup/index.md)
+- [createRollupPrepareConfig](createRollupPrepareConfig/index.md)
+- [createRollupPrepareDeploymentParamsConfig](createRollupPrepareDeploymentParamsConfig/index.md)
+- [createTokenBridge](createTokenBridge/index.md)
+- [decorators/sequencerInboxActions](decorators/sequencerInboxActions/index.md)
+- [generated](generated/index.md)
+- [types/NodeConfig.generated](types/NodeConfig.generated/index.md)
+- [upgradeExecutorFetchPrivilegedAccounts](upgradeExecutorFetchPrivilegedAccounts/index.md)
+- [upgradeExecutorPrepareAddExecutorTransactionRequest](upgradeExecutorPrepareAddExecutorTransactionRequest/index.md)
+- [upgradeExecutorPrepareRemoveExecutorTransactionRequest](upgradeExecutorPrepareRemoveExecutorTransactionRequest/index.md)
+- [utils/getArbOSVersion](utils/getArbOSVersion/index.md)

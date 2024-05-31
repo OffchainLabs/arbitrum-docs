@@ -5,7 +5,7 @@
 ### createRollupPrepareTransaction()
 
 ```ts
-function createRollupPrepareTransaction(tx: Transaction): CreateRollupTransaction
+function createRollupPrepareTransaction(tx: Transaction): CreateRollupTransaction;
 ```
 
 Creates a CreateRollupTransaction from the provided transaction by
@@ -14,9 +14,9 @@ function.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `tx` | `Transaction` |
+| Parameter | Type          |
+| :-------- | :------------ |
+| `tx`      | `Transaction` |
 
 #### Returns
 

@@ -5,7 +5,10 @@
 ### arbOwnerPrepareTransactionRequest()
 
 ```ts
-function arbOwnerPrepareTransactionRequest<TFunctionName, TChain>(client: object, params: ArbOwnerPrepareTransactionRequestParameters<TFunctionName>): Promise<object | object | object>
+function arbOwnerPrepareTransactionRequest<TFunctionName, TChain>(
+  client: object,
+  params: ArbOwnerPrepareTransactionRequestParameters<TFunctionName>,
+): Promise<object | object | object>;
 ```
 
 Prepares a transaction request for the arbOwner contract on the specified
@@ -14,42 +17,43 @@ chain using the provided client and parameters.
 #### Type parameters
 
 | Type parameter |
-| :------ |
-| `TFunctionName` *extends* 
-  \| `"addChainOwner"`
-  \| `"getAllChainOwners"`
-  \| `"getInfraFeeAccount"`
-  \| `"getNetworkFeeAccount"`
-  \| `"isChainOwner"`
-  \| `"releaseL1PricerSurplusFunds"`
-  \| `"removeChainOwner"`
-  \| `"scheduleArbOSUpgrade"`
-  \| `"setAmortizedCostCapBips"`
-  \| `"setBrotliCompressionLevel"`
-  \| `"setChainConfig"`
-  \| `"setInfraFeeAccount"`
-  \| `"setL1BaseFeeEstimateInertia"`
-  \| `"setL1PricePerUnit"`
-  \| `"setL1PricingEquilibrationUnits"`
-  \| `"setL1PricingInertia"`
-  \| `"setL1PricingRewardRate"`
-  \| `"setL1PricingRewardRecipient"`
-  \| `"setL2BaseFee"`
-  \| `"setL2GasBacklogTolerance"`
-  \| `"setL2GasPricingInertia"`
-  \| `"setMaxTxGasLimit"`
-  \| `"setMinimumL2BaseFee"`
-  \| `"setNetworkFeeAccount"`
-  \| `"setPerBatchGasCharge"`
-  \| `"setSpeedLimit"` |
-| `TChain` *extends* `undefined` \| `Chain` |
+| :------------- |
+
+| `TFunctionName` _extends_
+\| `"addChainOwner"`
+\| `"getAllChainOwners"`
+\| `"getInfraFeeAccount"`
+\| `"getNetworkFeeAccount"`
+\| `"isChainOwner"`
+\| `"releaseL1PricerSurplusFunds"`
+\| `"removeChainOwner"`
+\| `"scheduleArbOSUpgrade"`
+\| `"setAmortizedCostCapBips"`
+\| `"setBrotliCompressionLevel"`
+\| `"setChainConfig"`
+\| `"setInfraFeeAccount"`
+\| `"setL1BaseFeeEstimateInertia"`
+\| `"setL1PricePerUnit"`
+\| `"setL1PricingEquilibrationUnits"`
+\| `"setL1PricingInertia"`
+\| `"setL1PricingRewardRate"`
+\| `"setL1PricingRewardRecipient"`
+\| `"setL2BaseFee"`
+\| `"setL2GasBacklogTolerance"`
+\| `"setL2GasPricingInertia"`
+\| `"setMaxTxGasLimit"`
+\| `"setMinimumL2BaseFee"`
+\| `"setNetworkFeeAccount"`
+\| `"setPerBatchGasCharge"`
+\| `"setSpeedLimit"` |
+| `TChain` _extends_ `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | `ArbOwnerPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                             |
+| :-------- | :--------------------------------------------------------------- |
+| `client`  | `object`                                                         |
+| `params`  | `ArbOwnerPrepareTransactionRequestParameters`\<`TFunctionName`\> |
 
 #### Returns
 

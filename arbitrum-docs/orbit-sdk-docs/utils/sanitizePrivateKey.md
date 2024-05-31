@@ -5,7 +5,7 @@
 ### sanitizePrivateKey()
 
 ```ts
-function sanitizePrivateKey(privateKey: string): `0x${string}`
+function sanitizePrivateKey(privateKey: string): `0x${string}`;
 ```
 
 SanitizePrivateKey sanitizes a private key by ensuring it starts with '0x'
@@ -13,8 +13,8 @@ and returns a string.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter    | Type     |
+| :----------- | :------- |
 | `privateKey` | `string` |
 
 #### Returns

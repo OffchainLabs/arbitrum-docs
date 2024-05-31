@@ -5,7 +5,10 @@
 ### sequencerInboxReadContract()
 
 ```ts
-function sequencerInboxReadContract<TChain, TFunctionName>(client: object, params: SequencerInboxReadContractParameters<TFunctionName>): Promise<SequencerInboxReadContractReturnType<TFunctionName>>
+function sequencerInboxReadContract<TChain, TFunctionName>(
+  client: object,
+  params: SequencerInboxReadContractParameters<TFunctionName>,
+): Promise<SequencerInboxReadContractReturnType<TFunctionName>>;
 ```
 
 Reads data from the sequencer inbox contract specified by the provided
@@ -13,38 +16,39 @@ address and function name, returning the result as a Promise.
 
 #### Type parameters
 
-| Type parameter |
-| :------ |
-| `TChain` *extends* `undefined` \| `Chain` |
-| `TFunctionName` *extends* 
-  \| `"bridge"`
-  \| `"initialize"`
-  \| `"DATA_AUTHENTICATED_FLAG"`
-  \| `"HEADER_LENGTH"`
-  \| `"addSequencerL2Batch"`
-  \| `"addSequencerL2BatchFromOrigin"`
-  \| `"batchCount"`
-  \| `"dasKeySetInfo"`
-  \| `"forceInclusion"`
-  \| `"getKeysetCreationBlock"`
-  \| `"inboxAccs"`
-  \| `"invalidateKeysetHash"`
-  \| `"isBatchPoster"`
-  \| `"isValidKeysetHash"`
-  \| `"maxTimeVariation"`
-  \| `"removeDelayAfterFork"`
-  \| `"rollup"`
-  \| `"setIsBatchPoster"`
-  \| `"setMaxTimeVariation"`
-  \| `"setValidKeyset"`
-  \| `"totalDelayedMessagesRead"` |
+| Type parameter                            |
+| :---------------------------------------- |
+| `TChain` _extends_ `undefined` \| `Chain` |
+
+| `TFunctionName` _extends_
+\| `"bridge"`
+\| `"initialize"`
+\| `"DATA_AUTHENTICATED_FLAG"`
+\| `"HEADER_LENGTH"`
+\| `"addSequencerL2Batch"`
+\| `"addSequencerL2BatchFromOrigin"`
+\| `"batchCount"`
+\| `"dasKeySetInfo"`
+\| `"forceInclusion"`
+\| `"getKeysetCreationBlock"`
+\| `"inboxAccs"`
+\| `"invalidateKeysetHash"`
+\| `"isBatchPoster"`
+\| `"isValidKeysetHash"`
+\| `"maxTimeVariation"`
+\| `"removeDelayAfterFork"`
+\| `"rollup"`
+\| `"setIsBatchPoster"`
+\| `"setMaxTimeVariation"`
+\| `"setValidKeyset"`
+\| `"totalDelayedMessagesRead"` |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | `SequencerInboxReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                      |
+| :-------- | :-------------------------------------------------------- |
+| `client`  | `object`                                                  |
+| `params`  | `SequencerInboxReadContractParameters`\<`TFunctionName`\> |
 
 #### Returns
 

@@ -5,24 +5,18 @@
 ### getParentChainLayer()
 
 ```ts
-function getParentChainLayer(parentChainId: 
-  | 1
-  | 1337
-  | 17000
-  | 42161
-  | 42170
-  | 412346
-  | 421614
-  | 11155111): 1 | 2
+function getParentChainLayer(
+  parentChainId: 1 | 1337 | 17000 | 42161 | 42170 | 412346 | 421614 | 11155111,
+): 1 | 2;
 ```
 
 Returns the layer of the parent chain identified by the provided ParentChainId.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `parentChainId` |  \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
+| Parameter       | Type                                                                                    |
+| :-------------- | :-------------------------------------------------------------------------------------- |
+| `parentChainId` | \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
 
 #### Returns
 

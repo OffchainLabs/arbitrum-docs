@@ -5,7 +5,9 @@
 ### validateParentChainPublicClient()
 
 ```ts
-function validateParentChainPublicClient<TTransport, TChain>(publicClient: object): ParentChainPublicClient
+function validateParentChainPublicClient<TTransport, TChain>(
+  publicClient: object,
+): ParentChainPublicClient;
 ```
 
 Validates and returns a ParentChainPublicClient based on the provided
@@ -13,15 +15,15 @@ PublicClient, ensuring that the parent chain is supported.
 
 #### Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TTransport` *extends* `Transport` | `Transport` |
-| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
+| Type parameter                            | Value                  |
+| :---------------------------------------- | :--------------------- |
+| `TTransport` _extends_ `Transport`        | `Transport`            |
+| `TChain` _extends_ `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter      | Type     |
+| :------------- | :------- |
 | `publicClient` | `object` |
 
 #### Returns

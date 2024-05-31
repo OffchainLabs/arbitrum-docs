@@ -5,7 +5,9 @@
 ### createTokenBridgeFetchTokenBridgeContracts()
 
 ```ts
-function createTokenBridgeFetchTokenBridgeContracts(__namedParameters: object): Promise<TokenBridgeContracts>
+function createTokenBridgeFetchTokenBridgeContracts(
+  __namedParameters: object,
+): Promise<TokenBridgeContracts>;
 ```
 
 Fetches the token bridge contracts addresses for both the parent chain and
@@ -15,11 +17,11 @@ addresses of various contract types for both chains.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.inbox` | \`0x$\{string\}\` | - |
-| `__namedParameters.parentChainPublicClient` | `object` | - |
+| Parameter                                              | Type              | Description                                                                                                                                |
+| :----------------------------------------------------- | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `__namedParameters`                                    | `object`          | -                                                                                                                                          |
+| `__namedParameters.inbox`                              | \`0x$\{string\}\` | -                                                                                                                                          |
+| `__namedParameters.parentChainPublicClient`            | `object`          | -                                                                                                                                          |
 | `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 #### Returns

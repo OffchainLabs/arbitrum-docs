@@ -5,7 +5,9 @@
 ### arbGasInfoPublicActions()
 
 ```ts
-function arbGasInfoPublicActions<TTransport, TChain>(client: object): ArbGasInfoPublicActions<TChain>
+function arbGasInfoPublicActions<TTransport, TChain>(
+  client: object,
+): ArbGasInfoPublicActions<TChain>;
 ```
 
 Returns an object with a method `arbGasInfoReadContract` that takes
@@ -13,16 +15,16 @@ parameters and returns a Promise of the corresponding contract data.
 
 #### Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TTransport` *extends* `Transport` | `Transport` |
-| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
+| Type parameter                            | Value                  |
+| :---------------------------------------- | :--------------------- |
+| `TTransport` _extends_ `Transport`        | `Transport`            |
+| `TChain` _extends_ `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
+| Parameter | Type     |
+| :-------- | :------- |
+| `client`  | `object` |
 
 #### Returns
 

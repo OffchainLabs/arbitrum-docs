@@ -5,15 +5,17 @@
 ### viemTransactionReceiptToEthersTransactionReceipt()
 
 ```ts
-function viemTransactionReceiptToEthersTransactionReceipt(receipt: TransactionReceipt): EthersTransactionReceipt
+function viemTransactionReceiptToEthersTransactionReceipt(
+  receipt: TransactionReceipt,
+): EthersTransactionReceipt;
 ```
 
 Converts a Viem transaction receipt to an Ethers transaction receipt.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter | Type                 |
+| :-------- | :------------------- |
 | `receipt` | `TransactionReceipt` |
 
 #### Returns

@@ -5,7 +5,7 @@
 ### prepareNodeConfig()
 
 ```ts
-function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig
+function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig;
 ```
 
 prepareNodeConfig prepares and returns a [NodeConfig](types/NodeConfig.md#nodeconfig) based on the
@@ -17,8 +17,8 @@ additional configurations if required.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                      |
+| :------------------ | :------------------------ |
 | `__namedParameters` | `PrepareNodeConfigParams` |
 
 #### Returns

@@ -5,7 +5,9 @@
 ### createRollupFetchTransactionHash()
 
 ```ts
-function createRollupFetchTransactionHash(__namedParameters: CreateRollupFetchTransactionHashParams): Promise<`0x${string}`>
+function createRollupFetchTransactionHash(
+  __namedParameters: CreateRollupFetchTransactionHashParams,
+): Promise<`0x${string}`>;
 ```
 
 Creates a transaction hash for a Rollup contract by fetching the
@@ -14,8 +16,8 @@ hash as a String.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                     |
+| :------------------ | :--------------------------------------- |
 | `__namedParameters` | `CreateRollupFetchTransactionHashParams` |
 
 #### Returns

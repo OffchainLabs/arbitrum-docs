@@ -5,16 +5,18 @@
 ### getDefaultConfirmPeriodBlocks()
 
 ```ts
-function getDefaultConfirmPeriodBlocks(parentChainIdOrPublicClient: 
-  | 1
-  | 421614
-  | 1337
-  | 412346
-  | 42161
-  | 42170
-  | 11155111
-  | 17000
-  | object): bigint
+function getDefaultConfirmPeriodBlocks(
+  parentChainIdOrPublicClient:
+    | 1
+    | 421614
+    | 1337
+    | 412346
+    | 42161
+    | 42170
+    | 11155111
+    | 17000
+    | object,
+): bigint;
 ```
 
 Returns the default confirmation period blocks based on the provided
@@ -22,9 +24,9 @@ ParentChainId or PublicClient.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `parentChainIdOrPublicClient` |  \| `1` \| `421614` \| `1337` \| `412346` \| `42161` \| `42170` \| `11155111` \| `17000` \| `object` |
+| Parameter                     | Type                                                                                                |
+| :---------------------------- | :-------------------------------------------------------------------------------------------------- |
+| `parentChainIdOrPublicClient` | \| `1` \| `421614` \| `1337` \| `412346` \| `42161` \| `42170` \| `11155111` \| `17000` \| `object` |
 
 #### Returns
 

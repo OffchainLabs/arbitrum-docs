@@ -5,7 +5,7 @@
 ### setValidKeyset()
 
 ```ts
-function setValidKeyset(__namedParameters: SetValidKeysetParams): Promise<TransactionReceipt>
+function setValidKeyset(__namedParameters: SetValidKeysetParams): Promise<TransactionReceipt>;
 ```
 
 Sets a valid keyset for the given core contracts and executes the call using
@@ -13,8 +13,8 @@ the upgrade executor. Returns a TransactionReceipt.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                   |
+| :------------------ | :--------------------- |
 | `__namedParameters` | `SetValidKeysetParams` |
 
 #### Returns

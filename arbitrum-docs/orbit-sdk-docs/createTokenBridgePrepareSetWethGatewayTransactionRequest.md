@@ -5,7 +5,9 @@
 ### createTokenBridgePrepareSetWethGatewayTransactionRequest()
 
 ```ts
-function createTokenBridgePrepareSetWethGatewayTransactionRequest(__namedParameters: object): Promise<object | object | object>
+function createTokenBridgePrepareSetWethGatewayTransactionRequest(
+  __namedParameters: object,
+): Promise<object | object | object>;
 ```
 
 Creates a transaction request to set the WETH gateway on the parent chain
@@ -14,15 +16,15 @@ transaction request object.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.account` | \`0x$\{string\}\` | - |
-| `__namedParameters.orbitChainPublicClient` | `object` | - |
-| `__namedParameters.parentChainPublicClient` | `object` | - |
-| `__namedParameters.retryableGasOverrides`? | `TransactionRequestRetryableGasOverrides` | - |
-| `__namedParameters.rollup` | \`0x$\{string\}\` | - |
-| `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
+| Parameter                                              | Type                                      | Description                                                                                                                                |
+| :----------------------------------------------------- | :---------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `__namedParameters`                                    | `object`                                  | -                                                                                                                                          |
+| `__namedParameters.account`                            | \`0x$\{string\}\`                         | -                                                                                                                                          |
+| `__namedParameters.orbitChainPublicClient`             | `object`                                  | -                                                                                                                                          |
+| `__namedParameters.parentChainPublicClient`            | `object`                                  | -                                                                                                                                          |
+| `__namedParameters.retryableGasOverrides`?             | `TransactionRequestRetryableGasOverrides` | -                                                                                                                                          |
+| `__namedParameters.rollup`                             | \`0x$\{string\}\`                         | -                                                                                                                                          |
+| `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\`                         | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 #### Returns
 

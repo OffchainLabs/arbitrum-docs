@@ -5,7 +5,7 @@
 ### setValidKeysetEncodeFunctionData()
 
 ```ts
-function setValidKeysetEncodeFunctionData(keyset: `0x${string}`): `0x${string}`
+function setValidKeysetEncodeFunctionData(keyset: `0x${string}`): `0x${string}`;
 ```
 
 SetValidKeysetEncodeFunctionData encodes the input keyset string into
@@ -14,9 +14,9 @@ ABI.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `keyset` | \`0x$\{string\}\` |
+| Parameter | Type              |
+| :-------- | :---------------- |
+| `keyset`  | \`0x$\{string\}\` |
 
 #### Returns
 

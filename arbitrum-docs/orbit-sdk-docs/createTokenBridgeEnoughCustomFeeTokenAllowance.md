@@ -5,7 +5,9 @@
 ### createTokenBridgeEnoughCustomFeeTokenAllowance()
 
 ```ts
-function createTokenBridgeEnoughCustomFeeTokenAllowance(__namedParameters: object): Promise<boolean>
+function createTokenBridgeEnoughCustomFeeTokenAllowance(
+  __namedParameters: object,
+): Promise<boolean>;
 ```
 
 createTokenBridgeEnoughCustomFeeTokenAllowance checks if the token allowance
@@ -15,12 +17,12 @@ sufficient or not.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.nativeToken` | \`0x$\{string\}\` | - |
-| `__namedParameters.owner` | \`0x$\{string\}\` | - |
-| `__namedParameters.publicClient` | `object` | - |
+| Parameter                                              | Type              | Description                                                                                                                                |
+| :----------------------------------------------------- | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `__namedParameters`                                    | `object`          | -                                                                                                                                          |
+| `__namedParameters.nativeToken`                        | \`0x$\{string\}\` | -                                                                                                                                          |
+| `__namedParameters.owner`                              | \`0x$\{string\}\` | -                                                                                                                                          |
+| `__namedParameters.publicClient`                       | `object`          | -                                                                                                                                          |
 | `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 #### Returns

@@ -5,15 +5,15 @@
 ### getClientVersion()
 
 ```ts
-function getClientVersion(publicClientOrRpcUrl: string | object): Promise<string>
+function getClientVersion(publicClientOrRpcUrl: string | object): Promise<string>;
 ```
 
 Returns the client version of a PublicClient or a provided RPC URL.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter              | Type                 |
+| :--------------------- | :------------------- |
 | `publicClientOrRpcUrl` | `string` \| `object` |
 
 #### Returns

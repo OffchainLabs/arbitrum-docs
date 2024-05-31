@@ -5,7 +5,10 @@
 ### arbAggregatorPrepareTransactionRequest()
 
 ```ts
-function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(client: object, params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>): Promise<object | object | object>
+function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(
+  client: object,
+  params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>,
+): Promise<object | object | object>;
 ```
 
 Prepares a transaction request for the ArbAggregator contract on a specified
@@ -16,24 +19,25 @@ executor is specified. Returns the prepared transaction request object.
 #### Type parameters
 
 | Type parameter |
-| :------ |
-| `TFunctionName` *extends* 
-  \| `"addBatchPoster"`
-  \| `"getBatchPosters"`
-  \| `"getDefaultAggregator"`
-  \| `"getFeeCollector"`
-  \| `"getPreferredAggregator"`
-  \| `"getTxBaseFee"`
-  \| `"setFeeCollector"`
-  \| `"setTxBaseFee"` |
-| `TChain` *extends* `undefined` \| `Chain` |
+| :------------- |
+
+| `TFunctionName` _extends_
+\| `"addBatchPoster"`
+\| `"getBatchPosters"`
+\| `"getDefaultAggregator"`
+\| `"getFeeCollector"`
+\| `"getPreferredAggregator"`
+\| `"getTxBaseFee"`
+\| `"setFeeCollector"`
+\| `"setTxBaseFee"` |
+| `TChain` _extends_ `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | `ArbAggregatorPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                  |
+| :-------- | :-------------------------------------------------------------------- |
+| `client`  | `object`                                                              |
+| `params`  | `ArbAggregatorPrepareTransactionRequestParameters`\<`TFunctionName`\> |
 
 #### Returns
 

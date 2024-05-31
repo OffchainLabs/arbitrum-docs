@@ -15,20 +15,20 @@ sequencerInboxMaxTimeVariation.
 
 #### Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `baseStake` | `bigint` | ... |
-| `confirmPeriodBlocks` | `bigint` | ... |
-| `extraChallengeTimeBlocks` | `bigint` | ... |
-| `genesisBlockNum` | `bigint` | ... |
-| `loserStakeEscrow` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `sequencerInboxMaxTimeVariation` | `object` | ... |
-| `sequencerInboxMaxTimeVariation.delayBlocks` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.delaySeconds` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.futureBlocks` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.futureSeconds` | `bigint` | ... |
-| `stakeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `wasmModuleRoot` | \`0x$\{string\}\` | - |
+| Member                                         | Type                                           | Value       |
+| :--------------------------------------------- | :--------------------------------------------- | :---------- |
+| `baseStake`                                    | `bigint`                                       | ...         |
+| `confirmPeriodBlocks`                          | `bigint`                                       | ...         |
+| `extraChallengeTimeBlocks`                     | `bigint`                                       | ...         |
+| `genesisBlockNum`                              | `bigint`                                       | ...         |
+| `loserStakeEscrow`                             | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `sequencerInboxMaxTimeVariation`               | `object`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.delayBlocks`   | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.delaySeconds`  | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.futureBlocks`  | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.futureSeconds` | `bigint`                                       | ...         |
+| `stakeToken`                                   | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `wasmModuleRoot`                               | \`0x$\{string\}\`                              | -           |
 
 #### Source
 
@@ -39,7 +39,7 @@ sequencerInboxMaxTimeVariation.
 ### createRollupPrepareConfig()
 
 ```ts
-function createRollupPrepareConfig(__namedParameters: object): CreateRollupPrepareConfigResult
+function createRollupPrepareConfig(__namedParameters: object): CreateRollupPrepareConfigResult;
 ```
 
 Creates a Rollup prepare configuration object based on the provided
@@ -48,20 +48,20 @@ CreateRollupFunctionInputs[0]['config'].
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | `object` |
-| `__namedParameters.baseStake` | `undefined` \| `bigint` |
-| `__namedParameters.chainConfig`? | `ChainConfig` |
-| `__namedParameters.chainId` | `bigint` |
-| `__namedParameters.confirmPeriodBlocks` | `undefined` \| `bigint` |
-| `__namedParameters.extraChallengeTimeBlocks` | `undefined` \| `bigint` |
-| `__namedParameters.genesisBlockNum` | `undefined` \| `bigint` |
-| `__namedParameters.loserStakeEscrow` | `undefined` \| \`0x$\{string\}\` |
-| `__namedParameters.owner` | \`0x$\{string\}\` |
-| `__namedParameters.sequencerInboxMaxTimeVariation` | `undefined` \| `object` |
-| `__namedParameters.stakeToken` | `undefined` \| \`0x$\{string\}\` |
-| `__namedParameters.wasmModuleRoot` | `undefined` \| \`0x$\{string\}\` |
+| Parameter                                          | Type                             |
+| :------------------------------------------------- | :------------------------------- |
+| `__namedParameters`                                | `object`                         |
+| `__namedParameters.baseStake`                      | `undefined` \| `bigint`          |
+| `__namedParameters.chainConfig`?                   | `ChainConfig`                    |
+| `__namedParameters.chainId`                        | `bigint`                         |
+| `__namedParameters.confirmPeriodBlocks`            | `undefined` \| `bigint`          |
+| `__namedParameters.extraChallengeTimeBlocks`       | `undefined` \| `bigint`          |
+| `__namedParameters.genesisBlockNum`                | `undefined` \| `bigint`          |
+| `__namedParameters.loserStakeEscrow`               | `undefined` \| \`0x$\{string\}\` |
+| `__namedParameters.owner`                          | \`0x$\{string\}\`                |
+| `__namedParameters.sequencerInboxMaxTimeVariation` | `undefined` \| `object`          |
+| `__namedParameters.stakeToken`                     | `undefined` \| \`0x$\{string\}\` |
+| `__namedParameters.wasmModuleRoot`                 | `undefined` \| \`0x$\{string\}\` |
 
 #### Returns
 

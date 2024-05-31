@@ -5,7 +5,9 @@
 ### createRollupPrepareTransactionRequest()
 
 ```ts
-function createRollupPrepareTransactionRequest(__namedParameters: object): Promise<object | object | object>
+function createRollupPrepareTransactionRequest(
+  __namedParameters: object,
+): Promise<object | object | object>;
 ```
 
 Prepare a transaction request for creating a rollup chain with specified
@@ -16,14 +18,14 @@ prepared transaction request along with the chain ID.
 
 #### Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.account` | \`0x$\{string\}\` | - |
-| `__namedParameters.gasOverrides`? | `TransactionRequestGasOverrides` | - |
-| `__namedParameters.params` | `CreateRollupParams` | - |
-| `__namedParameters.publicClient` | `object` | - |
-| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
+| Parameter                                         | Type                             | Description                                                                                                                           |
+| :------------------------------------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `__namedParameters`                               | `object`                         | -                                                                                                                                     |
+| `__namedParameters.account`                       | \`0x$\{string\}\`                | -                                                                                                                                     |
+| `__namedParameters.gasOverrides`?                 | `TransactionRequestGasOverrides` | -                                                                                                                                     |
+| `__namedParameters.params`                        | `CreateRollupParams`             | -                                                                                                                                     |
+| `__namedParameters.publicClient`                  | `object`                         | -                                                                                                                                     |
+| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\`                | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 #### Returns
 

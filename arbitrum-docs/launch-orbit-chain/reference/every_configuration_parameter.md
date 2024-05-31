@@ -63,72 +63,78 @@ Before diving into individual parameters, here is an example representing all th
   }
 }
 ```
+
 You can inspect our code source for all these parameters [default values](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
 
 ### Key Parameters Explanation
 
 #### DataAvailabilityCommittee
+
 - **Type**: `boolean`
 - **Description**: This parameter determines whether the Orbit chain functions as a Rollup or an AnyTrust chain. If `true`, the chain relies on a Data Availability Committee (DAC) to ensure data availability, classifying it as an AnyTrust chain. If `false`, it utilizes the standard L2 Rollup architecture, depending on its parent chain for data availability.
 
 #### `chainId`
+
 - **Type**: `uint64`
 - **Description**: A unique identifier for the blockchain. This value ensures network uniqueness to prevent replay attacks across different networks.
 
 #### InitialChainOwner
+
 - **Type**: `Address`
 - **Description**: Sets the initial owner of the chain, who has administrative control over the chain's parameters.
 
 #### MaxCodeSize
+
 - **Type**: `uint32`
 - **Description**: Defines the maximum allowed size for contract code on the chain, e.g., Ethereum mainnet has a limit of 24,576 Bytes.
 
 #### MaxInitCodeSize
+
 - **Type**: `uint32`
 - **Description**: Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. e.g., Ethereum mainnet limit is 49,152 Bytes.
 
 ### Additional Parameters to consider
 
-| **Name**                      | **Type**                 | **Optional** | **Description**                                                                                                                                     |
-|-------------------------------|--------------------------|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `confirmPeriodBlocks`           | `uint64`                 | No           | Number of blocks required to confirm transactions.                                                                                                  |
-| `extraChallengeTimeBlocks`      | `uint64`                 | No           | Additional time in blocks for challenge periods. Defaults to 0 if unnecessary.                                                                       |
-| `stakeToken`                    | `Address`                | No           | Address of the token used for staking.                                                                                                               |
-| `baseStake`                     | `uint256`                | No           | Minimum stake required to participate in the network.                                                                                               |
-| `wasmModuleRoot`                | `Hash`                   | No           | Root of the WebAssembly module used for execution.                                                                                                  |
-| `loserStakeEscrow`              | `Address`                | No           | Address where the losing stakes will be escrowed.                                                                                                    |
-| `genesisBlockNum`               | `uint64`                 | No           | Number assigned to the genesis block.                                                                                                                |
-| `sequencerInboxMaxTimeVariation`| `object`                 | No           | Maximum time variations for the sequencer's inbox, with nested parameters for `delayBlocks`, `futureBlocks`, `delaySeconds`, and `futureSeconds`.    |
+| **Name**                         | **Type**  | **Optional** | **Description**                                                                                                                                   |
+| -------------------------------- | --------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confirmPeriodBlocks`            | `uint64`  | No           | Number of blocks required to confirm transactions.                                                                                                |
+| `extraChallengeTimeBlocks`       | `uint64`  | No           | Additional time in blocks for challenge periods. Defaults to 0 if unnecessary.                                                                    |
+| `stakeToken`                     | `Address` | No           | Address of the token used for staking.                                                                                                            |
+| `baseStake`                      | `uint256` | No           | Minimum stake required to participate in the network.                                                                                             |
+| `wasmModuleRoot`                 | `Hash`    | No           | Root of the WebAssembly module used for execution.                                                                                                |
+| `loserStakeEscrow`               | `Address` | No           | Address where the losing stakes will be escrowed.                                                                                                 |
+| `genesisBlockNum`                | `uint64`  | No           | Number assigned to the genesis block.                                                                                                             |
+| `sequencerInboxMaxTimeVariation` | `object`  | No           | Maximum time variations for the sequencer's inbox, with nested parameters for `delayBlocks`, `futureBlocks`, `delaySeconds`, and `futureSeconds`. |
 
 ### `chainConfig` Parameters
 
-| **Name**              | **Type**     | **Optional** | **Description**                                                                                 |
-|-----------------------|--------------|--------------|-------------------------------------------------------------------------------------------------|
-| `homesteadBlock`        | `uint64`     | No           | Block at which the Homestead `EIP` was activated.                                                 |
-| `daoForkBlock`          | `uint64`     | Yes          | Block number for the DAO hard fork. Set to `null` if unsupported.                               |
-| `daoForkSupport`        | `boolean`    | No           | Indicates whether the chain supports the DAO fork.                                              |
-| `eip150Block`           | `uint64`     | No           | Block number at which `EIP-150` was activated.                                                    |
-| `eip150Hash`            | `Hash`       | Yes          | Hash used in `EIP-150`.                                                                           |
-| `eip155Block`           | `uint64`     | No           | Block number at which `EIP-155` was activated.                                                    |
-| `eip158Block`           | `uint64`     | No           | Block number at which `EIP-158` was activated.                                                    |
-| `byzantiumBlock`        | `uint64`     | No           | Block number at which Byzantium fork was activated.                                             |
-| `constantinopleBlock`   | `uint64`     | No           | Block number at which Constantinople fork was activated.                                        |
-| `petersburgBlock`       | `uint64`     | No           | Block number at which Petersburg fork was activated.                                            |
-| `istanbulBlock`         | `uint64`     | No           | Block number at which Istanbul fork was activated.                                              |
-| `muirGlacierBlock`      | `uint64`     | No           | Block number at which Muir Glacier fork was activated.                                          |
-| `berlinBlock`           | `uint64`     | No           | Block number at which Berlin fork was activated.                                                |
-| `londonBlock`           | `uint64`     | No           | Block number at which London fork was activated.                                                |
-| clique                | `object`     | No           | Defines Clique parameters like `period` and `epoch`.                                            |
+| **Name**              | **Type**  | **Optional** | **Description**                                                   |
+| --------------------- | --------- | ------------ | ----------------------------------------------------------------- |
+| `homesteadBlock`      | `uint64`  | No           | Block at which the Homestead `EIP` was activated.                 |
+| `daoForkBlock`        | `uint64`  | Yes          | Block number for the DAO hard fork. Set to `null` if unsupported. |
+| `daoForkSupport`      | `boolean` | No           | Indicates whether the chain supports the DAO fork.                |
+| `eip150Block`         | `uint64`  | No           | Block number at which `EIP-150` was activated.                    |
+| `eip150Hash`          | `Hash`    | Yes          | Hash used in `EIP-150`.                                           |
+| `eip155Block`         | `uint64`  | No           | Block number at which `EIP-155` was activated.                    |
+| `eip158Block`         | `uint64`  | No           | Block number at which `EIP-158` was activated.                    |
+| `byzantiumBlock`      | `uint64`  | No           | Block number at which Byzantium fork was activated.               |
+| `constantinopleBlock` | `uint64`  | No           | Block number at which Constantinople fork was activated.          |
+| `petersburgBlock`     | `uint64`  | No           | Block number at which Petersburg fork was activated.              |
+| `istanbulBlock`       | `uint64`  | No           | Block number at which Istanbul fork was activated.                |
+| `muirGlacierBlock`    | `uint64`  | No           | Block number at which Muir Glacier fork was activated.            |
+| `berlinBlock`         | `uint64`  | No           | Block number at which Berlin fork was activated.                  |
+| `londonBlock`         | `uint64`  | No           | Block number at which London fork was activated.                  |
+| clique                | `object`  | No           | Defines Clique parameters like `period` and `epoch`.              |
 
 ### `arbitrum` Parameters
 
-| **Name**                    | **Type**    | **Optional** | **Description**                                                                                                       |
-|-----------------------------|-------------|--------------|-----------------------------------------------------------------------------------------------------------------------|
-| `EnableArbOS`                 | `boolean`   | No           | Specifies if ArbOS should be enabled.                                                                                 |
-| `AllowDebugPrecompiles`       | `boolean`   | Yes          | Indicates if debug precompiles are allowed.                                                                           |
-| `DataAvailabilityCommittee`   | `boolean`   | No           | Determines whether the Orbit chain functions as a Rollup or an AnyTrust chain based on data availability requirements. |
-| `InitialArbOSVersion`         | `uint32`    | No           | Version of ArbOS at genesis.                                                                                          |
-| `GenesisBlockNum`             | `uint64`    | No           | Block number assigned to the genesis block.                                                                           |
-| `MaxCodeSize`                 | `uint32`    | No           | Maximum allowed size for contract code on the chain.                                                                  |
-| `MaxInitCodeSize`             | `uint32`    | No           | Maximum allowed size for the initial code used to deploy a contract.                                                   |
-| `InitialChainOwner`           | `Address`   | No           | Initial owner of the chain with administrative control over the parameters.                                            |
+| **Name**                    | **Type**  | **Optional** | **Description**                                                                                                        |
+| --------------------------- | --------- | ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `EnableArbOS`               | `boolean` | No           | Specifies if ArbOS should be enabled.                                                                                  |
+| `AllowDebugPrecompiles`     | `boolean` | Yes          | Indicates if debug precompiles are allowed.                                                                            |
+| `DataAvailabilityCommittee` | `boolean` | No           | Determines whether the Orbit chain functions as a Rollup or an AnyTrust chain based on data availability requirements. |
+| `InitialArbOSVersion`       | `uint32`  | No           | Version of ArbOS at genesis.                                                                                           |
+| `GenesisBlockNum`           | `uint64`  | No           | Block number assigned to the genesis block.                                                                            |
+| `MaxCodeSize`               | `uint32`  | No           | Maximum allowed size for contract code on the chain.                                                                   |
+| `MaxInitCodeSize`           | `uint32`  | No           | Maximum allowed size for the initial code used to deploy a contract.                                                   |
+| `InitialChainOwner`         | `Address` | No           | Initial owner of the chain with administrative control over the parameters.                                            |

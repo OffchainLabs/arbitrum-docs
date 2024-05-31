@@ -5,7 +5,9 @@
 ### createRollupPrepareTransactionReceipt()
 
 ```ts
-function createRollupPrepareTransactionReceipt(txReceipt: TransactionReceipt): CreateRollupTransactionReceipt
+function createRollupPrepareTransactionReceipt(
+  txReceipt: TransactionReceipt,
+): CreateRollupTransactionReceipt;
 ```
 
 Creates a transaction receipt for preparing a Rollup, including core contract
@@ -13,8 +15,8 @@ information.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter   | Type                 |
+| :---------- | :------------------- |
 | `txReceipt` | `TransactionReceipt` |
 
 #### Returns

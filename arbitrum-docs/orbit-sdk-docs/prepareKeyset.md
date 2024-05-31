@@ -5,7 +5,7 @@
 ### prepareKeyset()
 
 ```ts
-function prepareKeyset(publicKeys: string[], assumedHonest: number): `0x${string}`
+function prepareKeyset(publicKeys: string[], assumedHonest: number): `0x${string}`;
 ```
 
 prepareKeyset encodes a list of public keys along with an assumed honest
@@ -14,10 +14,10 @@ endian format, and returns a `0x${string}`.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `publicKeys` | `string`[] |
-| `assumedHonest` | `number` |
+| Parameter       | Type       |
+| :-------------- | :--------- |
+| `publicKeys`    | `string`[] |
+| `assumedHonest` | `number`   |
 
 #### Returns
 

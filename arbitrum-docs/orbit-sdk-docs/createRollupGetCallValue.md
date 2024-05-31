@@ -5,7 +5,7 @@
 ### createRollupGetCallValue()
 
 ```ts
-function createRollupGetCallValue(params: CreateRollupParams): bigint
+function createRollupGetCallValue(params: CreateRollupParams): bigint;
 ```
 
 createRollupGetCallValue calculates the call value needed for creating
@@ -16,9 +16,9 @@ fee token is used for payment.
 
 #### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | `CreateRollupParams` |
+| Parameter | Type                 |
+| :-------- | :------------------- |
+| `params`  | `CreateRollupParams` |
 
 #### Returns
 
