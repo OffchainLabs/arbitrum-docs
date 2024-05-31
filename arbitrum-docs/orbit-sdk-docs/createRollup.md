@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / createRollup
 
 ## Type Aliases
 
@@ -24,7 +20,7 @@ This type is for the params of the createRollup function
 
 #### Source
 
-[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/createRollup.ts#L74)
+[src/createRollup.ts:74](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/createRollup.ts#L74)
 
 ***
 
@@ -60,7 +56,7 @@ the core contracts
 
 #### Source
 
-[src/createRollup.ts:86](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/createRollup.ts#L86)
+[src/createRollup.ts:86](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/createRollup.ts#L86)
 
 ## Functions
 
@@ -91,7 +87,7 @@ Returns the transaction, the transaction receipt, and the core contracts.
 
 #### Returns
 
-`Promise` \<[`CreateRollupResults`](createRollup.md#createrollupresults)\>
+`Promise`\<[`CreateRollupResults`](createRollup.md#createrollupresults)\>
 
 Promise<[CreateRollupResults](createRollup.md#createrollupresults)> - the transaction, the transaction receipt, and the core contracts.
 
@@ -127,4 +123,4 @@ const {
 
 #### Source
 
-[src/createRollup.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/createRollup.ts#L152)
+[src/createRollup.ts:152](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/createRollup.ts#L152)

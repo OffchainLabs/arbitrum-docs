@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / createTokenBridge
 
 ## Functions
 
@@ -74,4 +70,4 @@ const tokenBridgeContracts = await createTokenBridge({
 
 #### Source
 
-[src/createTokenBridge.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/createTokenBridge.ts#L152)
+[src/createTokenBridge.ts:152](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/createTokenBridge.ts#L152)

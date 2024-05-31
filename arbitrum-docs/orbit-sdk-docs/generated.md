@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / generated
 
 ## Variables
 
@@ -16,7 +12,7 @@ const arbAggregatorABI: readonly [object, object, object, object, object, object
 
 #### Source
 
-[src/generated.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L8)
+[src/generated.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L8)
 
 ***
 
@@ -36,7 +32,7 @@ const arbAggregatorAddress: object;
 
 #### Source
 
-[src/generated.ts:79](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L79)
+[src/generated.ts:79](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L79)
 
 ***
 
@@ -58,7 +54,7 @@ const arbAggregatorConfig: object;
 
 #### Source
 
-[src/generated.ts:86](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L86)
+[src/generated.ts:86](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L86)
 
 ***
 
@@ -72,7 +68,7 @@ const arbGasInfoABI: readonly [object, object, object, object, object, object, o
 
 #### Source
 
-[src/generated.ts:98](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L98)
+[src/generated.ts:98](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L98)
 
 ***
 
@@ -92,7 +88,7 @@ const arbGasInfoAddress: object;
 
 #### Source
 
-[src/generated.ts:298](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L298)
+[src/generated.ts:298](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L298)
 
 ***
 
@@ -114,7 +110,7 @@ const arbGasInfoConfig: object;
 
 #### Source
 
-[src/generated.ts:305](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L305)
+[src/generated.ts:305](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L305)
 
 ***
 
@@ -128,7 +124,7 @@ const arbOwnerABI: readonly [object, object, object, object, object, object, obj
 
 #### Source
 
-[src/generated.ts:314](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L314)
+[src/generated.ts:314](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L314)
 
 ***
 
@@ -148,7 +144,7 @@ const arbOwnerAddress: object;
 
 #### Source
 
-[src/generated.ts:515](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L515)
+[src/generated.ts:515](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L515)
 
 ***
 
@@ -170,7 +166,7 @@ const arbOwnerConfig: object;
 
 #### Source
 
-[src/generated.ts:522](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L522)
+[src/generated.ts:522](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L522)
 
 ***
 
@@ -184,7 +180,7 @@ const arbOwnerPublicABI: readonly [object, object, object, object, object, objec
 
 #### Source
 
-[src/generated.ts:531](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L531)
+[src/generated.ts:531](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L531)
 
 ***
 
@@ -204,7 +200,7 @@ const arbOwnerPublicAddress: object;
 
 #### Source
 
-[src/generated.ts:595](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L595)
+[src/generated.ts:595](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L595)
 
 ***
 
@@ -226,7 +222,7 @@ const arbOwnerPublicConfig: object;
 
 #### Source
 
-[src/generated.ts:602](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L602)
+[src/generated.ts:602](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L602)
 
 ***
 
@@ -246,7 +242,7 @@ const rollupCreatorABI: readonly [object, object, object, object, object, object
 
 #### Source
 
-[src/generated.ts:741](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L741)
+[src/generated.ts:741](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L741)
 
 ***
 
@@ -279,7 +275,7 @@ const rollupCreatorAddress: object;
 
 #### Source
 
-[src/generated.ts:938](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L938)
+[src/generated.ts:938](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L938)
 
 ***
 
@@ -314,7 +310,7 @@ const rollupCreatorConfig: object;
 
 #### Source
 
-[src/generated.ts:958](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L958)
+[src/generated.ts:958](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L958)
 
 ***
 
@@ -334,7 +330,7 @@ const tokenBridgeCreatorABI: readonly [object, object, object, object, object, o
 
 #### Source
 
-[src/generated.ts:976](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L976)
+[src/generated.ts:976](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L976)
 
 ***
 
@@ -367,7 +363,7 @@ const tokenBridgeCreatorAddress: object;
 
 #### Source
 
-[src/generated.ts:1020](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L1020)
+[src/generated.ts:1020](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L1020)
 
 ***
 
@@ -402,4 +398,4 @@ const tokenBridgeCreatorConfig: object;
 
 #### Source
 
-[src/generated.ts:1040](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/generated.ts#L1040)
+[src/generated.ts:1040](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/generated.ts#L1040)

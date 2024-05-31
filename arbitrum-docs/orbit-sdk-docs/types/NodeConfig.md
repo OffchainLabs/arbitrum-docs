@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](../README.md) / types/NodeConfig.generated
 
 ## Type Aliases
 
@@ -576,4 +572,4 @@ Nitro node configuration options
 
 #### Source
 
-[src/types/NodeConfig.generated.ts:10](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/types/NodeConfig.generated.ts#L10)
+[src/types/NodeConfig.generated.ts:10](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/types/NodeConfig.generated.ts#L10)

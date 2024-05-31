@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](../README.md) / decorators/sequencerInboxActions
 
 ## Functions
 
@@ -19,14 +15,14 @@ Set of actions that can be performed on the sequencerInbox contract through wagm
 | Type parameter | Value |
 | :------ | :------ |
 | `TParams` *extends* `object` | - |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| `TTransport` *extends* `Transport` | `Transport` |
+| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
 | Parameter | Type | Description |
 | :------ | :------ | :------ |
-| `sequencerInbox` | `TParams` | Address of the sequencerInbox core contract<br />User can still overrides sequencerInbox address,<br />by passing it as an argument to sequencerInboxReadContract/sequencerInboxPrepareTransactionRequest calls |
+| `sequencerInbox` | `TParams` | Address of the sequencerInbox core contract User can still overrides sequencerInbox address, by passing it as an argument to sequencerInboxReadContract/sequencerInboxPrepareTransactionRequest calls |
 
 #### Returns
 
@@ -66,4 +62,4 @@ client.sequencerInboxReadContract({
 
 #### Source
 
-[src/decorators/sequencerInboxActions.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/decorators/sequencerInboxActions.ts#L71)
+[src/decorators/sequencerInboxActions.ts:71](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/decorators/sequencerInboxActions.ts#L71)

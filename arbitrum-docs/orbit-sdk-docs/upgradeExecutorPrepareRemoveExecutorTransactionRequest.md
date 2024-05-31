@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / upgradeExecutorPrepareRemoveExecutorTransactionRequest
 
 ## Type Aliases
 
@@ -25,14 +21,14 @@ Type for the params of the [upgradeExecutorPrepareRemoveExecutorTransactionReque
 
 #### Source
 
-[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L17)
+[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:17](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L17)
 
 ## Functions
 
 ### upgradeExecutorPrepareRemoveExecutorTransactionRequest()
 
 ```ts
-function upgradeExecutorPrepareRemoveExecutorTransactionRequest(upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams): Promise<any>
+function upgradeExecutorPrepareRemoveExecutorTransactionRequest(upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams): Promise<object | object | object>
 ```
 
 Prepares a transaction to revoke the executor role from an account
@@ -47,7 +43,7 @@ Prepares a transaction to revoke the executor role from an account
 
 #### Returns
 
-`Promise`\<`any`\>
+`Promise`\<`object` \| `object` \| `object`\>
 
 Promise<PrepareTransactionRequestReturnType> - the transaction request
 
@@ -64,4 +60,4 @@ const removeExecutorTransactionRequest = await upgradeExecutorPrepareRemoveExecu
 
 #### Source
 
-[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:45](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L45)
+[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:45](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L45)

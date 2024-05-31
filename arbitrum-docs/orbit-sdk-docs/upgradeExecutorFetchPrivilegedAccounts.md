@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / upgradeExecutorFetchPrivilegedAccounts
 
 ## Type Aliases
 
@@ -23,7 +19,7 @@ This type is for the params of the [upgradeExecutorFetchPrivilegedAccounts](upgr
 
 #### Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)
 
 ***
 
@@ -44,7 +40,7 @@ and an array with a hash for each role they have.
 
 #### Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorFetchPrivilegedAccounts.ts#L19)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:19](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorFetchPrivilegedAccounts.ts#L19)
 
 ## Functions
 
@@ -66,7 +62,7 @@ Returns an object containing the addresses of the privileged accounts as keys, a
 
 #### Returns
 
-`Promise` \<[`UpgradeExecutorPrivilegedAccounts`](upgradeExecutorFetchPrivilegedAccounts.md#upgradeexecutorprivilegedaccounts)\>
+`Promise`\<[`UpgradeExecutorPrivilegedAccounts`](upgradeExecutorFetchPrivilegedAccounts.md#upgradeexecutorprivilegedaccounts)\>
 
 Promise<[UpgradeExecutorPrivilegedAccounts](upgradeExecutorFetchPrivilegedAccounts.md#upgradeexecutorprivilegedaccounts)> - an object containing the addresses of the privileged accounts as keys, and an array with a hash for each role they have
 
@@ -81,4 +77,4 @@ const privilegedAccounts = await upgradeExecutorFetchPrivilegedAccounts({
 
 #### Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:92](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorFetchPrivilegedAccounts.ts#L92)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:92](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorFetchPrivilegedAccounts.ts#L92)

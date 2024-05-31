@@ -1,8 +1,4 @@
----
-layout: docs
-sidebar: true
-toc_max_heading_level: 5
----
+[Documentation](README.md) / upgradeExecutorPrepareAddExecutorTransactionRequest
 
 ## Type Aliases
 
@@ -25,14 +21,14 @@ Type for the params of the [upgradeExecutorPrepareAddExecutorTransactionRequest]
 
 #### Source
 
-[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L17)
+[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:17](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L17)
 
 ## Functions
 
 ### upgradeExecutorPrepareAddExecutorTransactionRequest()
 
 ```ts
-function upgradeExecutorPrepareAddExecutorTransactionRequest(upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams): Promise<any>
+function upgradeExecutorPrepareAddExecutorTransactionRequest(upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams): Promise<object | object | object>
 ```
 
 Prepares a transaction to grant the executor role to a new account
@@ -47,7 +43,7 @@ Prepares a transaction to grant the executor role to a new account
 
 #### Returns
 
-`Promise`\<`any`\>
+`Promise`\<`object` \| `object` \| `object`\>
 
 Promise<PrepareTransactionRequestReturnType> - the transaction request
 
@@ -64,4 +60,4 @@ const addExecutorTransactionRequest = await upgradeExecutorPrepareAddExecutorTra
 
 #### Source
 
-[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:45](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cddcae0078e845771579bdf42f49d1e85568f943/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L45)
+[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:45](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L45)
