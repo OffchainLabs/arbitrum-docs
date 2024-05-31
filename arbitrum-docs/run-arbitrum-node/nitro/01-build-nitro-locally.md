@@ -130,15 +130,15 @@ nvm install 16.19
 nvm use 16.19
 ```
 
-### Step 6. Configure Rust [1.72.1](https://www.rust-lang.org/tools/install)
+### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.72.1
-rustup default 1.72.1
-rustup target add wasm32-unknown-unknown --toolchain 1.72.1
-rustup target add wasm32-wasi --toolchain 1.72.1
+rustup install 1.73
+rustup default 1.73
+rustup target add wasm32-unknown-unknown --toolchain 1.73
+rustup target add wasm32-wasi --toolchain 1.73
 cargo install cbindgen
 ```
 
@@ -170,6 +170,13 @@ curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/insta
 
 If you use zsh, replace `bash` with `zsh`.
 
+#### Install foundry
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
 ### Step 8. Start build
 
 ```bash
@@ -188,4 +195,18 @@ To run your node using the generated binaries, use the following command from th
 
 ```bash
 ./target/bin/nitro <node parameters>
+```
+
+#### WASM module root error (v2.3.4 or later)
+
+Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
+
+```
+ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
+```
+
+Try add flag:
+
+```bash
+--validation.wasm.allowed-wasm-module-roots={WASM_MODULE_ROOT}
 ```

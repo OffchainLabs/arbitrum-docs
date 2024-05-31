@@ -1,5 +1,7 @@
 // @ts-check
 
+const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   buildDecentralizedAppsSidebar: [
@@ -228,9 +230,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'link',
+          type: 'category',
           label: 'Arbitrum SDK',
-          href: '/sdk',
+          items: sdkDocsSidebar,
         },
         {
           type: 'link',
@@ -528,7 +530,7 @@ const sidebars = {
           id: 'run-arbitrum-node/run-local-dev-node',
           label: 'Run a local dev node',
         },
-        { 
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
@@ -696,22 +698,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'why-nitro',
+              id: 'how-arbitrum-works/why-nitro',
               label: 'Why Nitro?',
             },
             {
               type: 'doc',
-              id: 'tx-lifecycle',
+              id: 'how-arbitrum-works/tx-lifecycle',
               label: 'Transaction lifecycle',
             },
             {
               type: 'doc',
-              id: 'sequencer',
+              id: 'how-arbitrum-works/sequencer',
               label: 'Sequencer',
             },
             {
               type: 'doc',
-              id: 'inside-anytrust',
+              id: 'how-arbitrum-works/inside-anytrust',
               label: 'AnyTrust protocol',
             },
             {
@@ -720,12 +722,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/gas',
-                  label: 'L2 gas',
+                  id: 'how-arbitrum-works/gas-fees',
+                  label: 'L2 gas and fees',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l1-pricing',
+                  id: 'how-arbitrum-works/l1-gas-pricing',
                   label: 'L1 pricing',
                 },
               ],
@@ -739,7 +741,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'inside-arbitrum-nitro/inside-arbitrum-nitro',
+              id: 'how-arbitrum-works/inside-arbitrum-nitro',
               label: 'Deep dive: Inside Arbitrum',
             },
             {
@@ -749,7 +751,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'assertion-tree',
+              id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
             },
             {
@@ -758,12 +760,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/l1-to-l2-messaging',
+                  id: 'how-arbitrum-works/arbos/l1-l2-messaging',
                   label: 'L1-to-L2 messaging',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l2-to-l1-messaging',
+                  id: 'how-arbitrum-works/arbos/l2-l1-messaging',
                   label: 'L2-to-L1 messaging',
                 },
               ],
@@ -774,12 +776,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/arbos',
+                  id: 'how-arbitrum-works/arbos/introduction',
                   label: 'ArbOS',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/geth',
+                  id: 'how-arbitrum-works/arbos/geth',
                   label: 'Geth',
                 },
               ],
@@ -790,32 +792,32 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'proving/challenge-manager',
+                  id: 'how-arbitrum-works/fraud-proofs/challenge-manager',
                   label: 'Interactive challenges',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/osp-assumptions',
+                  id: 'how-arbitrum-works/fraud-proofs/osp-assumptions',
                   label: 'One step proof assumptions',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wasm-to-wavm',
+                  id: 'how-arbitrum-works/fraud-proofs/wasm-wavm',
                   label: 'Wasm To WAVM',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-custom-opcodes',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-custom-opcodes',
                   label: 'Custom WAVM opcodes',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-floats',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-floats',
                   label: 'WAVM floats',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-modules',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-modules',
                   label: 'WAVM modules',
                 },
               ],
@@ -826,7 +828,7 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'bold/bold-gentle-introduction',
+                  id: 'how-arbitrum-works/bold/gentle-introduction',
                   label: 'A gentle introduction',
                 },
                 {
@@ -856,7 +858,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'bold/concepts/public-preview-expectations',
+                  id: 'how-arbitrum-works/bold/public-preview-expectations',
                   label: 'Public preview',
                 },
               ],
