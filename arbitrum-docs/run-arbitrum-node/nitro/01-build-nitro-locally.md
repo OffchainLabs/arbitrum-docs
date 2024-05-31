@@ -199,7 +199,7 @@ To run your node using the generated binaries, use the following command from th
 
 #### WASM module root error (v2.3.4 or later)
 
-If your node shutdown due to this error
+Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
 
 ```
 ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
