@@ -5,9 +5,7 @@
 ### setValidKeysetPrepareTransactionRequest()
 
 ```ts
-function setValidKeysetPrepareTransactionRequest(
-  __namedParameters: SetValidKeysetPrepareTransactionRequestParams,
-): Promise<object | object | object>;
+function setValidKeysetPrepareTransactionRequest(__namedParameters: SetValidKeysetPrepareTransactionRequestParams): Promise<object | object | object>
 ```
 
 Sets up a transaction request to upgrade executor with a valid keyset for a
@@ -15,8 +13,8 @@ specific account on the specified chain.
 
 #### Parameters
 
-| Parameter           | Type                                            |
-| :------------------ | :---------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `SetValidKeysetPrepareTransactionRequestParams` |
 
 #### Returns

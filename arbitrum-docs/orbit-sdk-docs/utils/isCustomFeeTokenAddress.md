@@ -5,9 +5,7 @@
 ### isCustomFeeTokenAddress()
 
 ```ts
-function isCustomFeeTokenAddress(
-  nativeToken: undefined | `0x${string}`,
-): nativeToken is `0x${string}`;
+function isCustomFeeTokenAddress(nativeToken: undefined | `0x${string}`): nativeToken is `0x${string}`
 ```
 
 Checks if the provided token address is a custom fee token address. It
@@ -16,8 +14,8 @@ to zeroAddress.
 
 #### Parameters
 
-| Parameter     | Type                             |
-| :------------ | :------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `nativeToken` | `undefined` \| \`0x$\{string\}\` |
 
 #### Returns

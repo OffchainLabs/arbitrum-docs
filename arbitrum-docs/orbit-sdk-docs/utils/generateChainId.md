@@ -5,7 +5,7 @@
 ### generateChainId()
 
 ```ts
-function generateChainId(): number;
+function generateChainId(): number
 ```
 
 Generates a unique chain ID by calculating a random number between 1 and

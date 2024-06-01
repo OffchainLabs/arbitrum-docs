@@ -2,15 +2,15 @@
 const arbOwnerPublicConfig: object;
 ```
 
-[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006b)
+[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006b)
 
 ## Type declaration
 
-| Member           | Type                                                                                      | Value                                        |
-| :--------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------- |
-| `abi`            | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerPublicABI                            |
-| `address`        | `object`                                                                                  | arbOwnerPublicAddress                        |
-| `address.421614` | `"0x000000000000000000000000000000000000006b"`                                            | '0x000000000000000000000000000000000000006b' |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerPublicABI |
+| `address` | `object` | arbOwnerPublicAddress |
+| `address.421614` | `"0x000000000000000000000000000000000000006b"` | '0x000000000000000000000000000000000000006b' |
 
 ## Source
 

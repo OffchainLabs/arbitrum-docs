@@ -12,16 +12,16 @@ This type is for the params of the [upgradeExecutorFetchPrivilegedAccounts](upgr
 
 #### Type declaration
 
-| Member                   | Type           |
-| :----------------------- | :------------- |
-| `publicClient`           | `PublicClient` |
-| `upgradeExecutorAddress` | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `publicClient` | `PublicClient` |
+| `upgradeExecutorAddress` | `Address` |
 
 #### Source
 
 [src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)
 
----
+***
 
 ### UpgradeExecutorPrivilegedAccounts
 
@@ -36,7 +36,7 @@ and an array with a hash for each role they have.
 
 #### Index signature
 
-\[`account`: \`0x$\{string\}\`\]: `UpgradeExecutorRole`[]
+ \[`account`: \`0x$\{string\}\`\]: `UpgradeExecutorRole`[]
 
 #### Source
 
@@ -47,9 +47,7 @@ and an array with a hash for each role they have.
 ### upgradeExecutorFetchPrivilegedAccounts()
 
 ```ts
-function upgradeExecutorFetchPrivilegedAccounts(
-  upgradeExecutorFetchPrivilegedAccountsParams: UpgradeExecutorFetchPrivilegedAccountsParams,
-): Promise<UpgradeExecutorPrivilegedAccounts>;
+function upgradeExecutorFetchPrivilegedAccounts(upgradeExecutorFetchPrivilegedAccountsParams: UpgradeExecutorFetchPrivilegedAccountsParams): Promise<UpgradeExecutorPrivilegedAccounts>
 ```
 
 Returns all accounts that have been granted a role in the UpgradeExecutor
@@ -58,8 +56,8 @@ Returns an object containing the addresses of the privileged accounts as keys, a
 
 #### Parameters
 
-| Parameter                                      | Type                                                                                                                                     | Description                                                                                                                            |
-| :--------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `upgradeExecutorFetchPrivilegedAccountsParams` | [`UpgradeExecutorFetchPrivilegedAccountsParams`](upgradeExecutorFetchPrivilegedAccounts.md#upgradeexecutorfetchprivilegedaccountsparams) | [UpgradeExecutorFetchPrivilegedAccountsParams](upgradeExecutorFetchPrivilegedAccounts.md#upgradeexecutorfetchprivilegedaccountsparams) |
 
 #### Returns

@@ -12,17 +12,17 @@ This type is for the params of the createRollup function
 
 #### Type declaration
 
-| Member                    | Type                 |
-| :------------------------ | :------------------- |
-| `account`                 | `PrivateKeyAccount`  |
-| `params`                  | `CreateRollupParams` |
-| `parentChainPublicClient` | `PublicClient`       |
+| Member | Type |
+| :------ | :------ |
+| `account` | `PrivateKeyAccount` |
+| `params` | `CreateRollupParams` |
+| `parentChainPublicClient` | `PublicClient` |
 
 #### Source
 
 [src/createRollup.ts:74](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/createRollup.ts#L74)
 
----
+***
 
 ### CreateRollupResults
 
@@ -48,10 +48,10 @@ the core contracts
 
 #### Type declaration
 
-| Member               | Type                             |
-| :------------------- | :------------------------------- |
-| `coreContracts`      | `CoreContracts`                  |
-| `transaction`        | `CreateRollupTransaction`        |
+| Member | Type |
+| :------ | :------ |
+| `coreContracts` | `CoreContracts` |
+| `transaction` | `CreateRollupTransaction` |
 | `transactionReceipt` | `CreateRollupTransactionReceipt` |
 
 #### Source
@@ -63,9 +63,7 @@ the core contracts
 ### createRollup()
 
 ```ts
-function createRollup(
-  createRollupFunctionParams: CreateRollupFunctionParams,
-): Promise<CreateRollupResults>;
+function createRollup(createRollupFunctionParams: CreateRollupFunctionParams): Promise<CreateRollupResults>
 ```
 
 Performs the tx to deploy the chain's core contracts.
@@ -83,8 +81,8 @@ Returns the transaction, the transaction receipt, and the core contracts.
 
 #### Parameters
 
-| Parameter                    | Type                                                                       | Description                                                              |
-| :--------------------------- | :------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `createRollupFunctionParams` | [`CreateRollupFunctionParams`](createRollup.md#createrollupfunctionparams) | [CreateRollupFunctionParams](createRollup.md#createrollupfunctionparams) |
 
 #### Returns
@@ -108,14 +106,18 @@ const createRollupConfig = createRollupPrepareConfig({
   }),
 });
 
-const { transaction, transactionReceipt, coreContracts } = await createRollup({
+const {
+  transaction,
+  transactionReceipt,
+  coreContracts,
+} = await createRollup({
   params: {
-    config: createRollupConfig,
+   config: createRollupConfig,
     batchPoster,
     validators,
-  },
-  account: deployer,
-  parentChainPublicClient,
+ },
+ account: deployer,
+ parentChainPublicClient,
 });
 ```
 

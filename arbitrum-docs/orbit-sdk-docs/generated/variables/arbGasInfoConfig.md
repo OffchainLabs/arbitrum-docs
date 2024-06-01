@@ -2,15 +2,15 @@
 const arbGasInfoConfig: object;
 ```
 
-[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006c)
+[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006c)
 
 ## Type declaration
 
-| Member           | Type                                                                                                                                                                                                                                                      | Value                                        |
-| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------- |
-| `abi`            | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbGasInfoABI                                |
-| `address`        | `object`                                                                                                                                                                                                                                                  | arbGasInfoAddress                            |
-| `address.421614` | `"0x000000000000000000000000000000000000006C"`                                                                                                                                                                                                            | '0x000000000000000000000000000000000000006C' |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbGasInfoABI |
+| `address` | `object` | arbGasInfoAddress |
+| `address.421614` | `"0x000000000000000000000000000000000000006C"` | '0x000000000000000000000000000000000000006C' |
 
 ## Source
 

@@ -5,9 +5,7 @@
 ### createRollupFetchCoreContracts()
 
 ```ts
-function createRollupFetchCoreContracts(
-  __namedParameters: CreateRollupFetchCoreContractsParams,
-): Promise<CoreContracts>;
+function createRollupFetchCoreContracts(__namedParameters: CreateRollupFetchCoreContractsParams): Promise<CoreContracts>
 ```
 
 Creates a fetch function to retrieve core contract addresses for a given
@@ -15,8 +13,8 @@ rollup chain using transaction hash and receipt. Returns a CoreContracts.
 
 #### Parameters
 
-| Parameter           | Type                                   |
-| :------------------ | :------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `CreateRollupFetchCoreContractsParams` |
 
 #### Returns

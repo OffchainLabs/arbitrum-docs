@@ -5,25 +5,23 @@
 ### sequencerInboxActions()
 
 ```ts
-function sequencerInboxActions<TParams, TTransport, TChain>(
-  sequencerInbox: TParams,
-): (client: object) => SequencerInboxActions<TParams['sequencerInbox'], TChain>;
+function sequencerInboxActions<TParams, TTransport, TChain>(sequencerInbox: TParams): (client: object) => SequencerInboxActions<TParams["sequencerInbox"], TChain>
 ```
 
 Set of actions that can be performed on the sequencerInbox contract through wagmi public client
 
 #### Type parameters
 
-| Type parameter                            | Value                  |
-| :---------------------------------------- | :--------------------- |
-| `TParams` _extends_ `object`              | -                      |
-| `TTransport` _extends_ `Transport`        | `Transport`            |
-| `TChain` _extends_ `undefined` \| `Chain` | `undefined` \| `Chain` |
+| Type parameter | Value |
+| :------ | :------ |
+| `TParams` *extends* `object` | - |
+| `TTransport` *extends* `Transport` | `Transport` |
+| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter        | Type      | Description                                                                                                                                                                                           |
-| :--------------- | :-------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `sequencerInbox` | `TParams` | Address of the sequencerInbox core contract User can still overrides sequencerInbox address, by passing it as an argument to sequencerInboxReadContract/sequencerInboxPrepareTransactionRequest calls |
 
 #### Returns
@@ -34,9 +32,9 @@ sequencerInboxActionsWithSequencerInbox - Function passed to client.extends() to
 
 ##### Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 ##### Returns
 
@@ -58,7 +56,7 @@ client.sequencerInboxReadContract({
 // Overriding sequencerInbox address for this call only
 client.sequencerInboxReadContract({
   functionName: 'inboxAccs',
-  sequencerInbox: contractAddress.anotherSequencerInbox,
+  sequencerInbox: contractAddress.anotherSequencerInbox
 });
 ```
 

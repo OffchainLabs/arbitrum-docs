@@ -5,7 +5,7 @@
 ### isAnyTrustChainConfig()
 
 ```ts
-function isAnyTrustChainConfig(chainConfig: ChainConfig): boolean;
+function isAnyTrustChainConfig(chainConfig: ChainConfig): boolean
 ```
 
 Checks if there is any trust chain configuration present in the provided
@@ -13,8 +13,8 @@ ChainConfig object.
 
 #### Parameters
 
-| Parameter     | Type          |
-| :------------ | :------------ |
+| Parameter | Type |
+| :------ | :------ |
 | `chainConfig` | `ChainConfig` |
 
 #### Returns

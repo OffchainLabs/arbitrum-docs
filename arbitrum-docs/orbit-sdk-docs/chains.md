@@ -5,17 +5,7 @@
 ### chains
 
 ```ts
-const chains: readonly [
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-];
+const chains: readonly [Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>];
 ```
 
 Available chains in the application including mainnet, arbitrum, sepolia,

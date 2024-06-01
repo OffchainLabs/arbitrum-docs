@@ -5,7 +5,7 @@
 ### arbOwnerPublicActions()
 
 ```ts
-function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>;
+function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>
 ```
 
 Returns an object containing functions to interact with the ArbOwner contract
@@ -15,16 +15,16 @@ transaction requests.
 
 #### Type parameters
 
-| Type parameter                            | Value                  |
-| :---------------------------------------- | :--------------------- |
-| `TTransport` _extends_ `Transport`        | `Transport`            |
-| `TChain` _extends_ `undefined` \| `Chain` | `undefined` \| `Chain` |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport` | `Transport` |
+| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 #### Returns
 

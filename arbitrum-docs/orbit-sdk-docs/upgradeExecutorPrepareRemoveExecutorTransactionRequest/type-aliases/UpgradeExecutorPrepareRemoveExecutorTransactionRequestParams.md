@@ -6,12 +6,12 @@ Type for the params of the [upgradeExecutorPrepareRemoveExecutorTransactionReque
 
 ## Type declaration
 
-| Member                   | Type           |
-| :----------------------- | :------------- |
-| `account`                | `Address`      |
-| `executorAccountAddress` | `Address`      |
-| `publicClient`           | `PublicClient` |
-| `upgradeExecutorAddress` | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `account` | `Address` |
+| `executorAccountAddress` | `Address` |
+| `publicClient` | `PublicClient` |
+| `upgradeExecutorAddress` | `Address` |
 
 ## Source
 

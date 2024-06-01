@@ -5,9 +5,7 @@
 ### createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest()
 
 ```ts
-function createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(
-  __namedParameters: object,
-): Promise<object | object | object>;
+function createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(__namedParameters: object): Promise<object | object | object>
 ```
 
 Creates a custom fee token approval transaction request for the Token Bridge.
@@ -17,13 +15,13 @@ approval transaction request details and the chain ID.
 
 #### Parameters
 
-| Parameter                                              | Type              | Description                                                                                                                                |
-| :----------------------------------------------------- | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
-| `__namedParameters`                                    | `object`          | -                                                                                                                                          |
-| `__namedParameters.amount`?                            | `bigint`          | -                                                                                                                                          |
-| `__namedParameters.nativeToken`                        | \`0x$\{string\}\` | -                                                                                                                                          |
-| `__namedParameters.owner`                              | \`0x$\{string\}\` | -                                                                                                                                          |
-| `__namedParameters.publicClient`                       | `object`          | -                                                                                                                                          |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `__namedParameters` | `object` | - |
+| `__namedParameters.amount`? | `bigint` | - |
+| `__namedParameters.nativeToken` | \`0x$\{string\}\` | - |
+| `__namedParameters.owner` | \`0x$\{string\}\` | - |
+| `__namedParameters.publicClient` | `object` | - |
 | `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 #### Returns

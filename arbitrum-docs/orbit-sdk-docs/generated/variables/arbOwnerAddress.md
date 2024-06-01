@@ -2,12 +2,12 @@
 const arbOwnerAddress: object;
 ```
 
-[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x0000000000000000000000000000000000000070)
+[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x0000000000000000000000000000000000000070)
 
 ## Type declaration
 
-| Member   | Type                                           | Value                                        |
-| :------- | :--------------------------------------------- | :------------------------------------------- |
+| Member | Type | Value |
+| :------ | :------ | :------ |
 | `421614` | `"0x0000000000000000000000000000000000000070"` | '0x0000000000000000000000000000000000000070' |
 
 ## Source

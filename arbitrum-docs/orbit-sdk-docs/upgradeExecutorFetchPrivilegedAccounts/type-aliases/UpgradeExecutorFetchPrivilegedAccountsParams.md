@@ -6,10 +6,10 @@ This type is for the params of the [upgradeExecutorFetchPrivilegedAccounts](../f
 
 ## Type declaration
 
-| Member                   | Type           |
-| :----------------------- | :------------- |
-| `publicClient`           | `PublicClient` |
-| `upgradeExecutorAddress` | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `publicClient` | `PublicClient` |
+| `upgradeExecutorAddress` | `Address` |
 
 ## Source
 

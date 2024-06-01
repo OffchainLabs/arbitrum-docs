@@ -13,11 +13,11 @@ nativeToken, deployFactoriesToL2, and maxFeePerGasForRetryables.
 
 #### Type declaration
 
-| Member                      | Type                                           | Value       |
-| :-------------------------- | :--------------------------------------------- | :---------- |
-| `deployFactoriesToL2`       | `boolean`                                      | true        |
-| `maxFeePerGasForRetryables` | `bigint`                                       | ...         |
-| `nativeToken`               | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `deployFactoriesToL2` | `boolean` | true |
+| `maxFeePerGasForRetryables` | `bigint` | ... |
+| `nativeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
 
 #### Source
 

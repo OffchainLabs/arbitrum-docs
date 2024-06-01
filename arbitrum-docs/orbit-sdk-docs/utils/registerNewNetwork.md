@@ -6,29 +6,28 @@
 
 ```ts
 function registerNewNetwork(
-  parentProvider: JsonRpcProvider,
-  childProvider: JsonRpcProvider,
-  rollupAddress: string,
-): Promise<object>;
+   parentProvider: JsonRpcProvider, 
+   childProvider: JsonRpcProvider, 
+rollupAddress: string): Promise<object>
 ```
 
 Registers a new network by creating and adding the parent and child networks.
 
 #### Parameters
 
-| Parameter        | Type              |
-| :--------------- | :---------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentProvider` | `JsonRpcProvider` |
-| `childProvider`  | `JsonRpcProvider` |
-| `rollupAddress`  | `string`          |
+| `childProvider` | `JsonRpcProvider` |
+| `rollupAddress` | `string` |
 
 #### Returns
 
 `Promise`\<`object`\>
 
-| Member          | Type                       |
-| :-------------- | :------------------------- |
-| `childNetwork`  | `L2Network`                |
+| Member | Type |
+| :------ | :------ |
+| `childNetwork` | `L2Network` |
 | `parentNetwork` | `L1Network` \| `L2Network` |
 
 #### Source

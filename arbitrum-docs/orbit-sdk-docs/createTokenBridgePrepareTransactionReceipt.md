@@ -5,17 +5,15 @@
 ### createTokenBridgePrepareTransactionReceipt()
 
 ```ts
-function createTokenBridgePrepareTransactionReceipt(
-  txReceipt: TransactionReceipt,
-): CreateTokenBridgeTransactionReceipt;
+function createTokenBridgePrepareTransactionReceipt(txReceipt: TransactionReceipt): CreateTokenBridgeTransactionReceipt
 ```
 
 createTokenBridgePrepareTransactionReceipt returns a CreateTokenBridgeTransactionReceipt.
 
 #### Parameters
 
-| Parameter   | Type                 |
-| :---------- | :------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `txReceipt` | `TransactionReceipt` |
 
 #### Returns

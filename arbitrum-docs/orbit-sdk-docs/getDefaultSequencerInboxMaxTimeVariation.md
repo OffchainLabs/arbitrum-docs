@@ -5,18 +5,16 @@
 ### getDefaultSequencerInboxMaxTimeVariation()
 
 ```ts
-function getDefaultSequencerInboxMaxTimeVariation(
-  parentChainIdOrPublicClient:
-    | 1
-    | 421614
-    | 1337
-    | 412346
-    | 42161
-    | 42170
-    | 11155111
-    | 17000
-    | object,
-): SequencerInboxMaxTimeVariation;
+function getDefaultSequencerInboxMaxTimeVariation(parentChainIdOrPublicClient: 
+  | 1
+  | 421614
+  | 1337
+  | 412346
+  | 42161
+  | 42170
+  | 11155111
+  | 17000
+  | object): SequencerInboxMaxTimeVariation
 ```
 
 Returns the default maximum time variation for the sequencer inbox, including
@@ -25,9 +23,9 @@ public client.
 
 #### Parameters
 
-| Parameter                     | Type                                                                                                |
-| :---------------------------- | :-------------------------------------------------------------------------------------------------- |
-| `parentChainIdOrPublicClient` | \| `1` \| `421614` \| `1337` \| `412346` \| `42161` \| `42170` \| `11155111` \| `17000` \| `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `parentChainIdOrPublicClient` |  \| `1` \| `421614` \| `1337` \| `412346` \| `42161` \| `42170` \| `11155111` \| `17000` \| `object` |
 
 #### Returns
 

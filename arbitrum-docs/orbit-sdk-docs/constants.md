@@ -15,7 +15,7 @@ transactions to 0.125 Viem tokens.
 
 [src/constants.ts:7](https://github.com/anegg0/arbitrum-orbit-sdk/blob/763a3f41e7ea001cbb6fe81ac11cc794b4a0f94d/src/constants.ts#L7)
 
----
+***
 
 ### createTokenBridgeDefaultRetryablesFees
 

@@ -5,7 +5,7 @@
 ### arbAggregatorActions()
 
 ```ts
-function arbAggregatorActions<TTransport, TChain>(client: object): ArbAggregatorActions<TChain>;
+function arbAggregatorActions<TTransport, TChain>(client: object): ArbAggregatorActions<TChain>
 ```
 
 arbAggregatorActions returns an object with two functions:
@@ -18,16 +18,16 @@ prepare transaction request return type along with the chain ID.
 
 #### Type parameters
 
-| Type parameter                            | Value                  |
-| :---------------------------------------- | :--------------------- |
-| `TTransport` _extends_ `Transport`        | `Transport`            |
-| `TChain` _extends_ `undefined` \| `Chain` | `undefined` \| `Chain` |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport` | `Transport` |
+| `TChain` *extends* `undefined` \| `Chain` | `undefined` \| `Chain` |
 
 #### Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 #### Returns
 

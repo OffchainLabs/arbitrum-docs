@@ -5,9 +5,7 @@
 ### createTokenBridgePrepareSetWethGatewayTransactionReceipt()
 
 ```ts
-function createTokenBridgePrepareSetWethGatewayTransactionReceipt(
-  txReceipt: TransactionReceipt,
-): CreateTokenBridgeSetWethGatewayTransactionReceipt;
+function createTokenBridgePrepareSetWethGatewayTransactionReceipt(txReceipt: TransactionReceipt): CreateTokenBridgeSetWethGatewayTransactionReceipt
 ```
 
 Creates a token bridge transaction receipt for setting WETH gateway. It
@@ -16,8 +14,8 @@ to complete and returns the transaction receipt.
 
 #### Parameters
 
-| Parameter   | Type                 |
-| :---------- | :------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `txReceipt` | `TransactionReceipt` |
 
 #### Returns

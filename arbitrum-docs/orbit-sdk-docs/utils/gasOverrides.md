@@ -5,7 +5,7 @@
 ### applyPercentIncrease()
 
 ```ts
-function applyPercentIncrease(__namedParameters: object): bigint;
+function applyPercentIncrease(__namedParameters: object): bigint
 ```
 
 applyPercentIncrease calculates the new gas limit by applying a percentage
@@ -13,10 +13,10 @@ increase to the base gas limit provided.
 
 #### Parameters
 
-| Parameter                            | Type     |
-| :----------------------------------- | :------- |
-| `__namedParameters`                  | `object` |
-| `__namedParameters.base`             | `bigint` |
+| Parameter | Type |
+| :------ | :------ |
+| `__namedParameters` | `object` |
+| `__namedParameters.base` | `bigint` |
 | `__namedParameters.percentIncrease`? | `bigint` |
 
 #### Returns

@@ -5,7 +5,7 @@
 ### validateChain()
 
 ```ts
-function validateChain(chainIdOrPublicClient: number | object): ChainId;
+function validateChain(chainIdOrPublicClient: number | object): ChainId
 ```
 
 validateChain validates and returns a ChainId based on the provided
@@ -15,8 +15,8 @@ throws an error indicating that the chain is not supported.
 
 #### Parameters
 
-| Parameter               | Type                 |
-| :---------------------- | :------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `chainIdOrPublicClient` | `number` \| `object` |
 
 #### Returns

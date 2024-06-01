@@ -12,12 +12,12 @@ Type for the params of the [upgradeExecutorPrepareAddExecutorTransactionRequest]
 
 #### Type declaration
 
-| Member                   | Type           |
-| :----------------------- | :------------- |
-| `account`                | `Address`      |
-| `executorAccountAddress` | `Address`      |
-| `publicClient`           | `PublicClient` |
-| `upgradeExecutorAddress` | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `account` | `Address` |
+| `executorAccountAddress` | `Address` |
+| `publicClient` | `PublicClient` |
+| `upgradeExecutorAddress` | `Address` |
 
 #### Source
 
@@ -28,9 +28,7 @@ Type for the params of the [upgradeExecutorPrepareAddExecutorTransactionRequest]
 ### upgradeExecutorPrepareAddExecutorTransactionRequest()
 
 ```ts
-function upgradeExecutorPrepareAddExecutorTransactionRequest(
-  upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams,
-): Promise<object | object | object>;
+function upgradeExecutorPrepareAddExecutorTransactionRequest(upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams): Promise<object | object | object>
 ```
 
 Prepares a transaction to grant the executor role to a new account
@@ -39,8 +37,8 @@ Prepares a transaction to grant the executor role to a new account
 
 #### Parameters
 
-| Parameter                                                   | Type                                                                                                                                                                            | Description                                                                                                                                                                   |
-| :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `upgradeExecutorPrepareAddExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareAddExecutorTransactionRequestParams`](upgradeExecutorPrepareAddExecutorTransactionRequest.md#upgradeexecutorprepareaddexecutortransactionrequestparams) | [UpgradeExecutorPrepareAddExecutorTransactionRequestParams](upgradeExecutorPrepareAddExecutorTransactionRequest.md#upgradeexecutorprepareaddexecutortransactionrequestparams) |
 
 #### Returns

@@ -5,9 +5,15 @@
 ### createRollupGetMaxDataSize()
 
 ```ts
-function createRollupGetMaxDataSize(
-  parentChainId: 1 | 1337 | 17000 | 42161 | 42170 | 412346 | 421614 | 11155111,
-): bigint;
+function createRollupGetMaxDataSize(parentChainId: 
+  | 1
+  | 1337
+  | 17000
+  | 42161
+  | 42170
+  | 412346
+  | 421614
+  | 11155111): bigint
 ```
 
 Returns the maximum data size allowed for a rollup chain based on the
@@ -15,9 +21,9 @@ provided parent chain ID.
 
 #### Parameters
 
-| Parameter       | Type                                                                                    |
-| :-------------- | :-------------------------------------------------------------------------------------- |
-| `parentChainId` | \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
+| Parameter | Type |
+| :------ | :------ |
+| `parentChainId` |  \| `1` \| `1337` \| `17000` \| `42161` \| `42170` \| `412346` \| `421614` \| `11155111` |
 
 #### Returns
 

@@ -1,13 +1,13 @@
 ```ts
-function getArbOSVersion(arbitrumPublicClient: object): Promise<number>;
+function getArbOSVersion(arbitrumPublicClient: object): Promise<number>
 ```
 
 Returns the the ArbOS version from the provider passed in parameter.
 
 ## Parameters
 
-| Parameter              | Type     | Description        |
-| :--------------------- | :------- | :----------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `arbitrumPublicClient` | `object` | viem public client |
 
 ## Returns

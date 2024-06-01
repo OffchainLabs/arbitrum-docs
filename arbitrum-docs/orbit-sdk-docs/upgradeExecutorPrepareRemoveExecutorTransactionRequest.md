@@ -12,12 +12,12 @@ Type for the params of the [upgradeExecutorPrepareRemoveExecutorTransactionReque
 
 #### Type declaration
 
-| Member                   | Type           |
-| :----------------------- | :------------- |
-| `account`                | `Address`      |
-| `executorAccountAddress` | `Address`      |
-| `publicClient`           | `PublicClient` |
-| `upgradeExecutorAddress` | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `account` | `Address` |
+| `executorAccountAddress` | `Address` |
+| `publicClient` | `PublicClient` |
+| `upgradeExecutorAddress` | `Address` |
 
 #### Source
 
@@ -28,9 +28,7 @@ Type for the params of the [upgradeExecutorPrepareRemoveExecutorTransactionReque
 ### upgradeExecutorPrepareRemoveExecutorTransactionRequest()
 
 ```ts
-function upgradeExecutorPrepareRemoveExecutorTransactionRequest(
-  upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams,
-): Promise<object | object | object>;
+function upgradeExecutorPrepareRemoveExecutorTransactionRequest(upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams): Promise<object | object | object>
 ```
 
 Prepares a transaction to revoke the executor role from an account
@@ -39,8 +37,8 @@ Prepares a transaction to revoke the executor role from an account
 
 #### Parameters
 
-| Parameter                                                      | Type                                                                                                                                                                                     | Description                                                                                                                                                                            |
-| :------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `upgradeExecutorPrepareRemoveExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams`](upgradeExecutorPrepareRemoveExecutorTransactionRequest.md#upgradeexecutorprepareremoveexecutortransactionrequestparams) | [UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams](upgradeExecutorPrepareRemoveExecutorTransactionRequest.md#upgradeexecutorprepareremoveexecutortransactionrequestparams) |
 
 #### Returns
@@ -52,13 +50,12 @@ Promise<PrepareTransactionRequestReturnType> - the transaction request
 #### Example
 
 ```ts
-const removeExecutorTransactionRequest =
-  await upgradeExecutorPrepareRemoveExecutorTransactionRequest({
-    account: accountAddress,
-    upgradeExecutorAddress: coreContracts.upgradeExecutor,
-    executorAccountAddress: deployer.address,
-    publicClient,
-  });
+const removeExecutorTransactionRequest = await upgradeExecutorPrepareRemoveExecutorTransactionRequest({
+  account: accountAddress,
+  upgradeExecutorAddress: coreContracts.upgradeExecutor,
+  executorAccountAddress: deployer.address,
+  publicClient,
+});
 ```
 
 #### Source

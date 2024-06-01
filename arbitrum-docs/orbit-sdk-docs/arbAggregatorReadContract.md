@@ -5,10 +5,7 @@
 ### arbAggregatorReadContract()
 
 ```ts
-function arbAggregatorReadContract<TChain, TFunctionName>(
-  client: object,
-  params: ArbAggregatorReadContractParameters<TFunctionName>,
-): Promise<ArbAggregatorReadContractReturnType<TFunctionName>>;
+function arbAggregatorReadContract<TChain, TFunctionName>(client: object, params: ArbAggregatorReadContractParameters<TFunctionName>): Promise<ArbAggregatorReadContractReturnType<TFunctionName>>
 ```
 
 Reads data from the ArbAggregator contract on the specified chain and returns
@@ -16,26 +13,25 @@ the result.
 
 #### Type parameters
 
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `undefined` \| `Chain` |
-
-| `TFunctionName` _extends_
-\| `"addBatchPoster"`
-\| `"getBatchPosters"`
-\| `"getDefaultAggregator"`
-\| `"getFeeCollector"`
-\| `"getPreferredAggregator"`
-\| `"getTxBaseFee"`
-\| `"setFeeCollector"`
-\| `"setTxBaseFee"` |
+| Type parameter |
+| :------ |
+| `TChain` *extends* `undefined` \| `Chain` |
+| `TFunctionName` *extends* 
+  \| `"addBatchPoster"`
+  \| `"getBatchPosters"`
+  \| `"getDefaultAggregator"`
+  \| `"getFeeCollector"`
+  \| `"getPreferredAggregator"`
+  \| `"getTxBaseFee"`
+  \| `"setFeeCollector"`
+  \| `"setTxBaseFee"` |
 
 #### Parameters
 
-| Parameter | Type                                                     |
-| :-------- | :------------------------------------------------------- |
-| `client`  | `object`                                                 |
-| `params`  | `ArbAggregatorReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | `ArbAggregatorReadContractParameters`\<`TFunctionName`\> |
 
 #### Returns
 

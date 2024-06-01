@@ -1,7 +1,5 @@
 ```ts
-function upgradeExecutorFetchPrivilegedAccounts(
-  upgradeExecutorFetchPrivilegedAccountsParams: UpgradeExecutorFetchPrivilegedAccountsParams,
-): Promise<UpgradeExecutorPrivilegedAccounts>;
+function upgradeExecutorFetchPrivilegedAccounts(upgradeExecutorFetchPrivilegedAccountsParams: UpgradeExecutorFetchPrivilegedAccountsParams): Promise<UpgradeExecutorPrivilegedAccounts>
 ```
 
 Returns all accounts that have been granted a role in the UpgradeExecutor
@@ -10,8 +8,8 @@ Returns an object containing the addresses of the privileged accounts as keys, a
 
 ## Parameters
 
-| Parameter                                      | Type                                                                                                              | Description                                                                                                     |
-| :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `upgradeExecutorFetchPrivilegedAccountsParams` | [`UpgradeExecutorFetchPrivilegedAccountsParams`](../type-aliases/UpgradeExecutorFetchPrivilegedAccountsParams.md) | [UpgradeExecutorFetchPrivilegedAccountsParams](../type-aliases/UpgradeExecutorFetchPrivilegedAccountsParams.md) |
 
 ## Returns
