@@ -1,0 +1,46 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
+```ts
+function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(__namedParameters: TParams): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams["rollup"], TChain>
+```
+
+The function rollupAdminLogicPublicActions returns a RollupAdminLogicActions object that contains two methods:
+rollupAdminLogicReadContract and rollupAdminLogicPrepareTransactionRequest.
+These methods allow interacting with the Rollup Admin Logic smart contract by
+reading contract data and preparing transaction requests.
+
+## Type parameters
+
+| Type parameter | Value |
+| :------ | :------ |
+| `TParams` *extends* `object` | - |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `Chain`\<`undefined` \| `ChainFormatters`\> |
+
+## Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `__namedParameters` | `TParams` |
+
+## Returns
+
+`Function`
+
+### Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `PublicClient`\<`TTransport`, `TChain`\> |
+
+### Returns
+
+`RollupAdminLogicActions`\<`TParams`\[`"rollup"`\], `TChain`\>
+
+## Source
+
+[src/decorators/rollupAdminLogicPublicActions.ts:51](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/decorators/rollupAdminLogicPublicActions.ts#L51)

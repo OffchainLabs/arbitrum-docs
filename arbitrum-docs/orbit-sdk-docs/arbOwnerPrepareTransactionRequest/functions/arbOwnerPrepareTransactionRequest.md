@@ -1,0 +1,60 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
+```ts
+function arbOwnerPrepareTransactionRequest<TFunctionName, TChain>(client: object, params: ArbOwnerPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
+```
+
+Prepares a transaction request for executing a function on the ArbOwner
+contract.
+
+## Type parameters
+
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* 
+  \| `"addChainOwner"`
+  \| `"getAllChainOwners"`
+  \| `"getInfraFeeAccount"`
+  \| `"getNetworkFeeAccount"`
+  \| `"isChainOwner"`
+  \| `"releaseL1PricerSurplusFunds"`
+  \| `"removeChainOwner"`
+  \| `"scheduleArbOSUpgrade"`
+  \| `"setAmortizedCostCapBips"`
+  \| `"setBrotliCompressionLevel"`
+  \| `"setChainConfig"`
+  \| `"setInfraFeeAccount"`
+  \| `"setL1BaseFeeEstimateInertia"`
+  \| `"setL1PricePerUnit"`
+  \| `"setL1PricingEquilibrationUnits"`
+  \| `"setL1PricingInertia"`
+  \| `"setL1PricingRewardRate"`
+  \| `"setL1PricingRewardRecipient"`
+  \| `"setL2BaseFee"`
+  \| `"setL2GasBacklogTolerance"`
+  \| `"setL2GasPricingInertia"`
+  \| `"setMaxTxGasLimit"`
+  \| `"setMinimumL2BaseFee"`
+  \| `"setNetworkFeeAccount"`
+  \| `"setPerBatchGasCharge"`
+  \| `"setSpeedLimit"` |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+
+## Parameters
+
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | `ArbOwnerPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+
+## Returns
+
+`Promise`\<`any`\>
+
+## Source
+
+[src/arbOwnerPrepareTransactionRequest.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/arbOwnerPrepareTransactionRequest.ts#L74)
