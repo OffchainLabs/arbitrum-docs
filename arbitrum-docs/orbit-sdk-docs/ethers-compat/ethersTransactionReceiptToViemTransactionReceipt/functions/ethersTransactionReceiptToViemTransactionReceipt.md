@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function ethersTransactionReceiptToViemTransactionReceipt(receipt: TransactionReceipt): ViemTransactionReceipt
+function ethersTransactionReceiptToViemTransactionReceipt(
+  receipt: TransactionReceipt,
+): ViemTransactionReceipt;
 ```
 
 Converts an Ethereum transaction receipt (from `EthersTransactionReceipt`) to
@@ -15,8 +17,8 @@ receipt, including conversion of data types where necessary.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter | Type                 |
+| :-------- | :------------------- |
 | `receipt` | `TransactionReceipt` |
 
 ## Returns

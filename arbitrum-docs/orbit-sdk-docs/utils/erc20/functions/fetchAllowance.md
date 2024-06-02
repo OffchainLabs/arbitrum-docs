@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function fetchAllowance(__namedParameters: FetchAllowanceProps): Promise<any>
+function fetchAllowance(__namedParameters: FetchAllowanceProps): Promise<any>;
 ```
 
 fetchAllowance retrieves the allowance of tokens that the owner has approved
@@ -15,8 +15,8 @@ address as parameters. It returns the allowance amount as a BigInt value.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                  |
+| :------------------ | :-------------------- |
 | `__namedParameters` | `FetchAllowanceProps` |
 
 ## Returns

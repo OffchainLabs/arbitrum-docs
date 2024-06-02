@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function upgradeExecutorPrepareAddExecutorTransactionRequest(upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams): Promise<any>
+function upgradeExecutorPrepareAddExecutorTransactionRequest(
+  upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams,
+): Promise<any>;
 ```
 
 Prepares a transaction to grant the executor role to a new account
@@ -14,8 +16,8 @@ Prepares a transaction to grant the executor role to a new account
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter                                                   | Type                                                                                                                                        | Description                                                                                                                               |
+| :---------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `upgradeExecutorPrepareAddExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareAddExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md) | [UpgradeExecutorPrepareAddExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md) |
 
 ## Returns

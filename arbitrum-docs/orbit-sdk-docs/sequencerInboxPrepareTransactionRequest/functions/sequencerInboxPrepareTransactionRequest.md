@@ -5,7 +5,10 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function sequencerInboxPrepareTransactionRequest<TFunctionName, TTransport, TChain>(client: object, params: SequencerInboxPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
+function sequencerInboxPrepareTransactionRequest<TFunctionName, TTransport, TChain>(
+  client: object,
+  params: SequencerInboxPrepareTransactionRequestParameters<TFunctionName>,
+): Promise<any>;
 ```
 
 sequencerInboxPrepareTransactionRequest prepares a transaction request to
@@ -18,38 +21,39 @@ request object.
 ## Type parameters
 
 | Type parameter | Value |
-| :------ | :------ |
-| `TFunctionName` *extends* 
-  \| `"bridge"`
-  \| `"initialize"`
-  \| `"DATA_AUTHENTICATED_FLAG"`
-  \| `"HEADER_LENGTH"`
-  \| `"addSequencerL2Batch"`
-  \| `"addSequencerL2BatchFromOrigin"`
-  \| `"batchCount"`
-  \| `"dasKeySetInfo"`
-  \| `"forceInclusion"`
-  \| `"getKeysetCreationBlock"`
-  \| `"inboxAccs"`
-  \| `"invalidateKeysetHash"`
-  \| `"isBatchPoster"`
-  \| `"isValidKeysetHash"`
-  \| `"maxTimeVariation"`
-  \| `"removeDelayAfterFork"`
-  \| `"rollup"`
-  \| `"setIsBatchPoster"`
-  \| `"setMaxTimeVariation"`
-  \| `"setValidKeyset"`
-  \| `"totalDelayedMessagesRead"` | - |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| :------------- | :---- |
+
+| `TFunctionName` _extends_
+\| `"bridge"`
+\| `"initialize"`
+\| `"DATA_AUTHENTICATED_FLAG"`
+\| `"HEADER_LENGTH"`
+\| `"addSequencerL2Batch"`
+\| `"addSequencerL2BatchFromOrigin"`
+\| `"batchCount"`
+\| `"dasKeySetInfo"`
+\| `"forceInclusion"`
+\| `"getKeysetCreationBlock"`
+\| `"inboxAccs"`
+\| `"invalidateKeysetHash"`
+\| `"isBatchPoster"`
+\| `"isValidKeysetHash"`
+\| `"maxTimeVariation"`
+\| `"removeDelayAfterFork"`
+\| `"rollup"`
+\| `"setIsBatchPoster"`
+\| `"setMaxTimeVariation"`
+\| `"setValidKeyset"`
+\| `"totalDelayedMessagesRead"` | - |
+| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | `SequencerInboxPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                   |
+| :-------- | :--------------------------------------------------------------------- |
+| `client`  | `object`                                                               |
+| `params`  | `SequencerInboxPrepareTransactionRequestParameters`\<`TFunctionName`\> |
 
 ## Returns
 

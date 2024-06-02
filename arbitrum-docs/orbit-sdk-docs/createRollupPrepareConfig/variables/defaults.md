@@ -13,20 +13,20 @@ creating a Rollup deployment.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `baseStake` | `bigint` | ... |
-| `confirmPeriodBlocks` | `bigint` | ... |
-| `extraChallengeTimeBlocks` | `bigint` | ... |
-| `genesisBlockNum` | `bigint` | ... |
-| `loserStakeEscrow` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `sequencerInboxMaxTimeVariation` | `object` | ... |
-| `sequencerInboxMaxTimeVariation.delayBlocks` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.delaySeconds` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.futureBlocks` | `bigint` | ... |
-| `sequencerInboxMaxTimeVariation.futureSeconds` | `bigint` | ... |
-| `stakeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `wasmModuleRoot` | \`0x$\{string\}\` | - |
+| Member                                         | Type                                           | Value       |
+| :--------------------------------------------- | :--------------------------------------------- | :---------- |
+| `baseStake`                                    | `bigint`                                       | ...         |
+| `confirmPeriodBlocks`                          | `bigint`                                       | ...         |
+| `extraChallengeTimeBlocks`                     | `bigint`                                       | ...         |
+| `genesisBlockNum`                              | `bigint`                                       | ...         |
+| `loserStakeEscrow`                             | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `sequencerInboxMaxTimeVariation`               | `object`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.delayBlocks`   | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.delaySeconds`  | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.futureBlocks`  | `bigint`                                       | ...         |
+| `sequencerInboxMaxTimeVariation.futureSeconds` | `bigint`                                       | ...         |
+| `stakeToken`                                   | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `wasmModuleRoot`                               | \`0x$\{string\}\`                              | -           |
 
 ## Source
 

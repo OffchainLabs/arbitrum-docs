@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupPrepareTransactionReceipt(txReceipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): CreateRollupTransactionReceipt
+function createRollupPrepareTransactionReceipt(
+  txReceipt: TransactionReceipt<bigint, number, 'success' | 'reverted', TransactionType>,
+): CreateRollupTransactionReceipt;
 ```
 
 Creates a transaction receipt for preparing a rollup, including core contract
@@ -13,8 +15,8 @@ information. Returns a CreateRollupTransactionReceipt.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter   | Type                                                                                       |
+| :---------- | :----------------------------------------------------------------------------------------- |
 | `txReceipt` | `TransactionReceipt`\<`bigint`, `number`, `"success"` \| `"reverted"`, `TransactionType`\> |
 
 ## Returns

@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts
+function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts;
 ```
 
 Returns a collection of private key accounts for the Nitro test node,

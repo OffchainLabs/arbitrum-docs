@@ -12,12 +12,12 @@ Type for the params of the [upgradeExecutorPrepareAddExecutorTransactionRequest]
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `Address` |
-| `executorAccountAddress` | `Address` |
-| `publicClient` | `PublicClient` |
-| `upgradeExecutorAddress` | `Address` |
+| Member                   | Type           |
+| :----------------------- | :------------- |
+| `account`                | `Address`      |
+| `executorAccountAddress` | `Address`      |
+| `publicClient`           | `PublicClient` |
+| `upgradeExecutorAddress` | `Address`      |
 
 ## Source
 

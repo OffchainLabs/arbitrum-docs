@@ -5,10 +5,35 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-const arbGasInfoABI: readonly [object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object];
+const arbGasInfoABI: readonly [
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+];
 ```
 
-[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006c)
+[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006c)
 
 ## Source
 

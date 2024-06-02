@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupFetchCoreContracts(__namedParameters: CreateRollupFetchCoreContractsParams): Promise<CoreContracts>
+function createRollupFetchCoreContracts(
+  __namedParameters: CreateRollupFetchCoreContractsParams,
+): Promise<CoreContracts>;
 ```
 
 Creates and fetches core contracts for a specified rollup using the provided
@@ -14,8 +16,8 @@ transaction receipt to return the core contracts. Returns a CoreContracts.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                   |
+| :------------------ | :------------------------------------- |
 | `__namedParameters` | `CreateRollupFetchCoreContractsParams` |
 
 ## Returns
