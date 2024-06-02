@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 type UpgradeExecutorFetchPrivilegedAccountsParams: object;
 ```
@@ -13,4 +19,4 @@ This type is for the params of the [upgradeExecutorFetchPrivilegedAccounts](../f
 
 ## Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)

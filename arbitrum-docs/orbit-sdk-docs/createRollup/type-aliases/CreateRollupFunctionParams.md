@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 type CreateRollupFunctionParams: object;
 ```
@@ -14,4 +20,4 @@ This type is for the params of the createRollup function
 
 ## Source
 
-[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/createRollup.ts#L74)
+[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollup.ts#L74)

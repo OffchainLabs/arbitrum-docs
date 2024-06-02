@@ -4,7 +4,7 @@
 const variableInjector = require('./src/remark/variable-injector');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
-const orbitSdkCodebasePath = '../orbit-sdk';
+const orbitSdkCodebasePath = '../arbitrum-orbit-sdk';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -141,12 +141,12 @@ const config = {
           notDocumented: true,
         },
         logLevel: 'Verbose',
-        // sidebar: {
-        //   autoConfiguration: true,
-        // },
+        skipErrorChecking: 'true',
+        sidebar: {
+          autoConfiguration: 'false',
+        },
 
-        plugin: ['typedoc-plugin-markdown'],
-
+        plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         outputFileStrategy: 'members',
@@ -160,12 +160,11 @@ const config = {
         propertiesFormat: 'table',
         enumMembersFormat: 'table',
         typeDeclarationFormat: 'table',
-        sanitizeComments: true,
-        // frontmatterGlobals: {
-        //   layout: 'docs',
-        //   sidebar: true,
-        //   toc_max_heading_level: 5,
-        // },
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: false,
+          toc_max_heading_level: 5,
+        },
       },
     ],
     [

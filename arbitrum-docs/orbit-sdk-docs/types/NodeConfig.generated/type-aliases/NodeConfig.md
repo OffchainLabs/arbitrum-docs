@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 type NodeConfig: object;
 ```
@@ -123,7 +129,7 @@ Nitro node configuration options
 | `execution.tx-lookup-limit` | `number` | retain the ability to lookup transactions by hash for the past N blocks (0 = all blocks) (default 126230400) |
 | `execution.tx-pre-checker` | `object` | - |
 | `execution.tx-pre-checker.required-state-age` | `number` | how long ago should the storage conditions from eth_SendRawTransactionConditional be true, 0 = don't check old state (default 2) |
-| `execution.tx-pre-checker.required-state-max-blocks` | `number` | maximum number of blocks to look back while looking for the \<required-state-age\> seconds old state, 0 = don't limit the search (default 4) |
+| `execution.tx-pre-checker.required-state-max-blocks` | `number` | maximum number of blocks to look back while looking for the <required-state-age> seconds old state, 0 = don't limit the search (default 4) |
 | `execution.tx-pre-checker.strictness` | `number` | how strict to be when checking txs before forwarding them. 0 = accept anything, 10 = should never reject anything that'd succeed, 20 = likely won't reject anything that'd succeed, 30 = full validation which may reject txs that would succeed |
 | `file-logging` | `object` | - |
 | `file-logging.buf-size` | `number` | size of intermediate log records buffer (default 512) |
@@ -399,7 +405,7 @@ Nitro node configuration options
 | `node.seq-coordinator.lockout-duration` | `string` | (default 1m0s) |
 | `node.seq-coordinator.lockout-spare` | `string` | (default 30s) |
 | `node.seq-coordinator.msg-per-poll` | `number` | will only be marked as wanting the lockout if not too far behind (default 2000) |
-| `node.seq-coordinator.my-url` | `string` | url for this sequencer if it is the chosen (default "\<?INVALID-URL?\>") |
+| `node.seq-coordinator.my-url` | `string` | url for this sequencer if it is the chosen (default "<?INVALID-URL?>") |
 | `node.seq-coordinator.redis-url` | `string` | the Redis URL to coordinate via |
 | `node.seq-coordinator.release-retries` | `number` | the number of times to retry releasing the wants lockout and chosen one status on shutdown (default 4) |
 | `node.seq-coordinator.retry-interval` | `string` | (default 50ms) |
@@ -566,4 +572,4 @@ Nitro node configuration options
 
 ## Source
 
-[src/types/NodeConfig.generated.ts:10](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/types/NodeConfig.generated.ts#L10)
+[src/types/NodeConfig.generated.ts:10](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/types/NodeConfig.generated.ts#L10)

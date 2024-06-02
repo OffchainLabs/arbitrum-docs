@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 function sequencerInboxActions<TParams, TTransport, TChain>(sequencerInbox: TParams): (client: object) => SequencerInboxActions<TParams["sequencerInbox"], TChain>
 ```
@@ -56,4 +62,4 @@ client.sequencerInboxReadContract({
 
 ## Source
 
-[src/decorators/sequencerInboxActions.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/decorators/sequencerInboxActions.ts#L71)
+[src/decorators/sequencerInboxActions.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/decorators/sequencerInboxActions.ts#L71)

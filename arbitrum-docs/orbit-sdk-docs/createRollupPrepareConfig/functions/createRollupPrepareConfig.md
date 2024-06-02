@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 function createRollupPrepareConfig(__namedParameters: object): CreateRollupPrepareConfigResult
 ```
@@ -29,4 +35,4 @@ Will be removed in a future release. Please use [createRollupPrepareDeploymentPa
 
 ## Source
 
-[src/createRollupPrepareConfig.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/createRollupPrepareConfig.ts#L33)
+[src/createRollupPrepareConfig.ts:37](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupPrepareConfig.ts#L37)

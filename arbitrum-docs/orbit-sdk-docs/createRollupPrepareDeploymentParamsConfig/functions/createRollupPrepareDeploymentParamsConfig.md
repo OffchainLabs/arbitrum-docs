@@ -1,3 +1,9 @@
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
+
 ```ts
 function createRollupPrepareDeploymentParamsConfig<TTransport, TChain>(client: Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>, params: object): CreateRollupPrepareDeploymentParamsConfigResult
 ```
@@ -58,4 +64,4 @@ const config = createRollupPrepareDeploymentParamsConfig(parentPublicClient, {
 
 ## Source
 
-[src/createRollupPrepareDeploymentParamsConfig.ts:66](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/efea61c53fc08d3a6a336315cc447bc7613aada5/src/createRollupPrepareDeploymentParamsConfig.ts#L66)
+[src/createRollupPrepareDeploymentParamsConfig.ts:66](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupPrepareDeploymentParamsConfig.ts#L66)
