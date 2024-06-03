@@ -5,10 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function sequencerInboxPrepareTransactionRequest<TFunctionName, TTransport, TChain>(
-  client: object,
-  params: SequencerInboxPrepareTransactionRequestParameters<TFunctionName>,
-): Promise<any>;
+function sequencerInboxPrepareTransactionRequest<TFunctionName, TTransport, TChain>(client: object, params: SequencerInboxPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
 ```
 
 sequencerInboxPrepareTransactionRequest prepares a transaction request to
@@ -21,39 +18,38 @@ request object.
 ## Type parameters
 
 | Type parameter | Value |
-| :------------- | :---- |
-
-| `TFunctionName` _extends_
-\| `"bridge"`
-\| `"initialize"`
-\| `"DATA_AUTHENTICATED_FLAG"`
-\| `"HEADER_LENGTH"`
-\| `"addSequencerL2Batch"`
-\| `"addSequencerL2BatchFromOrigin"`
-\| `"batchCount"`
-\| `"dasKeySetInfo"`
-\| `"forceInclusion"`
-\| `"getKeysetCreationBlock"`
-\| `"inboxAccs"`
-\| `"invalidateKeysetHash"`
-\| `"isBatchPoster"`
-\| `"isValidKeysetHash"`
-\| `"maxTimeVariation"`
-\| `"removeDelayAfterFork"`
-\| `"rollup"`
-\| `"setIsBatchPoster"`
-\| `"setMaxTimeVariation"`
-\| `"setValidKeyset"`
-\| `"totalDelayedMessagesRead"` | - |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| :------ | :------ |
+| `TFunctionName` *extends* 
+  \| `"bridge"`
+  \| `"initialize"`
+  \| `"DATA_AUTHENTICATED_FLAG"`
+  \| `"HEADER_LENGTH"`
+  \| `"addSequencerL2Batch"`
+  \| `"addSequencerL2BatchFromOrigin"`
+  \| `"batchCount"`
+  \| `"dasKeySetInfo"`
+  \| `"forceInclusion"`
+  \| `"getKeysetCreationBlock"`
+  \| `"inboxAccs"`
+  \| `"invalidateKeysetHash"`
+  \| `"isBatchPoster"`
+  \| `"isValidKeysetHash"`
+  \| `"maxTimeVariation"`
+  \| `"removeDelayAfterFork"`
+  \| `"rollup"`
+  \| `"setIsBatchPoster"`
+  \| `"setMaxTimeVariation"`
+  \| `"setValidKeyset"`
+  \| `"totalDelayedMessagesRead"` | - |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type                                                                   |
-| :-------- | :--------------------------------------------------------------------- |
-| `client`  | `object`                                                               |
-| `params`  | `SequencerInboxPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | `SequencerInboxPrepareTransactionRequestParameters`\<`TFunctionName`\> |
 
 ## Returns
 
@@ -61,4 +57,4 @@ request object.
 
 ## Source
 
-[src/sequencerInboxPrepareTransactionRequest.ts:83](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/sequencerInboxPrepareTransactionRequest.ts#L83)
+[src/sequencerInboxPrepareTransactionRequest.ts:83](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/sequencerInboxPrepareTransactionRequest.ts#L83)

@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig;
+function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig
 ```
 
 prepareNodeConfig prepares the configuration object for a node based on the
@@ -16,8 +16,8 @@ parameters, and data availability settings if applicable.
 
 ## Parameters
 
-| Parameter           | Type                      |
-| :------------------ | :------------------------ |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `PrepareNodeConfigParams` |
 
 ## Returns
@@ -26,4 +26,4 @@ parameters, and data availability settings if applicable.
 
 ## Source
 
-[src/prepareNodeConfig.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/prepareNodeConfig.ts#L71)
+[src/prepareNodeConfig.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/prepareNodeConfig.ts#L71)

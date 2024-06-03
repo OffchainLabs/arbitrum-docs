@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(
-  __namedParameters: TParams,
-): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams['rollup'], TChain>;
+function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(__namedParameters: TParams): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams["rollup"], TChain>
 ```
 
 The function rollupAdminLogicPublicActions returns a RollupAdminLogicActions object that contains two methods:
@@ -17,16 +15,16 @@ reading contract data and preparing transaction requests.
 
 ## Type parameters
 
-| Type parameter                                                                                                 | Value                                                                                   |
-| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| `TParams` _extends_ `object`                                                                                   | -                                                                                       |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `Chain`\<`undefined` \| `ChainFormatters`\>                                             |
+| Type parameter | Value |
+| :------ | :------ |
+| `TParams` *extends* `object` | - |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter           | Type      |
-| :------------------ | :-------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `TParams` |
 
 ## Returns
@@ -35,9 +33,9 @@ reading contract data and preparing transaction requests.
 
 ### Parameters
 
-| Parameter | Type                                     |
-| :-------- | :--------------------------------------- |
-| `client`  | `PublicClient`\<`TTransport`, `TChain`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `PublicClient`\<`TTransport`, `TChain`\> |
 
 ### Returns
 
@@ -45,4 +43,4 @@ reading contract data and preparing transaction requests.
 
 ## Source
 
-[src/decorators/rollupAdminLogicPublicActions.ts:51](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/decorators/rollupAdminLogicPublicActions.ts#L51)
+[src/decorators/rollupAdminLogicPublicActions.ts:51](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/decorators/rollupAdminLogicPublicActions.ts#L51)

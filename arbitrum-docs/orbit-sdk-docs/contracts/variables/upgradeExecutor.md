@@ -13,10 +13,10 @@ roles, grant roles, and revoke roles.
 
 ## Type declaration
 
-| Member | Type  | Value |
-| :----- | :---- | :---- |
-| `abi`  | `any` | ...   |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | `any` | ... |
 
 ## Source
 
-[src/contracts.ts:53](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/contracts.ts#L53)
+[src/contracts.ts:53](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L53)

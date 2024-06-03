@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>;
+function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>
 ```
 
 Returns an object with two functions: `arbOwnerReadContract` and
@@ -15,16 +15,16 @@ respectively.
 
 ## Type parameters
 
-| Type parameter                                                                                                 | Value                                                                                   |
-| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 ## Returns
 
@@ -32,4 +32,4 @@ respectively.
 
 ## Source
 
-[src/decorators/arbOwnerPublicActions.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/decorators/arbOwnerPublicActions.ts#L33)
+[src/decorators/arbOwnerPublicActions.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/decorators/arbOwnerPublicActions.ts#L33)

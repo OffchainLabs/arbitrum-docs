@@ -15,15 +15,15 @@ loserStakeEscrow, and genesisBlockNum.
 
 ## Type declaration
 
-| Member                     | Type                                           | Value       |
-| :------------------------- | :--------------------------------------------- | :---------- |
-| `baseStake`                | `bigint`                                       | ...         |
-| `extraChallengeTimeBlocks` | `bigint`                                       | ...         |
-| `genesisBlockNum`          | `bigint`                                       | ...         |
-| `loserStakeEscrow`         | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `stakeToken`               | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `wasmModuleRoot`           | \`0x$\{string\}\`                              | -           |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `baseStake` | `bigint` | ... |
+| `extraChallengeTimeBlocks` | `bigint` | ... |
+| `genesisBlockNum` | `bigint` | ... |
+| `loserStakeEscrow` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `stakeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| `wasmModuleRoot` | \`0x$\{string\}\` | - |
 
 ## Source
 
-[src/createRollupPrepareDeploymentParamsConfigDefaults.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupPrepareDeploymentParamsConfigDefaults.ts#L17)
+[src/createRollupPrepareDeploymentParamsConfigDefaults.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareDeploymentParamsConfigDefaults.ts#L17)

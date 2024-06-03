@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupFetchTransactionHash(
-  __namedParameters: CreateRollupFetchTransactionHashParams,
-): Promise<any>;
+function createRollupFetchTransactionHash(__namedParameters: CreateRollupFetchTransactionHashParams): Promise<any>
 ```
 
 createRollupFetchTransactionHash retrieves the transaction hash of the
@@ -20,8 +18,8 @@ hash.
 
 ## Parameters
 
-| Parameter           | Type                                     |
-| :------------------ | :--------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `CreateRollupFetchTransactionHashParams` |
 
 ## Returns
@@ -30,4 +28,4 @@ hash.
 
 ## Source
 
-[src/createRollupFetchTransactionHash.ts:64](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupFetchTransactionHash.ts#L64)
+[src/createRollupFetchTransactionHash.ts:64](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupFetchTransactionHash.ts#L64)

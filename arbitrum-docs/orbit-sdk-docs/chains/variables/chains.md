@@ -5,17 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-const chains: readonly [
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  any,
-  any,
-  any,
-];
+const chains: readonly [Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, any, any, any];
 ```
 
 The `chains` variable contains an array of various blockchain configurations,
@@ -26,4 +16,4 @@ reference different blockchain configurations within the application.
 
 ## Source
 
-[src/chains.ts:67](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/chains.ts#L67)
+[src/chains.ts:67](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/chains.ts#L67)

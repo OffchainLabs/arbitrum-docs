@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupGetMaxDataSize(parentChainId: any): undefined | bigint;
+function createRollupGetMaxDataSize(parentChainId: any): undefined | bigint
 ```
 
 createRollupGetMaxDataSize calculates and returns the maximum data size
@@ -15,8 +15,8 @@ testnet, and nitro-testnode, returning the appropriate value as a BigInt.
 
 ## Parameters
 
-| Parameter       | Type  |
-| :-------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainId` | `any` |
 
 ## Returns
@@ -25,4 +25,4 @@ testnet, and nitro-testnode, returning the appropriate value as a BigInt.
 
 ## Source
 
-[src/createRollupGetMaxDataSize.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupGetMaxDataSize.ts#L19)
+[src/createRollupGetMaxDataSize.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupGetMaxDataSize.ts#L19)

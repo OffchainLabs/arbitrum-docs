@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getDefaultSequencerInboxMaxTimeVariation(
-  parentChainIdOrPublicClient: any,
-): SequencerInboxMaxTimeVariation;
+function getDefaultSequencerInboxMaxTimeVariation(parentChainIdOrPublicClient: any): SequencerInboxMaxTimeVariation
 ```
 
 getDefaultSequencerInboxMaxTimeVariation retrieves the default maximum time
@@ -17,8 +15,8 @@ containing delayBlocks, futureBlocks, delaySeconds, and futureSeconds values.
 
 ## Parameters
 
-| Parameter                     | Type  |
-| :---------------------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainIdOrPublicClient` | `any` |
 
 ## Returns
@@ -27,4 +25,4 @@ containing delayBlocks, futureBlocks, delaySeconds, and futureSeconds values.
 
 ## Source
 
-[src/getDefaultSequencerInboxMaxTimeVariation.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/getDefaultSequencerInboxMaxTimeVariation.ts#L18)
+[src/getDefaultSequencerInboxMaxTimeVariation.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/getDefaultSequencerInboxMaxTimeVariation.ts#L18)

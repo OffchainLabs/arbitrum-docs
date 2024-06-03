@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts;
+function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts
 ```
 
 Returns a collection of private key accounts for the Nitro test node,
@@ -18,4 +18,4 @@ deployer, and L2 token bridge deployer.
 
 ## Source
 
-[src/testHelpers.ts:34](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/testHelpers.ts#L34)
+[src/testHelpers.ts:34](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/testHelpers.ts#L34)

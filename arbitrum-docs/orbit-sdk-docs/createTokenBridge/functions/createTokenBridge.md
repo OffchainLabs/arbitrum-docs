@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createTokenBridge(
-  createTokenBridgeParams: CreateTokenBridgeParams,
-): Promise<CreateTokenBridgeResults>;
+function createTokenBridge(createTokenBridgeParams: CreateTokenBridgeParams): Promise<CreateTokenBridgeResults>
 ```
 
 Performs the transactions to deploy the token bridge core contracts
@@ -19,15 +17,14 @@ Returns the token bridge core contracts.
 
 ## Parameters
 
-| Parameter                 | Type                      | Description |
-| :------------------------ | :------------------------ | :---------- |
-| `createTokenBridgeParams` | `CreateTokenBridgeParams` |             |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `createTokenBridgeParams` | `CreateTokenBridgeParams` |  |
 
 ## Returns
 
 `Promise`\<`CreateTokenBridgeResults`\>
 
-Promise<CreateTokenBridgeResults>
 
 ## Example
 
@@ -72,4 +69,4 @@ const tokenBridgeContracts = await createTokenBridge({
 
 ## Source
 
-[src/createTokenBridge.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createTokenBridge.ts#L152)
+[src/createTokenBridge.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridge.ts#L152)

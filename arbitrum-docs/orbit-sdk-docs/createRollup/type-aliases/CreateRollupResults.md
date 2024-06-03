@@ -26,12 +26,12 @@ the core contracts
 
 ## Type declaration
 
-| Member               | Type                             |
-| :------------------- | :------------------------------- |
-| `coreContracts`      | `CoreContracts`                  |
-| `transaction`        | `CreateRollupTransaction`        |
+| Member | Type |
+| :------ | :------ |
+| `coreContracts` | `CoreContracts` |
+| `transaction` | `CreateRollupTransaction` |
 | `transactionReceipt` | `CreateRollupTransactionReceipt` |
 
 ## Source
 
-[src/createRollup.ts:86](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollup.ts#L86)
+[src/createRollup.ts:86](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollup.ts#L86)

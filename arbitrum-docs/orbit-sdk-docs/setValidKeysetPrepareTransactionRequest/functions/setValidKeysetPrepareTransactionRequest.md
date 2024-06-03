@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function setValidKeysetPrepareTransactionRequest(
-  __namedParameters: SetValidKeysetPrepareTransactionRequestParams,
-): Promise<any>;
+function setValidKeysetPrepareTransactionRequest(__namedParameters: SetValidKeysetPrepareTransactionRequestParams): Promise<any>
 ```
 
 Sets up a transaction request to upgrade the executor with a valid keyset.
@@ -17,8 +15,8 @@ transaction request along with the chain ID.
 
 ## Parameters
 
-| Parameter           | Type                                            |
-| :------------------ | :---------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | `SetValidKeysetPrepareTransactionRequestParams` |
 
 ## Returns
@@ -27,4 +25,4 @@ transaction request along with the chain ID.
 
 ## Source
 
-[src/setValidKeysetPrepareTransactionRequest.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/setValidKeysetPrepareTransactionRequest.ts#L21)
+[src/setValidKeysetPrepareTransactionRequest.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/setValidKeysetPrepareTransactionRequest.ts#L21)

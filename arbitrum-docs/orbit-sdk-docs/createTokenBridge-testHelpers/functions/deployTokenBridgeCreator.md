@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function deployTokenBridgeCreator(__namedParameters: object): Promise<Address>;
+function deployTokenBridgeCreator(__namedParameters: object): Promise<Address>
 ```
 
 Deploys a Token Bridge Creator contract on the specified public client
@@ -13,9 +13,9 @@ network and returns the address of the deployed contract.
 
 ## Parameters
 
-| Parameter                        | Type     |
-| :------------------------------- | :------- |
-| `__namedParameters`              | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `__namedParameters` | `object` |
 | `__namedParameters.publicClient` | `object` |
 
 ## Returns
@@ -24,4 +24,4 @@ network and returns the address of the deployed contract.
 
 ## Source
 
-[src/createTokenBridge-testHelpers.ts:14](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createTokenBridge-testHelpers.ts#L14)
+[src/createTokenBridge-testHelpers.ts:14](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridge-testHelpers.ts#L14)

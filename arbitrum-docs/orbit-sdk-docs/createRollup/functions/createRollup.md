@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollup(
-  createRollupFunctionParams: CreateRollupFunctionParams,
-): Promise<CreateRollupResults>;
+function createRollup(createRollupFunctionParams: CreateRollupFunctionParams): Promise<CreateRollupResults>
 ```
 
 Performs the tx to deploy the chain's core contracts.
@@ -25,15 +23,14 @@ Returns the transaction, the transaction receipt, and the core contracts.
 
 ## Parameters
 
-| Parameter                    | Type                                                                          | Description                                                                 |
-| :--------------------------- | :---------------------------------------------------------------------------- | :-------------------------------------------------------------------------- |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
 | `createRollupFunctionParams` | [`CreateRollupFunctionParams`](../type-aliases/CreateRollupFunctionParams.md) | [CreateRollupFunctionParams](../type-aliases/CreateRollupFunctionParams.md) |
 
 ## Returns
 
 `Promise` \<[`CreateRollupResults`](../type-aliases/CreateRollupResults.md)\>
 
-Promise<[CreateRollupResults](../type-aliases/CreateRollupResults.md)> - the transaction, the transaction receipt, and the core contracts.
 
 ## Example
 
@@ -50,17 +47,21 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
   }),
 });
 
-const { transaction, transactionReceipt, coreContracts } = await createRollup({
+const {
+  transaction,
+  transactionReceipt,
+  coreContracts,
+} = await createRollup({
   params: {
     config: createRollupConfig,
     batchPoster,
     validators,
-  },
-  account: deployer,
-  parentChainPublicClient,
+ },
+ account: deployer,
+ parentChainPublicClient,
 });
 ```
 
 ## Source
 
-[src/createRollup.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollup.ts#L152)
+[src/createRollup.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollup.ts#L152)

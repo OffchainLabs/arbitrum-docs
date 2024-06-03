@@ -126,7 +126,7 @@ const config = {
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src/`],
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `types`],
         excludeNotDocumented: true,
         excludeInternal: true,
         excludeExternals: true,

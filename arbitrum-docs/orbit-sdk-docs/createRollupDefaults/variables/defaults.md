@@ -14,12 +14,12 @@ retryable transactions.
 
 ## Type declaration
 
-| Member                      | Type                                           | Value       |
-| :-------------------------- | :--------------------------------------------- | :---------- |
-| `deployFactoriesToL2`       | `boolean`                                      | true        |
-| `maxFeePerGasForRetryables` | `bigint`                                       | ...         |
-| `nativeToken`               | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `deployFactoriesToL2` | `boolean` | true |
+| `maxFeePerGasForRetryables` | `bigint` | ... |
+| `nativeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
 
 ## Source
 
-[src/createRollupDefaults.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupDefaults.ts#L8)
+[src/createRollupDefaults.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupDefaults.ts#L8)

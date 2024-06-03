@@ -5,10 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(
-  client: object,
-  params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>,
-): Promise<any>;
+function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(client: object, params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
 ```
 
 Prepares a transaction request for the ArbAggregator contract function
@@ -19,25 +16,24 @@ transaction request using the provided client and account information.
 ## Type parameters
 
 | Type parameter |
-| :------------- |
-
-| `TFunctionName` _extends_
-\| `"addBatchPoster"`
-\| `"getBatchPosters"`
-\| `"getDefaultAggregator"`
-\| `"getFeeCollector"`
-\| `"getPreferredAggregator"`
-\| `"getTxBaseFee"`
-\| `"setFeeCollector"`
-\| `"setTxBaseFee"` |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| :------ |
+| `TFunctionName` *extends* 
+  \| `"addBatchPoster"`
+  \| `"getBatchPosters"`
+  \| `"getDefaultAggregator"`
+  \| `"getFeeCollector"`
+  \| `"getPreferredAggregator"`
+  \| `"getTxBaseFee"`
+  \| `"setFeeCollector"`
+  \| `"setTxBaseFee"` |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type                                                                  |
-| :-------- | :-------------------------------------------------------------------- |
-| `client`  | `object`                                                              |
-| `params`  | `ArbAggregatorPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | `ArbAggregatorPrepareTransactionRequestParameters`\<`TFunctionName`\> |
 
 ## Returns
 
@@ -45,4 +41,4 @@ transaction request using the provided client and account information.
 
 ## Source
 
-[src/arbAggregatorPrepareTransactionRequest.ts:77](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/arbAggregatorPrepareTransactionRequest.ts#L77)
+[src/arbAggregatorPrepareTransactionRequest.ts:77](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/arbAggregatorPrepareTransactionRequest.ts#L77)

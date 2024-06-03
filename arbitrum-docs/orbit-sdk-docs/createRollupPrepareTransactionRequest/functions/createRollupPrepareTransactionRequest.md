@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupPrepareTransactionRequest(__namedParameters: object): Promise<any>;
+function createRollupPrepareTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
 Prepares a transaction request to create a rollup chain on the specified
@@ -18,14 +18,14 @@ request along with the chain ID.
 
 ## Parameters
 
-| Parameter                                         | Type                             | Description                                                                                                                           |
-| :------------------------------------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `__namedParameters`                               | `object`                         | -                                                                                                                                     |
-| `__namedParameters.account`                       | \`0x$\{string\}\`                | -                                                                                                                                     |
-| `__namedParameters.gasOverrides`?                 | `TransactionRequestGasOverrides` | -                                                                                                                                     |
-| `__namedParameters.params`                        | `CreateRollupParams`             | -                                                                                                                                     |
-| `__namedParameters.publicClient`                  | `object`                         | -                                                                                                                                     |
-| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\`                | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `__namedParameters` | `object` | - |
+| `__namedParameters.account` | \`0x$\{string\}\` | - |
+| `__namedParameters.gasOverrides`? | `TransactionRequestGasOverrides` | - |
+| `__namedParameters.params` | `CreateRollupParams` | - |
+| `__namedParameters.publicClient` | `object` | - |
+| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Returns
 
@@ -33,4 +33,4 @@ request along with the chain ID.
 
 ## Source
 
-[src/createRollupPrepareTransactionRequest.ts:48](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/cfcbd32d6879cf7817a33b24f062a0fd879ea257/src/createRollupPrepareTransactionRequest.ts#L48)
+[src/createRollupPrepareTransactionRequest.ts:48](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareTransactionRequest.ts#L48)
