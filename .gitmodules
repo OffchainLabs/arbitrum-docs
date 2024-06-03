@@ -3,6 +3,3 @@
 	url = https://github.com/OffchainLabs/arbitrum-sdk
 	branch = main
 
-[submodule "/Users/allup/dev/OCL/docs.arbitrum/arbitrum-orbit-sdk"]
-	path = /Users/allup/dev/OCL/docs.arbitrum/arbitrum-orbit-sdk
-	url = https://github.com/OffchainLabs/arbitrum-orbit-sdk.git
