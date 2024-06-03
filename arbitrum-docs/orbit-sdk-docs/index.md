@@ -61,8 +61,6 @@ toc_max_heading_level: 5
 - [setValidKeysetEncodeFunctionData](setValidKeysetEncodeFunctionData/index.md)
 - [setValidKeysetPrepareTransactionRequest](setValidKeysetPrepareTransactionRequest/index.md)
 - [testHelpers](testHelpers/index.md)
-- [types/NodeConfig.generated](types/NodeConfig.generated/index.md)
-- [types/ParentChain](types/ParentChain/index.md)
 - [upgradeExecutorFetchPrivilegedAccounts](upgradeExecutorFetchPrivilegedAccounts/index.md)
 - [upgradeExecutorPrepareAddExecutorTransactionRequest](upgradeExecutorPrepareAddExecutorTransactionRequest/index.md)
 - [upgradeExecutorPrepareRemoveExecutorTransactionRequest](upgradeExecutorPrepareRemoveExecutorTransactionRequest/index.md)
