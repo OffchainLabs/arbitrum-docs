@@ -73,7 +73,7 @@ const config = {
         tsconfig: `${sdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${sdkCodebasePath}/src/lib`],
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `src`, `node_modules`, `tests`, `scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
         excludeNotDocumented: true,
         excludeInternal: true,
         excludeExternals: true,
