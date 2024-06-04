@@ -96,14 +96,14 @@ BOLD makes permissionless validation possible for Arbitrum rollup chains and mar
 
 ### Reimbursements and penalities
 
-As mentioned above in Step 5, once all of a validator’s assertions are confirmed, a validator can withdraw their full assertion bond. Other costs, including the mini-bonds from both the malicious actor and honest party, will continue to be held in the Gnosis Safe multi-sig wallet controlled by the Arbitrum Foundation.
+As mentioned above in Step 5, once all of a validator’s assertions are confirmed, a validator can withdraw their full assertion bond and have their challenge bonds refunded automatically. Funds from a malicious party will be confiscated and sent to the ArbitrumDAO treasury.
 
 The ArbitrumDAO has full discretion over:
 
-- How to reimburse the mini-bond and gas costs to honest parties, and
+- How to reimburse the challenge bond and gas costs to honest parties, and
 - What to do with the funds confiscated from a malicious actor (including, but not limited to, rewarding the honest parties with a portion of the confiscated funds, burning the confiscated funds in its entirety, or sending the confiscated funds to the DAO treasury).
 
-Note that honest parties are not automatically rewarded with the funds confiscated from malicious actors to avoid creating a situation where honest parties wastefully compete to be the first one to make each honest move in the interactive fraud proof game. Additionally, BOLD resolves disputes by determining which top-level assertion is correct, without necessarily being able to classify every move as “honest” or “malicious” as part of the interactive fraud proof game without off-chain knowledge. These two factors are the reason why the ArbitrumDAO has the final authority on what to do with the funds that are held in Gnosis Safe multi-sig wallet.
+Note that honest parties are not automatically rewarded with the funds confiscated from malicious actors to avoid creating a situation where honest parties wastefully compete to be the first one to make each honest move in the interactive fraud proof game. Additionally, BOLD resolves disputes by determining which top-level assertion is correct, without necessarily being able to classify every move as “honest” or “malicious” as part of the interactive fraud proof game without off-chain knowledge. 
 
 ## What can I do with BOLD today?
 
@@ -117,6 +117,14 @@ If you’re intrigued by what BOLD can unlock for Arbitrum chains, we encourage 
 - Reading the formal specification and mathematical proofs behind BOLD in the [BOLD whitepaper](https://arxiv.org/abs/2404.10491).
 
 ## Wen mainnet?
+
+:::caution Withdrawals leading up to a BOLD upgrade
+
+For any Arbitrum chain that upgrades to use BOLD, including Arbitrum One and Arbitrum Nova, all pending withdrawals to L1 Ethereum that were initiated _before_ the upgrade will be delayed by 1 challenge period, plus the time between the withdrawal was initiated and the time that the BOLD upgrade takes place. This is because the upgrade effectively "resets" the challenge period for that are not yet finalized. 
+
+For example, if the upgrade happened at time _t_, then a withdrawal initiated at a time _t-6.4 days_ will need to wait an additional _6.4 days_ for their withdrawal to be finalized, totaling 12.8 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time _t_ will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days.
+
+:::
 
 BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD's journey to being deployed to Arbitrum chains include:
 
