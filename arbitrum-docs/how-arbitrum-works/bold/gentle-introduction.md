@@ -120,9 +120,9 @@ If you’re intrigued by what BOLD can unlock for Arbitrum chains, we encourage 
 
 :::caution Withdrawals leading up to a BOLD upgrade
 
-For any Arbitrum chain that upgrades to use BOLD, including Arbitrum One and Arbitrum Nova, all pending withdrawals to L1 Ethereum that were initiated _before_ the upgrade will be delayed by 1 challenge period, plus the time between the withdrawal was initiated and the time that the BOLD upgrade takes place. This is because the upgrade effectively "resets" the challenge period for that are not yet finalized. 
+The confirmation timing on any withdrawal that is in-flight when the BOLD upgrade is activated will be delayed until the first BOLD assertion is confirmed. This means that for any Arbitrum chain that upgrades to use BOLD, including Arbitrum One and Arbitrum Nova, all pending withdrawals to L1 Ethereum that were initiated _before_ the upgrade will be delayed by 1 challenge period, plus the time between the withdrawal was initiated and the time that the BOLD upgrade takes place. This is because the upgrade effectively "resets" the challenge period for that are not yet finalized. 
 
-For example, if the upgrade happened at time _t_, then a withdrawal initiated at a time _t-6.4 days_ will need to wait an additional _6.4 days_ for their withdrawal to be finalized, totaling 12.8 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time _t_ will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days.
+For example, if the upgrade happened at time _t_, then a withdrawal initiated at a time _t-2_ days will need to wait an additional _6.4_ days for their withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time _t_ will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days (two challenge periods).
 
 :::
 
