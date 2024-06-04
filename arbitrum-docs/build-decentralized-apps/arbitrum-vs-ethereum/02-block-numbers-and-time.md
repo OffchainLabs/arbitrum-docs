@@ -1,7 +1,7 @@
 ---
-title: 'Block numbers and time'
+title: 'Block gas limit, numbers and time'
 sidebar_position: 2
-description: This concept page provides information about the differences between Arbitrum and Ethereum in terms of block numbers and timing, so developers can easily understand what to expect when deploying to Arbitrum
+description: This concept page provides information about the differences between Arbitrum and Ethereum in terms of block gas limit, numbers and timing, so developers can easily understand what to expect when deploying to Arbitrum
 author: dzgoldman
 target_audience: developers who want to build on Arbitrum
 content_type: concept
@@ -17,7 +17,15 @@ As in Ethereum, Arbitrum clients submit transactions, and the system executes th
 
 Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between the time when a message is put into the inbox (and timestamped) and the time when the contract processes the message and carries out the transaction requested by the message.
 
-In this page we describe what does this mechanism mean for the block numbers and the time assumptions of the transactions submitted to Arbitrum.
+Additionally, since the calldata of Arbitrum transactions (or the DAC certificate on AnyTrust chains) is posted to Ethereum, the gas paid when executing them includes an L1 component to cover the costs of the batch poster.
+
+In this page we describe what does this mechanism mean for the block gas limit, block numbers and the time assumptions of the transactions submitted to Arbitrum.
+
+## Block gas limits
+
+When submitting a transaction to Arbitrum, the user needs to pay for the execution of the transaction on Arbitrum plus the relative cost of posting its calldata to Ethereum. Arbitrum handles this [2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) by adjusting the gas limit of the transaction to also cover the L1 posting costs. Hence, a given transaction might show a very high value as the gas limit.
+
+Then, the gas limit of an Arbitrum block is set as the sum of the total gas limit (execution + adjustment of the L1 costs) of all transactions. Because of that, the `gasLimit` shown when querying a block will likely be higher than the effective block gas limit (32 million). To check the actual gas used for execution on a specific block, we can look at the `gasUsed` field.
 
 ## Block numbers: Arbitrum vs. Ethereum
 
