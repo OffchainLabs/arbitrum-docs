@@ -21,7 +21,7 @@ Additionally, since the calldata of Arbitrum transactions (or the DAC certificat
 
 In this page we describe what does this mechanism mean for the block gas limit, block numbers and the time assumptions of the transactions submitted to Arbitrum.
 
-## Block gas limits
+## Block gas limit
 
 When submitting a transaction to Arbitrum, the user needs to pay for the execution of the transaction on Arbitrum plus the relative cost of posting its calldata to Ethereum. Arbitrum handles this [2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) by adjusting the gas limit of the transaction to also cover the L1 posting costs. Hence, a given transaction might show a very high value as the gas limit.
 
