@@ -45,6 +45,7 @@ Below you can find faucets for obtaining testnet ETH. If using a faucet on Ether
 | QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia | Arbitrum Sepolia |
 | Alchemy            | https://sepoliafaucet.com/                    | Ethereum Sepolia |
 | Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia |
+| GetBlock           | https://getblock.io/faucet/arb-sepolia/       | Arbitrum Sepolia |
 
 ## Useful smart contract addresses
 
