@@ -69,7 +69,7 @@ With PAY, our platform offers a low-code payment integration that creates a cust
 | Gaming SDK      | Unity                           | [Documentation](https://docs.venly.io/docs/getting-started-with-unity)         |
 | Gaming SDK      | Unreal Engine                   | [Documentation](https://docs.venly.io/docs/getting-started-with-unreal-engine) |
 
-# Venly - Arbitrum
+# Venly <> Arbitrum
 
 Venly supports the Arbitrum chain on its Wallet API which allows you to create wallets on the Arbitrum chain. You can send and receive funds to/from Arbitrum wallets directly through the Wallet API, enabling seamless integration with applications using the Arbitrum blockchain.
 
