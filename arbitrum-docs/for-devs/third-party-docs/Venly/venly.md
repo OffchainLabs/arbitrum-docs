@@ -6,7 +6,7 @@ sme: abdullahvenly
 sidebar_label: 'Venly'
 ---
 
-## Venly
+## [Venly](https://venly.io/)
 
 Venly stands out as a cutting-edge developer platform, designed to streamline digital asset management and foster the creation of innovative blockchain solutions. Known for its exceptional performance and strong security features, Venly’s non-custodian model ensures you retain complete ownership and control of your assets, distinguishing it from other platforms.
 
@@ -17,7 +17,7 @@ At Venly, our core principles guide our commitment to you:
 - **Optimal Performance**: We guarantee consistent high performance with a focus on efficiency and reliability.
 - **Innovation**: We are dedicated to providing cutting-edge solutions, staying at the forefront of technology.
 
-The Venly platform is anchored by three main pillars: **Digital Wallets, Digital Assets, and Payments**, each seamlessly integrated to enhance your blockchain experience.
+The [Venly](https://venly.io/) platform is anchored by three main pillars: **Digital Wallets, Digital Assets, and Payments**, each seamlessly integrated to enhance your blockchain experience.
 
 ```
 Venly Tools
@@ -69,7 +69,7 @@ With PAY, our platform offers a low-code payment integration that creates a cust
 | Gaming SDK      | Unity                           | [Documentation](https://docs.venly.io/docs/getting-started-with-unity)         |
 | Gaming SDK      | Unreal Engine                   | [Documentation](https://docs.venly.io/docs/getting-started-with-unreal-engine) |
 
-# Venly <> Arbitrum
+# [Venly](https://venly.io/) - Arbitrum
 
 Venly supports the Arbitrum chain on its Wallet API which allows you to create wallets on the Arbitrum chain. You can send and receive funds to/from Arbitrum wallets directly through the Wallet API, enabling seamless integration with applications using the Arbitrum blockchain.
 
