@@ -416,7 +416,7 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'orbit-sdk-docs/index',
+                  id: 'orbit-sdk-docs/index/README',
                   label: `SDK reference`,
                 },
                 {

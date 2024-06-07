@@ -8,15 +8,15 @@ toc_max_heading_level: 5
 const arbAggregatorConfig: object;
 ```
 
-[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006d)
+[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006d)
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbAggregatorABI |
-| `address` | `object` | arbAggregatorAddress |
-| `address.421614` | `"0x000000000000000000000000000000000000006D"` | '0x000000000000000000000000000000000000006D' |
+| Member           | Type                                                                                      | Value                                        |
+| :--------------- | :---------------------------------------------------------------------------------------- | :------------------------------------------- |
+| `abi`            | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbAggregatorABI                             |
+| `address`        | `object`                                                                                  | arbAggregatorAddress                         |
+| `address.421614` | `"0x000000000000000000000000000000000000006D"`                                            | '0x000000000000000000000000000000000000006D' |
 
 ## Source
 

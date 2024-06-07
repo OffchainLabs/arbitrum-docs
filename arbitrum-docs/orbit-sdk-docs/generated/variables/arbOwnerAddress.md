@@ -8,12 +8,12 @@ toc_max_heading_level: 5
 const arbOwnerAddress: object;
 ```
 
-[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x0000000000000000000000000000000000000070)
+[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x0000000000000000000000000000000000000070)
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
+| Member   | Type                                           | Value                                        |
+| :------- | :--------------------------------------------- | :------------------------------------------- |
 | `421614` | `"0x0000000000000000000000000000000000000070"` | '0x0000000000000000000000000000000000000070' |
 
 ## Source

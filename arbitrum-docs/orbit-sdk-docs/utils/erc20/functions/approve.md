@@ -5,15 +5,15 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function approve(__namedParameters: ApproveProps): Promise<any>
+function approve(__namedParameters: ApproveProps): Promise<any>;
 ```
 
 Approve the spending of a specified amount of tokens by a designated address.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type           |
+| :------------------ | :------------- |
 | `__namedParameters` | `ApproveProps` |
 
 ## Returns

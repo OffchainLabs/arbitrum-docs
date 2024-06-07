@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function upgradeExecutorPrepareRemoveExecutorTransactionRequest(upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams): Promise<any>
+function upgradeExecutorPrepareRemoveExecutorTransactionRequest(
+  upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams,
+): Promise<any>;
 ```
 
 Prepares a transaction to revoke the executor role from an account
@@ -14,24 +16,24 @@ Prepares a transaction to revoke the executor role from an account
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter                                                      | Type                                                                                                                                              | Description                                                                                                                                     |
+| :------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `upgradeExecutorPrepareRemoveExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md) | [UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md) |
 
 ## Returns
 
 `Promise`\<`any`\>
 
-
 ## Example
 
 ```ts
-const removeExecutorTransactionRequest = await upgradeExecutorPrepareRemoveExecutorTransactionRequest({
-  account: accountAddress,
-  upgradeExecutorAddress: coreContracts.upgradeExecutor,
-  executorAccountAddress: deployer.address,
-  publicClient,
-});
+const removeExecutorTransactionRequest =
+  await upgradeExecutorPrepareRemoveExecutorTransactionRequest({
+    account: accountAddress,
+    upgradeExecutorAddress: coreContracts.upgradeExecutor,
+    executorAccountAddress: deployer.address,
+    publicClient,
+  });
 ```
 
 ## Source

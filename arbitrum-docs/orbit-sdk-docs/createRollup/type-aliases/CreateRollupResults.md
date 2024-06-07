@@ -26,10 +26,10 @@ the core contracts
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `coreContracts` | `CoreContracts` |
-| `transaction` | `CreateRollupTransaction` |
+| Member               | Type                             |
+| :------------------- | :------------------------------- |
+| `coreContracts`      | `CoreContracts`                  |
+| `transaction`        | `CreateRollupTransaction`        |
 | `transactionReceipt` | `CreateRollupTransactionReceipt` |
 
 ## Source

@@ -12,9 +12,9 @@ erc20 returns a Foo.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | erc20ABI |
+| Member | Type                                                                                                                                        | Value    |
+| :----- | :------------------------------------------------------------------------------------------------------------------------------------------ | :------- |
+| `abi`  | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | erc20ABI |
 
 ## Source
 

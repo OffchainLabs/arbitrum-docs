@@ -97,26 +97,6 @@ const config = {
           `typedoc-plugin-frontmatter`,
           './src/scripts/arbitrumSdkDocsHandler.ts',
         ],
-
-        // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        propertiesFormat: 'table',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        sanitizeComments: true,
-        frontmatterGlobals: {
-          layout: 'docs',
-          sidebar: true,
-          toc_max_heading_level: 5,
-        },
       },
     ],
     [

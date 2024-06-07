@@ -6,12 +6,13 @@ toc_max_heading_level: 5
 
 ```ts
 function createTokenBridgeGetInputs(
-   l1DeployerAddress: string, 
-   l1PublicClient: object, 
-   l2PublicClient: object, 
-   l1TokenBridgeCreatorAddress: string, 
-   rollupAddress: string, 
-retryableGasOverrides?: TransactionRequestRetryableGasOverrides): Promise<CreateTokenBridgeGetInputsResult>
+  l1DeployerAddress: string,
+  l1PublicClient: object,
+  l2PublicClient: object,
+  l1TokenBridgeCreatorAddress: string,
+  rollupAddress: string,
+  retryableGasOverrides?: TransactionRequestRetryableGasOverrides,
+): Promise<CreateTokenBridgeGetInputsResult>;
 ```
 
 Returns a CreateTokenBridgeGetInputsResult object containing inputs
@@ -19,14 +20,14 @@ required for creating a token bridge.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `l1DeployerAddress` | `string` |
-| `l1PublicClient` | `object` |
-| `l2PublicClient` | `object` |
-| `l1TokenBridgeCreatorAddress` | `string` |
-| `rollupAddress` | `string` |
-| `retryableGasOverrides`? | `TransactionRequestRetryableGasOverrides` |
+| Parameter                     | Type                                      |
+| :---------------------------- | :---------------------------------------- |
+| `l1DeployerAddress`           | `string`                                  |
+| `l1PublicClient`              | `object`                                  |
+| `l2PublicClient`              | `object`                                  |
+| `l1TokenBridgeCreatorAddress` | `string`                                  |
+| `rollupAddress`               | `string`                                  |
+| `retryableGasOverrides`?      | `TransactionRequestRetryableGasOverrides` |
 
 ## Returns
 

@@ -12,10 +12,10 @@ arbAggregator retrieves data from a specified source.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbAggregatorABI |
-| `address` | `"0x000000000000000000000000000000000000006D"` | ... |
+| Member    | Type                                                                                      | Value            |
+| :-------- | :---------------------------------------------------------------------------------------- | :--------------- |
+| `abi`     | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbAggregatorABI |
+| `address` | `"0x000000000000000000000000000000000000006D"`                                            | ...              |
 
 ## Source
 
