@@ -15,9 +15,9 @@ specific amount of tokens for a spender.
 
 ## Parameters
 
-| Parameter           | Type                                    |
-| :------------------ | :-------------------------------------- |
-| `__namedParameters` | `ApprovePrepareTransactionRequestProps` |
+| Parameter           | Type                                                                                                |
+| :------------------ | :-------------------------------------------------------------------------------------------------- |
+| `__namedParameters` | [`ApprovePrepareTransactionRequestProps`](../type-aliases/ApprovePrepareTransactionRequestProps.md) |
 
 ## Returns
 

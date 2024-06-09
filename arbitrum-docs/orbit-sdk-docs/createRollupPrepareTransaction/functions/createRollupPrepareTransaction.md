@@ -22,7 +22,7 @@ inputs for creating a rollup.
 
 ## Returns
 
-`CreateRollupTransaction`
+[`CreateRollupTransaction`](../type-aliases/CreateRollupTransaction.md)
 
 ## Source
 

@@ -1,24 +1,22 @@
-[Documentation](../../../README.md) / [utils/erc20](../README.md) / FetchAllowanceProps
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-type FetchAllowanceProps<TChain>: object;
+type FetchAllowanceProps: object;
 ```
-
-## Type parameters
-
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member         | Type                                    |
-| :------------- | :-------------------------------------- |
-| `address`      | `Address`                               |
-| `owner`        | `Address`                               |
-| `publicClient` | `PublicClient`\<`Transport`, `TChain`\> |
-| `spender`      | `Address`                               |
+| Member         | Type           |
+| :------------- | :------------- |
+| `address`      | `Address`      |
+| `owner`        | `Address`      |
+| `publicClient` | `PublicClient` |
+| `spender`      | `Address`      |
 
 ## Source
 
-[src/utils/erc20.ts:72](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/utils/erc20.ts#L72)
+[src/utils/erc20.ts:75](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/erc20.ts#L75)

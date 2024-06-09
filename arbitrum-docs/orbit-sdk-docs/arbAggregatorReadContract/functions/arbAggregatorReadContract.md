@@ -32,14 +32,14 @@ result.
 
 ## Parameters
 
-| Parameter | Type                                                     |
-| :-------- | :------------------------------------------------------- |
-| `client`  | `object`                                                 |
-| `params`  | `ArbAggregatorReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                               |
+| :-------- | :----------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                           |
+| `params`  | [`ArbAggregatorReadContractParameters`](../type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
-`Promise`\<`ArbAggregatorReadContractReturnType`\<`TFunctionName`\>\>
+`Promise` \<[`ArbAggregatorReadContractReturnType`](../type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 

@@ -33,7 +33,7 @@ Creates the configuration object to be used with [createRollup](../../createRoll
 | `client`                                | `Client`\<`TTransport`, `TChain`, `undefined` \| `Account`\<\`0x$\{string\}\`\>, `undefined`, `undefined` \| `object`\> | Parent chain client            |
 | `params`                                | `object`                                                                                                                | Chain configuration parameters |
 | `params.baseStake`                      | `undefined` \| `bigint`                                                                                                 |                                |
-| `params.chainConfig`?                   | `ChainConfig`                                                                                                           |                                |
+| `params.chainConfig`?                   | [`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md)                                                    |                                |
 | `params.chainId`                        | `bigint`                                                                                                                |                                |
 | `params.confirmPeriodBlocks`            | `undefined` \| `bigint`                                                                                                 |                                |
 | `params.extraChallengeTimeBlocks`       | `undefined` \| `bigint`                                                                                                 |                                |
@@ -46,9 +46,9 @@ Creates the configuration object to be used with [createRollup](../../createRoll
 
 ## Returns
 
-`CreateRollupPrepareDeploymentParamsConfigResult`
+[`CreateRollupPrepareDeploymentParamsConfigResult`](../type-aliases/CreateRollupPrepareDeploymentParamsConfigResult.md)
 
-CreateRollupPrepareDeploymentParamsConfigResult
+[CreateRollupPrepareDeploymentParamsConfigResult](../type-aliases/CreateRollupPrepareDeploymentParamsConfigResult.md)
 
 ## See
 

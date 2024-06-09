@@ -34,10 +34,10 @@ transaction request using the provided client and account information.
 
 ## Parameters
 
-| Parameter | Type                                                                  |
-| :-------- | :-------------------------------------------------------------------- |
-| `client`  | `object`                                                              |
-| `params`  | `ArbAggregatorPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                                         |
+| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                                                     |
+| `params`  | [`ArbAggregatorPrepareTransactionRequestParameters`](../type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

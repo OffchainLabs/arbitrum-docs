@@ -50,10 +50,10 @@ contract.
 
 ## Parameters
 
-| Parameter | Type                                                             |
-| :-------- | :--------------------------------------------------------------- |
-| `client`  | `object`                                                         |
-| `params`  | `ArbOwnerPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                               |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                                           |
+| `params`  | [`ArbOwnerPrepareTransactionRequestParameters`](../type-aliases/ArbOwnerPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

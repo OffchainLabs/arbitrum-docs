@@ -1,4 +1,8 @@
-[Documentation](../../README.md) / [rollupAdminLogicReadContract](../README.md) / RollupAdminLogicReadContractParameters
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 type RollupAdminLogicReadContractParameters<TFunctionName>: object & GetFunctionArgs<RollupAdminLogicAbi, TFunctionName>;
@@ -19,4 +23,4 @@ type RollupAdminLogicReadContractParameters<TFunctionName>: object & GetFunction
 
 ## Source
 
-[src/rollupAdminLogicReadContract.ts:18](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/rollupAdminLogicReadContract.ts#L18)
+[src/rollupAdminLogicReadContract.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/rollupAdminLogicReadContract.ts#L18)

@@ -12,9 +12,9 @@ Checks if there is any trust chain configuration present in the given ChainConfi
 
 ## Parameters
 
-| Parameter     | Type          |
-| :------------ | :------------ |
-| `chainConfig` | `ChainConfig` |
+| Parameter     | Type                                                                    |
+| :------------ | :---------------------------------------------------------------------- |
+| `chainConfig` | [`ChainConfig`](../../../types/ChainConfig/type-aliases/ChainConfig.md) |
 
 ## Returns
 

@@ -16,13 +16,13 @@ transaction receipt to return the core contracts. Returns a CoreContracts.
 
 ## Parameters
 
-| Parameter           | Type                                   |
-| :------------------ | :------------------------------------- |
-| `__namedParameters` | `CreateRollupFetchCoreContractsParams` |
+| Parameter           | Type                                                                                              |
+| :------------------ | :------------------------------------------------------------------------------------------------ |
+| `__namedParameters` | [`CreateRollupFetchCoreContractsParams`](../type-aliases/CreateRollupFetchCoreContractsParams.md) |
 
 ## Returns
 
-`Promise`\<`CoreContracts`\>
+`Promise` \<[`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md)\>
 
 ## Source
 

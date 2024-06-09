@@ -28,7 +28,7 @@ respectively.
 
 ## Returns
 
-`ArbOwnerPublicActions`\<`TChain`\>
+[`ArbOwnerPublicActions`](../type-aliases/ArbOwnerPublicActions.md)\<`TChain`\>
 
 ## Source
 

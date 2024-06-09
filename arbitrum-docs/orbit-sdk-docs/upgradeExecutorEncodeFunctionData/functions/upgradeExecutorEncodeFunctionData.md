@@ -1,36 +1,34 @@
-[Documentation](../../README.md) / [upgradeExecutorEncodeFunctionData](../README.md) / upgradeExecutorEncodeFunctionData
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 function upgradeExecutorEncodeFunctionData<TFunctionName>(__namedParameters: {
   [K in string | number | symbol]: Omit<
-    EncodeFunctionDataParameters<readonly [Object, Object, Object, Object, Object], TFunctionName>,
+    EncodeFunctionDataParameters<any, TFunctionName, any>,
     'abi'
   >[K];
-}): `0x${string}`;
+}): any;
 ```
 
 ## Type parameters
 
-| Type parameter |
-| :------------- |
-
-| `TFunctionName` _extends_
-\| `"execute"`
-\| `"executeCall"`
-\| `"hasRole"`
-\| `"grantRole"`
-\| `"revokeRole"` |
+| Type parameter                      |
+| :---------------------------------- |
+| `TFunctionName` _extends_ `unknown` |
 
 ## Parameters
 
-| Parameter           | Type                                                                                                                                                              |
-| :------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `__namedParameters` | \{ \[K in string \| number \| symbol\]: Omit\<EncodeFunctionDataParameters\<readonly \[Object, Object, Object, Object, Object\], TFunctionName\>, "abi"\>\[K\] \} |
+| Parameter           | Type                                                                                                                   |
+| :------------------ | :--------------------------------------------------------------------------------------------------------------------- |
+| `__namedParameters` | \{ \[K in string \| number \| symbol\]: Omit\<EncodeFunctionDataParameters\<any, TFunctionName, any\>, "abi"\>\[K\] \} |
 
 ## Returns
 
-\`0x$\{string\}\`
+`any`
 
 ## Source
 
-[src/upgradeExecutorEncodeFunctionData.ts:22](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/upgradeExecutorEncodeFunctionData.ts#L22)
+[src/upgradeExecutorEncodeFunctionData.ts:22](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/upgradeExecutorEncodeFunctionData.ts#L22)

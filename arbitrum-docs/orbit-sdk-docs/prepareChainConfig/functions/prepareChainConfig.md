@@ -10,18 +10,18 @@ function prepareChainConfig(params: PrepareChainConfigParams): ChainConfig;
 
 PrepareChainConfig merges the default chain configuration with the provided
 parameters, including specific configurations for the Clique and Arbitrum
-consensus algorithms. It returns a ChainConfig object with the
+consensus algorithms. It returns a [ChainConfig](../../types/ChainConfig/type-aliases/ChainConfig.md) object with the
 updated values.
 
 ## Parameters
 
-| Parameter | Type                       |
-| :-------- | :------------------------- |
-| `params`  | `PrepareChainConfigParams` |
+| Parameter | Type                                                                      |
+| :-------- | :------------------------------------------------------------------------ |
+| `params`  | [`PrepareChainConfigParams`](../type-aliases/PrepareChainConfigParams.md) |
 
 ## Returns
 
-`ChainConfig`
+[`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md)
 
 ## Source
 

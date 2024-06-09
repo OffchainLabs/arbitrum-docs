@@ -1,16 +1,13 @@
-[Documentation](../../README.md) / [createTokenBridgePrepareSetWethGatewayTransactionRequest](../README.md) / CreateTokenBridgePrepareRegisterWethGatewayTransactionRequestParams
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-type CreateTokenBridgePrepareRegisterWethGatewayTransactionRequestParams<TParentChain, TOrbitChain>: Prettify<WithTokenBridgeCreatorAddressOverride<object>>;
+type CreateTokenBridgePrepareRegisterWethGatewayTransactionRequestParams: Prettify<WithTokenBridgeCreatorAddressOverride<object>>;
 ```
-
-## Type parameters
-
-| Type parameter                                  |
-| :---------------------------------------------- |
-| `TParentChain` _extends_ `Chain` \| `undefined` |
-| `TOrbitChain` _extends_ `Chain` \| `undefined`  |
 
 ## Source
 
-[src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts:21](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts#L21)
+[src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts#L21)

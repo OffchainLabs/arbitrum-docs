@@ -1,22 +1,33 @@
-[Documentation](../../../README.md) / [types/ParentChain](../README.md) / validateParentChain
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-function validateParentChain<TChain>(
-  chainIdOrClient: number | Client<Transport, TChain>,
+function validateParentChain<TTransport, TChain>(
+  chainIdOrClient:
+    | number
+    | Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>,
 ): ParentChainId;
 ```
 
+Validates the provided parent chain ID to ensure it is supported by the
+system. If the parent chain ID is not valid, an error is thrown with a
+corresponding message. Returns the validated parent chain ID.
+
 ## Type parameters
 
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `undefined` \| `Chain` |
+| Type parameter                                                                                                 | Value                                                                                   |
+| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
 
 ## Parameters
 
-| Parameter         | Type                                          |
-| :---------------- | :-------------------------------------------- |
-| `chainIdOrClient` | `number` \| `Client`\<`Transport`, `TChain`\> |
+| Parameter         | Type                                                                                                                                |
+| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| `chainIdOrClient` | `number` \| `Client`\<`TTransport`, `TChain`, `undefined` \| `Account`\<\`0x$\{string\}\`\>, `undefined`, `undefined` \| `object`\> |
 
 ## Returns
 
@@ -24,4 +35,4 @@ function validateParentChain<TChain>(
 
 ## Source
 
-[src/types/ParentChain.ts:22](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/types/ParentChain.ts#L22)
+[src/types/ParentChain.ts:29](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/types/ParentChain.ts#L29)

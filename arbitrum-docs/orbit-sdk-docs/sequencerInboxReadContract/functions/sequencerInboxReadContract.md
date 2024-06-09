@@ -45,14 +45,14 @@ the result.
 
 ## Parameters
 
-| Parameter | Type                                                      |
-| :-------- | :-------------------------------------------------------- |
-| `client`  | `object`                                                  |
-| `params`  | `SequencerInboxReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                 |
+| :-------- | :------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                             |
+| `params`  | [`SequencerInboxReadContractParameters`](../type-aliases/SequencerInboxReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
-`Promise`\<`SequencerInboxReadContractReturnType`\<`TFunctionName`\>\>
+`Promise` \<[`SequencerInboxReadContractReturnType`](../type-aliases/SequencerInboxReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 

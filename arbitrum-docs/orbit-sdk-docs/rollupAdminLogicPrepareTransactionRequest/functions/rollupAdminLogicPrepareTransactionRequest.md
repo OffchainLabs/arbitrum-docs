@@ -96,10 +96,10 @@ executed on a public client.
 
 ## Parameters
 
-| Parameter | Type                                                                     |
-| :-------- | :----------------------------------------------------------------------- |
-| `client`  | `object`                                                                 |
-| `params`  | `RollupAdminLogicPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                                               |
+| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                                                           |
+| `params`  | [`RollupAdminLogicPrepareTransactionRequestParameters`](../type-aliases/RollupAdminLogicPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

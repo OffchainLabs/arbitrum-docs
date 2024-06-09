@@ -10,7 +10,7 @@ function rollupAdminLogicPublicActions<TParams, TTransport, TChain>(
 ): (client: PublicClient<TTransport, TChain>) => RollupAdminLogicActions<TParams['rollup'], TChain>;
 ```
 
-The function rollupAdminLogicPublicActions returns a RollupAdminLogicActions object that contains two methods:
+The function rollupAdminLogicPublicActions returns a [RollupAdminLogicActions](../type-aliases/RollupAdminLogicActions.md) object that contains two methods:
 rollupAdminLogicReadContract and rollupAdminLogicPrepareTransactionRequest.
 These methods allow interacting with the Rollup Admin Logic smart contract by
 reading contract data and preparing transaction requests.
@@ -41,7 +41,7 @@ reading contract data and preparing transaction requests.
 
 ### Returns
 
-`RollupAdminLogicActions`\<`TParams`\[`"rollup"`\], `TChain`\>
+[`RollupAdminLogicActions`](../type-aliases/RollupAdminLogicActions.md)\<`TParams`\[`"rollup"`\], `TChain`\>
 
 ## Source
 

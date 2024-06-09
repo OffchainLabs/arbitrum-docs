@@ -1,21 +1,19 @@
-[Documentation](../../README.md) / [createTokenBridgePrepareTransactionReceipt](../README.md) / WaitForRetryablesParameters
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-type WaitForRetryablesParameters<TOrbitChain>: object;
+type WaitForRetryablesParameters: object;
 ```
-
-## Type parameters
-
-| Type parameter                                 |
-| :--------------------------------------------- |
-| `TOrbitChain` _extends_ `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member              | Type                                         |
-| :------------------ | :------------------------------------------- |
-| `orbitPublicClient` | `PublicClient`\<`Transport`, `TOrbitChain`\> |
+| Member              | Type           |
+| :------------------ | :------------- |
+| `orbitPublicClient` | `PublicClient` |
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionReceipt.ts:52](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/createTokenBridgePrepareTransactionReceipt.ts#L52)
+[src/createTokenBridgePrepareTransactionReceipt.ts:50](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareTransactionReceipt.ts#L50)

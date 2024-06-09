@@ -14,9 +14,9 @@ returns a transaction receipt TransactionReceipt.
 
 ## Parameters
 
-| Parameter           | Type                   |
-| :------------------ | :--------------------- |
-| `__namedParameters` | `SetValidKeysetParams` |
+| Parameter           | Type                                                              |
+| :------------------ | :---------------------------------------------------------------- |
+| `__namedParameters` | [`SetValidKeysetParams`](../type-aliases/SetValidKeysetParams.md) |
 
 ## Returns
 

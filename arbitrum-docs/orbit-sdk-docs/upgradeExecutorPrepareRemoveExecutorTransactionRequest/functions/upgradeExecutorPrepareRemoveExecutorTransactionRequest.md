@@ -24,6 +24,8 @@ Prepares a transaction to revoke the executor role from an account
 
 `Promise`\<`any`\>
 
+Promise<PrepareTransactionRequestReturnType> - the transaction request
+
 ## Example
 
 ```ts

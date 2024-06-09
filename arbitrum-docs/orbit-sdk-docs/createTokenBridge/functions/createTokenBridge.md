@@ -19,13 +19,15 @@ Returns the token bridge core contracts.
 
 ## Parameters
 
-| Parameter                 | Type                      | Description |
-| :------------------------ | :------------------------ | :---------- |
-| `createTokenBridgeParams` | `CreateTokenBridgeParams` |             |
+| Parameter                 | Type                                                                    | Description |
+| :------------------------ | :---------------------------------------------------------------------- | :---------- |
+| `createTokenBridgeParams` | [`CreateTokenBridgeParams`](../type-aliases/CreateTokenBridgeParams.md) |             |
 
 ## Returns
 
-`Promise`\<`CreateTokenBridgeResults`\>
+`Promise` \<[`CreateTokenBridgeResults`](../type-aliases/CreateTokenBridgeResults.md)\>
+
+Promise<[CreateTokenBridgeResults](../type-aliases/CreateTokenBridgeResults.md)>
 
 ## Example
 

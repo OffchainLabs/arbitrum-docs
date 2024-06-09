@@ -6,6 +6,12 @@ toc_max_heading_level: 5
 
 ## Index
 
+### Type Aliases
+
+- [ApprovePrepareTransactionRequestProps](type-aliases/ApprovePrepareTransactionRequestProps.md)
+- [ApproveProps](type-aliases/ApproveProps.md)
+- [FetchAllowanceProps](type-aliases/FetchAllowanceProps.md)
+
 ### Functions
 
 - [approve](functions/approve.md)

@@ -20,6 +20,7 @@ toc_max_heading_level: 5
 - [arbOwnerPublicABI](variables/arbOwnerPublicABI.md)
 - [arbOwnerPublicAddress](variables/arbOwnerPublicAddress.md)
 - [arbOwnerPublicConfig](variables/arbOwnerPublicConfig.md)
+- [erc20ABI](variables/erc20ABI.md)
 - [rollupCreatorABI](variables/rollupCreatorABI.md)
 - [rollupCreatorAddress](variables/rollupCreatorAddress.md)
 - [rollupCreatorConfig](variables/rollupCreatorConfig.md)

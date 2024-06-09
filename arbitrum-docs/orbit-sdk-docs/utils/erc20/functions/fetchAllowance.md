@@ -15,9 +15,9 @@ address as parameters. It returns the allowance amount as a BigInt value.
 
 ## Parameters
 
-| Parameter           | Type                  |
-| :------------------ | :-------------------- |
-| `__namedParameters` | `FetchAllowanceProps` |
+| Parameter           | Type                                                            |
+| :------------------ | :-------------------------------------------------------------- |
+| `__namedParameters` | [`FetchAllowanceProps`](../type-aliases/FetchAllowanceProps.md) |
 
 ## Returns
 

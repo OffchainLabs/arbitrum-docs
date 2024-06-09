@@ -13,7 +13,7 @@ function createTokenBridgeFetchTokenBridgeContracts(
 Creates and fetches the token bridge contracts on both the parent chain and
 the orbit chain. It retrieves addresses for various contracts including
 routers, gateways, WETH, proxy admin, beacon proxy factory, upgrade executor,
-and multicall on both chains. Returns TokenBridgeContracts.
+and multicall on both chains. Returns [TokenBridgeContracts](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md).
 
 ## Parameters
 
@@ -26,7 +26,7 @@ and multicall on both chains. Returns TokenBridgeContracts.
 
 ## Returns
 
-`Promise`\<`TokenBridgeContracts`\>
+`Promise` \<[`TokenBridgeContracts`](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md)\>
 
 ## Source
 

@@ -14,9 +14,9 @@ the calculated call value.
 
 ## Parameters
 
-| Parameter | Type                 |
-| :-------- | :------------------- |
-| `params`  | `CreateRollupParams` |
+| Parameter | Type                                                                                     |
+| :-------- | :--------------------------------------------------------------------------------------- |
+| `params`  | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
 
 ## Returns
 

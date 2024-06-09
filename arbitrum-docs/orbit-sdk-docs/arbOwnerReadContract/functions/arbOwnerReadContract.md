@@ -30,14 +30,14 @@ Reads data from a contract owned by an arbitrary owner.
 
 ## Parameters
 
-| Parameter | Type                                                |
-| :-------- | :-------------------------------------------------- |
-| `client`  | `object`                                            |
-| `params`  | `ArbOwnerReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                     |
+| :-------- | :------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                 |
+| `params`  | [`ArbOwnerReadContractParameters`](../type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
-`Promise`\<`ArbOwnerReadContractReturnType`\<`TFunctionName`\>\>
+`Promise` \<[`ArbOwnerReadContractReturnType`](../type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 

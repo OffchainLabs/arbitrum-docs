@@ -48,14 +48,14 @@ result.
 
 ## Parameters
 
-| Parameter | Type                                                  |
-| :-------- | :---------------------------------------------------- |
-| `client`  | `object`                                              |
-| `params`  | `ArbGasInfoReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                         |
+| :-------- | :----------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                     |
+| `params`  | [`ArbGasInfoReadContractParameters`](../type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
-`Promise`\<`ArbGasInfoReadContractReturnType`\<`TFunctionName`\>\>
+`Promise` \<[`ArbGasInfoReadContractReturnType`](../type-aliases/ArbGasInfoReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 

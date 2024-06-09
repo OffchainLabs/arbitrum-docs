@@ -1,4 +1,8 @@
-[Documentation](../../README.md) / [arbOwnerPrepareTransactionRequest](../README.md) / ArbOwnerEncodeFunctionDataParameters
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 type ArbOwnerEncodeFunctionDataParameters<TFunctionName>: EncodeFunctionDataParameters<ArbOwnerAbi, TFunctionName>;
@@ -12,4 +16,4 @@ type ArbOwnerEncodeFunctionDataParameters<TFunctionName>: EncodeFunctionDataPara
 
 ## Source
 
-[src/arbOwnerPrepareTransactionRequest.ts:16](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/arbOwnerPrepareTransactionRequest.ts#L16)
+[src/arbOwnerPrepareTransactionRequest.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/arbOwnerPrepareTransactionRequest.ts#L16)

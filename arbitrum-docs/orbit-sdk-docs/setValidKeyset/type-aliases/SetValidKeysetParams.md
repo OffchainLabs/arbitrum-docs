@@ -1,24 +1,22 @@
-[Documentation](../../README.md) / [setValidKeyset](../README.md) / SetValidKeysetParams
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-type SetValidKeysetParams<TChain>: object;
+type SetValidKeysetParams: object;
 ```
-
-## Type parameters
-
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member          | Type                                                                                                                            |
-| :-------------- | :------------------------------------------------------------------------------------------------------------------------------ |
-| `coreContracts` | `Pick`\<[`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md), `"upgradeExecutor"` \| `"sequencerInbox"`\> |
-| `keyset`        | \`0x$\{string\}\`                                                                                                               |
-| `publicClient`  | `PublicClient`\<`Transport`, `TChain`\>                                                                                         |
-| `walletClient`  | `WalletClient`                                                                                                                  |
+| Member          | Type                                                                                                                             |
+| :-------------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| `coreContracts` | `Pick` \<[`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md), `"upgradeExecutor"` \| `"sequencerInbox"`\> |
+| `keyset`        | \`0x$\{string\}\`                                                                                                                |
+| `publicClient`  | `PublicClient`                                                                                                                   |
+| `walletClient`  | `WalletClient`                                                                                                                   |
 
 ## Source
 
-[src/setValidKeyset.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/setValidKeyset.ts#L8)
+[src/setValidKeyset.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/setValidKeyset.ts#L8)

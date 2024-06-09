@@ -95,14 +95,14 @@ and returns the result.
 
 ## Parameters
 
-| Parameter | Type                                                        |
-| :-------- | :---------------------------------------------------------- |
-| `client`  | `object`                                                    |
-| `params`  | `RollupAdminLogicReadContractParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                     |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                                 |
+| `params`  | [`RollupAdminLogicReadContractParameters`](../type-aliases/RollupAdminLogicReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
-`Promise`\<`RollupAdminLogicReadContractReturnType`\<`TFunctionName`\>\>
+`Promise` \<[`RollupAdminLogicReadContractReturnType`](../type-aliases/RollupAdminLogicReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 

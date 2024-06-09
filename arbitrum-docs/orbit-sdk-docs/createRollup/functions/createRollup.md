@@ -33,6 +33,8 @@ Returns the transaction, the transaction receipt, and the core contracts.
 
 `Promise` \<[`CreateRollupResults`](../type-aliases/CreateRollupResults.md)\>
 
+Promise<[CreateRollupResults](../type-aliases/CreateRollupResults.md)> - the transaction, the transaction receipt, and the core contracts.
+
 ## Example
 
 ```ts

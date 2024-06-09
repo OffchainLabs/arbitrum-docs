@@ -21,7 +21,7 @@ including a method to wait for retryable messages on the Orbit chain.
 
 ## Returns
 
-`CreateTokenBridgeSetWethGatewayTransactionReceipt`
+[`CreateTokenBridgeSetWethGatewayTransactionReceipt`](../type-aliases/CreateTokenBridgeSetWethGatewayTransactionReceipt.md)
 
 ## Source
 

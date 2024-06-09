@@ -24,6 +24,8 @@ Returns an object containing the addresses of the privileged accounts as keys, a
 
 `Promise` \<[`UpgradeExecutorPrivilegedAccounts`](../type-aliases/UpgradeExecutorPrivilegedAccounts.md)\>
 
+Promise<[UpgradeExecutorPrivilegedAccounts](../type-aliases/UpgradeExecutorPrivilegedAccounts.md)> - an object containing the addresses of the privileged accounts as keys, and an array with a hash for each role they have
+
 ## Example
 
 ```ts

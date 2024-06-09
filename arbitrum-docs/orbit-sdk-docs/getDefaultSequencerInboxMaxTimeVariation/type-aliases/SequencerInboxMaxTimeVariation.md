@@ -1,4 +1,8 @@
-[Documentation](../../README.md) / [getDefaultSequencerInboxMaxTimeVariation](../README.md) / SequencerInboxMaxTimeVariation
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 type SequencerInboxMaxTimeVariation: object;
@@ -15,4 +19,4 @@ type SequencerInboxMaxTimeVariation: object;
 
 ## Source
 
-[src/getDefaultSequencerInboxMaxTimeVariation.ts:6](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/getDefaultSequencerInboxMaxTimeVariation.ts#L6)
+[src/getDefaultSequencerInboxMaxTimeVariation.ts:5](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/getDefaultSequencerInboxMaxTimeVariation.ts#L5)

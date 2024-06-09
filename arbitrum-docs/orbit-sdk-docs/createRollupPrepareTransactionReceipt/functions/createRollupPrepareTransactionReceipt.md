@@ -11,7 +11,7 @@ function createRollupPrepareTransactionReceipt(
 ```
 
 Creates a transaction receipt for preparing a rollup, including core contract
-information. Returns a CreateRollupTransactionReceipt.
+information. Returns a [CreateRollupTransactionReceipt](../type-aliases/CreateRollupTransactionReceipt.md).
 
 ## Parameters
 
@@ -21,7 +21,7 @@ information. Returns a CreateRollupTransactionReceipt.
 
 ## Returns
 
-`CreateRollupTransactionReceipt`
+[`CreateRollupTransactionReceipt`](../type-aliases/CreateRollupTransactionReceipt.md)
 
 ## Source
 

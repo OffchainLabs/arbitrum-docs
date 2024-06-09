@@ -26,7 +26,7 @@ ArbAggregator smart contract on the specified chain.
 
 ## Returns
 
-`ArbAggregatorActions`\<`TChain`\>
+[`ArbAggregatorActions`](../type-aliases/ArbAggregatorActions.md)\<`TChain`\>
 
 ## Source
 

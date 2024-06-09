@@ -1,16 +1,25 @@
-[Documentation](../../../README.md) / [types/ParentChain](../README.md) / validateParentChainPublicClient
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-function validateParentChainPublicClient<TChain>(
+function validateParentChainPublicClient<TTransport, TChain>(
   publicClient: object,
-): ParentChainPublicClient<TChain>;
+): ParentChainPublicClient;
 ```
+
+Validates the parent chain of a PublicClient to ensure it is
+supported. If the parent chain is not supported, an error is thrown. Returns
+a [ParentChainPublicClient](../type-aliases/ParentChainPublicClient.md).
 
 ## Type parameters
 
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `undefined` \| `Chain` |
+| Type parameter                                                                                                 | Value                                                                                   |
+| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
 
 ## Parameters
 
@@ -20,8 +29,8 @@ function validateParentChainPublicClient<TChain>(
 
 ## Returns
 
-[`ParentChainPublicClient`](../type-aliases/ParentChainPublicClient.md)\<`TChain`\>
+[`ParentChainPublicClient`](../type-aliases/ParentChainPublicClient.md)
 
 ## Source
 
-[src/types/ParentChain.ts:34](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/types/ParentChain.ts#L34)
+[src/types/ParentChain.ts:47](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/types/ParentChain.ts#L47)

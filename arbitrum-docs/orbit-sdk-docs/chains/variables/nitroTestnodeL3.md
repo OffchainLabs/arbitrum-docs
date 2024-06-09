@@ -1,27 +1,13 @@
-[Documentation](../../README.md) / [chains](../README.md) / nitroTestnodeL3
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-const nitroTestnodeL3: Assign<object, ChainConfig<undefined>>;
+const nitroTestnodeL3: any;
 ```
-
-## Type declaration
-
-| Member                    | Type                                 | Value               |
-| :------------------------ | :----------------------------------- | :------------------ |
-| `id`                      | `333333`                             | 333333              |
-| `name`                    | `"nitro-testnode-l3"`                | 'nitro-testnode-l3' |
-| `nativeCurrency`          | `object`                             | ...                 |
-| `nativeCurrency.decimals` | `18`                                 | 18                  |
-| `nativeCurrency.name`     | `"AppTestToken"`                     | 'AppTestToken'      |
-| `nativeCurrency.symbol`   | `"APP"`                              | 'APP'               |
-| `network`                 | `"Nitro Testnode L3"`                | 'Nitro Testnode L3' |
-| `rpcUrls`                 | `object`                             | ...                 |
-| `rpcUrls.default`         | `object`                             | ...                 |
-| `rpcUrls.default.http`    | readonly [`"http://127.0.0.1:3347"`] | ...                 |
-| `rpcUrls.public`          | `object`                             | ...                 |
-| `rpcUrls.public.http`     | readonly [`"http://127.0.0.1:3347"`] | ...                 |
-| `testnet`                 | `true`                               | true                |
 
 ## Source
 
-[src/chains.ts:46](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/chains.ts#L46)
+[src/chains.ts:44](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/chains.ts#L44)

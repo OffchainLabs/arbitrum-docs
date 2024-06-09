@@ -1,4 +1,8 @@
-[Documentation](../../../README.md) / [decorators/arbAggregatorActions](../README.md) / ArbAggregatorActions
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 type ArbAggregatorActions<TChain>: object;
@@ -12,11 +16,11 @@ type ArbAggregatorActions<TChain>: object;
 
 ## Type declaration
 
-| Member                                   | Type                                                                                                                                                                                                                                                                                                                                               |
-| :--------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `arbAggregatorPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbAggregatorPrepareTransactionRequestParameters`](../../../arbAggregatorPrepareTransactionRequest/type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                                |
-| `arbAggregatorReadContract`              | \<`TFunctionName`\>(`args`: [`ArbAggregatorReadContractParameters`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\>) => `Promise`\<[`ArbAggregatorReadContractReturnType`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\> |
+| Member                                   | Type                                                                                                                                                                                                                                                                                                                                                |
+| :--------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `arbAggregatorPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbAggregatorPrepareTransactionRequestParameters`](../../../arbAggregatorPrepareTransactionRequest/type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                                 |
+| `arbAggregatorReadContract`              | \<`TFunctionName`\>(`args`: [`ArbAggregatorReadContractParameters`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbAggregatorReadContractReturnType`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source
 
-[src/decorators/arbAggregatorActions.ts:15](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/decorators/arbAggregatorActions.ts#L15)
+[src/decorators/arbAggregatorActions.ts:15](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/decorators/arbAggregatorActions.ts#L15)

@@ -17,9 +17,9 @@ transaction request along with the chain ID.
 
 ## Parameters
 
-| Parameter           | Type                                            |
-| :------------------ | :---------------------------------------------- |
-| `__namedParameters` | `SetValidKeysetPrepareTransactionRequestParams` |
+| Parameter           | Type                                                                                                                |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------ |
+| `__namedParameters` | [`SetValidKeysetPrepareTransactionRequestParams`](../type-aliases/SetValidKeysetPrepareTransactionRequestParams.md) |
 
 ## Returns
 

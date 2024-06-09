@@ -40,7 +40,7 @@ sequencerInboxActionsWithSequencerInbox - Function passed to client.extends() to
 
 ### Returns
 
-`SequencerInboxActions`\<`TParams`\[`"sequencerInbox"`\], `TChain`\>
+[`SequencerInboxActions`](../type-aliases/SequencerInboxActions.md)\<`TParams`\[`"sequencerInbox"`\], `TChain`\>
 
 ## Example
 

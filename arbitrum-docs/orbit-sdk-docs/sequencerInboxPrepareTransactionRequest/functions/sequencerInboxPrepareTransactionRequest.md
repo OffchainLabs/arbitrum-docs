@@ -50,10 +50,10 @@ request object.
 
 ## Parameters
 
-| Parameter | Type                                                                   |
-| :-------- | :--------------------------------------------------------------------- |
-| `client`  | `object`                                                               |
-| `params`  | `SequencerInboxPrepareTransactionRequestParameters`\<`TFunctionName`\> |
+| Parameter | Type                                                                                                                                           |
+| :-------- | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                                                       |
+| `params`  | [`SequencerInboxPrepareTransactionRequestParameters`](../type-aliases/SequencerInboxPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

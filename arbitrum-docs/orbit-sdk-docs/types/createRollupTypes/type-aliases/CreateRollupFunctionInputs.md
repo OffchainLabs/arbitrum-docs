@@ -1,4 +1,8 @@
-[Documentation](../../../README.md) / [types/createRollupTypes](../README.md) / CreateRollupFunctionInputs
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
 type CreateRollupFunctionInputs: GetFunctionArgs<typeof rollupCreator.abi, "createRollup">["args"];
@@ -6,4 +10,4 @@ type CreateRollupFunctionInputs: GetFunctionArgs<typeof rollupCreator.abi, "crea
 
 ## Source
 
-[src/types/createRollupTypes.ts:5](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/types/createRollupTypes.ts#L5)
+[src/types/createRollupTypes.ts:5](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/types/createRollupTypes.ts#L5)

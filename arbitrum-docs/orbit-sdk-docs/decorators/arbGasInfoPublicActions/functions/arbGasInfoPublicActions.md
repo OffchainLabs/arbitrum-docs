@@ -28,7 +28,7 @@ reading contract information related to gas costs on the Arbitrum network.
 
 ## Returns
 
-`ArbGasInfoPublicActions`\<`TChain`\>
+[`ArbGasInfoPublicActions`](../type-aliases/ArbGasInfoPublicActions.md)\<`TChain`\>
 
 ## Source
 

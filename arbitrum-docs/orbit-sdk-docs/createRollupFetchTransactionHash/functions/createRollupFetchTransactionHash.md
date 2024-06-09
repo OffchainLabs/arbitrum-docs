@@ -20,9 +20,9 @@ hash.
 
 ## Parameters
 
-| Parameter           | Type                                     |
-| :------------------ | :--------------------------------------- |
-| `__namedParameters` | `CreateRollupFetchTransactionHashParams` |
+| Parameter           | Type                                                                                                  |
+| :------------------ | :---------------------------------------------------------------------------------------------------- |
+| `__namedParameters` | [`CreateRollupFetchTransactionHashParams`](../type-aliases/CreateRollupFetchTransactionHashParams.md) |
 
 ## Returns
 

@@ -24,6 +24,8 @@ Prepares a transaction to grant the executor role to a new account
 
 `Promise`\<`any`\>
 
+Promise<PrepareTransactionRequestReturnType> - the transaction request
+
 ## Example
 
 ```ts

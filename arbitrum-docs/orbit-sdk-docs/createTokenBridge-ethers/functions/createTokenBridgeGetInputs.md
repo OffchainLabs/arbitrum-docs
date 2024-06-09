@@ -15,23 +15,23 @@ function createTokenBridgeGetInputs(
 ): Promise<CreateTokenBridgeGetInputsResult>;
 ```
 
-Returns a CreateTokenBridgeGetInputsResult object containing inputs
+Returns a [CreateTokenBridgeGetInputsResult](../type-aliases/CreateTokenBridgeGetInputsResult.md) object containing inputs
 required for creating a token bridge.
 
 ## Parameters
 
-| Parameter                     | Type                                      |
-| :---------------------------- | :---------------------------------------- |
-| `l1DeployerAddress`           | `string`                                  |
-| `l1PublicClient`              | `object`                                  |
-| `l2PublicClient`              | `object`                                  |
-| `l1TokenBridgeCreatorAddress` | `string`                                  |
-| `rollupAddress`               | `string`                                  |
-| `retryableGasOverrides`?      | `TransactionRequestRetryableGasOverrides` |
+| Parameter                     | Type                                                                                                                                                  |
+| :---------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1DeployerAddress`           | `string`                                                                                                                                              |
+| `l1PublicClient`              | `object`                                                                                                                                              |
+| `l2PublicClient`              | `object`                                                                                                                                              |
+| `l1TokenBridgeCreatorAddress` | `string`                                                                                                                                              |
+| `rollupAddress`               | `string`                                                                                                                                              |
+| `retryableGasOverrides`?      | [`TransactionRequestRetryableGasOverrides`](../../createTokenBridgePrepareTransactionRequest/type-aliases/TransactionRequestRetryableGasOverrides.md) |
 
 ## Returns
 
-`Promise`\<`CreateTokenBridgeGetInputsResult`\>
+`Promise` \<[`CreateTokenBridgeGetInputsResult`](../type-aliases/CreateTokenBridgeGetInputsResult.md)\>
 
 ## Source
 

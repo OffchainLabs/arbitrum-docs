@@ -12,7 +12,7 @@ function getDefaultSequencerInboxMaxTimeVariation(
 
 getDefaultSequencerInboxMaxTimeVariation retrieves the default maximum time
 variation for the sequencer inbox based on the provided parent chain ID or
-PublicClient. It returns a SequencerInboxMaxTimeVariation object
+PublicClient. It returns a [SequencerInboxMaxTimeVariation](../type-aliases/SequencerInboxMaxTimeVariation.md) object
 containing delayBlocks, futureBlocks, delaySeconds, and futureSeconds values.
 
 ## Parameters
@@ -23,7 +23,7 @@ containing delayBlocks, futureBlocks, delaySeconds, and futureSeconds values.
 
 ## Returns
 
-`SequencerInboxMaxTimeVariation`
+[`SequencerInboxMaxTimeVariation`](../type-aliases/SequencerInboxMaxTimeVariation.md)
 
 ## Source
 

@@ -6,6 +6,10 @@ toc_max_heading_level: 5
 
 ## Index
 
+### Type Aliases
+
+- [PrepareChainConfigParams](type-aliases/PrepareChainConfigParams.md)
+
 ### Variables
 
 - [defaults](variables/defaults.md)

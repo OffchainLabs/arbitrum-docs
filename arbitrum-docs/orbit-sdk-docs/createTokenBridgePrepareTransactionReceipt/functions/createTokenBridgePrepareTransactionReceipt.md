@@ -21,7 +21,7 @@ token bridge contracts.
 
 ## Returns
 
-`CreateTokenBridgeTransactionReceipt`
+[`CreateTokenBridgeTransactionReceipt`](../type-aliases/CreateTokenBridgeTransactionReceipt.md)
 
 ## Source
 

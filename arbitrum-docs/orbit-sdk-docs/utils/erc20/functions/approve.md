@@ -12,9 +12,9 @@ Approve the spending of a specified amount of tokens by a designated address.
 
 ## Parameters
 
-| Parameter           | Type           |
-| :------------------ | :------------- |
-| `__namedParameters` | `ApproveProps` |
+| Parameter           | Type                                              |
+| :------------------ | :------------------------------------------------ |
+| `__namedParameters` | [`ApproveProps`](../type-aliases/ApproveProps.md) |
 
 ## Returns
 

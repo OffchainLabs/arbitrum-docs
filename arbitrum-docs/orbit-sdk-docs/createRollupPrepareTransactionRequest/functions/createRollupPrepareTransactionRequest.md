@@ -18,14 +18,14 @@ request along with the chain ID.
 
 ## Parameters
 
-| Parameter                                         | Type                             | Description                                                                                                                           |
-| :------------------------------------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `__namedParameters`                               | `object`                         | -                                                                                                                                     |
-| `__namedParameters.account`                       | \`0x$\{string\}\`                | -                                                                                                                                     |
-| `__namedParameters.gasOverrides`?                 | `TransactionRequestGasOverrides` | -                                                                                                                                     |
-| `__namedParameters.params`                        | `CreateRollupParams`             | -                                                                                                                                     |
-| `__namedParameters.publicClient`                  | `object`                         | -                                                                                                                                     |
-| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\`                | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
+| Parameter                                         | Type                                                                                                        | Description                                                                                                                           |
+| :------------------------------------------------ | :---------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| `__namedParameters`                               | `object`                                                                                                    | -                                                                                                                                     |
+| `__namedParameters.account`                       | \`0x$\{string\}\`                                                                                           | -                                                                                                                                     |
+| `__namedParameters.gasOverrides`?                 | [`TransactionRequestGasOverrides`](../../utils/gasOverrides/type-aliases/TransactionRequestGasOverrides.md) | -                                                                                                                                     |
+| `__namedParameters.params`                        | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md)                    | -                                                                                                                                     |
+| `__namedParameters.publicClient`                  | `object`                                                                                                    | -                                                                                                                                     |
+| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\`                                                                                           | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Returns
 

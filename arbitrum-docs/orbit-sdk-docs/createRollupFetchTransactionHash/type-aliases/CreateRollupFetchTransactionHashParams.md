@@ -1,22 +1,20 @@
-[Documentation](../../README.md) / [createRollupFetchTransactionHash](../README.md) / CreateRollupFetchTransactionHashParams
+---
+layout: docs
+sidebar: false
+toc_max_heading_level: 5
+---
 
 ```ts
-type CreateRollupFetchTransactionHashParams<TChain>: object;
+type CreateRollupFetchTransactionHashParams: object;
 ```
-
-## Type parameters
-
-| Type parameter                            |
-| :---------------------------------------- |
-| `TChain` _extends_ `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member         | Type                                    |
-| :------------- | :-------------------------------------- |
-| `publicClient` | `PublicClient`\<`Transport`, `TChain`\> |
-| `rollup`       | `Address`                               |
+| Member         | Type           |
+| :------------- | :------------- |
+| `publicClient` | `PublicClient` |
+| `rollup`       | `Address`      |
 
 ## Source
 
-[src/createRollupFetchTransactionHash.ts:18](https://github.com/anegg0/arbitrum-orbit-sdk/blob/8d986d322aefb470a79fa3dc36918f72097df8c1/src/createRollupFetchTransactionHash.ts#L18)
+[src/createRollupFetchTransactionHash.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupFetchTransactionHash.ts#L16)
