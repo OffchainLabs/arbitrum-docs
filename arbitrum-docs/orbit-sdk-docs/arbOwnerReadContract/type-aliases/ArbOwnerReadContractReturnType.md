@@ -10,9 +10,9 @@ type ArbOwnerReadContractReturnType<TFunctionName>: ReadContractReturnType<ArbOw
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbOwnerPublicFunctionName`](ArbOwnerPublicFunctionName.md) |
+| Type parameter                                                                          |
+| :-------------------------------------------------------------------------------------- |
+| `TFunctionName` _extends_ [`ArbOwnerPublicFunctionName`](ArbOwnerPublicFunctionName.md) |
 
 ## Source
 

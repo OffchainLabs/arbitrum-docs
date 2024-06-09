@@ -10,13 +10,13 @@ type TransactionRequestRetryableGasOverrides: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `maxGasForContracts` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxGasForFactory` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxGasPrice` | `bigint` |
+| Member                          | Type                                                                                |
+| :------------------------------ | :---------------------------------------------------------------------------------- |
+| `maxGasForContracts`            | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+| `maxGasForFactory`              | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+| `maxGasPrice`                   | `bigint`                                                                            |
 | `maxSubmissionCostForContracts` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxSubmissionCostForFactory` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+| `maxSubmissionCostForFactory`   | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
 
 ## Source
 

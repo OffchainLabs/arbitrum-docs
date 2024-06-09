@@ -10,11 +10,11 @@ type SequencerInboxMaxTimeVariation: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `delayBlocks` | `bigint` |
-| `delaySeconds` | `bigint` |
-| `futureBlocks` | `bigint` |
+| Member          | Type     |
+| :-------------- | :------- |
+| `delayBlocks`   | `bigint` |
+| `delaySeconds`  | `bigint` |
+| `futureBlocks`  | `bigint` |
 | `futureSeconds` | `bigint` |
 
 ## Source

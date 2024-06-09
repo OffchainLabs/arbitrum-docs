@@ -10,16 +10,16 @@ type ArbAggregatorActions<TChain>: object;
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+| Type parameter                            | Value                  |
+| :---------------------------------------- | :--------------------- |
+| `TChain` _extends_ `Chain` \| `undefined` | `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `arbAggregatorPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbAggregatorPrepareTransactionRequestParameters`](../../../arbAggregatorPrepareTransactionRequest/type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\> |
-| `arbAggregatorReadContract` | \<`TFunctionName`\>(`args`: [`ArbAggregatorReadContractParameters`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbAggregatorReadContractReturnType`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\> |
+| Member                                   | Type                                                                                                                                                                                                                                                                                                                                                |
+| :--------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `arbAggregatorPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbAggregatorPrepareTransactionRequestParameters`](../../../arbAggregatorPrepareTransactionRequest/type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                                 |
+| `arbAggregatorReadContract`              | \<`TFunctionName`\>(`args`: [`ArbAggregatorReadContractParameters`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbAggregatorReadContractReturnType`](../../../arbAggregatorReadContract/type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source
 

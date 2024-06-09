@@ -10,12 +10,12 @@ type FetchAllowanceProps: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `address` | `Address` |
-| `owner` | `Address` |
+| Member         | Type           |
+| :------------- | :------------- |
+| `address`      | `Address`      |
+| `owner`        | `Address`      |
 | `publicClient` | `PublicClient` |
-| `spender` | `Address` |
+| `spender`      | `Address`      |
 
 ## Source
 

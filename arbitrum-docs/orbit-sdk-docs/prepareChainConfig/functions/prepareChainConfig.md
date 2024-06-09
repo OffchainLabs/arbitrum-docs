@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function prepareChainConfig(params: PrepareChainConfigParams): ChainConfig
+function prepareChainConfig(params: PrepareChainConfigParams): ChainConfig;
 ```
 
 PrepareChainConfig merges the default chain configuration with the provided
@@ -15,9 +15,9 @@ updated values.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `params` | [`PrepareChainConfigParams`](../type-aliases/PrepareChainConfigParams.md) |
+| Parameter | Type                                                                      |
+| :-------- | :------------------------------------------------------------------------ |
+| `params`  | [`PrepareChainConfigParams`](../type-aliases/PrepareChainConfigParams.md) |
 
 ## Returns
 

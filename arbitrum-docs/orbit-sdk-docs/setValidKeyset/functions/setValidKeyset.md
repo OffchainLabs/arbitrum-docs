@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function setValidKeyset(__namedParameters: SetValidKeysetParams): Promise<any>
+function setValidKeyset(__namedParameters: SetValidKeysetParams): Promise<any>;
 ```
 
 Sets the valid keyset for a contract on the parent chain. It takes in the
@@ -14,8 +14,8 @@ returns a transaction receipt TransactionReceipt.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                                              |
+| :------------------ | :---------------------------------------------------------------- |
 | `__namedParameters` | [`SetValidKeysetParams`](../type-aliases/SetValidKeysetParams.md) |
 
 ## Returns

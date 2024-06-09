@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getParentChainLayer(parentChainId: any): undefined | 1 | 2
+function getParentChainLayer(parentChainId: any): undefined | 1 | 2;
 ```
 
 Returns the layer of the parent chain identified by the provided
@@ -13,8 +13,8 @@ ParentChainId.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter       | Type  |
+| :-------------- | :---- |
 | `parentChainId` | `any` |
 
 ## Returns

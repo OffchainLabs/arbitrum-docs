@@ -10,7 +10,7 @@ toc_max_heading_level: 5
 
 Re-exports [rollupAdminLogicABI](rollupAdminLogicABI/variables/rollupAdminLogicABI.md)
 
-***
+---
 
 ### sequencerInboxABI
 

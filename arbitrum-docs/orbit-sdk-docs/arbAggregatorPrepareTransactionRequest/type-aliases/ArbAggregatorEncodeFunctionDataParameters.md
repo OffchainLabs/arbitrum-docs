@@ -10,9 +10,9 @@ type ArbAggregatorEncodeFunctionDataParameters<TFunctionName>: EncodeFunctionDat
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
+| Type parameter                                                                                                                          |
+| :-------------------------------------------------------------------------------------------------------------------------------------- |
+| `TFunctionName` _extends_ [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
 
 ## Source
 

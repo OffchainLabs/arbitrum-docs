@@ -5,31 +5,35 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbOwnerReadContract<TChain, TFunctionName>(client: object, params: ArbOwnerReadContractParameters<TFunctionName>): Promise<ArbOwnerReadContractReturnType<TFunctionName>>
+function arbOwnerReadContract<TChain, TFunctionName>(
+  client: object,
+  params: ArbOwnerReadContractParameters<TFunctionName>,
+): Promise<ArbOwnerReadContractReturnType<TFunctionName>>;
 ```
 
 Reads data from a contract owned by an arbitrary owner.
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
-| `TFunctionName` *extends* 
-  \| `"getAllChainOwners"`
-  \| `"getInfraFeeAccount"`
-  \| `"getNetworkFeeAccount"`
-  \| `"isChainOwner"`
-  \| `"getBrotliCompressionLevel"`
-  \| `"getScheduledUpgrade"`
-  \| `"rectifyChainOwner"` |
+| Type parameter                                                                |
+| :---------------------------------------------------------------------------- |
+| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+
+| `TFunctionName` _extends_
+\| `"getAllChainOwners"`
+\| `"getInfraFeeAccount"`
+\| `"getNetworkFeeAccount"`
+\| `"isChainOwner"`
+\| `"getBrotliCompressionLevel"`
+\| `"getScheduledUpgrade"`
+\| `"rectifyChainOwner"` |
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | [`ArbOwnerReadContractParameters`](../type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\> |
+| Parameter | Type                                                                                                     |
+| :-------- | :------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                 |
+| `params`  | [`ArbOwnerReadContractParameters`](../type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

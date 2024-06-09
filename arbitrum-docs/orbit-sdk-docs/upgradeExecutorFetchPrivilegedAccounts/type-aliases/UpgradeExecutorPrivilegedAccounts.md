@@ -15,7 +15,7 @@ and an array with a hash for each role they have.
 
 ## Index signature
 
- \[`account`: \`0x$\{string\}\`\]: [`UpgradeExecutorRole`](../../upgradeExecutorEncodeFunctionData/type-aliases/UpgradeExecutorRole.md)[]
+\[`account`: \`0x$\{string\}\`\]: [`UpgradeExecutorRole`](../../upgradeExecutorEncodeFunctionData/type-aliases/UpgradeExecutorRole.md)[]
 
 ## Source
 

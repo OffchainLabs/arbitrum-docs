@@ -10,12 +10,12 @@ type CreateTokenBridgeGetInputsResult: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `gasPrice` | `bigint` |
-| `inbox` | `Address` |
-| `maxGasForContracts` | `bigint` |
-| `retryableFee` | `bigint` |
+| Member               | Type      |
+| :------------------- | :-------- |
+| `gasPrice`           | `bigint`  |
+| `inbox`              | `Address` |
+| `maxGasForContracts` | `bigint`  |
+| `retryableFee`       | `bigint`  |
 
 ## Source
 

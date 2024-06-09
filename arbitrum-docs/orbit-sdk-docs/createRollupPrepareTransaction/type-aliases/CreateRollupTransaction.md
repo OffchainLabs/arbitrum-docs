@@ -10,8 +10,8 @@ type CreateRollupTransaction: Transaction & object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member      | Type                |
+| :---------- | :------------------ |
 | `getInputs` | readonly [`object`] |
 
 ## Source

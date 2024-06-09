@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createTokenBridgePrepareSetWethGatewayTransactionReceipt(txReceipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): CreateTokenBridgeSetWethGatewayTransactionReceipt
+function createTokenBridgePrepareSetWethGatewayTransactionReceipt(
+  txReceipt: TransactionReceipt<bigint, number, 'success' | 'reverted', TransactionType>,
+): CreateTokenBridgeSetWethGatewayTransactionReceipt;
 ```
 
 Creates a token bridge transaction receipt for setting up the WETH gateway,
@@ -13,8 +15,8 @@ including a method to wait for retryable messages on the Orbit chain.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter   | Type                                                                                       |
+| :---------- | :----------------------------------------------------------------------------------------- |
 | `txReceipt` | `TransactionReceipt`\<`bigint`, `number`, `"success"` \| `"reverted"`, `TransactionType`\> |
 
 ## Returns

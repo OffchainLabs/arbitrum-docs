@@ -5,7 +5,10 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbGasInfoReadContract<TChain, TFunctionName>(client: object, params: ArbGasInfoReadContractParameters<TFunctionName>): Promise<ArbGasInfoReadContractReturnType<TFunctionName>>
+function arbGasInfoReadContract<TChain, TFunctionName>(
+  client: object,
+  params: ArbGasInfoReadContractParameters<TFunctionName>,
+): Promise<ArbGasInfoReadContractReturnType<TFunctionName>>;
 ```
 
 Reads data from the ArbGasInfo contract on a specified chain and returns the
@@ -13,41 +16,42 @@ result.
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
-| `TFunctionName` *extends* 
-  \| `"getAmortizedCostCapBips"`
-  \| `"getCurrentTxL1GasFees"`
-  \| `"getGasAccountingParams"`
-  \| `"getGasBacklog"`
-  \| `"getGasBacklogTolerance"`
-  \| `"getL1BaseFeeEstimate"`
-  \| `"getL1BaseFeeEstimateInertia"`
-  \| `"getL1FeesAvailable"`
-  \| `"getL1GasPriceEstimate"`
-  \| `"getL1PricingEquilibrationUnits"`
-  \| `"getL1PricingFundsDueForRewards"`
-  \| `"getL1PricingSurplus"`
-  \| `"getL1PricingUnitsSinceUpdate"`
-  \| `"getL1RewardRate"`
-  \| `"getL1RewardRecipient"`
-  \| `"getLastL1PricingSurplus"`
-  \| `"getLastL1PricingUpdateTime"`
-  \| `"getMinimumGasPrice"`
-  \| `"getPerBatchGasCharge"`
-  \| `"getPricesInArbGas"`
-  \| `"getPricesInArbGasWithAggregator"`
-  \| `"getPricesInWei"`
-  \| `"getPricesInWeiWithAggregator"`
-  \| `"getPricingInertia"` |
+| Type parameter                                                                |
+| :---------------------------------------------------------------------------- |
+| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+
+| `TFunctionName` _extends_
+\| `"getAmortizedCostCapBips"`
+\| `"getCurrentTxL1GasFees"`
+\| `"getGasAccountingParams"`
+\| `"getGasBacklog"`
+\| `"getGasBacklogTolerance"`
+\| `"getL1BaseFeeEstimate"`
+\| `"getL1BaseFeeEstimateInertia"`
+\| `"getL1FeesAvailable"`
+\| `"getL1GasPriceEstimate"`
+\| `"getL1PricingEquilibrationUnits"`
+\| `"getL1PricingFundsDueForRewards"`
+\| `"getL1PricingSurplus"`
+\| `"getL1PricingUnitsSinceUpdate"`
+\| `"getL1RewardRate"`
+\| `"getL1RewardRecipient"`
+\| `"getLastL1PricingSurplus"`
+\| `"getLastL1PricingUpdateTime"`
+\| `"getMinimumGasPrice"`
+\| `"getPerBatchGasCharge"`
+\| `"getPricesInArbGas"`
+\| `"getPricesInArbGasWithAggregator"`
+\| `"getPricesInWei"`
+\| `"getPricesInWeiWithAggregator"`
+\| `"getPricingInertia"` |
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | [`ArbGasInfoReadContractParameters`](../type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\> |
+| Parameter | Type                                                                                                         |
+| :-------- | :----------------------------------------------------------------------------------------------------------- |
+| `client`  | `object`                                                                                                     |
+| `params`  | [`ArbGasInfoReadContractParameters`](../type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

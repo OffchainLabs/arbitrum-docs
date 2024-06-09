@@ -5,13 +5,13 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function publicClientToProvider(publicClient: object): StaticJsonRpcProvider
+function publicClientToProvider(publicClient: object): StaticJsonRpcProvider;
 ```
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter      | Type     |
+| :------------- | :------- |
 | `publicClient` | `object` |
 
 ## Returns

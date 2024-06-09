@@ -26,10 +26,10 @@ the core contracts
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `coreContracts` | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md) |
-| `transaction` | [`CreateRollupTransaction`](../../createRollupPrepareTransaction/type-aliases/CreateRollupTransaction.md) |
+| Member               | Type                                                                                                                           |
+| :------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| `coreContracts`      | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md)                                                     |
+| `transaction`        | [`CreateRollupTransaction`](../../createRollupPrepareTransaction/type-aliases/CreateRollupTransaction.md)                      |
 | `transactionReceipt` | [`CreateRollupTransactionReceipt`](../../createRollupPrepareTransactionReceipt/type-aliases/CreateRollupTransactionReceipt.md) |
 
 ## Source

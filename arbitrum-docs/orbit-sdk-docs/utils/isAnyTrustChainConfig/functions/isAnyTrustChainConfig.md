@@ -5,15 +5,15 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function isAnyTrustChainConfig(chainConfig: ChainConfig): boolean
+function isAnyTrustChainConfig(chainConfig: ChainConfig): boolean;
 ```
 
 Checks if there is any trust chain configuration present in the given ChainConfig object.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter     | Type                                                                    |
+| :------------ | :---------------------------------------------------------------------- |
 | `chainConfig` | [`ChainConfig`](../../../types/ChainConfig/type-aliases/ChainConfig.md) |
 
 ## Returns

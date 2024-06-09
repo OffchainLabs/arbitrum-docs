@@ -5,15 +5,17 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function viemTransactionReceiptToEthersTransactionReceipt(receipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): EthersTransactionReceipt
+function viemTransactionReceiptToEthersTransactionReceipt(
+  receipt: TransactionReceipt<bigint, number, 'success' | 'reverted', TransactionType>,
+): EthersTransactionReceipt;
 ```
 
 Converts a Viem transaction receipt to an Ethers transaction receipt.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter | Type                                                                                       |
+| :-------- | :----------------------------------------------------------------------------------------- |
 | `receipt` | `TransactionReceipt`\<`bigint`, `number`, `"success"` \| `"reverted"`, `TransactionType`\> |
 
 ## Returns

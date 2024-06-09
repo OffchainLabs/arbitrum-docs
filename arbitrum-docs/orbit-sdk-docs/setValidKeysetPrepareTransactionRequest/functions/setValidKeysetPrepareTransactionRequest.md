@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function setValidKeysetPrepareTransactionRequest(__namedParameters: SetValidKeysetPrepareTransactionRequestParams): Promise<any>
+function setValidKeysetPrepareTransactionRequest(
+  __namedParameters: SetValidKeysetPrepareTransactionRequestParams,
+): Promise<any>;
 ```
 
 Sets up a transaction request to upgrade the executor with a valid keyset.
@@ -15,8 +17,8 @@ transaction request along with the chain ID.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                                                                                                |
+| :------------------ | :------------------------------------------------------------------------------------------------------------------ |
 | `__namedParameters` | [`SetValidKeysetPrepareTransactionRequestParams`](../type-aliases/SetValidKeysetPrepareTransactionRequestParams.md) |
 
 ## Returns

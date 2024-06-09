@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function generateChainId(): number
+function generateChainId(): number;
 ```
 
 Generates a random chain ID as a number.

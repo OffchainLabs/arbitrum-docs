@@ -5,7 +5,21 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-const erc20ABI: readonly [object, object, object, object, object, object, object, object, object, object, object, object, object];
+const erc20ABI: readonly [
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+  object,
+];
 ```
 
 ## Source

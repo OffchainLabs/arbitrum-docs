@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function setValidKeysetEncodeFunctionData(keyset: `0x${string}`): any
+function setValidKeysetEncodeFunctionData(keyset: `0x${string}`): any;
 ```
 
 Encodes the function data for setting a valid keyset by parsing the ABI and
@@ -13,9 +13,9 @@ encoding the function name and arguments.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `keyset` | \`0x$\{string\}\` |
+| Parameter | Type              |
+| :-------- | :---------------- |
+| `keyset`  | \`0x$\{string\}\` |
 
 ## Returns
 

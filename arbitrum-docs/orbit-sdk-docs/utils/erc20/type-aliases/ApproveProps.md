@@ -10,12 +10,12 @@ type ApproveProps: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `address` | `Address` |
-| `amount` | `bigint` |
+| Member         | Type           |
+| :------------- | :------------- |
+| `address`      | `Address`      |
+| `amount`       | `bigint`       |
 | `publicClient` | `PublicClient` |
-| `spender` | `Address` |
+| `spender`      | `Address`      |
 | `walletClient` | `WalletClient` |
 
 ## Source

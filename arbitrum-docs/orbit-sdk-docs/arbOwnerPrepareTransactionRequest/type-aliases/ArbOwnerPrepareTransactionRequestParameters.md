@@ -10,15 +10,15 @@ type ArbOwnerPrepareTransactionRequestParameters<TFunctionName>: Omit<ArbOwnerPr
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member    | Type      |
+| :-------- | :-------- |
 | `account` | `Address` |
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbOwnerPrepareTransactionRequestFunctionName`](ArbOwnerPrepareTransactionRequestFunctionName.md) |
+| Type parameter                                                                                                                |
+| :---------------------------------------------------------------------------------------------------------------------------- |
+| `TFunctionName` _extends_ [`ArbOwnerPrepareTransactionRequestFunctionName`](ArbOwnerPrepareTransactionRequestFunctionName.md) |
 
 ## Source
 

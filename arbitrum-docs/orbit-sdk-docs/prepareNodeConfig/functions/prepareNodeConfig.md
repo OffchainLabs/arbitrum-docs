@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig
+function prepareNodeConfig(__namedParameters: PrepareNodeConfigParams): NodeConfig;
 ```
 
 prepareNodeConfig prepares the configuration object for a node based on the
@@ -16,8 +16,8 @@ parameters, and data availability settings if applicable.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                                                    |
+| :------------------ | :---------------------------------------------------------------------- |
 | `__namedParameters` | [`PrepareNodeConfigParams`](../type-aliases/PrepareNodeConfigParams.md) |
 
 ## Returns

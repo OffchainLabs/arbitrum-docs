@@ -10,27 +10,27 @@ type ChainConfig: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `arbitrum` | [`ChainConfigArbitrumParams`](ChainConfigArbitrumParams.md) |
-| `berlinBlock` | `number` |
-| `byzantiumBlock` | `number` |
-| `chainId` | `number` |
-| `clique` | `object` |
-| `clique.epoch` | `number` |
-| `clique.period` | `number` |
-| `constantinopleBlock` | `number` |
-| `daoForkBlock` | `null` |
-| `daoForkSupport` | `boolean` |
-| `eip150Block` | `number` |
-| `eip150Hash` | `string` |
-| `eip155Block` | `number` |
-| `eip158Block` | `number` |
-| `homesteadBlock` | `number` |
-| `istanbulBlock` | `number` |
-| `londonBlock` | `number` |
-| `muirGlacierBlock` | `number` |
-| `petersburgBlock` | `number` |
+| Member                | Type                                                        |
+| :-------------------- | :---------------------------------------------------------- |
+| `arbitrum`            | [`ChainConfigArbitrumParams`](ChainConfigArbitrumParams.md) |
+| `berlinBlock`         | `number`                                                    |
+| `byzantiumBlock`      | `number`                                                    |
+| `chainId`             | `number`                                                    |
+| `clique`              | `object`                                                    |
+| `clique.epoch`        | `number`                                                    |
+| `clique.period`       | `number`                                                    |
+| `constantinopleBlock` | `number`                                                    |
+| `daoForkBlock`        | `null`                                                      |
+| `daoForkSupport`      | `boolean`                                                   |
+| `eip150Block`         | `number`                                                    |
+| `eip150Hash`          | `string`                                                    |
+| `eip155Block`         | `number`                                                    |
+| `eip158Block`         | `number`                                                    |
+| `homesteadBlock`      | `number`                                                    |
+| `istanbulBlock`       | `number`                                                    |
+| `londonBlock`         | `number`                                                    |
+| `muirGlacierBlock`    | `number`                                                    |
+| `petersburgBlock`     | `number`                                                    |
 
 ## Source
 

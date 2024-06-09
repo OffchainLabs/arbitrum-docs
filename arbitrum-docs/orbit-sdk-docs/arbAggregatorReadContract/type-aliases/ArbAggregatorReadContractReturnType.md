@@ -10,9 +10,9 @@ type ArbAggregatorReadContractReturnType<TFunctionName>: ReadContractReturnType<
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md) |
+| Type parameter                                                                        |
+| :------------------------------------------------------------------------------------ |
+| `TFunctionName` _extends_ [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md) |
 
 ## Source
 

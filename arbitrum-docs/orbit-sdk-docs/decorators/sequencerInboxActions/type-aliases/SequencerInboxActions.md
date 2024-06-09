@@ -10,17 +10,17 @@ type SequencerInboxActions<TSequencerInbox, TChain>: object;
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TSequencerInbox` *extends* `Address` \| `undefined` | - |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+| Type parameter                                       | Value                  |
+| :--------------------------------------------------- | :--------------------- |
+| `TSequencerInbox` _extends_ `Address` \| `undefined` | -                      |
+| `TChain` _extends_ `Chain` \| `undefined`            | `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `sequencerInboxPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: `SequencerInboxPrepareTransactionRequestArgs`\<`TSequencerInbox`, `TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\> |
-| `sequencerInboxReadContract` | \<`TFunctionName`\>(`args`: `SequencerInboxReadContractArgs`\<`TSequencerInbox`, `TFunctionName`\>) => `Promise` \<[`SequencerInboxReadContractReturnType`](../../../sequencerInboxReadContract/type-aliases/SequencerInboxReadContractReturnType.md)\<`TFunctionName`\>\> |
+| Member                                    | Type                                                                                                                                                                                                                                                                       |
+| :---------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sequencerInboxPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: `SequencerInboxPrepareTransactionRequestArgs`\<`TSequencerInbox`, `TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                                                              |
+| `sequencerInboxReadContract`              | \<`TFunctionName`\>(`args`: `SequencerInboxReadContractArgs`\<`TSequencerInbox`, `TFunctionName`\>) => `Promise` \<[`SequencerInboxReadContractReturnType`](../../../sequencerInboxReadContract/type-aliases/SequencerInboxReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source
 

@@ -10,15 +10,15 @@ type ArbGasInfoReadContractParameters<TFunctionName>: object & GetFunctionArgs<A
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member         | Type            |
+| :------------- | :-------------- |
 | `functionName` | `TFunctionName` |
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbGasInfoFunctionName`](ArbGasInfoFunctionName.md) |
+| Type parameter                                                                  |
+| :------------------------------------------------------------------------------ |
+| `TFunctionName` _extends_ [`ArbGasInfoFunctionName`](ArbGasInfoFunctionName.md) |
 
 ## Source
 

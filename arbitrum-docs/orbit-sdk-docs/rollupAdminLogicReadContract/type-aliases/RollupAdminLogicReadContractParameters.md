@@ -10,16 +10,16 @@ type RollupAdminLogicReadContractParameters<TFunctionName>: object & GetFunction
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member         | Type            |
+| :------------- | :-------------- |
 | `functionName` | `TFunctionName` |
-| `rollup` | `Address` |
+| `rollup`       | `Address`       |
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
+| Type parameter                                                                              |
+| :------------------------------------------------------------------------------------------ |
+| `TFunctionName` _extends_ [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
 
 ## Source
 

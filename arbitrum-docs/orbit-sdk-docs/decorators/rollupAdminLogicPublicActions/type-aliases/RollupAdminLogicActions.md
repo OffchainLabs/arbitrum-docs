@@ -10,17 +10,17 @@ type RollupAdminLogicActions<TRollupAdminLogic, TChain>: object;
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TRollupAdminLogic` *extends* `Address` \| `undefined` | - |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+| Type parameter                                         | Value                  |
+| :----------------------------------------------------- | :--------------------- |
+| `TRollupAdminLogic` _extends_ `Address` \| `undefined` | -                      |
+| `TChain` _extends_ `Chain` \| `undefined`              | `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `rollupAdminLogicPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: `rollupAdminLogicPrepareTransactionRequestArgs`\<`TRollupAdminLogic`, `TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\> |
-| `rollupAdminLogicReadContract` | \<`TFunctionName`\>(`args`: `RollupAdminLogicReadContractArgs`\<`TRollupAdminLogic`, `TFunctionName`\>) => `Promise` \<[`RollupAdminLogicReadContractReturnType`](../../../rollupAdminLogicReadContract/type-aliases/RollupAdminLogicReadContractReturnType.md)\<`TFunctionName`\>\> |
+| Member                                      | Type                                                                                                                                                                                                                                                                                 |
+| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rollupAdminLogicPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: `rollupAdminLogicPrepareTransactionRequestArgs`\<`TRollupAdminLogic`, `TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                                                                    |
+| `rollupAdminLogicReadContract`              | \<`TFunctionName`\>(`args`: `RollupAdminLogicReadContractArgs`\<`TRollupAdminLogic`, `TFunctionName`\>) => `Promise` \<[`RollupAdminLogicReadContractReturnType`](../../../rollupAdminLogicReadContract/type-aliases/RollupAdminLogicReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source
 

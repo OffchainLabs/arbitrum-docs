@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createTokenBridgeFetchTokenBridgeContracts(__namedParameters: object): Promise<TokenBridgeContracts>
+function createTokenBridgeFetchTokenBridgeContracts(
+  __namedParameters: object,
+): Promise<TokenBridgeContracts>;
 ```
 
 Creates and fetches the token bridge contracts on both the parent chain and
@@ -15,11 +17,11 @@ and multicall on both chains. Returns [TokenBridgeContracts](../../types/TokenBr
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.inbox` | \`0x$\{string\}\` | - |
-| `__namedParameters.parentChainPublicClient` | `object` | - |
+| Parameter                                              | Type              | Description                                                                                                                                |
+| :----------------------------------------------------- | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| `__namedParameters`                                    | `object`          | -                                                                                                                                          |
+| `__namedParameters.inbox`                              | \`0x$\{string\}\` | -                                                                                                                                          |
+| `__namedParameters.parentChainPublicClient`            | `object`          | -                                                                                                                                          |
 | `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Returns

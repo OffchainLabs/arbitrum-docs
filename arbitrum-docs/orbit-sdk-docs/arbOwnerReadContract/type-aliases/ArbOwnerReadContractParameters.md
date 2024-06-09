@@ -10,15 +10,15 @@ type ArbOwnerReadContractParameters<TFunctionName>: object & GetFunctionArgs<Arb
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member         | Type            |
+| :------------- | :-------------- |
 | `functionName` | `TFunctionName` |
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbOwnerPublicFunctionName`](ArbOwnerPublicFunctionName.md) |
+| Type parameter                                                                          |
+| :-------------------------------------------------------------------------------------- |
+| `TFunctionName` _extends_ [`ArbOwnerPublicFunctionName`](ArbOwnerPublicFunctionName.md) |
 
 ## Source
 

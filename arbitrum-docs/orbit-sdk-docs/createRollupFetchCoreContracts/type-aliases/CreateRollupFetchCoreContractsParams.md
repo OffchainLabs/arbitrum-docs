@@ -10,10 +10,10 @@ type CreateRollupFetchCoreContractsParams: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member         | Type           |
+| :------------- | :------------- |
 | `publicClient` | `PublicClient` |
-| `rollup` | `Address` |
+| `rollup`       | `Address`      |
 
 ## Source
 

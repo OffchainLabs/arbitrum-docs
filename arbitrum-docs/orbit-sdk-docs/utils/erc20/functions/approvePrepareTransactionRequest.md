@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function approvePrepareTransactionRequest(__namedParameters: ApprovePrepareTransactionRequestProps): Promise<any>
+function approvePrepareTransactionRequest(
+  __namedParameters: ApprovePrepareTransactionRequestProps,
+): Promise<any>;
 ```
 
 ApprovePrepareTransactionRequest prepares a transaction request to approve a
@@ -13,8 +15,8 @@ specific amount of tokens for a spender.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
+| Parameter           | Type                                                                                                |
+| :------------------ | :-------------------------------------------------------------------------------------------------- |
 | `__namedParameters` | [`ApprovePrepareTransactionRequestProps`](../type-aliases/ApprovePrepareTransactionRequestProps.md) |
 
 ## Returns

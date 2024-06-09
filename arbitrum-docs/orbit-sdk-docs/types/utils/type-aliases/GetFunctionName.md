@@ -10,9 +10,9 @@ type GetFunctionName<TAbi>: Extract<TAbi[number], object>["name"];
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TAbi` *extends* `Abi` |
+| Type parameter         |
+| :--------------------- |
+| `TAbi` _extends_ `Abi` |
 
 ## Source
 

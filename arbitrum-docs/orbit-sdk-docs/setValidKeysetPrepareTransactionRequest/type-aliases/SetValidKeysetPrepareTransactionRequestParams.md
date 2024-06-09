@@ -10,8 +10,8 @@ type SetValidKeysetPrepareTransactionRequestParams: Omit<SetValidKeysetParams, "
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member    | Type      |
+| :-------- | :-------- |
 | `account` | `Address` |
 
 ## Source

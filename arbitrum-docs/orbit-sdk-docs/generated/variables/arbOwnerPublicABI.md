@@ -8,7 +8,7 @@ toc_max_heading_level: 5
 const arbOwnerPublicABI: readonly [object, object, object, object, object, object, object, object];
 ```
 
-[__View Contract on Arbitrum Sepolia Blockscout__](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006b)
+[**View Contract on Arbitrum Sepolia Blockscout**](https://sepolia-explorer.arbitrum.io/address/0x000000000000000000000000000000000000006b)
 
 ## Source
 

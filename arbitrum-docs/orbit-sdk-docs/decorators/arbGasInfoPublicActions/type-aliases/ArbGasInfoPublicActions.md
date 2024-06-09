@@ -10,14 +10,14 @@ type ArbGasInfoPublicActions<TChain>: object;
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+| Type parameter                            | Value                  |
+| :---------------------------------------- | :--------------------- |
+| `TChain` _extends_ `Chain` \| `undefined` | `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member                   | Type                                                                                                                                                                                                                                                                                                                              |
+| :----------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `arbGasInfoReadContract` | \<`TFunctionName`\>(`args`: [`ArbGasInfoReadContractParameters`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbGasInfoReadContractReturnType`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source

@@ -12,10 +12,10 @@ arbOwnerPublic configuration for the Arbitrum owner's public address.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerPublicABI |
-| `address` | `"0x000000000000000000000000000000000000006b"` | ... |
+| Member    | Type                                                                                      | Value             |
+| :-------- | :---------------------------------------------------------------------------------------- | :---------------- |
+| `abi`     | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerPublicABI |
+| `address` | `"0x000000000000000000000000000000000000006b"`                                            | ...               |
 
 ## Source
 

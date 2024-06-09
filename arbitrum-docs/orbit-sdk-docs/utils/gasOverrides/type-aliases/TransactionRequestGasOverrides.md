@@ -10,8 +10,8 @@ type TransactionRequestGasOverrides: object;
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
+| Member     | Type                                          |
+| :--------- | :-------------------------------------------- |
 | `gasLimit` | [`GasOverrideOptions`](GasOverrideOptions.md) |
 
 ## Source

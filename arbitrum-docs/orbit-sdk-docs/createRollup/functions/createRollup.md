@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollup(createRollupFunctionParams: CreateRollupFunctionParams): Promise<CreateRollupResults>
+function createRollup(
+  createRollupFunctionParams: CreateRollupFunctionParams,
+): Promise<CreateRollupResults>;
 ```
 
 Performs the tx to deploy the chain's core contracts.
@@ -23,8 +25,8 @@ Returns the transaction, the transaction receipt, and the core contracts.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
+| Parameter                    | Type                                                                          | Description                                                                 |
+| :--------------------------- | :---------------------------------------------------------------------------- | :-------------------------------------------------------------------------- |
 | `createRollupFunctionParams` | [`CreateRollupFunctionParams`](../type-aliases/CreateRollupFunctionParams.md) | [CreateRollupFunctionParams](../type-aliases/CreateRollupFunctionParams.md) |
 
 ## Returns
@@ -48,18 +50,14 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
   }),
 });
 
-const {
-  transaction,
-  transactionReceipt,
-  coreContracts,
-} = await createRollup({
+const { transaction, transactionReceipt, coreContracts } = await createRollup({
   params: {
     config: createRollupConfig,
     batchPoster,
     validators,
- },
- account: deployer,
- parentChainPublicClient,
+  },
+  account: deployer,
+  parentChainPublicClient,
 });
 ```
 

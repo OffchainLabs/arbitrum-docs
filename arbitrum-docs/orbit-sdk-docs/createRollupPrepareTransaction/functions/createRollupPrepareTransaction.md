@@ -5,7 +5,9 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupPrepareTransaction(tx: Transaction<bigint, number, boolean>): CreateRollupTransaction
+function createRollupPrepareTransaction(
+  tx: Transaction<bigint, number, boolean>,
+): CreateRollupTransaction;
 ```
 
 Creates a transaction object for preparing a createRollup function call,
@@ -14,9 +16,9 @@ inputs for creating a rollup.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `tx` | `Transaction`\<`bigint`, `number`, `boolean`\> |
+| Parameter | Type                                           |
+| :-------- | :--------------------------------------------- |
+| `tx`      | `Transaction`\<`bigint`, `number`, `boolean`\> |
 
 ## Returns
 
