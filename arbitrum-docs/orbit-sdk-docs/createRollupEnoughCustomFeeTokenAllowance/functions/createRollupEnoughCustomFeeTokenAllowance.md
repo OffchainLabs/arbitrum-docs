@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupEnoughCustomFeeTokenAllowance(__namedParameters: object): Promise<boolean>;
+function createRollupEnoughCustomFeeTokenAllowance(__namedParameters: object): Promise<boolean>
 ```
 
 CreateRollupEnoughCustomFeeTokenAllowance checks if the allowance for a
@@ -17,12 +17,12 @@ or equal to the default retryable fees required for creating the rollup.
 
 ## Parameters
 
-| Parameter                                         | Type              | Description                                                                                                                           |
-| :------------------------------------------------ | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `__namedParameters`                               | `object`          | -                                                                                                                                     |
-| `__namedParameters.account`                       | \`0x$\{string\}\` | -                                                                                                                                     |
-| `__namedParameters.nativeToken`                   | \`0x$\{string\}\` | -                                                                                                                                     |
-| `__namedParameters.publicClient`                  | `object`          | -                                                                                                                                     |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `__namedParameters` | `object` | - |
+| `__namedParameters.account` | \`0x$\{string\}\` | - |
+| `__namedParameters.nativeToken` | \`0x$\{string\}\` | - |
+| `__namedParameters.publicClient` | `object` | - |
 | `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Returns

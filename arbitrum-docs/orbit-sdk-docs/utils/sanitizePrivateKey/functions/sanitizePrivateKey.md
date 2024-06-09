@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function sanitizePrivateKey(privateKey: string): `0x${string}`;
+function sanitizePrivateKey(privateKey: string): `0x${string}`
 ```
 
 SanitizePrivateKey sanitizes a private key string by ensuring it starts with
@@ -13,8 +13,8 @@ SanitizePrivateKey sanitizes a private key string by ensuring it starts with
 
 ## Parameters
 
-| Parameter    | Type     |
-| :----------- | :------- |
+| Parameter | Type |
+| :------ | :------ |
 | `privateKey` | `string` |
 
 ## Returns

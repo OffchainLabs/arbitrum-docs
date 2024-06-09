@@ -10,15 +10,15 @@ type ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>: Omit<ArbAg
 
 ## Type declaration
 
-| Member    | Type      |
-| :-------- | :-------- |
+| Member | Type |
+| :------ | :------ |
 | `account` | `Address` |
 
 ## Type parameters
 
-| Type parameter                                                                                                                          |
-| :-------------------------------------------------------------------------------------------------------------------------------------- |
-| `TFunctionName` _extends_ [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
 
 ## Source
 

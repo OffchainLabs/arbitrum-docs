@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function validateParentChainPublicClient<TTransport, TChain>(
-  publicClient: object,
-): ParentChainPublicClient;
+function validateParentChainPublicClient<TTransport, TChain>(publicClient: object): ParentChainPublicClient
 ```
 
 Validates the parent chain of a PublicClient to ensure it is
@@ -16,15 +14,15 @@ a [ParentChainPublicClient](../type-aliases/ParentChainPublicClient.md).
 
 ## Type parameters
 
-| Type parameter                                                                                                 | Value                                                                                   |
-| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter      | Type     |
-| :------------- | :------- |
+| Parameter | Type |
+| :------ | :------ |
 | `publicClient` | `object` |
 
 ## Returns

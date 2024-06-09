@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-  __namedParameters: object,
-): Promise<any>;
+function createRollupPrepareCustomFeeTokenApprovalTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
 Creates a custom fee token approval transaction request for the Rollup chain.
@@ -17,13 +15,13 @@ generates the transaction request, and returns it along with the chain ID.
 
 ## Parameters
 
-| Parameter                                         | Type              | Description                                                                                                                           |
-| :------------------------------------------------ | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------ |
-| `__namedParameters`                               | `object`          | -                                                                                                                                     |
-| `__namedParameters.account`                       | \`0x$\{string\}\` | -                                                                                                                                     |
-| `__namedParameters.amount`?                       | `bigint`          | -                                                                                                                                     |
-| `__namedParameters.nativeToken`                   | \`0x$\{string\}\` | -                                                                                                                                     |
-| `__namedParameters.publicClient`                  | `object`          | -                                                                                                                                     |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `__namedParameters` | `object` | - |
+| `__namedParameters.account` | \`0x$\{string\}\` | - |
+| `__namedParameters.amount`? | `bigint` | - |
+| `__namedParameters.nativeToken` | \`0x$\{string\}\` | - |
+| `__namedParameters.publicClient` | `object` | - |
 | `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Returns

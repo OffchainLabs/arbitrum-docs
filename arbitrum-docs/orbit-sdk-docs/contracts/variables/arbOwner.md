@@ -12,10 +12,10 @@ arbOwner configures the Arbitrum owner with the specified address.
 
 ## Type declaration
 
-| Member    | Type                                                                                                                                                                                                                                                                                    | Value       |
-| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------- |
-| `abi`     | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerABI |
-| `address` | `"0x0000000000000000000000000000000000000070"`                                                                                                                                                                                                                                          | ...         |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbOwnerABI |
+| `address` | `"0x0000000000000000000000000000000000000070"` | ... |
 
 ## Source
 

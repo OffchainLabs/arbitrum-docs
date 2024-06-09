@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>;
+function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>
 ```
 
 Returns an object with two functions: `arbOwnerReadContract` and
@@ -15,16 +15,16 @@ respectively.
 
 ## Type parameters
 
-| Type parameter                                                                                                 | Value                                                                                   |
-| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 ## Returns
 

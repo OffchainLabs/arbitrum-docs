@@ -10,9 +10,9 @@ type TokenBridgeContracts: object;
 
 ## Type declaration
 
-| Member                 | Type                              |
-| :--------------------- | :-------------------------------- |
-| `orbitChainContracts`  | `TokenBridgeOrbitChainContracts`  |
+| Member | Type |
+| :------ | :------ |
+| `orbitChainContracts` | `TokenBridgeOrbitChainContracts` |
 | `parentChainContracts` | `TokenBridgeParentChainContracts` |
 
 ## Source

@@ -5,10 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(
-  client: object,
-  params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>,
-): Promise<any>;
+function arbAggregatorPrepareTransactionRequest<TFunctionName, TChain>(client: object, params: ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
 ```
 
 Prepares a transaction request for the ArbAggregator contract function
@@ -19,25 +16,24 @@ transaction request using the provided client and account information.
 ## Type parameters
 
 | Type parameter |
-| :------------- |
-
-| `TFunctionName` _extends_
-\| `"addBatchPoster"`
-\| `"getBatchPosters"`
-\| `"getDefaultAggregator"`
-\| `"getFeeCollector"`
-\| `"getPreferredAggregator"`
-\| `"getTxBaseFee"`
-\| `"setFeeCollector"`
-\| `"setTxBaseFee"` |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| :------ |
+| `TFunctionName` *extends* 
+  \| `"addBatchPoster"`
+  \| `"getBatchPosters"`
+  \| `"getDefaultAggregator"`
+  \| `"getFeeCollector"`
+  \| `"getPreferredAggregator"`
+  \| `"getTxBaseFee"`
+  \| `"setFeeCollector"`
+  \| `"setTxBaseFee"` |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter | Type                                                                                                                                         |
-| :-------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| `client`  | `object`                                                                                                                                     |
-| `params`  | [`ArbAggregatorPrepareTransactionRequestParameters`](../type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | [`ArbAggregatorPrepareTransactionRequestParameters`](../type-aliases/ArbAggregatorPrepareTransactionRequestParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 

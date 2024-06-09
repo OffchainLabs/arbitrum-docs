@@ -5,15 +5,15 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getClientVersion(publicClientOrRpcUrl: string | object): Promise<string>;
+function getClientVersion(publicClientOrRpcUrl: string | object): Promise<string>
 ```
 
 Returns the client version of the provided PublicClient or RPC URL.
 
 ## Parameters
 
-| Parameter              | Type                 |
-| :--------------------- | :------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `publicClientOrRpcUrl` | `string` \| `object` |
 
 ## Returns

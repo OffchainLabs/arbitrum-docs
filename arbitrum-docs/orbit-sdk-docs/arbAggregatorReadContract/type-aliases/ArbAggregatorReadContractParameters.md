@@ -10,15 +10,15 @@ type ArbAggregatorReadContractParameters<TFunctionName>: object & GetFunctionArg
 
 ## Type declaration
 
-| Member         | Type            |
-| :------------- | :-------------- |
+| Member | Type |
+| :------ | :------ |
 | `functionName` | `TFunctionName` |
 
 ## Type parameters
 
-| Type parameter                                                                        |
-| :------------------------------------------------------------------------------------ |
-| `TFunctionName` _extends_ [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md) |
 
 ## Source
 

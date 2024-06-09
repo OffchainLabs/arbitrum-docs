@@ -10,13 +10,13 @@ type ApprovePrepareTransactionRequestProps: object;
 
 ## Type declaration
 
-| Member         | Type           |
-| :------------- | :------------- |
-| `address`      | `Address`      |
-| `amount`       | `bigint`       |
-| `owner`        | `Address`      |
+| Member | Type |
+| :------ | :------ |
+| `address` | `Address` |
+| `amount` | `bigint` |
+| `owner` | `Address` |
 | `publicClient` | `PublicClient` |
-| `spender`      | `Address`      |
+| `spender` | `Address` |
 
 ## Source
 

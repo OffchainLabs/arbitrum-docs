@@ -10,8 +10,8 @@ type CreateTokenBridgeSetWethGatewayTransactionReceipt: TransactionReceipt & obj
 
 ## Type declaration
 
-| Member              | Type                                                                  |
-| :------------------ | :-------------------------------------------------------------------- |
+| Member | Type |
+| :------ | :------ |
 | `waitForRetryables` | `Promise` \<[`WaitForRetryablesResult`](WaitForRetryablesResult.md)\> |
 
 ## Source

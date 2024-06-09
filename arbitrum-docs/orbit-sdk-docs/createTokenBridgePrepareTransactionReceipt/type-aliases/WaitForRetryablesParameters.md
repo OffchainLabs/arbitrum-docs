@@ -10,8 +10,8 @@ type WaitForRetryablesParameters: object;
 
 ## Type declaration
 
-| Member              | Type           |
-| :------------------ | :------------- |
+| Member | Type |
+| :------ | :------ |
 | `orbitPublicClient` | `PublicClient` |
 
 ## Source

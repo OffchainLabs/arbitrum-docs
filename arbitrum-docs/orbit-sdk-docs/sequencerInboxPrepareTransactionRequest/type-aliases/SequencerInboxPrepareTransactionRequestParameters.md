@@ -10,15 +10,15 @@ type SequencerInboxPrepareTransactionRequestParameters<TFunctionName>: Omit<Sequ
 
 ## Type declaration
 
-| Member    | Type      |
-| :-------- | :-------- |
+| Member | Type |
+| :------ | :------ |
 | `account` | `Address` |
 
 ## Type parameters
 
-| Type parameter                                                                          |
-| :-------------------------------------------------------------------------------------- |
-| `TFunctionName` _extends_ [`SequencerInboxFunctionName`](SequencerInboxFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`SequencerInboxFunctionName`](SequencerInboxFunctionName.md) |
 
 ## Source
 

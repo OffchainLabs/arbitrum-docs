@@ -5,17 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-const chains: readonly [
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  Assign<object, ChainConfig<undefined>>,
-  any,
-  any,
-  any,
-];
+const chains: readonly [Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, Assign<object, ChainConfig<undefined>>, any, any, any];
 ```
 
 The `chains` variable contains an array of various blockchain configurations,

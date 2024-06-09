@@ -10,15 +10,15 @@ type WithRollupCreatorAddressOverride<T>: T & object;
 
 ## Type declaration
 
-| Member                         | Type      | Description                                                                                                                           |
-| :----------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------ |
+| Member | Type | Description |
+| :------ | :------ | :------ |
 | `rollupCreatorAddressOverride` | `Address` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Type parameters
 
 | Type parameter |
-| :------------- |
-| `T`            |
+| :------ |
+| `T` |
 
 ## Source
 

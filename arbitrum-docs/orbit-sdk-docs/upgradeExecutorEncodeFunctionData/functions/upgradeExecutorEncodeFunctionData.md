@@ -5,24 +5,19 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function upgradeExecutorEncodeFunctionData<TFunctionName>(__namedParameters: {
-  [K in string | number | symbol]: Omit<
-    EncodeFunctionDataParameters<any, TFunctionName, any>,
-    'abi'
-  >[K];
-}): any;
+function upgradeExecutorEncodeFunctionData<TFunctionName>(__namedParameters: { [K in string | number | symbol]: Omit<EncodeFunctionDataParameters<any, TFunctionName, any>, "abi">[K] }): any
 ```
 
 ## Type parameters
 
-| Type parameter                      |
-| :---------------------------------- |
-| `TFunctionName` _extends_ `unknown` |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* `unknown` |
 
 ## Parameters
 
-| Parameter           | Type                                                                                                                   |
-| :------------------ | :--------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | \{ \[K in string \| number \| symbol\]: Omit\<EncodeFunctionDataParameters\<any, TFunctionName, any\>, "abi"\>\[K\] \} |
 
 ## Returns

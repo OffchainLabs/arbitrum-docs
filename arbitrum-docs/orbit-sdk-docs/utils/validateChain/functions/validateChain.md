@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function validateChain(chainIdOrPublicClient: number | object): ChainId;
+function validateChain(chainIdOrPublicClient: number | object): ChainId
 ```
 
 Validates the provided chain ID or PublicClient and ensures that it is a
@@ -13,8 +13,8 @@ supported chain within the system. Returns a ChainId.
 
 ## Parameters
 
-| Parameter               | Type                 |
-| :---------------------- | :------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `chainIdOrPublicClient` | `number` \| `object` |
 
 ## Returns

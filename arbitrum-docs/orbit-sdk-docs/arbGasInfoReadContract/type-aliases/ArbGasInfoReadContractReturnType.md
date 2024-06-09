@@ -10,9 +10,9 @@ type ArbGasInfoReadContractReturnType<TFunctionName>: ReadContractReturnType<Arb
 
 ## Type parameters
 
-| Type parameter                                                                  |
-| :------------------------------------------------------------------------------ |
-| `TFunctionName` _extends_ [`ArbGasInfoFunctionName`](ArbGasInfoFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`ArbGasInfoFunctionName`](ArbGasInfoFunctionName.md) |
 
 ## Source
 

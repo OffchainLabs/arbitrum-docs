@@ -10,15 +10,15 @@ type WithTokenBridgeCreatorAddressOverride<T>: T & object;
 
 ## Type declaration
 
-| Member                              | Type      | Description                                                                                                                                |
-| :---------------------------------- | :-------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
+| Member | Type | Description |
+| :------ | :------ | :------ |
 | `tokenBridgeCreatorAddressOverride` | `Address` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
 
 ## Type parameters
 
 | Type parameter |
-| :------------- |
-| `T`            |
+| :------ |
+| `T` |
 
 ## Source
 

@@ -12,11 +12,11 @@ This type is for the params of the createRollup function
 
 ## Type declaration
 
-| Member                    | Type                                                                                     |
-| :------------------------ | :--------------------------------------------------------------------------------------- |
-| `account`                 | `PrivateKeyAccount`                                                                      |
-| `params`                  | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
-| `parentChainPublicClient` | `PublicClient`                                                                           |
+| Member | Type |
+| :------ | :------ |
+| `account` | `PrivateKeyAccount` |
+| `params` | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
+| `parentChainPublicClient` | `PublicClient` |
 
 ## Source
 

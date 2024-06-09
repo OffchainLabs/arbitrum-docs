@@ -10,10 +10,10 @@ type TransactionRequestRetryableGasOverrides: object;
 
 ## Type declaration
 
-| Member              | Type                                                                                |
-| :------------------ | :---------------------------------------------------------------------------------- |
-| `gasLimit`          | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxFeePerGas`      | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+| Member | Type |
+| :------ | :------ |
+| `gasLimit` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+| `maxFeePerGas` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
 | `maxSubmissionCost` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
 
 ## Source

@@ -10,12 +10,12 @@ type SetValidKeysetParams: object;
 
 ## Type declaration
 
-| Member          | Type                                                                                                                             |
-| :-------------- | :------------------------------------------------------------------------------------------------------------------------------- |
+| Member | Type |
+| :------ | :------ |
 | `coreContracts` | `Pick` \<[`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md), `"upgradeExecutor"` \| `"sequencerInbox"`\> |
-| `keyset`        | \`0x$\{string\}\`                                                                                                                |
-| `publicClient`  | `PublicClient`                                                                                                                   |
-| `walletClient`  | `WalletClient`                                                                                                                   |
+| `keyset` | \`0x$\{string\}\` |
+| `publicClient` | `PublicClient` |
+| `walletClient` | `WalletClient` |
 
 ## Source
 

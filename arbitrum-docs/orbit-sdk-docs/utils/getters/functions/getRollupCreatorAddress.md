@@ -5,16 +5,16 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getRollupCreatorAddress(client: object): any;
+function getRollupCreatorAddress(client: object): any
 ```
 
 Returns the address of the rollup creator for a given public client.
 
 ## Parameters
 
-| Parameter | Type     |
-| :-------- | :------- |
-| `client`  | `object` |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
 
 ## Returns
 

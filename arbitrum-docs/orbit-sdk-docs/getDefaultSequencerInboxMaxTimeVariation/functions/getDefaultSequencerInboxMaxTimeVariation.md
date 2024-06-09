@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getDefaultSequencerInboxMaxTimeVariation(
-  parentChainIdOrPublicClient: any,
-): SequencerInboxMaxTimeVariation;
+function getDefaultSequencerInboxMaxTimeVariation(parentChainIdOrPublicClient: any): SequencerInboxMaxTimeVariation
 ```
 
 getDefaultSequencerInboxMaxTimeVariation retrieves the default maximum time
@@ -17,8 +15,8 @@ containing delayBlocks, futureBlocks, delaySeconds, and futureSeconds values.
 
 ## Parameters
 
-| Parameter                     | Type  |
-| :---------------------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainIdOrPublicClient` | `any` |
 
 ## Returns

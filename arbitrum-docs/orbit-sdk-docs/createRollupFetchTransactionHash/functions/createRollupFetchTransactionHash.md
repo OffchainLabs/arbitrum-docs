@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupFetchTransactionHash(
-  __namedParameters: CreateRollupFetchTransactionHashParams,
-): Promise<any>;
+function createRollupFetchTransactionHash(__namedParameters: CreateRollupFetchTransactionHashParams): Promise<any>
 ```
 
 createRollupFetchTransactionHash retrieves the transaction hash of the
@@ -20,8 +18,8 @@ hash.
 
 ## Parameters
 
-| Parameter           | Type                                                                                                  |
-| :------------------ | :---------------------------------------------------------------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `__namedParameters` | [`CreateRollupFetchTransactionHashParams`](../type-aliases/CreateRollupFetchTransactionHashParams.md) |
 
 ## Returns

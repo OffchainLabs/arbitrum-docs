@@ -10,16 +10,16 @@ type SequencerInboxReadContractParameters<TFunctionName>: object & GetFunctionAr
 
 ## Type declaration
 
-| Member           | Type            |
-| :--------------- | :-------------- |
-| `functionName`   | `TFunctionName` |
-| `sequencerInbox` | `Address`       |
+| Member | Type |
+| :------ | :------ |
+| `functionName` | `TFunctionName` |
+| `sequencerInbox` | `Address` |
 
 ## Type parameters
 
-| Type parameter                                                                                                                                     |
-| :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TFunctionName` _extends_ [`SequencerInboxFunctionName`](../../sequencerInboxPrepareTransactionRequest/type-aliases/SequencerInboxFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`SequencerInboxFunctionName`](../../sequencerInboxPrepareTransactionRequest/type-aliases/SequencerInboxFunctionName.md) |
 
 ## Source
 

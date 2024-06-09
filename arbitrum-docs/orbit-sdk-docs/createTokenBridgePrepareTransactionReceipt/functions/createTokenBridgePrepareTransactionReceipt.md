@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createTokenBridgePrepareTransactionReceipt(
-  txReceipt: TransactionReceipt<bigint, number, 'success' | 'reverted', TransactionType>,
-): CreateTokenBridgeTransactionReceipt;
+function createTokenBridgePrepareTransactionReceipt(txReceipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): CreateTokenBridgeTransactionReceipt
 ```
 
 Creates a transaction receipt with methods to wait for retryables and get
@@ -15,8 +13,8 @@ token bridge contracts.
 
 ## Parameters
 
-| Parameter   | Type                                                                                       |
-| :---------- | :----------------------------------------------------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `txReceipt` | `TransactionReceipt`\<`bigint`, `number`, `"success"` \| `"reverted"`, `TransactionType`\> |
 
 ## Returns

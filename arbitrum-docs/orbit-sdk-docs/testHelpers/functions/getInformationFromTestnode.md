@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getInformationFromTestnode(): TestnodeInformation;
+function getInformationFromTestnode(): TestnodeInformation
 ```
 
 Returns information about the testnode setup including addresses for the

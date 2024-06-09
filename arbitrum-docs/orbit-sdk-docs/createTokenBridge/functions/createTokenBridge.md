@@ -5,9 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createTokenBridge(
-  createTokenBridgeParams: CreateTokenBridgeParams,
-): Promise<CreateTokenBridgeResults>;
+function createTokenBridge(createTokenBridgeParams: CreateTokenBridgeParams): Promise<CreateTokenBridgeResults>
 ```
 
 Performs the transactions to deploy the token bridge core contracts
@@ -19,9 +17,9 @@ Returns the token bridge core contracts.
 
 ## Parameters
 
-| Parameter                 | Type                                                                    | Description |
-| :------------------------ | :---------------------------------------------------------------------- | :---------- |
-| `createTokenBridgeParams` | [`CreateTokenBridgeParams`](../type-aliases/CreateTokenBridgeParams.md) |             |
+| Parameter | Type | Description |
+| :------ | :------ | :------ |
+| `createTokenBridgeParams` | [`CreateTokenBridgeParams`](../type-aliases/CreateTokenBridgeParams.md) |  |
 
 ## Returns
 

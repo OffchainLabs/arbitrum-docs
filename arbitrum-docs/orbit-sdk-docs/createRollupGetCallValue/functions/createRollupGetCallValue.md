@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupGetCallValue(params: CreateRollupParams): bigint;
+function createRollupGetCallValue(params: CreateRollupParams): bigint
 ```
 
 createRollupGetCallValue calculates the call value needed for creating
@@ -14,9 +14,9 @@ the calculated call value.
 
 ## Parameters
 
-| Parameter | Type                                                                                     |
-| :-------- | :--------------------------------------------------------------------------------------- |
-| `params`  | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
+| Parameter | Type |
+| :------ | :------ |
+| `params` | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
 
 ## Returns
 
