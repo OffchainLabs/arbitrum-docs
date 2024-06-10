@@ -17,6 +17,7 @@ const config = {
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
+    format: 'md',
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -97,6 +98,53 @@ const config = {
           `typedoc-plugin-frontmatter`,
           './src/scripts/arbitrumSdkDocsHandler.ts',
         ],
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'orbit-sdk',
+        tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${orbitSdkCodebasePath}/src/`],
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `dist`],
+        excludeNotDocumented: false,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
+        // Output options
+        out: '../arbitrum-docs/orbit-sdk-docs',
+        hideGenerator: true,
+        validation: {
+          notExported: false,
+          invalidLink: true,
+          notDocumented: true,
+        },
+        logLevel: 'Verbose',
+        skipErrorChecking: 'true',
+        sidebar: {
+          autoConfiguration: 'false',
+        },
+
+        plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
+        // typedoc-plugin-markdown options
+        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'members',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: false,
+          toc_max_heading_level: 5,
+        },
       },
     ],
     [
