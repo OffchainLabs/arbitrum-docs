@@ -142,7 +142,7 @@ rustup target add wasm32-wasi --toolchain 1.73
 cargo install cbindgen
 ```
 
-### Step 7. Configure Go [1.21](https://github.com/moovweb/gvm)
+### Step 7. Configure Go [1.20](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
@@ -163,12 +163,19 @@ brew install bison
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.21
-gvm use go1.21 --default
+gvm install go1.20
+gvm use go1.20 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
 If you use zsh, replace `bash` with `zsh`.
+
+#### Install foundry
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
 
 ### Step 8. Start build
 
@@ -188,4 +195,18 @@ To run your node using the generated binaries, use the following command from th
 
 ```bash
 ./target/bin/nitro <node parameters>
+```
+
+#### WASM module root error (v2.3.4 or later)
+
+Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
+
+```
+ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
+```
+
+Try add flag:
+
+```bash
+--validation.wasm.allowed-wasm-module-roots={WASM_MODULE_ROOT}
 ```
