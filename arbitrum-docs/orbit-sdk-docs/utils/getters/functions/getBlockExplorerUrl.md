@@ -5,16 +5,16 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getBlockExplorerUrl(chain: Chain<undefined | ChainFormatters>): undefined | string;
+function getBlockExplorerUrl(chain: Chain<undefined | ChainFormatters>): undefined | string
 ```
 
 Returns the URL of the block explorer for a given Chain.
 
 ## Parameters
 
-| Parameter | Type                                        |
-| :-------- | :------------------------------------------ |
-| `chain`   | `Chain`\<`undefined` \| `ChainFormatters`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `chain` | `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Returns
 

@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function prepareKeyset(publicKeys: string[], assumedHonest: number): `0x${string}`;
+function prepareKeyset(publicKeys: string[], assumedHonest: number): `0x${string}`
 ```
 
 Prepares a keyset by encoding the assumed honest value, number of committee
@@ -13,10 +13,10 @@ members, and public keys into a single hexadecimal string.
 
 ## Parameters
 
-| Parameter       | Type       |
-| :-------------- | :--------- |
-| `publicKeys`    | `string`[] |
-| `assumedHonest` | `number`   |
+| Parameter | Type |
+| :------ | :------ |
+| `publicKeys` | `string`[] |
+| `assumedHonest` | `number` |
 
 ## Returns
 

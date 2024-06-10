@@ -5,15 +5,15 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function parentChainIsMainnet(parentChainId: any): boolean;
+function parentChainIsMainnet(parentChainId: any): boolean
 ```
 
 Checks if the given [ParentChainId](../../types/ParentChain/type-aliases/ParentChainId.md) is a mainnet chain or not.
 
 ## Parameters
 
-| Parameter       | Type  |
-| :-------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainId` | `any` |
 
 ## Returns

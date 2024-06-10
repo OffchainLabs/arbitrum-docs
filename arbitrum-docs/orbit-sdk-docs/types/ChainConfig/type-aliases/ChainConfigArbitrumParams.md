@@ -10,16 +10,16 @@ type ChainConfigArbitrumParams: object;
 
 ## Type declaration
 
-| Member                      | Type      |
-| :-------------------------- | :-------- |
-| `AllowDebugPrecompiles`     | `boolean` |
+| Member | Type |
+| :------ | :------ |
+| `AllowDebugPrecompiles` | `boolean` |
 | `DataAvailabilityCommittee` | `boolean` |
-| `EnableArbOS`               | `boolean` |
-| `GenesisBlockNum`           | `number`  |
-| `InitialArbOSVersion`       | `number`  |
-| `InitialChainOwner`         | `Address` |
-| `MaxCodeSize`               | `number`  |
-| `MaxInitCodeSize`           | `number`  |
+| `EnableArbOS` | `boolean` |
+| `GenesisBlockNum` | `number` |
+| `InitialArbOSVersion` | `number` |
+| `InitialChainOwner` | `Address` |
+| `MaxCodeSize` | `number` |
+| `MaxInitCodeSize` | `number` |
 
 ## Source
 

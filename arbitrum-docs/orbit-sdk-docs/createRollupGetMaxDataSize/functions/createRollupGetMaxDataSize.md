@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function createRollupGetMaxDataSize(parentChainId: any): undefined | bigint;
+function createRollupGetMaxDataSize(parentChainId: any): undefined | bigint
 ```
 
 createRollupGetMaxDataSize calculates and returns the maximum data size
@@ -15,8 +15,8 @@ testnet, and nitro-testnode, returning the appropriate value as a BigInt.
 
 ## Parameters
 
-| Parameter       | Type  |
-| :-------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainId` | `any` |
 
 ## Returns

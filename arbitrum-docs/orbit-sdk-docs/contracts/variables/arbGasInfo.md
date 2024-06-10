@@ -13,10 +13,10 @@ network.
 
 ## Type declaration
 
-| Member    | Type                                                                                                                                                                                                                                                      | Value         |
-| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------ |
-| `abi`     | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbGasInfoABI |
-| `address` | `"0x000000000000000000000000000000000000006C"`                                                                                                                                                                                                            | ...           |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | arbGasInfoABI |
+| `address` | `"0x000000000000000000000000000000000000006C"` | ... |
 
 ## Source
 

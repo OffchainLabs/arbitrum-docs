@@ -11,8 +11,8 @@ type Prettify<T>: { [K in keyof T]: T[K] } & object;
 ## Type parameters
 
 | Type parameter |
-| :------------- |
-| `T`            |
+| :------ |
+| `T` |
 
 ## Source
 

@@ -6,10 +6,9 @@ toc_max_heading_level: 5
 
 ```ts
 function registerNewNetwork(
-  parentProvider: JsonRpcProvider,
-  childProvider: JsonRpcProvider,
-  rollupAddress: string,
-): Promise<object>;
+   parentProvider: JsonRpcProvider, 
+   childProvider: JsonRpcProvider, 
+rollupAddress: string): Promise<object>
 ```
 
 Registers a new network by creating parent and child networks based on the
@@ -17,19 +16,19 @@ provided providers and rollup address.
 
 ## Parameters
 
-| Parameter        | Type              |
-| :--------------- | :---------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentProvider` | `JsonRpcProvider` |
-| `childProvider`  | `JsonRpcProvider` |
-| `rollupAddress`  | `string`          |
+| `childProvider` | `JsonRpcProvider` |
+| `rollupAddress` | `string` |
 
 ## Returns
 
 `Promise`\<`object`\>
 
-| Member          | Type                       |
-| :-------------- | :------------------------- |
-| `childNetwork`  | `L2Network`                |
+| Member | Type |
+| :------ | :------ |
+| `childNetwork` | `L2Network` |
 | `parentNetwork` | `L1Network` \| `L2Network` |
 
 ## Source

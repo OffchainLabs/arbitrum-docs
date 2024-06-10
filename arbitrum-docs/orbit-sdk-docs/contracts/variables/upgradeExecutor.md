@@ -13,9 +13,9 @@ roles, grant roles, and revoke roles.
 
 ## Type declaration
 
-| Member | Type  | Value |
-| :----- | :---- | :---- |
-| `abi`  | `any` | ...   |
+| Member | Type | Value |
+| :------ | :------ | :------ |
+| `abi` | `any` | ... |
 
 ## Source
 

@@ -5,7 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function getDefaultConfirmPeriodBlocks(parentChainIdOrPublicClient: any): bigint;
+function getDefaultConfirmPeriodBlocks(parentChainIdOrPublicClient: any): bigint
 ```
 
 Returns the default number of confirmation blocks required for a transaction,
@@ -13,8 +13,8 @@ based on the parent chain provided.
 
 ## Parameters
 
-| Parameter                     | Type  |
-| :---------------------------- | :---- |
+| Parameter | Type |
+| :------ | :------ |
 | `parentChainIdOrPublicClient` | `any` |
 
 ## Returns

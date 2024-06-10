@@ -10,20 +10,20 @@ type CoreContracts: object;
 
 ## Type declaration
 
-| Member                   | Type      |
-| :----------------------- | :-------- |
-| `adminProxy`             | `Address` |
-| `bridge`                 | `Address` |
-| `challengeManager`       | `Address` |
-| `deployedAtBlockNumber`  | `number`  |
-| `inbox`                  | `Address` |
-| `nativeToken`            | `Address` |
-| `outbox`                 | `Address` |
-| `rollup`                 | `Address` |
-| `rollupEventInbox`       | `Address` |
-| `sequencerInbox`         | `Address` |
-| `upgradeExecutor`        | `Address` |
-| `validatorUtils`         | `Address` |
+| Member | Type |
+| :------ | :------ |
+| `adminProxy` | `Address` |
+| `bridge` | `Address` |
+| `challengeManager` | `Address` |
+| `deployedAtBlockNumber` | `number` |
+| `inbox` | `Address` |
+| `nativeToken` | `Address` |
+| `outbox` | `Address` |
+| `rollup` | `Address` |
+| `rollupEventInbox` | `Address` |
+| `sequencerInbox` | `Address` |
+| `upgradeExecutor` | `Address` |
+| `validatorUtils` | `Address` |
 | `validatorWalletCreator` | `Address` |
 
 ## Source

@@ -10,10 +10,10 @@ type CreateTokenBridgeTransactionReceipt: TransactionReceipt & object;
 
 ## Type declaration
 
-| Member                    | Type                                                                                                          |
-| :------------------------ | :------------------------------------------------------------------------------------------------------------ |
+| Member | Type |
+| :------ | :------ |
 | `getTokenBridgeContracts` | `Promise` \<[`TokenBridgeContracts`](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md)\> |
-| `waitForRetryables`       | `Promise` \<[`WaitForRetryablesResult`](WaitForRetryablesResult.md)\>                                         |
+| `waitForRetryables` | `Promise` \<[`WaitForRetryablesResult`](WaitForRetryablesResult.md)\> |
 
 ## Source
 

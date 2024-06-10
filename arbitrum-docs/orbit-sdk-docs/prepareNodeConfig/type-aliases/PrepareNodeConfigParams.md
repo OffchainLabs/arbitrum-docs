@@ -10,16 +10,16 @@ type PrepareNodeConfigParams: object;
 
 ## Type declaration
 
-| Member                    | Type                                                                       |
-| :------------------------ | :------------------------------------------------------------------------- |
-| `batchPosterPrivateKey`   | `string`                                                                   |
-| `chainConfig`             | [`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md)       |
-| `chainName`               | `string`                                                                   |
-| `coreContracts`           | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md) |
-| `parentChainBeaconRpcUrl` | `string`                                                                   |
-| `parentChainId`           | [`ParentChainId`](../../types/ParentChain/type-aliases/ParentChainId.md)   |
-| `parentChainRpcUrl`       | `string`                                                                   |
-| `validatorPrivateKey`     | `string`                                                                   |
+| Member | Type |
+| :------ | :------ |
+| `batchPosterPrivateKey` | `string` |
+| `chainConfig` | [`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md) |
+| `chainName` | `string` |
+| `coreContracts` | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md) |
+| `parentChainBeaconRpcUrl` | `string` |
+| `parentChainId` | [`ParentChainId`](../../types/ParentChain/type-aliases/ParentChainId.md) |
+| `parentChainRpcUrl` | `string` |
+| `validatorPrivateKey` | `string` |
 
 ## Source
 

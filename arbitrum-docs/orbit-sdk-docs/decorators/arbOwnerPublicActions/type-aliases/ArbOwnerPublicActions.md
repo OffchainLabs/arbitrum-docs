@@ -10,16 +10,16 @@ type ArbOwnerPublicActions<TChain>: object;
 
 ## Type parameters
 
-| Type parameter                            | Value                  |
-| :---------------------------------------- | :--------------------- |
-| `TChain` _extends_ `Chain` \| `undefined` | `Chain` \| `undefined` |
+| Type parameter | Value |
+| :------ | :------ |
+| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
 
 ## Type declaration
 
-| Member                              | Type                                                                                                                                                                                                                                                                                                                  |
-| :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `arbOwnerPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbOwnerPrepareTransactionRequestParameters`](../../../arbOwnerPrepareTransactionRequest/type-aliases/ArbOwnerPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>                                  |
-| `arbOwnerReadContract`              | \<`TFunctionName`\>(`args`: [`ArbOwnerReadContractParameters`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbOwnerReadContractReturnType`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\> |
+| Member | Type |
+| :------ | :------ |
+| `arbOwnerPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbOwnerPrepareTransactionRequestParameters`](../../../arbOwnerPrepareTransactionRequest/type-aliases/ArbOwnerPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\> |
+| `arbOwnerReadContract` | \<`TFunctionName`\>(`args`: [`ArbOwnerReadContractParameters`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbOwnerReadContractReturnType`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\> |
 
 ## Source
 

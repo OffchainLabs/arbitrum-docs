@@ -5,11 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function validateParentChain<TTransport, TChain>(
-  chainIdOrClient:
-    | number
-    | Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>,
-): ParentChainId;
+function validateParentChain<TTransport, TChain>(chainIdOrClient: number | Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>): ParentChainId
 ```
 
 Validates the provided parent chain ID to ensure it is supported by the
@@ -18,15 +14,15 @@ corresponding message. Returns the validated parent chain ID.
 
 ## Type parameters
 
-| Type parameter                                                                                                 | Value                                                                                   |
-| :------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
-| `TTransport` _extends_ `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                                  | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>                              |
+| Type parameter | Value |
+| :------ | :------ |
+| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
 
 ## Parameters
 
-| Parameter         | Type                                                                                                                                |
-| :---------------- | :---------------------------------------------------------------------------------------------------------------------------------- |
+| Parameter | Type |
+| :------ | :------ |
 | `chainIdOrClient` | `number` \| `Client`\<`TTransport`, `TChain`, `undefined` \| `Account`\<\`0x$\{string\}\`\>, `undefined`, `undefined` \| `object`\> |
 
 ## Returns

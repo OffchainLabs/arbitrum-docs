@@ -10,9 +10,9 @@ type GasOverrideOptions: object;
 
 ## Type declaration
 
-| Member            | Type     |
-| :---------------- | :------- |
-| `base`            | `bigint` |
+| Member | Type |
+| :------ | :------ |
+| `base` | `bigint` |
 | `percentIncrease` | `bigint` |
 
 ## Source

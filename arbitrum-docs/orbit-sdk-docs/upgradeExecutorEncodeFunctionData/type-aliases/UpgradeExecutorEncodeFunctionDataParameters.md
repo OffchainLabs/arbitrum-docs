@@ -10,9 +10,9 @@ type UpgradeExecutorEncodeFunctionDataParameters<TFunctionName>: Prettify<Omit<E
 
 ## Type parameters
 
-| Type parameter                                                                            |
-| :---------------------------------------------------------------------------------------- |
-| `TFunctionName` _extends_ [`UpgradeExecutorFunctionName`](UpgradeExecutorFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`UpgradeExecutorFunctionName`](UpgradeExecutorFunctionName.md) |
 
 ## Source
 

@@ -10,9 +10,9 @@ type RollupAdminLogicReadContractReturnType<TFunctionName>: ReadContractReturnTy
 
 ## Type parameters
 
-| Type parameter                                                                              |
-| :------------------------------------------------------------------------------------------ |
-| `TFunctionName` _extends_ [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
 
 ## Source
 

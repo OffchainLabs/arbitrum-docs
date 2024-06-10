@@ -10,15 +10,15 @@ type RollupAdminLogicPrepareTransactionRequestParameters<TFunctionName>: Omit<Ro
 
 ## Type declaration
 
-| Member    | Type      |
-| :-------- | :-------- |
+| Member | Type |
+| :------ | :------ |
 | `account` | `Address` |
 
 ## Type parameters
 
-| Type parameter                                                                              |
-| :------------------------------------------------------------------------------------------ |
-| `TFunctionName` _extends_ [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
+| Type parameter |
+| :------ |
+| `TFunctionName` *extends* [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
 
 ## Source
 

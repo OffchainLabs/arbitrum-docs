@@ -10,8 +10,8 @@ type CreateRollupTransactionReceipt: TransactionReceipt & object;
 
 ## Type declaration
 
-| Member             | Type                                                                       |
-| :----------------- | :------------------------------------------------------------------------- |
+| Member | Type |
+| :------ | :------ |
 | `getCoreContracts` | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md) |
 
 ## Source

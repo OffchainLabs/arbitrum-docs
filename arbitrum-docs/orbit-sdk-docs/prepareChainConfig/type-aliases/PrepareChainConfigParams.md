@@ -10,8 +10,8 @@ type PrepareChainConfigParams: Pick<ChainConfig, "chainId"> & Partial<Omit<Chain
 
 ## Type declaration
 
-| Member     | Type                                                                                                                                                                                                                                                                                 |
-| :--------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Member | Type |
+| :------ | :------ |
 | `arbitrum` | `Pick` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\> & `Partial`\<`Omit` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\>\> |
 
 ## Source

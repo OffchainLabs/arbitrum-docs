@@ -5,10 +5,7 @@ toc_max_heading_level: 5
 ---
 
 ```ts
-function arbAggregatorReadContract<TChain, TFunctionName>(
-  client: object,
-  params: ArbAggregatorReadContractParameters<TFunctionName>,
-): Promise<ArbAggregatorReadContractReturnType<TFunctionName>>;
+function arbAggregatorReadContract<TChain, TFunctionName>(client: object, params: ArbAggregatorReadContractParameters<TFunctionName>): Promise<ArbAggregatorReadContractReturnType<TFunctionName>>
 ```
 
 Reads data from the ArbAggregator smart contract and returns the specified
@@ -16,26 +13,25 @@ result.
 
 ## Type parameters
 
-| Type parameter                                                                |
-| :---------------------------------------------------------------------------- |
-| `TChain` _extends_ `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
-
-| `TFunctionName` _extends_
-\| `"addBatchPoster"`
-\| `"getBatchPosters"`
-\| `"getDefaultAggregator"`
-\| `"getFeeCollector"`
-\| `"getPreferredAggregator"`
-\| `"getTxBaseFee"`
-\| `"setFeeCollector"`
-\| `"setTxBaseFee"` |
+| Type parameter |
+| :------ |
+| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+| `TFunctionName` *extends* 
+  \| `"addBatchPoster"`
+  \| `"getBatchPosters"`
+  \| `"getDefaultAggregator"`
+  \| `"getFeeCollector"`
+  \| `"getPreferredAggregator"`
+  \| `"getTxBaseFee"`
+  \| `"setFeeCollector"`
+  \| `"setTxBaseFee"` |
 
 ## Parameters
 
-| Parameter | Type                                                                                                               |
-| :-------- | :----------------------------------------------------------------------------------------------------------------- |
-| `client`  | `object`                                                                                                           |
-| `params`  | [`ArbAggregatorReadContractParameters`](../type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\> |
+| Parameter | Type |
+| :------ | :------ |
+| `client` | `object` |
+| `params` | [`ArbAggregatorReadContractParameters`](../type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\> |
 
 ## Returns
 
