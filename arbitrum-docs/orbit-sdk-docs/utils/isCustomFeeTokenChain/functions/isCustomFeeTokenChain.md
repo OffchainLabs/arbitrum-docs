@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function isCustomFeeTokenChain(__namedParameters: object): Promise<boolean>
 ```
 
-Checks if the given rollup chain is a custom fee token chain by verifying the
-existence of a native token on the bridge contract. Returns true if it is a
-custom fee token chain, false otherwise.
-
 ## Parameters
 
 | Parameter | Type |
@@ -26,4 +22,4 @@ custom fee token chain, false otherwise.
 
 ## Source
 
-[src/utils/isCustomFeeTokenChain.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/isCustomFeeTokenChain.ts#L8)
+[src/utils/isCustomFeeTokenChain.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/isCustomFeeTokenChain.ts#L3)

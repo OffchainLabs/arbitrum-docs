@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function createTokenBridgeEnoughCustomFeeTokenAllowance(__namedParameters: object): Promise<boolean>
 ```
 
-Creates a token bridge with enough custom fee token allowance. This function
-fetches the allowance for a native token owned by a specified address,
-compares it to the default retryable fees for creating a token bridge, and
-returns a boolean indicating if the allowance is sufficient.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -29,4 +24,4 @@ returns a boolean indicating if the allowance is sufficient.
 
 ## Source
 
-[src/createTokenBridgeEnoughCustomFeeTokenAllowance.ts:24](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgeEnoughCustomFeeTokenAllowance.ts#L24)
+[src/createTokenBridgeEnoughCustomFeeTokenAllowance.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgeEnoughCustomFeeTokenAllowance.ts#L18)

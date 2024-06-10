@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function ethersTransactionReceiptToViemTransactionReceipt(receipt: TransactionReceipt): ViemTransactionReceipt
 ```
 
-Converts an Ethereum transaction receipt (from `EthersTransactionReceipt`) to
-a Viem transaction receipt (to `ViemTransactionReceipt`). This function maps
-the fields from the Ethereum receipt to the corresponding fields in the Viem
-receipt, including conversion of data types where necessary.
-
 ## Parameters
 
 | Parameter | Type |
@@ -25,4 +20,4 @@ receipt, including conversion of data types where necessary.
 
 ## Source
 
-[src/ethers-compat/ethersTransactionReceiptToViemTransactionReceipt.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/ethers-compat/ethersTransactionReceiptToViemTransactionReceipt.ts#L33)
+[src/ethers-compat/ethersTransactionReceiptToViemTransactionReceipt.ts:27](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/ethers-compat/ethersTransactionReceiptToViemTransactionReceipt.ts#L27)

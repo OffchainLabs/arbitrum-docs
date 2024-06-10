@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 const tokenBridgeCreator: object;
 ```
 
-tokenBridgeCreator configures and deploys a token bridge between Layer 1 and
-Layer 2 Ethereum networks.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -28,4 +25,4 @@ Layer 2 Ethereum networks.
 
 ## Source
 
-[src/contracts.ts:219](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L219)
+[src/contracts.ts:202](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L202)

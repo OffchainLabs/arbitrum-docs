@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function createRollupPrepareCustomFeeTokenApprovalTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
-Creates a custom fee token approval transaction request for the Rollup chain.
-The function takes in parameters such as the amount, native token address,
-account address, and public client. It then validates the parent chain,
-generates the transaction request, and returns it along with the chain ID.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -30,4 +25,4 @@ generates the transaction request, and returns it along with the chain ID.
 
 ## Source
 
-[src/createRollupPrepareCustomFeeTokenApprovalTransactionRequest.ts:26](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareCustomFeeTokenApprovalTransactionRequest.ts#L26)
+[src/createRollupPrepareCustomFeeTokenApprovalTransactionRequest.ts:20](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareCustomFeeTokenApprovalTransactionRequest.ts#L20)

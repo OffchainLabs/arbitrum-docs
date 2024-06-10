@@ -8,12 +8,10 @@ toc_max_heading_level: 5
 function generateChainId(): number
 ```
 
-Generates a random chain ID as a number.
-
 ## Returns
 
 `number`
 
 ## Source
 
-[src/utils/generateChainId.ts:2](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/generateChainId.ts#L2)
+[src/utils/generateChainId.ts:1](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/generateChainId.ts#L1)

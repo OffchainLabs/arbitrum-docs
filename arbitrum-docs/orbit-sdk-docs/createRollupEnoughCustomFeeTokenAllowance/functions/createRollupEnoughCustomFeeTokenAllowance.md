@@ -8,13 +8,6 @@ toc_max_heading_level: 5
 function createRollupEnoughCustomFeeTokenAllowance(__namedParameters: object): Promise<boolean>
 ```
 
-CreateRollupEnoughCustomFeeTokenAllowance checks if the allowance for a
-specific native token is enough for creating a rollup with custom fees. It
-fetches the allowance using the owner's account and the spender address,
-which is either provided or fetched from the Rollup creator address. The
-function returns a boolean indicating whether the allowance is greater than
-or equal to the default retryable fees required for creating the rollup.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -31,4 +24,4 @@ or equal to the default retryable fees required for creating the rollup.
 
 ## Source
 
-[src/createRollupEnoughCustomFeeTokenAllowance.ts:26](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupEnoughCustomFeeTokenAllowance.ts#L26)
+[src/createRollupEnoughCustomFeeTokenAllowance.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupEnoughCustomFeeTokenAllowance.ts#L18)

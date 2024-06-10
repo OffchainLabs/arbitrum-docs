@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function validateParentChain<TTransport, TChain>(chainIdOrClient: number | Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>): ParentChainId
 ```
 
-Validates the provided parent chain ID to ensure it is supported by the
-system. If the parent chain ID is not valid, an error is thrown with a
-corresponding message. Returns the validated parent chain ID.
-
 ## Type parameters
 
 | Type parameter | Value |
@@ -31,4 +27,4 @@ corresponding message. Returns the validated parent chain ID.
 
 ## Source
 
-[src/types/ParentChain.ts:29](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/types/ParentChain.ts#L29)
+[src/types/ParentChain.ts:24](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/types/ParentChain.ts#L24)

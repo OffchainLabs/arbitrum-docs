@@ -10,4 +10,4 @@ type CreateTokenBridgePrepareTransactionRequestParams: Prettify<WithTokenBridgeC
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionRequest.ts:25](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareTransactionRequest.ts#L25)
+[src/createTokenBridgePrepareTransactionRequest.ts:25](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareTransactionRequest.ts#L25)

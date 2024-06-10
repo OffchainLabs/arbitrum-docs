@@ -14,9 +14,6 @@ function createTokenBridgeGetInputs(
 retryableGasOverrides?: TransactionRequestRetryableGasOverrides): Promise<CreateTokenBridgeGetInputsResult>
 ```
 
-Returns a [CreateTokenBridgeGetInputsResult](../type-aliases/CreateTokenBridgeGetInputsResult.md) object containing inputs
-required for creating a token bridge.
-
 ## Parameters
 
 | Parameter | Type |
@@ -34,4 +31,4 @@ required for creating a token bridge.
 
 ## Source
 
-[src/createTokenBridge-ethers.ts:38](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridge-ethers.ts#L38)
+[src/createTokenBridge-ethers.ts:34](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridge-ethers.ts#L34)

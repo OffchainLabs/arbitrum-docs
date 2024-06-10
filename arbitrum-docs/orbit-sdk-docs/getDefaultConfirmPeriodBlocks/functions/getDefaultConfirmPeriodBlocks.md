@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function getDefaultConfirmPeriodBlocks(parentChainIdOrPublicClient: any): bigint
 ```
 
-Returns the default number of confirmation blocks required for a transaction,
-based on the parent chain provided.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ based on the parent chain provided.
 
 ## Source
 
-[src/getDefaultConfirmPeriodBlocks.ts:10](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/getDefaultConfirmPeriodBlocks.ts#L10)
+[src/getDefaultConfirmPeriodBlocks.ts:6](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/getDefaultConfirmPeriodBlocks.ts#L6)

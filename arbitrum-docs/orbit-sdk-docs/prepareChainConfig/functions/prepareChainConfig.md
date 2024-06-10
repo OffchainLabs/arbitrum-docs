@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function prepareChainConfig(params: PrepareChainConfigParams): ChainConfig
 ```
 
-PrepareChainConfig merges the default chain configuration with the provided
-parameters, including specific configurations for the Clique and Arbitrum
-consensus algorithms. It returns a [ChainConfig](../../types/ChainConfig/type-aliases/ChainConfig.md) object with the
-updated values.
-
 ## Parameters
 
 | Parameter | Type |
@@ -25,4 +20,4 @@ updated values.
 
 ## Source
 
-[src/prepareChainConfig.ts:53](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/prepareChainConfig.ts#L53)
+[src/prepareChainConfig.ts:39](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/prepareChainConfig.ts#L39)

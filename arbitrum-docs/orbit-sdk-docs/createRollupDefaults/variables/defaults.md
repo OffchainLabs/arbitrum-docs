@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 const defaults: object;
 ```
 
-The `defaults` object provides default values for various settings, including
-the native token address, deployment to Layer 2, and maximum fee per gas for
-retryable transactions.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -22,4 +18,4 @@ retryable transactions.
 
 ## Source
 
-[src/createRollupDefaults.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupDefaults.ts#L8)
+[src/createRollupDefaults.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupDefaults.ts#L3)

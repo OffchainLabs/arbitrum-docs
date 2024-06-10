@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 const arbOwner: object;
 ```
 
-arbOwner configures the Arbitrum owner with the specified address.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -19,4 +17,4 @@ arbOwner configures the Arbitrum owner with the specified address.
 
 ## Source
 
-[src/contracts.ts:20](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L20)
+[src/contracts.ts:18](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L18)

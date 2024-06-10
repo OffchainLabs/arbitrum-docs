@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function validateParentChainPublicClient<TTransport, TChain>(publicClient: object): ParentChainPublicClient
 ```
 
-Validates the parent chain of a PublicClient to ensure it is
-supported. If the parent chain is not supported, an error is thrown. Returns
-a [ParentChainPublicClient](../type-aliases/ParentChainPublicClient.md).
-
 ## Type parameters
 
 | Type parameter | Value |
@@ -31,4 +27,4 @@ a [ParentChainPublicClient](../type-aliases/ParentChainPublicClient.md).
 
 ## Source
 
-[src/types/ParentChain.ts:47](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/types/ParentChain.ts#L47)
+[src/types/ParentChain.ts:37](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/types/ParentChain.ts#L37)

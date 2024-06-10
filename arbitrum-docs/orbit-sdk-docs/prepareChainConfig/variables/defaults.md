@@ -8,13 +8,6 @@ toc_max_heading_level: 5
 const defaults: object;
 ```
 
-The defaults object contains default values for various blockchain
-parameters, such as block numbers and configuration settings. It includes
-values for Ethereum mainnet hard forks like Homestead, Constantinople, and
-Istanbul, as well as specific settings for the Arbitrum layer 2 solution. The
-prepareChainConfig function utilizes these defaults to create a complete
-ChainConfig object with the specified parameters.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -47,4 +40,4 @@ ChainConfig object with the specified parameters.
 
 ## Source
 
-[src/prepareChainConfig.ts:11](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/prepareChainConfig.ts#L11)
+[src/prepareChainConfig.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/prepareChainConfig.ts#L3)

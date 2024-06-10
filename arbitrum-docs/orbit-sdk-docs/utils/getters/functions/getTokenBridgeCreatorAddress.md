@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function getTokenBridgeCreatorAddress(client: object): any
 ```
 
-getTokenBridgeCreatorAddress returns the address of the token bridge creator
-for a specific chain based on the provided PublicClient.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ for a specific chain based on the provided PublicClient.
 
 ## Source
 
-[src/utils/getters.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/getters.ts#L21)
+[src/utils/getters.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/getters.ts#L16)

@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function createTokenBridgePrepareTransactionReceipt(txReceipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): CreateTokenBridgeTransactionReceipt
 ```
 
-Creates a transaction receipt with methods to wait for retryables and get
-token bridge contracts.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ token bridge contracts.
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionReceipt.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareTransactionReceipt.ts#L71)
+[src/createTokenBridgePrepareTransactionReceipt.ts:67](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareTransactionReceipt.ts#L67)

@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function createTokenBridgeFetchTokenBridgeContracts(__namedParameters: object): Promise<TokenBridgeContracts>
 ```
 
-Creates and fetches the token bridge contracts on both the parent chain and
-the orbit chain. It retrieves addresses for various contracts including
-routers, gateways, WETH, proxy admin, beacon proxy factory, upgrade executor,
-and multicall on both chains. Returns [TokenBridgeContracts](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md).
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -28,4 +23,4 @@ and multicall on both chains. Returns [TokenBridgeContracts](../../types/TokenBr
 
 ## Source
 
-[src/createTokenBridgeFetchTokenBridgeContracts.ts:23](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgeFetchTokenBridgeContracts.ts#L23)
+[src/createTokenBridgeFetchTokenBridgeContracts.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgeFetchTokenBridgeContracts.ts#L17)

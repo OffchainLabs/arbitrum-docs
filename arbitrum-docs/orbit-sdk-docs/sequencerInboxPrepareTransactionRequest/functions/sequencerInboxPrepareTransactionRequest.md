@@ -8,13 +8,6 @@ toc_max_heading_level: 5
 function sequencerInboxPrepareTransactionRequest<TFunctionName, TTransport, TChain>(client: object, params: SequencerInboxPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
 ```
 
-sequencerInboxPrepareTransactionRequest prepares a transaction request to
-interact with the Sequencer Inbox contract on a specified chain. It takes in
-a PublicClient and parameters including the function name, arguments, upgrade
-executor, and account address. The function generates the transaction data
-and value based on the parameters provided and returns a prepared transaction
-request object.
-
 ## Type parameters
 
 | Type parameter | Value |
@@ -57,4 +50,4 @@ request object.
 
 ## Source
 
-[src/sequencerInboxPrepareTransactionRequest.ts:83](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/sequencerInboxPrepareTransactionRequest.ts#L83)
+[src/sequencerInboxPrepareTransactionRequest.ts:75](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/sequencerInboxPrepareTransactionRequest.ts#L75)

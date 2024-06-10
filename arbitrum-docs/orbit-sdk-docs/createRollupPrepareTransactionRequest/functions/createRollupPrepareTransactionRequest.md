@@ -8,14 +8,6 @@ toc_max_heading_level: 5
 function createRollupPrepareTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
-Prepares a transaction request to create a rollup chain on the specified
-parent chain. The function validates the input parameters, including the
-batch poster address and validator addresses, and checks if the native token
-is allowed based on the chain configuration. It then encodes the function
-data using the rollup creator ABI and prepares the transaction request with
-the necessary data, value, and gas limits. Returns the prepared transaction
-request along with the chain ID.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -33,4 +25,4 @@ request along with the chain ID.
 
 ## Source
 
-[src/createRollupPrepareTransactionRequest.ts:48](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareTransactionRequest.ts#L48)
+[src/createRollupPrepareTransactionRequest.ts:39](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransactionRequest.ts#L39)

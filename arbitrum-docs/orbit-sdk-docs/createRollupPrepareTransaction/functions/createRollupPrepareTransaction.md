@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function createRollupPrepareTransaction(tx: Transaction<bigint, number, boolean>): CreateRollupTransaction
 ```
 
-Creates a transaction object for preparing a createRollup function call,
-which extends the base Transaction type and includes a method to retrieve the
-inputs for creating a rollup.
-
 ## Parameters
 
 | Parameter | Type |
@@ -24,4 +20,4 @@ inputs for creating a rollup.
 
 ## Source
 
-[src/createRollupPrepareTransaction.ts:22](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareTransaction.ts#L22)
+[src/createRollupPrepareTransaction.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransaction.ts#L17)

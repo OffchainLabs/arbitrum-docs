@@ -16,4 +16,4 @@ type UpgradeExecutorEncodeFunctionDataParameters<TFunctionName>: Prettify<Omit<E
 
 ## Source
 
-[src/upgradeExecutorEncodeFunctionData.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/upgradeExecutorEncodeFunctionData.ts#L17)
+[src/upgradeExecutorEncodeFunctionData.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorEncodeFunctionData.ts#L17)

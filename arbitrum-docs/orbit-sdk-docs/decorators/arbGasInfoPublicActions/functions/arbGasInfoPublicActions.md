@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function arbGasInfoPublicActions<TTransport, TChain>(client: object): ArbGasInfoPublicActions<TChain>
 ```
 
-Returns an object with a method `arbGasInfoReadContract` that allows for
-reading contract information related to gas costs on the Arbitrum network.
-
 ## Type parameters
 
 | Type parameter | Value |
@@ -30,4 +27,4 @@ reading contract information related to gas costs on the Arbitrum network.
 
 ## Source
 
-[src/decorators/arbGasInfoPublicActions.ts:20](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/decorators/arbGasInfoPublicActions.ts#L20)
+[src/decorators/arbGasInfoPublicActions.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/decorators/arbGasInfoPublicActions.ts#L16)

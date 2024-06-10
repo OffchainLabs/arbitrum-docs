@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 function createRollupHelper(__namedParameters: object): Promise<object>
 ```
 
-Creates a rollup chain with specified deployment parameters and validators.
-
 ## Parameters
 
 | Parameter | Type |
@@ -47,4 +45,4 @@ Creates a rollup chain with specified deployment parameters and validators.
 
 ## Source
 
-[src/testHelpers.ts:148](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/testHelpers.ts#L148)
+[src/testHelpers.ts:138](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/testHelpers.ts#L138)

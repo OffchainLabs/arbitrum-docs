@@ -16,4 +16,4 @@ type PrepareChainConfigParams: Pick<ChainConfig, "chainId"> & Partial<Omit<Chain
 
 ## Source
 
-[src/prepareChainConfig.ts:41](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/prepareChainConfig.ts#L41)
+[src/prepareChainConfig.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/prepareChainConfig.ts#L33)

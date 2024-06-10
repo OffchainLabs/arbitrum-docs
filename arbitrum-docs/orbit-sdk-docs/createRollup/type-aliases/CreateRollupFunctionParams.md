@@ -20,4 +20,4 @@ This type is for the params of the createRollup function
 
 ## Source
 
-[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollup.ts#L74)
+[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollup.ts#L74)

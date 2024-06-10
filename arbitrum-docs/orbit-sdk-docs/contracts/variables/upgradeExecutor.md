@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 const upgradeExecutor: object;
 ```
 
-upgradeExecutor provides functions to execute upgrades, execute calls, check
-roles, grant roles, and revoke roles.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -19,4 +16,4 @@ roles, grant roles, and revoke roles.
 
 ## Source
 
-[src/contracts.ts:53](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L53)
+[src/contracts.ts:40](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L40)

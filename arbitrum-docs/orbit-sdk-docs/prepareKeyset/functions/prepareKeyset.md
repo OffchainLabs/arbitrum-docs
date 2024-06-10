@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function prepareKeyset(publicKeys: string[], assumedHonest: number): `0x${string}`
 ```
 
-Prepares a keyset by encoding the assumed honest value, number of committee
-members, and public keys into a single hexadecimal string.
-
 ## Parameters
 
 | Parameter | Type |
@@ -24,4 +21,4 @@ members, and public keys into a single hexadecimal string.
 
 ## Source
 
-[src/prepareKeyset.ts:23](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/prepareKeyset.ts#L23)
+[src/prepareKeyset.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/prepareKeyset.ts#L19)

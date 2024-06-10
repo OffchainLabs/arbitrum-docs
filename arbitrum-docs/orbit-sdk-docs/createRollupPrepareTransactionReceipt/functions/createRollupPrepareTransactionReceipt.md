@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function createRollupPrepareTransactionReceipt(txReceipt: TransactionReceipt<bigint, number, "success" | "reverted", TransactionType>): CreateRollupTransactionReceipt
 ```
 
-Creates a transaction receipt for preparing a rollup, including core contract
-information. Returns a [CreateRollupTransactionReceipt](../type-aliases/CreateRollupTransactionReceipt.md).
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ information. Returns a [CreateRollupTransactionReceipt](../type-aliases/CreateRo
 
 ## Source
 
-[src/createRollupPrepareTransactionReceipt.ts:38](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createRollupPrepareTransactionReceipt.ts#L38)
+[src/createRollupPrepareTransactionReceipt.ts:34](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransactionReceipt.ts#L34)

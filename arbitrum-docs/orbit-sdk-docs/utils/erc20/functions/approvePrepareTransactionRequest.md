@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function approvePrepareTransactionRequest(__namedParameters: ApprovePrepareTransactionRequestProps): Promise<any>
 ```
 
-ApprovePrepareTransactionRequest prepares a transaction request to approve a
-specific amount of tokens for a spender.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ specific amount of tokens for a spender.
 
 ## Source
 
-[src/utils/erc20.ts:25](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/erc20.ts#L25)
+[src/utils/erc20.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/erc20.ts#L21)

@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function setValidKeysetEncodeFunctionData(keyset: `0x${string}`): any
 ```
 
-Encodes the function data for setting a valid keyset by parsing the ABI and
-encoding the function name and arguments.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ encoding the function name and arguments.
 
 ## Source
 
-[src/setValidKeysetEncodeFunctionData.ts:7](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/setValidKeysetEncodeFunctionData.ts#L7)
+[src/setValidKeysetEncodeFunctionData.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/setValidKeysetEncodeFunctionData.ts#L3)

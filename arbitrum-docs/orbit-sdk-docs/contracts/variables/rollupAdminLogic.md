@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 const rollupAdminLogic: object;
 ```
 
-rollupAdminLogic represents the ABI for the Rollup Admin Logic contract.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -18,4 +16,4 @@ rollupAdminLogic represents the ABI for the Rollup Admin Logic contract.
 
 ## Source
 
-[src/contracts.ts:230](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L230)
+[src/contracts.ts:211](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L211)

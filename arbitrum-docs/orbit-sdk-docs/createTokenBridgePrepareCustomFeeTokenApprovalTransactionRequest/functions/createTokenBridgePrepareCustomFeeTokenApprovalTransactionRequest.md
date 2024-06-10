@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
-Creates a Token Bridge prepare custom fee token approval transaction request
-with specified parameters. This function returns a Request object
-containing the approval transaction details.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -29,4 +25,4 @@ containing the approval transaction details.
 
 ## Source
 
-[src/createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest.ts:24](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest.ts#L24)
+[src/createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest.ts#L19)

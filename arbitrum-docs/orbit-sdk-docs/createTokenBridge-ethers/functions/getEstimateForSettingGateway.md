@@ -14,8 +14,6 @@ function getEstimateForSettingGateway(
 orbitChainPublicClient: object): Promise<object>
 ```
 
-Returns an estimate for setting a token gateway in the router.
-
 ## Parameters
 
 | Parameter | Type |
@@ -40,4 +38,4 @@ Returns an estimate for setting a token gateway in the router.
 
 ## Source
 
-[src/createTokenBridge-ethers.ts:229](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridge-ethers.ts#L229)
+[src/createTokenBridge-ethers.ts:192](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridge-ethers.ts#L192)

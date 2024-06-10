@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 const arbAggregator: object;
 ```
 
-arbAggregator retrieves data from a specified source.
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -19,4 +17,4 @@ arbAggregator retrieves data from a specified source.
 
 ## Source
 
-[src/contracts.ts:41](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L41)
+[src/contracts.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L33)

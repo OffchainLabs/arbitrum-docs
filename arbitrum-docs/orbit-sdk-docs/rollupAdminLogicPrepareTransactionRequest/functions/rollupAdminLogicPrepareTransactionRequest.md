@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function rollupAdminLogicPrepareTransactionRequest<TFunctionName, TTransport, TChain>(client: object, params: RollupAdminLogicPrepareTransactionRequestParameters<TFunctionName>): Promise<any>
 ```
 
-Prepares a transaction request for a Rollup Admin Logic function to be
-executed on a public client.
-
 ## Type parameters
 
 | Type parameter | Value |
@@ -103,4 +100,4 @@ executed on a public client.
 
 ## Source
 
-[src/rollupAdminLogicPrepareTransactionRequest.ts:81](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/rollupAdminLogicPrepareTransactionRequest.ts#L81)
+[src/rollupAdminLogicPrepareTransactionRequest.ts:77](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/rollupAdminLogicPrepareTransactionRequest.ts#L77)

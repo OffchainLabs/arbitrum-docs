@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 const sequencerInbox: object;
 ```
 
-sequencerInbox returns a [sequencerInboxABI](../../abi/sequencerInboxABI/variables/sequencerInboxABI.md).
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -18,4 +16,4 @@ sequencerInbox returns a [sequencerInboxABI](../../abi/sequencerInboxABI/variabl
 
 ## Source
 
-[src/contracts.ts:225](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L225)
+[src/contracts.ts:207](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L207)

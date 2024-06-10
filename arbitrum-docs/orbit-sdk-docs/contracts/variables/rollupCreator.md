@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 const rollupCreator: object = rollupCreatorConfig;
 ```
 
-rollupCreator returns a [rollupCreatorConfig](../../generated/variables/rollupCreatorConfig.md).
-
 ## Type declaration
 
 | Member | Type | Value |
@@ -27,4 +25,4 @@ rollupCreator returns a [rollupCreatorConfig](../../generated/variables/rollupCr
 
 ## Source
 
-[src/contracts.ts:47](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/contracts.ts#L47)
+[src/contracts.ts:38](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L38)

@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function sanitizePrivateKey(privateKey: string): `0x${string}`
 ```
 
-SanitizePrivateKey sanitizes a private key string by ensuring it starts with
-'0x' and returns a `0x${string}`.
-
 ## Parameters
 
 | Parameter | Type |
@@ -23,4 +20,4 @@ SanitizePrivateKey sanitizes a private key string by ensuring it starts with
 
 ## Source
 
-[src/utils/sanitizePrivateKey.ts:5](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/sanitizePrivateKey.ts#L5)
+[src/utils/sanitizePrivateKey.ts:1](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/sanitizePrivateKey.ts#L1)

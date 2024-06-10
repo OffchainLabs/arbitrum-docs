@@ -11,9 +11,6 @@ function registerNewNetwork(
 rollupAddress: string): Promise<object>
 ```
 
-Registers a new network by creating parent and child networks based on the
-provided providers and rollup address.
-
 ## Parameters
 
 | Parameter | Type |
@@ -33,4 +30,4 @@ provided providers and rollup address.
 
 ## Source
 
-[src/utils/registerNewNetwork.ts:170](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/registerNewNetwork.ts#L170)
+[src/utils/registerNewNetwork.ts:166](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/registerNewNetwork.ts#L166)

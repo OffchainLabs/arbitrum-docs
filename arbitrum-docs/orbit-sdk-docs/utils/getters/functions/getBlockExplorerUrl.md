@@ -8,8 +8,6 @@ toc_max_heading_level: 5
 function getBlockExplorerUrl(chain: Chain<undefined | ChainFormatters>): undefined | string
 ```
 
-Returns the URL of the block explorer for a given Chain.
-
 ## Parameters
 
 | Parameter | Type |
@@ -22,4 +20,4 @@ Returns the URL of the block explorer for a given Chain.
 
 ## Source
 
-[src/utils/getters.ts:32](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/utils/getters.ts#L32)
+[src/utils/getters.ts:26](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/getters.ts#L26)

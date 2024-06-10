@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function sequencerInboxReadContract<TChain, TFunctionName>(client: object, params: SequencerInboxReadContractParameters<TFunctionName>): Promise<SequencerInboxReadContractReturnType<TFunctionName>>
 ```
 
-Reads data from the sequencer inbox contract on a specified chain and returns
-the result.
-
 ## Type parameters
 
 | Type parameter |
@@ -52,4 +49,4 @@ the result.
 
 ## Source
 
-[src/sequencerInboxReadContract.ts:30](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/sequencerInboxReadContract.ts#L30)
+[src/sequencerInboxReadContract.ts:26](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/sequencerInboxReadContract.ts#L26)

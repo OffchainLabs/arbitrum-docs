@@ -8,9 +8,6 @@ toc_max_heading_level: 5
 function createTokenBridgePrepareTransactionRequest(__namedParameters: object): Promise<any>
 ```
 
-Creates a transaction request to prepare token bridge creation on the parent
-chain. Returns the prepared transaction request along with the chain ID.
-
 ## Parameters
 
 | Parameter | Type | Description |
@@ -32,4 +29,4 @@ chain. Returns the prepared transaction request along with the chain ID.
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionRequest.ts:40](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/createTokenBridgePrepareTransactionRequest.ts#L40)
+[src/createTokenBridgePrepareTransactionRequest.ts:36](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareTransactionRequest.ts#L36)

@@ -8,11 +8,6 @@ toc_max_heading_level: 5
 function setValidKeysetPrepareTransactionRequest(__namedParameters: SetValidKeysetPrepareTransactionRequestParams): Promise<any>
 ```
 
-Sets up a transaction request to upgrade the executor with a valid keyset.
-This function prepares the transaction request by encoding the necessary
-function data and validating the parent chain. It returns the prepared
-transaction request along with the chain ID.
-
 ## Parameters
 
 | Parameter | Type |
@@ -25,4 +20,4 @@ transaction request along with the chain ID.
 
 ## Source
 
-[src/setValidKeysetPrepareTransactionRequest.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/setValidKeysetPrepareTransactionRequest.ts#L21)
+[src/setValidKeysetPrepareTransactionRequest.ts:15](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/setValidKeysetPrepareTransactionRequest.ts#L15)

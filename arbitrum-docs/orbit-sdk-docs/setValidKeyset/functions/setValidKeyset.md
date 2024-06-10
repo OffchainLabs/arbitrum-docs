@@ -8,10 +8,6 @@ toc_max_heading_level: 5
 function setValidKeyset(__namedParameters: SetValidKeysetParams): Promise<any>
 ```
 
-Sets the valid keyset for a contract on the parent chain. It takes in the
-core contracts, keyset, public client, and wallet client as parameters and
-returns a transaction receipt TransactionReceipt.
-
 ## Parameters
 
 | Parameter | Type |
@@ -24,4 +20,4 @@ returns a transaction receipt TransactionReceipt.
 
 ## Source
 
-[src/setValidKeyset.ts:20](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/9d5595a042e42f7d6b9af10a84816c98ea30f330/src/setValidKeyset.ts#L20)
+[src/setValidKeyset.ts:15](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/setValidKeyset.ts#L15)
