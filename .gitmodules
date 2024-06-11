@@ -5,5 +5,5 @@
 
 [submodule "arbitrum-orbit-sdk"]
 	path = arbitrum-orbit-sdk
-	url = https://github.com/OffchainLabs/arbitrum-orbit-sdk
-	branch = main
+	url = https://github.com/anegg0/arbitrum-orbit-sdk
+	branch = generated-docstrings
