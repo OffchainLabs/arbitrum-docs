@@ -4,22 +4,20 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbAggregatorPrepareTransactionRequestParameters<TFunctionName>: Omit<ArbAggregatorPrepareFunctionDataParameters<TFunctionName>, "abi"> & object;
-```
+# Type alias: ArbAggregatorPrepareTransactionRequestParameters\<TFunctionName\>
+
+> **ArbAggregatorPrepareTransactionRequestParameters**\<`TFunctionName`\>: `Omit`\<`ArbAggregatorPrepareFunctionDataParameters`\<`TFunctionName`\>, `"abi"`\> & `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `Address` |
+### account
+
+> **account**: `Address`
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
+• **TFunctionName** *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md)
 
 ## Source
 
-[src/arbAggregatorPrepareTransactionRequest.ts:66](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbAggregatorPrepareTransactionRequest.ts#L66)
+[src/arbAggregatorPrepareTransactionRequest.ts:88](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbAggregatorPrepareTransactionRequest.ts#L88)

@@ -4,16 +4,16 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type PrepareChainConfigParams: Pick<ChainConfig, "chainId"> & Partial<Omit<ChainConfig, "chainId" | "arbitrum">> & object;
-```
+# Type alias: PrepareChainConfigParams
+
+> **PrepareChainConfigParams**: `Pick` \<[`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md), `"chainId"`\> & `Partial`\<`Omit` \<[`ChainConfig`](../../types/ChainConfig/type-aliases/ChainConfig.md), `"chainId"` \| `"arbitrum"`\>\> & `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `arbitrum` | `Pick` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\> & `Partial`\<`Omit` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\>\> |
+### arbitrum
+
+> **arbitrum**: `Pick` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\> & `Partial`\<`Omit` \<[`ChainConfigArbitrumParams`](../../types/ChainConfig/type-aliases/ChainConfigArbitrumParams.md), `"InitialChainOwner"`\>\>
 
 ## Source
 
-[src/prepareChainConfig.ts:33](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/prepareChainConfig.ts#L33)
+[src/prepareChainConfig.ts:41](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/prepareChainConfig.ts#L41)

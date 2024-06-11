@@ -4,9 +4,13 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts
-```
+# Function: getNitroTestnodePrivateKeyAccounts()
+
+> **getNitroTestnodePrivateKeyAccounts**(): `NitroTestNodePrivateKeyAccounts`
+
+Returns a collection of private key accounts for the Nitro test node,
+including deployer, L2 rollup owner, L3 rollup owner, L3 token bridge
+deployer, and L2 token bridge deployer.
 
 ## Returns
 
@@ -14,4 +18,4 @@ function getNitroTestnodePrivateKeyAccounts(): NitroTestNodePrivateKeyAccounts
 
 ## Source
 
-[src/testHelpers.ts:29](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/testHelpers.ts#L29)
+[src/testHelpers.ts:34](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/testHelpers.ts#L34)

@@ -4,22 +4,32 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function fetchDecimals(__namedParameters: object): any
-```
+# Function: fetchDecimals()
+
+> **fetchDecimals**(`params`): `any`
+
+Retrieves the number of decimals for a specified ERC20 token at the given address.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | `object` |
-| `__namedParameters.address` | \`0x$\{string\}\` |
-| `__namedParameters.publicClient` | `object` |
+• **params**
+
+The parameters for fetching the decimals.
+
+• **params.address**: \`0x$\{string\}\`
+
+The address of the token contract.
+
+• **params.publicClient**
+
+The public client to interact with the blockchain.
 
 ## Returns
 
 `any`
 
+The number of decimals.
+
 ## Source
 
-[src/utils/erc20.ts:91](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/erc20.ts#L91)
+[src/utils/erc20.ts:139](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/erc20.ts#L139)

@@ -13,7 +13,7 @@ Part of the L2 state of an Arbitrum chain — and consequently, part of what's a
 
 ### Client Flow
 
-From a client perspective, an L2 to L1 message begins with a call to the L2 [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.md#arbsys) precompile contract's `sendTxToL1` method. Once the message is included in an assertion (typically within ~1 hour) and the assertion is confirmed (typically about ~ 1 week), any client can execute the message. To do this, the client first retrieves the proof data via a call to the Arbitrum chain's "virtual"/precompile-esque\*\* `NodeInterface` contract's `constructOutboxProof` method. The data returned can then be used in the `Outbox`'s `executeTransaction` method to perform the L1 execution.
+From a client perspective, an L2 to L1 message begins with a call to the L2 [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Once the message is included in an assertion (typically within ~1 hour) and the assertion is confirmed (typically about ~ 1 week), any client can execute the message. To do this, the client first retrieves the proof data via a call to the Arbitrum chain's "virtual"/precompile-esque\*\* `NodeInterface` contract's `constructOutboxProof` method. The data returned can then be used in the `Outbox`'s `executeTransaction` method to perform the L1 execution.
 
 ### Protocol Design Details
 

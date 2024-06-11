@@ -4,16 +4,22 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type CreateRollupTransaction: Transaction & object;
-```
+# Type alias: CreateRollupTransaction
+
+> **CreateRollupTransaction**: `Transaction` & `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `getInputs` | readonly [`object`] |
+### getInputs()
+
+Retrieves the inputs for the createRollup function call.
+
+#### Returns
+
+readonly [`object`]
+
+The inputs for the createRollup function.
 
 ## Source
 
-[src/createRollupPrepareTransaction.ts:13](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransaction.ts#L13)
+[src/createRollupPrepareTransaction.ts:19](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollupPrepareTransaction.ts#L19)

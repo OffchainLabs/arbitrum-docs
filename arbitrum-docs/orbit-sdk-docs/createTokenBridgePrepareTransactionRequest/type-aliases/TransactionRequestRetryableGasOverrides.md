@@ -4,20 +4,32 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type TransactionRequestRetryableGasOverrides: object;
-```
+# Type alias: TransactionRequestRetryableGasOverrides
+
+> **TransactionRequestRetryableGasOverrides**: `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `maxGasForContracts` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxGasForFactory` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxGasPrice` | `bigint` |
-| `maxSubmissionCostForContracts` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxSubmissionCostForFactory` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+### maxGasForContracts?
+
+> `optional` **maxGasForContracts**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
+
+### maxGasForFactory?
+
+> `optional` **maxGasForFactory**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
+
+### maxGasPrice?
+
+> `optional` **maxGasPrice**: `bigint`
+
+### maxSubmissionCostForContracts?
+
+> `optional` **maxSubmissionCostForContracts**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
+
+### maxSubmissionCostForFactory?
+
+> `optional` **maxSubmissionCostForFactory**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionRequest.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareTransactionRequest.ts#L17)
+[src/createTokenBridgePrepareTransactionRequest.ts:17](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createTokenBridgePrepareTransactionRequest.ts#L17)

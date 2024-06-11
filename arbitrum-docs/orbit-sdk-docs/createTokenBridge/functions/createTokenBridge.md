@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function createTokenBridge(createTokenBridgeParams: CreateTokenBridgeParams): Promise<CreateTokenBridgeResults>
-```
+# Function: createTokenBridge()
+
+> **createTokenBridge**(`createTokenBridgeParams`): `Promise` \<[`CreateTokenBridgeResults`](../type-aliases/CreateTokenBridgeResults.md)\>
 
 Performs the transactions to deploy the token bridge core contracts
 
@@ -17,15 +17,15 @@ Returns the token bridge core contracts.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `createTokenBridgeParams` | [`CreateTokenBridgeParams`](../type-aliases/CreateTokenBridgeParams.md) |  |
+• **createTokenBridgeParams**: [`CreateTokenBridgeParams`](../type-aliases/CreateTokenBridgeParams.md)
+
+The parameters for creating the token bridge
 
 ## Returns
 
 `Promise` \<[`CreateTokenBridgeResults`](../type-aliases/CreateTokenBridgeResults.md)\>
 
-Promise<[CreateTokenBridgeResults](../type-aliases/CreateTokenBridgeResults.md)>
+- The result of the token bridge creation
 
 ## Example
 
@@ -70,4 +70,4 @@ const tokenBridgeContracts = await createTokenBridge({
 
 ## Source
 
-[src/createTokenBridge.ts:152](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridge.ts#L152)
+[src/createTokenBridge.ts:147](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createTokenBridge.ts#L147)

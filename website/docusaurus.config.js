@@ -42,6 +42,12 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
+          // include: ['**/*.md', '**/*.mdx', '**/_*.{js,jsx,ts,tsx,md,mdx}'],
+          // exclude: [
+          //   // '**/_*.{js,jsx,ts,tsx,md,mdx}',
+          //   '**/*.test.{js,jsx,ts,tsx}',
+          //   '**/__tests__/**',
+          // ],
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
@@ -103,12 +109,16 @@ const config = {
     [
       'docusaurus-plugin-typedoc',
       {
-        id: 'orbit-sdk',
+        id: 'arbitrum-orbit-sdk',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
-        // fileExtension: `.mdx`,
-        // membersWithOwnFile: ['Function'],
-        // Output options
+        out: '../arbitrum-docs/orbit-sdk-docs',
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `dist`],
+        excludeNotDocumented: false,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
         skipErrorChecking: true,
         plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
         // typedoc-plugin-markdown options

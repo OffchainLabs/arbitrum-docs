@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type CreateRollupResults: object;
-```
+# Type alias: CreateRollupResults
+
+> **CreateRollupResults**: `object`
 
 ## Param
 
@@ -26,12 +26,18 @@ the core contracts
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `coreContracts` | [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md) |
-| `transaction` | [`CreateRollupTransaction`](../../createRollupPrepareTransaction/type-aliases/CreateRollupTransaction.md) |
-| `transactionReceipt` | [`CreateRollupTransactionReceipt`](../../createRollupPrepareTransactionReceipt/type-aliases/CreateRollupTransactionReceipt.md) |
+### coreContracts
+
+> **coreContracts**: [`CoreContracts`](../../types/CoreContracts/type-aliases/CoreContracts.md)
+
+### transaction
+
+> **transaction**: [`CreateRollupTransaction`](../../createRollupPrepareTransaction/type-aliases/CreateRollupTransaction.md)
+
+### transactionReceipt
+
+> **transactionReceipt**: [`CreateRollupTransactionReceipt`](../../createRollupPrepareTransactionReceipt/type-aliases/CreateRollupTransactionReceipt.md)
 
 ## Source
 
-[src/createRollup.ts:86](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollup.ts#L86)
+[src/createRollup.ts:91](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollup.ts#L91)

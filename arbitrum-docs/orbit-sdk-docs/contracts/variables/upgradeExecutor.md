@@ -4,16 +4,18 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const upgradeExecutor: object;
-```
+# Variable: upgradeExecutor
+
+> `const` **upgradeExecutor**: `object`
+
+Executor for upgrades, calls, and role management.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | `any` | ... |
+### abi
+
+> **abi**: `any`
 
 ## Source
 
-[src/contracts.ts:40](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L40)
+[src/contracts.ts:72](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/contracts.ts#L72)

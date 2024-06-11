@@ -4,18 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type TransactionRequestRetryableGasOverrides: object;
-```
+# Type alias: TransactionRequestRetryableGasOverrides
+
+> **TransactionRequestRetryableGasOverrides**: `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `gasLimit` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxFeePerGas` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
-| `maxSubmissionCost` | [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md) |
+### gasLimit?
+
+> `optional` **gasLimit**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
+
+### maxFeePerGas?
+
+> `optional` **maxFeePerGas**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
+
+### maxSubmissionCost?
+
+> `optional` **maxSubmissionCost**: [`GasOverrideOptions`](../../utils/gasOverrides/type-aliases/GasOverrideOptions.md)
 
 ## Source
 
-[src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts:15](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts#L15)
+[src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts:15](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createTokenBridgePrepareSetWethGatewayTransactionRequest.ts#L15)

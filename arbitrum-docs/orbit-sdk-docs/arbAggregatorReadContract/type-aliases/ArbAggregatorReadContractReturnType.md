@@ -4,16 +4,14 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbAggregatorReadContractReturnType<TFunctionName>: ReadContractReturnType<ArbAggregatorAbi, TFunctionName>;
-```
+# Type alias: ArbAggregatorReadContractReturnType\<TFunctionName\>
+
+> **ArbAggregatorReadContractReturnType**\<`TFunctionName`\>: `ReadContractReturnType` \<[`ArbAggregatorAbi`](ArbAggregatorAbi.md), `TFunctionName`\>
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md) |
+• **TFunctionName** *extends* [`ArbAggregatorFunctionName`](ArbAggregatorFunctionName.md)
 
 ## Source
 
-[src/arbAggregatorReadContract.ts:13](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbAggregatorReadContract.ts#L13)
+[src/arbAggregatorReadContract.ts:13](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbAggregatorReadContract.ts#L13)

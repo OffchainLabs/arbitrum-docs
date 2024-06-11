@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand what monitoring tools and block
 content_type: overview
 ---
 
-import KnowMoreToolsBox from '../../for-devs/partials/_know-more-tools-box-partial.md';
+import KnowMoreToolsBox from '../../for-devs/partials/_know-more-tools-box-partial.mdx';
 
 <KnowMoreToolsBox />
 

@@ -4,19 +4,28 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type FetchAllowanceProps: object;
-```
+# Type alias: FetchAllowanceProps
+
+> **FetchAllowanceProps**: `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `address` | `Address` |
-| `owner` | `Address` |
-| `publicClient` | `PublicClient` |
-| `spender` | `Address` |
+### address
+
+> **address**: `Address`
+
+### owner
+
+> **owner**: `Address`
+
+### publicClient
+
+> **publicClient**: `PublicClient`
+
+### spender
+
+> **spender**: `Address`
 
 ## Source
 
-[src/utils/erc20.ts:70](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/erc20.ts#L70)
+[src/utils/erc20.ts:100](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/erc20.ts#L100)

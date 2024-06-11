@@ -4,20 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function parentChainIsMainnet(parentChainId: any): boolean
-```
+# Function: parentChainIsMainnet()
+
+> **parentChainIsMainnet**(`parentChainId`): `boolean`
+
+Checks if the given [ParentChainId](../../types/ParentChain/type-aliases/ParentChainId.md) is a mainnet chain or not.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `parentChainId` | `any` |
+• **parentChainId**: `any`
+
+The ID of the parent chain to check.
 
 ## Returns
 
 `boolean`
 
+- Returns true if the parent chain is a mainnet chain, otherwise false.
+
 ## Source
 
-[src/parentChainIsMainnet.ts:4](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/parentChainIsMainnet.ts#L4)
+[src/parentChainIsMainnet.ts:10](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/parentChainIsMainnet.ts#L10)

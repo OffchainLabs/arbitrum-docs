@@ -4,23 +4,49 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function createTokenBridgeFetchTokenBridgeContracts(__namedParameters: object): Promise<TokenBridgeContracts>
-```
+# Function: createTokenBridgeFetchTokenBridgeContracts()
+
+> **createTokenBridgeFetchTokenBridgeContracts**(`createTokenBridgeFetchTokenBridgeContractsParams`): `Promise` \<[`TokenBridgeContracts`](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md)\>
+
+Creates and fetches the token bridge contracts on both the parent chain and
+the orbit chain. It retrieves addresses for various contracts including
+routers, gateways, WETH, proxy admin, beacon proxy factory, upgrade executor,
+and multicall on both chains. Returns [TokenBridgeContracts](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md).
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.inbox` | \`0x$\{string\}\` | - |
-| `__namedParameters.parentChainPublicClient` | `object` | - |
-| `__namedParameters.tokenBridgeCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain. |
+• **createTokenBridgeFetchTokenBridgeContractsParams**
+
+The parameters for fetching token bridge contracts
+
+• **createTokenBridgeFetchTokenBridgeContractsParams.inbox**: \`0x$\{string\}\`
+
+The inbox address
+
+• **createTokenBridgeFetchTokenBridgeContractsParams.parentChainPublicClient**
+
+The parent chain public client
+
+• **createTokenBridgeFetchTokenBridgeContractsParams.tokenBridgeCreatorAddressOverride?**: \`0x$\{string\}\`
+
+Specifies a custom address for the TokenBridgeCreator. By default, the address will be automatically detected based on the provided chain.
 
 ## Returns
 
 `Promise` \<[`TokenBridgeContracts`](../../types/TokenBridgeContracts/type-aliases/TokenBridgeContracts.md)\>
 
+The token bridge contracts on both chains
+
+## Example
+
+```ts
+const contracts = await createTokenBridgeFetchTokenBridgeContracts({
+  inbox: '0xYourInboxAddress',
+  parentChainPublicClient: yourPublicClientInstance,
+});
+console.log(contracts);
+```
+
 ## Source
 
-[src/createTokenBridgeFetchTokenBridgeContracts.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgeFetchTokenBridgeContracts.ts#L17)
+[src/createTokenBridgeFetchTokenBridgeContracts.ts:36](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createTokenBridgeFetchTokenBridgeContracts.ts#L36)

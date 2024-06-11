@@ -4,16 +4,16 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type SetValidKeysetPrepareTransactionRequestParams: Omit<SetValidKeysetParams, "walletClient"> & object;
-```
+# Type alias: SetValidKeysetPrepareTransactionRequestParams
+
+> **SetValidKeysetPrepareTransactionRequestParams**: `Omit` \<[`SetValidKeysetParams`](../../setValidKeyset/type-aliases/SetValidKeysetParams.md), `"walletClient"`\> & `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `Address` |
+### account
+
+> **account**: `Address`
 
 ## Source
 
-[src/setValidKeysetPrepareTransactionRequest.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/setValidKeysetPrepareTransactionRequest.ts#L8)
+[src/setValidKeysetPrepareTransactionRequest.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/setValidKeysetPrepareTransactionRequest.ts#L8)

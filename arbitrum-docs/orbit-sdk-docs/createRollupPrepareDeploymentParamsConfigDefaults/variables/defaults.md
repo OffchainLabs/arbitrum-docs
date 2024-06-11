@@ -4,21 +4,41 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const defaults: object;
-```
+# Variable: defaults
+
+> `const` **defaults**: `object`
+
+defaults defines the default values for various parameters used in the
+preparation of deployment configuration. It includes
+extraChallengeTimeBlocks, stakeToken, baseStake, wasmModuleRoot,
+loserStakeEscrow, and genesisBlockNum.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `baseStake` | `bigint` | ... |
-| `extraChallengeTimeBlocks` | `bigint` | ... |
-| `genesisBlockNum` | `bigint` | ... |
-| `loserStakeEscrow` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `stakeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
-| `wasmModuleRoot` | \`0x$\{string\}\` | - |
+### baseStake
+
+> `readonly` **baseStake**: `bigint`
+
+### extraChallengeTimeBlocks
+
+> `readonly` **extraChallengeTimeBlocks**: `bigint`
+
+### genesisBlockNum
+
+> `readonly` **genesisBlockNum**: `bigint`
+
+### loserStakeEscrow
+
+> `readonly` **loserStakeEscrow**: `"0x0000000000000000000000000000000000000000"` = `zeroAddress`
+
+### stakeToken
+
+> `readonly` **stakeToken**: `"0x0000000000000000000000000000000000000000"` = `zeroAddress`
+
+### wasmModuleRoot
+
+> **wasmModuleRoot**: \`0x$\{string\}\`
 
 ## Source
 
-[src/createRollupPrepareDeploymentParamsConfigDefaults.ts:7](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareDeploymentParamsConfigDefaults.ts#L7)
+[src/createRollupPrepareDeploymentParamsConfigDefaults.ts:24](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollupPrepareDeploymentParamsConfigDefaults.ts#L24)

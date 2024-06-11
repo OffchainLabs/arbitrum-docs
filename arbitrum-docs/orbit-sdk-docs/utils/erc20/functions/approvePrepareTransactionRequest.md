@@ -4,20 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function approvePrepareTransactionRequest(__namedParameters: ApprovePrepareTransactionRequestProps): Promise<any>
-```
+# Function: approvePrepareTransactionRequest()
+
+> **approvePrepareTransactionRequest**(`props`): `Promise`\<`any`\>
+
+Prepares a transaction request to approve a specific amount of tokens for a spender.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | [`ApprovePrepareTransactionRequestProps`](../type-aliases/ApprovePrepareTransactionRequestProps.md) |
+• **props**: [`ApprovePrepareTransactionRequestProps`](../type-aliases/ApprovePrepareTransactionRequestProps.md)
+
+The properties for preparing the transaction request.
 
 ## Returns
 
 `Promise`\<`any`\>
 
+The prepared transaction request.
+
 ## Source
 
-[src/utils/erc20.ts:21](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/erc20.ts#L21)
+[src/utils/erc20.ts:40](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/erc20.ts#L40)

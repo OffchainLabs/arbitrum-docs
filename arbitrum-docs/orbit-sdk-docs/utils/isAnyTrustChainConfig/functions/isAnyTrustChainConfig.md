@@ -4,20 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function isAnyTrustChainConfig(chainConfig: ChainConfig): boolean
-```
+# Function: isAnyTrustChainConfig()
+
+> **isAnyTrustChainConfig**(`chainConfig`): `boolean`
+
+Checks if there is any trust chain configuration present in the given ChainConfig object.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `chainConfig` | [`ChainConfig`](../../../types/ChainConfig/type-aliases/ChainConfig.md) |
+• **chainConfig**: [`ChainConfig`](../../../types/ChainConfig/type-aliases/ChainConfig.md)
+
+The chain configuration object to be checked.
 
 ## Returns
 
 `boolean`
 
+- Returns true if there is a Data Availability Committee configuration, false otherwise.
+
 ## Source
 
-[src/utils/isAnyTrustChainConfig.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/isAnyTrustChainConfig.ts#L3)
+[src/utils/isAnyTrustChainConfig.ts:10](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/isAnyTrustChainConfig.ts#L10)

@@ -4,16 +4,14 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbAggregatorEncodeFunctionDataParameters<TFunctionName>: EncodeFunctionDataParameters<ArbAggregatorAbi, TFunctionName>;
-```
+# Type alias: ArbAggregatorEncodeFunctionDataParameters\<TFunctionName\>
+
+> **ArbAggregatorEncodeFunctionDataParameters**\<`TFunctionName`\>: `EncodeFunctionDataParameters`\<`ArbAggregatorAbi`, `TFunctionName`\>
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md) |
+• **TFunctionName** *extends* [`ArbAggregatorPrepareTransactionRequestFunctionName`](ArbAggregatorPrepareTransactionRequestFunctionName.md)
 
 ## Source
 
-[src/arbAggregatorPrepareTransactionRequest.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbAggregatorPrepareTransactionRequest.ts#L16)
+[src/arbAggregatorPrepareTransactionRequest.ts:16](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbAggregatorPrepareTransactionRequest.ts#L16)

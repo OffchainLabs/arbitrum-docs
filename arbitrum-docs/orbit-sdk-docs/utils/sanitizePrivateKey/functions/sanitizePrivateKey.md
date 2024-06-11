@@ -4,20 +4,31 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function sanitizePrivateKey(privateKey: string): `0x${string}`
-```
+# Function: sanitizePrivateKey()
+
+> **sanitizePrivateKey**(`privateKey`): \`0x$\{string\}\`
+
+Sanitizes a private key string by ensuring it starts with '0x'.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `privateKey` | `string` |
+• **privateKey**: `string`
+
+The private key string to be sanitized.
 
 ## Returns
 
 \`0x$\{string\}\`
 
+- The sanitized private key string.
+
+## Example
+
+```ts
+const sanitizedKey = sanitizePrivateKey('abcdef');
+console.log(sanitizedKey); // Output: '0xabcdef'
+```
+
 ## Source
 
-[src/utils/sanitizePrivateKey.ts:1](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/sanitizePrivateKey.ts#L1)
+[src/utils/sanitizePrivateKey.ts:11](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/sanitizePrivateKey.ts#L11)

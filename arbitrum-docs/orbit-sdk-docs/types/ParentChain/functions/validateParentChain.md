@@ -4,22 +4,23 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function validateParentChain<TTransport, TChain>(chainIdOrClient: number | Client<TTransport, TChain, undefined | Account<`0x${string}`>, undefined, undefined | object>): ParentChainId
-```
+# Function: validateParentChain()
+
+> **validateParentChain**\<`TTransport`, `TChain`\>(`chainIdOrClient`): [`ParentChainId`](../type-aliases/ParentChainId.md)
+
+Validates the provided parent chain ID to ensure it is supported by the
+system. If the parent chain ID is not valid, an error is thrown with a
+corresponding message. Returns the validated parent chain ID.
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+• **TTransport** *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> = `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\>
+
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> = `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `chainIdOrClient` | `number` \| `Client`\<`TTransport`, `TChain`, `undefined` \| `Account`\<\`0x$\{string\}\`\>, `undefined`, `undefined` \| `object`\> |
+• **chainIdOrClient**: `number` \| `Client`\<`TTransport`, `TChain`, `undefined` \| `Account`\<\`0x$\{string\}\`\>, `undefined`, `undefined` \| `object`\>
 
 ## Returns
 
@@ -27,4 +28,4 @@ function validateParentChain<TTransport, TChain>(chainIdOrClient: number | Clien
 
 ## Source
 
-[src/types/ParentChain.ts:24](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/types/ParentChain.ts#L24)
+[src/types/ParentChain.ts:29](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/types/ParentChain.ts#L29)

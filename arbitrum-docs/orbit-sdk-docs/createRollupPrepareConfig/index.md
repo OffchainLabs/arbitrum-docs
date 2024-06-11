@@ -4,16 +4,13 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
+# createRollupPrepareConfig
+
 ## Index
 
 ### Type Aliases
 
-- [CreateRollupPrepareConfigParams](type-aliases/CreateRollupPrepareConfigParams.md)
 - [CreateRollupPrepareConfigResult](type-aliases/CreateRollupPrepareConfigResult.md)
-
-### Variables
-
-- [defaults](variables/defaults.md)
 
 ### Functions
 

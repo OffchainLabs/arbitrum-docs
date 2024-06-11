@@ -4,20 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function fetchAllowance(__namedParameters: FetchAllowanceProps): Promise<any>
-```
+# Function: fetchAllowance()
+
+> **fetchAllowance**(`props`): `Promise`\<`any`\>
+
+Retrieves the allowance of tokens that the owner has approved to be spent by a specific spender.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | [`FetchAllowanceProps`](../type-aliases/FetchAllowanceProps.md) |
+• **props**: [`FetchAllowanceProps`](../type-aliases/FetchAllowanceProps.md)
+
+The properties for fetching the allowance.
 
 ## Returns
 
 `Promise`\<`any`\>
 
+The allowance amount.
+
 ## Source
 
-[src/utils/erc20.ts:77](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/erc20.ts#L77)
+[src/utils/erc20.ts:117](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/erc20.ts#L117)

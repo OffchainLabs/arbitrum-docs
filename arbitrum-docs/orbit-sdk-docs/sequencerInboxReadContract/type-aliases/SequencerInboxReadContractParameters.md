@@ -4,23 +4,24 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type SequencerInboxReadContractParameters<TFunctionName>: object & GetFunctionArgs<SequencerInboxAbi, TFunctionName>;
-```
+# Type alias: SequencerInboxReadContractParameters\<TFunctionName\>
+
+> **SequencerInboxReadContractParameters**\<`TFunctionName`\>: `object` & `GetFunctionArgs` \<[`SequencerInboxAbi`](../../sequencerInboxPrepareTransactionRequest/type-aliases/SequencerInboxAbi.md), `TFunctionName`\>
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `functionName` | `TFunctionName` |
-| `sequencerInbox` | `Address` |
+### functionName
+
+> **functionName**: `TFunctionName`
+
+### sequencerInbox
+
+> **sequencerInbox**: `Address`
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`SequencerInboxFunctionName`](../../sequencerInboxPrepareTransactionRequest/type-aliases/SequencerInboxFunctionName.md) |
+• **TFunctionName** *extends* [`SequencerInboxFunctionName`](../../sequencerInboxPrepareTransactionRequest/type-aliases/SequencerInboxFunctionName.md)
 
 ## Source
 
-[src/sequencerInboxReadContract.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/sequencerInboxReadContract.ts#L16)
+[src/sequencerInboxReadContract.ts:16](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/sequencerInboxReadContract.ts#L16)

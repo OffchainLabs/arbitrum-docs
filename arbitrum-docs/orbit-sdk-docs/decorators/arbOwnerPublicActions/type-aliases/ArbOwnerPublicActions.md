@@ -4,23 +4,48 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbOwnerPublicActions<TChain>: object;
-```
+# Type alias: ArbOwnerPublicActions\<TChain\>
+
+> **ArbOwnerPublicActions**\<`TChain`\>: `object`
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+• **TChain** *extends* `Chain` \| `undefined` = `Chain` \| `undefined`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `arbOwnerPrepareTransactionRequest` | \<`TFunctionName`\>(`args`: [`ArbOwnerPrepareTransactionRequestParameters`](../../../arbOwnerPrepareTransactionRequest/type-aliases/ArbOwnerPrepareTransactionRequestParameters.md)\<`TFunctionName`\>) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\> |
-| `arbOwnerReadContract` | \<`TFunctionName`\>(`args`: [`ArbOwnerReadContractParameters`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbOwnerReadContractReturnType`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\> |
+### arbOwnerPrepareTransactionRequest()
+
+> **arbOwnerPrepareTransactionRequest**: \<`TFunctionName`\>(`args`) => `Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>
+
+#### Type parameters
+
+• **TFunctionName** *extends* [`ArbOwnerPrepareTransactionRequestFunctionName`](../../../arbOwnerPrepareTransactionRequest/type-aliases/ArbOwnerPrepareTransactionRequestFunctionName.md)
+
+#### Parameters
+
+• **args**: [`ArbOwnerPrepareTransactionRequestParameters`](../../../arbOwnerPrepareTransactionRequest/type-aliases/ArbOwnerPrepareTransactionRequestParameters.md)\<`TFunctionName`\>
+
+#### Returns
+
+`Promise`\<`PrepareTransactionRequestReturnType`\<`TChain`\> & `object`\>
+
+### arbOwnerReadContract()
+
+> **arbOwnerReadContract**: \<`TFunctionName`\>(`args`) => `Promise` \<[`ArbOwnerReadContractReturnType`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\>
+
+#### Type parameters
+
+• **TFunctionName** *extends* [`ArbOwnerPublicFunctionName`](../../../arbOwnerReadContract/type-aliases/ArbOwnerPublicFunctionName.md)
+
+#### Parameters
+
+• **args**: [`ArbOwnerReadContractParameters`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractParameters.md)\<`TFunctionName`\>
+
+#### Returns
+
+`Promise` \<[`ArbOwnerReadContractReturnType`](../../../arbOwnerReadContract/type-aliases/ArbOwnerReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 
-[src/decorators/arbOwnerPublicActions.ts:15](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/decorators/arbOwnerPublicActions.ts#L15)
+[src/decorators/arbOwnerPublicActions.ts:15](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/decorators/arbOwnerPublicActions.ts#L15)

@@ -4,20 +4,28 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function getTokenBridgeCreatorAddress(client: object): any
-```
+# Function: getTokenBridgeCreatorAddress()
+
+> **getTokenBridgeCreatorAddress**(`client`): `any`
+
+Returns the address of the token bridge creator for a specific chain based on the provided PublicClient.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
+• **client**
+
+The public client instance.
 
 ## Returns
 
 `any`
 
+- The address of the token bridge creator.
+
+## Throws
+
+- If the parent chain is not supported.
+
 ## Source
 
-[src/utils/getters.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/getters.ts#L16)
+[src/utils/getters.ts:30](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/getters.ts#L30)

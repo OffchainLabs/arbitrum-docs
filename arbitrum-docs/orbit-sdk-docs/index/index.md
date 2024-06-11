@@ -4,6 +4,14 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
+# index
+
+## Index
+
+### Variables
+
+- [CreateRollupPrepareConfigParams](variables/CreateRollupPrepareConfigParams.md)
+
 ## References
 
 ### ChainConfig
@@ -51,12 +59,6 @@ Re-exports [CreateRollupFunctionParams](../createRollup/type-aliases/CreateRollu
 ### CreateRollupParams
 
 Re-exports [CreateRollupParams](../types/createRollupTypes/type-aliases/CreateRollupParams.md)
-
-***
-
-### CreateRollupPrepareConfigParams
-
-Re-exports [CreateRollupPrepareConfigParams](../createRollupPrepareConfig/type-aliases/CreateRollupPrepareConfigParams.md)
 
 ***
 

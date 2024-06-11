@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const tokenBridgeCreatorABI: readonly [object, object, object, object, object, object];
-```
+# Variable: tokenBridgeCreatorABI
+
+> `const` **tokenBridgeCreatorABI**: readonly [`object`, `object`, `object`, `object`, `object`, `object`]
 
 - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x60D9A46F24D5a35b95A78Dd3E793e55D94EE0660)
 -
@@ -18,4 +18,4 @@ const tokenBridgeCreatorABI: readonly [object, object, object, object, object, o
 
 ## Source
 
-[src/generated.ts:976](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/generated.ts#L976)
+[src/generated.ts:976](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/generated.ts#L976)

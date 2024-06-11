@@ -4,16 +4,16 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type TransactionRequestGasOverrides: object;
-```
+# Type alias: TransactionRequestGasOverrides
+
+> **TransactionRequestGasOverrides**: `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `gasLimit` | [`GasOverrideOptions`](GasOverrideOptions.md) |
+### gasLimit?
+
+> `optional` **gasLimit**: [`GasOverrideOptions`](GasOverrideOptions.md)
 
 ## Source
 
-[src/utils/gasOverrides.ts:6](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/gasOverrides.ts#L6)
+[src/utils/gasOverrides.ts:6](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/gasOverrides.ts#L6)

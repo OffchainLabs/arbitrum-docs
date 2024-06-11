@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function upgradeExecutorPrepareAddExecutorTransactionRequest(upgradeExecutorPrepareAddExecutorTransactionRequestParams: UpgradeExecutorPrepareAddExecutorTransactionRequestParams): Promise<any>
-```
+# Function: upgradeExecutorPrepareAddExecutorTransactionRequest()
+
+> **upgradeExecutorPrepareAddExecutorTransactionRequest**(`upgradeExecutorPrepareAddExecutorTransactionRequestParams`): `Promise`\<`PrepareTransactionRequestReturnType`\>
 
 Prepares a transaction to grant the executor role to a new account
 
@@ -14,13 +14,13 @@ Prepares a transaction to grant the executor role to a new account
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `upgradeExecutorPrepareAddExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareAddExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md) | [UpgradeExecutorPrepareAddExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md) |
+• **upgradeExecutorPrepareAddExecutorTransactionRequestParams**: [`UpgradeExecutorPrepareAddExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md)
+
+[UpgradeExecutorPrepareAddExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareAddExecutorTransactionRequestParams.md)
 
 ## Returns
 
-`Promise`\<`any`\>
+`Promise`\<`PrepareTransactionRequestReturnType`\>
 
 Promise<PrepareTransactionRequestReturnType> - the transaction request
 
@@ -37,4 +37,4 @@ const addExecutorTransactionRequest = await upgradeExecutorPrepareAddExecutorTra
 
 ## Source
 
-[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:45](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L45)
+[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:45](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L45)

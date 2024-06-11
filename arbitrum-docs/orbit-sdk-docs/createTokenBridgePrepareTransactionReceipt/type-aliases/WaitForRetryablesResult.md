@@ -4,10 +4,12 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type WaitForRetryablesResult: [TransactionReceipt, TransactionReceipt];
-```
+# Type alias: WaitForRetryablesResult
+
+> **WaitForRetryablesResult**: [`TransactionReceipt`, `TransactionReceipt`]
+
+Result of waiting for retryables.
 
 ## Source
 
-[src/createTokenBridgePrepareTransactionReceipt.ts:54](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createTokenBridgePrepareTransactionReceipt.ts#L54)
+[src/createTokenBridgePrepareTransactionReceipt.ts:86](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createTokenBridgePrepareTransactionReceipt.ts#L86)

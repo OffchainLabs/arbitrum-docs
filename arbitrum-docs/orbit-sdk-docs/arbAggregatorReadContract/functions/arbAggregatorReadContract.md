@@ -4,36 +4,50 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function arbAggregatorReadContract<TChain, TFunctionName>(client: object, params: ArbAggregatorReadContractParameters<TFunctionName>): Promise<ArbAggregatorReadContractReturnType<TFunctionName>>
-```
+# Function: arbAggregatorReadContract()
+
+> **arbAggregatorReadContract**\<`TChain`, `TFunctionName`\>(`client`, `params`): `Promise` \<[`ArbAggregatorReadContractReturnType`](../type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\>
+
+Reads data from the ArbAggregator smart contract and returns the specified
+result.
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
-| `TFunctionName` *extends* 
-  \| `"addBatchPoster"`
-  \| `"getBatchPosters"`
-  \| `"getDefaultAggregator"`
-  \| `"getFeeCollector"`
-  \| `"getPreferredAggregator"`
-  \| `"getTxBaseFee"`
-  \| `"setFeeCollector"`
-  \| `"setTxBaseFee"` |
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
+
+The type of the blockchain chain.
+
+• **TFunctionName** *extends* `"addBatchPoster"` \| `"getBatchPosters"` \| `"getDefaultAggregator"` \| `"getFeeCollector"` \| `"getPreferredAggregator"` \| `"getTxBaseFee"` \| `"setFeeCollector"` \| `"setTxBaseFee"`
+
+The name of the function to read from the contract.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | [`ArbAggregatorReadContractParameters`](../type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\> |
+• **client**
+
+The public client to interact with the blockchain.
+
+• **params**: [`ArbAggregatorReadContractParameters`](../type-aliases/ArbAggregatorReadContractParameters.md)\<`TFunctionName`\>
+
+The parameters for reading the contract.
 
 ## Returns
 
 `Promise` \<[`ArbAggregatorReadContractReturnType`](../type-aliases/ArbAggregatorReadContractReturnType.md)\<`TFunctionName`\>\>
 
+- The result from the contract function.
+
+## Example
+
+```ts
+const client = new PublicClient(...);
+const result = await arbAggregatorReadContract(client, {
+  functionName: 'getTotalStaked',
+  args: [],
+});
+console.log(result);
+```
+
 ## Source
 
-[src/arbAggregatorReadContract.ts:16](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbAggregatorReadContract.ts#L16)
+[src/arbAggregatorReadContract.ts:35](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbAggregatorReadContract.ts#L35)

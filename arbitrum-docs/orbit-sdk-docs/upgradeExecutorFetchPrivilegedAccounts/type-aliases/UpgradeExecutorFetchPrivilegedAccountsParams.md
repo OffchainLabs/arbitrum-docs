@@ -4,19 +4,22 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type UpgradeExecutorFetchPrivilegedAccountsParams: object;
-```
+# Type alias: UpgradeExecutorFetchPrivilegedAccountsParams
+
+> **UpgradeExecutorFetchPrivilegedAccountsParams**: `object`
 
 This type is for the params of the [upgradeExecutorFetchPrivilegedAccounts](../functions/upgradeExecutorFetchPrivilegedAccounts.md) function
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `publicClient` | `PublicClient` |
-| `upgradeExecutorAddress` | `Address` |
+### publicClient
+
+> **publicClient**: `PublicClient`
+
+### upgradeExecutorAddress
+
+> **upgradeExecutorAddress**: `Address`
 
 ## Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorFetchPrivilegedAccounts.ts#L8)

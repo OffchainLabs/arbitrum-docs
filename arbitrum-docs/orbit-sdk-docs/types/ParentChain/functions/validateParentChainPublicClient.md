@@ -4,22 +4,23 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function validateParentChainPublicClient<TTransport, TChain>(publicClient: object): ParentChainPublicClient
-```
+# Function: validateParentChainPublicClient()
+
+> **validateParentChainPublicClient**\<`TTransport`, `TChain`\>(`publicClient`): [`ParentChainPublicClient`](../type-aliases/ParentChainPublicClient.md)
+
+Validates the parent chain of a PublicClient to ensure it is
+supported. If the parent chain is not supported, an error is thrown. Returns
+a [ParentChainPublicClient](../type-aliases/ParentChainPublicClient.md).
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+• **TTransport** *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> = `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\>
+
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> = `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `publicClient` | `object` |
+• **publicClient**
 
 ## Returns
 
@@ -27,4 +28,4 @@ function validateParentChainPublicClient<TTransport, TChain>(publicClient: objec
 
 ## Source
 
-[src/types/ParentChain.ts:37](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/types/ParentChain.ts#L37)
+[src/types/ParentChain.ts:47](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/types/ParentChain.ts#L47)

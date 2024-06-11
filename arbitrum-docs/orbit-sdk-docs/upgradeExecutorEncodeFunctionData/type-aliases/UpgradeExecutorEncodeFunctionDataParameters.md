@@ -4,16 +4,14 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type UpgradeExecutorEncodeFunctionDataParameters<TFunctionName>: Prettify<Omit<EncodeFunctionDataParameters<UpgradeExecutorAbi, TFunctionName>, "abi">>;
-```
+# Type alias: UpgradeExecutorEncodeFunctionDataParameters\<TFunctionName\>
+
+> **UpgradeExecutorEncodeFunctionDataParameters**\<`TFunctionName`\>: [`Prettify`](../../types/utils/type-aliases/Prettify.md)\<`Omit`\<`EncodeFunctionDataParameters` \<[`UpgradeExecutorAbi`](UpgradeExecutorAbi.md), `TFunctionName`\>, `"abi"`\>\>
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`UpgradeExecutorFunctionName`](UpgradeExecutorFunctionName.md) |
+• **TFunctionName** *extends* [`UpgradeExecutorFunctionName`](UpgradeExecutorFunctionName.md)
 
 ## Source
 
-[src/upgradeExecutorEncodeFunctionData.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorEncodeFunctionData.ts#L17)
+[src/upgradeExecutorEncodeFunctionData.ts:36](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorEncodeFunctionData.ts#L36)

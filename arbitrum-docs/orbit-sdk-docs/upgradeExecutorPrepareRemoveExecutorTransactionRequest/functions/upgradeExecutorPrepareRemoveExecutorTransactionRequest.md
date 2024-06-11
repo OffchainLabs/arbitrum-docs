@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function upgradeExecutorPrepareRemoveExecutorTransactionRequest(upgradeExecutorPrepareRemoveExecutorTransactionRequestParams: UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams): Promise<any>
-```
+# Function: upgradeExecutorPrepareRemoveExecutorTransactionRequest()
+
+> **upgradeExecutorPrepareRemoveExecutorTransactionRequest**(`upgradeExecutorPrepareRemoveExecutorTransactionRequestParams`): `Promise`\<`PrepareTransactionRequestReturnType`\>
 
 Prepares a transaction to revoke the executor role from an account
 
@@ -14,13 +14,13 @@ Prepares a transaction to revoke the executor role from an account
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `upgradeExecutorPrepareRemoveExecutorTransactionRequestParams` | [`UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md) | [UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md) |
+• **upgradeExecutorPrepareRemoveExecutorTransactionRequestParams**: [`UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams`](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md)
+
+[UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams](../type-aliases/UpgradeExecutorPrepareRemoveExecutorTransactionRequestParams.md)
 
 ## Returns
 
-`Promise`\<`any`\>
+`Promise`\<`PrepareTransactionRequestReturnType`\>
 
 Promise<PrepareTransactionRequestReturnType> - the transaction request
 
@@ -37,4 +37,4 @@ const removeExecutorTransactionRequest = await upgradeExecutorPrepareRemoveExecu
 
 ## Source
 
-[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:45](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L45)
+[src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts:45](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorPrepareRemoveExecutorTransactionRequest.ts#L45)

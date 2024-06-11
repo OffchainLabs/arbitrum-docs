@@ -4,6 +4,8 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
+# createTokenBridgePrepareTransactionReceipt
+
 ## Index
 
 ### Type Aliases

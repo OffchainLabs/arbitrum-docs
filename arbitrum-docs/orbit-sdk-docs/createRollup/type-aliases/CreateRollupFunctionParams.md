@@ -4,20 +4,26 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type CreateRollupFunctionParams: object;
-```
+# Type alias: CreateRollupFunctionParams
+
+> **CreateRollupFunctionParams**: `object`
 
 This type is for the params of the createRollup function
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `PrivateKeyAccount` |
-| `params` | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) |
-| `parentChainPublicClient` | `PublicClient` |
+### account
+
+> **account**: `PrivateKeyAccount`
+
+### params
+
+> **params**: [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md)
+
+### parentChainPublicClient
+
+> **parentChainPublicClient**: `PublicClient`
 
 ## Source
 
-[src/createRollup.ts:74](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollup.ts#L74)
+[src/createRollup.ts:79](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollup.ts#L79)

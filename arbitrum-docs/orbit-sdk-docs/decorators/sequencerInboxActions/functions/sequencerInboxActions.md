@@ -4,25 +4,25 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function sequencerInboxActions<TParams, TTransport, TChain>(sequencerInbox: TParams): (client: object) => SequencerInboxActions<TParams["sequencerInbox"], TChain>
-```
+# Function: sequencerInboxActions()
+
+> **sequencerInboxActions**\<`TParams`, `TTransport`, `TChain`\>(`params`): (`client`) => [`SequencerInboxActions`](../type-aliases/SequencerInboxActions.md)\<`TParams`\[`"sequencerInbox"`\], `TChain`\>
 
 Set of actions that can be performed on the sequencerInbox contract through wagmi public client
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TParams` *extends* `object` | - |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+• **TParams** *extends* `object`
+
+• **TTransport** *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> = `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\>
+
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> = `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `sequencerInbox` | `TParams` | Address of the sequencerInbox core contract User can still overrides sequencerInbox address, by passing it as an argument to sequencerInboxReadContract/sequencerInboxPrepareTransactionRequest calls |
+• **params**: `TParams`
+
+Parameters object
 
 ## Returns
 
@@ -32,9 +32,7 @@ sequencerInboxActionsWithSequencerInbox - Function passed to client.extends() to
 
 ### Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
+• **client**
 
 ### Returns
 
@@ -62,4 +60,4 @@ client.sequencerInboxReadContract({
 
 ## Source
 
-[src/decorators/sequencerInboxActions.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/decorators/sequencerInboxActions.ts#L71)
+[src/decorators/sequencerInboxActions.ts:81](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/decorators/sequencerInboxActions.ts#L81)

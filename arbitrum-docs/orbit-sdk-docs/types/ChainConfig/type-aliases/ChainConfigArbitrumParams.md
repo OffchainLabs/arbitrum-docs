@@ -4,23 +4,44 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ChainConfigArbitrumParams: object;
-```
+# Type alias: ChainConfigArbitrumParams
+
+> **ChainConfigArbitrumParams**: `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `AllowDebugPrecompiles` | `boolean` |
-| `DataAvailabilityCommittee` | `boolean` |
-| `EnableArbOS` | `boolean` |
-| `GenesisBlockNum` | `number` |
-| `InitialArbOSVersion` | `number` |
-| `InitialChainOwner` | `Address` |
-| `MaxCodeSize` | `number` |
-| `MaxInitCodeSize` | `number` |
+### AllowDebugPrecompiles
+
+> **AllowDebugPrecompiles**: `boolean`
+
+### DataAvailabilityCommittee
+
+> **DataAvailabilityCommittee**: `boolean`
+
+### EnableArbOS
+
+> **EnableArbOS**: `boolean`
+
+### GenesisBlockNum
+
+> **GenesisBlockNum**: `number`
+
+### InitialArbOSVersion
+
+> **InitialArbOSVersion**: `number`
+
+### InitialChainOwner
+
+> **InitialChainOwner**: `Address`
+
+### MaxCodeSize
+
+> **MaxCodeSize**: `number`
+
+### MaxInitCodeSize
+
+> **MaxInitCodeSize**: `number`
 
 ## Source
 
-[src/types/ChainConfig.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/types/ChainConfig.ts#L3)
+[src/types/ChainConfig.ts:3](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/types/ChainConfig.ts#L3)

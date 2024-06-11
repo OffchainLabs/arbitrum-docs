@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const rollupCreatorABI: readonly [object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object, object];
-```
+# Variable: rollupCreatorABI
+
+> `const` **rollupCreatorABI**: readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`]
 
 - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0x90d68b056c411015eae3ec0b98ad94e2c91419f1)
 -
@@ -18,4 +18,4 @@ const rollupCreatorABI: readonly [object, object, object, object, object, object
 
 ## Source
 
-[src/generated.ts:741](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/generated.ts#L741)
+[src/generated.ts:741](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/generated.ts#L741)

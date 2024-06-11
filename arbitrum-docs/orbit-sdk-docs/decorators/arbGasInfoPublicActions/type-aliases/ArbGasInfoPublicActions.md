@@ -4,22 +4,32 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbGasInfoPublicActions<TChain>: object;
-```
+# Type alias: ArbGasInfoPublicActions\<TChain\>
+
+> **ArbGasInfoPublicActions**\<`TChain`\>: `object`
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TChain` *extends* `Chain` \| `undefined` | `Chain` \| `undefined` |
+• **TChain** *extends* `Chain` \| `undefined` = `Chain` \| `undefined`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `arbGasInfoReadContract` | \<`TFunctionName`\>(`args`: [`ArbGasInfoReadContractParameters`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\>) => `Promise` \<[`ArbGasInfoReadContractReturnType`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractReturnType.md)\<`TFunctionName`\>\> |
+### arbGasInfoReadContract()
+
+> **arbGasInfoReadContract**: \<`TFunctionName`\>(`args`) => `Promise` \<[`ArbGasInfoReadContractReturnType`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractReturnType.md)\<`TFunctionName`\>\>
+
+#### Type parameters
+
+• **TFunctionName** *extends* [`ArbGasInfoFunctionName`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoFunctionName.md)
+
+#### Parameters
+
+• **args**: [`ArbGasInfoReadContractParameters`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractParameters.md)\<`TFunctionName`\>
+
+#### Returns
+
+`Promise` \<[`ArbGasInfoReadContractReturnType`](../../../arbGasInfoReadContract/type-aliases/ArbGasInfoReadContractReturnType.md)\<`TFunctionName`\>\>
 
 ## Source
 
-[src/decorators/arbGasInfoPublicActions.ts:10](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/decorators/arbGasInfoPublicActions.ts#L10)
+[src/decorators/arbGasInfoPublicActions.ts:10](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/decorators/arbGasInfoPublicActions.ts#L10)

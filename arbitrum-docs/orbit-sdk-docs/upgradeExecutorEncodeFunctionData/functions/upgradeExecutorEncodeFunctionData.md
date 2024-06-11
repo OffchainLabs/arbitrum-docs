@@ -4,26 +4,28 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function upgradeExecutorEncodeFunctionData<TFunctionName>(__namedParameters: { [K in string | number | symbol]: Omit<EncodeFunctionDataParameters<any, TFunctionName, any>, "abi">[K] }): any
-```
+# Function: upgradeExecutorEncodeFunctionData()
+
+> **upgradeExecutorEncodeFunctionData**\<`TFunctionName`\>(`params`): `string`
+
+Encodes a function call to be sent through the UpgradeExecutor
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* `unknown` |
+• **TFunctionName** *extends* `unknown`
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `__namedParameters` | \{ \[K in string \| number \| symbol\]: Omit\<EncodeFunctionDataParameters\<any, TFunctionName, any\>, "abi"\>\[K\] \} |
+• **params**: \{ \[K in string \| number \| symbol\]: Omit\<EncodeFunctionDataParameters\<any, TFunctionName, any\>, "abi"\>\[K\] \}
+
+Parameters for encoding function data
 
 ## Returns
 
-`any`
+`string`
+
+Encoded function data
 
 ## Source
 
-[src/upgradeExecutorEncodeFunctionData.ts:22](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorEncodeFunctionData.ts#L22)
+[src/upgradeExecutorEncodeFunctionData.ts:49](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorEncodeFunctionData.ts#L49)

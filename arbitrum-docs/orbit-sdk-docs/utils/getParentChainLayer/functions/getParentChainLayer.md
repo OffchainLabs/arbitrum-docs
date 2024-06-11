@@ -4,20 +4,25 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function getParentChainLayer(parentChainId: any): undefined | 1 | 2
-```
+# Function: getParentChainLayer()
+
+> **getParentChainLayer**(`parentChainId`): `undefined` \| `1` \| `2`
+
+Returns the layer of the parent chain identified by the provided
+ParentChainId.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `parentChainId` | `any` |
+• **parentChainId**: `any`
+
+The identifier of the parent chain.
 
 ## Returns
 
 `undefined` \| `1` \| `2`
 
+- The layer of the parent chain (1 or 2).
+
 ## Source
 
-[src/utils/getParentChainLayer.ts:13](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/utils/getParentChainLayer.ts#L13)
+[src/utils/getParentChainLayer.ts:21](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/utils/getParentChainLayer.ts#L21)

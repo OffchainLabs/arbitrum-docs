@@ -4,16 +4,18 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const erc20: object;
-```
+# Variable: erc20
+
+> `const` **erc20**: `object`
+
+ERC-20 token contract configuration.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `abi` | readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] | erc20ABI |
+### abi
+
+> **abi**: readonly [`object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`, `object`] = `erc20ABI`
 
 ## Source
 
-[src/contracts.ts:14](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/contracts.ts#L14)
+[src/contracts.ts:18](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/contracts.ts#L18)

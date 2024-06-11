@@ -4,10 +4,10 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbGasInfoAbi: typeof arbGasInfo.abi;
-```
+# Type alias: ArbGasInfoAbi
+
+> **ArbGasInfoAbi**: *typeof* `arbGasInfo.abi`
 
 ## Source
 
-[src/arbGasInfoReadContract.ts:6](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbGasInfoReadContract.ts#L6)
+[src/arbGasInfoReadContract.ts:6](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbGasInfoReadContract.ts#L6)

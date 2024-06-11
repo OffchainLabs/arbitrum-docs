@@ -4,22 +4,20 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type RollupAdminLogicPrepareTransactionRequestParameters<TFunctionName>: Omit<RollupAdminLogicPrepareFunctionDataParameters<TFunctionName>, "abi"> & object;
-```
+# Type alias: RollupAdminLogicPrepareTransactionRequestParameters\<TFunctionName\>
+
+> **RollupAdminLogicPrepareTransactionRequestParameters**\<`TFunctionName`\>: `Omit`\<`RollupAdminLogicPrepareFunctionDataParameters`\<`TFunctionName`\>, `"abi"`\> & `object`
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `Address` |
+### account
+
+> **account**: `Address`
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TFunctionName` *extends* [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md) |
+• **TFunctionName** *extends* [`RollupAdminLogicFunctionName`](RollupAdminLogicFunctionName.md)
 
 ## Source
 
-[src/rollupAdminLogicPrepareTransactionRequest.ts:71](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/rollupAdminLogicPrepareTransactionRequest.ts#L71)
+[src/rollupAdminLogicPrepareTransactionRequest.ts:94](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/rollupAdminLogicPrepareTransactionRequest.ts#L94)

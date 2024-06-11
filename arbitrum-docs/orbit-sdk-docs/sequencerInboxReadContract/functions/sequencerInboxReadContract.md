@@ -4,49 +4,52 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function sequencerInboxReadContract<TChain, TFunctionName>(client: object, params: SequencerInboxReadContractParameters<TFunctionName>): Promise<SequencerInboxReadContractReturnType<TFunctionName>>
-```
+# Function: sequencerInboxReadContract()
+
+> **sequencerInboxReadContract**\<`TChain`, `TFunctionName`\>(`client`, `params`): `Promise` \<[`SequencerInboxReadContractReturnType`](../type-aliases/SequencerInboxReadContractReturnType.md)\<`TFunctionName`\>\>
+
+Reads data from the sequencer inbox contract on a specified chain and returns
+the result.
 
 ## Type parameters
 
-| Type parameter |
-| :------ |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
-| `TFunctionName` *extends* 
-  \| `"bridge"`
-  \| `"initialize"`
-  \| `"DATA_AUTHENTICATED_FLAG"`
-  \| `"HEADER_LENGTH"`
-  \| `"addSequencerL2Batch"`
-  \| `"addSequencerL2BatchFromOrigin"`
-  \| `"batchCount"`
-  \| `"dasKeySetInfo"`
-  \| `"forceInclusion"`
-  \| `"getKeysetCreationBlock"`
-  \| `"inboxAccs"`
-  \| `"invalidateKeysetHash"`
-  \| `"isBatchPoster"`
-  \| `"isValidKeysetHash"`
-  \| `"maxTimeVariation"`
-  \| `"removeDelayAfterFork"`
-  \| `"rollup"`
-  \| `"setIsBatchPoster"`
-  \| `"setMaxTimeVariation"`
-  \| `"setValidKeyset"`
-  \| `"totalDelayedMessagesRead"` |
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
+
+The type of the blockchain chain.
+
+• **TFunctionName** *extends* `"bridge"` \| `"initialize"` \| `"DATA_AUTHENTICATED_FLAG"` \| `"HEADER_LENGTH"` \| `"addSequencerL2Batch"` \| `"addSequencerL2BatchFromOrigin"` \| `"batchCount"` \| `"dasKeySetInfo"` \| `"forceInclusion"` \| `"getKeysetCreationBlock"` \| `"inboxAccs"` \| `"invalidateKeysetHash"` \| `"isBatchPoster"` \| `"isValidKeysetHash"` \| `"maxTimeVariation"` \| `"removeDelayAfterFork"` \| `"rollup"` \| `"setIsBatchPoster"` \| `"setMaxTimeVariation"` \| `"setValidKeyset"` \| `"totalDelayedMessagesRead"`
+
+The name of the function to read from the contract.
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
-| `params` | [`SequencerInboxReadContractParameters`](../type-aliases/SequencerInboxReadContractParameters.md)\<`TFunctionName`\> |
+• **client**
+
+The public client to interact with the blockchain.
+
+• **params**: [`SequencerInboxReadContractParameters`](../type-aliases/SequencerInboxReadContractParameters.md)\<`TFunctionName`\>
+
+The parameters for reading the contract.
 
 ## Returns
 
 `Promise` \<[`SequencerInboxReadContractReturnType`](../type-aliases/SequencerInboxReadContractReturnType.md)\<`TFunctionName`\>\>
 
+- A promise that resolves to the result of the contract function.
+
+## Example
+
+```ts
+const client = new PublicClient(...);
+const params = {
+  functionName: 'getInboxAccumulators',
+  sequencerInbox: '0x1234...abcd',
+  args: [],
+};
+const result = await sequencerInboxReadContract(client, params);
+console.log(result);
+```
+
 ## Source
 
-[src/sequencerInboxReadContract.ts:26](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/sequencerInboxReadContract.ts#L26)
+[src/sequencerInboxReadContract.ts:50](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/sequencerInboxReadContract.ts#L50)

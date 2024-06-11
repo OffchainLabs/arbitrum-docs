@@ -4,21 +4,30 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type UpgradeExecutorPrepareAddExecutorTransactionRequestParams: object;
-```
+# Type alias: UpgradeExecutorPrepareAddExecutorTransactionRequestParams
+
+> **UpgradeExecutorPrepareAddExecutorTransactionRequestParams**: `object`
 
 Type for the params of the [upgradeExecutorPrepareAddExecutorTransactionRequest](../functions/upgradeExecutorPrepareAddExecutorTransactionRequest.md) function
 
 ## Type declaration
 
-| Member | Type |
-| :------ | :------ |
-| `account` | `Address` |
-| `executorAccountAddress` | `Address` |
-| `publicClient` | `PublicClient` |
-| `upgradeExecutorAddress` | `Address` |
+### account
+
+> **account**: `Address`
+
+### executorAccountAddress
+
+> **executorAccountAddress**: `Address`
+
+### publicClient
+
+> **publicClient**: `PublicClient`
+
+### upgradeExecutorAddress
+
+> **upgradeExecutorAddress**: `Address`
 
 ## Source
 
-[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:17](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L17)
+[src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts:17](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorPrepareAddExecutorTransactionRequest.ts#L17)

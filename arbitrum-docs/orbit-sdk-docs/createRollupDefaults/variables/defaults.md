@@ -4,18 +4,34 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-const defaults: object;
-```
+# Variable: defaults
+
+> `const` **defaults**: `object`
+
+The `defaults` object provides default values for various settings, including
+the native token address, deployment to Layer 2, and maximum fee per gas for
+retryable transactions.
 
 ## Type declaration
 
-| Member | Type | Value |
-| :------ | :------ | :------ |
-| `deployFactoriesToL2` | `boolean` | true |
-| `maxFeePerGasForRetryables` | `bigint` | ... |
-| `nativeToken` | `"0x0000000000000000000000000000000000000000"` | zeroAddress |
+### deployFactoriesToL2
+
+> **deployFactoriesToL2**: `boolean` = `true`
+
+Whether to deploy factories to Layer 2. Defaults to true.
+
+### maxFeePerGasForRetryables
+
+> **maxFeePerGasForRetryables**: `bigint`
+
+The maximum fee per gas for retryable transactions. Defaults to 0.1 gwei.
+
+### nativeToken
+
+> **nativeToken**: `"0x0000000000000000000000000000000000000000"` = `zeroAddress`
+
+The address of the native token. Defaults to zero address.
 
 ## Source
 
-[src/createRollupDefaults.ts:3](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupDefaults.ts#L3)
+[src/createRollupDefaults.ts:8](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollupDefaults.ts#L8)

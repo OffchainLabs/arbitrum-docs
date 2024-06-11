@@ -4,10 +4,10 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type ArbOwnerPublicFunctionName: GetFunctionName<ArbOwnerPublicAbi>;
-```
+# Type alias: ArbOwnerPublicFunctionName
+
+> **ArbOwnerPublicFunctionName**: [`GetFunctionName`](../../types/utils/type-aliases/GetFunctionName.md) \<[`ArbOwnerPublicAbi`](ArbOwnerPublicAbi.md)\>
 
 ## Source
 
-[src/arbOwnerReadContract.ts:7](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/arbOwnerReadContract.ts#L7)
+[src/arbOwnerReadContract.ts:7](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/arbOwnerReadContract.ts#L7)

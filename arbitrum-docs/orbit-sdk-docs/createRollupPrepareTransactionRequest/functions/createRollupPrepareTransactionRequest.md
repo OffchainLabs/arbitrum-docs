@@ -4,25 +4,66 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function createRollupPrepareTransactionRequest(__namedParameters: object): Promise<any>
-```
+# Function: createRollupPrepareTransactionRequest()
+
+> **createRollupPrepareTransactionRequest**(`createRollupPrepareTransactionRequestParams`): `Promise`\<`any`\>
+
+Prepares a transaction request to create a rollup chain on the specified
+parent chain. The function validates the input parameters, including the
+batch poster address and validator addresses, and checks if the native token
+is allowed based on the chain configuration. It then encodes the function
+data using the rollup creator ABI and prepares the transaction request with
+the necessary data, value, and gas limits. Returns the prepared transaction
+request along with the chain ID.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :------ | :------ | :------ |
-| `__namedParameters` | `object` | - |
-| `__namedParameters.account` | \`0x$\{string\}\` | - |
-| `__namedParameters.gasOverrides`? | [`TransactionRequestGasOverrides`](../../utils/gasOverrides/type-aliases/TransactionRequestGasOverrides.md) | - |
-| `__namedParameters.params` | [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md) | - |
-| `__namedParameters.publicClient` | `object` | - |
-| `__namedParameters.rollupCreatorAddressOverride`? | \`0x$\{string\}\` | Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain. |
+• **createRollupPrepareTransactionRequestParams**
+
+The parameters for preparing the transaction request
+
+• **createRollupPrepareTransactionRequestParams.account**: \`0x$\{string\}\`
+
+The account address
+
+• **createRollupPrepareTransactionRequestParams.gasOverrides?**: [`TransactionRequestGasOverrides`](../../utils/gasOverrides/type-aliases/TransactionRequestGasOverrides.md)
+
+Optional gas overrides for the transaction request
+
+• **createRollupPrepareTransactionRequestParams.params**: [`CreateRollupParams`](../../types/createRollupTypes/type-aliases/CreateRollupParams.md)
+
+The parameters for creating the rollup
+
+• **createRollupPrepareTransactionRequestParams.publicClient**
+
+The public client
+
+• **createRollupPrepareTransactionRequestParams.rollupCreatorAddressOverride?**: \`0x$\{string\}\`
+
+Specifies a custom address for the RollupCreator. By default, the address will be automatically detected based on the provided chain.
 
 ## Returns
 
 `Promise`\<`any`\>
 
+The prepared transaction request and the chain ID
+
+## Throws
+
+If the batch poster address or validator addresses are invalid, or if the native token is not allowed
+
+## Example
+
+```ts
+const transactionRequest = await createRollupPrepareTransactionRequest({
+  params: createRollupParams,
+  account: '0xYourAccountAddress',
+  publicClient: yourPublicClientInstance,
+  gasOverrides: { gasLimit: { base: 500000, percentIncrease: 20 } },
+  rollupCreatorAddressOverride: '0xOverrideAddress',
+});
+```
+
 ## Source
 
-[src/createRollupPrepareTransactionRequest.ts:39](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransactionRequest.ts#L39)
+[src/createRollupPrepareTransactionRequest.ts:67](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollupPrepareTransactionRequest.ts#L67)

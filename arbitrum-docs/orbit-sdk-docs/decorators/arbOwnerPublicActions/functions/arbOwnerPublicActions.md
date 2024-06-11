@@ -4,27 +4,50 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-function arbOwnerPublicActions<TTransport, TChain>(client: object): ArbOwnerPublicActions<TChain>
-```
+# Function: arbOwnerPublicActions()
+
+> **arbOwnerPublicActions**\<`TTransport`, `TChain`\>(`client`): [`ArbOwnerPublicActions`](../type-aliases/ArbOwnerPublicActions.md)\<`TChain`\>
+
+Returns an object with two functions: `arbOwnerReadContract` and
+`arbOwnerPrepareTransactionRequest`, which interact with the ArbOwner
+contract by reading contract data and preparing transaction requests,
+respectively.
 
 ## Type parameters
 
-| Type parameter | Value |
-| :------ | :------ |
-| `TTransport` *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> | `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> |
-| `TChain` *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> | `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> |
+• **TTransport** *extends* `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\> = `Transport`\<`string`, `Record`\<`string`, `any`\>, `EIP1193RequestFn`\<`undefined`\>\>
+
+• **TChain** *extends* `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\> = `undefined` \| `Chain`\<`undefined` \| `ChainFormatters`\>
 
 ## Parameters
 
-| Parameter | Type |
-| :------ | :------ |
-| `client` | `object` |
+• **client**
+
+The public client used to interact with the blockchain.
 
 ## Returns
 
 [`ArbOwnerPublicActions`](../type-aliases/ArbOwnerPublicActions.md)\<`TChain`\>
 
+An object containing the functions to read contract data and prepare transaction requests.
+
+## Example
+
+```ts
+const publicClient = new PublicClient(...);
+const actions = arbOwnerPublicActions(publicClient);
+
+const readResult = await actions.arbOwnerReadContract({
+  functionName: 'someFunction',
+  args: [...],
+});
+
+const txRequest = await actions.arbOwnerPrepareTransactionRequest({
+  functionName: 'someOtherFunction',
+  args: [...],
+});
+```
+
 ## Source
 
-[src/decorators/arbOwnerPublicActions.ts:27](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/decorators/arbOwnerPublicActions.ts#L27)
+[src/decorators/arbOwnerPublicActions.ts:51](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/decorators/arbOwnerPublicActions.ts#L51)

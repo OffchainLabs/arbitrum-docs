@@ -4,9 +4,9 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type UpgradeExecutorPrivilegedAccounts: object;
-```
+# Type alias: UpgradeExecutorPrivilegedAccounts
+
+> **UpgradeExecutorPrivilegedAccounts**: `object`
 
 This type is for the result of the [upgradeExecutorFetchPrivilegedAccounts](../functions/upgradeExecutorFetchPrivilegedAccounts.md) function.
 
@@ -19,4 +19,4 @@ and an array with a hash for each role they have.
 
 ## Source
 
-[src/upgradeExecutorFetchPrivilegedAccounts.ts:19](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/upgradeExecutorFetchPrivilegedAccounts.ts#L19)
+[src/upgradeExecutorFetchPrivilegedAccounts.ts:19](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/upgradeExecutorFetchPrivilegedAccounts.ts#L19)

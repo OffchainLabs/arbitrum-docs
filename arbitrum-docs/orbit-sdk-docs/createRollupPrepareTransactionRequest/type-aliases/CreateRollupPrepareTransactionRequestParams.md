@@ -4,10 +4,10 @@ sidebar: false
 toc_max_heading_level: 5
 ---
 
-```ts
-type CreateRollupPrepareTransactionRequestParams: Prettify<WithRollupCreatorAddressOverride<object>>;
-```
+# Type alias: CreateRollupPrepareTransactionRequestParams
+
+> **CreateRollupPrepareTransactionRequestParams**: [`Prettify`](../../types/utils/type-aliases/Prettify.md) \<[`WithRollupCreatorAddressOverride`](../../types/createRollupTypes/type-aliases/WithRollupCreatorAddressOverride.md)\<`object`\>\>
 
 ## Source
 
-[src/createRollupPrepareTransactionRequest.ts:30](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/27c24d61cdc7e62a81af29bd04f39d5a3549ecb3/src/createRollupPrepareTransactionRequest.ts#L30)
+[src/createRollupPrepareTransactionRequest.ts:30](https://github.com/anegg0/arbitrum-orbit-sdk/blob/b24cbe9cd68eb30d18566196d2c909bd4086db10/src/createRollupPrepareTransactionRequest.ts#L30)
