@@ -5,7 +5,7 @@
         "scripts": {
                 "docusaurus": "docusaurus",
                 "install_arbitrum-sdk_dependencies": "cd ../arbitrum-sdk && yarn install",
-                "install_arbitrum-orbit-sdk_dependencies": "cd ../arbitrum-orbit-sdk && rm -rf ./orbit-sdk-docs/* &&  && yarn install",
+                "install_arbitrum-orbit-sdk_dependencies": "cd ../arbitrum-orbit-sdk && yarn install",
                 "generate_precompiles_ref_tables": "ts-node src/scripts/precompile-reference-generator.ts",
                 "start": "docusaurus start",
                 "build_translation": "yarn ts-node ./src/scripts/move-untranslated-files.ts",
