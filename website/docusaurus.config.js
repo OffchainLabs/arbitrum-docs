@@ -114,7 +114,7 @@ const config = {
         entryPoints: [`${orbitSdkCodebasePath}/src`],
         out: '../arbitrum-docs/orbit-sdk-docs',
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `dist`],
+        exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
         excludeInternal: true,
         excludeExternals: true,
