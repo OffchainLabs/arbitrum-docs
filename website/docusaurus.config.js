@@ -42,12 +42,6 @@ const config = {
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
-          // include: ['**/*.md', '**/*.mdx', '**/_*.{js,jsx,ts,tsx,md,mdx}'],
-          // exclude: [
-          //   // '**/_*.{js,jsx,ts,tsx,md,mdx}',
-          //   '**/*.test.{js,jsx,ts,tsx}',
-          //   '**/__tests__/**',
-          // ],
           editUrl: function (s) {
             // troubleshooting docs content has external source-of-truth; node-providers uses form-submission
             if (s.docPath.includes('troubleshooting') || s.docPath.includes('node-providers'))
@@ -94,7 +88,7 @@ const config = {
           invalidLink: true,
           notDocumented: true,
         },
-        logLevel: 'Verbose',
+        logLevel: 'Error',
         sidebar: {
           autoConfiguration: false,
         },
@@ -117,6 +111,7 @@ const config = {
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
         excludeInternal: true,
+        logLevel: 'Error',
         excludeExternals: true,
         outputFileStrategy: 'modules',
         readme: 'none',
