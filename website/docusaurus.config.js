@@ -118,6 +118,7 @@ const config = {
         excludeNotDocumented: false,
         excludeInternal: true,
         excludeExternals: true,
+        outputFileStrategy: 'modules',
         readme: 'none',
         skipErrorChecking: true,
         plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
@@ -125,7 +126,7 @@ const config = {
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         frontmatterGlobals: {
           layout: 'docs',
-          sidebar: false,
+          sidebar: true,
           toc_max_heading_level: 5,
         },
       },
