@@ -4,6 +4,7 @@
 const variableInjector = require('./src/remark/variable-injector');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
+const orbitSdkCodebasePath = '../arbitrum-orbit-sdk';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,6 +17,7 @@ const config = {
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
+    format: 'detect',
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -72,7 +74,7 @@ const config = {
         tsconfig: `${sdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${sdkCodebasePath}/src/lib`],
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `dist`],
         excludeNotDocumented: true,
         excludeInternal: true,
         excludeExternals: true,
@@ -94,23 +96,29 @@ const config = {
         plugin: [
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
-          './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/arbitrumSdkDocsHandler.ts',
         ],
-
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'arbitrum-orbit-sdk',
+        tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${orbitSdkCodebasePath}/src`],
+        out: '../arbitrum-docs/orbit-sdk-docs',
+        entryPointStrategy: 'expand',
+        exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
+        excludeNotDocumented: false,
+        excludeInternal: true,
+        logLevel: 'Error',
+        excludeExternals: true,
+        outputFileStrategy: 'modules',
+        readme: 'none',
+        skipErrorChecking: true,
+        plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
-        outputFileStrategy: 'modules',
-        excludeGroups: false,
-        hidePageHeader: true,
-        hidePageTitle: true,
-        hideBreadcrumbs: true,
-        useCodeBlocks: true,
-        expandParameters: true,
-        parametersFormat: 'table',
-        propertiesFormat: 'table',
-        enumMembersFormat: 'table',
-        typeDeclarationFormat: 'table',
-        sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
           sidebar: true,
