@@ -228,7 +228,7 @@ You can use <code><a href="https://ethereum.org/en/developers/docs/apis/json-rpc
 </p>
 
 <ul>
-<li> <code>latest</code>: Provides you with the most recent Arbitrum block number that the node has observed on the L1 and indicates that the Sequencer's batch has been just published<strong> </strong>as an L1 block on the Ethereum network. It's important to note that this block has the potential to be re-orged but<strong> </strong>you can consider and trust this block as final, if you trust the sequencer.</li>
+<li> <code>latest</code>: Provides you with the most recent Arbitrum block number, also known as the tip of the chain. This block is typically the last sequenced block and may not yet be posted on L1. As long as you trust the Sequencer to eventually post this information on L1, relying on the <code>latest</code> block should be fine. </li>
 <li> <code>safe</code>: Provides you with the most recent Arbitrum block number that has achieved attestations from a two-thirds majority of Ethereum's validator set. This occurs when the Sequencer's batch is posted as an L1 block on Ethereum and then the batch transactions achieve <code>safe</code> finality there. While safe blocks are typically resistant to re-orgs, they can still be re-orged in the event of a significant L1 re-org.</li>
 <li> <code>finalized</code>: Provides you with the most recent Arbitrum block number that is finalized on Ethereum. This means that the Sequencer's batch has been published<strong> </strong>as an L1 block on the Ethereum network and has reached a substantial depth, making it eligible for hard finality. Unlike <code>safe</code> blocks, <code>finalized</code> blocks are highly improbable to undergo re-orgs. </li>
 </ul>
