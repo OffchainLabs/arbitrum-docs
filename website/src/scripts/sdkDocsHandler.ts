@@ -16,13 +16,13 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
+  const sourceDir = path.join(outputDir, '../../../arbitrum-docs/sdk-docs');
   const targetDir = path.join(outputDir);
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
   });
-  
+
   app.renderer.on(RendererEvent.END, async () => {
     copyFiles(sourceDir, targetDir);
 
@@ -63,7 +63,7 @@ function copyFiles(source, target) {
     console.error(`Source path does not exist: ${source}`);
     return;
   }
-  
+
   if (!fs.lstatSync(source).isDirectory()) {
     console.error(`Source path is not a directory: ${source}`);
     return;
