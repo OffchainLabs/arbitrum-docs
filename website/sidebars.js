@@ -409,6 +409,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
               label: `Orbit Chain Configuration`,
             },
+            {
+              type: 'doc',
+              id: 'orbit-sdk-docs/index',
+              label: `Orbit SDK Reference`,
+            },
           ],
         },
       ],
