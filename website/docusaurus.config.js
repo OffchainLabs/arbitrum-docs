@@ -106,7 +106,7 @@ const config = {
         id: 'arbitrum-orbit-sdk',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
-        out: './arbitrum-docs/orbit-sdk-docs',
+        out: './generated-docs/orbit-sdk-docs',
         entryPointStrategy: 'expand',
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
