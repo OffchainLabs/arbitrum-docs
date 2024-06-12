@@ -81,22 +81,22 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: './arbitrum-docs/sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
           invalidLink: true,
           notDocumented: true,
         },
-        logLevel: 'Verbose',
+        logLevel: 'Error',
         sidebar: {
           autoConfiguration: false,
         },
 
         plugin: [
           'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
-          './src/scripts/arbitrumSdkDocsHandler.ts',
+          'typedoc-plugin-frontmatter',
+          './src/scripts/sdkDocsHandler.ts',
         ],
       },
     ],
@@ -106,17 +106,21 @@ const config = {
         id: 'arbitrum-orbit-sdk',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
-        out: '../arbitrum-docs/orbit-sdk-docs',
+        out: './arbitrum-docs/orbit-sdk-docs',
         entryPointStrategy: 'expand',
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
+        logLevel: 'Verbose',
         excludeInternal: true,
-        logLevel: 'Error',
         excludeExternals: true,
         outputFileStrategy: 'modules',
         readme: 'none',
         skipErrorChecking: true,
-        plugin: ['typedoc-plugin-markdown', `typedoc-plugin-frontmatter`],
+        plugin: [
+          'typedoc-plugin-markdown',
+          'typedoc-plugin-frontmatter',
+          './src/scripts/orbitSdkDocsHandler.ts',
+        ],
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         frontmatterGlobals: {
