@@ -88,7 +88,7 @@ const config = {
           invalidLink: true,
           notDocumented: true,
         },
-        logLevel: 'Verbose',
+        logLevel: 'Error',
         sidebar: {
           autoConfiguration: false,
         },
@@ -110,7 +110,7 @@ const config = {
         entryPointStrategy: 'expand',
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
-        logLevel: 'Verbose',
+        logLevel: 'Error',
         excludeInternal: true,
         excludeExternals: true,
         outputFileStrategy: 'modules',
