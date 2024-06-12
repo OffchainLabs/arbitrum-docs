@@ -81,14 +81,14 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: './arbitrum-docs/sdk-docs',
+        out: './generated-docs/sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
           invalidLink: true,
           notDocumented: true,
         },
-        logLevel: 'Error',
+        logLevel: 'Verbose',
         sidebar: {
           autoConfiguration: false,
         },
