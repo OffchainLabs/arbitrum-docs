@@ -6,9 +6,7 @@ You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](h
 
 ## Step 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
-<p>
-  You'll need the `release` branch.
-</p>
+<p>You'll need the `release` branch.</p>
 
 <CodeBlock language="bash">
   {`git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`}
@@ -52,7 +50,7 @@ docker exec nitro-testnode-sequencer-1 ls /config
 
 An L1-L2 token bridge can be deployed by using the parameter --tokenbridge. The list of contracts can be found by running:
 
-```bash
+````bash
 docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
 ``
 
@@ -61,13 +59,12 @@ docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
 An L3 chain can be deployed on top of the L2 chain, by using the parameter --l3node. Its chain configuration can be found by running:
 ```bash
 docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
-```
+````
 
 When deploying an L3 chain, the following parameters are also available:
 
 `--l3-fee-token`: Uses a custom gas token for the L3 (symbol $APP), deployed on L2 at address `0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e`
 `--l3-token-bridge`: Deploys an L2-L3 token bridge. The list of contracts can be found by running `docker compose run --entrypoint sh tokenbridge -c "cat l2l3_network.json"`.
-
 
 ## Additional arguments
 
