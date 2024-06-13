@@ -4,4 +4,4 @@
 	branch = main
 [submodule "arbitrum-orbit-sdk"]
 	path = arbitrum-orbit-sdk
-	url = https://github.com/offchainlabs/arbitrum-orbit-sdk
+	url = https://github.com/anegg0/arbitrum-orbit-sdk
