@@ -15,6 +15,7 @@ const { Application, RendererEvent } = require('typedoc');
  * files by leading numbers first then alphabetically.
  */
 function load(app) {
+  console.log('Present working directory:', __dirname);
   const outputDir = app.options.getValue('out');
   const sourceDir = path.join(outputDir, '../../../arbitrum-docs/sdk-docs');
   const targetDir = path.join(outputDir);
