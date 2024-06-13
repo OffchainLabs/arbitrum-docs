@@ -82,7 +82,7 @@ const config = {
         skipErrorChecking: true,
 
         // Output options
-        out: './generated-docs/sdk-docs',
+        out: './arbitrum-docs/sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -107,7 +107,7 @@ const config = {
         id: 'arbitrum-orbit-sdk',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
-        out: './generated-docs/orbit-sdk-docs',
+        out: './arbitrum-docs/orbit-sdk-docs',
         entryPointStrategy: 'expand',
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
