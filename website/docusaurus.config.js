@@ -82,7 +82,7 @@ const config = {
         skipErrorChecking: true,
 
         // Output options
-        out: './arbitrum-docs/sdk-docs',
+        out: '../arbitrum-docs/sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -99,31 +99,20 @@ const config = {
           'typedoc-plugin-frontmatter',
           './src/scripts/sdkDocsHandler.ts',
         ],
-      },
-    ],
-    [
-      'docusaurus-plugin-typedoc',
-      {
-        id: 'arbitrum-orbit-sdk',
-        tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
-        entryPoints: [`${orbitSdkCodebasePath}/src`],
-        out: './arbitrum-docs/orbit-sdk-docs',
-        entryPointStrategy: 'expand',
-        exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
-        excludeNotDocumented: false,
-        logLevel: 'Verbose',
-        excludeInternal: true,
-        excludeExternals: true,
-        outputFileStrategy: 'modules',
-        readme: 'none',
-        skipErrorChecking: true,
-        plugin: [
-          'typedoc-plugin-markdown',
-          'typedoc-plugin-frontmatter',
-          './src/scripts/orbitSdkDocsHandler.ts',
-        ],
         // typedoc-plugin-markdown options
         // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
         frontmatterGlobals: {
           layout: 'docs',
           sidebar: true,
@@ -131,6 +120,50 @@ const config = {
         },
       },
     ],
+    // [
+    //   'docusaurus-plugin-typedoc',
+    //   {
+    //     id: 'arbitrum-orbit-sdk',
+    //     tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
+    //     entryPoints: [`${orbitSdkCodebasePath}/src`],
+    //     out: '../arbitrum-docs/orbit-sdk-docs',
+    //     entryPointStrategy: 'expand',
+    //     exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
+    //     excludeNotDocumented: false,
+    //     logLevel: 'Verbose',
+    //     excludeInternal: true,
+    //     excludeExternals: true,
+    //     outputFileStrategy: 'modules',
+    //     readme: 'none',
+    //     skipErrorChecking: true,
+    //     plugin: [
+    //       'typedoc-plugin-markdown',
+    //       'typedoc-plugin-frontmatter',
+    //       './src/scripts/orbitSdkDocsHandler.ts',
+    //     ],
+    //     // typedoc-plugin-markdown options
+    //     // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+    //     // typedoc-plugin-markdown options
+    //     // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+    //     outputFileStrategy: 'modules',
+    //     excludeGroups: false,
+    //     hidePageHeader: true,
+    //     hidePageTitle: true,
+    //     hideBreadcrumbs: true,
+    //     useCodeBlocks: true,
+    //     expandParameters: true,
+    //     parametersFormat: 'table',
+    //     propertiesFormat: 'table',
+    //     enumMembersFormat: 'table',
+    //     typeDeclarationFormat: 'table',
+    //     sanitizeComments: true,
+    //     frontmatterGlobals: {
+    //       layout: 'docs',
+    //       sidebar: true,
+    //       toc_max_heading_level: 5,
+    //     },
+    //   },
+    // ],
     [
       'posthog-docusaurus',
       {
