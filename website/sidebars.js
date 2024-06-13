@@ -1,6 +1,7 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const orbitSdkDocsSidebar = require('../arbitrum-docs/orbit-sdk-docs/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -410,9 +411,9 @@ const sidebars = {
               label: `Orbit Chain Configuration`,
             },
             {
-              type: 'doc',
-              id: 'orbit-sdk-docs/index',
-              label: `Orbit SDK Reference`,
+              type: 'category',
+              label: 'Arbitrum Orbit SDK',
+              items: orbitSdkDocsSidebar,
             },
           ],
         },
