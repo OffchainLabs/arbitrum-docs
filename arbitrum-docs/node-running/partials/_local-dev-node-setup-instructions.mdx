@@ -50,16 +50,17 @@ docker exec nitro-testnode-sequencer-1 ls /config
 
 An L1-L2 token bridge can be deployed by using the parameter --tokenbridge. The list of contracts can be found by running:
 
-````bash
+```bash
 docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
-``
+```
 
 ## Running an L3 chain
 
 An L3 chain can be deployed on top of the L2 chain, by using the parameter --l3node. Its chain configuration can be found by running:
+
 ```bash
 docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
-````
+```
 
 When deploying an L3 chain, the following parameters are also available:
 
