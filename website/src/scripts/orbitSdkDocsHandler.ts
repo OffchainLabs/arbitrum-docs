@@ -16,7 +16,8 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  const sourceDir = path.join(outputDir, '../../../arbitrum-docs/orbit-sdk-docs');
+  console.log(`outputDir is: ${outputDir}`);
+  const sourceDir = path.join(outputDir, '../../arbitrum-docs/orbit-sdk-docs');
   const targetDir = path.join(outputDir);
 
   app.renderer.on(RendererEvent.START, async () => {
