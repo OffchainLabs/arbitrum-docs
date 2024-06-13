@@ -18,7 +18,9 @@ function load(app) {
   const outputDir = app.options.getValue('out');
   console.log(`outputDir is: ${outputDir}`);
   const sourceDir = path.join(outputDir, '../../arbitrum-docs/orbit-sdk-docs');
+  console.log(`sourceDir is: ${sourceDir}`);
   const targetDir = path.join(outputDir);
+  console.log(`targetDir is: ${targetDir}`);
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
