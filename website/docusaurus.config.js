@@ -79,6 +79,7 @@ const config = {
         excludeInternal: true,
         excludeExternals: true,
         readme: 'none',
+        skipErrorChecking: true,
 
         // Output options
         out: './generated-docs/sdk-docs',
