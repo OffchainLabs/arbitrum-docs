@@ -7,11 +7,11 @@ You'll need [docker](https://docs.docker.com/get-docker/) and [docker compose](h
 ## Step 2. Clone the [nitro-testnode](https://github.com/OffchainLabs/nitro-testnode) repo
 
 <p>
-  You'll need the <code>{props.branch}</code> branch.
+  You'll need the `release` branch.
 </p>
 
 <CodeBlock language="bash">
-  {`git clone -b ${props.branch} --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`}
+  {`git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`}
 </CodeBlock>
 
 ## Step 3. Run your node
@@ -50,65 +50,24 @@ docker exec nitro-testnode-sequencer-1 ls /config
 
 ## Token bridge
 
-<!-- This is a temporary block since the tokenbridge behavior is different in the "release" and stylus branches for now. -->
-<!-- Once the "stylus" branch is updated, we should remove this conditional and move the HTML format to MD -->
+An L1-L2 token bridge can be deployed by using the parameter --tokenbridge. The list of contracts can be found by running:
 
-<div>
-  {props.branch == 'release' && (
-    <div>
-      <p>
-        An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of
-        contracts can be found by running:
-      </p>
-      <CodeBlock language="bash">
-        docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
-      </CodeBlock>
-    </div>
-  )}
-</div>
-
-<div>
-  {props.branch == 'stylus' && (
-    <div>
-      <p>
-        An L1-L2 token bridge is deployed by default. The list of contracts can be found by running:
-      </p>
-      <CodeBlock language="bash">
-        docker compose run --entrypoint sh tokenbridge -c "cat localNetwork.json"
-      </CodeBlock>
-    </div>
-  )}
-</div>
+```bash
+docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
+``
 
 ## Running an L3 chain
 
-An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3node`. Its chain configuration can be found by running:
-
+An L3 chain can be deployed on top of the L2 chain, by using the parameter --l3node. Its chain configuration can be found by running:
 ```bash
 docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
 ```
 
-<!-- This is a temporary block since these parameters are only available in the "release" branch for now. -->
-<!-- Once the "stylus" branch is updated, we should remove this conditional and move the HTML format to MD -->
+When deploying an L3 chain, the following parameters are also available:
 
-<div>
-  {props.branch == 'release' && (
-    <div>
-      <p>When deploying an L3 chain, the following parameters are also available:</p>
-      <ul>
-        <li>
-          <code>--l3-fee-token</code>: Uses a custom gas token for the L3 (symbol $APP), deployed on
-          L2 at address <code>0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e</code>
-        </li>
-        <li>
-          <code>--l3-token-bridge</code>: Deploys an L2-L3 token bridge. The list of contracts can
-          be found by running{' '}
-          <code>docker compose run --entrypoint sh tokenbridge -c "cat l2l3_network.json"</code>.
-        </li>
-      </ul>
-    </div>
-  )}
-</div>
+`--l3-fee-token`: Uses a custom gas token for the L3 (symbol $APP), deployed on L2 at address `0x9b7c0fcc305ca36412f87fd6bd08c194909a7d4e`
+`--l3-token-bridge`: Deploys an L2-L3 token bridge. The list of contracts can be found by running `docker compose run --entrypoint sh tokenbridge -c "cat l2l3_network.json"`.
+
 
 ## Additional arguments
 
