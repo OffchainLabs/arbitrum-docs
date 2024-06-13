@@ -10,7 +10,7 @@
 
 # Generated docs
 sdk-docs
-
+orbit-sdk-docs
 # Misc
 .DS_Store
 .env.local
