@@ -16,3 +16,5 @@ If you want your local development environment to support Stylus, [check out thi
 :::
 
 import LocalDevNodeSetupInstructions from '../node-running/partials/_local-dev-node-setup-instructions.mdx';
+
+<LocalDevNodeSetupInstructions branch="release" />
