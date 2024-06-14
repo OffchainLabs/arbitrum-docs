@@ -1,0 +1,11 @@
+---
+title: 'How to run a local dev node with Stylus support'
+description: 'A guide to run an Arbitrum local dev node with Stylus support on your local machine'
+author: jose-franco
+sme: jose-franco
+target_audience: 'Developers deploying smart contracts using Stylus'
+content_type: how-to
+sidebar_position: 1
+---
+
+Running a local dev node with Stylus support is identical to running a local Nitro dev node. For detailed instructions, please refer to [this guide](https://docs.arbitrum.io/run-arbitrum-node/run-local-dev-node). This guide enables you to deploy and test smart contracts written in Solidity or [languages supported by Stylus](/stylus/stylus-gentle-introduction.md#in-a-nutshell) within a fully controlled environment. By following these steps, you will establish a complete development environment on your local machine, including a Nitro development node (L2), a dev-mode geth parent chain (L1), and multiple instances with various roles.
