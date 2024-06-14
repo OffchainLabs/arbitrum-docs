@@ -91,9 +91,8 @@ const config = {
         },
         logLevel: 'Verbose',
         sidebar: {
-          autoConfiguration: false,
+          autoConfiguration: true,
         },
-
         plugin: [
           'typedoc-plugin-markdown',
           'typedoc-plugin-frontmatter',
@@ -128,7 +127,7 @@ const config = {
         entryPoints: [`${orbitSdkCodebasePath}/src`],
         out: '../arbitrum-docs/orbit-sdk-docs',
         entryPointStrategy: 'expand',
-        exclude: ['**test.ts', '*abi.ts', 'node_modules', 'tests', 'scripts', 'dist'],
+        exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
         logLevel: 'Verbose',
         excludeInternal: true,
@@ -136,10 +135,13 @@ const config = {
         outputFileStrategy: 'modules',
         readme: 'none',
         skipErrorChecking: true,
+        sidebar: {
+          autoConfiguration: true,
+        },
         plugin: [
           'typedoc-plugin-markdown',
           'typedoc-plugin-frontmatter',
-          // './src/scripts/orbitSdkDocsHandler.ts',
+          './src/scripts/orbitSdkDocsHandler.ts',
         ],
         // typedoc-plugin-markdown options
         // Reference: https:github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
