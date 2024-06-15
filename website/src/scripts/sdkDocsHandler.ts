@@ -16,20 +16,25 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  console.log(`outputDir is: ${outputDir}`);
-  const sourceDir = path.join(outputDir, '../../arbitrum-docs/sdk-docs');
-  console.log(`sourceDir is: ${sourceDir}`);
-  const targetDir = path.join(outputDir);
-  console.log(`targetDir is: ${targetDir}`);
-
+  console.log(`outputDir is ${outputDir}`);
+  const contentCategory = outputDir.split('/').pop();
+  const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
+  console.log(`sourceDir is ${sourceDir}`);
+  // const futureTargetDir = path.join(outputDir, '../../arbitrum-sdk');
+  // console.log(`futureTargetDir is ${futureTargetDir}`);
+  // console.log(futureTargetDir);
+  const targetDir = path.join('../arbitrum-docs/', contentCategory);
+  console.log(`targetDir is ${targetDir}`);
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
   });
 
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, targetDir);
+    copyFiles(outputDir, targetDir);
+    const sidebarItems = generateSidebar(contentCategory, targetDir);
+    console.log(`contentCategory is ${contentCategory}`);
 
-    const sidebarItems = generateSidebar(targetDir);
+    // console.log(`sidebarItems are ${JSON.stringify(sidebarItems)}`);
     const sidebarConfig = { items: sidebarItems };
     const sidebarPath = path.join(targetDir, 'sidebar.js');
 
@@ -108,11 +113,12 @@ function sortEntries(a, b) {
 }
 
 // Generate an in-folder sidebar with sorting
-function generateSidebar(dir, basePath = '') {
+function generateSidebar(contentCateg, dir, basePath = '') {
+  console.log(`contentCateg in generateSidebar's scope is: ${contentCateg}`);
+
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   // Sort entries before processing
   entries.sort((a, b) => sortEntries(a.name, b.name));
-
   const items = entries
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
@@ -127,7 +133,7 @@ function generateSidebar(dir, basePath = '') {
           items: subItems,
         };
       } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        const docId = generateId(entry.name, basePath);
+        const docId = generateId(entry.name, basePath, contentCateg);
         return {
           type: 'doc',
           id: docId,
@@ -144,11 +150,13 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function generateId(name, basePath) {
+function generateId(name, basePath, contentCateg) {
+  console.log(`contentCateg in generateId's scope is: ${contentCateg}`);
+
   let label = name.replace(/^\d+-/, ''); //
   label = label.replace(/\.md$/, '');
   const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return 'sdk-docs' + slashIfNeeded + path.join(basePath, label);
+  return contentCateg + slashIfNeeded + path.join(basePath, label);
 }
 
 function generateLabel(name) {
