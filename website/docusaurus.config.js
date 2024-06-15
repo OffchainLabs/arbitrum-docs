@@ -82,7 +82,7 @@ const config = {
         skipErrorChecking: true,
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: 'sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -125,7 +125,7 @@ const config = {
         id: 'arbitrum-orbit-sdk',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
-        out: '../arbitrum-docs/orbit-sdk-docs',
+        out: 'orbit-sdk-docs',
         entryPointStrategy: 'expand',
         exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
         excludeNotDocumented: false,
@@ -141,7 +141,7 @@ const config = {
         plugin: [
           'typedoc-plugin-markdown',
           'typedoc-plugin-frontmatter',
-          './src/scripts/orbitSdkDocsHandler.ts',
+          './src/scripts/sdkDocsHandler.ts',
         ],
         // typedoc-plugin-markdown options
         // Reference: https:github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
