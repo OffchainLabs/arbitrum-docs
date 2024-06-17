@@ -23,14 +23,14 @@ This table provides an overview of the available public RPC endpoints for the St
 
 | Name                             | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
 | -------------------------------- | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
-| Stylus testnet (v2)              | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
+| Stylus testnet (v2 - deprecated)              | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
 | Stylus testnet (v1 - deprecated) | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | wss://stylus-testnet.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
 
 :::caution
 
 - Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
 - Stylus testnet (v1) has been deprecated.
-- Stylus testnet (v2) will be deprecated once Stylus comes out of beta and is enabled on the Arbitrum Sepolia testnet.
+- Stylus testnet (v2) has been deprecated.
 
 :::
 
