@@ -37,7 +37,7 @@ A bonded validator’s responsibilities are to:
 - Open challenges to dispute invalid claims made by other validators, and
 - Confirm valid claims by participating in and winning challenges.
 
-The goal of BoLD is to unlock permissionless validation by ensuring that disputes are resolved within a fixed period of time (currently equivalent to 2 challenge periods, plus a 2 day grace period for the Security Council to intervene if necessarym, and a small delta for computation), effectively removing the risk of delay attacks and making withdrawals to a parent chain more secure. BoLD accomplishes this by introducing a new dispute system that lets any, single entity defend Arbitrum against malicious parties - effectively allowing anyone to validate, propose, and defend an Arbitrum chain’s state without needing permission to do so.
+The goal of BoLD is to unlock permissionless validation by ensuring that disputes are resolved within a fixed period (currently equivalent to 2 challenge periods, plus a two-day grace period for the Security Council to intervene if necessary and a small delta for computation), effectively removing the risk of delay attacks and making withdrawals to a parent chain more secure. BoLD accomplishes this by introducing a new dispute system that lets any single entity defend Arbitrum against malicious parties - effectively allowing anyone to validate, propose, and defend an Arbitrum chain’s state without needing permission to do so.
 
 ## Why does Arbitrum need a new dispute protocol?
 
