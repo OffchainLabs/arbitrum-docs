@@ -8,7 +8,7 @@ author: leeederek
 sme: leeederek
 ---
 
-import PublicPreviewBannerPartial from './partials/_BoLD-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/_bold-public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
