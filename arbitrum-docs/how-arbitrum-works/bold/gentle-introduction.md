@@ -65,7 +65,7 @@ BoLD addresses these challenges head-on by introducing a time limit on the exist
 
 To summarize with an analogy and the diagram below: Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against each unique challenger sequentially, like in a _“1v1 tournament”_. BoLD, on the other hand, enables any single honest party to defend the correct state and be guaranteed to win, similar to an _“all-vs-all battle royale”_ where there must and will always be a single winner in the end.
 
-![before-and-after-with-BoLD](./images/before-vs-after-with-BoLD.png)
+![before-and-after-with-BoLD](./images/before-vs-after-with-bold.png)
 _Note that the timer/clocks above are arbitrary and instead represent the duration of challenges and how challenges are sequential today but can take place in parallel with BoLD. The duration of challenges are independent from one another._
 
 ## How is this possible?
