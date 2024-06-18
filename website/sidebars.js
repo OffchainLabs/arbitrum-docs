@@ -861,6 +861,16 @@ const sidebars = {
                   id: 'how-arbitrum-works/bold/public-preview-expectations',
                   label: 'Public preview',
                 },
+                {
+                  type: 'link',
+                  href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
+                  label: 'Audit Report by Trail of Bits',
+                },
+                {
+                  type: 'link',
+                  href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
+                  label: 'Audit Report by Code4rena',
+                }
               ],
             },
           ],
