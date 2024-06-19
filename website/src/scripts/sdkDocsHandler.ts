@@ -16,25 +16,17 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  console.log(`outputDir is ${outputDir}`);
-  const contentCategory = outputDir.split('/').pop();
   const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
-  console.log(`sourceDir is ${sourceDir}`);
-  // const futureTargetDir = path.join(outputDir, '../../arbitrum-sdk');
-  // console.log(`futureTargetDir is ${futureTargetDir}`);
-  // console.log(futureTargetDir);
-  const targetDir = path.join('../arbitrum-docs/', contentCategory);
-  console.log(`targetDir is ${targetDir}`);
+  const targetDir = path.join(outputDir);
+
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
   });
-
+  
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(outputDir, targetDir);
-    const sidebarItems = generateSidebar(contentCategory, targetDir);
-    console.log(`contentCategory is ${contentCategory}`);
+    copyFiles(sourceDir, targetDir);
 
-    // console.log(`sidebarItems are ${JSON.stringify(sidebarItems)}`);
+    const sidebarItems = generateSidebar(targetDir);
     const sidebarConfig = { items: sidebarItems };
     const sidebarPath = path.join(targetDir, 'sidebar.js');
 
@@ -71,7 +63,7 @@ function copyFiles(source, target) {
     console.error(`Source path does not exist: ${source}`);
     return;
   }
-
+  
   if (!fs.lstatSync(source).isDirectory()) {
     console.error(`Source path is not a directory: ${source}`);
     return;
@@ -113,12 +105,11 @@ function sortEntries(a, b) {
 }
 
 // Generate an in-folder sidebar with sorting
-function generateSidebar(contentCateg, dir, basePath = '') {
-  console.log(`contentCateg in generateSidebar's scope is: ${contentCateg}`);
-
+function generateSidebar(dir, basePath = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   // Sort entries before processing
   entries.sort((a, b) => sortEntries(a.name, b.name));
+
   const items = entries
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
@@ -133,7 +124,7 @@ function generateSidebar(contentCateg, dir, basePath = '') {
           items: subItems,
         };
       } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        const docId = generateId(entry.name, basePath, contentCateg);
+        const docId = generateId(entry.name, basePath);
         return {
           type: 'doc',
           id: docId,
@@ -150,13 +141,11 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function generateId(name, basePath, contentCateg) {
-  console.log(`contentCateg in generateId's scope is: ${contentCateg}`);
-
+function generateId(name, basePath) {
   let label = name.replace(/^\d+-/, ''); //
   label = label.replace(/\.md$/, '');
   const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return contentCateg + slashIfNeeded + path.join(basePath, label);
+  return 'sdk-docs' + slashIfNeeded + path.join(basePath, label);
 }
 
 function generateLabel(name) {
