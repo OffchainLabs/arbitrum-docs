@@ -2,7 +2,6 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const variableInjector = require('./src/remark/variable-injector');
-const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
 const orbitSdkCodebasePath = '../arbitrum-orbit-sdk';
 
@@ -71,6 +70,7 @@ const config = {
       'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
+        name: 'sdk-docs',
         tsconfig: `${sdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${sdkCodebasePath}/src/lib`],
         entryPointStrategy: 'expand',
@@ -91,7 +91,7 @@ const config = {
         },
         logLevel: 'Verbose',
         sidebar: {
-          autoConfiguration: true,
+          autoConfiguration: false,
         },
         plugin: [
           'typedoc-plugin-markdown',
@@ -99,7 +99,7 @@ const config = {
           './src/scripts/sdkDocsHandler.ts',
         ],
         // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        // Reference: https:github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         outputFileStrategy: 'modules',
         excludeGroups: false,
         hidePageHeader: true,
@@ -123,11 +123,12 @@ const config = {
       'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-orbit-sdk',
+        name: 'orbit-sdk-docs',
         tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${orbitSdkCodebasePath}/src`],
         out: 'orbit-sdk-docs',
         entryPointStrategy: 'expand',
-        exclude: ['**/*test.ts', '**/abi/*.ts', 'node_modules', 'tests', 'scripts', 'dist'],
+        exclude: ['**/abi/**/*', '**/scripts/**/*', '**/*+(.test|scripts).ts'],
         excludeNotDocumented: false,
         logLevel: 'Verbose',
         excludeInternal: true,
@@ -136,7 +137,7 @@ const config = {
         readme: 'none',
         skipErrorChecking: true,
         sidebar: {
-          autoConfiguration: true,
+          autoConfiguration: false,
         },
         plugin: [
           'typedoc-plugin-markdown',
