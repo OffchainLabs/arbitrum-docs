@@ -185,6 +185,14 @@ const config = {
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
       },
+      announcementBar: {
+        id: 'stylus',
+        content:
+          'Stylus is now live on Arbitrum Sepolia! Learn more about the Stylus Blitz hackathon <a target="_blank" rel="noopener noreferrer" href="https://arbitrumfoundation.medium.com/welcome-to-the-stylus-blitz-hackathon-0d8b27e0c057">here</a>.',
+        backgroundColor: 'var(--stylus-brand-color-dark)',
+        textColor: 'white',
+        isCloseable: false,
+      },
       navbar: {
         title: 'Arbitrum Docs',
         logo: {
