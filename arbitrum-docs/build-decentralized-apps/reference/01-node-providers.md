@@ -65,3 +65,4 @@ Alternatively, to interact with public Arbitrum chains, you can rely on many of 
 | [Pocket Network](https://docs.pokt.network/welcome-to-pokt-network/supported-chains) | ✅       |           |              |            |
 | [Quicknode](https://www.quicknode.com/chains/arb)                                    | ✅       | ✅        | ✅           | ✅         |
 | [Unifra](https://unifra.io/)                                                         | ✅       |           |              |            |
+| [SubQuery](https://rpc.subquery.network/)                                            | ✅       |           |              |            |
