@@ -90,7 +90,7 @@ A key responsibility for Arbitrum proposers is to regularly post claims about th
 
 3. The number of messages in the Arbitrum inbox at the time the assertion was posted on-chain
 
-The following assertion to be posted on-chain must consume, at least, the specified number of inbox messages from its parent. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to 1 hour for BoLD.
+The following assertion to be posted on-chain must consume, at least, the specified number of inbox messages from its parent. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to equal 1 hour for BoLD.
 
 Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion on-chain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
 
