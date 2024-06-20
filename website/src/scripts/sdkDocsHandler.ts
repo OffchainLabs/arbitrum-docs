@@ -16,17 +16,17 @@ const { Application, RendererEvent } = require('typedoc');
  */
 function load(app) {
   const outputDir = app.options.getValue('out');
-  const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
-  const targetDir = path.join(outputDir);
+  const sdkName = app.options.getValue('name');
+  const targetDir = path.join('../arbitrum-docs', sdkName);
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(targetDir);
   });
-  
-  app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, targetDir);
 
-    const sidebarItems = generateSidebar(targetDir);
+  app.renderer.on(RendererEvent.END, async () => {
+    copyFiles(outputDir, targetDir);
+
+    const sidebarItems = generateSidebar(targetDir, sdkName);
     const sidebarConfig = { items: sidebarItems };
     const sidebarPath = path.join(targetDir, 'sidebar.js');
 
@@ -63,7 +63,7 @@ function copyFiles(source, target) {
     console.error(`Source path does not exist: ${source}`);
     return;
   }
-  
+
   if (!fs.lstatSync(source).isDirectory()) {
     console.error(`Source path is not a directory: ${source}`);
     return;
@@ -105,7 +105,7 @@ function sortEntries(a, b) {
 }
 
 // Generate an in-folder sidebar with sorting
-function generateSidebar(dir, basePath = '') {
+function generateSidebar(dir, sdkName, basePath = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   // Sort entries before processing
   entries.sort((a, b) => sortEntries(a.name, b.name));
@@ -116,6 +116,7 @@ function generateSidebar(dir, basePath = '') {
       if (entry.isDirectory()) {
         const subItems = generateSidebar(
           fullPath,
+          sdkName,
           `${basePath}/${entry.name.replace(/^\d+-/, '')}`,
         );
         return {
@@ -124,7 +125,7 @@ function generateSidebar(dir, basePath = '') {
           items: subItems,
         };
       } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        const docId = generateId(entry.name, basePath);
+        const docId = generateId(entry.name, basePath, sdkName);
         return {
           type: 'doc',
           id: docId,
@@ -141,11 +142,11 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function generateId(name, basePath) {
+function generateId(name, basePath, sdkName) {
   let label = name.replace(/^\d+-/, ''); //
   label = label.replace(/\.md$/, '');
   const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return 'sdk-docs' + slashIfNeeded + path.join(basePath, label);
+  return sdkName + slashIfNeeded + path.join(basePath, label);
 }
 
 function generateLabel(name) {

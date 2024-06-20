@@ -2,8 +2,8 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 const variableInjector = require('./src/remark/variable-injector');
-const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
+const orbitSdkCodebasePath = '../arbitrum-orbit-sdk';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -16,6 +16,7 @@ const config = {
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
+    format: 'detect',
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -69,17 +70,19 @@ const config = {
       'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
+        name: 'sdk-docs',
         tsconfig: `${sdkCodebasePath}/tsconfig.json`,
         entryPoints: [`${sdkCodebasePath}/src/lib`],
         entryPointStrategy: 'expand',
-        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`, `dist`],
         excludeNotDocumented: true,
         excludeInternal: true,
         excludeExternals: true,
         readme: 'none',
+        skipErrorChecking: true,
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: 'sdk-docs',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -90,15 +93,59 @@ const config = {
         sidebar: {
           autoConfiguration: false,
         },
-
         plugin: [
           'typedoc-plugin-markdown',
-          `typedoc-plugin-frontmatter`,
+          'typedoc-plugin-frontmatter',
           './src/scripts/sdkDocsHandler.ts',
         ],
-
         // typedoc-plugin-markdown options
-        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        // Reference: https:github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: true,
+          toc_max_heading_level: 5,
+        },
+      },
+    ],
+    [
+      'docusaurus-plugin-typedoc',
+      {
+        id: 'arbitrum-orbit-sdk',
+        name: 'orbit-sdk-docs',
+        tsconfig: `${orbitSdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${orbitSdkCodebasePath}/src`],
+        out: 'orbit-sdk-docs',
+        entryPointStrategy: 'expand',
+        exclude: ['**/abi/**/*', '**/scripts/**/*', '**/*+(.test|scripts).ts'],
+        excludeNotDocumented: false,
+        logLevel: 'Verbose',
+        excludeInternal: true,
+        excludeExternals: true,
+        outputFileStrategy: 'modules',
+        readme: 'none',
+        skipErrorChecking: true,
+        sidebar: {
+          autoConfiguration: false,
+        },
+        plugin: [
+          'typedoc-plugin-markdown',
+          'typedoc-plugin-frontmatter',
+          './src/scripts/sdkDocsHandler.ts',
+        ],
+        // typedoc-plugin-markdown options
+        // Reference: https:github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
         outputFileStrategy: 'modules',
         excludeGroups: false,
         hidePageHeader: true,
