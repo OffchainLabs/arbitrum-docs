@@ -23,7 +23,7 @@ Validators on Arbitrum can post their claim on the validity of state roots, know
 
 The assertions being disputed concern block hashes of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> at a given batch/inbox position. Given that Arbitrum chains are deterministic, there is only one correct history for all parties running the standard Nitro software. Using the notion of one-step proof, Ethereum can check whether someone is making a fraudulent assertion.
 
-If a claim is honest, it can be confirmed on Ethereum after a 6.4-day period (although the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can successfully challenge it within that 6.4-day window _and always win_ within a challenge period.
+If a claim is honest, it can be confirmed on Ethereum after a 6.4-day period (although the DAO can change this period). If a claim is malicious, anyone who knows the correct Arbitrum state can successfully challenge it within that 6.4-day window _and always win_ within a <a data-quicklook-from="challenge-period">challenge period</a>.
 
 The current implementation of BoLD involves both on-chain and off-chain components:
 
