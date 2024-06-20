@@ -538,6 +538,13 @@ const sidebars = {
           // a: see note at end of file
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-stylus-node">Run a full Stylus node <span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
+        },
+        {
           type: 'doc',
           id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
