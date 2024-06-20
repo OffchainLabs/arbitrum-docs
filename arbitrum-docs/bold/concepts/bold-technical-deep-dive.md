@@ -118,7 +118,7 @@ and make moves on challenges without sacrificing decentralization.
 
 ### Opening challenges
 
-To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on Ethereum. Additionally, the validator posting the edge must attach a bond called a challenge bond to it (denominated in `WETH` for the BoLD testnet). This bond is much lower than the one required to become an assertion poster.
+To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on the parent chain. Additionally, the validator posting the edge must attach a bond called a challenge bond to it (denominated in `WETH` for the BoLD testnet and for Arbitrum One and Arbitrum Nova). This bond is much lower than the one required to become an assertion poster.
 
 Anyone can open a challenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. Challenges are not tied to specific addresses or parties – instead, anyone can participate.
 
