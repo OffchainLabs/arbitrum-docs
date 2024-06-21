@@ -75,7 +75,7 @@ Refer to [Chainlink’s documentation](https://docs.chain.link/) for more exampl
 [Chronicle Protocol](https://chroniclelabs.org/) is a novel Oracle solution that has exclusively secured over $10B in assets for MakerDAO and its ecosystem since 2017. Chronicle overcomes the current limitations of transferring data on-chain by developing scalable, cost-efficient, decentralized, and verifiable Oracles, rewriting the rulebook on data transparency and accessibility.
 
 ### Querying the price of $ARB using Chronicle
-Chronicle contracts are read-protected by a whitelist, meaning you won't be able to read them on-chain without your address being added to the whitelist. On the Testnet, users can add themselves to the whitelist through the SelfKisser contract, a process playfully referred to as "kissing" themselves. For access to production Oracles on the Mainnet, please open a support ticket on [Discord](https://discord.com/invite/CjgvJ9EspJ) in the 🆘｜support channel.
+Chronicle contracts are read-protected by a whitelist, meaning you won't be able to read them on-chain without your address being added to the whitelist. On the Testnet, users can add themselves to the whitelist through the SelfKisser contract, a process playfully referred to as "kissing" themselves. For access to production Oracles on the Mainnet, please open a support ticket in [Discord](https://discord.com/invite/CjgvJ9EspJ) in the 🆘｜support channel.
 
 For the deployment addresses, please check out the [Dashboard](https://chroniclelabs.org/dashboard/oracles). 
 ```solidity
