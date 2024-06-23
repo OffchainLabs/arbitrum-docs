@@ -119,10 +119,6 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 
 ### Wen mainnet?
 
-Stylus is in `alpha`, which means there are a lot of planned improvements on the roadmap! A few high-level next steps for Stylus include:
-
-- An audit of the [Stylus source code](https://github.com/OffchainLabs/stylus) to ensure the safety of the contracts, as well as the [Stylus SDK](https://docs.arbitrum.io/stylus/reference/stylus-sdk)
-- Enabling Stylus for mainnet [Orbit Chains](https://docs.arbitrum.io/launch-orbit-chain/orbit-gentle-introduction), which can be deployed and upgraded permissionlessly
-- Submitting a proposal to the Arbitrum DAO, to activate Stylus on Arbitrum testnets, and eventually Arbitrum One and Arbitrum Nova mainnet
+Stylus is tagged as a `release-candidate`, which means an onchain vote to adopt Stylus is close! The source code has been audited, ecosystem-wide compatibility testing is underway, and Orbit chains are free to adopt the technology whenever they see fit.
 
 To keep up with the latest announcements, join the Stylus [Discord channel](https://discord.com/invite/arbitrum) and follow the Arbitrum Developers [Twitter account](https://twitter.com/ArbitrumDevs).
