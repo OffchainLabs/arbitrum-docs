@@ -429,9 +429,11 @@ const sidebars = {
           label: 'Quickstart (Rust)',
         },
         {
-          type: 'doc',
-          label: 'Run a local dev node',
-          id: 'run-arbitrum-node/run-local-dev-node',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a full Stylus node <span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
+          // a: see note at end of file
         },
         {
           type: 'doc',
@@ -535,13 +537,6 @@ const sidebars = {
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?
-          // a: see note at end of file
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="run-arbitrum-node/run-local-dev-node">Run a full Stylus node <span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
           // a: see note at end of file
         },
         {
