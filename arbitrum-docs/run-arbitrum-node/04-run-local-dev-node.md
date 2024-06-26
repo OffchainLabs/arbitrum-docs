@@ -9,7 +9,7 @@ content_type: how-to
 
 A local Arbitrum Nitro dev node can help you deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of deploying and running a full development environment on your local machine that includes a Nitro dev node, a dev-mode geth L1, and multiple instances with different roles.
 
-Note that the node is now Stylus-enabled by default, and the setup instructions remain the same as for running a Stylus node.
+Note that the node is now Stylus-enabled by default, and the setup instructions remain the same as for running a Stylus dev node.
 
 ## Step 1. Install prerequisites
 
