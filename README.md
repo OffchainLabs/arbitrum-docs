@@ -28,34 +28,38 @@ cd website/
 
 Install node dependencies
 
-```
+```shell
 yarn
-```
-
-You will only need to generate docs once:
-
-```
-yarn generate_sdk_docs
 ```
 
 ### Dev Build
 
-Live build without generating sdk docs (recommended):
+To start a build server to serve the docs site locally, run this command from the `/website` directory:
 
-```
-yarn start_nitro_docs
-```
-
-(Re)generate sdk docs and live build:
-
-```
+```shell
 yarn start
+```
+
+This command will both generate the `arbitrum-sdk` docs from the submodule and start the local server. In order to update the `arbitrum-sdk` docs, you will need to run this command again every time you update files in `arbitrum-sdk` directory.
+
+### Build
+
+While in the `/website` directory, this command will build the site:
+
+```shell
+yarn build
+```
+
+To test the build locally, you can use the following command:
+
+```shell
+yarn serve
 ```
 
 ### Update submodules
 
-Sdk repo:
+`arbitrum-sdk` repo:
 
-```
+```shell
 git submodule update --remote arbitrum-sdk
 ```
