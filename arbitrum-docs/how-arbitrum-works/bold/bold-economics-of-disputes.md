@@ -52,7 +52,7 @@ As assertions have a dispute window of 7 days, and disputes require an additiona
 
 ### The cost of delaying withdrawals
 
-Delaying withdrawals incurs opportunity cost and a worse user experience for users that want to withdraw their assets. In the happy case, where no disputes exist, withdrawals already have a baked-in, 7-day delay. A dispute incurs an additional 7 days on top of that maximum. The problem is that disputes delay _all_ pending withdrawals from Arbitrum One back to Ethereum, not just a single claim. As such, **disputing a claim must have a cost for the initiator** proportional to the opportunity cost they impose on Arbitrum users.
+Delaying withdrawals incurs opportunity cost and a worse user experience for users that want to withdraw their assets. In the happy case, where no disputes exist, withdrawals already have a baked-in, 7-day delay. A dispute incurs an additional 7 days on top of that maximum. The problem is that disputes delay *all* pending withdrawals from Arbitrum One back to Ethereum, not just a single claim. As such, **disputing a claim must have a cost for the initiator** proportional to the opportunity cost they impose on Arbitrum users.
 
 #### Requiring a bond to become a validator
 
@@ -70,7 +70,7 @@ Honest parties can always withdraw their bond once their assertions are confirme
 
 Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing a allowlist of validators with instead a system that requires a lot of money to participate in. However, **BoLD ships with a trustless bonding pool** for assertion posting. That is, any group of honest parties can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. We believe that making it easy to pool the funds to become an assertion poster, without needing trust to dispute invalid claims, does not fundamentally affect the safety or decentralization of BoLD.
 
-We claim optimizing for the unhappy case is more important than the happy case. As there only needs to be one honest assertion poster, we believe it falls into the security budget of the chain to price in a $2M bond to become a validator. It _should_ be expensive to delay Arbitrum One withdrawals, and it should also have a high barrier to entry to perform a key responsibility. As long as disputes can be made in a trustless manner, and trustless pools are available in production, we claim the security properties of assertion posting hold equally.
+We claim optimizing for the unhappy case is more important than the happy case. As there only needs to be one honest assertion poster, we believe it falls into the security budget of the chain to price in a $2M bond to become a validator. It *should* be expensive to delay Arbitrum One withdrawals, and it should also have a high barrier to entry to perform a key responsibility. As long as disputes can be made in a trustless manner, and trustless pools are available in production, we claim the security properties of assertion posting hold equally.
 
 ## Resolving disputes
 
