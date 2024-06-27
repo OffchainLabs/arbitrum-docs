@@ -100,10 +100,10 @@ contract OracleReader {
 
     /** 
     * @notice The SelfKisser granting access to Chronicle oracles.
-    * SelfKisser_1:0x0Dcc19657007713483A5cA76e6A7bbe5f56EA37d
+    * SelfKisser_1:0xc0fe3a070Bc98b4a45d735A52a1AFDd134E0283f
     * Network: Arbitrum Sepolia
     */
-    ISelfKisser public selfKisser = ISelfKisser(address(0x0Dcc19657007713483A5cA76e6A7bbe5f56EA37d));
+    ISelfKisser public selfKisser = ISelfKisser(address(0xc0fe3a070Bc98b4a45d735A52a1AFDd134E0283f));
 
     constructor() {
         // Note to add address(this) to chronicle oracle's whitelist.
