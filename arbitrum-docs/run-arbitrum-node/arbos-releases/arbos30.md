@@ -7,15 +7,15 @@ author: dlee
 
 :::caution Note to Orbit chains
 
-Upgrading your Orbit chain to ArbOS 30 or deploying a new Orbit chain with ArbOS 30 is **not yet supported or encouraged**. This page will be updated with requirements, upgrade instructions, and associated details when available.
+Upgrading your Orbit chain to ArbOS 30 or deploying a new Orbit chain with ArbOS 30 is **not yet supported or encouraged**. This page will be updated with requirements, upgrade instructions, and associated details when available. When ArbOS 30 Bianca is ready for Orbit mainnet adoption and all requirements have been formally tagged and published, Orbit chain owners and RaaS teams will need to follow [these instructions to upgrade](../../launch-orbit-chain/how-tos/arbos-upgrade.md). When the time comes, Orbit chain owners will need to upgrade their Nitro node versions, deploy new versions of [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) (using the [Orbit action contracts](https://github.com/OffchainLabs/orbit-actions)), set a new Wasm module root, and perform any ArbOS 30 Bianca specific configurations or actions. 
 
 :::
 
-ArbOS 30 Bianca will be shipped as a Nitro release, which will be available on Docker hub. For Arbitrum One and Arbitrum Nova, the ArbOS 30 Bianca upgrade requires a governance vote to activate and so this release of Nitro will be a mandatory upgrade for Arbitrum One and Nova node operators if the on-chain DAO vote for the upgrade proposal passes. 
+ArbOS 30 Bianca will be shipped as a Nitro release, which will be available on Docker hub. For Arbitrum One and Arbitrum Nova, the ArbOS 30 Bianca upgrade requires a governance vote to activate and so this release of Nitro will be a mandatory upgrade for Arbitrum One and Nova node operators if the on-chain DAO vote for the upgrade proposal passes. The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.md).
 
 ### Requirements:
 - A minimum Nitro version of 3.0.0, but the exact version is yet to be tagged and released.
-- An upgrade to a new, unreleased version of `nitro-contracts`
+- An upgrade to a new, unreleased version of [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts)
 - The setting of a new Wasm module root (that will be added here when available)
 
 ### High-level description of ArbOS 30 changes
