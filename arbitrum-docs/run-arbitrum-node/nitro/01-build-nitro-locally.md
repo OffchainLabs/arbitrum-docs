@@ -103,7 +103,10 @@ echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 Install essentials:
 
 ```bash
-brew install git curl make cmake npm go gvm golangci-lint wabt llvm gotestsum
+brew install git curl make cmake npm go golangci-lint wabt llvm gotestsum
+echo 'export PATH="/opt/homebrew/opt/llvm/bin:$PATH"' >> ~/.zshrc
+echo 'export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"' >> ~/.zshrc
+echo 'export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"' >> ~/.zshrc
 npm install --global yarn
 sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
@@ -182,6 +185,16 @@ foundryup
 ```bash
 make
 ```
+
+:::info
+
+In MacOS with Apple Silicon, warnings like the following might appear but they will not hinder the compilation process.
+
+```
+ld: warning: object file was built for newer 'macOS' version (14.4) than being linked (14.0)
+```
+
+:::
 
 ### Step 9. Produce binaries
 
