@@ -16,7 +16,7 @@ import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banne
 
 The core component of our caching strategy is the [CacheManager contract](https://github.com/OffchainLabs/stylus-contracts/blob/c51ab1dc90f543caf579600162f77e053984b8cd/src/chain/CacheManager.sol). This smart contract manages the cache, interacts with precompiles, and determines which contracts should be cached. The CacheManager can hold approximately 4,000 contracts in memory.
 
-The CacheManager defines how contracts remain in the cache and how they compete with other contracts for cache space. Its primary purpose is to manage high initialization costs, ensuring efficient contract activation and usage. The contract includes methods for adding and removing cache entries, querying the status of cached contracts, and managing the lifecycle of cached data.
+The CacheManager defines how contracts remain in the cache and how they compete with other contracts for cache space. Its primary purpose is to reduce high initialization costs, ensuring efficient contract activation and usage. The contract includes methods for adding and removing cache entries, querying the status of cached contracts, and managing the lifecycle of cached data.
 
 ### Key features
 
@@ -28,6 +28,6 @@ To ensure that developers periodically pay to maintain their position in the cac
 
 ### Cache access and costs
 
-During activation, we compute initialization costs for both non-cached and cached initialization of the contract. These costs take into account factors such as the number of functions, types, code size, data length, and memory usage. It's important to note that ccessing an uncached contract does not automatically add it to the CacheManager's cache. Only explicit calls to the CacheManager contract will add a contract to the cache. If a contract is removed from the cache, calling the contract becomes more expensive unless it is re-added.
+During activation, we compute initialization costs for both non-cached and cached initialization of the contract. These costs take into account factors such as the number of functions, types, code size, data length, and memory usage. It's important to note that accessing an uncached contract does not automatically add it to the CacheManager's cache. Only explicit calls to the CacheManager contract will add a contract to the cache. If a contract is removed from the cache, calling the contract becomes more expensive unless it is re-added.
 
 To see how much gas contract initialization would cost, you need to call `programInitGas(address)` from the [ArbWasm precompile](https://github.com/OffchainLabs/nitro/blob/d906798140e562500beb9005d2503b0272852298/precompiles/ArbWasm.go). This function returns both the initialization cost when the contract is cached and when it is not.
