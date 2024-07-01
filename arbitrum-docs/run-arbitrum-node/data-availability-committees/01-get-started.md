@@ -45,7 +45,7 @@ Here's a basic checklist of actions to complete for chain owners:
   - URL of the RPC endpoint
   - URL(s) of the REST(s) endpoint
 - Ensure that at least one DAS is running as an [archive DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#archive-da-servers)
-- Generate the keyset and keyset hash with all the information from the servers (guide coming soon)
+- Generate the keyset and keyset hash with all the information from the servers (see [Keyset generation](/launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation))
 - Craft the new configuration for the batch poster (guide coming soon)
 - Craft the new configuration for your chain's nodes (guide coming soon)
 - Update the SequencerInbox contract (guide coming soon)
