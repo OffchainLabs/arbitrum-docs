@@ -556,6 +556,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos30',
+              label: 'ArbOS 30 Bianca',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/arbos20',
               label: 'ArbOS 20 Atlas',
             },

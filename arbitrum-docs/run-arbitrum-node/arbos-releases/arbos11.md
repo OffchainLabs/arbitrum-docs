@@ -1,7 +1,7 @@
 ---
 title: 'ArbOS 11'
 sidebar_label: 'ArbOS 11'
-sidebar_position: 3
+sidebar_position: 4
 author: dlee
 ---
 
