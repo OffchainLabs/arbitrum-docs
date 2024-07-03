@@ -9,7 +9,14 @@ target_audience: 'Developers who want to build on Arbitrum using popular program
 sidebar_position: 1
 ---
 
-## Launch details & key dates
+:::info PUBLIC PREVIEW DOCUMENT
+
+This document is currently in **public preview** and may change significantly as feedback is captured from readers like you. Click the _Request an update_ button at the top of this document or [join the Arbitrum Discord](https://discord.gg/arbitrum) to share your feedback.
+
+:::
+
+
+## Launch details and key dates
 
 - **Status:** Alpha - continued testing and evaluation of performance of BoLD with Stylus
 
@@ -22,23 +29,23 @@ sidebar_position: 1
 
 ### tldr;
 
-Arbitrum BoLD is an upgrade to the existing dispute protocol used by Arbitrum chains that enables permissionless validation and other security benefits. Similar to other new features for the Arbitrum technology stack, BoLD will be made available for mainnet adoption by Orbit chains when they are ready. Specifically for Arbitrum BoLD, an upgrade will involve a Nitro node software version bump & the deployment and consumption of new smart contracts on the parent chain.
+Arbitrum BoLD is an upgrade to the existing dispute protocol used by Arbitrum chains that enables permissionless validation and other security benefits. Similar to other new features for the Arbitrum technology stack, BoLD will be made available for mainnet adoption by Orbit chains when they are ready. Specifically for Arbitrum BoLD, an upgrade will involve a Nitro node software version bump and the deployment and consumption of new smart contracts on the parent chain.
 
-Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security benefits to Orbit chains that are independent of whether or not validation is permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3's. Because of these new security benefits, we strongly recommend teams to upgrade their Orbit chains to use Arbitrum BoLD (for the security benefits) but **keep validation permissioned**. Below is a quick breakdown of the impacts of permissioned BoLD vs. permissionless BoLD on your Orbit chain:
+Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security benefits to Orbit chains that are independent of whether or not validation is permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. Because of these new security benefits, we strongly recommend teams to upgrade their Orbit chains to use Arbitrum BoLD (for the security benefits) but **keep validation permissioned**. Below is a quick breakdown of the impacts of permissioned BoLD vs. permissionless BoLD on your Orbit chain:
 
 | Permissioned BoLD                           | Permissionless BoLD                              |
 |--------------------------------------------- |--------------------------------------------------|
 | Improved resistance to delay attacks         | Everything in permissioned BoLD                  |
-| Increased censorship resistance for `L3`s     | More expensive engineering overhead and infrastructure costs |
+| Increased censorship resistance for `L3s`     | More expensive engineering overhead and infrastructure costs |
 | Use of any `ERC-20` as the bonding token    | Risk of resource exhaustion attacks (challenges required computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders)              |
-| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up | Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price) |
+| Be on the latest iteration of Arbitrum technology, making future security and feature updates much easier to pick up | Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price) |
 |                                             | Risk of liquidity concerns and price impacts if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs |
 |                                             | Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack |
 
 
 ### Benefits of adopting Arbitrum BoLD
 
-Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain **even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
+Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
 
 Below are some benefits for an Orbit chain that come with adopting Arbitrum BoLD - **regardless of whether validation is kept permissioned or not**:
 
