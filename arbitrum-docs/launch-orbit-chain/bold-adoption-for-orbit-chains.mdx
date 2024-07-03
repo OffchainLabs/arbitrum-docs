@@ -33,14 +33,34 @@ Arbitrum BoLD is an upgrade to the existing dispute protocol used by Arbitrum ch
 
 Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security benefits to Orbit chains that are independent of whether or not validation is permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. Because of these new security benefits, we strongly recommend teams to upgrade their Orbit chains to use Arbitrum BoLD (for the security benefits) but **keep validation permissioned**. Below is a quick breakdown of the impacts of permissioned BoLD vs. permissionless BoLD on your Orbit chain:
 
-| Permissioned BoLD                           | Permissionless BoLD                              |
-|--------------------------------------------- |--------------------------------------------------|
-| Improved resistance to delay attacks         | Everything in permissioned BoLD                  |
-| Increased censorship resistance for `L3s`     | More expensive engineering overhead and infrastructure costs |
-| Use of any `ERC-20` as the bonding token    | Risk of resource exhaustion attacks (challenges required computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders)              |
-| Be on the latest iteration of Arbitrum technology, making future security and feature updates much easier to pick up | Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price) |
-|                                             | Risk of liquidity concerns and price impacts if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs |
-|                                             | Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack |
+
+Permissioned BoLD
+
+- Improved resistance to delay attacks
+- Increased censorship resistance for L3s
+- Use of any `ERC-20` as the bonding token
+- Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up
+
+Permissionless BoLD
+
+- Everything in permissioned BoLD
+- More expensive engineering overhead and infrastructure costs
+- Risk of resource exhaustion attacks (challenges required computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders)
+- Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price)
+- Risk of liquidity concerns and price impacts if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs
+- Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack
+
+| Permissioned BoLD                                                                                                  | Permissionless BoLD                                                                                                                                                                                                                   |
+|--------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Improved resistance to delay attacks                                                                               | Improved resistance to delay attacks                                                                                                                                                                                                  |
+| Increased censorship resistance for L3s                                                                            | Increased censorship resistance for L3s                                                                                                                                                                                               |
+| Use of any `ERC-20` as the bonding token                                                                           | Use of any `ERC-20` as the bonding token                                                                                                                                                                                              |
+| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up | Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up                                                                                                                    |
+|                                                                                                                    | More expensive engineering overhead and infrastructure costs                                                                                                                                                                          |
+|                                                                                                                    | Risk of resource exhaustion attacks (challenges required computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders)                                             |
+|                                                                                                                    | Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price) |
+|                                                                                                                    | Risk of liquidity concerns and price impacts if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs                                                                                         |
+|                                                                                                                    | Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack                                                                                         |
 
 
 ### Benefits of adopting Arbitrum BoLD
