@@ -408,7 +408,7 @@ When querying the receipt of a Classic transaction on a Nitro node, there's some
 </p>
 
 <p>
-To get the exact fees paid, you can query a Classic node, which will return all the exact information.
+To get the exact fees paid, you can query a Classic node, which will return all the exact information in an object called <code>feeStats</code>. That object will contain all the information split into the 4 different gas fields: prices, unitsUsed and paid (which is price * unitsUsed).
 </p>
 
 <p>
