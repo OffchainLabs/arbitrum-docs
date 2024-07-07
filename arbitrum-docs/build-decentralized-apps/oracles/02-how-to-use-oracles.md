@@ -72,11 +72,11 @@ Refer to [Chainlink’s documentation](https://docs.chain.link/) for more exampl
 
 ## API3
 
-[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for Airnodes to push off-chain data to on-chain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through dAPIs (data feeds of up-to-date off-chain data).
+[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push off-chain data to on-chain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
 
 ### Querying the price of $ARB through API3
 
-Here’s an example on how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/) provides a list of all the dAPIs available across multiple chains including testnets. These dAPIs are self-funded so, before querying it, we must make sure they have enough funds to cover our test.
+Here’s an example on how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
 
 API3 provides an npm package with the contracts needed to access their feeds. We first install that package in our project:
 
@@ -87,10 +87,14 @@ yarn add @api3/contracts
 To use a data feed, we retrieve the information through the specific proxy address for that feed. We’ll use the IProxy interface to do so.
 
 ```solidity
-import "@api3/contracts/v0.8/interfaces/IProxy.sol";
+import "@api3/contracts/api3-server-v1/proxies/interfaces/IProxy.sol";
 ```
 
-In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the address of the proxy that will provide that information. We will search the feed on the API3 Market, connect our wallet and click on `Get Proxy`. The ARB/USD proxy address is `0x0cB281EC7DFB8497d07196Dc0f86D2eFD21066A5`.
+In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the address of the proxy that will provide that information. We will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active and if it is, we can check its configuration parameters, deploy the proxy contract and click on `Integrate`. You can find the proxy address of ARB/USD [here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
+
+:::info
+If a dAPI is already active, you can use the proxy address directly. If it is not active, you can activate it by clicking on `Activate` and following the instructions to deploy a proxy contract.
+:::
 
 We can now build the function to get the latest price of $ARB. We’ll use this example contract:
 
@@ -128,7 +132,7 @@ To request randomness on-chain, the requester submits a request for a random num
 
 Here’s an example of a basic `QrngRequester` that requests a random number.
 
-API3 provides an npm package with the contracts needed to access the ANU qrng airnode. We first install that package in our project:
+API3 provides an npm package with the contracts needed to access the ANU QRNG airnode. We first install that package in our project:
 
 ```bash
 yarn add @api3/airnode-protocol
@@ -139,6 +143,20 @@ We’ll need several information to request a random number:
 - `address airnodeRrp`: Address of the protocol contract. See the [Chains](https://docs.api3.org/reference/qrng/chains.html) page for a list of addresses on different chains. For Arbitrum, we’ll use `0xb015ACeEdD478fc497A798Ab45fcED8BdEd08924`.
 - `address airnode`: The address that belongs to the Airnode that will be called to get the QRNG data via its endpoints. See the [Providers](https://docs.api3.org/reference/qrng/providers.html) page for a list of addresses on different chains. For Arbitrum we’ll use `0x9d3C147cA16DB954873A498e0af5852AB39139f2`.
 - `bytes32 endpointId`: Endpoint ID known by the Airnode that will map to an API provider call (allowed to be `bytes32(0)`). You can also find that information in the [Providers](https://docs.api3.org/reference/qrng/providers.html) page. For Arbitrum we’ll use `0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78`.
+- `address sponsorWallet`: The address of the wallet that will pay for the gas costs for the callback request to get the random number on-chain. You need to fund this wallet with enough ETH to cover the gas costs.
+
+To derive your sponsorWallet address, you can use the following command:
+
+```bash
+yarn @api3/airnode-admin derive-sponsor-wallet-address \
+  --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2 \
+  --airnode-xpub xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf \
+  --sponsor-address <use-the-address-of-your-requester-contract>
+
+  # The command outputs.
+  Sponsor wallet address: 0x6394...5906757
+  # Use this address as the value for _sponsorWallet.
+```
 
 We can now build the function to get a random number. We’ll use this example contract:
 
@@ -159,15 +177,21 @@ contract QrngRequester is RrpRequesterV0 {
     address constant airnode = 0x9d3C147cA16DB954873A498e0af5852AB39139f2;
     bytes32 constant endpointIdUint256 = 0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78;
     mapping(bytes32 => bool) public waitingFulfillment;
+    address sponsorWallet;
 
     constructor() RrpRequesterV0(_airnodeRrp) {}
+
+    // Set the sponsor wallet address that you just derived.
+    function setSponsorWallet(address _sponsorWallet) external {
+        sponsorWallet = _sponsorWallet;
+    }
 
     function makeRequestUint256() external {
         bytes32 requestId = airnodeRrp.makeFullRequest(
             airnode,
             endpointIdUint256,
             address(this),
-            msg.sender,
+            sponsorWallet,
             address(this),
             this.fulfillUint256.selector,
             ""
@@ -194,11 +218,17 @@ contract QrngRequester is RrpRequesterV0 {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the addresses of the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to set the `sponsorWallet` address before making the request and use the addresses of the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
 
 ### More examples
 
 Refer to [API3’s documentation](https://docs.api3.org/) for more examples of querying other data feeds and Airnodes.
+
+You can also check out some other detailed guides:
+
+- [Subscribing to dAPIs](https://docs.api3.org/guides/dapis/subscribing-to-dapis/)
+- [Reading a dAPI Proxy](https://docs.api3.org/guides/dapis/read-a-dapi/)
+- [Using QRNG with Remix](https://docs.api3.org/guides/qrng/qrng-remix/)
 
 ## Tellor
 
