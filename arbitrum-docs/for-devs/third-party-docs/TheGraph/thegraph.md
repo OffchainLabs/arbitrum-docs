@@ -6,9 +6,9 @@ Getting historical data on a smart contract can be frustrating when building a d
 
 These subgraphs only take a few minutes to set up and get running. To get started, follow these three steps:
 
-1. Initialize your subgraph project
-2. Deploy & Publish
-3. Query from your dApp
+1. [Initialize your subgraph project](#1-initialize-your-subgraph-project)
+2. [Deploy & publish](#2-deploy--publish)
+3. [Query from your dApp](#sample-query)
 
 Pricing: **All developers receive 100K free monthly queries on the decentralized network**. After these free queries, you only pay based on usage at $4 for every 100K queries.
 
