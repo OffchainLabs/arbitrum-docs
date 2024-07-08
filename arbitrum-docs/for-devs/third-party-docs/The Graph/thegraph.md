@@ -1,8 +1,9 @@
+
 # The Graph 
 
 Getting historical data on a smart contract can be frustrating when you’re building a dapp. [The Graph](https://thegraph.com/) provides an easy way to query smart contract data through APIs known as subgraphs, which utilize GraphQL.  The Graph’s infrastructure relies on a decentralized network of indexers, enabling your dapp to become truly decentralized.
 
-## Quick Start
+## Quick start
 
 These subgraphs only take a few minutes to set up and get running. To get started, follow these three steps:
 
@@ -47,7 +48,7 @@ You’ll be prompted to provide some info on your subgraph like this:
 
 Simply have your contract verified on the block explorer and the CLI will automatically obtain the ABI and set up your subgraph. The default settings will generate an entity for each event.
 
-## 2. Deploy & Publish
+## 2. Deploy & publish
 
 ### Deploy to Subgraph Studio⁠
 
@@ -74,7 +75,7 @@ You can test your subgraph by making a sample query in the playground section. T
 ![Playground](https://lh7-us.googleusercontent.com/docsz/AD_4nXf3afwSins8_eO7BceGPN79VvwolDxmFNUnkPk0zAJCaUA-3-UAAjVvrMzwr7q9vNYWdrEUNgm2De2VfQpWauiT87RkFc-cVfoPSsQbYSgsmwhyY1-tpPdv2J1H4JAMq70nfWBhb8PszZBFjsbDAaJ5eto?key=fnI6SyFgXU9SZRNX5C5vPQ)
 
 
-### Publish Your Subgraph to The Graph’s Decentralized Network
+### Publish your subgraph to The Graph’s decentralized network
 
 Once your subgraph is ready to be put into production, you can publish it to the decentralized network. On your subgraph’s page in Subgraph Studio, click on the Publish button:
 
@@ -104,7 +105,7 @@ https://gateway-arbitrum.network.thegraph.com/api/**[api-key]**/subgraphs/id/HdV
 
 Now, you simply need to  fill in your own API Key to start sending GraphQL queries to this endpoint.
 
-### Getting your own API Key
+### Getting your own API key
 
 ![API keys](https://lh7-us.googleusercontent.com/docsz/AD_4nXdz7H8hSRf2XqrU0jN3p3KbmuptHvQJbhRHOJh67nBfwh8RVnhTsCFDGA_JQUFizyMn7psQO0Vgk6Vy7cKYH47OyTq5PqycB0xxLyF4kSPsT7hYdMv2MEzAo433sJT6VlQbUAzgPnSxKI9a5Tn3ShSzaxI?key=fnI6SyFgXU9SZRNX5C5vPQ)
 
@@ -113,7 +114,7 @@ In Subgraph Studio, you’ll see the “API Keys” menu at the top of the page.
 
 ## Appendix
 
-### Sample Query
+### Sample query
 
 This query shows the most expensive CryptoPunks sold.
 
