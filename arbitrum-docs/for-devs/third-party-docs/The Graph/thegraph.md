@@ -1,7 +1,7 @@
 
 # The Graph 
 
-Getting historical data on a smart contract can be frustrating when building a dApp. [The Graph](https://thegraph.com/) provides an easy way to query smart contract data through APIs known as subgraphs, which utilize GraphQL.  The Graph's infrastructure relies on a decentralized network of indexers, enabling your dApp to become truly decentralized.
+Getting historical data on a smart contract can be frustrating when building a dApp. [The Graph](https://thegraph.com/) provides an easy way to query smart contract data through APIs known as subgraphs, which utilize `GraphQL`.  The Graph's infrastructure relies on a decentralized network of indexers, enabling your dApp to become truly decentralized.
 
 ## Quick start
 
@@ -68,7 +68,7 @@ graph auth --studio <DEPLOY_KEY>
 graph deploy --studio <SUBGRAPH_SLUG>
 ```
 
-You will be asked for a version label. You can enter something like v0.0.1, but you're free to choose the format.
+You will be asked for a version label. You can enter something like `V0.0.1`, but you're free to choose the format.
 
 ### Test your subgraph⁠
 
@@ -94,7 +94,7 @@ When publishing, you'll see the option to curate your subgraph. As of May 2024, 
 
 Congratulations! You can now query your subgraph on the decentralized network!
 
-You can start querying any subgraph on the decentralized network by passing a GraphQL query into the subgraph's query URL, which can be found at the top of its Explorer page.
+You can start querying any subgraph on the decentralized network by passing a `GraphQL` query into the subgraph's query URL, which can be found at the top of its Explorer page.
 
 Here's an example from the [CryptoPunks Ethereum subgraph](https://thegraph.com/explorer/subgraphs/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK) by Messari:
 
@@ -103,9 +103,12 @@ Here's an example from the [CryptoPunks Ethereum subgraph](https://thegraph.com/
 
 The query URL for this subgraph is:
 
-https://gateway-arbitrum.network.thegraph.com/api/**[api-key]**/subgraphs/id/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK
 
-Now, you simply need to  fill in your own API Key to start sending GraphQL queries to this endpoint.
+```shell
+https://gateway-arbitrum.network.thegraph.com/api/**[api-key]**/subgraphs/id/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK
+```
+
+Now, you simply need to  fill in your own API Key to start sending `GraphQL` queries to this endpoint.
 
 ### Getting your own API key
 
@@ -131,7 +134,7 @@ This query shows the most expensive CryptoPunks sold.
 
 Passing this into the query URL returns this result:
 
-```json
+```graphql
 {
   "data": {
     "trades": [
@@ -146,10 +149,8 @@ Passing this into the query URL returns this result:
 //      ...
 ```
 
-<aside>
 💡 Trivia: Looking at the top sales on [CryptoPunks website](https://cryptopunks.app/cryptopunks/topsales) it looks like the top sale is Punk #5822, not #9998. Why? Because they censored the flash-loan sale that happened.
 
-</aside>
 
 ### Sample code
 
@@ -172,7 +173,7 @@ const graphQLRequest = {
   },
 };
 
-// Send the GraphQL query
+// Send the `GraphQL` query
 axios(graphQLRequest)
   .then((response) => {
     // Handle the response here
@@ -189,4 +190,4 @@ axios(graphQLRequest)
 ### Additional resources:
 
 - To explore all the ways you can optimize & customize your subgraph for better performance, read more about [creating a subgraph here](https://thegraph.com/docs/en/developing/creating-a-subgraph/).
-- For more information about querying data from your subgraph, read more [here](https://thegraph.com/docs/en/querying/querying-the-graph/).
+- You can find more information in our article about [querying data from your subgraph](https://thegraph.com/docs/en/querying/querying-the-graph/).
