@@ -42,7 +42,7 @@ In order to get your VRF up and running with Gelato, you need to make your contr
 
 Ensure you have either [Foundry](https://book.getfoundry.sh/getting-started/installation) or [Hardhat](https://hardhat.org/) set up in your development environment.
 
-## Step 2: Install the Gelato VRF Contracts
+## Step 2: Install the Gelato VRF contracts
 
 - For hardhat users:
 
