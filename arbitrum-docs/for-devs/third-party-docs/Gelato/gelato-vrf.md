@@ -34,7 +34,7 @@ Top-level Flow:
 - Processing: Web3 functions fetch the random number from Drand.
 - Delivery: The fulfillRandomness function delivers the random number to the requesting contract.
 
-# Quick Start Guide
+# Quick start guide
 
 In order to get your VRF up and running with Gelato, you need to make your contract VRF Compatible.
 
