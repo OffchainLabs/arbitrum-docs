@@ -110,4 +110,4 @@ contract YourContract is GelatoVRFConsumerBase {
 }
 ```
 
-and once you have your contract ready & deployed, grab the address and [Deploy your VRF instance](https://docs.gelato.network/web3-services/vrf/quick-start/deploying-your-vrf-instance)!
+Once your contract is ready & deployed, grab the address and [Deploy your VRF instance](https://docs.gelato.network/web3-services/vrf/quick-start/deploying-your-vrf-instance)!
