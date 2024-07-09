@@ -92,7 +92,7 @@ Step 5: Implement the `fulfillRandomness` function
 
 ## Step 6: Pass dedicated msg.sender
 
-When you're ready to deploy your Gelato VRF-compatible contract, an important step is to include the dedicated msg.sender as a constructor parameter. This ensures that your contract is set up to work with the correct operator for fulfilling the randomness requests.. It's crucial for ensuring that only authorized requests are processed.
+When you're ready to deploy your Gelato VRF-compatible contract, an important step is to include the dedicated `msg.sender` as a constructor parameter. This ensures your contract is set up to work with the correct operator to fulfill the randomness requests. It's crucial to ensure that only authorized requests are processed.
 
 ```solidity
 // SPDX-License-Identifier: MIT
