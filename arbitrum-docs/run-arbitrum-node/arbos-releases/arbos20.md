@@ -1,7 +1,7 @@
 ---
 title: 'ArbOS 20 Atlas'
 sidebar_label: 'ArbOS 20 Atlas'
-sidebar_position: 2
+sidebar_position: 3
 author: dlee
 ---
 
