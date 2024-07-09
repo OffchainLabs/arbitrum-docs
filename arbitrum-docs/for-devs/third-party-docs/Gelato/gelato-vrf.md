@@ -69,7 +69,7 @@ contract YourContract is GelatoVRFConsumerBase {
 }
 ```
 
-## Step 4: Request Randomness
+## Step 4: Request randomness
 
 ```solidity
 function requestRandomness(bytes memory data) external {
