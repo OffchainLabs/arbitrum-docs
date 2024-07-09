@@ -19,7 +19,7 @@ The potential applications of a reliable and transparent random number generator
 - NFT Generation: Randomly generate traits or characteristics for unique digital assets.
 - Protocol Decision Making: In protocols where decisions need to be randomized, such as selecting validators or jurors.
 
-# How does Gelato VRF Work?
+# How does Gelato VRF work?
 
 Gelato VRF (Verifiable Random Function) provides trustable randomness on EVM-compatible blockchains. Here's a brief overview:
 
