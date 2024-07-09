@@ -80,9 +80,9 @@ Once your subgraph is ready for production, you can publish it to the decentrali
 
 ![publish button](https://edgeandnode.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fa7d6afae-8784-4b15-a90e-ee8f6ee007ba%2F2f9c4526-123d-4164-8ea8-39959c8babbf%2FUntitled.png?table=block&id=37005371-76b4-4780-b044-040a570e3af6&spaceId=a7d6afae-8784-4b15-a90e-ee8f6ee007ba&width=1420&userId=&cache=v2)
 
-Before you can query your subgraph, Indexers need to begin serving queries on it. In order to streamline this process, you can curate your own subgraph using GRT.
+Before you can query your subgraph, Indexers need to begin serving queries on it. In order to streamline this process, you can curate your own subgraph using `$GRT`.
 
-When publishing, you'll see the option to curate your subgraph. As of May 2024, it is recommended that you curate your own subgraph with at least 3,000 GRT to ensure that it is indexed and available for querying as soon as possible.
+When publishing, you'll see the option to curate your subgraph. As of May 2024, it is recommended that you curate your own subgraph with at least 3,000 `$GRT` to ensure that it is indexed and available for querying as soon as possible.
 
 ![Publish screen](https://lh7-us.googleusercontent.com/docsz/AD_4nXerUr-IgWjwBZvp9Idvz5hTq8AFB0n_VlXCzyDtUxKaCTANT4gkk-2O77oW-a0ZWOh3hnqQsY7zcSaLeCQin9XU1NTX1RVYOLFX9MuVxBEqcMryqgnGQKx-MbDnOWKuMoLBhgyVWQereg3cdWtCPcTQKFU?key=fnI6SyFgXU9SZRNX5C5vPQ)
 
