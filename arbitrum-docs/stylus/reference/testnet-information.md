@@ -23,14 +23,15 @@ This table provides an overview of the available public RPC endpoints for the St
 
 | Name                             | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
 | -------------------------------- | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
-| Stylus testnet (v2)              | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
-| Stylus testnet (v1 - deprecated) | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | wss://stylus-testnet.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
+| Arbitrum Sepolia | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io            | Sepolia          | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
+| Stylus testnet (v2-deprecated)              | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
+| Stylus testnet (v1-deprecated) | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | wss://stylus-testnet.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
 
 :::caution
 
 - Unlike the RPC Url, the Sequencer endpoint only supports `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
-- Stylus testnet (v1) has been deprecated. 
-- Stylus testnet (v2) will be deprecated once Stylus comes out of beta and is enabled on the Arbitrum Sepolia testnet.
+- Stylus testnet (v1) has been deprecated.
+- Stylus testnet (v2) has been deprecated.
 
 :::
 
@@ -40,11 +41,11 @@ For information on other mainnet and testnet Arbitrum chains, visit the [Node Ru
 
 Below you can find faucets for obtaining testnet ETH. If using a faucet on Ethereum Sepolia or Arbitrum Sepolia, your testnet ETH can be bridged to the Stylus testnet on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
-| Faucet Operator    | Faucet URL                                            | Chain            |
-| ------------------ | ----------------------------------------------------- | ---------------- |
-| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia         | Arbitrum Sepolia |
-| Alchemy            | https://sepoliafaucet.com/                            | Ethereum Sepolia |
-| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/                      | Ethereum Sepolia |
+| Faucet Operator    | Faucet URL                                    | Chain            |
+| ------------------ | --------------------------------------------- | ---------------- |
+| QuickNode          | https://faucet.quicknode.com/arbitrum/sepolia | Arbitrum Sepolia |
+| Alchemy            | https://sepoliafaucet.com/                    | Ethereum Sepolia |
+| Sepolia PoW Faucet | https://sepolia-faucet.pk910.de/              | Ethereum Sepolia |
 
 ## Useful smart contract addresses
 

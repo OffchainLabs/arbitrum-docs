@@ -794,6 +794,21 @@
             "source": "/(launch-orbit-chain/reference/command-line-options/?)",
             "destination": "/node-running/how-tos/running-an-orbit-node",
             "permanent": false
+        },
+        {
+            "source": "/sdk",
+            "destination": "/sdk-docs",
+            "permanent": false
+        },
+        {
+            "source": "/sdk/(.*)",
+            "destination": "/sdk-docs/$1",
+            "permanent": false
+        },
+        {
+            "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+            "destination": "/run-arbitrum-node/run-local-dev-node",
+            "permanent": false
         }
     ]
 }
