@@ -24,7 +24,7 @@ This page describes what this mechanism means for the block gas limit, block num
 
 ## Block gas limit
 
-When submitting a transaction to Arbitrum, the user needs to pay for the execution of the transaction on Arbitrum plus the relative cost of posting its calldata to Ethereum. Arbitrum handles this [2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) by adjusting the gas limit of the transaction to also cover the L1 posting costs. Hence, a given transaction might show a very high value as the gas limit.
+When submitting a transaction to Arbitrum, the user is required to cover the execution cost on Arbitrum and the relative cost of posting its calldata to Ethereum. Arbitrum manages this [2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) by adjusting the transaction's gas limit to cover the L1 posting costs. Hence, a given transaction might show a very high value as the gas limit.
 
 Then, the gas limit of an Arbitrum block is set as the sum of the total gas limit (execution + adjustment of the L1 costs) of all transactions. Because of that, the `gasLimit` shown when querying a block will likely be higher than the effective block gas limit (32 million). To check the actual gas used for execution on a specific block, we can look at the `gasUsed` field.
 
