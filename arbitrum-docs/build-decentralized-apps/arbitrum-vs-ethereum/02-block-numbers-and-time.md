@@ -20,7 +20,7 @@ Once in the chain's core inbox contract, transactions are processed in order. Ge
 Additionally, since the calldata of Arbitrum  transactions (or the DAC certificate on  <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a>chains) is posted to Ethereum, the gas paid when executing them includes an L1 component to cover the costs of the batch poster.
 
 
-In this page we describe what does this mechanism mean for the block gas limit, block numbers and the time assumptions of the transactions submitted to Arbitrum.
+This page describes what this mechanism means for the block gas limit, block numbers, and the time assumptions of the transactions submitted to Arbitrum.
 
 ## Block gas limit
 
