@@ -30,7 +30,7 @@ Custom gas token support in the Arbitrum SDK introduces a suite of APIs designed
 
 **Note** that these APIs are just needed for `custom gas token` orbit chains and for ETH-powered rollup and anytrust orbit chains, you don't need to use them.
 
-**Note** that when native tokens are transferred to the custom gas token orbit chain, they function equivalently to ETH on EVM chains. This means that these tokens will exhibit behavior identical to that of ETH, which is the native currency on EVM chains. This similarity in functionality is a key feature to consider in transactions and operations within the orbit chain.
+**Note** that when native tokens are transferred to the custom gas token orbit chain, they function equivalently to ETH on EVM chains. This means these tokens will exhibit behavior identical to that of ETH, the native currency on EVM chains. This similarity in functionality is a key feature to consider in transactions and operations within the orbit chain.
 
 **Note** that everything else is under the hood, and the custom gas token code paths will be executed just if the `L2Network` object config has a `nativeToken` field.
 
