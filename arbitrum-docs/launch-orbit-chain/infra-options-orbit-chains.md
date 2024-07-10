@@ -41,6 +41,7 @@ For applications that require the ability to transfer assets to chains outside o
 - [Hyperlane](https://www.hyperlane.xyz/)
 - [Axelar](https://axelar.network/)
 - [Across](https://across.to/)
+- [Decent](https://www.decent.xyz/)
 
 ## Data availability
 
