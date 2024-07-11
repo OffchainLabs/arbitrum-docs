@@ -58,7 +58,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Block numbers and time',
+              label: 'Block gas limit, numbers and time',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
@@ -427,6 +427,11 @@ const sidebars = {
           type: 'doc',
           id: 'stylus/stylus-quickstart',
           label: 'Quickstart (Rust)',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/concepts/stylus-cache-manager',
+          label: 'Stylus caching strategy',
         },
         {
           type: 'html',
