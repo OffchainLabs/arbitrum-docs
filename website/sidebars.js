@@ -429,6 +429,11 @@ const sidebars = {
           label: 'Quickstart (Rust)',
         },
         {
+          type: 'doc',
+          id: 'stylus/concepts/stylus-cache-manager',
+          label: 'Stylus caching strategy',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
