@@ -13,6 +13,7 @@ This document provides an overview of third-party Orbit chain infrastructure pro
 
 For most production use-cases, we encourage Orbit chain operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Orbit chain deployments:
 
+- [QuickNode](https://www.quicknode.com/rollup?utm_source=arb-docs)
 - [Caldera](https://www.caldera.xyz/)
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
@@ -40,6 +41,7 @@ For applications that require the ability to transfer assets to chains outside o
 - [Hyperlane](https://www.hyperlane.xyz/)
 - [Axelar](https://axelar.network/)
 - [Across](https://across.to/)
+- [Decent](https://www.decent.xyz/)
 
 ## Data availability
 
@@ -54,6 +56,7 @@ One way to reduce transaction fees for Orbit chains is to configure a Data Avail
 
 Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
 
+- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
 - [Alchemy](https://www.alchemy.com/)
 - [The Graph](https://thegraph.com/)
 - [Goldsky](https://goldsky.com/)
@@ -76,4 +79,4 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
-- [QuickNode](https://www.quicknode.com/)
+- [QuickNode](https://www.quicknode.com?utm_source=arb-docs)

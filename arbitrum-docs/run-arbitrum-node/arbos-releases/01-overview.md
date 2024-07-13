@@ -27,6 +27,7 @@ Visit [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro.md) to l
 
 ## List of available ArbOS releases
 
+- [ArbOS 30 "Bianca"](/run-arbitrum-node/arbos-releases/arbos30.md)
 - [ArbOS 20 "Atlas"](/run-arbitrum-node/arbos-releases/arbos20.md)
 - [ArbOS 11](/run-arbitrum-node/arbos-releases/arbos11.md)
 
