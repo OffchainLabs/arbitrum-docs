@@ -59,7 +59,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Block numbers and time',
+              label: 'Block gas limit, numbers and time',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
@@ -436,8 +436,15 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Run a local dev node',
-          id: 'stylus/how-tos/local-stylus-dev-node',
+          id: 'stylus/concepts/stylus-cache-manager',
+          label: 'Stylus caching strategy',
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
+          // a: see note at end of file
         },
         {
           type: 'doc',
@@ -557,6 +564,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos30',
+              label: 'ArbOS 30 Bianca',
             },
             {
               type: 'doc',
