@@ -412,7 +412,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'Arbitrum Orbit SDK',
+              label: 'Orbit SDK Reference',
               items: orbitSdkDocsSidebar,
             },
           ],

@@ -1,3 +1,5 @@
 .vscode
 arbitrum-docs/sdk-docs
 arbitrum-docs/orbit-sdk-docs
+arbitrum-orbit-sdk
+node_modules
