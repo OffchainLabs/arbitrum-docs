@@ -72,5 +72,5 @@ Here we describe different strategies that validators follow and provide instruc
 
 - You need to be the chain owner to include a new validator address in the allowlist:
 - Find your `upgradeExecutor` contract address.
-- Send transactions to the `executeCall` method of the`upgradeExecutor` contract and set the `target` address to your Rollup contract address, set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
+- Send transactions to the `executeCall` method of the`upgradeExecutor` contract and set the `target` address to your Rollup contract's address, set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
 - Call your Rollup contract's `isValidator(address)` and check the result.
