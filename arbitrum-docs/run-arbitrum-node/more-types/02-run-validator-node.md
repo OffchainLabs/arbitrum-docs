@@ -57,7 +57,7 @@ Here we describe different strategies that validators follow and provide instruc
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --parent-chain.wallet.password="SOME SECURE PASSWORD"
   ```
-- For orbit chains, you need to set `--chain.info-json=<Orbit Chain's chain info>` instead of `--chain.id=<chain id>`
+- For Orbit chains, you need to set the `--chain.info-json=<Orbit Chain's chain info>` flag instead of `--chain.id=<chain id>`
 - To verify validator is working, this log line shows the wallet is setup correctly:
   ```shell
   INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
