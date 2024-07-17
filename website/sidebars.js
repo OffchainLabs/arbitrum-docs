@@ -453,6 +453,12 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
+          type: 'link',
+          label: 'Stylus by example',
+          href: 'https://stylus-by-example.org/',
+        },
+
+        {
           type: 'category',
           label: 'Gas and ink',
           collapsed: true,
