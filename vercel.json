@@ -796,16 +796,6 @@
             "permanent": false
         },
         {
-            "source": "/sdk",
-            "destination": "/sdk-docs",
-            "permanent": false
-        },
-        {
-            "source": "/sdk/(.*)",
-            "destination": "/sdk-docs/$1",
-            "permanent": false
-        },
-        {
             "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
             "destination": "/run-arbitrum-node/run-local-dev-node",
             "permanent": false

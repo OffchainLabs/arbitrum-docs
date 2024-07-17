@@ -144,7 +144,7 @@ function capitalizeFirstLetter(string) {
 function generateId(name, basePath) {
   const label = getLabelFromFilesystem(name);
   const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return 'sdk-docs' + slashIfNeeded + path.join(basePath, label);
+  return 'sdk' + slashIfNeeded + path.join(basePath, label);
 }
 
 function generateLabel(entry) {

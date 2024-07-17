@@ -9,7 +9,7 @@
 .cache-loader
 
 # Generated docs
-sdk-docs
+sdk
 
 # Misc
 .DS_Store
