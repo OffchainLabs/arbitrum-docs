@@ -74,6 +74,7 @@ const config = {
         entryPointStrategy: 'expand',
         exclude: [`abi`, `node_modules`, `tests`, `scripts`],
         excludeNotDocumented: true,
+        skipErrorChecking: true,
         excludeInternal: true,
         excludeExternals: true,
         readme: 'none',
