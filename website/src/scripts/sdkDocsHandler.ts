@@ -123,7 +123,7 @@ function generateSidebar(dir, basePath = '') {
           label,
           items: subItems,
         };
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
         const docId = generateId(entry.name, basePath);
         return {
           type: 'doc',
@@ -155,7 +155,7 @@ function generateLabel(entry) {
 }
 
 function getLabelFromFilesystem(name) {
-  const label = name.replace(/^\d+-/, '').replace(/\.md$/, '');
+  const label = name.replace(/^\d+-/, '').replace(/\.md$/, '').replace(/\.mdx$/, '');
   return label || '';
 }
 
