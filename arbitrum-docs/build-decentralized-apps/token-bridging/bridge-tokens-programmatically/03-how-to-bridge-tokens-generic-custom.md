@@ -309,7 +309,7 @@ When using this function two actions will be performed:
 1. Call function `registerTokenToL2` of `L1CustomGateway`. This will change the `l1ToL2Token` internal mapping it holds and will send a retryable ticket to the counterpart `L2CustomGateway` contract in L2, to also set its mapping to the new values.
 2. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [registerCustomToken](/sdk/assetBridger_erc20Bridger#registercustomtoken) of the [AdminErc20Bridger](/sdk/assetBridger_erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [AdminErc20Bridger](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
 
 ```tsx
 /**

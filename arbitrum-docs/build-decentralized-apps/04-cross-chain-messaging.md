@@ -13,7 +13,7 @@ Arbitrary L1 to L2 contract calls can be created via the `Inbox`'s `createRetrya
 
 For details and protocol specification, see [L1 to L2 Messages](/how-arbitrum-works/arbos/l1-l2-messaging.md).
 
-For an example of retryable tickets in action, see the [Greeter](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) tutorial, which uses the [Arbitrum SDK](./sdk).
+For an example of retryable tickets in action, see the [Greeter](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/greeter) tutorial, which uses the [Arbitrum SDK](../sdk/1-introduction.mdx).
 
 ## Arbitrum-to-Ethereum messaging
 
