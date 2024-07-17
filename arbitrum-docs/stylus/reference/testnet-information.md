@@ -21,10 +21,10 @@ Stylus is undergoing major upgrades, and some improvements are expected to requi
 
 This table provides an overview of the available public RPC endpoints for the Stylus testnet and necessary details to interact with them.
 
-| Name                             | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
-| -------------------------------- | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
-| Arbitrum Sepolia | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io            | Sepolia          | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
-| Stylus testnet (v2-deprecated)              | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
+| Name                           | RPC URL                                | Chain ID | Block explorer                               | Underlying chain | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
+| ------------------------------ | -------------------------------------- | -------- | -------------------------------------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
+| Arbitrum Sepolia               | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io                  | Sepolia          | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
+| Stylus testnet (v2-deprecated) | https://stylusv2.arbitrum.io/rpc       | 13331371 | https://stylusv2-explorer.arbitrum.io/       | Arbitrum Sepolia | wss://stylusv2.arbitrum.io/feed       | https://stylusv2-sequencer.arbitrum.io/rpc       |
 | Stylus testnet (v1-deprecated) | https://stylus-testnet.arbitrum.io/rpc | 23011913 | https://stylus-testnet-explorer.arbitrum.io/ | Arbitrum Sepolia | wss://stylus-testnet.arbitrum.io/feed | https://stylus-testnet-sequencer.arbitrum.io/rpc |
 
 :::caution
