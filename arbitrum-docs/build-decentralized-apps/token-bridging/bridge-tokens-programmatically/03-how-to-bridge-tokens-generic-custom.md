@@ -162,7 +162,7 @@ We now deploy that token to L1.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet } = require('ethers');
-const { getL2Network } = require('@arbitrum/sdk');
+const { getArbitrumNetwork } = require('@arbitrum/sdk');
 require('dotenv').config();
 
 const walletPrivateKey = process.env.DEVNET_PRIVKEY;
@@ -178,7 +178,7 @@ const main = async () => {
   /**
    * Use l2Network to get the token bridge addresses needed to deploy the token
    */
-  const l2Network = await getL2Network(l2Provider);
+  const l2Network = await getArbitrumNetwork(l2Provider);
 
   const l1Gateway = l2Network.tokenBridge.l1CustomGateway;
   const l1Router = l2Network.tokenBridge.l1GatewayRouter;
@@ -259,7 +259,7 @@ We now deploy that token to L2.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet } = require('ethers');
-const { getL2Network } = require('@arbitrum/sdk');
+const { getArbitrumNetwork } = require('@arbitrum/sdk');
 require('dotenv').config();
 
 const walletPrivateKey = process.env.DEVNET_PRIVKEY;
@@ -275,12 +275,12 @@ const main = async () => {
   /**
    * Use l2Network to get the token bridge addresses needed to deploy the token
    */
-  const l2Network = await getL2Network(l2Provider);
-  const l2Gateway = l2Network.tokenBridge.l2CustomGateway;
+  const l2Network = await getArbitrumNetwork(l2Provider);
+  const l2Gateway = l2Network.tokenBridge.childCustomGateway;
 
   /**
    * Deploy our custom token smart contract to L2
-   * We give the custom token contract the address of l2CustomGateway as well as the address of the counterpart L1 token
+   * We give the custom token contract the address of childCustomGateway as well as the address of the counterpart L1 token
    */
   console.log('Deploying the test L2Token to L2:');
   const L2Token = await (await ethers.getContractFactory('L2Token')).connect(l2Wallet);
@@ -333,7 +333,7 @@ console.log(
  * To compute this txn hash, we need our message's "sequence numbers", unique identifiers of each L1 to L2 message.
  * We'll fetch them from the event logs with a helper method.
  */
-const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider);
+const l1ToL2Msgs = await registerTokenRec.getParentToChildMessages(l2Provider);
 
 /**
  * In principle, a single L1 txn can trigger any number of L1-to-L2 messages (each with its own sequencer number).
@@ -345,10 +345,10 @@ const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider);
 expect(l1ToL2Msgs.length, 'Should be 2 messages.').to.eq(2);
 
 const setTokenTx = await l1ToL2Msgs[0].waitForStatus();
-expect(setTokenTx.status, 'Set token not redeemed.').to.eq(L1ToL2MessageStatus.REDEEMED);
+expect(setTokenTx.status, 'Set token not redeemed.').to.eq(ParentToChildMessageStatus.REDEEMED);
 
 const setGateways = await l1ToL2Msgs[1].waitForStatus();
-expect(setGateways.status, 'Set gateways not redeemed.').to.eq(L1ToL2MessageStatus.REDEEMED);
+expect(setGateways.status, 'Set gateways not redeemed.').to.eq(ParentToChildMessageStatus.REDEEMED);
 
 console.log(
   'Your custom token is now registered on our custom gateway 🥳  Go ahead and make the deposit!',
