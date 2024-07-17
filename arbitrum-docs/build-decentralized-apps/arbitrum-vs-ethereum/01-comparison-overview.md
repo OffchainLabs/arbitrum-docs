@@ -10,7 +10,7 @@ content_type: concept
 
 Arbitrum is designed to be as compatible and consistent with Ethereum as possible, from its high-level RPCs to its low-level bytecode and everything in between. <a data-quicklook-from="dapp">Decentralized app (dApp)</a> developers with experience building on Ethereum will likely find that little-to-no new specific knowledge is required to build on Arbitrum.
 
-This section describes the differences, perks, and gotchas that devs are advised to be aware of when working with Arbitrum. This first page serves as an overview of where you might these differences, with links to the relevant pages when needed.
+This section describes the differences, perks, and gotchas that devs are advised to be aware of when working with Arbitrum. This first page serves as an overview of where you might find these differences, with links to the relevant pages when needed.
 
 ## Block numbers and time
 
