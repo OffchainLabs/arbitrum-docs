@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/\_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -36,7 +36,7 @@ Also, the **L2 counterpart of the token**, must conform to the [IArbToken](https
 - It must have`bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract
 - It must have an `l1Address` view method that returns the address of the token in L1
 
-import TokenCompatibilityPartial from '../partials/_token-compatibility.md';
+import TokenCompatibilityPartial from '../partials/\_token-compatibility.md';
 
 <TokenCompatibilityPartial />
 
@@ -320,12 +320,12 @@ const registerTokenTx = await adminTokenBridger.registerCustomToken(
   l1CustomToken.address,
   l2CustomToken.address,
   l1Wallet,
-  l2Provider,
+  l2Provider
 );
 
 const registerTokenRec = await registerTokenTx.wait();
 console.log(
-  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}`,
+  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}`
 );
 
 /**
@@ -351,7 +351,7 @@ const setGateways = await l1ToL2Msgs[1].waitForStatus();
 expect(setGateways.status, 'Set gateways not redeemed.').to.eq(L1ToL2MessageStatus.REDEEMED);
 
 console.log(
-  'Your custom token is now registered on our custom gateway 🥳  Go ahead and make the deposit!',
+  'Your custom token is now registered on our custom gateway 🥳  Go ahead and make the deposit!'
 );
 ```
 

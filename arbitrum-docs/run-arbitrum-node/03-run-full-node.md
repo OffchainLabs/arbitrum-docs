@@ -114,6 +114,6 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 We show here a list of the parameters that are most commonly used when running a node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
-import OptionalOrbitCompatibleCLIFlagsPartial from '../partials/_optional-orbit-compatible-cli-flags-partial.md';
+import OptionalOrbitCompatibleCLIFlagsPartial from '../partials/\_optional-orbit-compatible-cli-flags-partial.mdx';
 
 <OptionalOrbitCompatibleCLIFlagsPartial />
