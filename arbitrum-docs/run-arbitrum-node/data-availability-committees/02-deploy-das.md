@@ -6,7 +6,7 @@ sidebar_position: 2
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/\_public-preview-banner-partial.mdx';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
