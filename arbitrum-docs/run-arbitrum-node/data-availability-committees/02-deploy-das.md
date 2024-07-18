@@ -149,10 +149,10 @@ Finally, for the storage backends you wish to configure, use the following param
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_s3-parameters.mdx';
-import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_local-badger-db-parameters.mdx';
-import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_local-files-parameters.mdx';
-import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_ipfs-parameters.mdx';
+import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
+import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
+import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
