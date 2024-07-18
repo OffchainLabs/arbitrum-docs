@@ -36,7 +36,7 @@ Also, the **L2 counterpart of the token**, must conform to the [IArbToken](https
 - It must have`bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract
 - It must have an `l1Address` view method that returns the address of the token in L1
 
-import TokenCompatibilityPartial from '../partials/\_token-compatibility.md';
+import TokenCompatibilityPartial from '../partials/_token-compatibility.md';
 
 <TokenCompatibilityPartial />
 
