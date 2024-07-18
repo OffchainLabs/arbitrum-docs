@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 The guidance displayed on this page will change based on your selected configuration:
 
-import MultidimensionalContentControlsPartial from '../partials/\_multidimensional-content-controls-partial.mdx';
+import MultidimensionalContentControlsPartial from '../partials/_multidimensional-content-controls-partial.mdx';
 
 <MultidimensionalContentControlsPartial />
 
