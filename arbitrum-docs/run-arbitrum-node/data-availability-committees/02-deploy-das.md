@@ -421,8 +421,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/\_das-optional-parameters.mdx';
-import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/\_das-metrics.mdx';
+import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
+import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';
 
 ## Optional parameters
 
