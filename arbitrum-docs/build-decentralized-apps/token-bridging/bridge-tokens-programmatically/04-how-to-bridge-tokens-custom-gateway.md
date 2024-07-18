@@ -5,7 +5,7 @@ reader_audience: developers who want to build on Ethereum/Arbitrum and bridge to
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/\_public-preview-banner-partial.mdx';
+import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
