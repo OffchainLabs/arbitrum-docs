@@ -210,7 +210,7 @@ A message [derived from a transaction][asmessage_link] will carry that transacti
 | Run Mode                                 | Scope                   | Carries an Underlying Tx?                                                                                   |
 | :--------------------------------------- | :---------------------- | :---------------------------------------------------------------------------------------------------------- |
 | [`MessageCommitMode`][mc0]               | state transition &nbsp; | always                                                                                                      |
-| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.md) or when scheduled |
+| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx) or when scheduled |
 | [`MessageEthcallMode`][mc2]              | eth_calls               | never                                                                                                       |
 
 [mc0]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654
