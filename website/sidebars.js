@@ -509,6 +509,11 @@ const sidebars = {
           id: 'stylus/how-tos/optimizing-binaries',
         },
         {
+          type: 'doc',
+          label: 'debug Stylus transactions',
+          id: 'stylus/how-tos/debugging-stylus-tx',
+        },
+        {
           type: 'link',
           label: 'Rust crate docs',
           href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
