@@ -6,7 +6,7 @@ content_type: faq
 ---
 
 import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
-import FAQQuestions from '../partials/_troubleshooting-users-partial.md';
+import FAQQuestions from '../partials/_troubleshooting-users-partial.mdx';
 
 <FAQStructuredDataJsonLd faqsId="get-started" />
 <FAQQuestions />
