@@ -6,7 +6,7 @@ sidebar_position: 3
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/\_public-preview-banner-partial.mdx';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -113,10 +113,10 @@ Finally, for the storage backends you wish to configure, use the following param
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_s3-parameters.mdx';
-import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_local-badger-db-parameters.mdx';
-import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_local-files-parameters.mdx';
-import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/\_ipfs-parameters.mdx';
+import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
+import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
+import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
@@ -275,8 +275,8 @@ Once the DAS is deployed and tested, you'll have to communicate the following in
 
 - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
-import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/\_das-optional-parameters.mdx';
-import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/\_das-metrics.mdx';
+import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
+import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';
 
 ## Optional parameters
 
