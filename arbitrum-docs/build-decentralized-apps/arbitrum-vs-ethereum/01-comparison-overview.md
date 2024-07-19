@@ -36,7 +36,7 @@ Similarly, Arbitrum chains can also send messages to the parent chain. Find more
 
 ## Precompiles
 
-Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.md).
+Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.mdx).
 
 ## NodeInterface
 

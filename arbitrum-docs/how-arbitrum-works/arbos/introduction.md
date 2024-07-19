@@ -4,7 +4,7 @@ ArbOS is the Layer 2 EVM hypervisor that facilitates the execution environment o
 
 ## Precompiles
 
-ArbOS provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.md) for more information about how these work, and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.md) for a full reference of the precompiles available in Arbitrum chains.
+ArbOS provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work, and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available in Arbitrum chains.
 
 A precompile consists of a solidity interface in [`contracts/src/precompiles/`][nitro_precompiles_dir] and a corresponding Golang implementation in [`precompiles/`][precompiles_dir]. Using Geth's ABI generator, [`solgen/gen.go`][gen_file] generates [`solgen/go/precompilesgen/precompilesgen.go`][precompilesgen_link], which collects the ABI data of the precompiles. The [runtime installer][installer_link] uses this generated file to check the type safety of each precompile's implementer.
 
@@ -42,7 +42,7 @@ ArbOS's state is viewed and modified via [`ArbosState`][arbosstate_link] objects
 
 Because two [`ArbosState`][arbosstate_link] objects with the same [`backingStorage`][backingstorage_link] contain and mutate the same underlying state, different [`ArbosState`][arbosstate_link] objects can provide different views of ArbOS's contents. [`Burner`][burner_link] objects, which track gas usage while working with the [`ArbosState`][arbosstate_link], provide the internal mechanism for doing so. Some are read-only, causing transactions to revert with `vm.ErrWriteProtection` upon a mutating request. Others demand the caller have elevated privileges. While yet others dynamically charge users when doing stateful work. For safety the kind of view is chosen when [`OpenArbosState()`][openarbosstate_link] creates the object and may never change.
 
-Much of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.md). The parts that aren't are detailed below.
+Much of ArbOS's state exists to facilitate its [precompiles](/build-decentralized-apps/precompiles/02-reference.mdx). The parts that aren't are detailed below.
 
 [arbosstate_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36
 [backingstorage_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51
@@ -71,7 +71,7 @@ This component maintains the last 256 L1 block hashes in a circular buffer. This
 
 ### [`l1PricingState`][l1pricingstate_link]
 
-In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.md#arbaggregator), the L1 pricing state provides tools for determining the L1 component of a transaction's gas costs. This part of the state tracks both the total amount of funds collected from transactions in L1 gas fees, as well as the funds spent by batch posters to post data batches on L1.
+In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the L1 pricing state provides tools for determining the L1 component of a transaction's gas costs. This part of the state tracks both the total amount of funds collected from transactions in L1 gas fees, as well as the funds spent by batch posters to post data batches on L1.
 
 Based on this information, ArbOS maintains an L1 data fee, also tracked as part of this state, which determines how much transactions will be charged for L1 fees. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs, over time.
 
@@ -81,7 +81,7 @@ Based on this information, ArbOS maintains an L1 data fee, also tracked as part 
 
 The L2 pricing state tracks L2 resource usage to determine a reasonable L2 gas price. This process considers a variety of factors, including user demand, the state of Geth, and the computational speed limit. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as L2-specific resources are consumed and filled as time passes. L1-specific resources like L1 `calldata` are not tracked by the pools, as they have little bearing on the actual work done by the network actors that the speed limit is meant to keep stable and synced.
 
-While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.md#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.md#arbowner) precompiles, most changes are automatic and happen during [block production][block_production_link] and [the transaction hooks](geth#Hooks). Each of an incoming message's transactions removes from the pool the L2 component of the gas it uses, and afterward the message's timestamp [informs the pricing mechanism][notify_pricer_link] of the time that's passed as ArbOS [finalizes the block][finalizeblock_link].
+While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompiles, most changes are automatic and happen during [block production][block_production_link] and [the transaction hooks](geth#Hooks). Each of an incoming message's transactions removes from the pool the L2 component of the gas it uses, and afterward the message's timestamp [informs the pricing mechanism][notify_pricer_link] of the time that's passed as ArbOS [finalizes the block][finalizeblock_link].
 
 ArbOS's larger gas pool [determines][maintain_limit_link] the per-block gas limit, setting a dynamic [upper limit][per_block_limit_link] on the amount of compute gas an L2 block may have. This limit is always enforced, though for the [first transaction][first_transaction_link] it's done in the [GasChargingHook](geth#GasChargingHook) to avoid sharp decreases in the L1 gas price from over-inflating the compute component purchased to above the gas limit. This improves UX by allowing the first transaction to succeed rather than requiring a resubmission. Because the first transaction lowers the amount of space left in the block, subsequent transactions do not employ this strategy and may fail from such compute-component inflation. This is acceptable because such transactions are only present in cases where the system is under heavy load and the result is that the user's transaction is dropped without charges since the state transition fails early. Those trusting the sequencer can rely on the transaction being automatically resubmitted in such a scenario.
 
