@@ -6,7 +6,7 @@ author: mahsamoosavi
 
 In order to be able to _interact with_ or _build applications on_ any of the Arbitrum chains, you need access to the corresponding Arbitrum node. Options are:
 
-- You can use third party node providers (see the list [here](/build-decentralized-apps/reference/01-node-providers.md)) to get RPC access to fully-managed nodes
+- You can use third party node providers (see the list [here](/build-decentralized-apps/reference/01-node-providers.mdx)) to get RPC access to fully-managed nodes
 - You can run your own Arbitrum node, especially if you want to always know the state of the Arbitrum chain
 
 Here, you can find resources that help you run different types of Arbitrum nodes:

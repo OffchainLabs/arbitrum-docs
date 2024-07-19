@@ -30,7 +30,7 @@ You'll also need to add the desired chain's RPC endpoint to your wallet. Here we
 
 ![Add the desired destination network to your MetaMask wallet](images/getting_started_users_1.png)
 
-Here we display the information of the most common Arbitrum chains, but you can find a more exhaustive list in our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.md) page.
+Here we display the information of the most common Arbitrum chains, but you can find a more exhaustive list in our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
 
 | Parameter          | Arbitrum One                 | Arbitrum Nova                | Arbitrum Sepolia (testnet)             |
 | ------------------ | ---------------------------- | ---------------------------- | -------------------------------------- |
