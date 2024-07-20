@@ -111,8 +111,8 @@ A dispute consists of two staked validators dissecting their disagreement down t
 
 **See:**
 
-- [Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.md)
-- [Wasm/WAVM](/how-arbitrum-works/fraud-proofs/wasm-wavm.md)
+- [Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx)
+- [Wasm/WAVM](/how-arbitrum-works/fraud-proofs/wasm-wavm.mdx)
 
 L1 contracts also keep track of the tree of all assertions; i.e., how many stakers are in disagreement, who is currently disputing with whom, etc. We refer to this level of Arbitrum's design architecture as its "assertion tree protocol."
 
