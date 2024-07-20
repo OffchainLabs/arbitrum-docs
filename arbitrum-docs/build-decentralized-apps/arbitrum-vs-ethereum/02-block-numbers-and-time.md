@@ -13,7 +13,7 @@ With the release of Arbitrum Orbit, Arbitrum chains can now be L2s that settle t
 
 :::
 
-As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions at some later time. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the sequencer](/how-arbitrum-works/sequencer.md#happycommon-case-sequencer-is-live-and-well-behaved) or via the chain's [delayed inbox](/how-arbitrum-works/sequencer.md#unhappyuncommon-case-sequencer-isnt-doing-its-job).
+As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions at some later time. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the sequencer](/how-arbitrum-works/sequencer.mdx#happycommon-case-sequencer-is-live-and-well-behaved) or via the chain's [delayed inbox](/how-arbitrum-works/sequencer.mdx#unhappyuncommon-case-sequencer-isnt-doing-its-job).
 
 Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
