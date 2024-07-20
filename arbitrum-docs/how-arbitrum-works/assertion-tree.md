@@ -26,7 +26,7 @@ These properties together ensure that as long as at least one honest, active val
 
 Even if the Assertion Tree has multiple conflicting leaves and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid leaf (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
 
-The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/arbos/l2-l1-messaging.md) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
+The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/arbos/l2-l1-messaging.mdx) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
 
 ### Detailed Spec
 

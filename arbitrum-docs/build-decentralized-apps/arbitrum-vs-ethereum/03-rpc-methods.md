@@ -30,8 +30,8 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 | `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from L1 to L2 via the Arbitrum bridge                                                                                                      |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call an L2 contract from L1, originated by a user through the Arbitrum bridge                                                                          |
 | `102`                 | `ArbitrumContractTxType`        | Used to call an L2 contract from L1, originated by a contract through the Arbitrum bridge                                                                      |
-| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.md) on L2 that failed to execute automatically (usually due to low gas) |
-| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.md#submission) via the Arbitrum bridge on L1                                     |
+| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx) on L2 that failed to execute automatically (usually due to low gas) |
+| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#submission) via the Arbitrum bridge on L1                                     |
 | `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the L1 base fee and the block number                                         |
 
 ### Additional fields
@@ -48,7 +48,7 @@ On RPC calls that return transactions, the following fields will have a differen
 
 | Field name | Description                                                                                                                                                       |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `from`     | On L1 to L2 transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/arbos/l1-l2-messaging.md#address-aliasing) of the L1's `msg.sender` |
+| `from`     | On L1 to L2 transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#address-aliasing) of the L1's `msg.sender` |
 
 ## Transaction receipts
 

@@ -30,9 +30,9 @@ The fees an Arbitrum transaction pays for execution essentially work identically
 
 ## Cross-chain messaging
 
-Arbitrum chains support arbitrary message passing from a parent chain (for example, a Layer 1 (L1) like Ethereum) to a child chain (for example, a Layer 2 (L2) like Arbitrum One or Arbitrum Nova). These are commonly known as "L1 to L2 messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [L1 to L2 messaging](/how-arbitrum-works/arbos/l1-l2-messaging.md).
+Arbitrum chains support arbitrary message passing from a parent chain (for example, a Layer 1 (L1) like Ethereum) to a child chain (for example, a Layer 2 (L2) like Arbitrum One or Arbitrum Nova). These are commonly known as "L1 to L2 messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [L1 to L2 messaging](/how-arbitrum-works/arbos/l1-l2-messaging.mdx).
 
-Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [L2 to L1 messaging and the outbox](/how-arbitrum-works/arbos/l2-l1-messaging.md).
+Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [L2 to L1 messaging and the outbox](/how-arbitrum-works/arbos/l2-l1-messaging.mdx).
 
 ## Precompiles
 

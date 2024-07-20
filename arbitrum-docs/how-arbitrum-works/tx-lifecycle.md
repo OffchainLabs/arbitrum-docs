@@ -22,7 +22,7 @@ Alternatively, a client can send a message to the Sequencer by signing and publi
 
 **See**:
 
-- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.md)
+- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.mdx)
 - [The Sequencer](/how-arbitrum-works/sequencer.md)
 - [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 
@@ -97,7 +97,7 @@ RBlock assertions include claims about the state of the Outbox; if our transacti
 
 **See**:
 
-- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.md)
+- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.mdx)
 
 #### 4a. RBlock is valid / goes unchallenged
 
