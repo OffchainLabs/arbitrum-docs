@@ -16,7 +16,7 @@ Before customizing your Orbit chain, it's important to understand what the State
 The STF defines how new blocks are produced from input messages (i.e. transactions).
 This guide is only necessary for changes that modify the State Transition Function.
 To customize other node behavior, such as RPC behavior or the sequencer's ordering policy, you can simply
-[build your own node](/run-arbitrum-node/nitro/01-build-nitro-locally.md) without worrying about the rest of this guide.
+[build your own node](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx) without worrying about the rest of this guide.
 However, changes that modify the STF require updating the fraud proving system to recognize the new behavior as correct.
 Otherwise, the fraud prover would side with unmodified nodes, which would win fraud proofs against your modified node.
 
