@@ -15,4 +15,4 @@ Here, you can find resources that help you run different types of Arbitrum nodes
 - Step-by-step instructions for how to [read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.md), [build the Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.md) and [run the sequencer coordinator manager UI tool](/run-arbitrum-node/sequencer/03-run-sequencer-coordination-manager.md)
 - Step-by-step instructions for [how to configure a Data Availability Committee](/run-arbitrum-node/data-availability-committees/01-get-started.md)
 - [Troubleshooting page](/run-arbitrum-node/06-troubleshooting.md)
-- [Frequently asked questions](/node-running/faq.md)
+- [Frequently asked questions](/node-running/faq.mdx)
