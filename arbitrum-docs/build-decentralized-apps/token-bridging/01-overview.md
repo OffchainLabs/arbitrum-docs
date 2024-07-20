@@ -7,7 +7,7 @@ content_type: overview
 sidebar_position: 1
 ---
 
-Token bridging is a fundamental aspect of any Layer 2 (L2) protocol. Arbitrum uses its ability to pass messages between L1 and L2 (see [Cross-chain messaging](/build-decentralized-apps/04-cross-chain-messaging.md)) to allow projects to trustlessly move assets from Ethereum to an Arbitrum chain and back. Any asset and asset type can in principle be bridged, including Ether, ERC-20 tokens and ERC-721 tokens among others.
+Token bridging is a fundamental aspect of any Layer 2 (L2) protocol. Arbitrum uses its ability to pass messages between L1 and L2 (see [Cross-chain messaging](/build-decentralized-apps/04-cross-chain-messaging.mdx)) to allow projects to trustlessly move assets from Ethereum to an Arbitrum chain and back. Any asset and asset type can in principle be bridged, including Ether, ERC-20 tokens and ERC-721 tokens among others.
 
 This section offers a series of conceptual documents explaining how asset bridging works and what options exist to bridge ether (ETH) and other types of asset between layers, as well as a series of how-tos showcasing the different methods available for making your token bridgeable.
 

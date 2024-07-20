@@ -19,7 +19,7 @@ The L2 gas price on a given Arbitrum chain has a set floor, which can be queried
 
 ## Estimating Gas
 
-Calling an Arbitrum Node's `eth_estimateGas` RPC gives a value sufficient to cover the full transaction fee at the given L2 gas price; i.e., the value returned from `eth_estimateGas` multiplied by the L2 gas price tells you how much total Ether is required for the transaction to succeed. Note that this means that for a given operation, the value returned by `eth_estimateGas` will change over time (as the L1 calldata price fluctuates.) (See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.md) for more.)
+Calling an Arbitrum Node's `eth_estimateGas` RPC gives a value sufficient to cover the full transaction fee at the given L2 gas price; i.e., the value returned from `eth_estimateGas` multiplied by the L2 gas price tells you how much total Ether is required for the transaction to succeed. Note that this means that for a given operation, the value returned by `eth_estimateGas` will change over time (as the L1 calldata price fluctuates.) (See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
 
 ## Tips in L2
 

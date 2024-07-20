@@ -7,7 +7,7 @@ content_type: how-to
 
 Oracles are web services that provide a connection between smart contracts and the outside world. They let decentralized apps (dApps) interact with off-chain data and services.
 
-Familiarity with [oracles](/build-decentralized-apps/oracles/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding.
+Familiarity with [oracles](/build-decentralized-apps/oracles/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) before proceeding.
 
 ## Chainlink
 
@@ -64,7 +64,7 @@ contract ARBPriceConsumer {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) available that goes through the process of compiling and deploying a contract.
 
 ### More examples
 
@@ -122,7 +122,7 @@ contract ARBPriceConsumer {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) available that goes through the process of compiling and deploying a contract.
 
 ### Querying a random number through API3
 
@@ -218,7 +218,7 @@ contract QrngRequester is RrpRequesterV0 {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to set the `sponsorWallet` address before making the request and use the addresses of the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to set the `sponsorWallet` address before making the request and use the addresses of the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) available that goes through the process of compiling and deploying a contract.
 
 ### More examples
 
@@ -272,7 +272,7 @@ contract ARBPriceConsumer is UsingTellor {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the oracle contract in that network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the oracle contract in that network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) available that goes through the process of compiling and deploying a contract.
 
 ### See also
 

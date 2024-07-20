@@ -8,7 +8,7 @@ content_type: how-to
 sidebar_position: 11
 ---
 
-When running a Nitro node for the first time on a chain that produced [classic blocks](/build-decentralized-apps/03-public-chains.md#classic-deprecated) in the past (like Arbitrum One), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a database snapshot using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.md)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
+When running a Nitro node for the first time on a chain that produced [classic blocks](/build-decentralized-apps/03-public-chains.mdx#classic-deprecated) in the past (like Arbitrum One), you need to initialize its database to, at least, the state of the chain after executing the last classic block. The common, and recommended, way of doing that is to provide a database snapshot using the `--init.url` option (as mentioned in [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.md)). In this how-to we show you an alternative way for doing that, migrating the state and history of the chain from a fully synced classic node.
 
 :::info Is this How-to for you?
 
