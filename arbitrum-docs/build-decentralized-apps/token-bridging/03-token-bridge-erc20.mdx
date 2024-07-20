@@ -106,7 +106,7 @@ Your token on L1 should conform to the [ICustomToken](https://github.com/Offchai
 
 Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [L2GatewayToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
 
-import TokenCompatibilityPartial from './partials/_token-compatibility.md';
+import TokenCompatibilityPartial from './partials/_token-compatibility.mdx';
 
 <TokenCompatibilityPartial />
 
