@@ -23,8 +23,8 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 | Use case                                                                        | Required node type(s)                                     | Docs                                                                                                |
 | ------------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | Access the **Arbitrum network** without running your own node                   | Fully managed by third-parties, exposed via RPC endpoints | [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.md)             |
-| Run an **archive node** for **Arbitrum Sepolia (testnet)** or **Arbitrum Nova** | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.md)                            |
-| Send **post-Nitro** archive requests                                            | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.md)                            |
+| Run an **archive node** for **Arbitrum Sepolia (testnet)** or **Arbitrum Nova** | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.mdx)                            |
+| Send **post-Nitro** archive requests                                            | Full node (Nitro)                                         | [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.mdx)                            |
 | Send **pre-Nitro** archive requests                                             | Full node (Classic)                                       | [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.md) |
 | Send **post-Nitro** _and_ **pre-Nitro** archive requests                        | Full node (Nitro) _and_ full node (Classic)               | That's what this how-to is for; you're in the right place.                                          |
 
@@ -119,4 +119,4 @@ Both Nitro and Classic have multiple other parameters that can be used to config
 
 ### Troubleshooting
 
-If you run into any issues, visit the [node-running troubleshooting guide](/run-arbitrum-node/06-troubleshooting.md).
+If you run into any issues, visit the [node-running troubleshooting guide](/run-arbitrum-node/06-troubleshooting.mdx).
