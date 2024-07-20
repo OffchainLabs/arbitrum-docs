@@ -7,7 +7,7 @@ sidebar_position: 6
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

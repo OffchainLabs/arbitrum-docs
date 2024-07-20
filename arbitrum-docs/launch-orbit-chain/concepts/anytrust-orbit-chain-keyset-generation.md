@@ -8,7 +8,7 @@ target_audience: 'Developers deploying and maintaining Orbit AnyTrust chains.'
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.mdx';
 
 **AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer.
 
