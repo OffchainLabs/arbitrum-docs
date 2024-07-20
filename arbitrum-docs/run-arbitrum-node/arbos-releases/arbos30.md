@@ -7,7 +7,7 @@ author: dlee
 
 :::caution Note to Orbit chains
 
-Upgrading your Orbit chain to ArbOS 30 or deploying a new Orbit chain with ArbOS 30 is **not yet supported or encouraged**. This page will be updated with requirements, upgrade instructions, and associated details when available. When ArbOS 30 Bianca is ready for Orbit mainnet adoption and all requirements have been formally tagged and published, Orbit chain owners and RaaS teams will need to follow [these instructions to upgrade](../../launch-orbit-chain/how-tos/arbos-upgrade.md). When the time comes, Orbit chain owners will need to upgrade their Nitro node versions, deploy new versions of [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) (using the [Orbit action contracts](https://github.com/OffchainLabs/orbit-actions)), set a new Wasm module root, and perform any ArbOS 30 Bianca specific configurations or actions.
+Upgrading your Orbit chain to ArbOS 30 or deploying a new Orbit chain with ArbOS 30 is **not yet supported or encouraged**. This page will be updated with requirements, upgrade instructions, and associated details when available. When ArbOS 30 Bianca is ready for Orbit mainnet adoption and all requirements have been formally tagged and published, Orbit chain owners and RaaS teams will need to follow [these instructions to upgrade](../../launch-orbit-chain/how-tos/arbos-upgrade.mdx). When the time comes, Orbit chain owners will need to upgrade their Nitro node versions, deploy new versions of [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) (using the [Orbit action contracts](https://github.com/OffchainLabs/orbit-actions)), set a new Wasm module root, and perform any ArbOS 30 Bianca specific configurations or actions.
 
 :::
 
