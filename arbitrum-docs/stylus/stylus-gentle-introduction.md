@@ -44,7 +44,7 @@ This means Nitro is able to deterministically prove **arbitrary WASM**.
 
 If WASM can be proven in general, then the correctness of **any program** that compiles down to WASM can be proven. This is the key technological leap that makes Stylus possible.
 
-For a detailed overview of Nitro's technical architecture, see the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.md) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
+For a detailed overview of Nitro's technical architecture, see the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 
 ### Why does this matter?
 

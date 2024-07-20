@@ -26,7 +26,7 @@ You can deploy Solidity contracts onto Arbitrum just like you do Ethereum. There
 
 ## Fees
 
-The fees an Arbitrum transaction pays for execution essentially work identically to gas fees on Ethereum. Arbitrum transactions must also, however, pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, an L2, is posted to Ethereum, an L1). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/gas-fees.md) and [L1 pricing](/how-arbitrum-works/l1-gas-pricing.md).
+The fees an Arbitrum transaction pays for execution essentially work identically to gas fees on Ethereum. Arbitrum transactions must also, however, pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, an L2, is posted to Ethereum, an L1). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/gas-fees.mdx) and [L1 pricing](/how-arbitrum-works/l1-gas-pricing.mdx).
 
 ## Cross-chain messaging
 

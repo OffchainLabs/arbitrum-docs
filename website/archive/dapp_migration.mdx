@@ -76,6 +76,6 @@ Also, worth mentioning that the address of the Delayed Inbox contract and Token 
 
 - **Gas Info in Transaction Receipts**: Arbitrum transaction receipts return data about gas in a new format; receipts will have `gasUsed` (total) and `gasUsedForL1` fields (instead of the `feeStats` field in Arbitrum classic).
 
-- **Batch Info In Receipts**: Arbitrum transaction receipts no longer include the `l1SequenceNumber` field; the `findBatchContainingBlock` or `getL1Confirmations` methods in the [NodeInterface precompile](/how-arbitrum-works/gas-fees.md#nodeinterfacesol) can be used to determine a transaction's inclusion in L1.
+- **Batch Info In Receipts**: Arbitrum transaction receipts no longer include the `l1SequenceNumber` field; the `findBatchContainingBlock` or `getL1Confirmations` methods in the [NodeInterface precompile](/how-arbitrum-works/gas-fees.mdx#nodeinterfacesol) can be used to determine a transaction's inclusion in L1.
 
 - **Estimate Retryable Ticket**: Use `eth_estimateGas` on `NodeInterface.estimateRetryableTicket` to estimate the gas limit of a retryable; the function itself no longer return the gas used and gas price. The gas price can be estimated using `eth_gasPrice`.

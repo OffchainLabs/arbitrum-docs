@@ -456,7 +456,7 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 
 Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real $ETH instead of $ASPL.
 
-Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/how-arbitrum-works/gas-fees.md) contains more information about how gas fees are determined for Arbitrum transactions.
+Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/how-arbitrum-works/gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
 
 <!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 

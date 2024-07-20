@@ -61,7 +61,7 @@ On RPC calls that return transaction receipts, the following fields are added to
 | Field name      | Description                                                                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `l1BlockNumber` | The L1 block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.md) |
-| `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/gas-fees.md)                                                                 |
+| `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/gas-fees.mdx)                                                                 |
 
 ## Blocks
 
