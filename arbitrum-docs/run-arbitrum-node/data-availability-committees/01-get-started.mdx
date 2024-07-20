@@ -23,20 +23,20 @@ Before following the guides in this section, you should be familiarized with how
 
 ## If you are a DAC member
 
-Committee members will need to run a DAS. To do that, they will first need to generate a pair of keys and deploy a DAS. They may also choose to deploy an additional mirror DAS. Find more information in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md).
+Committee members will need to run a DAS. To do that, they will first need to generate a pair of keys and deploy a DAS. They may also choose to deploy an additional mirror DAS. Find more information in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.mdx).
 
 Here's a basic checklist of actions to complete for DAC members:
 
-- [Deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md). Send the following information to the chain owner:
+- [Deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx). Send the following information to the chain owner:
   - Public BLS key
   - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
   - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
-- [Deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md) if you want to complement your setup with a mirror DAS. Send the following information to the chain owner:
+- [Deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.mdx) if you want to complement your setup with a mirror DAS. Send the following information to the chain owner:
   - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
 
 ## If you are a chain owner
 
-Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](/run-arbitrum-node/data-availability-committees/04-configure-dac.md)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md#testing-the-das).
+Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.mdx#testing-the-das).
 
 Here's a basic checklist of actions to complete for chain owners:
 
@@ -44,7 +44,7 @@ Here's a basic checklist of actions to complete for chain owners:
   - Public BLS Key
   - URL of the RPC endpoint
   - URL(s) of the REST(s) endpoint
-- Ensure that at least one DAS is running as an [archive DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#archive-da-servers)
+- Ensure that at least one DAS is running as an [archive DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#archive-da-servers)
 - Generate the keyset and keyset hash with all the information from the servers (guide coming soon)
 - Craft the new configuration for the batch poster (guide coming soon)
 - Craft the new configuration for your chain's nodes (guide coming soon)
