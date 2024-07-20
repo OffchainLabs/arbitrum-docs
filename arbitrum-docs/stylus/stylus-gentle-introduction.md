@@ -38,7 +38,7 @@ Compared to using Solidity, WASM programs are much more efficient. There are man
 
 ### How is this possible?
 
-Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol)
+Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx#general-bisection-protocol)
 
 This means Nitro is able to deterministically prove **arbitrary WASM**.
 

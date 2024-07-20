@@ -16,7 +16,7 @@ If, however, two or more conflicting assertions exist, the Assertion Tree bifurc
 
 Crucially, the rules of advancing an Arbitrum chain are deterministic; this means that given a chain state and some new inputs, there is only one valid output. Thus, if the Assertion Tree contains more than one leaf, then at most only one leaf can represent the valid chain-state; if we assume there is at least one honest active validator, _exactly_ one leaf will be valid.
 
-Two conflicting assertions can be put into a dispute; see [Interactive Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.md) for details on the dispute process. For the sake of understanding the Assertion Tree protocol, suffice it to say that 2-party disputes last at most a fixed amount of time (1 week), at the end of which one of the two conflicting assertions will be rejected, and the validator who posted it will lose their stake.
+Two conflicting assertions can be put into a dispute; see [Interactive Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx) for details on the dispute process. For the sake of understanding the Assertion Tree protocol, suffice it to say that 2-party disputes last at most a fixed amount of time (1 week), at the end of which one of the two conflicting assertions will be rejected, and the validator who posted it will lose their stake.
 
 In order for an assertion to be confirmed and for its stake to be recovered, two conditions must be met: sufficient time for disputes must have passed, and no other conflicting branches in the Assertion Tree can exist (i.e., they've all been disputed / "pruned" off.)
 
