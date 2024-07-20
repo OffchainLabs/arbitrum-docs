@@ -9,15 +9,15 @@ import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner
 
 <PublicPreviewBannerPartial />
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.md).
+In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.md).
 
-Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
+Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-token-bridging) that encapsulates the entire process.
 
 ## Step 0: Review the prerequisites
 
-As stated in the [token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#the-arbitrum-generic-custom-gateway), there are a few prerequisites to keep in mind while using this method to make a token bridgeable.
+As stated in the [token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#the-arbitrum-generic-custom-gateway), there are a few prerequisites to keep in mind while using this method to make a token bridgeable.
 
 First of all, the **L1 counterpart of the token**, must conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface. This means that:
 
@@ -379,6 +379,6 @@ Yes, if your token has a standard ERC20 counterpart on L2, you can go through th
 
 ## Resources
 
-1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
+1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts)
