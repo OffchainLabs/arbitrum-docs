@@ -36,8 +36,8 @@ Upon receiving a transaction, the Sequencer will:
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.md)
-- [Geth](/how-arbitrum-works/arbos/geth.md)
+- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
+- [Geth](/how-arbitrum-works/arbos/geth.mdx)
 - [L1 pricing](/how-arbitrum-works/l1-gas-pricing.md) / [L2 Gas](/how-arbitrum-works/gas-fees.md)
 
 #### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
@@ -85,8 +85,8 @@ A staked, active validator will then run the Arbitrum VM over the inputs in the 
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.md)
-- [Geth](/how-arbitrum-works/arbos/geth.md)
+- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
+- [Geth](/how-arbitrum-works/arbos/geth.mdx)
 - [L1 pricing](/how-arbitrum-works/l1-gas-pricing.md) / [L2 Gas](/how-arbitrum-works/gas-fees.md)
 
 :::note

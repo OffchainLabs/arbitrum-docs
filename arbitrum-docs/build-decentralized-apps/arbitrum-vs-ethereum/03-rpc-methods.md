@@ -21,7 +21,7 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/arbos/geth.md#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/arbos/geth.mdx#transaction-types).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
