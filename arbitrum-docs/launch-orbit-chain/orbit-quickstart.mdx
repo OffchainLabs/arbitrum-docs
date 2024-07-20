@@ -12,7 +12,7 @@ This quickstart is for developers who want to launch their own Arbitrum Orbit ch
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Sepolia testnet**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
 
-If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.md).
+If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.mdx).
 
 import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
 
