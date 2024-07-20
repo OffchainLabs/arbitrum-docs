@@ -13,7 +13,7 @@ An Orbit chain's initial chain owner is set by the chain's creator when the chai
 
 The chain-ownership architecture is designed to give Orbit chain creators flexibility in deciding how upgrades to their chain occur.
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

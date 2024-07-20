@@ -5,7 +5,7 @@ author: symbolpunk
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

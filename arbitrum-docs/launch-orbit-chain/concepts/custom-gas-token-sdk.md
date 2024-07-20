@@ -9,7 +9,7 @@ sidebar_position: 2
 
 Arbitrum SDK is a TypeScript library for client-side interactions with Arbitrum. It provides common helper functionality as well as access to the underlying smart contract interfaces.
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

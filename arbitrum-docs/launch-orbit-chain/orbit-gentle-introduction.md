@@ -11,7 +11,7 @@ This document is for developers and decision-makers who want to learn more about
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
