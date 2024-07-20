@@ -12,7 +12,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 :::caution Running a regular DAS vs running a mirror DAS
 
-The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md)_ if needed.
+The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx)_ if needed.
 
 :::
 
@@ -23,16 +23,16 @@ The main use-case for running a mirror DAS is to complement your setup as a Data
   members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
-In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.md)_.
+In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx)_.
 
 This how-to assumes that you're familiar with:
 
-- How a regular DAS works and what configuration options are available. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md)_ for a refresher.
+- How a regular DAS works and what configuration options are available. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## What is a mirror DAS?
 
-To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
+To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
 
 In general, mirror DA servers serve two main purposes:
 
@@ -41,7 +41,7 @@ In general, mirror DA servers serve two main purposes:
 
 ## Configuration options
 
-A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#configuration-options).
+A mirror DAS will use the same tool and, thus, the same configuration options as your main DAS. You can find an explanation of those options in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#configuration-options).
 
 ## How to deploy a mirror DAS
 
