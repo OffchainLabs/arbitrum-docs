@@ -285,7 +285,7 @@ const generateNodeInterfaceReferenceTables = async (
     methodOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.md`, methodsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.mdx`, methodsTable);
 };
 
 const main = async (precompilesInformation, nodeInterfaceInformation) => {
