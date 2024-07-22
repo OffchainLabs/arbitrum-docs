@@ -25,8 +25,8 @@ This section provides an overview of the available public RPC endpoints for diff
 
 - Unlike the RPC Urls, the Sequencer endpoints only support `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
 - Arbitrum public RPCs do not provide Websocket support.
-- Stylus testnet (v1) has been deprecated, but you can still find its information in [Stylus testnet information](/stylus/reference/testnet-information.md).
-- Stylus testnet (v2) has been deprecated, but you can still find its information in [Stylus testnet information](/stylus/reference/testnet-information.md).
+- Stylus testnet (v1) has been deprecated, but you can still find its information in [Stylus testnet information](/stylus/reference/testnet-information.mdx).
+- Stylus testnet (v2) has been deprecated, but you can still find its information in [Stylus testnet information](/stylus/reference/testnet-information.mdx).
 - Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia) for testnet Sepolia tokens on L2.
 
 :::
