@@ -109,15 +109,15 @@ sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
 
-### Step 5. Configure node [16.19](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node [18.20.3](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
-nvm install 16.19
-nvm use 16.19
+nvm install 18.20.3
+nvm use 18.20.3
 ```
 
 #### For MacOS
@@ -163,8 +163,8 @@ brew install bison
 ```bash
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.20
-gvm use go1.20 --default
+gvm install go1.21
+gvm use go1.21 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
