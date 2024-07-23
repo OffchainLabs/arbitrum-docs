@@ -126,8 +126,8 @@ nvm use 18.20.3
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 16.19
-nvm use 16.19
+nvm install 18.20.3
+nvm use 18.20.3
 ```
 
 ### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
