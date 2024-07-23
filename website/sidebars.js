@@ -510,7 +510,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'debug Stylus transactions',
+          label: 'Debug Stylus transactions',
           id: 'stylus/how-tos/debugging-stylus-tx',
         },
         {
