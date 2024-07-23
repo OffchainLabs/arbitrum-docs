@@ -7,7 +7,7 @@ content_type: faq
 ---
 
 import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
-import FAQQuestions from '../partials/_troubleshooting-orbit-partial.md';
+import FAQQuestions from '../partials/_troubleshooting-orbit-partial.mdx';
 
 <FAQStructuredDataJsonLd faqsId="building-orbit" />
 <FAQQuestions />
