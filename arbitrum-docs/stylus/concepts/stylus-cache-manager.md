@@ -10,7 +10,7 @@ sidebar_position: 3
 
 This initialization process, if repeated frequently, may lead to inefficiencies. To address this, we have implemented a caching strategy. By storing frequently accessed contracts in memory, we can avoid repeated initializations. This approach saves resources and time, significantly enhancing the speed and efficiency of contract execution.
 
-**Note that Stylus smart contracts will need to be re-activated once per year (365 days), even if they are in the cache. This re-activation can be done using [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus), a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust.**
+**Note that Stylus smart contracts will need to be re-activated once per year (365 days) or whenever a upgrade to Stylus (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus), a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust.**
 
 
 
