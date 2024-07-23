@@ -142,7 +142,7 @@ rustup target add wasm32-wasi --toolchain 1.73
 cargo install cbindgen
 ```
 
-### Step 7. Configure Go [1.20](https://github.com/moovweb/gvm)
+### Step 7. Configure Go [1.21](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
