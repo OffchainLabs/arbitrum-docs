@@ -289,7 +289,7 @@ async function generateFiles() {
     linkableTerms
   )}\n`
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_glossary-partial.md',
+    '../arbitrum-docs/partials/_glossary-partial.mdx',
     definitionsHTML
   )
 
@@ -301,7 +301,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.getStartedFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-users-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-users-partial.mdx',
     renderFAQs(cmsContents.getStartedFAQs)
   )
 
@@ -311,7 +311,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.nodeRunningFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-nodes-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx',
     renderFAQs(cmsContents.nodeRunningFAQs)
   )
 
@@ -321,7 +321,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.buildingFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-building-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-building-partial.mdx',
     renderFAQs(cmsContents.buildingFAQs)
   )
 
@@ -331,7 +331,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.buildingStylusFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-stylus-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-stylus-partial.mdx',
     renderFAQs(cmsContents.buildingStylusFAQs)
   )
 
@@ -341,7 +341,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.orbitFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-orbit-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-orbit-partial.mdx',
     renderFAQs(cmsContents.orbitFAQs)
   )
 
@@ -351,7 +351,7 @@ async function generateFiles() {
     renderJSONFAQStructuredData(cmsContents.bridgingFAQs)
   )
   fs.writeFileSync(
-    '../arbitrum-docs/partials/_troubleshooting-bridging-partial.md',
+    '../arbitrum-docs/partials/_troubleshooting-bridging-partial.mdx',
     renderFAQs(cmsContents.bridgingFAQs)
   )
 }
