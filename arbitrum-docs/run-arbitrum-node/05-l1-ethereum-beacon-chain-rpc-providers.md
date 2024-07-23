@@ -3,7 +3,7 @@ title: 'L1 Ethereum beacon chain RPC providers'
 author: dlee
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

@@ -6,7 +6,7 @@ sidebar_position: 1
 content_type: overview
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
