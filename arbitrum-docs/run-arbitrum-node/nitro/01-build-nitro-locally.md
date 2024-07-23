@@ -109,15 +109,15 @@ sudo mkdir -p /usr/local/bin
 sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 ```
 
-### Step 5. Configure node [18.20.3](https://github.com/nvm-sh/nvm)
+### Step 5. Configure node [18](https://github.com/nvm-sh/nvm)
 
 #### For Debian/Ubuntu
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
-nvm install 18.20.3
-nvm use 18.20.3
+nvm install 18
+nvm use 18
 ```
 
 #### For MacOS
@@ -126,8 +126,8 @@ nvm use 18.20.3
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 18.20.3
-nvm use 18.20.3
+nvm install 18
+nvm use 18
 ```
 
 ### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
