@@ -7,7 +7,7 @@ content_type: troubleshooting
 ---
 
 import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
-import FAQQuestions from '../partials/_troubleshooting-bridging-partial.md';
+import FAQQuestions from '../partials/_troubleshooting-bridging-partial.mdx';
 
 <FAQStructuredDataJsonLd faqsId="bridging" />
 <FAQQuestions />
