@@ -8,7 +8,7 @@ user_story: As a current or prospective Orbit chain owner, I need to onboard int
 content_type: get-started
 ---
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
