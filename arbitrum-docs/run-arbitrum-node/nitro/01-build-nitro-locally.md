@@ -24,7 +24,7 @@ This how-to assumes that you're running one of the following operating systems:
 
 #### For [Debian](https://docs.docker.com/engine/install/debian)/[Ubuntu](https://docs.docker.com/engine/install/ubuntu)
 
-```bash
+```shell
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -51,7 +51,7 @@ Depending on whether your Mac has an Intel processor or Apple silicon, download 
 
 After installing docker, you might want to be able to run it with your current user instead of root. You can run the following commands to do so.
 
-```bash
+```shell
 sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
@@ -61,7 +61,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 
 ### Step 2. Download the Nitro source code
 
-```bash
+```shell
 git clone --branch @nitroVersionTag@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
@@ -69,7 +69,7 @@ git submodule update --init --recursive --force
 
 ### Step 3. Build the Nitro node Docker image
 
-```bash
+```shell
 docker build . --tag nitro-node
 ```
 
@@ -83,7 +83,7 @@ If you want to build the node binaries natively, execute steps 1-3 of the [Build
 
 #### For Debian/Ubuntu
 
-```bash
+```shell
 apt install git curl build-essential cmake npm golang clang make gotestsum wabt lld-13 python3
 npm install --global yarn
 ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
@@ -93,7 +93,7 @@ ln -s /usr/bin/wasm-ld-13 /usr/local/bin/wasm-ld
 
 Install [Homebrew](https://brew.sh/) package manager and add it to your `PATH` environment variable:
 
-```bash
+```shell
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
@@ -102,7 +102,7 @@ echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 
 Install essentials:
 
-```bash
+```shell
 brew install git curl make cmake npm go gvm golangci-lint wabt llvm gotestsum
 npm install --global yarn
 sudo mkdir -p /usr/local/bin
@@ -122,7 +122,7 @@ nvm use 18
 
 #### For MacOS
 
-```bash
+```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -132,7 +132,7 @@ nvm use 18
 
 ### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
 
-```bash
+```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 rustup install 1.73
@@ -148,13 +148,13 @@ cargo install cbindgen
 
 ##### For Debian/Ubuntu
 
-```bash
+```shell
 sudo apt-get install bison
 ```
 
 ##### For MacOS
 
-```bash
+```shell
 brew install bison
 ```
 
@@ -172,20 +172,20 @@ If you use zsh, replace `bash` with `zsh`.
 
 #### Install foundry
 
-```bash
+```shell
 curl -L https://foundry.paradigm.xyz | bash
 foundryup
 ```
 
 ### Step 8. Start build
 
-```bash
+```shell
 make
 ```
 
 ### Step 9. Produce binaries
 
-```bash
+```shell
 make build
 ```
 
@@ -193,7 +193,7 @@ make build
 
 To run your node using the generated binaries, use the following command from the `nitro` folder, with your desired parameters
 
-```bash
+```shell
 ./target/bin/nitro <node parameters>
 ```
 
@@ -207,6 +207,6 @@ ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-
 
 Try add flag:
 
-```bash
+```shell
 --validation.wasm.allowed-wasm-module-roots={WASM_MODULE_ROOT}
 ```
