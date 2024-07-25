@@ -55,6 +55,6 @@ A second term is added to the L1 Gas Basefee, based on the derivative of the sur
 
 ## Getting L1 fee info
 
-The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.md#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/build-decentralized-apps/nodeinterface/02-reference.md) or [NodeInterface.gasEstimateL1Component()](/build-decentralized-apps/nodeinterface/02-reference.md) method can be used.
+The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.md#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/build-decentralized-apps/nodeinterface/02-reference.mdx) or [NodeInterface.gasEstimateL1Component()](/build-decentralized-apps/nodeinterface/02-reference.mdx) method can be used.
 
 Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.
