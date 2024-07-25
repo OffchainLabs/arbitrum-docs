@@ -113,7 +113,7 @@ sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
 
 #### For Debian/Ubuntu
 
-```bash
+```shell
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 source "$HOME/.bashrc"
 nvm install 18
