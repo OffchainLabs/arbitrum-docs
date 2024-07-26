@@ -1,6 +1,7 @@
 ---
 author: dzgoldman
 ---
+import ImageWithCaption from '@site/src/components/ImageCaptions/'
 
 # Inside Arbitrum Nitro
 
@@ -33,7 +34,9 @@ Nitro is a major upgrade to Arbitrum, improving over "classic" Arbitrum in sever
 
 At the most basic level, an Arbitrum chain works like this:
 
-![img](https://lh4.googleusercontent.com/qwf_aYyB1AfX9s-_PQysOmPNtWB164_qA6isj3NhkDnmcro6J75f6MC2_AjlN60lpSkSw6DtZwNfrt13F3E_G8jdvjeWHX8EophDA2oUM0mEpPVeTlMbsjUCMmztEM0WvDpyWZ6R)
+
+<ImageWithCaption caption="Original napkin sketch drawn by Arbitrum co-founder Ed Felten" src="https://lh4.googleusercontent.com/qwf_aYyB1AfX9s-_PQysOmPNtWB164_qA6isj3NhkDnmcro6J75f6MC2_AjlN60lpSkSw6DtZwNfrt13F3E_G8jdvjeWHX8EophDA2oUM0mEpPVeTlMbsjUCMmztEM0WvDpyWZ6R" />
+
 
 Users and contracts put messages into the inbox. The chain reads the messages one at a time, and processes each one. This updates the state of the chain and produces some outputs.
 
