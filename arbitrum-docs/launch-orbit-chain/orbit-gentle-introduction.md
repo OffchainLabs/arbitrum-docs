@@ -128,7 +128,7 @@ It depends on your definition of "app chain". Orbit chains can be used as applic
 
 ### What's the best model: AnyTrust or Rollup?
 
-The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilema (scalability vs. security vs. decentralization), so the best choice depends on what features matter most for your use-case.
+The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilemma (scalability vs. security vs. decentralization), so the best option depends on what features matter most for your use case.
 
 Here's a short list to help you pick the model that works for you: 
 
