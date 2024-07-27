@@ -116,7 +116,7 @@ Stylus smart contracts will need to be re-activated once per year (365 days) or 
 To stay up to date with proposals, timelines, and statuses of network upgrades to Arbitrum One and Nova, we recommend you subscribe to the <a href="https://t.me/arbitrumnodeupgrade">Arbitrum Node Upgrade Announcement channel on Telegram</a>, join both the #dev-announcements and #node-runners Discord channels in the <a href="https://discord.com/invite/arbitrum">Arbitrum Discord server</a>, and follow the official Arbitrum <a href="https://x.com/ArbitrumDevs">Arbitrum Developers X accounts</a>.
 </p>
 
-### Why do I get an error "no library targets found in package" when trying to compile and old example?
+### Why do I get an error "no library targets found in package" when trying to compile an old example?
 <p>
 Some of the first Stylus examples were built and deployed using a previous version of <a href="https://github.com/OffchainLabs/cargo-stylus">cargo-stylus</a> (<code>0.1.x</code>). In that version, Stylus projects were structured as regular Rust binaries.
 </p>
