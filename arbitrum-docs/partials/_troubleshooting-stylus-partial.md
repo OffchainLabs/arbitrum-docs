@@ -109,7 +109,7 @@ As an alternative solution, you can use <a href="https://docs.arbitrum.io/stylus
 
 ### Is there anything special I need to do whenever Stylus gets upgraded on the chain I'm deployed on?
 <p>
-Stylus smart contracts will need to be re-activated once per year (365 days) or whenever an upgrade to Stylus is rolled out (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using cargo-stylus, a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust. Note that the gas fee required to make this call will depend on the current demand for Stylus contract activations at any given moment in time. It is recommended that you estimate the gas and then use that value, or a value slightly higher, to re-activate your Stylus contract.
+Stylus smart contracts will need to be re-activated once per year (365 days) or whenever an upgrade to Stylus is rolled out (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [cargo-stylus](https://github.com/OffchainLabs/cargo-stylus), specifically the `cargo stylus activate --address=$ADDR` sub-command. `cargo-stylus` is a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust. Note that the gas fee required to make this call will depend on the current demand for Stylus contract activations at any given moment in time. It is recommended that you estimate the gas and then use that value, or a value slightly higher, to re-activate your Stylus contract.
 </p>
 
 <p>
