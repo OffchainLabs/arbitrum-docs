@@ -70,7 +70,7 @@ curl https://api.openfort.xyz/v1/policies \
 
 Then, add a policy rule for the NFT contract:
 
-```bash
+```shell
 curl https://api.openfort.xyz/v1/policies/:id/policy_rules \
   -H "Authorization: Bearer $YOUR_SECRET_KEY" \
   -d type="contract_functions" \
