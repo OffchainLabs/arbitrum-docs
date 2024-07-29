@@ -514,6 +514,11 @@ const sidebars = {
           id: 'stylus/how-tos/debugging-stylus-tx',
         },
         {
+          type: 'doc',
+          label: 'Verifying Stylus contracts',
+          id: 'stylus/how-tos/verifying-contracts',
+        },
+        {
           type: 'link',
           label: 'Rust crate docs',
           href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
