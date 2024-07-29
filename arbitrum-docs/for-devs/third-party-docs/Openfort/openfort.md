@@ -12,7 +12,7 @@ The following document was contributed by  [@joalavedra](https://github.com/joal
 
 :::
 
-**[<ins>Openfort</ins>](https://www.openfort.xyz/)** is a headless wallet solution that helps developers integrate authentication, private key management, and account abstraction into their dApps. By abstracting away the complexities of blockchain interactions, Openfort allows you to build Web3 applications with a Web2-like user experience, without requiring end users to manage private keys or hold cryptocurrency.
+**[<ins>Openfort</ins>](https://www.openfort.xyz/)** is a headless wallet solution that helps developers integrate authentication, private key management, and account abstraction into their dApps. By abstracting away the complexities of blockchain interactions, Openfort allows you to build Web3 applications with a Web2-like user experience without requiring end users to manage private keys or hold cryptocurrency.
 
 Openfort enables you to:
 - Implement secure authentication and key management 
