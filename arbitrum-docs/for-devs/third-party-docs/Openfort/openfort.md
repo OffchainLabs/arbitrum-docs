@@ -21,7 +21,7 @@ Openfort enables you to:
 
 Check out **[<ins>Openfort's Documentation</ins>](https://www.openfort.xyz/docs)** to get started.
 
-## Openfort Dashboard
+## Openfort dashboard
 
 The Openfort Dashboard allows you to:
 
