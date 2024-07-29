@@ -23,7 +23,7 @@ Check out **[<ins>Openfort's Documentation</ins>](https://www.openfort.xyz/docs)
 
 ## Openfort dashboard
 
-The Openfort Dashboard allows you to:
+The Openfort dashboard allows you to:
 
 - Create and manage projects
 - Generate API keys
