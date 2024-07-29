@@ -8,6 +8,6 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 <PublicPreviewBannerPartial />
 
-import GentleIntroPartial from '../partials/_gentle-intro-partial.md';
+import GentleIntroPartial from '../partials/_gentle-intro-partial.mdx';
 
 <GentleIntroPartial />
