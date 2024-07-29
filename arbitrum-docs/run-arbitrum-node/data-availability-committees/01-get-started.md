@@ -36,7 +36,7 @@ Here's a basic checklist of actions to complete for DAC members:
 
 ## If you are a chain owner
 
-Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](/run-arbitrum-node/data-availability-committees/04-configure-dac.md)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md#testing-the-das).
+Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to set valid keyset on parent chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md#4-setting-valid-keyset-on-parent-chain.md)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md#testing-the-das).
 
 Here's a basic checklist of actions to complete for chain owners:
 
