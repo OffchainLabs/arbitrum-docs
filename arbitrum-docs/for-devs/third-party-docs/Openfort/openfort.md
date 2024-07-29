@@ -80,7 +80,7 @@ curl https://api.openfort.xyz/v1/policies/:id/policy_rules \
 
 Replace `:id` with the policy ID returned from the previous step, and `con_...` with your contract ID.
 
-### 3. Create a Gasless Transaction
+### 3. Create a gasless transaction
 
 Now, let's create a transaction to mint an NFT without the user paying for gas:
 
