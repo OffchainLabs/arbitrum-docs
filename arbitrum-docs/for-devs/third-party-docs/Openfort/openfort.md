@@ -102,7 +102,7 @@ const transactionIntent = await openfort.transactionIntents.create({
 });
 ```
 
-### 4. Optional: Specify the Player
+### 4. Optional: specify the player
 
 If you want to associate the transaction with a specific player:
 
