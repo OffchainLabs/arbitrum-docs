@@ -60,7 +60,7 @@ Replace `YOUR_CONTRACT_ADDRESS` with the address of your NFT contract on Arbitru
 
 Create a new policy to sponsor gas fees for users:
 
-```bash
+```shell
 curl https://api.openfort.xyz/v1/policies \
   -H "Authorization: Bearer $YOUR_SECRET_KEY" \
   -d chainId=42161 \
