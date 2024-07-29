@@ -40,7 +40,7 @@ Please check out the [<ins>docs</ins>](https://www.openfort.xyz/docs/) to learn 
 
 ## How to implement a gasless transaction on Arbitrum using Openfort
 
-With Openfort, you can sponsor transactions for your users, meaning that in-game wallets don't need to have native tokens to execute transactions, such as minting an NFT. This guide will walk you through the process of implementing a gasless transaction to mint an NFT on Arbitrum.
+With Openfort, you can sponsor transactions for your users, meaning that in-game wallets don't need native tokens to execute transactions, such as minting an NFT. This guide will walk you through the process of implementing a gasless transaction to mint an NFT on Arbitrum.
 
 ### 1. Import the NFT Contract
 
