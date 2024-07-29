@@ -8,7 +8,7 @@ sidebar_label: 'Openfort'
 
 :::info Community member contribution
 
-Shoutout to [@joalavedra](https://github.com/joalavedra) for contributing the following [third-party document](/for-devs/third-party-docs/contribute)!
+The following document was contributed by  [@joalavedra](https://github.com/joalavedra). Give them a shoutout if you find it useful!
 
 :::
 
