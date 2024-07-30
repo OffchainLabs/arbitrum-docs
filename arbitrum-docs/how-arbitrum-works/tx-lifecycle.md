@@ -22,7 +22,7 @@ Alternatively, a client can send a message to the Sequencer by signing and publi
 
 **See**:
 
-- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.md)
+- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.mdx)
 - [The Sequencer](/how-arbitrum-works/sequencer.md)
 - [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 
@@ -36,8 +36,8 @@ Upon receiving a transaction, the Sequencer will:
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.md)
-- [Geth](/how-arbitrum-works/arbos/geth.md)
+- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
+- [Geth](/how-arbitrum-works/arbos/geth.mdx)
 - [L1 pricing](/how-arbitrum-works/l1-gas-pricing.md) / [L2 Gas](/how-arbitrum-works/gas-fees.md)
 
 #### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
@@ -85,8 +85,8 @@ A staked, active validator will then run the Arbitrum VM over the inputs in the 
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.md)
-- [Geth](/how-arbitrum-works/arbos/geth.md)
+- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
+- [Geth](/how-arbitrum-works/arbos/geth.mdx)
 - [L1 pricing](/how-arbitrum-works/l1-gas-pricing.md) / [L2 Gas](/how-arbitrum-works/gas-fees.md)
 
 :::note
@@ -97,7 +97,7 @@ RBlock assertions include claims about the state of the Outbox; if our transacti
 
 **See**:
 
-- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.md)
+- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.mdx)
 
 #### 4a. RBlock is valid / goes unchallenged
 
