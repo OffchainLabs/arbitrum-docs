@@ -636,11 +636,6 @@ const sidebars = {
               id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
             },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
-            },
           ],
         },
         {
