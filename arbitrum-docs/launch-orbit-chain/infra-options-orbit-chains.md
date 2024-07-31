@@ -27,6 +27,7 @@ Chain explorers let you view transactions, blocks, addresses, and network activi
 - [Socialscan](https://socialscan.io/)
 - [Lore](https://www.lorescan.com/)
 - [Routescan](https://routescan.io/)
+- [L2scan](https://arbitrum.l2scan.co/)
 
 Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block includes a given transaction.
 
