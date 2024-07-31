@@ -26,7 +26,7 @@ AnyTrust works with a group of Data Availability Servers, forming a committee th
 
 To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where `N` is the total number of committee members and `H` is the minimum number of members assumed to be honest.
 
-Someone setting up an AnyTrust node would need to first set up the committee of Data Availability Servers, including generating their BLS keys. You can learn more on about this topic [in this guide explaining the process of generating BLS keys ](run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypai  r).
+Someone setting up an AnyTrust node would need to first set up the committee of Data Availability Servers, including generating their BLS keys. You can learn more on about this topic [in this guide explaining the process of generating BLS keys ](run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
 
 Here is a sample of the `JSON` configuration, taken from a past configuration of Arbitrum Nova, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`, and `signer-mask` fields. `pubkey` is the base64 encoded BLS public key of the committee member, and `signer-mask` should be a power of 2, starting from 2^0, 2^1, etc.
 
