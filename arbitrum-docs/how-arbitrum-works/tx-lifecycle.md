@@ -24,7 +24,7 @@ Alternatively, a client can send a message to the Sequencer by signing and publi
 
 - [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.md)
 - [The Sequencer](/how-arbitrum-works/sequencer.md)
-- [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
+- [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 
 ### 2. Sequencer orders transaction (off-chain)
 
