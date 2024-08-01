@@ -12,23 +12,23 @@ import UnderConstructionPartial from '../../partials/_under-construction-banner-
 
 <UnderConstructionPartial />
 
-The DAC has `N` members; the AnyTrust protocol assumes that a minimum of `H` `DAC` members maintain integrity. `H` is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for storage to be considered successful.
+The DAC has `N` members; the AnyTrust protocol assumes that a minimum of `H` `DAC` members maintain integrity. `H` is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the Keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for storage to be considered successful.
 
-Each DAC member gets their own set of BLS public and private keys. It's important for every member to create their own new and secure BLS keys. They should do this on their own and make sure these keys are random and only for their use. If you need help generating BLS keys, please refer to our guide on generating keys in the Arbitrum documentation: [Generating BLS Keys](/run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
+Each DAC member gets their own set of BLS public and private keys. Every member needs to create their own new and secure BLS keys. They should do this independently and ensure these keys are random and only for their use. If you need help generating BLS keys, please refer to our guide on generating keys in the Arbitrum documentation: [Generating BLS Keys](/run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
 
-The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a>. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro#inside-anytrust) for more information.
+The main blockchain (parent chain) needs to know all DAC members' names and public keys to validate the integrity of the data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a>. This design lets the chain owner modify the DAC's membership over time and lets DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro#inside-anytrust) for more information.
 
-In the following section, we will provide a detailed guide on the generation of a Keyset corresponding to your individual set of keys, as well as instructions for its subsequent configuration within the chain.
+In the following section, we will provide a detailed guide on generating a Keyset corresponding to your individual set of keys and instructions for its subsequent configuration within the chain.
 
 ### Batch poster configuration
 
-AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro <a data-quicklook-from="batch">Batch</a> Poster, you need to provide specific information for each committee member. This includes their URL and BLS public key for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
+AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro <a data-quicklook-from="batch">Batch</a> Poster, you need to provide specific information for each committee member. This includes each member's URL, BLS public key, and a parameter known as `assumed-honest`. As mentioned, assumed-honest refers to the minimum number of committee members we trust.
 
 To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where `N` is the total number of committee members and `H` is the minimum number of members assumed to be honest.
 
-Someone setting up an AnyTrust node would need to first set up the committee of Data Availability Servers, including generating their BLS keys. You can learn more on about this topic [in this guide explaining the process of generating BLS keys ](run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
+Someone setting up an AnyTrust node would need to first set up the committee of Data Availability Servers, including generating their BLS keys. You can learn more about this topic [in this guide explaining the process of generating BLS keys ](run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
 
-Here is a sample of the `JSON` configuration, taken from a past configuration of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`. `pubkey` is the base64 encoded BLS public key of the committee member.
+Here is a sample of the `JSON` configuration, taken from a past configuration of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, which was used with the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, and `pubkey`. `pubkey` is the base64 encoded BLS public key of the committee member.
 
 ```shell
 {
@@ -47,7 +47,7 @@ Here is a sample of the `JSON` configuration, taken from a past configuration of
 
 ### Keyset Generation
 
-For the Batch Poster to be able to post batches, the keyset corresponding to the configuration it is using must be enabled on the Inbox contract. You’ll need to generate the keyset and keyset hash binary blobs to pass to the `SetValidKeyset` call on the Inbox contract. Here’s an example using the same Nova @Keyset 8 configuration as before, and the datool utility which is distributed with Nitro:
+For the Batch Poster to be able to post batches, the Keyset corresponding to the configuration it is using must be enabled on the Inbox contract. You’ll need to generate the keyset and keyset hash binary blobs to pass to the `SetValidKeyset` call on the Inbox contract. Here’s an example using the same Nova @Keyset 8 configuration as before and the datool utility, which is distributed with Nitro:
 
 ```shell
 {
@@ -78,18 +78,18 @@ YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 #### Keyset
 
-Once you've generated the keys, it is imperative to generate the Keyset as previously outlined. For example, in the scenario involving a zero-valued private key, the Keyset configuration would be as follows:
+Once you've generated the keys, generating the Keyset as previously outlined is imperative. For example, in the scenario involving a zero-valued private key, the Keyset configuration would be as follows:
 
 ```shell
 Keyset: 0x00000000000000010000000000000001012160000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 KeysetHash: 0x4d795e20d33eea0b070600e4e100c512a750562bf03c300c99444bd5af92d9b0
 ```
 
-Upon successfully generating the Keyset, it is essential to establish it within the parent chain. This step ensures that the parent chain is accurately informed of the Committee members' keyset.
+Upon successfully generating the Keyset, it is essential to establish it within the parent chain. This step ensures that the parent chain is accurately informed of the Committee members' Keyset.
 
 The Keyset can be configured by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/bridge/SequencerInbox.sol#L466) method within the SequencerInbox contract.
 
-**Note:** Only Rollup owner(s) can call this method to set the new valid keyset.
+**Note:** Only Rollup owner(s) can call this method to set the new valid Keyset.
 
 #### Sequencer Configuration
 
