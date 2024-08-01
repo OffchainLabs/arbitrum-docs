@@ -8,9 +8,9 @@ target_audience: 'Developers and node operators deploying and maintaining AnyTru
 content_type: how-to
 ---
 
-import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
-<UnderConstructionPartial />
+<PublicPreviewBannerPartial />
 
 The DAC has `N` members; the AnyTrust protocol assumes that a minimum of `H` `DAC` members maintain integrity. `H` is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the Keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for storage to be considered successful.
 
