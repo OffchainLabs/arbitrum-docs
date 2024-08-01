@@ -28,7 +28,7 @@ As far as the L1 knows, all deposited funds are held by Arbitrum's Bridge contra
 
 ## Withdrawing ether
 
-Withdrawing ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.md#arbsys)'s `withdrawEth` method:
+Withdrawing ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
 
 ```sol
 ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)

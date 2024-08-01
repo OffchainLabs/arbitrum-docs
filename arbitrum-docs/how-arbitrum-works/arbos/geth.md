@@ -70,7 +70,7 @@ If the user attempts to purchase compute gas in excess of ArbOS's per-block gas 
 
 ### [`PushCaller`][pushcaller_link]{#PushCaller}
 
-These hooks track the callers within the EVM callstack, pushing and popping as calls are made and complete. This provides [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.md#arbsys) with info about the callstack, which it uses to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
+These hooks track the callers within the EVM callstack, pushing and popping as calls are made and complete. This provides [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) with info about the callstack, which it uses to implement the methods `WasMyCallersAddressAliased` and `MyCallersAddressWithoutAliasing`.
 
 ### [`L1BlockHash`][l1blockhash_link]
 
@@ -180,7 +180,7 @@ Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#Arbit
 
 ### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
-These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
+These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
 
 ### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
@@ -265,7 +265,7 @@ Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/arbos/introduct
 
 Added [`UnderlyingTransaction`][underlyingtransaction_link] to Message interface
 Added [`GetCurrentTxLogs`](https://github.com/OffchainLabs/go-ethereum/tree/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state/statedb_arbitrum.go) to StateDB
-We created the AdvancedPrecompile interface, which executes and charges gas with the same function call. This is used by [Arbitrum's precompiles](/build-decentralized-apps/precompiles/01-overview.md), and also wraps Geth's standard precompiles.
+We created the AdvancedPrecompile interface, which executes and charges gas with the same function call. This is used by [Arbitrum's precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), and also wraps Geth's standard precompiles.
 
 ### WASM build support
 
