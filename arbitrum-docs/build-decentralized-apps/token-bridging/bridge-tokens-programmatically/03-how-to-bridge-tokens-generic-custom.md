@@ -381,4 +381,4 @@ Yes, if your token has a standard ERC20 counterpart on L2, you can go through th
 
 1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
-3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts)
+3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.mdx#token-bridge-smart-contracts)

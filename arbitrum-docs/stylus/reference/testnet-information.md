@@ -35,7 +35,7 @@ This table provides an overview of the available public RPC endpoints for the St
 
 :::
 
-For information on other mainnet and testnet Arbitrum chains, visit the [Node Runners](/build-decentralized-apps/reference/01-node-providers.md#rpc-endpoints) section of the docs.
+For information on other mainnet and testnet Arbitrum chains, visit the [Node Runners](/build-decentralized-apps/reference/01-node-providers.mdx#rpc-endpoints) section of the docs.
 
 ## Faucets
 
@@ -57,7 +57,7 @@ Stylus is undergoing major upgrades, and some improvements are expected to requi
 
 :::
 
-Here we list the addresses of the smart contracts related to the protocol, the token bridge and precompiles of the Stylus testnet. For the addresses of these contracts deployed on other Arbitrum chains, see our reference page [Smart contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md).
+Here we list the addresses of the smart contracts related to the protocol, the token bridge and precompiles of the Stylus testnet. For the addresses of these contracts deployed on other Arbitrum chains, see our reference page [Smart contract addresses](/build-decentralized-apps/reference/02-useful-addresses.mdx).
 
 ### Protocol smart contracts
 

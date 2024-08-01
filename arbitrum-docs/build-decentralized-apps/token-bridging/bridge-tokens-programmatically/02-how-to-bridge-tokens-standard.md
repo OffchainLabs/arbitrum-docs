@@ -94,7 +94,7 @@ Now, here’s an explanation of the contracts and methods that need to be called
 - When bridging from Ethereum (L1) to Arbitrum (L2), you’ll need to interact with the `L1GatewayRouter` contract, by calling the `outboundTransferCustomRefund` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L1ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L1GatewayRouter` contract.
 - When bridging from Arbitrum (L2) to Ethereum (L1), you’ll need to interact with the `L2GatewayRouter` contract, by calling the `outBoundTransfer` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L2ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L2GatewayRouter` contract.
 
-You can find the addresses of the contracts involved in the process in [this page](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts).
+You can find the addresses of the contracts involved in the process in [this page](/build-decentralized-apps/reference/02-useful-addresses.mdx#token-bridge-smart-contracts).
 
 ## Step 3: Approve token allowance for the gateway contract
 
@@ -224,4 +224,4 @@ After finishing this process, you’ll now have a counterpart token contract aut
 
 1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
-3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts)
+3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.mdx#token-bridge-smart-contracts)

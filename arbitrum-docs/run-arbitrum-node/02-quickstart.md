@@ -13,7 +13,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 
 :::info
 
-There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.md) to get RPC access to fully-managed nodes hosted by a third party provider.
+There is no protocol level incentive to run an Arbitum full node. If you’re interested in accessing an Arbitrum chain, but you don’t want to set up your own node, see our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) to get RPC access to fully-managed nodes hosted by a third party provider.
 
 :::
 
