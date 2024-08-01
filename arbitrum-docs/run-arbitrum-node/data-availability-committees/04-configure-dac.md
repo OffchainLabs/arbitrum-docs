@@ -16,19 +16,19 @@ The DAC has `N` members; the AnyTrust protocol assumes that a minimum of `H` `DA
 
 Each DAC member gets their own set of BLS public and private keys. It's important for every member to create their own new and secure BLS keys. They should do this on their own and make sure these keys are random and only for their use. If you need help generating BLS keys, please refer to our guide on generating keys in the Arbitrum documentation: [Generating BLS Keys](/run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
 
-The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a Data Availability Certificate. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro#inside-anytrust) for more information.
+The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a>. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro#inside-anytrust) for more information.
 
 In the following section, we will provide a detailed guide on the generation of a Keyset corresponding to your individual set of keys, as well as instructions for its subsequent configuration within the chain.
 
 ### Batch poster configuration
 
-AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro Batch Poster, you need to provide specific information for each committee member. This includes their URL and BLS public key for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
+AnyTrust works with a group of Data Availability Servers, forming a committee that ensures transaction data is accessible. When setting up the Nitro <a data-quicklook-from="batch">Batch</a> Poster, you need to provide specific information for each committee member. This includes their URL and BLS public key for each member, and a parameter known as assumed-honest. As mentioned before, assumed-honest refers to the minimum number of committee members that we trust.
 
 To ensure data is stored properly, a certain number of committee members need to confirm they have the data. This number is calculated as `K = (N + 1) - H`, where `N` is the total number of committee members and `H` is the minimum number of members assumed to be honest.
 
 Someone setting up an AnyTrust node would need to first set up the committee of Data Availability Servers, including generating their BLS keys. You can learn more on about this topic [in this guide explaining the process of generating BLS keys ](run-arbitrum-node/data-availability-committees/deploy-das#step-1-generate-the-bls-keypair).
 
-Here is a sample of the `JSON` configuration, taken from a past configuration of Arbitrum Nova, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`. `pubkey` is the base64 encoded BLS public key of the committee member.
+Here is a sample of the `JSON` configuration, taken from a past configuration of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, which was used with to the batch poster configuration. Note that due to a quirk in a configuration library we use in Nitro, the `backends` field is an escaped JSON string with `url`, `pubkey`. `pubkey` is the base64 encoded BLS public key of the committee member.
 
 ```shell
 {
@@ -66,7 +66,7 @@ KeysetHash: 0xf8bb9a67839d1767e79afe52d21e97a04ee0bf5f816d5b52c10df60cccb7f822
 
 ### Example with single private key = zero
 
-For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and Sequencer configuration can be set as detailed below.
+For example, in the case of a solitary, zero-valued private key, the setup of the keys, Keyset, and <a data-quicklook-from="sequencer">Sequencer</a> configuration can be set as detailed below.
 
 #### Key
 
