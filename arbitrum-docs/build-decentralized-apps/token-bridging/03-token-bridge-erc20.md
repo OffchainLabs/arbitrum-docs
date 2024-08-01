@@ -7,7 +7,7 @@ content_type: concept
 sidebar_position: 3
 ---
 
-The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (the Layer 1, or L1) and Arbitrum (the Layer 2, or L2) that leverages Arbitrum's [cross-chain message passing system](/build-decentralized-apps/04-cross-chain-messaging.md) to achieve basic desired token-bridging functionality. We recommend that you use it!
+The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (the Layer 1, or L1) and Arbitrum (the Layer 2, or L2) that leverages Arbitrum's [cross-chain message passing system](/build-decentralized-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
 
 ## Design rationale
 
