@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Application, RendererEvent } = require('typedoc');
-
+const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 /**
  * Plugin to move docs files from a target folder to the same folder as used by Docusaurus site.
  *
@@ -15,20 +15,19 @@ const { Application, RendererEvent } = require('typedoc');
  * files by leading numbers first then alphabetically.
  */
 function load(app) {
-  const outputDir = app.options.getValue('out');
+  const outputDir = path.join(app.options.getValue('out'),'../');
   const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
-  const targetDir = path.join(outputDir);
 
   app.renderer.on(RendererEvent.START, async () => {
-    cleanDirectory(targetDir);
+    cleanDirectory(outputDir);
   });
 
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, targetDir);
+    copyFiles(sourceDir, outputDir);
 
-    const sidebarItems = generateSidebar(targetDir);
+    const sidebarItems = generateSidebar(outputDir);
     const sidebarConfig = { items: sidebarItems };
-    const sidebarPath = path.join(targetDir, 'sidebar.js');
+    const sidebarPath = path.join(outputDir, 'sidebar.js');
 
     fs.writeFileSync(
       sidebarPath,
@@ -118,17 +117,18 @@ function generateSidebar(dir, basePath = '') {
           fullPath,
           `${basePath}/${entry.name.replace(/^\d+-/, '')}`,
         );
+        const label = capitalizeFirstLetter(getLabelFromFilesystem(entry.name));
         return {
           type: 'category',
-          label: generateLabel(entry.name),
+          label,
           items: subItems,
         };
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
+      } else if (entry.isFile() && (entry.name.endsWith('.md') || entry.name.endsWith('.mdx'))) {
         const docId = generateId(entry.name, basePath);
         return {
           type: 'doc',
           id: docId,
-          label: generateLabel(entry.name),
+          label: generateLabel(entry),
         };
       }
     })
@@ -142,16 +142,31 @@ function capitalizeFirstLetter(string) {
 }
 
 function generateId(name, basePath) {
-  let label = name.replace(/^\d+-/, ''); //
-  label = label.replace(/\.md$/, '');
+  const label = getLabelFromFilesystem(name);
   const slashIfNeeded = basePath.startsWith('/') ? '' : '/';
-  return 'sdk-docs' + slashIfNeeded + path.join(basePath, label);
+  return 'sdk' + slashIfNeeded + path.join(basePath, label);
 }
 
-function generateLabel(name) {
-  let label = name.replace(/^\d+-/, '');
-  label = label.replace(/\.md$/, '');
+function generateLabel(entry) {
+  const filePath = `${entry.path}/${entry.name}`;
+  const titleFromFile = getTitleFromFileContent(filePath);
+  const label = titleFromFile || getLabelFromFilesystem(entry.name);
   return capitalizeFirstLetter(label);
+}
+
+function getLabelFromFilesystem(name) {
+  const label = name.replace(/^\d+-/, '').replace(/\.md$/, '').replace(/\.mdx$/, '');
+  return label || '';
+}
+
+function getTitleFromFileContent(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return '';
+  }
+  const fileContent = fs.readFileSync(filePath, 'utf8');
+  const { contentTitle } = parseMarkdownContentTitle(fileContent);
+
+  return contentTitle || '';
 }
 
 exports.load = load;

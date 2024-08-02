@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -635,11 +635,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
