@@ -6,9 +6,14 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-<a data-quicklook-from="stylus">Stylus</a> is designed for fast computation and efficiency. However, the initialization process when entering a contract can be resource-intensive and time-consuming.
+<a data-quicklook-from="stylus">Stylus</a> is designed for fast computation and efficiency. However,
+the initialization process when entering a contract can be resource-intensive and time-consuming.
 
 This initialization process, if repeated frequently, may lead to inefficiencies. To address this, we have implemented a caching strategy. By storing frequently accessed contracts in memory, we can avoid repeated initializations. This approach saves resources and time, significantly enhancing the speed and efficiency of contract execution.
+
+**Note that Stylus smart contracts will need to be re-activated once per year (365 days) or whenever a upgrade to Stylus (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus), a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust.**
+
+
 
 import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
 
