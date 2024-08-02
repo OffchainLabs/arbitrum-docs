@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
