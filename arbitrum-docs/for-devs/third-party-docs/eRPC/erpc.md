@@ -11,6 +11,10 @@ sidebar_label: "eRPC"
 
 [eRPC](https://github.com/erpc/erpc) is a fault-tolerant EVM RPC proxy and re-org aware permanent caching solution. It is built with read-heavy use-cases in mind such as data indexing and high-load frontend usage.
 
+- [github](https://github.com/erpc/erpc)<br/>
+- [docs](https://docs.erpc.cloud/)<br/>
+- [telegram](https://t.me/erpc_cloud)<br/>
+
 ![Architecture](https://github.com/erpc/erpc/raw/main/assets/hla-diagram.svg)
 
 # Quick start
