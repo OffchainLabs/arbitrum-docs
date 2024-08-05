@@ -144,7 +144,7 @@ Here's a short list to help you pick the model that meets your chain's requireme
 
 - **AnyTrust:** The AnyTrust model allows you to use any `ERC-20` token for gas fees.
 
-#### I want my chain to be fully trustless and decentralized
+#### I want my chain to be trust-minimized and decentralized
 
 - **Rollup:** If your Rollup Orbit chain settles to Arbitrum One or Ethereum, it inherits the highest levels of trustlessness and decentralization of the Ethereum environment.
 
