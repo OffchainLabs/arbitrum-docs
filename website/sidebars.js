@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -453,6 +453,12 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
+          type: 'link',
+          label: 'Stylus by example',
+          href: 'https://stylus-by-example.org/',
+        },
+
+        {
           type: 'category',
           label: 'Gas and ink',
           collapsed: true,
@@ -501,6 +507,16 @@ const sidebars = {
           type: 'doc',
           label: 'Reduce the size of WASM binaries',
           id: 'stylus/how-tos/optimizing-binaries',
+        },
+        {
+          type: 'doc',
+          label: 'Debug Stylus transactions',
+          id: 'stylus/how-tos/debugging-stylus-tx',
+        },
+        {
+          type: 'doc',
+          label: 'Verifying Stylus contracts',
+          id: 'stylus/how-tos/verifying-contracts',
         },
         {
           type: 'link',
@@ -624,11 +640,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
