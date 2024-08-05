@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -512,6 +512,11 @@ const sidebars = {
           type: 'doc',
           label: 'Debug Stylus transactions',
           id: 'stylus/how-tos/debugging-stylus-tx',
+        },
+        {
+          type: 'doc',
+          label: 'Verifying Stylus contracts',
+          id: 'stylus/how-tos/verifying-contracts',
         },
         {
           type: 'link',
