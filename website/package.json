@@ -25,6 +25,7 @@
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
+    "@cookbookdev/docsbot": "^4.21.11",
     "@docusaurus/core": "^3.3.2",
     "@docusaurus/preset-classic": "^3.3.2",
     "@docusaurus/theme-live-codeblock": "^3.3.2",
