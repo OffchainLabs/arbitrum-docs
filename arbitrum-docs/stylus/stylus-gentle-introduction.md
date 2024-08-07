@@ -22,7 +22,7 @@ This introduction is for developers who want to build on Arbitrum using popular 
 - Stylus smart contracts benefit from **Arbitrum's EVM equivalence** thanks to a second, coequal WASM virtual machine.
 - Solidity contracts and Stylus contracts are fully interoperable. In Solidity, you can call a Rust program and vice versa.
 - Stylus contracts are over **an order of magnitude faster with significantly lower gas fees** due to the superior efficiency of WASM programs.
-- **Memory use can be much cheaper** when using Stylus, unlocking new use cases now that consuming RAM is viable on the blockchain.
+- **Memory use can be greatly optimized** when using Stylus, unlocking new use cases now that consuming RAM is viable on the blockchain.
 
 ### What's Stylus?
 
