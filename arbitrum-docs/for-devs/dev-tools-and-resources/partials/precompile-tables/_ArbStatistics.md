@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbStatistics.sol#L18"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbStatistics.sol#L18"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbStatistics.go#L18"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbStatistics.go#L18"
           target="_blank"
         >
           Implementation

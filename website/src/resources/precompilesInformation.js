@@ -185,6 +185,8 @@ const precompilesInformation = {
       },
     },
   },
+  ArbWasm: {},
+  ArbWasmCache: {},
 };
 
 const nodeInterfaceInformation = {
