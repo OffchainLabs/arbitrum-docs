@@ -35,10 +35,10 @@ const globalVars = {
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb',
+  nitroContractsCommit: '61204dd455966cb678192427a07aa9795ff91c14',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
-  goEthereumCommit: '22399a74e2b413e99a4f0d06c65862ced0d021c7',
+  goEthereumCommit: 'e35bf9cdd3d02034ac1be34a479d101f12012ba6',
 
   nitroPathToArbosState: 'arbos/arbosState',
   nitroPathToStorage: 'arbos/storage',
