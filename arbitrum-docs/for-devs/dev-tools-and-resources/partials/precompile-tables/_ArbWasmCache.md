@@ -177,7 +177,7 @@
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>Emitted when caching a WASM program</td>
     </tr>
   </tbody>
 </table>

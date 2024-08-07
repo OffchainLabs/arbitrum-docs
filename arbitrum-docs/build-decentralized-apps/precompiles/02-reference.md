@@ -21,8 +21,8 @@ This section is divided into two tables. We first list precompiles we expect use
 | [ArbGasInfo](#arbgasinfo)         | `0x6c`  | [Interface][arbgasinfo_link_interface]     | [Implementation][arbgasinfo_link_implementation]     | Info about gas pricing              |
 | [ArbRetryableTx](#arbretryabletx) | `0x6e`  | [Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation] | Managing retryables                 |
 | [ArbSys](#arbsys)                 | `0x64`  | [Interface][arbsys_link_interface]         | [Implementation][arbsys_link_implementation]         | System-level functionality          |
-| [ArbWasm](#arbwasm)                 | `0x71`  | [Interface][arbwasm_link_interface]         | [Implementation][arbwasm_link_implementation]         | Manages Stylus contracts         |
-| [ArbWasmCache](#arbwasmcache)                 | `0x72`  | [Interface][arbwasmcache_link_interface]         | [Implementation][arbwasmcache_link_implementation]         | Manages Stylus cache          |
+| [ArbWasm](#arbwasm)               | `0x71`  | [Interface][arbwasm_link_interface]        | [Implementation][arbwasm_link_implementation]        | Manages Stylus contracts            |
+| [ArbWasmCache](#arbwasmcache)     | `0x72`  | [Interface][arbwasmcache_link_interface]   | [Implementation][arbwasmcache_link_implementation]   | Manages Stylus cache                |
 
 ### Other precompiles
 

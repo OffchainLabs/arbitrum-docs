@@ -480,7 +480,7 @@
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>Emitted when activating a WASM program</td>
     </tr>
     <tr>
       <td>
@@ -502,7 +502,7 @@
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>Emitted when extending the expiration date of a WASM program</td>
     </tr>
   </tbody>
 </table>
