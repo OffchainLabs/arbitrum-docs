@@ -22,7 +22,7 @@ Keep in mind that this process only applies to Arbitrum One. Other Arbitrum chai
 
 To successfully migrate the state and history of the chain from a classic (pre-Nitro) node to a Nitro node, you'll need:
 
-- A fully synced classic node: you can find instructions on how to run a classic node in [this page](/run-arbitrum-node/more-types/03-run-classic-node.md).
+- A fully synced classic node: you can find instructions on how to run a classic node in [this page](/run-arbitrum-node/more-types/03-run-classic-node.mdx).
 - A clean, uninitialized Nitro node: you can find instructions on how to set up a Nitro node in [this page](/run-arbitrum-node/03-run-full-node.md).
 
 ## Step 1: Enable export options in your classic node
@@ -88,4 +88,4 @@ This state import operation requires more resources than a regular run of a Nitr
 ## See also
 
 - [How to run a full node (Nitro)](/run-arbitrum-node/03-run-full-node.md)
-- [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.md)
+- [How to run a full node (Classic, pre-Nitro)](/run-arbitrum-node/more-types/03-run-classic-node.mdx)
