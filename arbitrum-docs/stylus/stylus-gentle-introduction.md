@@ -22,7 +22,7 @@ This introduction is for developers who want to build on Arbitrum using popular 
 - Stylus smart contracts benefit from **Arbitrum's EVM equivalence** thanks to a second, coequal WASM virtual machine.
 - Solidity contracts and Stylus contracts are fully interoperable. In Solidity, you can call a Rust program and vice versa.
 - Stylus contracts are over **an order of magnitude faster with significantly lower gas fees** due to the superior efficiency of WASM programs.
-- **Memory can be 100-500x cheaper** when using Stylus, unlocking new use cases now that consuming RAM is viable on the blockchain.
+- **Memory use can be greatly optimized** when using Stylus, unlocking new use cases now that consuming RAM is viable on the blockchain.
 
 ### What's Stylus?
 
@@ -34,8 +34,7 @@ This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode
 
 With a WASM VM, any programming language that can compile down to WASM are within the bounds of Stylus. While many popular programming languages can be compiled into WASM, some compilers are more suitable for smart contract development than others, like with Rust, C, and C++. Other languages, such as Go, Sway, Move, and Cairo, can be supported as well. Languages that include their own runtimes, like Python and Javascript, are harder for Stylus to support, although not impossible. Third-party contribution in the form of libraries for new and existing languages is welcomed!
 
-Compared to using Solidity, WASM programs are much more efficient. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution. Generally, a **10x improvement** has been seen for contracts using WASM languages compared to contracts using Solidity.
-
+Compared to using Solidity, WASM programs are much more efficient. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution.
 ### How is this possible?
 
 Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol)
@@ -60,7 +59,7 @@ Stylus brings the best of both worlds. Developers still get all of the benefits 
 
 #### Cheaper Execution
 
-Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation can be over 10x cheaper, and memory can be over 100x cheaper. Cryptography libraries can be deployed as custom application layer precompiles, permissionlessly. Use cases that are impractical in the EVM are now possible in Stylus.
+Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation and memory can be significantly cheaper. Cryptography libraries can be deployed as custom application layer precompiles, permissionlessly. Use cases that are impractical in the EVM are now possible in Stylus.
 
 #### Opt-in reentrancy
 
