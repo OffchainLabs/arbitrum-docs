@@ -57,6 +57,7 @@ Here we describe different strategies that validators follow and provide instruc
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --parent-chain.wallet.password="SOME SECURE PASSWORD"
   ```
+- For Orbit chains, you need to set the `--chain.info-json=<Orbit Chain's chain info>` flag instead of `--chain.id=<chain id>`
 - To verify validator is working, this log line shows the wallet is setup correctly:
   ```shell
   INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
@@ -66,3 +67,10 @@ Here we describe different strategies that validators follow and provide instruc
   - `txSender` and `actingAsWallet` should both be present and not `nil`
   - The log line `validation succeeded` shows that the L2 block validator is working
   - The log line `found correct assertion` shows that the L1 validator is working
+
+#### Orbit chains: grant whitlelist
+
+- You need to be the chain owner to include a new validator address in the allowlist:
+- Find your `upgradeExecutor` contract address.
+- Send transactions to the `executeCall` method of the`upgradeExecutor` contract and set the `target` address to your Rollup contract's address, set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
+- Call your Rollup contract's `isValidator(address)` and check the result.

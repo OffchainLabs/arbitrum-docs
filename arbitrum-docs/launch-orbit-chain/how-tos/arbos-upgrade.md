@@ -72,7 +72,7 @@ When scheduling the ArbOS upgrade through `ArbOwner.scheduleArbOSUpgrade` you mu
 
 #### Step 4: Enable ArbOS specific configurations or feature flags (not always required)
 
-For some ArbOS upgrades, such as [ArbOS 20 Atlas](/run-arbitrum-node/arbos-releases/arbos20.md), there may be additional requirements or steps that need to be satisified to ensure your Orbit chain can use all of the new features and improvements made available in that particular ArbOS release.
+For some ArbOS upgrades, such as [ArbOS 20 Atlas](/run-arbitrum-node/arbos-releases/arbos20.md), there may be additional requirements or steps that need to be satisfied to ensure your Orbit chain can use all of the new features and improvements made available in that particular ArbOS release.
 
 If there are additional requirements for the targeted ArbOS release you're attempting to upgrade to, the additional requirements will be listed on the reference pages for [the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md#list-of-available-arbos-releases). For example, the additional requirements for Orbit chains upgrading to ArbOS 20 can be found [here on the ArbOS 20 docs](/run-arbitrum-node/arbos-releases/01-overview.md#additional-requirements-for-arbitrum-orbit-chain-operators).
 
