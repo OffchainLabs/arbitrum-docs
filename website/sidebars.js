@@ -869,17 +869,12 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BOLD Whitepaper',
+                  label: 'BoLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
-                  label: 'Economics of disputes',
                 },
                 {
                   type: 'link',
