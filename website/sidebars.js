@@ -1,6 +1,6 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -58,7 +58,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Block numbers and time',
+              label: 'Block gas limit, numbers and time',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
@@ -325,6 +325,13 @@ const sidebars = {
           // a: see note at end of file
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
+        },
+        {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
           label: 'Keyset generation (AnyTrust chains)',
@@ -429,6 +436,11 @@ const sidebars = {
           label: 'Quickstart (Rust)',
         },
         {
+          type: 'doc',
+          id: 'stylus/concepts/stylus-cache-manager',
+          label: 'Stylus caching strategy',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
@@ -440,6 +452,12 @@ const sidebars = {
           label: 'Testnets',
           id: 'stylus/reference/testnet-information',
         },
+        {
+          type: 'link',
+          label: 'Stylus by example',
+          href: 'https://stylus-by-example.org/',
+        },
+
         {
           type: 'category',
           label: 'Gas and ink',
@@ -489,6 +507,16 @@ const sidebars = {
           type: 'doc',
           label: 'Reduce the size of WASM binaries',
           id: 'stylus/how-tos/optimizing-binaries',
+        },
+        {
+          type: 'doc',
+          label: 'Debug Stylus transactions',
+          id: 'stylus/how-tos/debugging-stylus-tx',
+        },
+        {
+          type: 'doc',
+          label: 'Verifying Stylus contracts',
+          id: 'stylus/how-tos/verifying-contracts',
         },
         {
           type: 'link',
@@ -612,11 +640,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
               label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },

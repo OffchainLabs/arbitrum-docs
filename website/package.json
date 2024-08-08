@@ -6,7 +6,7 @@
     "docusaurus": "docusaurus",
     "install_sdk_dependencies": "cd ../arbitrum-sdk && yarn install && cd ../website",
     "generate_precompiles_ref_tables": "ts-node src/scripts/precompile-reference-generator.ts",
-    "start": "docusaurus start",
+    "start": "yarn clear && yarn install_sdk_dependencies && docusaurus start",
     "build_translation": "yarn ts-node ./src/scripts/move-untranslated-files.ts",
     "build": "yarn install_sdk_dependencies && docusaurus build",
     "swizzle": "docusaurus swizzle",

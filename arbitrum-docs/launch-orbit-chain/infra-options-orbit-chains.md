@@ -18,6 +18,9 @@ For most production use-cases, we encourage Orbit chain operators to work with o
 - [Conduit](https://conduit.xyz/)
 - [AltLayer](https://altlayer.io/)
 - [Gelato](https://www.gelato.network/)
+- [Asphere](https://www.ankr.com/rollup-as-a-service-raas)
+- [Alchemy](https://www.alchemy.com/rollups)
+- [Zeeve](https://www.zeeve.io)
 
 ## Chain explorers
 
@@ -41,6 +44,7 @@ For applications that require the ability to transfer assets to chains outside o
 - [Hyperlane](https://www.hyperlane.xyz/)
 - [Axelar](https://axelar.network/)
 - [Across](https://across.to/)
+- [Decent](https://www.decent.xyz/)
 
 ## Data availability
 

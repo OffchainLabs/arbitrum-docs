@@ -15,11 +15,11 @@ Complete [this form](@portalApplicationForm@) , if you'd like to see your projec
 
 This section provides an overview of the available public RPC endpoints for different Arbitrum chains and necessary details to interact with them.
 
-| Name                       | RPC Url(s)                             | Chain ID | Block explorer                         | Underlying chain | Tech stack       | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
-| -------------------------- | -------------------------------------- | -------- | -------------------------------------- | ---------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
-| Arbitrum One               | https://arb1.arbitrum.io/rpc           | 42161    | https://arbiscan.io/                   | Ethereum         | Nitro (Rollup)   | wss://arb1.arbitrum.io/feed           | https://arb1-sequencer.arbitrum.io/rpc           |
-| Arbitrum Nova              | https://nova.arbitrum.io/rpc           | 42170    | https://nova.arbiscan.io/              | Ethereum         | Nitro (AnyTrust) | wss://nova.arbitrum.io/feed           | https://nova-sequencer.arbitrum.io/rpc           |
-| Arbitrum Sepolia (Testnet) | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io            | Sepolia          | Nitro (Rollup)   | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
+| Name                       | RPC Url(s)                             | Chain ID | Block explorer              | Underlying chain | Tech stack       | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
+| -------------------------- | -------------------------------------- | -------- | --------------------------- | ---------------- | ---------------- | ------------------------------------- | ------------------------------------------------ |
+| Arbitrum One               | https://arb1.arbitrum.io/rpc           | 42161    | https://arbiscan.io/        | Ethereum         | Nitro (Rollup)   | wss://arb1.arbitrum.io/feed           | https://arb1-sequencer.arbitrum.io/rpc           |
+| Arbitrum Nova              | https://nova.arbitrum.io/rpc           | 42170    | https://nova.arbiscan.io/   | Ethereum         | Nitro (AnyTrust) | wss://nova.arbitrum.io/feed           | https://nova-sequencer.arbitrum.io/rpc           |
+| Arbitrum Sepolia (Testnet) | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io | Sepolia          | Nitro (Rollup)   | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
 
 :::caution
 
@@ -44,7 +44,7 @@ Alternatively, to interact with public Arbitrum chains, you can rely on many of 
 | Provider                                                                             | Arb One? | Arb Nova? | Arb Sepolia? | Websocket? |
 | ------------------------------------------------------------------------------------ | -------- | --------- | ------------ | ---------- |
 | [1RPC](https://docs.1rpc.io/overview/supported-networks#arbitrum)                    | ✅       |           |              |            |
-| [Alchemy](https://docs.alchemy.com/reference/arbitrum-api-quickstart)                | ✅       |           | ✅           | ✅         |
+| [Alchemy](https://docs.alchemy.com/reference/arbitrum-api-quickstart)                | ✅       | ✅        | ✅           | ✅         |
 | [Allnodes](https://arbitrum.publicnode.com)                                          | ✅       | ✅        |              | ✅         |
 | [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-list/#arbitrum)           | ✅       |           |              | ✅         |
 | [Blast](https://blastapi.io/public-api/arbitrum)                                     | ✅       | ✅        |              | ✅         |
@@ -65,3 +65,4 @@ Alternatively, to interact with public Arbitrum chains, you can rely on many of 
 | [Pocket Network](https://docs.pokt.network/welcome-to-pokt-network/supported-chains) | ✅       |           |              |            |
 | [Quicknode](https://www.quicknode.com/chains/arb)                                    | ✅       | ✅        | ✅           | ✅         |
 | [Unifra](https://unifra.io/)                                                         | ✅       |           |              |            |
+| [SubQuery](https://rpc.subquery.network/)                                            | ✅       |           |              |            |
