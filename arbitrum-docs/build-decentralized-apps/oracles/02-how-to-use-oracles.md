@@ -9,6 +9,78 @@ Oracles are web services that provide a connection between smart contracts and t
 
 Familiarity with [oracles](/build-decentralized-apps/oracles/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding.
 
+## Pyth
+
+The [Pyth network](https://pyth.network/) is the largest first-party oracle network, securely and transparently delivering real-time market data to [multiple chains](https://docs.pyth.network/price-feeds/contract-addresses).
+
+The network comprises some of the world’s [largest exchanges, market makers, and financial services providers](https://pyth.network/publishers). These publish proprietary data on-chain for aggregation and distribution to smart contract applications.
+
+### Pyth Price Feeds
+
+The Pyth network introduces an innovative low-latency [pull oracle design](https://docs.pyth.network/price-feeds/pull-updates), where users can pull price updates on-chain when needed, enabling everyone in the blockchain environment to access that data point. Pyth network updates the prices every 400ms, making Pyth the fastest on-chain oracle.
+
+Here is a working example of a contract that fetches the latest price of ARB/USD on Arbitrum network.
+You have to pass Pyth's contract address for Arbitrum mainnet/testnet and the desired price feed id to fetch the latest price.
+
+Install the Pyth SDK Solidity package in your project:
+```tsx
+npm install @pythnetwork/pyth-sdk-solidity
+```
+
+And then simply in 3 lines of code you can fetch the latest price on Arbitrum network.
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import "@pythnetwork/pyth-sdk-solidity/IPyth.sol";
+import "@pythnetwork/pyth-sdk-solidity/PythStructs.sol";
+
+contract MyFirstPythContract {
+    IPyth pyth;
+
+    // Pass the address of Pyth's contract for Arbitrum mainnet(0xff1a0f4744e8582DF1aE09D5611b887B6a12925C)
+    constructor(address _pyth) {
+        pyth = IPyth(_pyth);
+    }
+    function fetchPrice(
+        bytes[] calldata updateData,
+        bytes32 priceFeed
+    ) public payable returns (int64) {
+	// Fetch the priceUpdate from hermes.
+        uint updateFee = pyth.getUpdateFee(updateData);
+        pyth.updatePriceFeeds{value: updateFee}(updateData);
+
+        // Fetch the latest price
+        PythStructs.Price memory price = pyth.getPrice(priceFeed);
+        return price.price;
+    }
+}
+```
+
+Here you can fetch the updateData from our [Hermes](https://hermes.pyth.network/docs/) feed, which listens to Pythnet and Wormhole for price updates; or you can use the [pyth-evm-js](https://github.com/pyth-network/pyth-crosschain/blob/main/target_chains/ethereum/sdk/js/src/EvmPriceServiceConnection.ts#L15) SDK. Check [How to Fetch Price Updates](https://docs.pyth.network/price-feeds/fetch-price-updates) to pull the latest data. 
+
+### Pyth Entropy
+
+Pyth Entropy allows developers to quickly and easily generate secure **random numbers** on the blockchain.
+
+Check [how to generate random numbers in EVM contracts](https://docs.pyth.network/entropy/generate-random-numbers/evm) for a detailed walkthrough.
+
+#### Supported Networks for Arbitrum(Pyth Entropy):
+
+- Arbitrum: [`0x7698E925FfC29655576D0b361D75Af579e20AdAc`](https://arbiscan.io/address/0x7698E925FfC29655576D0b361D75Af579e20AdAc)
+- Arbitrum Sepolia: [`0x549Ebba8036Ab746611B4fFA1423eb0A4Df61440`](https://sepolia.arbiscan.io/address/0x549Ebba8036Ab746611B4fFA1423eb0A4Df61440)
+
+### Additoinal Resources
+Check out the following links to get started with Pyth.
+
+- [Pyth EVM Integration Guide](https://docs.pyth.network/price-feeds/use-real-time-data/evm)
+- [Pyth Docs](https://docs.pyth.network/home)
+- [Pyth API Reference](https://api-reference.pyth.network/price-feeds/evm/getPrice)
+- [Pyth Examples](https://github.com/pyth-network/pyth-examples)
+- [Pyth Price Feed Ids](https://pyth.network/developers/price-feed-ids)
+
+
+
 ## Chainlink
 
 [Chainlink](https://chain.link/) is a widely-recognized Web3 services platform that specializes in decentralized oracle networks. It lets you build Ethereum and Arbitrum dApps that connect to a variety of off-chain data feeds and APIs, including those that provide asset prices, weather data, random number generation, and more.
