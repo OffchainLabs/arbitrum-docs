@@ -46,13 +46,13 @@ Ensure you have either [Foundry](https://book.getfoundry.sh/getting-started/inst
 
 - For hardhat users:
 
-```bash
+```shell
  npm install --save-dev @gelatodigital/vrf-contracts
 ```
 
 - For Foundry users:
 
-```bash
+```shell
  forge install gelatodigital/vrf-contracts --no-commit
 ```
 
