@@ -13,5 +13,3 @@ import ThirdPartyRpcEndpoints from '../../partials/_reference-third-party-rpc-en
 <ArbitrumRpcEndpoints />
 
 <ThirdPartyRpcEndpoints />
-
-
