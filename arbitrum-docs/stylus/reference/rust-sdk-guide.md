@@ -447,7 +447,7 @@ Observe the casing change. [`sol_interface!`][sol_interface] computes the select
 
 ```rust
 pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
-    let config = Call::new()
+    let config = Call::new_in()
         .gas(evm::gas_left() / 2)       // limit to half the gas left
         .value(msg::value());           // set the callvalue
 
@@ -455,7 +455,7 @@ pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
 }
 ```
 
-By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new()`][Call_new] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
 ### Reentrant calls
 
@@ -538,7 +538,7 @@ Note that this method invokes the other contract, which may in turn call others.
 ```rust
 transfer_eth(recipient, value)?;                 // these two are equivalent
 
-call(Call::new().value(value), recipient, &[])?; // these two are equivalent
+call(Call::new_in().value(value), recipient, &[])?; // these two are equivalent
 ```
 
 ### [`RawCall`][RawCall] and `unsafe` calls
