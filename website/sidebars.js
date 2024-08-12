@@ -1,6 +1,7 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
+const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -453,9 +454,9 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
-          type: 'link',
+          type: 'category',
           label: 'Stylus by example',
-          href: 'https://stylus-by-example.org/',
+          items: stylusByExampleDocsSidebar,
         },
 
         {
