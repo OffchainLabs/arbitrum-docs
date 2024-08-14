@@ -153,7 +153,10 @@ import { prepareChainConfig } from '@arbitrum/orbit-sdk';
 
 const chainConfig = prepareChainConfig({
   chainId: Some_Chain_ID,
-  arbitrum: { InitialChainOwner: deployer_address, DataAvailabilityCommittee: false },
+  arbitrum: {
+    InitialChainOwner: deployer_address,
+    DataAvailabilityCommittee: false,
+  },
 });
 ```
 
@@ -182,18 +185,25 @@ While other configurable parameters exist, they are set to defaults, and it's ge
 
 ### Configuration and deployment helpers
 
-The Orbit SDK provides two APIs, `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
+The Orbit SDK provides two APIs, `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
 
-#### **createRollupPrepareConfig API**:
+#### **createRollupPrepareDeploymentParamsConfig API**:
 
 This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use.
 
 For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#chain-config-parameter), you would use the Orbit SDK as follows:
 
 ```js
-import { createRollupPrepareConfig } from '@arbitrum/orbit-sdk';
+import { createPublicClient, http } from 'viem';
+import { arbitrumSepolia } from 'viem/chains';
+import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
 
-const config = createRollupPrepareConfig({
+const parentPublicClient = createPublicClient({
+  chain: arbitrumSepolia,
+  transport: http(),
+});
+
+const config = createRollupPrepareDeploymentParamsConfig(parentPublicClient, {
   chainId: BigInt(chainId),
   owner: deployer.address,
   chainConfig,
@@ -212,7 +222,7 @@ import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
 const request = await createRollupPrepareTransactionRequest({
   params: {
     config,
-    batchPoster,
+    batchPosters: [batchPoster],
     validators: [validator],
   },
   account: deployer_address,

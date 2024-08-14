@@ -106,14 +106,15 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 
-const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-  allowanceParams,
-);
+const approvalTxRequest =
+  await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
+    allowanceParams
+  );
 ```
 
 ## 4. Deployment process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
@@ -127,7 +128,7 @@ Example:
 const txRequest = await createRollupPrepareTransactionRequest({
   params: {
     config,
-    batchPoster,
+    batchPosters: [batchPoster],
     validators: [validator],
     nativeToken,
   },
