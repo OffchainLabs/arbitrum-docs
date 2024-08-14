@@ -16,7 +16,7 @@ Before you start building the sample app to perform a USDC transfer, ensure you 
 
 3. **Project Setup**: Create a new project directory and initialize it with npm:
 
-   ```bash
+   ```shell
    mkdir usdc-transfer-app
    cd usdc-transfer-app
    npm init -y
@@ -24,7 +24,7 @@ Before you start building the sample app to perform a USDC transfer, ensure you 
 
 4. **Dependencies**: Install the required dependencies using the following command:
 
-```bash
+```shell
     npm install react@^18.2.0 react-dom@^18.2.0 @types/react@^18.0.27 @types/react-dom@^18.0.10 @vitejs/plugin-react@^3.1.0 typescript@^5.0.3 vite@^4.4.5
 ```
 This will set up your development environment with the necessary libraries and tools for building a React application with TypeScript and Vite.
@@ -33,7 +33,7 @@ This will set up your development environment with the necessary libraries and t
 
 To install viem run the following command.
 
-```bash
+```shell
 npm i viem
 ```
 
