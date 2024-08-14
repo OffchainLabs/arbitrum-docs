@@ -185,6 +185,23 @@ const precompilesInformation = {
       },
     },
   },
+  ArbWasm: {
+    eventOverrides: {
+      programactivated: {
+        description: 'Emitted when activating a WASM program',
+      },
+      programlifetimeextended: {
+        description: 'Emitted when extending the expiration date of a WASM program',
+      },
+    },
+  },
+  ArbWasmCache: {
+    eventOverrides: {
+      updateprogramcache: {
+        description: 'Emitted when caching a WASM program',
+      },
+    },
+  },
 };
 
 const nodeInterfaceInformation = {
