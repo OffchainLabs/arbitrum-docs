@@ -5,16 +5,21 @@ sidebar_position: 2
 author: dlee
 ---
 
-ArbOS 31 "Bianca" is shipped via Nitro v2.3.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.3.1-26fad6f`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 20 upgrade requires a governance vote to activate.
+:::caution
+
+Please upgrade directly to ArbOS 31 from ArbOS 20, and not to ArbOS 30. The ArbOS 31 release builds upon ArbOS 30 and includes new fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 31 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases. Orbit chains which have upgraded to ArbOS 30, instead of going directly to ArbOS 31, may not be supported in the future"
+
+:::
+
+ArbOS 31 "Bianca" is shipped via Nitro v3.1.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.1`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
 
 The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.md).
 
 ### Requirements:
 
-- Nitro 3.1.1 or higher (TODO: INSERT GITHUB LINK)
-- nitro-contracts v2.0.0 or higher
-- WASM module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4
-`
+- [Nitro 3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1) or higher
+- [nitro-contracts v2.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) or higher
+- WASM module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`
 
 ### High-level description of ArbOS 31 changes
 
@@ -25,6 +30,14 @@ ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum ch
 - Addition and subsequent activation of [Stylus](../../stylus/stylus-gentle-introduction.md) on Arbitrum chains through the addition of a new WebAssembly-based (WASM) virtual machine that runs alongside the EVM. Stylus enables developers to write smart contracts in new programming languages that compile down to WASM, like Rust, that are more efficient and safer than Solidity smart contracts while retaining complete interoperability.
 - Adding support for [RIP-7212](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md) decreases the costs of verifying the secp256r1 curve on-chain [by 99% when compared to current implementations](https://www.alchemy.com/blog/what-is-rip-7212), making secp256r1 verification more feasible for everyday use and enabling dApp developers and protocols to offer their users improved UX on Arbitrum One and Arbitrum Nova. Without this precompile, verifying this signature on-chain is extremely expensive. Passkey-based wallets offer a better level of security than a typical EOA and seamless cross-device support. Many wallets, and notably, apps using embedded wallets, have been requesting this feature for over a year.
 - A change to the transaction fee router contracts on Arbitrum Nova to allow for fees collected to be automatically sent to the ArbitrumDAO Treasury on Arbitrum One. Currently, the ArbitrumDAO receives Arbitrum Nova transaction fees are sent to a ArbitrumDAO controlled address that requires a constitutional proposal to move, which is less efficient. This change is specific to Arbitrum Nova and is not expected to impact Orbit chains.
+
+### Additional requirement for Arbitrum Orbit chains who wish to take advantage of the Stylus Cache Manager
+
+Specific to Stylus and ArbOS 31 "Bianca", we have developed a caching strategy that stores frequently accessed contracts in memory to reduce the costs and time associated with contract execution due to repeated initializations. Check out the [Stylus caching strategy docs](../../stylus/concepts/stylus-cache-manager.md) to learn more.
+
+In order to take advantage of this caching strategy, an additional step is required to deploy and enable it's use on your Orbit chain. 
+
+After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.md#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/stylus/setCacheManager) in the `orbit-actions` repository to deploy the cache manager contract on your chain. 
 
 ### Reference links for ArbOS 30 Bianca
 
