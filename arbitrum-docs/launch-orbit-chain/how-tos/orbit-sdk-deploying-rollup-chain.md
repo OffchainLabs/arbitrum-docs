@@ -99,63 +99,62 @@ Here's a brief overview of `chainConfig`:
 
 ```json {2,24,26,28,29}
 {
-  chainId: number;
-  homesteadBlock: number;
-  daoForkBlock: null;
-  daoForkSupport: boolean;
-  eip150Block: number;
-  eip150Hash: string;
-  eip155Block: number;
-  eip158Block: number;
-  byzantiumBlock: number;
-  constantinopleBlock: number;
-  petersburgBlock: number;
-  istanbulBlock: number;
-  muirGlacierBlock: number;
-  berlinBlock: number;
-  londonBlock: number;
-  clique: {
-    period: number;
-    epoch: number;
-  };
-  arbitrum: {
-  EnableArbOS: boolean;
-  AllowDebugPrecompiles: boolean;
-  DataAvailabilityCommittee: boolean;
-  InitialArbOSVersion: number;
-  InitialChainOwner: Address;
-  GenesisBlockNum: number;
-  MaxCodeSize: number;
-  MaxInitCodeSize: number;
-  };
+    chainId: number;
+    homesteadBlock: number;
+    daoForkBlock: null;
+    daoForkSupport: boolean;
+    eip150Block: number;
+    eip150Hash: string;
+    eip155Block: number;
+    eip158Block: number;
+    byzantiumBlock: number;
+    constantinopleBlock: number;
+    petersburgBlock: number;
+    istanbulBlock: number;
+    muirGlacierBlock: number;
+    berlinBlock: number;
+    londonBlock: number;
+    clique: {
+        period: number;
+        epoch: number;
+    };
+    arbitrum: {
+        EnableArbOS: boolean;
+        AllowDebugPrecompiles: boolean;
+        DataAvailabilityCommittee: boolean;
+        InitialArbOSVersion: number;
+        InitialChainOwner: Address;
+        GenesisBlockNum: number;
+        MaxCodeSize: number;
+        MaxInitCodeSize: number;
+    };
 }
 ```
 
-Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `DataAvailabilityCommittee`, `InitialChainOwner`, `MaxCodeSize`, and `MaxInitCodeSize`. `chainConfig`'s other parameters use default values and are less frequently modified. We will review these parameters in the [Rollup Configuration Parameters](#rollup-configuration-parameters) section.
+Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `arbitrum.InitialChainOwner`, `arbitrum.InitialArbOSVersion`, `arbitrum.DataAvailabilityCommittee`, `arbitrum.MaxCodeSize`, and `arbitrum.MaxInitCodeSize`. These parameters are customizable, while the other parameters use default values and should not be modified.
 
-All the parameters explained in this section are customizable, allowing the chain deployer to stick with default settings or specify new values.
-
-For easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed in the [Orbit SDK repository](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31).
+For easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts).
 
 Here are the parameters you can use with `prepareChainConfig`:
 
-| Parameter                   | Description                                                                                                                                     |
-| :-------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                   | Your Orbit chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                |
-| `DataAvailabilityCommittee` | Set to `false`, this boolean makes your chain as a Rollup, set to `true` configures it as an AnyTrust chain.                                    |
-| `InitialChainOwner`         | Identifies who owns and controls the chain.                                                                                                     |
-| `MaxCodeSize  `             | Sets the maximum size for contract bytecodes on the Orbit chain. e.g. Ethereum mainnet has a limit of 24,576 Bytes.                             |
-| `MaxInitCodeSize`           | Similar to `MaxCodeSize`, defines the maximum size for your Orbit chain's **initialization** code. e.g. Ethereum mainnet limit is 49,152 Bytes. |
+| Parameter                            | Type    | Required | Default Value  | Description                                                                                                          |
+| :----------------------------------- | :------ | :------- | :------------- | :------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                            | Number  | Yes      | /              | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                           |
+| `arbitrum.InitialChainOwner`         | Address | Yes      | /              | Specifies who owns and controls the chain.                                                                           |
+| `arbitrum.InitialArbOSVersion`       | Number  | No       | latest         | Specifies which version of ArbOS should the chain run.                                                               |
+| `arbitrum.DataAvailabilityCommittee` | Boolean | No       | false          | When set to `false`, your chain will run as a Rollup chain, and when set to `true` it will run as an AnyTrust chain. |
+| `arbitrum.MaxCodeSize`               | Number  | No       | 24_576 (bytes) | Sets the maximum size for contract bytecodes on the chain.                                                           |
+| `arbitrum.MaxInitCodeSize`           | Number  | No       | 49_152 (bytes) | Similar to `arbitrum.MaxCodeSize`, defines the maximum size for your chain's **initialization** code.                |
 
-Below is an example of how to use `prepareChainConfig` to set up a Rollup chain with a specific `chainId`, an `InitialChainOwner` (named as `deployer_address`):
+Below is an example of how to use `prepareChainConfig` to set up a Rollup chain with a specific `chainId`, an `InitialChainOwner` (named as `deployer`):
 
 ```js
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';
 
 const chainConfig = prepareChainConfig({
-  chainId: Some_Chain_ID,
+  chainId: 123_456,
   arbitrum: {
-    InitialChainOwner: deployer_address,
+    InitialChainOwner: deployer,
     DataAvailabilityCommittee: false,
   },
 });
@@ -169,7 +168,6 @@ In this section, we'll provide detailed explanations of the various chain config
 | :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `batchPosters`        | Array of batch poster addresses. Batch posters batch and compress transactions on the Orbit chain and transmit them back to the parent chain.                                                                                                                                                                         |
 | `batchPosterManager`  | Account address responsible for managing currently active batch posters. Not mandatory, as these actions can also be taken by the chain owner.                                                                                                                                                                        |
-|  |
 | `validators`          | Array of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting Rollup Blocks (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty RBlocks submitted by other validators.  |
 | `nativeToken`         | Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains.                                                                                                                                      |
 | `confirmPeriodBlocks` | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count. `confirmPeriodBlocks` is measured in L1 blocks, we recommend a value of `45818` |

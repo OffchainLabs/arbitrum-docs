@@ -41,7 +41,7 @@ The difference between custom gas token chains and other Orbit chains is the use
 
 ## 2. Chain configuration
 
-You can configure your Orbit chain using the [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
+You can configure your Orbit chain using the [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts) method and assigning it to a `chainConfig` variable.
 
 Example:
 
@@ -49,19 +49,19 @@ Example:
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';
 
 const chainConfig = prepareChainConfig({
-    chainId: Some_Chain_ID,
-    nativeToken: yourERC-20TokenAddress,
+  chainId: Some_Chain_ID,
+  arbitrum: {
     DataAvailabilityCommittee: true,
+  },
 });
 ```
 
 To use the `prepareChainConfig` method as shown in the example above, some inputs need to be defined:
 
-| Parameter                   | Type      | Description                                                                                                                                                     |
-| --------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                   | `number`  | Your Orbit chain's `chainId`.                                                                                                                                   |
-| `nativeToken`               | `Address` | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
-| `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
+| Parameter                            | Type      | Description                                                                    |
+| ------------------------------------ | --------- | ------------------------------------------------------------------------------ |
+| `chainId`                            | `number`  | Your Orbit chain's `chainId`.                                                  |
+| `arbitrum.DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens. |
 
 ## 3. Token approval before deployment process
 
