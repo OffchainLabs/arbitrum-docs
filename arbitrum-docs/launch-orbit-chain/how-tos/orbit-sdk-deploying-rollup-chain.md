@@ -46,12 +46,13 @@ The following will walk you through the methods and properties you will use to c
 ```solidity {2,4,6}
 struct RollupDeploymentParams {
     Config config;
-    address batchPoster;
     address[] validators;
     uint256 maxDataSize;
     address nativeToken;
     bool deployFactoriesToL2;
     uint256 maxFeePerGasForRetryables;
+    address[] batchPosters;
+    address batchPosterManager;
 }
 ```
 
@@ -166,7 +167,8 @@ In this section, we'll provide detailed explanations of the various chain config
 
 | Parameter             | Description                                                                                                                                                                                                                                                                                                           |
 | :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `batchPoster`         | Sets the batch poster address of your Orbit chain. The batch poster account batches and compresses transactions on the Orbit chain and transmits them back to the parent chain.                                                                                                                                       |
+| `batchPosters`        | Array of batch poster addresses. Batch posters batches and compresses transactions on the Orbit chain and transmits them back to the parent chain.                                                                                                                                                                    |
+| `batchPosterManager`  | Account address responsible for managing currently active batch posters.                                                                                                                                                                                                                                              |
 | `validators`          | Array of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting Rollup Blocks (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty RBlocks submitted by other validators.  |
 | `nativeToken`         | Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains.                                                                                                                                      |
 | `confirmPeriodBlocks` | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count. `confirmPeriodBlocks` is measured in L1 blocks, we recommend a value of `45818` |
