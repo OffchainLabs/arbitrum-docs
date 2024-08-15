@@ -1,0 +1,111 @@
+---
+title: "How to customize ArbOS on your Orbit chain"
+description: "Learn how to customize your ArbOS version"
+author: jasonwan
+sidebar_position: 7
+content_type: how-to
+---
+
+import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+
+<PublicPreviewBannerPartial />
+
+## In which case you need to customize ArbOS upgrade
+
+First, when you make changes to your nitro code and it may affect State Transition Function (You can refer to [Customize STF](./customize-stf.mdx#Preface)), 
+
+Second, if your Orbit Chain is not started for the first time but the changes are made while it is running.
+
+If your changes meet both those 2 points, then you need to customize the ArbOS upgrade.
+
+Also, if you added some changes to the chain and want to upgrade them at some time in the future. You should also take it into ArbOS upgrade process.
+
+## Where should I insert ArbOS Upgrade related code?
+Here we give you 4 examples that need to add ArbOS Upgrade related code:
+
+### 1. Add a new method to exsiting precompile on a specific ArbOS version:
+
+After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-Add-new-methods-to-an-existing-precompile),
+you need continue to modify [precompile.go][precompile_main_file_link]. 
+
+For example, the original code is
+```go
+ArbSys := insert(MakePrecompile(pgen.ArbSysMetaData, &ArbSys{Address: types.ArbSysAddress}))
+arbos.ArbSysAddress = ArbSys.address
+arbos.L2ToL1TransactionEventID = ArbSys.events["L2ToL1Transaction"].template.ID
+arbos.L2ToL1TxEventID = ArbSys.events["L2ToL1Tx"].template.ID
+```
+You need to write after it
+```go
+ArbSys := insert(MakePrecompile(pgen.ArbSysMetaData, &ArbSys{Address: types.ArbSysAddress}))
+arbos.ArbSysAddress = ArbSys.address
+arbos.L2ToL1TransactionEventID = ArbSys.events["L2ToL1Transaction"].template.ID
+arbos.L2ToL1TxEventID = ArbSys.events["L2ToL1Tx"].template.ID
+// The arbos version control logic
+ArbOwner.methodsByName["SayHi"].arbosVersion = ${The arbos version you want to activate this method}
+```
+In this way, this method will be executed normally and return results only after you update ArbOS to the target version.
+
+### 2. Create a new precompile contract on a specific ArbOS version
+After you add a new precompile named `ArbHi` according to the guide in [customize precompile option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [precompile.go][precompile_main_file_link], 
+you also need to make the following changes:
+```
+ArbHi := insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress})) // types.ArbHiAddress here is an example address
+// Set activate version to the precompile
+ArbHi.arbosVersion = ${The arbos version you want to activate this precompile}
+// Set activate version to all method
+for _, method := range ArbHi.methods {
+   method.arbosVersion = ${The arbos version you want to activate this precompile}
+}
+```
+In this way, ArbHi and all its methods will be activated after the ArbOS version you set.
+
+### 3. Create a new ArbOS state on a specific ArbOS version
+
+After you add a new state `myNumber` according to the guide in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state), you also need to rewrite [UpgradeArbosVersion][arbosstate_updatearbosversion_method_link] in [arbosstate.go][arbosstate_file_link]:
+Add your expected ArbOS version to the switch case statement of nextArbosVersion. Here we will take ArbOS V21 as an example:
+```
+case 21:
+			ensure(state.SetNewMyNumber(${random number}))
+```
+Here, we will ensure that the initial value of ${random number} after ArbOS is upgraded to V21.
+
+
+:::caution
+It should be noted that when you initialize the state (initial code is in [customize precompile Option 5]()), you need to initialize it to 0 or null value first.
+:::
+
+And, please make sure that your program cannot call the `state.SetNewMyNumber` or other function might change the value of `myNumber` before ArbOS V21. 
+To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to 1 or 2 to set the activation time of the precompile contract method.
+If your nitro code needs to call this method to change the state, you can continue reading point 4.
+
+### 4. Any changes in the stf logic that will affect the final execution result
+If you change the logic in STF and it will cause the execution result of the transaction to be different, 
+you need to keep the original execution logic and put the new logic into another branch.
+You can use `if else` statement to control it.
+For example, we change the `SayHi` return after upgrade the ArbOS version:
+```go
+// The method in ArbHi precompile
+func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+    if p.state.ArbOSVersion() >= ${The arbos you want to upgrade to} {
+        // Your new logic code
+        return "hi, new ArbOS version", nil
+    } else {
+        // The old logic code needs to be kept
+        return "hi", nil
+    }
+}
+```
+
+## 设置ArbOS更新时间
+After you add ArbOS version control to the nitro code, you can update ArbOS. You can refer to the document ArbOS upgrade to upgrade.
+It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current version and the target version will be activated.
+For example, if your current version is ArbOS v18 and you set the target version to v25, then all the features between v18 and v25 will be loaded.
+
+## 进行WASM Module Root的更新
+Afterwards, since Arbitrum needs to make a fraud proof on the parent chain, you need to update the Wasm Module Root recorded on the parent chain.
+Please continue reading xx for follow-up operations.
+
+[precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
+[arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/@nitroPathToArbosState@/arbosstate.go
+[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/nitroRepositorySlug@/blob/v3.1.0/arbos/@nitroPathToArbosState@/arbosstate.go#L253
