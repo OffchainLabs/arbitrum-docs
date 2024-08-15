@@ -48,7 +48,7 @@ In this way, this method will be executed normally and return results only after
 ### 2. Create a new precompile contract on a specific ArbOS version
 After you add a new precompile named `ArbHi` according to the guide in [customize precompile option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [precompile.go][precompile_main_file_link], 
 you also need to make the following changes:
-```
+```go
 ArbHi := insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: types.ArbHiAddress})) // types.ArbHiAddress here is an example address
 // Set activate version to the precompile
 ArbHi.arbosVersion = ${The arbos version you want to activate this precompile}
