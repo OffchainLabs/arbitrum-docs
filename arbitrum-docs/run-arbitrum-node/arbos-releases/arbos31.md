@@ -7,7 +7,9 @@ author: dlee
 
 :::caution
 
-Please upgrade directly to ArbOS 31 from ArbOS 20, and not to ArbOS 30. The ArbOS 31 release builds upon ArbOS 30 and includes new fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 31 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases. Orbit chains which have upgraded to ArbOS 30, instead of going directly to ArbOS 31, may not be supported in the future"
+Please upgrade directly to ArbOS 31 from ArbOS 20, and not to ArbOS 30. The ArbOS 31 release builds upon ArbOS 30 and includes new fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 31 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases. 
+
+Future versions of Nitro may remove support for Orbit chains which have historically upgraded to ArbOS 30 instead of going directly to ArbOS 31.
 
 :::
 
@@ -33,7 +35,7 @@ ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum ch
 
 ### Additional requirement for Arbitrum Orbit chains who wish to take advantage of the Stylus Cache Manager
 
-Specific to Stylus and ArbOS 31 "Bianca", we have developed a caching strategy that stores frequently accessed contracts in memory to reduce the costs and time associated with contract execution due to repeated initializations. Check out the [Stylus caching strategy docs](../../stylus/concepts/stylus-cache-manager.md) to learn more.
+Specific to Stylus and ArbOS 31 "Bianca", we have developed a caching strategy that stores frequently accessed contracts in memory to reduce the costs and time associated with contract execution from repeated initializations. Check out the [Stylus caching strategy docs](../../stylus/concepts/stylus-cache-manager.md) to learn more.
 
 In order to take advantage of this caching strategy, an additional step is required to deploy and enable it's use on your Orbit chain. 
 
