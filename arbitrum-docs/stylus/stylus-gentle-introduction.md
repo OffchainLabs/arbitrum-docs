@@ -28,7 +28,7 @@ This introduction is for developers who want to build on Arbitrum using popular 
 
 Stylus is an upgrade to Arbitrum Nitro, the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **EVM\+** since **everything is entirely additive.**
 
-![Stylus gives you EVM+](./assets/stylus-gives-you-evm-plus.png)
+![Stylus gives you MultiVM](./assets/stylus-gives-you-evm-plus.png)
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a modern binary format popularized by its use in major web standards, browsers, and companies to speed up computation. Built to be fast, portable, and human-readable, WASM also has sandboxed execution environments for security and simplicity. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fully functioning fraud proofs.
 
@@ -53,7 +53,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://www.slashdata.co/blog/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-blockchain-and-more)]. Developers are now free to use their preferred programming language, all interoperable on any Arbitrum chain with Stylus. Scaling to the next billion users requires onboarding the next million developers.
 
-#### EVM+
+#### MultiVM
 
 Stylus brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++. All without changing anything about how the EVM works. EVM equivalence is no longer the ceiling, it's the floor.
 
