@@ -83,6 +83,7 @@ If your nitro code needs to call this method to change the state, you can contin
 If you change the logic in STF and it will cause the execution result of the transaction to be different, 
 you need to keep the original execution logic and put the new logic into another branch.
 You can use `if else` statement to control it.
+
 For example, we change the `SayHi` return after upgrade the ArbOS version:
 ```go
 // The method in ArbHi precompile
@@ -97,6 +98,9 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
+In this example, we use precompiles as example, some logic might also affect stf such as the methods in [block_process.go], [internal_tx.go], [tx_processor.go] and so on.
+You need use those arbos control ways to different version of logic as well.
+
 ## Schedule ArbOS upgrade
 After you add ArbOS version control to the nitro code, you can update ArbOS. You can refer to the document ArbOS upgrade to upgrade.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current version and the target version will be activated.
@@ -109,3 +113,6 @@ Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
 [arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/@nitroPathToArbosState@/arbosstate.go
 [arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/nitroRepositorySlug@/blob/v3.1.0/arbos/@nitroPathToArbosState@/arbosstate.go#L253
+[block_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/block_processor.go
+[internal_tx_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/internal_tx.go
+[tx_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/tx_processor.go
