@@ -296,6 +296,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
           ],
         },
         {
