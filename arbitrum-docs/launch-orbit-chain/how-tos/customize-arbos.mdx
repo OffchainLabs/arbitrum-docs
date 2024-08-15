@@ -72,7 +72,7 @@ Here, we will ensure that the initial value of ${random number} after ArbOS is u
 
 
 :::caution
-It should be noted that when you initialize the state (initial code is in [customize precompile Option 5]()), you need to initialize it to 0 or null value first.
+It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state)), you need to initialize it to 0 or null value first to avoid potential blockchain reorg.
 :::
 
 And, please make sure that your program cannot call the `state.SetNewMyNumber` or other function might change the value of `myNumber` before ArbOS V21. 
@@ -97,14 +97,14 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-## 设置ArbOS更新时间
+## Schedule ArbOS upgrade
 After you add ArbOS version control to the nitro code, you can update ArbOS. You can refer to the document ArbOS upgrade to upgrade.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current version and the target version will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, then all the features between v18 and v25 will be loaded.
 
-## 进行WASM Module Root的更新
+## Upgrade WASM Module Root on parent chain
 Afterwards, since Arbitrum needs to make a fraud proof on the parent chain, you need to update the Wasm Module Root recorded on the parent chain.
-Please continue reading xx for follow-up operations.
+Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) for follow-up operations.
 
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
 [arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/@nitroPathToArbosState@/arbosstate.go
