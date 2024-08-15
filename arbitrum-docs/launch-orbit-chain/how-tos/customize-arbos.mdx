@@ -99,7 +99,7 @@ To prevent this, if you are using an external call to the precompile contract to
 [point 2](./customize-arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
 If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).
 
-### 4. Any changes in the stf logic that will affect the final execution result
+### 4. Any changes in the STF logic that will affect the final execution result
 If you change the logic in STF and it will cause the execution result of the transaction to be different, 
 you need to keep the original execution logic and put the new logic into another branch.
 You can use `if else` statement to control it.
