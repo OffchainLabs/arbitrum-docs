@@ -21,8 +21,7 @@ If your changes meet both those 2 points, then you need to customize the ArbOS u
 Also, if you added some changes to the chain and want to upgrade them at some time in the future. You should also take it into ArbOS upgrade process.
 
 ## Where should I insert ArbOS Upgrade related code?
-Here we give you 4 examples that need to add ArbOS Upgrade related code:
-
+Here we will provide you 4 examples that need to add ArbOS Upgrade related code:
 ### 1. Add a new method to exsiting precompile on a specific ArbOS version:
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-Add-new-methods-to-an-existing-precompile),
@@ -64,10 +63,30 @@ In this way, ArbHi and all its methods will be activated after the ArbOS version
 
 After you add a new state `myNumber` according to the guide in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state), you also need to rewrite [UpgradeArbosVersion][arbosstate_updatearbosversion_method_link] in [arbosstate.go][arbosstate_file_link]:
 Add your expected ArbOS version to the switch case statement of nextArbosVersion. Here we will take ArbOS V21 as an example:
+```go
+ensure := func(err error) {
+    if err != nil {
+        message := fmt.Sprintf(
+            "Failed to upgrade ArbOS version %v to version %v: %v",
+            state.arbosVersion, state.arbosVersion+1, err,
+        )
+        panic(message)
+    }
+}
+nextArbosVersion := state.arbosVersion + 1
+switch nextArbosVersion {
+    case 1:
+        //.....
+    case 2:
+        //....
+    //.....
+    case 21:
+        // Set your new ArbOS state value here
+        ensure(state.SetNewMyNumber(${random number}))
+    //....
+} 
 ```
-case 21:
-			ensure(state.SetNewMyNumber(${random number}))
-```
+
 Here, we will ensure that the initial value of $(an random number) after ArbOS is upgraded to V21.
 
 
@@ -76,8 +95,9 @@ It should be noted that when you initialize the state (initial code is in [custo
 :::
 
 And, please make sure that your program cannot call the `state.SetNewMyNumber` or other function might change the value of `myNumber` before ArbOS V21. 
-To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to 1 or 2 to set the activation time of the precompile contract method.
-If your nitro code needs to call this method to change the state, you can continue reading point 4.
+To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos.mdx#1-add-a-new-method-to-exsiting-precompile-on-a-specific-arbos-version) or
+[point 2](./customize-arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
+If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).
 
 ### 4. Any changes in the stf logic that will affect the final execution result
 If you change the logic in STF and it will cause the execution result of the transaction to be different, 
@@ -112,7 +132,7 @@ Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-
 
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
 [arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/@nitroPathToArbosState@/arbosstate.go
-[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/nitroRepositorySlug@/blob/v3.1.0/arbos/@nitroPathToArbosState@/arbosstate.go#L253
+[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/arbos/@nitroPathToArbosState@/arbosstate.go#L253
 [block_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/block_processor.go
 [internal_tx_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/internal_tx.go
 [tx_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/tx_processor.go
