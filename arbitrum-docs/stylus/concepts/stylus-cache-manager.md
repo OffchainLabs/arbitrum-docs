@@ -15,7 +15,7 @@ This initialization process, if repeated frequently, may lead to inefficiencies.
 
 
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
