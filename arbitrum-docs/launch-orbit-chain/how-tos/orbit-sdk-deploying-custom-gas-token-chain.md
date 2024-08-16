@@ -37,31 +37,11 @@ Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orb
 
 ## 1. Custom gas token specification
 
-The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as gas. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
+The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as the gas token. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
 
 ## 2. Chain configuration
 
-You can configure your Orbit chain using the [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts) method and assigning it to a `chainConfig` variable.
-
-Example:
-
-```js
-import { prepareChainConfig } from '@arbitrum/orbit-sdk';
-
-const chainConfig = prepareChainConfig({
-  chainId: Some_Chain_ID,
-  arbitrum: {
-    DataAvailabilityCommittee: true,
-  },
-});
-```
-
-To use the `prepareChainConfig` method as shown in the example above, some inputs need to be defined:
-
-| Parameter                            | Type      | Description                                                                    |
-| ------------------------------------ | --------- | ------------------------------------------------------------------------------ |
-| `chainId`                            | `number`  | Your Orbit chain's `chainId`.                                                  |
-| `arbitrum.DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens. |
+Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain#1-setting-up-the-chain-parameters).
 
 ## 3. Token approval before deployment process
 
@@ -72,15 +52,15 @@ In Custom gas token Orbit chains, the owner needs to give allowance to the `roll
 This API gets related inputs and checks if the `rollupCreator` contract has enough token `Allowance` from the owner:
 
 ```js
-import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
+import { createRollupEnoughCustomFeeTokenAllowance } from '@arbitrum/orbit-sdk';
 
 const allowanceParams = {
-nativeToken,
-account: deployer.address,
-publicClient: parentChainPublicClient,
+  nativeToken,
+  account: deployer.address,
+  publicClient: parentChainPublicClient,
 };
 
-const enough Allowance = createRollupEnoughCustomFeeTokenAllowance(allowanceParams)
+const enoughAllowance = await createRollupEnoughCustomFeeTokenAllowance(allowanceParams);
 ```
 
 To build the `allowanceParams` object as shown in the example above, you need to provide with the following:
@@ -106,10 +86,9 @@ const allowanceParams = {
   publicClient: parentChainPublicClient,
 };
 
-const approvalTxRequest =
-  await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-    allowanceParams
-  );
+const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
+  allowanceParams
+);
 ```
 
 ## 4. Deployment process

@@ -43,7 +43,7 @@ The following will walk you through the methods and properties you will use to c
 
 #### 1. RollupDeploymentParams struct
 
-```solidity {2,4,6}
+```solidity {2,4,6,8}
 struct RollupDeploymentParams {
     Config config;
     address[] validators;
@@ -60,7 +60,7 @@ This Solidity struct includes key settings like the chain configuration (`Config
 
 #### 2. Config struct
 
-```solidity {2,4,5,9}
+```solidity {2,4,6}
 struct Config {
     uint64 confirmPeriodBlocks;
     uint64 extraChallengeTimeBlocks;
@@ -80,7 +80,7 @@ The `Config` struct defines the chain's core settings, including block confirmat
 
 #### 3. MaxTimeVariation struct
 
-```solidity
+```solidity {2,4}
 struct MaxTimeVariation {
     uint256 delayBlocks;
     uint256 futureBlocks;
@@ -97,7 +97,7 @@ The `chainConfig` parameter within the `Config` struct allows you to customize y
 
 Here's a brief overview of `chainConfig`:
 
-```json {2,24,26,28,29}
+```json {2,24,25,26,28,29}
 {
     chainId: number;
     homesteadBlock: number;
@@ -131,20 +131,22 @@ Here's a brief overview of `chainConfig`:
 }
 ```
 
-Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `arbitrum.InitialChainOwner`, `arbitrum.InitialArbOSVersion`, `arbitrum.DataAvailabilityCommittee`, `arbitrum.MaxCodeSize`, and `arbitrum.MaxInitCodeSize`. These parameters are customizable, while the other parameters use default values and should not be modified.
+Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `arbitrum.InitialChainOwner`, `arbitrum.InitialArbOSVersion`, `arbitrum.DataAvailabilityCommittee`, `arbitrum.MaxCodeSize`, and `arbitrum.MaxInitCodeSize`.
 
-For easier config preparation, the Orbit SDK provides the `prepareChainConfig` API, which takes config parameters as arguments and returns a `chainConfig` `JSON` string. Any parameters not provided will default to standard values, which are detailed [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts).
+### prepareChainConfig
+
+For easier config preparation, the Orbit SDK provides the `prepareChainConfig` function, which takes config parameters as arguments and returns a full `chainConfig`. Any parameters not provided will default to standard values, which are detailed [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts).
 
 Here are the parameters you can use with `prepareChainConfig`:
 
 | Parameter                            | Type    | Required | Default Value  | Description                                                                                                          |
 | :----------------------------------- | :------ | :------- | :------------- | :------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                            | Number  | Yes      | /              | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                           |
-| `arbitrum.InitialChainOwner`         | Address | Yes      | /              | Specifies who owns and controls the chain.                                                                           |
+| `chainId`                            | Number  | **Yes**  | /              | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                           |
+| `arbitrum.InitialChainOwner`         | Address | **Yes**  | /              | Specifies who owns and controls the chain.                                                                           |
 | `arbitrum.InitialArbOSVersion`       | Number  | No       | latest         | Specifies which version of ArbOS should the chain run.                                                               |
 | `arbitrum.DataAvailabilityCommittee` | Boolean | No       | false          | When set to `false`, your chain will run as a Rollup chain, and when set to `true` it will run as an AnyTrust chain. |
-| `arbitrum.MaxCodeSize`               | Number  | No       | 24_576 (bytes) | Sets the maximum size for contract bytecodes on the chain.                                                           |
-| `arbitrum.MaxInitCodeSize`           | Number  | No       | 49_152 (bytes) | Similar to `arbitrum.MaxCodeSize`, defines the maximum size for your chain's **initialization** code.                |
+| `arbitrum.MaxCodeSize`               | Number  | No       | 24,576 (bytes) | Sets the maximum size for contract bytecodes on the chain.                                                           |
+| `arbitrum.MaxInitCodeSize`           | Number  | No       | 49,152 (bytes) | Similar to `arbitrum.MaxCodeSize`, defines the maximum size for your chain's **initialization** code.                |
 
 Below is an example of how to use `prepareChainConfig` to set up a Rollup chain with a specific `chainId`, an `InitialChainOwner` (named as `deployer`):
 
