@@ -1,3 +1,12 @@
+---
+title: "What is the Webacy Risk Data Network?"
+description: "Learn about the Webacy Risk Data Network, and how you can use it in your products."
+author: cvince
+sme: cvince
+sidebar_label: "Webacy"
+third_party_content_owner: cvince
+---
+
 [Webacy](https://webacy.com/) is a risk data network that helps wallets & applications protect their users against scams, hacks, and mistakes across the blockchain. 
 
 Wallets, protocols, & applications use Webacy throughout their user experience:
