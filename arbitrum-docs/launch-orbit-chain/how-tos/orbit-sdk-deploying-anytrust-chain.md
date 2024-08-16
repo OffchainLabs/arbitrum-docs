@@ -64,7 +64,7 @@ struct Config {
 }
 ```
 
-You can create the `chainConfig` parameter within the `Config` using `prepareChainConfig`. You can find more details on that function [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain#preparechainconfig).
+You can create the `chainConfig` parameter within the `Config` using `prepareChainConfig`. You can find more details on that function [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain#41-preparechainconfig).
 
 ```js
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';

@@ -37,7 +37,7 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 ### Rollup deployment parameters
 
 [`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
-`createRollup` takes a complex input named `deployParams', which defines the characteristics of an Orbit Rollup chain.
+`createRollup` takes a complex input named `deployParams`, which defines the characteristics of an Orbit Rollup chain.
 
 The following will walk you through the methods and properties you will use to configure your chain.
 
@@ -133,7 +133,7 @@ Here's a brief overview of `chainConfig`:
 
 Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `arbitrum.InitialChainOwner`, `arbitrum.InitialArbOSVersion`, `arbitrum.DataAvailabilityCommittee`, `arbitrum.MaxCodeSize`, and `arbitrum.MaxInitCodeSize`.
 
-### prepareChainConfig
+#### 4.1. `prepareChainConfig`
 
 For easier config preparation, the Orbit SDK provides the `prepareChainConfig` function, which takes config parameters as arguments and returns a full `chainConfig`. Any parameters not provided will default to standard values, which are detailed [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts).
 
