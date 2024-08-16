@@ -690,11 +690,11 @@ We now deploy that gateway to L2.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
-const { 
-  getArbitrumNetwork, 
+const {
+  getArbitrumNetwork,
   ParentToChildMessageStatus,
   AdminErc20Bridger,
-  Erc20Bridger, 
+  Erc20Bridger,
 } = require('@arbitrum/sdk');
 require('dotenv').config();
 
