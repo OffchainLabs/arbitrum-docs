@@ -7,23 +7,30 @@ target_audience: Developers building on the Stylus testnet
 sidebar_position: 9
 ---
 
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+
 import StylusFaucets from './partials/_stylus-faucets.mdx';
 
 import StylusSmartContractsAddresses from './partials/_stylus-smart-contract-addresses.mdx';
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
-
 <PublicPreviewBannerPartial />
+
+## Arbitrum public RPC endpoints
 
 :::caution
 
-Stylus is undergoing major upgrades, and some improvements are expected to require a chain reset. Prior to a reset, developers on the testnet are recommended to withdraw their testnet ETH (there is no 7-day delay since this is a testnet, withdrawals are processed in minutes) and redeploy their contracts on the new chain. There will be advanced warning of any resets. Stay up-to-date by joining the Stylus channel in [Discord](https://discord.com/invite/arbitrum).
+- Unlike the RPC Urls, the Sequencer endpoints only support `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
+- Arbitrum public RPCs do not provide Websocket support.
+- Stylus testnets v1 and v2 have been spun down and are not accesible anymore.
+- Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia) or [Alchemy's Arbitrum sepolia faucet](https://www.alchemy.com/faucets/arbitrum-sepolia) for testnet Sepolia tokens on L2.
 
 :::
 
-import ArbitrumRpcEndpoints from '../../partials/_reference-arbitrum-rpc-endpoints-partial.mdx';
+This section provides an overview of the available public RPC endpoints for different Arbitrum chains that have Stylus enabled, and necessary details to interact with them.
 
-<ArbitrumRpcEndpoints />
+| Name                       | RPC Url(s)                             | Chain ID | Block explorer              | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
+| -------------------------- | -------------------------------------- | -------- | --------------------------- | ---------------- | -------------- | ------------------------------------- | ------------------------------------------------ |
+| Arbitrum Sepolia (Testnet) | https://sepolia-rollup.arbitrum.io/rpc | 421614   | https://sepolia.arbiscan.io | Sepolia          | Nitro (Rollup) | wss://sepolia-rollup.arbitrum.io/feed | https://sepolia-rollup-sequencer.arbitrum.io/rpc |
 
 <StylusFaucets />
 
