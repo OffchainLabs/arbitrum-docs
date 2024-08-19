@@ -41,7 +41,7 @@ The difference between custom gas token chains and other Orbit chains is the use
 
 ## 2. Chain configuration
 
-Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain#1-setting-up-the-chain-parameters).
+Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md#1-setting-up-the-chain-parameters).
 
 ## 3. Token approval before deployment process
 
