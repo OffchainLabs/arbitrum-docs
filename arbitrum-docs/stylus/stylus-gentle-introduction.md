@@ -9,7 +9,7 @@ sidebar_position: 1
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
