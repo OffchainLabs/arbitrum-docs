@@ -16,7 +16,7 @@ Before you start building the sample app to perform a USDC transfer, ensure you 
 
 3. **Project Setup**: Create a new project directory and initialize it with npm:
 
-   ```bash
+   ```shell
    mkdir usdc-transfer-app
    cd usdc-transfer-app
    npm init -y
@@ -24,7 +24,7 @@ Before you start building the sample app to perform a USDC transfer, ensure you 
 
 4. **Dependencies**: Install the required dependencies using the following command:
 
-```bash
+```shell
     npm install react@^18.2.0 react-dom@^18.2.0 @types/react@^18.0.27 @types/react-dom@^18.0.10 @vitejs/plugin-react@^3.1.0 typescript@^5.0.3 vite@^4.4.5
 ```
 This will set up your development environment with the necessary libraries and tools for building a React application with TypeScript and Vite.
@@ -33,11 +33,11 @@ This will set up your development environment with the necessary libraries and t
 
 To install viem run the following command.
 
-```bash
+```shell
 npm i viem
 ```
 
-## Setup Public Client
+## Setup public client
 
 The public client is used to interact with your desired blockchain network.
 
@@ -51,9 +51,9 @@ const publicClient = createPublicClient({
 });
 ```
 
-## Setup Wallet Client
+## Setup wallet client
 
-The wallet client is used to interact with Arbitrum accounts to retrieve accounts, execute transactions, and sign messages. 
+The wallet client is used to interact with Arbitrum accounts to retrieve accounts, execute transactions, and sign messages.
 
 ```javascript
 import { createWalletClient } from 'viem';
@@ -65,7 +65,7 @@ const walletClient = createWalletClient({
 });
 ```
 
-## Define USDC Contract Details
+## Define USDC contract details
 
 Define the USDC contract address and ABI (Application Binary Interface). The ABI specifies the functions available in the contract. (The USDC Token Contract Address referenced in the code is on Ethereum Sepolia)
 
@@ -84,18 +84,18 @@ const USDC_CONTRACT_ADDRESS = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d'; cons
 ];
 ```
 
-## Connect Wallet
+## Connect wallet
 
 Create a function to connect the user's wallet and retrieve their account address.
 
 ```javascript
-const connect = async () => { 
-  const [address] = await walletClient.requestAddresses() 
-  setAccount(address) 
+const connect = async () => {
+  const [address] = await walletClient.requestAddresses()
+  setAccount(address)
 }
 ```
 
-## Send Transaction
+## Send transaction
 
 Create a function to send the USDC transfer transaction. This function encodes the transfer function data and sends the transaction using the wallet client.
 
@@ -113,7 +113,7 @@ const hash = await walletClient.sendTransaction({
 });
 ```
 
-## Wait for Transaction Receipt
+## Wait for transaction receipt
 
 Use the public client to wait for the transaction receipt, which confirms that the transaction has been mined.
 
@@ -128,12 +128,11 @@ useEffect(() => {
 }, [hash]);
 ```
 
-## Final Step: Build Your USDC Transfer Sample App
+## Final step: build your USDC transfer sample app
 
 Now that you understand the core components for programmatically performing your first USDC transaction, create the following **index.tsx** and **index.html** files to build a sample app. This app will enable you to send USDC from one wallet to another. Ensure that your wallet is funded with both the native gas token and USDC.
 
-index.tsx
-```javascript
+```javascript index.tsx
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
@@ -150,14 +149,14 @@ import {
 import { arbitrumSepolia } from 'viem/chains';
 import 'viem/window';
 
-const publicClient = createPublicClient({ 
-  chain: arbitrumSepolia, 
-  transport: http() 
+const publicClient = createPublicClient({
+  chain: arbitrumSepolia,
+  transport: http()
 });
 
-const walletClient = createWalletClient({ 
-  chain: arbitrumSepolia, 
-  transport: custom(window.ethereum!) 
+const walletClient = createWalletClient({
+  chain: arbitrumSepolia,
+  transport: custom(window.ethereum!)
 });
 
 const USDC_CONTRACT_ADDRESS = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d';
@@ -239,8 +238,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 );
 ```
 
-index.html
-```html
+
+```html index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -257,5 +256,3 @@ index.html
 ```
 
 By combining these **index.tsx** and **index.html** files, you will have a complete setup that allows you to perform a USDC transfer from your wallet. Simply connect your wallet, input the recipient's address and the amount of USDC to transfer, and click the “Send” button to execute the transaction. You will receive a transaction receipt once the transaction is confirmed on the blockchain.
-
-
