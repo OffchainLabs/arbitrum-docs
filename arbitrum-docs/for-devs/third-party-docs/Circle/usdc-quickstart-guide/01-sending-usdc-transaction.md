@@ -11,22 +11,24 @@ Before you start building the sample app to perform a USDC transfer, ensure you 
 1. **Node.js and npm**: Ensure that you have Node.js and npm installed on your machine. You can download and install Node.js from [nodejs.org](https://nodejs.org). npm comes with Node.js.
 
 2. [**MetaMask**](https://metamask.io/): Install the MetaMask browser extension and set up your wallet. Ensure that your wallet is funded with:
+
    - Some native gas tokens (e.g., ETH on the Sepolia network) to cover transaction fees.
    - USDC tokens for the transfer. ([USDC Testnet Faucet](https://faucet.circle.com/))
 
 3. **Project Setup**: Create a new project directory and initialize it with npm:
 
-   ```shell
-   mkdir usdc-transfer-app
-   cd usdc-transfer-app
-   npm init -y
-   ```
+```shell
+mkdir usdc-transfer-app
+cd usdc-transfer-app
+npm init -y
+```
 
 4. **Dependencies**: Install the required dependencies using the following command:
 
 ```shell
-    npm install react@^18.2.0 react-dom@^18.2.0 @types/react@^18.0.27 @types/react-dom@^18.0.10 @vitejs/plugin-react@^3.1.0 typescript@^5.0.3 vite@^4.4.5
+   npm install react@^18.2.0 react-dom@^18.2.0 @types/react@^18.0.27 @types/react-dom@^18.0.10 @vitejs/plugin-react@^3.1.0 typescript@^5.0.3 vite@^4.4.5
 ```
+
 This will set up your development environment with the necessary libraries and tools for building a React application with TypeScript and Vite.
 
 ## Installation
@@ -70,17 +72,18 @@ const walletClient = createWalletClient({
 Define the USDC contract address and ABI (Application Binary Interface). The ABI specifies the functions available in the contract. (The USDC Token Contract Address referenced in the code is on Ethereum Sepolia)
 
 ```javascript
-const USDC_CONTRACT_ADDRESS = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d'; const USDC_ABI = [
+const USDC_CONTRACT_ADDRESS = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d';
+const USDC_ABI = [
   {
-    "constant": false,
-    "inputs": [
-      { "name": "_to", "type": "address" },
-      { "name": "_value", "type": "uint256" }
+    constant: false,
+    inputs: [
+      { name: '_to', type: 'address' },
+      { name: '_value', type: 'uint256' },
     ],
-    "name": "transfer",
-    "outputs": [{ "name": "", "type": "bool" }],
-    "type": "function"
-  }
+    name: 'transfer',
+    outputs: [{ name: '', type: 'bool' }],
+    type: 'function',
+  },
 ];
 ```
 
@@ -90,9 +93,9 @@ Create a function to connect the user's wallet and retrieve their account addres
 
 ```javascript
 const connect = async () => {
-  const [address] = await walletClient.requestAddresses()
-  setAccount(address)
-}
+  const [address] = await walletClient.requestAddresses();
+  setAccount(address);
+};
 ```
 
 ## Send transaction
@@ -132,7 +135,7 @@ useEffect(() => {
 
 Now that you understand the core components for programmatically performing your first USDC transaction, create the following **index.tsx** and **index.html** files to build a sample app. This app will enable you to send USDC from one wallet to another. Ensure that your wallet is funded with both the native gas token and USDC.
 
-```javascript index.tsx
+```javascript title="index.tsx"
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
@@ -238,20 +241,19 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 );
 ```
 
-
-```html index.html
+```html title="index.html"
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>USDC Transfer Sample App</title>
-</head>
-<body>
-  <h1>USDC Transfer Sample App</h1>
-  <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USDC Transfer Sample App</title>
+  </head>
+  <body>
+    <h1>USDC Transfer Sample App</h1>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
 </html>
 ```
 
