@@ -103,7 +103,7 @@ While both of these bonds can be any ERC20 token and be set to any size, this pr
 
 BoLD makes permissionless validation possible for Arbitrum rollup chains and marks a major step towards [full decentralization](https://docs.arbitrum.foundation/state-of-progressive-decentralization). This significant milestone also lays the groundwork for productive discussions about future economic incentives for those participating in the protocol since anyone can participate.
 
-### Reimbursements and penalities
+### Reimbursements and penalties
 
 Once all of a validator’s proposed assertions are confirmed, a validator can withdraw their bond in full. Other costs spent by the honest parties to defend Arbitrum, such as the L1 gas costs and the challenge bonds, are fully refundable following confirmation of all sub-challenges. Challenge bonds will be automatically refundable in-protocol while L1 gas costs will be reimbursed by the Arbitrum Foundation using an off-chain procedure. All costs spent by malicious actors, including the assertion bond, are confiscated and sent to an Arbitrum DAO controlled address at the conclusion of a challenge. All eligible entities who wish to be paid a reward or be reimbursed by the Arbitrum DAO or the Arbitrum Foundation are expected to undergo the Arbitrum Foundation’s KYC process.
 
