@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "module": "nodenext",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "downlevelIteration": true
   }
 }
