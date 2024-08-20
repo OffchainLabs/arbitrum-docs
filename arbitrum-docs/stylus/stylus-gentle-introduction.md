@@ -35,6 +35,7 @@ This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode
 With a WASM VM, any programming language that can compile down to WASM are within the bounds of Stylus. While many popular programming languages can be compiled into WASM, some compilers are more suitable for smart contract development than others, like with Rust, C, and C++. Other languages, such as Go, Sway, Move, and Cairo, can be supported as well. Languages that include their own runtimes, like Python and Javascript, are harder for Stylus to support, although not impossible. Third-party contribution in the form of libraries for new and existing languages is welcomed!
 
 Compared to using Solidity, WASM programs are much more efficient. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution.
+
 ### How is this possible?
 
 Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol)
