@@ -1,5 +1,5 @@
 ---
-title: 'Opcode and host I/O pricing'
+title: 'Gas and Ink costs'
 description: 'A reference of how much opcodes and host I/Os cost in Stylus, with measurements in ink and gas.'
 author: rachel-bousfield
 sme: rachel-bousfield
