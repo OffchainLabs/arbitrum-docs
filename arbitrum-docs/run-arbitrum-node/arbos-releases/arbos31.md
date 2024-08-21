@@ -13,7 +13,7 @@ Future versions of Nitro may remove support for Orbit chains which have historic
 
 :::
 
-ArbOS 31 "Bianca" is shipped via Nitro v3.1.1, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.1`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
+ArbOS 31 "Bianca" is shipped via [Nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.1`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
 
 The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.md).
 
@@ -27,7 +27,7 @@ The Arbitrum docs will remain the canonical home for information regarding ArbOS
 
 ArbOS 31 Bianca is a major upgrade for Arbitrum chains. As a refresher, ArbOS upgrades can be treated as Arbitrum’s equivalent of a hard fork - more can be read about this subject over in [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Please note that ArbOS 31 Bianca is an upgrade that builds upon [ArbOS 20 Atlas](./arbos20.md).
 
-ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum chains. The full list of changes can be found in the Nitro release notes for [Nitro 3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1) or higher (as Nitro 3.1.1 is the first Nitro version that adds support for ArbOS 31 Bianca). Highlighted below are a few of the most impactful and critical features that are introduced with ArbOS 31:
+ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum chains. A full list of changes can be found in the Nitro release notes for [Nitro 3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1) or higher (as Nitro 3.1.1 is the endorsed Nitro node version for ArbOS 31 Bianca). Highlighted below are a few of the most impactful and critical features that are introduced with ArbOS 31 Bianca:
 
 - Addition and subsequent activation of [Stylus](../../stylus/stylus-gentle-introduction.md) on Arbitrum chains through the addition of a new WebAssembly-based (WASM) virtual machine that runs alongside the EVM. Stylus enables developers to write smart contracts in new programming languages that compile down to WASM, like Rust, that are more efficient and safer than Solidity smart contracts while retaining complete interoperability.
 - Adding support for [RIP-7212](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md) decreases the costs of verifying the secp256r1 curve on-chain [by 99% when compared to current implementations](https://www.alchemy.com/blog/what-is-rip-7212), making secp256r1 verification more feasible for everyday use and enabling dApp developers and protocols to offer their users improved UX on Arbitrum One and Arbitrum Nova. Without this precompile, verifying this signature on-chain is extremely expensive. Passkey-based wallets offer a better level of security than a typical EOA and seamless cross-device support. Many wallets, and notably, apps using embedded wallets, have been requesting this feature for over a year.
@@ -35,6 +35,10 @@ ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum ch
 - Introduction of a new Fast Withdrawals feature for Orbit chains to achieve fast finality. This feature allows for transactions processed by a committee of validators to be unanimously confirmed as quickly as 15 minutes, as opposed to the default 7 day challenge period. While any Orbit chain can adopt Fast Withdrawals, we only recommend Fast Withdrawals for AnyTrust chains. Note that to enable this feature, separate steps must be followed (below).
 
 ### Additional requirement for Arbitrum Orbit chains who wish to take advantage of the Stylus Cache Manager
+
+:::tip Stylus Cache Manager
+It is strongly recommended that teams upgrading to ArbOS 31 also spend the time following the instructions described below to deploy and enable the Stylus Cache Manager. Even your team does not intend to build with Stylus in the immediate term, enabling the Cache Manager ensures that future usage of Arbitrum Stylus on your chain is smooth and provides a consistent UX with the developer experience of building with Arbitrum Stylus on Arbitrum One.
+:::
 
 Specific to Stylus and ArbOS 31 "Bianca", we have developed a caching strategy that stores frequently accessed contracts in memory to reduce the costs and time associated with contract execution from repeated initializations. Check out the [Stylus caching strategy docs](../../stylus/concepts/stylus-cache-manager.md) to learn more.
 
@@ -44,7 +48,7 @@ After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have ful
 
 ### Additional requirement for Arbitrum Orbit chains who wish to enable Fast Withdrawals
 
-After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.md#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup.
+After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.md#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup. Note that Fast Withdrawals is disabled by default unless explicitly set up and enabled by the Orbit chain owner/maintainer. 
 
 ### Reference links for ArbOS 30 Bianca
 
