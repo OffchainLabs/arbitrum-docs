@@ -1,5 +1,5 @@
 ---
-title: 'Stylus caching strategy'
+title: 'Caching strategy'
 description: 'A conceptual overview of the Stylus caching strategy and `CacheManager` contract, and explaining its functionality.'
 sme: mahsa-moosavi
 target_audience: 'Developers deploying smart contracts using Stylus.'
