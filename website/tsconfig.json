@@ -3,6 +3,8 @@
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es2020"
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "downlevelIteration": true
   }
 }
