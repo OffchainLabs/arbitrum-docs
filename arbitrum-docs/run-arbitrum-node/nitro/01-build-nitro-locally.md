@@ -189,6 +189,21 @@ make
 make build
 ```
 
+#### Warnings on MacOS
+
+In MacOS with Apple Silicon, warnings like the following might appear but they will not hinder the compilation process.
+
+```
+ld: warning: object file was built for newer 'macOS' version (14.4) than being linked (14.0)
+```
+
+To solve these warnings, export the following environment variables before building Nitro.
+
+```
+export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)
+export CGO_LDFLAGS=-Wl,-no_warn_duplicate_libraries
+```
+
 ### Step 10. Run your node
 
 To run your node using the generated binaries, use the following command from the `nitro` folder, with your desired parameters
