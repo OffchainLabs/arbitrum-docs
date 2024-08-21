@@ -72,7 +72,7 @@ Solidity programs and WASM programs are completely composable. If working in Sol
 
 ### How does it work?
 
-There are four main steps for bringing a Stylus program to life — coding, compilation, execution, and proving.
+There are four main steps for bringing a Stylus program to life — coding, activation, execution, and proving.
 
 #### Coding
 
