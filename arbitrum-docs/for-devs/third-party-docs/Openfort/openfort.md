@@ -8,14 +8,15 @@ sidebar_label: 'Openfort'
 
 :::info Community member contribution
 
-The following document was contributed by  [@joalavedra](https://github.com/joalavedra). Give them a shoutout if you find it useful!
+The following document was contributed by [@joalavedra](https://github.com/joalavedra). Give them a shoutout if you find it useful!
 
 :::
 
 **[<ins>Openfort</ins>](https://www.openfort.xyz/)** is a headless wallet solution that helps developers integrate authentication, private key management, and account abstraction into their dApps. By abstracting away the complexities of blockchain interactions, Openfort allows you to build Web3 applications with a Web2-like user experience without requiring end users to manage private keys or hold cryptocurrency.
 
 Openfort enables you to:
-- Implement secure authentication and key management 
+
+- Implement secure authentication and key management
 - Create and manage smart contract wallets
 - Enable gasless and sponsored transactions
 
@@ -36,7 +37,6 @@ The Openfort dashboard allows you to:
 Please check out the [<ins>docs</ins>](https://www.openfort.xyz/docs/) to learn more about using the Openfort Dashboard. Click [<ins>here</ins>](https://dashboard.openfort.xyz) to access the Openfort Dashboard.
 
 :::
-
 
 ## How to implement a gasless transaction on Arbitrum using Openfort
 
@@ -97,8 +97,8 @@ const transactionIntent = await openfort.transactionIntents.create({
   interactions: {
     contract: 'con_....', // Your NFT contract ID
     functionName: 'mint',
-    functionArgs: ['0x...'] // Address to receive the NFT
-  }
+    functionArgs: ['0x...'], // Address to receive the NFT
+  },
 });
 ```
 
@@ -121,8 +121,8 @@ const transactionIntent = await openfort.transactionIntents.create({
   interactions: {
     contract: 'con_....', // Your NFT contract ID
     functionName: 'mint',
-    functionArgs: [playerId] // Minting to the player's address
-  }
+    functionArgs: [playerId], // Minting to the player's address
+  },
 });
 ```
 
