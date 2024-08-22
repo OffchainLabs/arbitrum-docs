@@ -49,7 +49,7 @@ To perform this signing operation, each DAC member must generate their own set o
 
 An Anytrust chain needs to know all DAC members' public keys to validate the integrity of the data being batched and posted. A _keyset_ is a list of all DAC members' RPC endpoint and BLS public key. Additionally, it also contains information about how many signatures are needed to approve a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate (DACert)</a>, via a special `assumed-honest` parameter (i.e., the `h` parameter we mentioned above). This design lets the chain owner modify the DAC membership over time, and DAC members change their keys if needed. See _[Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro#inside-anytrust)_ for more information.
 
-We use this keyset, and its hash, to configure the SequencerInbox contract with the valid keyset, and also the batch poster (to request storing information) and full nodes (to request information already stored).
+We use this keyset, and its hash to configure the SequencerInbox contract with the valid keyset, and also the batch poster (to request storing information) and full nodes (to request information already stored).
 
 ### How to generate a keyset and a keyset hash
 
