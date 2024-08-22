@@ -144,7 +144,7 @@ cast send --rpc-url $PARENT_CHAIN_RPC --private-key $CHAIN_OWNER_PRIVATE_KEY $SE
 
 ## Step 3: Craft the new configuration for the batch poster
 
-To configure the batch poster, we'll use the JSON structure we created in Step 1. This will allow the batch poster to send rpc requests to all the DA servers (to store the information of the transactions being included in the next batch), craft the DACert, and store it in the SequencerInbox.
+To configure the batch poster, we'll use the JSON structure we created in Step 1. This will allow the batch poster to send RPC requests to all the DA servers (to store the information of the transactions being included in the next batch), craft the DACert, and store it in the SequencerInbox.
 
 The configuration to enable the DAC in the batch poster looks like this:
 
