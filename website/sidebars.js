@@ -661,7 +661,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Generate a keyset',
+              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
