@@ -222,7 +222,7 @@ The configuration to enable the DAC in a full node looks like this:
 The following parameters are used:
 
 - `data-availability.enable`: tells the node to query information from the DAC
-- `data-availability.rest-aggregator`: includes information of the REST endpoints of all the DA servers run by DAC members.
+- `data-availability.rest-aggregator`: includes information on the REST endpoints of all the DA servers run by DAC members.
   - `enable`: tells the node that the REST aggregator will be used
   - `urls` or `online-url-list`: usually only one of these is used, although both parameters can be used and the information will be aggregated together. `urls` is a list of all REST endpoints of the DA servers, and `online-url-list` is a URL to a list of URLs of the REST endpoints of the DA servers.
 
