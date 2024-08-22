@@ -205,11 +205,10 @@ The configuration to enable the DAC in a full node looks like this:
     "rest-aggregator": {
       "enable": true,
       "urls": [
-          "https://rpc-endpoint-of-member-1/",
-          "https://rpc-endpoint-of-member-2/",
+          "https://rest-endpoint-of-member-1/",
+          "https://rest-endpoint-of-member-2/",
           ...
-          "https://rpc-endpoint-of-member-n/",
-
+          "https://rest-endpoint-of-member-n/",
       ],
       "online-url-list": "https://url-of-list-of-rest-endpoints"
     }
