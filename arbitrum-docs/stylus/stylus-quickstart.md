@@ -7,7 +7,7 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -50,7 +50,7 @@ If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at
 
 The Stylus testnet settles directly to the [Arbitrum Sepolia](/build-decentralized-apps/03-public-chains.md#arbitrum-sepolia) testnet. Follow these steps to acquire testnet ETH on the Stylus testnet:
 
-1. Navigate to [https://bwarelabs.com/faucets/arbitrum-stylus-testnet](https://bwarelabs.com/faucets/arbitrum-stylus-testnet).
+1. Navigate to [https://bwarelabs.com/faucets/arbitrum-sepolia](https://bwarelabs.com/faucets/arbitrum-sepolia).
 2. Enter your wallet address into the text field.
 3. Click `Claim` and optionally follow the second step to receive extra testnet tokens.
 4. You should now have Sepolia ETH on the Stylus testnet.

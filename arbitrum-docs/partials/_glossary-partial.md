@@ -110,7 +110,7 @@ A distributed digital ledger that is used to record transactions and store data 
 A cryptographic scheme that allows multiple signatures to be aggregated and compacted into one efficiently verifiable, constant-sized signature. Used in the <a href="/intro/glossary#arbitrum-anytrust-protocol">Arbitrum AnyTrust Protocol</a> for the <a href="/intro/glossary#data-availability-committee-dac">Data Availability Committee (DAC)</a>'s signatures.
 </p>
 
-### BOLD {#bold}
+### BoLD {#bold}
 <p>
 Short for "Bounded Liquidity Delay"; latest version of the Arbitrum <a href="/intro/glossary#challenge-protocol">Challenge protocol</a> designed to eliminate <a href="https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a">delay attack vectors</a> (see <a href="https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc">here</a> for more). Not currently on mainnet. 
 </p>
