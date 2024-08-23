@@ -33,33 +33,35 @@ Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security ben
 
 #### Permissioned BoLD
 
-| Benefits                                                                                                           | Limitations |
-|--------------------------------------------------------------------------------------------------------------------|-------------|
-| Improved resistance to delay attacks                                                                               |             |
-| Increased censorship resistance for L3s                                                                            |             |
-| Use of any `ERC-20` as the bonding token                                                                           |             |
-| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up |             |
-| Less engineering overhead and infrastructure costs                                                                 |             |
-|                                                                                                                    |             |
-|                                                                                                                    |             |
-|                                                                                                                    |             |
-|                                                                                                                    |             |
+| Benefits                                                                                                           |
+|--------------------------------------------------------------------------------------------------------------------|
+| Improved resistance to delay attacks                                                                               |
+| Increased censorship resistance for L3s                                                                            |
+| Use of any `ERC-20` as the bonding token                                                                           |
+| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up |
+| Less engineering overhead and infrastructure costs                                                                 |
 
 #### Permissionless BoLD
 
-| Benefits                                                                                                           | Limitations                                                                                                                                                                                                                           |
-|--------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Improved resistance to delay attacks                                                                               | More expensive engineering overhead and infrastructure costs                                                                                                                                                                          |
-| Increased censorship resistance for L3s                                                                            | Risk of resource exhaustion attacks (challenges required computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders)                                             |
-| Use of any `ERC-20` as the bonding token                                                                           | Risk of repeated delays due to cheap challenges (each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price) |
-| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up | Risk of liquidity concerns and price impacts if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs                                                                                         |
-| Less engineering overhead and infrastructure costs                                                                 | Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack                                                                                         |
-| More trust in the system's integrity and fairness                                                                  |                                                                                                                                                                                                                                       |
-| Creates a more open ecosystem for third-party developers and users                                                 |                                                                                                                                                                                                                                       |
-|                                                                                                                    |                                                                                                                                                                                                                                       |
-|                                                                                                                    |                                                                                                                                                                                                                                       |
+| Benefits                                                                                                           |
+|--------------------------------------------------------------------------------------------------------------------|
+| Improved resistance to delay attacks                                                                               |
+| Increased censorship resistance for L3s                                                                            |
+| Use of any `ERC-20` as the bonding token                                                                           |
+| Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up |
+| Less engineering overhead and infrastructure costs                                                                 |
+| More trust in the system's integrity and fairness                                                                  |
+| Creates a more open ecosystem for third-party developers and users                                                 |
 
-### Benefits of adopting Arbitrum BoLD
+Caveats come with adopting Arbitrum BoLD for permissionless validation: 
+- Risks of resource exhaustion attacks: challenges require computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders
+- Risks to liveness or delays of the chain: each challenge takes time to resolve and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at an inexpensive price 
+- Risk of liquidity concerns and price impact: if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs                                                                                        ### Benefits of adopting Arbitrum BoLD
+- Risk of grieving attacks if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack
+- More expensive engineering overhead and infrastructure costs
+
+
+These risks can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on these risks and how Arbitrum BoLD's design accounts for them can be found in the [BoLD whitepaper](https://arxiv.org/abs/2404.10491).
 
 Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
 
