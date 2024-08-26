@@ -26,8 +26,8 @@ Some helpful VS Code extensions for Rust development:
 - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)
-- [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
-
+- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi)
+  
 #### Testnet ETH for deployment
 
 You’ll need some testnet ETH for deploying your Rust contract for live testing. Explained below in further detail.
@@ -142,7 +142,7 @@ Location:
 
 ```
 
-To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
+To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/check/VALID_WASM.md). If your program succeeds, you'll see the following message:
 
 ```
 Finished release [optimized] target(s) in 1.88s
