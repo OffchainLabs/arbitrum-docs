@@ -52,7 +52,7 @@ One way to reduce transaction fees for Orbit chains is to configure a Data Avail
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
-- [Avail](https://www.availproject.org/) (coming soon)
+- [AvailDA](https://www.availproject.org/)
 - [Near](https://near.org/data-availability) (coming soon)
 
 ## Indexers
