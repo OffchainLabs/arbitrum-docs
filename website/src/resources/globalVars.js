@@ -1,9 +1,9 @@
 // If you are making any changes to these docs, please ensure you run "yarn generate_precompiles_ref_tables"!
 
-const L1_BLOCK_TIME_SECONDS = 12.1;
+const L1_BLOCK_TIME_SECONDS = 12;
 
-const arbOneDisputeWindowBlocks = 49983;
-const novaDisputeWindowBlocks = 49983;
+const arbOneDisputeWindowBlocks = 50400;
+const novaDisputeWindowBlocks = 50400;
 const goerliDisputeWindowBlocks = 20;
 const sepoliaDisputeWindowBlocks = 20;
 
