@@ -87,7 +87,7 @@ const allowanceParams = {
 };
 
 const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-  allowanceParams
+  allowanceParams,
 );
 ```
 
