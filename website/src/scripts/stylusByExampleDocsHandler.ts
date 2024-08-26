@@ -3,6 +3,8 @@ const path = require('path');
 const { Application, RendererEvent } = require('typedoc');
 const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 
+const allowList = ['getting_started', 'basic_examples'];
+
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
   const sourceDir = path.join(outputDir, '../../stylus-by-example/src');
@@ -60,19 +62,26 @@ function copyFiles(source, target, parentDir = '') {
     const sourcePath = path.join(source, entry.name);
     const targetPath = path.join(target, entry.name);
     if (entry.isDirectory()) {
-      copyFiles(sourcePath, targetPath, entry.name);
+      // Only process directories in the allowList
+      if (allowList.includes(entry.name)) {
+        copyFiles(sourcePath, targetPath, entry.name);
+      }
     } else if (entry.name === 'page.mdx') {
-      try {
-        const newFileName = `${parentDir}.mdx`;
-        const content = fs.readFileSync(sourcePath, 'utf8');
-        const convertedContent = convertMetadataToFrontmatter(content);
-        fs.writeFileSync(path.join(target, newFileName), convertedContent);
-      } catch (err) {
-        console.error(`Failed to process file from ${sourcePath} to ${targetPath}:`, err);
+      // Only copy files if their parent directory is in the allowList
+      if (allowList.includes(parentDir)) {
+        try {
+          const newFileName = `${parentDir}.mdx`;
+          const content = fs.readFileSync(sourcePath, 'utf8');
+          const convertedContent = convertMetadataToFrontmatter(content);
+          fs.writeFileSync(path.join(target, newFileName), convertedContent);
+        } catch (err) {
+          console.error(`Failed to process file from ${sourcePath} to ${targetPath}:`, err);
+        }
       }
     }
   });
 }
+
 function convertMetadataToFrontmatter(content) {
   const metadataRegex = /export const metadata = {([\s\S]*?)};/;
   const match = content.match(metadataRegex);
@@ -96,6 +105,7 @@ function convertMetadataToFrontmatter(content) {
 
   return content;
 }
+
 function sortEntries(a, b) {
   const specialOrder = ['getting_started', 'basic_examples'];
   const indexA = specialOrder.indexOf(a);
@@ -120,6 +130,10 @@ function generateSidebar(dir, basePath = '') {
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
+        // Check if the directory is in the allowList
+        if (!allowList.includes(entry.name)) {
+          return null;
+        }
         const subItems = generateSidebar(
           fullPath,
           `${basePath}/${entry.name}`
