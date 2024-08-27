@@ -426,7 +426,7 @@ const sidebars = {
       collapsed: false,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview', // This will be the default page when clicking the category
+        id: 'stylus/stylus-overview',
       },
       items: [
         {
@@ -493,6 +493,11 @@ const sidebars = {
           label: 'CLI tools (cargo-stylus)',
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
+            },
             {
               type: 'doc',
               label: 'Optimize WASM binaries',

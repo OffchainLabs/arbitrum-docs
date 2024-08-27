@@ -20,57 +20,61 @@ Let's learn how to write contracts with Stylus!
   <Card
     title="A gentle introduction"
     description="Start with the basics of Stylus contracts."
-    to="stylus-gentle-introduction"
+    href="https://docs.arbitrum.io/stylus/stylus-gentle-introduction"
   />
   <Card
     title="Quickstart (Rust)"
     description="Get started quickly with Rust."
-    to="stylus-quickstart"
+    href="https://docs.arbitrum.io/stylus/stylus-quickstart"
   />
   <Card
     title="Testnet"
     description="Explore the testnet environment."
-    to="reference/testnet-information"
+    href="https://docs.arbitrum.io/stylus/reference/testnet-information"
   />
   <Card
     title="Stylus by example"
     description="Learn Stylus through examples."
-    href="https://example.com/stylus-by-example"
+    href="https://stylus-by-example.org"
   />
-  <Card title="Stylus Rust SDK" description="Dive into the Stylus Rust SDK." to="stylus-rust-sdk" />
+  <Card
+    title="Stylus Rust SDK"
+    description="Dive into the Stylus Rust SDK."
+    href="https://docs.arbitrum.io/stylus/reference/rust-sdk-guide"
+  />
   <Card
     title="Gas, ink and caching"
     description="Learn about gas, ink, and caching strategies."
-    to="gas-ink-caching"
+    href="https://docs.arbitrum.io/stylus/concepts/stylus-gas"
   />
   <Card
     title="CLI tools (cargo-stylus)"
     description="Master the CLI tools for Stylus."
-    to="cli-tools-cargo-stylus"
+    href="/stylus/cli-tools-overview"
   />
   <Card
     title="Run a Stylus dev node"
     description="Set up and run a development node."
-    to="run-stylus-dev-node"
+    href="https://docs.arbitrum.io/run-arbitrum-node/run-local-dev-node"
   />
   <Card
     title="Other supported languages"
     description="Explore other languages supported by Stylus."
-    to="other-supported-languages"
+    href="https://docs.arbitrum.io/stylus/reference/stylus-sdk"
   />
   <Card
     title="Troubleshooting"
     description="Find solutions to common issues."
-    to="troubleshooting"
+    href="https://docs.arbitrum.io/stylus/troubleshooting-building-stylus"
   />
   <Card
     title="Source code repository"
     description="Check out the source code."
-    href="https://example.com/source-code-repository"
+    href="https://github.com/OffchainLabs/stylus"
   />
   <Card
     title="Public preview"
     description="View the public preview of Stylus."
-    to="public-preview"
+    href="https://docs.arbitrum.io/stylus/concepts/public-preview-expectations"
   />
 </div>
