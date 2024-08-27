@@ -14,8 +14,8 @@ const allowList = [
   'function_selector',
   'abi_encode',
   'abi_decode',
-  'hashing_with_keccak256',
-  'functions',
+  'hashing',
+  'function',
 ];
 
 function load(app) {
