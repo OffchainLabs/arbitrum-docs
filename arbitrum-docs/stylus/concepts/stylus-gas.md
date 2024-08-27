@@ -7,7 +7,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-**Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Opcode and host I/O pricing](/stylus/reference/opcode-hostio-pricing).
+**Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Gas and ink costs](/stylus/reference/opcode-hostio-pricing).
 
 import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
@@ -78,4 +78,5 @@ However, developers optimizing contracts may choose to measure performance in in
 
 ### See also
 
-- [Opcode and host I/O pricing reference](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
+- [Gas and ink costs](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
+- [Caching strategy](/stylus/concepts/stylus-cache-manager): Description of the Stylus caching strategy and the `CacheManager` contract
