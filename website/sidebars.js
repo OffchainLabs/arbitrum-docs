@@ -423,7 +423,11 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: true,
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview', // This will be the default page when clicking the category
+      },
       items: [
         {
           type: 'doc',
