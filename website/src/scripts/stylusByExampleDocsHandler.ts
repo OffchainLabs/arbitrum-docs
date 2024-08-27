@@ -1,13 +1,26 @@
 const fs = require('fs');
 const path = require('path');
-const { Application, RendererEvent } = require('typedoc');
+const { RendererEvent } = require('typedoc');
 const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 
-const allowList = ['getting_started', 'basic_examples', "applications", "erc20", "erc721"];
+const allowList = [
+  'bytes_in_bytes_out',
+  'primitive_data_types',
+  'variables',
+  'constants',
+  'events',
+  'errors',
+  'sending_ether',
+  'function_selector',
+  'abi_encode',
+  'abi_decode',
+  'hashing_with_keccak256',
+  'functions',
+];
 
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
-  const sourceDir = path.join(outputDir, '../../stylus-by-example/src/app');
+  const sourceDir = path.join(outputDir, '../../stylus-by-example/src/app/basic_examples');
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(outputDir);
@@ -25,9 +38,9 @@ function load(app) {
       `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst typedocSidebar = ${JSON.stringify(
         sidebarConfig,
         null,
-        2
+        2,
       )};\nmodule.exports = typedocSidebar.items;`,
-      'utf8'
+      'utf8',
     );
   });
 }
@@ -61,7 +74,7 @@ function copyFiles(source, target) {
 
   function processDirectory(dirPath, targetPath, isRoot = false) {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-    const hasChildDirectories = entries.some(entry => entry.isDirectory());
+    const hasChildDirectories = entries.some((entry) => entry.isDirectory());
 
     if (isRoot) {
       // Special handling for root directory
@@ -79,7 +92,7 @@ function copyFiles(source, target) {
 
       entries.forEach((entry) => {
         if (!allowList.includes(entry.name)) {
-          return
+          return;
         }
         const sourcePath = path.join(dirPath, entry.name);
         if (entry.isDirectory()) {
@@ -92,9 +105,12 @@ function copyFiles(source, target) {
       });
     } else {
       // This directory only contains files, so we flatten it
-      const mdxFile = entries.find(entry => entry.isFile() && entry.name === 'page.mdx');
+      const mdxFile = entries.find((entry) => entry.isFile() && entry.name === 'page.mdx');
       if (mdxFile) {
         const parentDirName = path.basename(dirPath);
+        if (!allowList.includes(parentDirName)) {
+          return;
+        }
         const sourcePath = path.join(dirPath, mdxFile.name);
         const newFileName = `${parentDirName}.mdx`;
         const content = fs.readFileSync(sourcePath, 'utf8');
@@ -105,21 +121,22 @@ function copyFiles(source, target) {
   }
 
   processDirectory(source, target, true);
-}function convertMetadataToFrontmatter(content) {
+}
+function convertMetadataToFrontmatter(content) {
   const metadataRegex = /export const metadata = {([\s\S]*?)};/;
   const match = content.match(metadataRegex);
 
   if (match) {
     let metadataContent = match[1];
-    
+
     // Convert JavaScript object syntax to YAML
     metadataContent = metadataContent
-      .replace(/:\s*"/g, ': "')  // Fix spacing after colons
-      .replace(/",\s*$/gm, '"')  // Remove trailing commas
-      .replace(/,\s*$/gm, '')    // Remove trailing commas without quotes
+      .replace(/:\s*"/g, ': "') // Fix spacing after colons
+      .replace(/",\s*$/gm, '"') // Remove trailing commas
+      .replace(/,\s*$/gm, '') // Remove trailing commas without quotes
       .split('\n')
-      .map(line => line.trim())
-      .filter(line => line)  // Remove empty lines
+      .map((line) => line.trim())
+      .filter((line) => line) // Remove empty lines
       .join('\n');
 
     const frontmatter = `---\n${metadataContent}\n---\n\n`;
@@ -129,19 +146,21 @@ function copyFiles(source, target) {
   return content;
 }
 
+/**
+ * Sorts entries based on the allowList order
+ */
 function sortEntries(a, b) {
-  const specialOrder = ['getting_started', 'basic_examples'];
-  const indexA = specialOrder.indexOf(a);
-  const indexB = specialOrder.indexOf(b);
-  
-  if (indexA !== -1 && indexB !== -1) {
-    return indexA - indexB;
-  } else if (indexA !== -1) {
+  const allowListIndexA = allowList.indexOf(a.replace('.mdx', ''));
+  const allowListIndexB = allowList.indexOf(b.replace('.mdx', ''));
+
+  if (allowListIndexA !== -1 && allowListIndexB !== -1) {
+    return allowListIndexA - allowListIndexB;
+  } else if (allowListIndexA !== -1) {
     return -1;
-  } else if (indexB !== -1) {
+  } else if (allowListIndexB !== -1) {
     return 1;
   }
-  
+
   return a.localeCompare(b);
 }
 
@@ -153,10 +172,7 @@ function generateSidebar(dir, basePath = '') {
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        const subItems = generateSidebar(
-          fullPath,
-          `${basePath}/${entry.name}`
-        );
+        const subItems = generateSidebar(fullPath, `${basePath}/${entry.name}`);
         if (subItems.length === 0) {
           return null; // Filter out empty categories
         }
@@ -181,12 +197,12 @@ function generateSidebar(dir, basePath = '') {
 }
 
 function capitalizeWords(string) {
-  return string.replace(/\b\w/g, l => l.toUpperCase());
+  return string.replace(/\b\w/g, (l) => l.toUpperCase());
 }
 
 function generateId(name, basePath) {
   const label = getLabelFromFilesystem(name);
-  return 'stylus-by-example'+(basePath + '/' + label).toLowerCase();
+  return 'stylus-by-example' + (basePath + '/' + label).toLowerCase();
 }
 
 function generateLabel(entry) {
