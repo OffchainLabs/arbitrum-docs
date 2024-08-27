@@ -602,8 +602,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos30',
-              label: 'ArbOS 30 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos31',
+              label: 'ArbOS 31 Bianca',
             },
             {
               type: 'doc',
