@@ -13,7 +13,7 @@ Future versions of Nitro may remove support for Orbit chains which have historic
 
 :::
 
-ArbOS 31 "Bianca" is shipped via [Nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.1-b26e84e`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
+ArbOS 31 "Bianca" is shipped via [Nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.2-309340a`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
 
 Please note that it is important that you only run the Nitro v3.1.1 against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (it might be inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. This is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
 
@@ -21,7 +21,7 @@ The Arbitrum docs will remain the canonical home for information regarding ArbOS
 
 ### Requirements:
 
-- [Nitro 3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1) or higher
+- [Nitro 3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or higher
 - [nitro-contracts v2.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) or higher
 - WASM module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`
 
