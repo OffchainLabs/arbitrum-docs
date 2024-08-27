@@ -3,11 +3,11 @@ const path = require('path');
 const { Application, RendererEvent } = require('typedoc');
 const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 
-const allowList = ['getting_started', 'basic_examples'];
+const allowList = ['getting_started', 'basic_examples', "applications", "erc20", "erc721"];
 
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
-  const sourceDir = path.join(outputDir, '../../stylus-by-example/src');
+  const sourceDir = path.join(outputDir, '../../stylus-by-example/src/app');
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(outputDir);
@@ -46,7 +46,7 @@ function cleanDirectory(directory) {
   }
 }
 
-function copyFiles(source, target, parentDir = '') {
+function copyFiles(source, target) {
   if (!fs.existsSync(source)) {
     console.error(`Source path does not exist: ${source}`);
     return;
@@ -58,31 +58,54 @@ function copyFiles(source, target, parentDir = '') {
   }
 
   fs.mkdirSync(target, { recursive: true });
-  fs.readdirSync(source, { withFileTypes: true }).forEach((entry) => {
-    const sourcePath = path.join(source, entry.name);
-    const targetPath = path.join(target, entry.name);
-    if (entry.isDirectory()) {
-      // Only process directories in the allowList
-      if (allowList.includes(entry.name)) {
-        copyFiles(sourcePath, targetPath, entry.name);
-      }
-    } else if (entry.name === 'page.mdx') {
-      // Only copy files if their parent directory is in the allowList
-      if (allowList.includes(parentDir)) {
-        try {
-          const newFileName = `${parentDir}.mdx`;
+
+  function processDirectory(dirPath, targetPath, isRoot = false) {
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    const hasChildDirectories = entries.some(entry => entry.isDirectory());
+
+    if (isRoot) {
+      // Special handling for root directory
+      entries.forEach((entry) => {
+        const sourcePath = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) {
+          processDirectory(sourcePath, targetPath);
+        }
+      });
+    } else if (hasChildDirectories) {
+      // This directory has subdirectories, so we preserve its structure
+      const currentDirName = path.basename(dirPath);
+      const newTargetPath = path.join(targetPath, currentDirName);
+      fs.mkdirSync(newTargetPath, { recursive: true });
+
+      entries.forEach((entry) => {
+        if (!allowList.includes(entry.name)) {
+          return
+        }
+        const sourcePath = path.join(dirPath, entry.name);
+        if (entry.isDirectory()) {
+          processDirectory(sourcePath, newTargetPath);
+        } else if (entry.name === 'page.mdx') {
           const content = fs.readFileSync(sourcePath, 'utf8');
           const convertedContent = convertMetadataToFrontmatter(content);
-          fs.writeFileSync(path.join(target, newFileName), convertedContent);
-        } catch (err) {
-          console.error(`Failed to process file from ${sourcePath} to ${targetPath}:`, err);
+          fs.writeFileSync(path.join(newTargetPath, entry.name), convertedContent);
         }
+      });
+    } else {
+      // This directory only contains files, so we flatten it
+      const mdxFile = entries.find(entry => entry.isFile() && entry.name === 'page.mdx');
+      if (mdxFile) {
+        const parentDirName = path.basename(dirPath);
+        const sourcePath = path.join(dirPath, mdxFile.name);
+        const newFileName = `${parentDirName}.mdx`;
+        const content = fs.readFileSync(sourcePath, 'utf8');
+        const convertedContent = convertMetadataToFrontmatter(content);
+        fs.writeFileSync(path.join(targetPath, newFileName), convertedContent);
       }
     }
-  });
-}
+  }
 
-function convertMetadataToFrontmatter(content) {
+  processDirectory(source, target, true);
+}function convertMetadataToFrontmatter(content) {
   const metadataRegex = /export const metadata = {([\s\S]*?)};/;
   const match = content.match(metadataRegex);
 
@@ -130,10 +153,6 @@ function generateSidebar(dir, basePath = '') {
     .map((entry) => {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
-        // Check if the directory is in the allowList
-        if (!allowList.includes(entry.name)) {
-          return null;
-        }
         const subItems = generateSidebar(
           fullPath,
           `${basePath}/${entry.name}`
