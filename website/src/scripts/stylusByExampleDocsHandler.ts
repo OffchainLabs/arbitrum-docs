@@ -123,20 +123,25 @@ function copyFiles(source, target) {
   processDirectory(source, target, true);
 }
 function convertMetadataToFrontmatter(content) {
-  const metadataRegex = /export const metadata = {([\s\S]*?)};/;
+  const metadataRegex = /export const metadata = ({[\s\S]*?});/;
   const match = content.match(metadataRegex);
 
   if (match) {
-    let metadataContent = match[1];
+    let metadataObj;
+    try {
+      metadataObj = eval(`(${match[1]})`);
+    } catch (error) {
+      console.error('Error parsing metadata:', error);
+      return content;
+    }
 
-    // Convert JavaScript object syntax to YAML
-    metadataContent = metadataContent
-      .replace(/:\s*"/g, ': "') // Fix spacing after colons
-      .replace(/",\s*$/gm, '"') // Remove trailing commas
-      .replace(/,\s*$/gm, '') // Remove trailing commas without quotes
-      .split('\n')
-      .map((line) => line.trim())
-      .filter((line) => line) // Remove empty lines
+    // Convert object to YAML-style string
+    let metadataContent = Object.entries(metadataObj)
+      .map(([key, value]) => {
+        // Escape double quotes and wrap value in quotes
+        const safeValue = String(value).replace(/"/g, '\\"');
+        return `${key}: "${safeValue}"`;
+      })
       .join('\n');
 
     const frontmatter = `---\n${metadataContent}\n---\n\n`;
