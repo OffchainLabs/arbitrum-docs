@@ -8,11 +8,11 @@ content_type: how-to
 sidebar_position: 11
 ---
 
-Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from genesis. It takes a long time for the node to sync from genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arb1 chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
+Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arb1 chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
 
 ## Supply the snapshot URL to Nitro
 
-There are multiple ways to supply Nitro with the database snapshot. The most straightforward way is to provide the configuration so Nitro downloads the snapshot by itself. It is also possible to download the database manually and supply it to Nitro. 
+There are multiple ways to supply Nitro with the database snapshot. The most straightforward way is to provide the configuration, so Nitro downloads the snapshot by itself. It is also possible to download the database manually and supply it to Nitro.
 
 ## Downloading the latest snapshot
 
@@ -32,7 +32,7 @@ Finally, Nitro decompresses and extracts the snapshot archive, placing it in the
 
 ## Downloading the snapshot from a URL
 
-Instead of letting Nitro search for the latest snapshot, you can provide a specific URL to download by setting the flag `--init.url` with the snapshot URL. If the URL points to a remote server, it should start with the `https://` protocol definition. Given the URL, Nitro will download the snapshot as described in the “Downloading the Latest Snapshot” section.
+Instead of letting Nitro search for the latest snapshot, you can provide a specific URL to download by setting the flag `--init.url` with the snapshot URL. If the URL points to a remote server, it should start with the `https://` protocol definition. Given the URL, Nitro will download the snapshot as described in the "Downloading the Latest Snapshot" section.
 
 Nitro also supports importing files from the local file system. In this case, you should provide the file path to `--init.url` starting with the prefix `file://` followed by the file path. Beware that when running Nitro inside a Docker container, you must mount a volume containing the provided snapshot using the docker flag `-v` (see [Docker documentation](https://docs.docker.com/reference/cli/docker/container/run/#volume)). Otherwise, the Nitro container running inside Docker won’t be able to find the snapshot in your local filesystem.
 
@@ -54,17 +54,17 @@ After downloading the snapshot, make sure to verify whether the checksum matches
 wget -q -O - "$SNAPSHOT_URL".sha256
 ```
 
-Once you know the expected snapshot checksum, run the command below to compute the checksum of the downloaded snapshot. Then, compare both add see if they are the same. If they are not the same, consider redownloading the snapshot. You must provide a valid snapshot to Nitro; otherwise, it won’t work properly.
+Once you know the expected snapshot checksum, run the command below to compute the checksum of the downloaded snapshot. Then, compare both and see if they are the same. If they are not the same, consider redownloading the snapshot. You must provide a valid snapshot to Nitro; otherwise, it won’t work properly.
 
 ```shell
 sha256sum $PATH_TO_SNAPSHOT
 ```
 
-Finally, you can provide path to the downloaded snapshot archive to Nitro using the `--init.url` flag, as described in the “Download the Snapshot from a URL” section.
+Finally, you can provide a path to the downloaded snapshot archive to Nitro using the `--init.url` flag, as described in the "Download the Snapshot from a URL" section.
 
 ### Downloading snapshot parts
 
-If the snapshot is divided in parts, you should first download the manifest file in `<snapshot-url>.manifest.txt`. This manifest contains the names and checksums of each part. For instance, the snippet below shows how the manifest file should look like. You may use the commands described previously to download each part of the snapshot and verify their checksums.
+If the snapshot is divided into parts, you should first download the manifest file in `<snapshot-url>.manifest.txt`. This manifest contains the names and checksums of each part. For instance, the snippet below shows how the manifest file should look. You may use the commands described previously to download each part of the snapshot and verify their checksums.
 
 ```shell
 a938e029605b81e03cd4b9a916c52d96d74c985ac264e2f298b90495c619af74  archive.tar.part0
@@ -85,7 +85,7 @@ cat archive.tar.part* > archive.tar
 
 ## Extracting the snapshot manually
 
-It is also possible to extract the snapshot archive and place the files manually. First, you need to download the snapshot archive as described in “Manually Downloading the Snapshot”. Then, create the directory where Nitro will look for its database. By default, Nitro stores the database on `$HOME/.arbitrum/$CHAIN/nitro`. Move the archive to this directory and extract it. The commands below exemplify this process for the Arbitrum Sepolia chain.
+It is also possible to extract the snapshot archive and place the files manually. First, you need to download the snapshot archive as described in "Manually Downloading the Snapshot". Then, create the directory where Nitro will look for its database. By default, Nitro stores the database on `$HOME/.arbitrum/$CHAIN/nitro`. Move the archive to this directory and extract it. The commands below exemplify this process for the Arbitrum Sepolia chain.
 
 ```shell
 export CHAIN=sepolia-rollup
@@ -107,7 +107,7 @@ nodes
 
 ## Creating a snapshot
 
-To generate the a snapshot for the Nitro database, first you need to stop the process gracefully. You must not generate the snapshot while Nitro is running because the database might be in a intermediary state. Nitro should print logs like the ones described below when stopping.
+To generate a snapshot for the Nitro database, you first need to stop the process gracefully. You must not generate the snapshot while Nitro runs because the database might be in an intermediary state. Nitro should print logs like the ones described below when stopping.
 
 ```shell
 ^CINFO [08-22|18:10:55.015] shutting down because of sigint
@@ -126,7 +126,7 @@ INFO [08-22|18:10:55.299] Persisted trie from memory database      nodes=0   siz
 INFO [08-22|18:10:55.304] Blockchain stopped
 ```
 
-After nitro stopped, go to the database directory and generate an archive file the directories `arbitrumdata`, `l2chaindata`, and `nodes`. By default, the database directory for nitro is `$HOME/.arbitrum/$CHAIN/nitro`. The commands below exemplify how to generate the snapshot for Nitro.
+After nitro stops, go to the database directory and generate an archive file for the directories `arbitrumdata`, `l2chaindata`, and `nodes`. By default, the database directory for nitro is `$HOME/.arbitrum/$CHAIN/nitro`. The commands below exemplify how to generate the snapshot for Nitro.
 
 ```shell
 export CHAIN=sepolia-rollup
@@ -135,14 +135,14 @@ cd $HOME/.arbitrum/$CHAIN/nitro
 tar zcfv $ARCHIVE_PATH arbitrumdata l2chaindata nodes
 ```
 
-This command purposely omits the `wasm` directory from the snapshot archive. The `wasm` contains native-code executable, so it might be a security concern for users downloading the snapshot. If the user downloading the snapshot trusts you, or if you are storing the snapshot for your own use, you may include the `wasm` directory in it.
+This command purposely omits the `wasm` directory from the snapshot archive. The `wasm` contains native-code executables, so it might be a security concern for users downloading the snapshot. If the user downloading the snapshot trusts you, or if you are storing it for your own use, you may include the `wasm` directory in it.
 
 ### Optional: divide it into parts
 
-It is possible to divide the snapshot into smaller parts to facilitate its download. This is particularly useful for archive snapshots of heavily used chains, such as arb1. These kind of snapshots can reach terabytes, so is useful to divide them into smaller parts. The snippet below illustrates how to divide the snapshot into parts using the split command. The `-b` argument tells split to divide the snapshot into 100 GB parts. The `-d` argument tells split to enumerate the parts using a numeric suffix instead of a alphabetic one.
+It is possible to divide the snapshot into smaller parts to facilitate its download. This is particularly useful for archive snapshots of heavily used chains, such as arb1. These kinds of snapshots can reach terabytes, so dividing them into smaller parts is helpful. The snippet below illustrates how to divide the snapshot into parts using the split command. The `-b` argument tells the split to divide the snapshot into 100 GB parts. The `-d` argument tells split to enumerate the parts using a numeric suffix instead of an alphabetic one.
 
 ```shell
 split -b 100g -d archive.tar.gz archive.tar.gz.part
 ```
 
-After dividing it into parts, you should generate the manifest file that contains the names and checksums of the parts. This files will be used by Nitro to know how many parts there are and to validate their checksum. The command below exemplifies how to do that.
+After dividing it into parts, you should generate the manifest file containing the parts' names and checksums. Nitro will use these files to know how many parts there are and to validate their checksum. The command below exemplifies how to do that.
