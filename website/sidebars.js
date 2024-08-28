@@ -442,11 +442,6 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
-          type: 'link',
-          label: 'Stylus by example',
-          href: 'https://stylus-by-example.org/',
-        },
-        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
@@ -455,13 +450,18 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Rust SDK overview',
-            },
-            ...stylusByExampleDocsSidebar,
-            {
-              type: 'link',
-              label: 'Rust crate docs',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
+              },
+              ...stylusByExampleDocsSidebar,
+              {
+                type: 'link',
+                label: 'Rust crate docs',
+                href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+              },
+              {
+                type: 'link',
+                label: 'Stylus by example',
+                href: 'https://stylus-by-example.org/',
+              },
           ],
         },
         {
