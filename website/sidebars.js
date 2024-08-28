@@ -443,11 +443,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Stylus by example',
-          items: stylusByExampleDocsSidebar,
-        },
-        {
-          type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
           items: [
@@ -456,6 +451,7 @@ const sidebars = {
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Rust SDK overview',
             },
+            ...stylusByExampleDocsSidebar,
             {
               type: 'link',
               label: 'Rust crate docs',
