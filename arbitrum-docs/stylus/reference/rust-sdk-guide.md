@@ -226,10 +226,6 @@ sol_storage! {
 
 The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract][erc20] for a full example of this feature.
 
-### Future storage work
-
-The Stylus SDK is currently in alpha and will improve in the coming versions. Something you may notice is that storage access patterns are often a bit verbose. This will change soon when we implement [`DerefMut`][DerefMut] for most types.
-
 ## Functions
 
 This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance] and [Sending ether](/stylus-by-example/sending_ether.mdx).
