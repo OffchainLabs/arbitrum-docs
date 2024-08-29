@@ -270,6 +270,56 @@ If enabled, the Stylus SDK will flush the storage cache in between reentrant cal
 
 The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
+### Inheritance, `#[inherit]`, and `#[borrow]`.
+
+Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[public]`][public] provides, can be connected via inheritance.
+
+```rust
+#[public]
+#[inherit(Erc20)]
+impl Token {
+    pub fn mint(&mut self, amount: U256) -> Result<(), Vec<u8>> {
+        ...
+    }
+}
+
+#[public]
+impl Erc20 {
+    pub fn balance_of() -> Result<U256> {
+        ...
+    }
+}
+```
+
+Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`][entrypoint], calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
+
+Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the ERC 20, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
+
+::::warning
+
+Stylus does not currently contain explicit `override` or `virtual` keywords for explicitly marking override functions. It is important, therefore, to carefully ensure that contracts are only overriding the functions.
+
+::::
+
+Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
+
+Note that for the above to work, `Token` must implement [`Borrow<Erc20>`][Borrow]. You can implement this yourself, but for simplicity, [`#[storage]`][storage] and [`sol_storage!`][sol_storage] provide a `#[borrow]` annotation.
+
+```rust
+sol_storage! {
+    #[entrypoint]
+    pub struct Token {
+        #[borrow]
+        Erc20 erc20;
+        ...
+    }
+
+    pub struct Erc20 {
+        ...
+    }
+}
+```
+
 ## Calls
 
 Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool][abi_export].
