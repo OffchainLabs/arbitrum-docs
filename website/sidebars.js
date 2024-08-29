@@ -1,6 +1,7 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
+const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -445,11 +446,6 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
-          type: 'link',
-          label: 'Stylus by example',
-          href: 'https://stylus-by-example.org/',
-        },
-        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
@@ -458,12 +454,18 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Rust SDK overview',
-            },
-            {
-              type: 'link',
-              label: 'Rust crate docs',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
+              },
+              ...stylusByExampleDocsSidebar,
+              {
+                type: 'link',
+                label: 'Rust crate docs',
+                href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+              },
+              {
+                type: 'link',
+                label: 'Stylus by example',
+                href: 'https://stylus-by-example.org/',
+              },
           ],
         },
         {
@@ -710,6 +712,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+              label: 'Nitro database snapshots',
             },
           ],
         },

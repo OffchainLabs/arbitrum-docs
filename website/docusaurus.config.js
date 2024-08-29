@@ -95,6 +95,7 @@ const config = {
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
           './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/stylusByExampleDocsHandler.ts',
         ],
 
         // typedoc-plugin-markdown options
