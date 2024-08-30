@@ -43,10 +43,20 @@ This section provides a practical guide for interacting with the `CacheManager` 
 
 ## Step 1: Determine the minimum bid
 
-Before placing a bid, it's important to know the minimum bid required to cache the Stylys contract. This can be done using the `getMinBid` function.
+Before placing a bid, it's important to know the minimum bid required to cache the Stylys contract. This can be done using the `getMinBid` function, or using the `cargo stylus cache suggest-bid` command.
+
+**Method 1: Direct smart contract call**
 
 ```solidity
 uint192 minBid = cacheManager.getMinBid(contractAddress);
+```
+
+**Method 2: Cargo stylus command**
+
+Note that here, <contractAddress> is the address of the Stylus contract you want to cache.
+
+```bash
+cargo stylus cache suggest-bid <contractAddress>
 ```
 
 ## Step 2: Place a bid
@@ -61,18 +71,26 @@ Here, `bidAmount` is the amount you want to bid, and `contractAddress` is the ad
 cacheManager.placeBid{value: bidAmount}(contractAddress);
 ```
 
-**Method 2: cargo stylus command**
+**Method 2: Cargo stylus command**
 
-To place a bid using the `cargo stylus` command-line tool, you can use the `cache` command with the appropriate arguments:
+You can place a bid using the `cargo stylus cache bid` command:
 
 ```bash
-cargo stylus cache --address=<contractAddress> --bid=<bidAmount>
+cargo stylus cache bid <contractAddress> <bidAmount>
 ```
 
-- `--address`: The address of the Stylus contract you want to cache.
-- `--bid`: The amount you want to bid. If not specified, the default bid is 0.
+- `<contractAddress>`: The address of the Stylus contract you want to cache.
+- `<bidAmount>`: The amount you want to bid. If not specified, the default bid is 0.
 
 If you specify a bid amount using `cargo stylus`, it will automatically validate that the bid is greater than or equal to the result of the `getMinBid` function. If the bid is insufficient, the command will fail, ensuring that only valid bids are placed.
+
+## Step 3: Check cache status
+
+To check if a specific address is cached, you can use the `cargo stylus status` command:
+
+```bash
+cargo stylus status --address=<contractAddress>
+```
 
 ### Additional information
 
