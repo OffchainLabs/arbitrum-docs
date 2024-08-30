@@ -53,10 +53,10 @@ uint192 minBid = cacheManager.getMinBid(contractAddress);
 
 **Method 2: Cargo stylus command**
 
-Note that here, <contractAddress> is the address of the Stylus contract you want to cache.
+Note that here, [contractAddress] is the address of the Stylus contract you want to cache.
 
 ```bash
-cargo stylus cache suggest-bid <contractAddress>
+cargo stylus cache suggest-bid [contractAddress]
 ```
 
 ## Step 2: Place a bid
@@ -76,11 +76,11 @@ cacheManager.placeBid{value: bidAmount}(contractAddress);
 You can place a bid using the `cargo stylus cache bid` command:
 
 ```bash
-cargo stylus cache bid <contractAddress> <bidAmount>
+cargo stylus cache bid [contractAddress] [bidAmount]
 ```
 
-- `<contractAddress>`: The address of the Stylus contract you want to cache.
-- `<bidAmount>`: The amount you want to bid. If not specified, the default bid is 0.
+- `[contractAddress]`: The address of the Stylus contract you want to cache.
+- `[bidAmount]`: The amount you want to bid. If not specified, the default bid is 0.
 
 If you specify a bid amount using `cargo stylus`, it will automatically validate that the bid is greater than or equal to the result of the `getMinBid` function. If the bid is insufficient, the command will fail, ensuring that only valid bids are placed.
 
@@ -89,7 +89,7 @@ If you specify a bid amount using `cargo stylus`, it will automatically validate
 To check if a specific address is cached, you can use the `cargo stylus status` command:
 
 ```bash
-cargo stylus status --address=<contractAddress>
+cargo stylus status --address=[contractAddress]
 ```
 
 ### Additional information
