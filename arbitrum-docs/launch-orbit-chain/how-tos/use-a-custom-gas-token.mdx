@@ -19,8 +19,8 @@ The main requirements for a custom gas token is that it must be an ERC-20 token,
 
 There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the ERC-20 token include:
 
-- Currently, the token must be configured with 18 decimals.
 - The token can't be rebasing or have a transfer fee.
+- The token must not revert on transfers of 0 value (as per standard implementations).
 - The token must only be transferrable via a call to the token address itself.
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
