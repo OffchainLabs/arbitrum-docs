@@ -156,7 +156,7 @@ Once you're ready to deploy your program onchain, you can use the `cargo stylus
 ```
 cargo stylus deploy \
   --private-key-path=<PRIVKEY_FILE_PATH> \
-  --estimate-gas-only
+  --estimate-gas
 ```
 
 and see:
