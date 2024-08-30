@@ -1,5 +1,5 @@
 ---
-title: 'Stylus caching strategy'
+title: 'Caching strategy'
 description: 'A conceptual overview of the Stylus caching strategy and `CacheManager` contract, and explaining its functionality.'
 sme: mahsa-moosavi
 target_audience: 'Developers deploying smart contracts using Stylus.'
@@ -13,9 +13,7 @@ This initialization process, if repeated frequently, may lead to inefficiencies.
 
 **Note that Stylus smart contracts will need to be re-activated once per year (365 days) or whenever a upgrade to Stylus (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus), a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust.**
 
-
-
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 

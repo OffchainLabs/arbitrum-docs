@@ -9,7 +9,7 @@ sidebar_position: 1
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -26,15 +26,16 @@ This introduction is for developers who want to build on Arbitrum using popular 
 
 ### What's Stylus?
 
-Stylus is an upgrade to Arbitrum Nitro, the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **EVM\+** since **everything is entirely additive.**
+Stylus is an upgrade to Arbitrum Nitro, the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **MultiVM** since **everything is entirely additive.**
 
-![Stylus gives you EVM+](./assets/stylus-gives-you-evm-plus.png)
+![Stylus gives you MultiVM](./assets/stylus-multivm.jpg)
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a modern binary format popularized by its use in major web standards, browsers, and companies to speed up computation. Built to be fast, portable, and human-readable, WASM also has sandboxed execution environments for security and simplicity. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fully functioning fraud proofs.
 
 With a WASM VM, any programming language that can compile down to WASM are within the bounds of Stylus. While many popular programming languages can be compiled into WASM, some compilers are more suitable for smart contract development than others, like with Rust, C, and C++. Other languages, such as Go, Sway, Move, and Cairo, can be supported as well. Languages that include their own runtimes, like Python and Javascript, are harder for Stylus to support, although not impossible. Third-party contribution in the form of libraries for new and existing languages is welcomed!
 
 Compared to using Solidity, WASM programs are much more efficient. There are many reasons for this, including the decades of compiler development for Rust and C. WASM also has a faster runtime than the EVM, resulting in faster execution.
+
 ### How is this possible?
 
 Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol)
@@ -53,7 +54,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://www.slashdata.co/blog/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-blockchain-and-more)]. Developers are now free to use their preferred programming language, all interoperable on any Arbitrum chain with Stylus. Scaling to the next billion users requires onboarding the next million developers.
 
-#### EVM+
+#### MultiVM
 
 Stylus brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++. All without changing anything about how the EVM works. EVM equivalence is no longer the ceiling, it's the floor.
 
@@ -118,6 +119,9 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 
 ### Wen mainnet?
 
-Stylus is tagged as a `release-candidate`, which means an onchain vote to adopt Stylus is close! The source code has been audited, ecosystem-wide compatibility testing is underway, and Orbit chains are free to adopt the technology whenever they see fit.
+Stylus is part of the [ArbOS 31 "Bianca" upgrade](../run-arbitrum-node/arbos-releases/arbos31.md) and the status of all network upgrades for Arbitrum One and Arbitrum Nova can be found on the [Network Upgrades page](https://docs.arbitrum.foundation/network-upgrades). 
 
-To keep up with the latest announcements, join the Stylus [Discord channel](https://discord.com/invite/arbitrum) and follow the Arbitrum Developers [Twitter account](https://twitter.com/ArbitrumDevs).
+To keep up with the latest announcements and updates about Stylus:
+- Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
+- Join both the `#dev-announcements` and `#node-runners` Discord channels in the [Arbitrum Discord server](https://discord.gg/arbitrum)
+- Follow the official Arbitrum ([`@Arbitrum`](https://twitter.com/arbitrum)) and Arbitrum Developers ([`@ArbitrumDevs`](https://twitter.com/ArbitrumDevs)) X accounts, formerly Twitter.
