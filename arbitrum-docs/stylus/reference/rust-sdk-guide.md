@@ -1,8 +1,8 @@
 ---
 title: 'Stylus Rust SDK advanced features'
 description: 'Advanced features of the Stylus Rust SDK'
-author: rachel-bousfield, jose-franco
-sme: rachel-bousfield, jose-franco
+author: rachel-bousfield, jose-franco, mehdi-salehi
+sme: rachel-bousfield, jose-franco, mehdi-salehi
 sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
