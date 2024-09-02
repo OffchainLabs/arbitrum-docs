@@ -30,7 +30,7 @@ Here, we will provide you with 4 examples that need to add ArbOS Upgrade-related
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-Add-new-methods-to-an-existing-precompile),
 you need continue to modify [precompile.go][precompile_main_file_link]. 
 
-For example, the original code is
+For example, the original code is:
 ```go
 ArbSys := insert(MakePrecompile(pgen.ArbSysMetaData, &ArbSys{Address: types.ArbSysAddress}))
 arbos.ArbSysAddress = ArbSys.address
