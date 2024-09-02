@@ -37,7 +37,7 @@ arbos.ArbSysAddress = ArbSys.address
 arbos.L2ToL1TransactionEventID = ArbSys.events["L2ToL1Transaction"].template.ID
 arbos.L2ToL1TxEventID = ArbSys.events["L2ToL1Tx"].template.ID
 ```
-You need to write after it
+You need to append the following code to it:
 ```go
 ArbSys := insert(MakePrecompile(pgen.ArbSysMetaData, &ArbSys{Address: types.ArbSysAddress}))
 arbos.ArbSysAddress = ArbSys.address
