@@ -103,11 +103,11 @@ To prevent this, if you are using an external call to the precompile contract to
 If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).
 
 ### 4. Any changes in the STF logic that will affect the final execution result
-If you change the logic in STF and it will cause the execution result of the transaction to be different, 
+If you change the logic in STF, it will cause the execution result of the transaction to be different, 
 you need to keep the original execution logic and put the new logic into another branch.
-You can use `if else` statement to control it.
+You can use an `if else` statement to control it.
 
-For example, we change the `SayHi` return after upgrade the ArbOS version:
+For example, we change the `SayHi` return after upgrading the ArbOS version:
 ```go
 // The method in ArbHi precompile
 func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
