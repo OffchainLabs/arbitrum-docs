@@ -49,6 +49,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - When running more than one node, it's easier to manually download the image of the snapshot and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it.
   - This parameter is **required** when initializing an Arbitrum One node because the chain has _classic_ blocks. For the rest of chains, this parameter is optional.
   - This parameter is ignored if the database already exists.
+  - Find more info in [Nitro database snapshots](./nitro/03-nitro-database-snapshots.md)
 
 ### Required parameters
 
