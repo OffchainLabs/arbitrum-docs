@@ -123,7 +123,7 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 
 ### Wen mainnet?
 
-Stylus is part of the [ArbOS 31 "Bianca" upgrade](../run-arbitrum-node/arbos-releases/arbos31.md) and the status of all network upgrades for Arbitrum One and Arbitrum Nova can be found on the [Network Upgrades page](https://docs.arbitrum.foundation/network-upgrades). 
+Stylus is now live on mainnet.
 
 
 To keep up with the latest announcements and updates about Stylus:
