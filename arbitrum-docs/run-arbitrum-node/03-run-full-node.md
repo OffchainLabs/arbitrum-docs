@@ -44,6 +44,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 - Latest Docker Image: <code>@latestNitroNodeImage@</code>
 - Database snapshot (required for Arbitrum One, optional for other chains)
+  - Use the parameter `--init.latest <snapshot type>`, accepted values: "archive" | "pruned" | "genesis". (Only Arbitrum One now)
   - Use the parameter `--init.url` on first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroPrunedSnapshot@"</code>.
   - When running more than one node, it's easier to manually download the image of the snapshot and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it.
   - This parameter is **required** when initializing an Arbitrum One node because the chain has _classic_ blocks. For the rest of chains, this parameter is optional.
