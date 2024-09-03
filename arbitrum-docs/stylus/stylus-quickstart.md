@@ -112,7 +112,7 @@ Start a new Stylus project with
 cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
-The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing.
+The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing. Note that the term "minimal" refers to a contract that handles simple bytes in, bytes out operations. Hence, the `cargo stylus export-abi` command (introduced later) won't work with contracts that use the entrypoint style because they don't enforce the Solidity ABI.
 
 Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
 
@@ -142,7 +142,7 @@ Location:
 
 ```
 
-To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
+To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
 
 ```
 Finished release [optimized] target(s) in 1.88s

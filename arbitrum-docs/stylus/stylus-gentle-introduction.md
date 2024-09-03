@@ -123,6 +123,10 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 
 ### Wen mainnet?
 
-Stylus is tagged as a `release-candidate`, which means an onchain vote to adopt Stylus is close! The [source code has been audited](../audit-reports), ecosystem-wide compatibility testing is underway. Stylus is already [available on Sepolia](./reference/testnet-information), and Orbit chains are free to adopt the technology whenever they see fit.
+Stylus is part of the [ArbOS 31 "Bianca" upgrade](../run-arbitrum-node/arbos-releases/arbos31.md) and the status of all network upgrades for Arbitrum One and Arbitrum Nova can be found on the [Network Upgrades page](https://docs.arbitrum.foundation/network-upgrades). 
 
-To keep up with the latest announcements, join the Stylus [Discord channel](https://discord.com/invite/arbitrum) and follow the Arbitrum Developers [Twitter account](https://twitter.com/ArbitrumDevs).
+
+To keep up with the latest announcements and updates about Stylus:
+- Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
+- Join both the `#dev-announcements` and `#node-runners` Discord channels in the [Arbitrum Discord server](https://discord.gg/arbitrum)
+- Follow the official Arbitrum ([`@Arbitrum`](https://twitter.com/arbitrum)) and Arbitrum Developers ([`@ArbitrumDevs`](https://twitter.com/ArbitrumDevs)) X accounts, formerly Twitter.
