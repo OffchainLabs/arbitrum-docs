@@ -151,6 +151,8 @@ Compressed WASM size: 3 KB
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
 
+Note that running `cargo stylus check` may take a few minutes, especially on a fresh build. If you're running the check or deploy commands, a message at the start will inform you that this process might take some time. For faster checks, you can use the `--no-verify` option. Additionally, please ensure that Docker is up and running as it's required for these commands to execute properly.
+
 Once you're ready to deploy your program onchain, you can use the `cargo stylus deploy` subcommand as follows. First, we can estimate the gas required to perform our deployment with:
 
 ```
