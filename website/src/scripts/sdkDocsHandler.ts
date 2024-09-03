@@ -15,7 +15,7 @@ const { parseMarkdownContentTitle } = require('@docusaurus/utils');
  * files by leading numbers first then alphabetically.
  */
 function load(app) {
-  const outputDir = path.join(app.options.getValue('out'),'../');
+  const outputDir = path.join(app.options.getValue('out'), '../');
   const sourceDir = path.join(outputDir, '../../arbitrum-sdk/docs');
 
   app.renderer.on(RendererEvent.START, async () => {
@@ -155,7 +155,10 @@ function generateLabel(entry) {
 }
 
 function getLabelFromFilesystem(name) {
-  const label = name.replace(/^\d+-/, '').replace(/\.md$/, '').replace(/\.mdx$/, '');
+  const label = name
+    .replace(/^\d+-/, '')
+    .replace(/\.md$/, '')
+    .replace(/\.mdx$/, '');
   return label || '';
 }
 

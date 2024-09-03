@@ -1,9 +1,9 @@
 ---
-title: "Getting Started with Gelato VRF"
-description: "Learn how to use Gelato VRF"
+title: 'Getting Started with Gelato VRF'
+description: 'Learn how to use Gelato VRF'
 author: anirudhmakhana
 sme: anirudhmakhana
-sidebar_label: "Gelato VRF"
+sidebar_label: 'Gelato VRF'
 ---
 
 # What is Gelato VRF?
