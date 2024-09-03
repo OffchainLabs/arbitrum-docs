@@ -230,6 +230,9 @@ The above allows consumers of `Erc20` to choose immutable constants via speciali
 
 This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance] and [Sending ether](/stylus-by-example/sending_ether.mdx).
 
+### Pure, View, and Write functions
+
+For non-payable methods the [`#[public]`][public] macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them, or even this one if the `reentrant` feature is enabled.
 
 ### [`#[entrypoint]`][entrypoint]
 
