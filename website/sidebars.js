@@ -448,20 +448,25 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
-              },
-              ...stylusByExampleDocsSidebar,
-              {
-                type: 'link',
-                label: 'Rust crate docs',
-                href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-              },
-              {
-                type: 'link',
-                label: 'Stylus by example',
-                href: 'https://stylus-by-example.org/',
-              },
+              label: 'Advanced features',
+            },
+            {
+              type: 'link',
+              label: 'Rust crate docs',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by example',
+              href: 'https://stylus-by-example.org/',
+            },
           ],
         },
         {

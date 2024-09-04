@@ -112,7 +112,7 @@ Start a new Stylus project with
 cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
-The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing.
+The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing. Note that the term "minimal" refers to a contract that handles simple bytes in, bytes out operations. Hence, the `cargo stylus export-abi` command (introduced later) won't work with contracts that use the entrypoint style because they don't enforce the Solidity ABI.
 
 Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
 
@@ -150,6 +150,8 @@ Reading WASM file at hello-stylus/target/wasm32-unknown-unknown/release/hello-st
 Compressed WASM size: 3 KB
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
+
+Note that running `cargo stylus check` may take a few minutes, especially on a fresh build. If you're running the check or deploy commands, a message at the start will inform you that this process might take some time. For faster checks, you can use the `--no-verify` option. Also, please ensure that Docker is up and running, as these commands are required to be executed properly.
 
 Once you're ready to deploy your program onchain, you can use the `cargo stylus deploy` subcommand as follows. First, we can estimate the gas required to perform our deployment with:
 
