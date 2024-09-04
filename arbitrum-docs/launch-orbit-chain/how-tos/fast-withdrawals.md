@@ -21,6 +21,6 @@ An ideal set up would establish these same operators as the validator committee 
 - [Nitro 3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or higher
 - [nitro-contracts](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) v2.1.0 or higher
 - [ArbOS 20](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos20) or higher
-- WASM module root on consensus v31 or higher
+- WASM module root: `0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69`
 
 
