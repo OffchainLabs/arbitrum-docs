@@ -124,6 +124,12 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 In the above code, we use precompiles as an example. Some logic might also affect the STF, such as the methods in [block_process.go][block_processor_file_link], [internal_tx.go][internal_tx_file_link], [tx_processor.go][tx_processor_file_link] and so on.
 You also need to use those ArbOS control methods for different logic versions.
 
+:::tip Backward compatibility
+
+Wasm module roots are backward compatible, so upgrading them before an ArbOS version upgrade will not disrupt your chain's functionality.
+
+:::
+
 ## Upgrade WASM Module Root on the parent chain
 Afterward, since Arbitrum might need to execute the validation and fraud proofs on the parent chain, you need to update the Wasm Module Root recorded on the parent chain.
 Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) for follow-up operations.
