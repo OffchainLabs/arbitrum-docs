@@ -54,13 +54,14 @@ Yes, you can make any changes you require to the underlying Nitro code base.
 
 ### What Data Availability (DA) solutions are currently available for Orbit chains?
 <p>
-Arbitrum Orbit currently supports 3 different DA solutions:
+Arbitrum Orbit currently supports 4 different DA solutions:
 </p>
 
 <ul>
 <li>Rollup, posting data to the parent chain which ultimately posts the data to Ethereum.</li>
 <li>AnyTrust, posting data to a Data Availability Committee, selected by the chain owner.</li>
 <li>Celestia, posting data to <a href="https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/">Celestia network</a>.</li>
+<li>AvailDA, posting data to <a href="https://blog.availproject.org/avail-ecosystem-series-arbitrum-orbit-chains/">AvailDA</a>.</li>
 </ul>
 <p>
 Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.

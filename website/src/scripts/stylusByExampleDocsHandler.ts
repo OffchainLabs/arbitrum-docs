@@ -5,18 +5,20 @@ const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 
 const allowList = [
   'hello_world',
-  'bytes_in_bytes_out',
   'primitive_data_types',
   'variables',
   'constants',
-  'events',
+  'function',
   'errors',
+  'events',
+  'inheritance',
+  'vm_affordances',
   'sending_ether',
   'function_selector',
   'abi_encode',
   'abi_decode',
   'hashing',
-  'function',
+  'bytes_in_bytes_out',
 ];
 
 function load(app) {
