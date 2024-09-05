@@ -146,7 +146,7 @@ Here's an example `daserver` command for a mirror DAS that:
 - Enables local file storage that, by default, doesn't discard data after expiring ([archive](#archive-da-servers))
 - Uses a local main DAS as part of the REST aggregator
 
-```bash
+```shell
 daserver
     --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>"
     --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>"
@@ -239,11 +239,11 @@ Archive DA servers are servers that don't discard any data after expiring. Each 
 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
-```bash
+```shell
 --data-availability.s3-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` doesn't discard data after expiring, so the option `discard-after-timeout` is not available.
+Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry` (the option `discard-after-timeout` is not available for this storage option).
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
@@ -261,7 +261,7 @@ The REST interface enabled in the mirror DAS has a health check on the path `/h
 
 Example:
 
-```bash
+```shell
 curl -I <YOUR REST ENDPOINT>/health
 ```
 

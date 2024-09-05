@@ -108,7 +108,7 @@ When running the key generator, we'll specify the `--dir` parameter with the abs
 
 Here's an example of how to use the `datool keygen` utility inside Docker and store the key that will be used by the DAS in the next step.
 
-```bash
+```shell
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
 @latestNitroNodeImage@ keygen --dir /data/keys
 ```
@@ -180,7 +180,7 @@ Here's an example `daserver` command for a DAS that:
 - Enables AWS S3 bucket storage
 - Enables local files storage
 
-```bash
+```shell
 daserver
     --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>"
     --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>"
@@ -273,11 +273,11 @@ Archive DA servers are servers that don't discard any data after expiring. Each 
 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
-```bash
+```shell
 --data-availability.s3-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` doesn't discard data after expiring, so the option `discard-after-timeout` is not available.
+Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry` (the option `discard-after-timeout` is not available for this storage option).
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
@@ -295,7 +295,7 @@ The RPC interface enabled in the DAS has a health check for the underlying stora
 
 Example:
 
-```bash
+```shell
 curl -X POST \
      -H 'Content-Type: application/json' \
      -d '{"jsonrpc":"2.0","id":0,"method":"das_healthCheck","params":[]}' \
@@ -312,13 +312,13 @@ Using this facility, a load test could be constructed by writing a script to sto
 
 First we'll generate an ECDSA keypair with `datool keygen`. Create a folder inside `/some/local/dir` to store the ECDSA keypair, for example `/some/local/dir/keys`. Then run `datool keygen`:
 
-```bash
+```shell
 datool keygen --dir /some/local/dir/keys --ecdsa
 ```
 
 You can also use the `docker run` command as follows:
 
-```bash
+```shell
 docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @latestNitroNodeImage@ keygen --dir /home/user/data/keys --ecdsa
 ```
 
@@ -326,13 +326,13 @@ docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @late
 
 Add the following configuration parameter to `daserver`:
 
-```bash
+```shell
 --data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
 ```
 
 OR
 
-```bash
+```shell
 --data-availability.extra-signature-checking-public-key "0x<contents of ecdsa.pub>"
 ```
 
@@ -342,19 +342,19 @@ And then restart it.
 
 Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
-```bash
+```shell
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
 ```
 
 OR
 
-```bash
+```shell
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key "0x<contents of ecdsa>"
 ```
 
 You can also use the `docker run` command:
 
-```bash
+```shell
 docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @latestNitroNodeImage@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
@@ -364,13 +364,13 @@ The above command will output the `Hex Encoded Data Hash` which can then be us
 
 Use again the `datool` to retrieve the stored data. Notice that to perform this step you must have the REST interface enabled in the DAS:
 
-```bash
+```shell
 datool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 You can also use the `docker run` command:
 
-```bash
+```shell
 docker run --rm -it --network="host" --entrypoint datool @latestNitroNodeImage@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
@@ -384,7 +384,7 @@ The REST interface has a health check on the path `/health` which will return 
 
 Example:
 
-```bash
+```shell
 curl -I <YOUR REST ENDPOINT>/health
 ```
 
