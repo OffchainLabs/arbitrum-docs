@@ -277,7 +277,7 @@ To activate the "archive mode" in your DAS, set the parameter `discard-after-tim
 --data-availability.s3-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry` (the option `discard-after-timeout` is not available for this storage option).
+Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
