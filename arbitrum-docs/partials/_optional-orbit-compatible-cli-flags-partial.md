@@ -19,5 +19,6 @@
 | `--init.download-path="/path/to/dir"`    | (Non-Orbit Nitro nodes only) Temporarily saves the downloaded database snapshot. Defaults to `/tmp/`. Used with `--init.url`.                                                                                                                                                                   |
 | `--node.batch-poster.post-4844-blobs`    | Boolean. Default: `false`. Used to enable or disable the posting of transaction data using Blobs to L1 Ethereum. If using calldata is more expensive and if the parent chain supports EIP4844 blobs, the batch poster will use blobs when this flag is set to `true`. Can be `true` or `false`. |
 | `--node.batch-poster.ignore-blob-price`  | Boolean. Default: `false`. If the parent chain supports EIP4844 blobs and `ignore-blob-price` is set to `true`, the batch poster will use EIP4844 blobs even if using calldata is cheaper. Can be `true` or `false`.                                                                            |
-
+| `--init.latest`    | string. if set, searches for the latest snapshot of the given kind (accepted values: "archive" | "pruned" | "genesis") |
+| `--init.latest-base`    | string. Default: "https://snapshot.arbitrum.foundation/". Base url used when searching for the latest. (If you are running orbit chains you might need to check with orbit chain team to get the url) |
 </section>
