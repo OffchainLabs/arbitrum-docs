@@ -118,9 +118,6 @@ cargo stylus new <YOUR_PROJECT_NAME>
 
 `cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
 
-Alternatively, you can create a more barebone example with a Stylus entry point locally by running `cargo stylus new --minimal <YOUR_PROJECT_NAME>`.
-Note that the `--minimal` option refers to a contract that handles simple "bytes in, bytes out" operations. Hence, the `cargo stylus export-abi` command (introduced later) won't work with contracts that use the entry point style because they don't enforce the Solidity ABI.
-
 At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference](./reference/overview) as a starting point, it offers many examples to quickly familiarize yourself with Stylus.
 
 ## Checking if your Stylus project is valid
@@ -150,7 +147,7 @@ Location:
     prover/src/binary.rs:493:9, data: None)
 ```
 
-The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo stylus/blob/main/main/VALID_WASM.md) can help you understand what are valid and invalid WASM contracts.
+The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
 If your program succeeds, you'll see something like this:
 
