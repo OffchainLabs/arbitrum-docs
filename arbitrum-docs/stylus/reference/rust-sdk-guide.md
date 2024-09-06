@@ -1,8 +1,8 @@
 ---
 title: 'Stylus Rust SDK advanced features'
 description: 'Advanced features of the Stylus Rust SDK'
-author: rachel-bousfield, jose-franco
-sme: rachel-bousfield, jose-franco
+author: rachel-bousfield, jose-franco, mehdi-salehi
+sme: rachel-bousfield, jose-franco, mehdi-salehi
 sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
@@ -230,7 +230,7 @@ The above allows consumers of `Erc20` to choose immutable constants via speciali
 
 This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance] and [Sending ether](/stylus-by-example/sending_ether.mdx).
 
-### [`#[pure]`][pure], [`#[view]`][view], and `#[write]`
+### Pure, View, and Write functions
 
 For non-payable methods the [`#[public]`][public] macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them, or even this one if the `reentrant` feature is enabled.
 
@@ -370,8 +370,8 @@ Observe the casing change. [`sol_interface!`][sol_interface] computes the select
 [`Call`][Call] lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
 
 ```rust
-pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Error> {
-    let config = Call::new_in(self)
+pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
+    let config = Call::new_in()
         .gas(evm::gas_left() / 2)       // limit to half the gas left
         .value(msg::value());           // set the callvalue
 
@@ -379,7 +379,7 @@ pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Er
 }
 ```
 
-By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new_in] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
 ### Reentrant calls
 
@@ -452,6 +452,18 @@ let return_data = call(Call::new_in(self), contract, call_data)?;
 In each case the calldata is supplied as a [`Vec<u8>`][Vec]. The return result is either the raw return data on success, or a call [`Error`][CallError] on failure.
 
 [`delegate_call`][fn_delegate_call] is also available, though it's `unsafe` and doesn't have a richly-typed equivalent. This is because a delegate call must trust the other contract to uphold safety requirements. Though this function clears any cached values, the other contract may arbitrarily change storage, spend ether, and do other things one should never blindly allow other contracts to do.
+
+### [`transfer_eth`][transfer_eth]
+
+This method provides a convenient shorthand for transferring ether.
+
+Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`][fn_call] function may be used instead.
+
+```rust
+transfer_eth(recipient, value)?;                 // these two are equivalent
+
+call(Call::new_in().value(value), recipient, &[])?; // these two are equivalent
+```
 
 ### [`RawCall`][RawCall] and `unsafe` calls
 
