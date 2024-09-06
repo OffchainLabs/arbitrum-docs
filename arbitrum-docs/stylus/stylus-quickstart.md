@@ -150,7 +150,7 @@ Location:
     prover/src/binary.rs:493:9, data: None)
 ```
 
-The program can fail the check for several reasons. Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo stylus/blob/main/main/VALID_WASM.md) will help you interpret the error message and understand what valid and invalid user WASM contracts.
+The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo stylus/blob/main/main/VALID_WASM.md) can help you understand what are valid and invalid WASM contracts.
 
 If your program succeeds, you'll see something like this:
 
