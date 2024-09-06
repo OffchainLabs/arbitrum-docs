@@ -206,7 +206,7 @@ wasm already activated!
 
 More options are available for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
 
-## Exporting the Solidity ABIs
+## Exporting the Solidity ABI interface
 
 The cargo stylus tool makes it easy to export your contract's ABI using `cargo stylus export-abi`.
 
