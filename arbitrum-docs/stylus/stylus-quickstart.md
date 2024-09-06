@@ -66,7 +66,7 @@ To add Arb Sepolia ETH to your wallet you can request it from a [faucet](https:/
 
 `cargo Stylus` is a CLI toolkit built to facilitate Stylus contracts development.
 
-It is available as a plugin to the standard `Cargo` tool used for developing Rust programs.
+It is available as a plugin to the standard `cargo` tool used for developing Rust programs.
 
 ### Installing cargo Stylus
 
