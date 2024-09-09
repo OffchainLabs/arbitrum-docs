@@ -439,7 +439,11 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: true,
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview',
+      },
       items: [
         {
           type: 'doc',
@@ -513,6 +517,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
+            },
+            {
+              type: 'doc',
               label: 'Optimize WASM binaries',
               id: 'stylus/how-tos/optimizing-binaries',
             },
@@ -543,13 +552,12 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: true,
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/other-language-frameworks',
+          },
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'Other language frameworks',
-            },
             {
               type: 'doc',
               label: 'Add a new smart contract language',
