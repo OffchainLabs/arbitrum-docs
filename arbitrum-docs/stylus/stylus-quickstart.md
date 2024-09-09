@@ -26,8 +26,8 @@ Some helpful VS Code extensions for Rust development:
 - [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)
-- [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
-
+- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi)
+  
 #### Testnet ETH for deployment
 
 You’ll need some testnet ETH for deploying your Rust contract for live testing. Explained below in further detail.
@@ -150,6 +150,8 @@ Reading WASM file at hello-stylus/target/wasm32-unknown-unknown/release/hello-st
 Compressed WASM size: 3 KB
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
+
+Note that running `cargo stylus check` may take a few minutes, especially on a fresh build. If you're running the check or deploy commands, a message at the start will inform you that this process might take some time. For faster checks, you can use the `--no-verify` option. Also, please ensure that Docker is up and running, as these commands are required to be executed properly.
 
 Once you're ready to deploy your program onchain, you can use the `cargo stylus deploy` subcommand as follows. First, we can estimate the gas required to perform our deployment with:
 

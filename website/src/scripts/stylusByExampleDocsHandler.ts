@@ -11,6 +11,8 @@ const allowList = [
   'function',
   'errors',
   'events',
+  'inheritance',
+  'vm_affordances',
   'sending_ether',
   'function_selector',
   'abi_encode',
