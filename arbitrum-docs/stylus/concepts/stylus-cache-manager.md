@@ -89,7 +89,7 @@ If you specify a bid amount using `cargo stylus`, it will automatically validate
 To check if a specific address is cached, you can use the `cargo stylus status` command:
 
 ```bash
-cargo stylus status --address=[contractAddress]
+cargo stylus cache status --address=[contractAddress]
 ```
 
 ### Additional information
