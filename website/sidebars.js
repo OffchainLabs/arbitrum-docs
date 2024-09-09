@@ -552,13 +552,12 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: true,
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/other-language-frameworks',
+          },
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'Other language frameworks',
-            },
             {
               type: 'doc',
               label: 'Add a new smart contract language',
