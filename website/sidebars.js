@@ -439,7 +439,11 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: true,
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview',
+      },
       items: [
         {
           type: 'doc',
@@ -511,6 +515,11 @@ const sidebars = {
           label: 'CLI tools (cargo-stylus)',
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
+            },
             {
               type: 'doc',
               label: 'Optimize WASM binaries',
