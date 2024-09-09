@@ -547,7 +547,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
+              id: 'stylus/reference/other-language-frameworks',
               label: 'Other language frameworks',
             },
             {
