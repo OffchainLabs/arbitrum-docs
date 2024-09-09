@@ -14,7 +14,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
 
 1. [Setting up your development environment](./stylus-quickstart#setting-up-your-development-environment)
-2. [Creating a new Stylus contract](./stylus-quickstart#creating-a-stylus-project-with-cargo stylus)
+2. [Creating a Stylus project with cargo Stylus](./stylus-quickstart#creating-a-stylus-project-with-cargo stylus)
 3. [Checking the validity of your contract](./stylus-quickstart#checking-if-your-stylus-project-is-valid)
 4. [Deploying your contract](./stylus-quickstart#deploying-your-contract)
 5. [Exporting your contract's ABIs](./stylus-quickstart#exporting-solidity-abis)
@@ -40,7 +40,7 @@ Some helpful VS Code extensions for Rust development:
 
 #### Docker
 
-`cargo stylus` requires Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
+Some `cargo stylus` commands requires Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
 #### Developer wallet/account
 
@@ -53,18 +53,19 @@ Labeling the account as a dev wallet or “Stylus” can be helpful. You’ll ne
 
 ##### Storing your private key
 
-You might also want to add your developer's private key to your environment variables for easier and safer access.
-To do this, store your hex-encoded private key in a text file and add the path to the file as an ENV variable named `$PRIVKEY_FILE_PATH` to your shell file, e.g.,``.bashrc`.
+You might also want to add your developer's private key to your environment variables for easier and safer access with `export PRIVKEY_FILE_PATH=<path-of-your-private-key>` 
 
 #### Arbitrum Sepolia ETH
 
 We will interact with the [Arbitrum Sepolia](./reference/testnet-information.md) testnet, so you will need a small amount of Sepolia ETH to deploy contracts and send transactions. 
 
-To add Arb Sepolia ETH to your wallet you can request it from a [faucet](https://arbitrum.faucet.dev/ArbSepolia).
+To add Arb Sepolia ETH to your wallet you can request it from these faucets:
+- [Alchemy faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
+- [Quicknode's faucet](https://faucet.quicknode.com/arbitrum/sepolia) 
 
 ## Creating a Stylus project with cargo Stylus
 
-`cargo Stylus` is a CLI toolkit built to facilitate Stylus contracts development.
+cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
 
 It is available as a plugin to the standard `cargo` tool used for developing Rust programs.
 
@@ -73,7 +74,7 @@ It is available as a plugin to the standard `cargo` tool used for developing Rus
 In your terminal, run:
 
 ```shell
-cargo install --force cargo stylus
+cargo install --force cargo-stylus
 ```
 
 Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
@@ -82,7 +83,7 @@ Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Ru
 rustup target add wasm32-unknown-unknown
 ```
 
-You can verify that `cargo Stylus` is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
 
 ```shell
 Cargo command for developing Stylus projects
@@ -147,7 +148,7 @@ Location:
     prover/src/binary.rs:493:9, data: None)
 ```
 
-The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
+The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
 If your program succeeds, you'll see something like this:
 
@@ -172,7 +173,7 @@ First, you can estimate the gas required to perform your contract's deployment b
 
 ```shell
 cargo stylus deploy \
-  --private-key-path=PRIV_KEY_PATH \
+  --private-key-path=$PRIV_KEY_PATH \
   --estimate-gas
 ```
 
@@ -190,7 +191,7 @@ Next, you can attempt an actual deployment. Two transactions will be sent onchai
 
 ```shell
 cargo stylus deploy \
-  --private-key-path=PRIV_KEY_PATH
+  --private-key-path=$PRIV_KEY_PATH
 ```
 
 Once the deployment is successful, you'll see an output similar to this:
@@ -207,7 +208,7 @@ More options are available for sending and outputting your transaction data. See
 
 The cargo stylus tool makes it easy to export your contract's ABI using `cargo stylus export-abi`.
 
-This command returns the ABI matching your smart contract. If you have been running `cargo stylus new` without modifying the output, `cargo stylus export-abi` will return:
+This command returns the Solidity ABI interface of your smart contract. If you have been running `cargo stylus new` without modifying the output, `cargo stylus export-abi` will return:
 
 ```shell
 /**
