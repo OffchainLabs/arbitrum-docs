@@ -9,7 +9,7 @@ sidebar_position: 4
 
 Arbitrum One supports two different types of USDC:
 
-1.  **Arbitrum-native USDC (USDC)**: USDC tokens native to the Arbitrum One chain.
+1.  **USDC (USDC)**: USDC tokens native to the Arbitrum One chain.
 2.  **Bridged USDC (USDC.e)**: Ethereum-native USDC tokens that have been bridged to Arbitrum One.
 
 ### Differences between USDC and USDC.e
