@@ -53,7 +53,7 @@ Labeling the account as a dev wallet or “Stylus” can be helpful. You’ll ne
 
 ##### Storing your private key
 
-You might also want to add your developer's private key to your environment variables for easier and safer access with `export PRIVKEY_FILE_PATH=<path-of-your-private-key>` 
+You might also want to add your developer's private key to your environment variables for easier and safer access with `export PRIV_KEY_PATH=<path-of-your-private-key>` 
 
 #### Arbitrum Sepolia ETH
 
