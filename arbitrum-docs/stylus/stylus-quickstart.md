@@ -187,7 +187,7 @@ deployment tx total cost: "0.000712373700000000" ETH
 
 ### Deployment
 
-Next, you can attempt an actual deployment. Two transactions will be sent onchain: the contract deployment and its activation.
+Next, you can attempt an actual deployment. Two transactions will be sent on-chain: the contract deployment and its activation.
 
 ```shell
 cargo stylus deploy \
