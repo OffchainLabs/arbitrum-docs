@@ -165,7 +165,7 @@ See `cargo stylus check --help` for more options.
 
 ## Deploying your contract
 
-Once you're ready to deploy your program onchain, `cargo stylus deploy` will help you with the estimation of the deployment's gas cost, as well as with the deployment itself.
+Once you're ready to deploy your program on-chain, `cargo stylus deploy` will help you with the estimation of the deployment's gas cost, as well as with the deployment itself.
 
 ### Estimating gas
 
