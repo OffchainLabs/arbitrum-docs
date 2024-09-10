@@ -14,7 +14,7 @@ import PublicPreviewBannerPartial from '../partials/_public-preview-banner-parti
 This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
 
 1. [Setting up your development environment](./stylus-quickstart#setting-up-your-development-environment)
-2. [Creating a Stylus project with cargo Stylus](./stylus-quickstart#creating-a-stylus-project-with-cargo stylus)
+2. [Creating a Stylus project with cargo stylus](./stylus-quickstart#creating-a-stylus-project-with-cargo-stylus)
 3. [Checking the validity of your contract](./stylus-quickstart#checking-if-your-stylus-project-is-valid)
 4. [Deploying your contract](./stylus-quickstart#deploying-your-contract)
 5. [Exporting your contract's ABIs](./stylus-quickstart#exporting-solidity-abis)
