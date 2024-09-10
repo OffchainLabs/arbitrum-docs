@@ -60,7 +60,7 @@ You might also want to add your developer's private key to your environment vari
 We will interact with the [Arbitrum Sepolia](./reference/testnet-information.md) testnet, so you will need a small amount of Sepolia ETH to deploy contracts and send transactions. 
 
 To add Arb Sepolia ETH to your wallet you can request it from these faucets:
-- [Alchemy faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
+- [Alchemy's faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
 - [Quicknode's faucet](https://faucet.quicknode.com/arbitrum/sepolia) 
 
 ## Creating a Stylus project with cargo Stylus
