@@ -40,7 +40,7 @@ Some helpful VS Code extensions for Rust development:
 
 #### Docker
 
-Some `cargo stylus` commands requires Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
+Some `cargo stylus` commands require Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
 #### Developer wallet/account
 
