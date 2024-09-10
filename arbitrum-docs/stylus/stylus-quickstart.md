@@ -69,7 +69,7 @@ cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
 
 It is available as a plugin to the standard `cargo` tool used for developing Rust programs.
 
-### Installing cargo Stylus
+### Installing cargo stylus
 
 In your terminal, run:
 
