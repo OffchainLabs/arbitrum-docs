@@ -63,7 +63,7 @@ To add Arb Sepolia ETH to your wallet you can request it from these faucets:
 - [Alchemy's faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
 - [Quicknode's faucet](https://faucet.quicknode.com/arbitrum/sepolia) 
 
-## Creating a Stylus project with cargo Stylus
+## Creating a Stylus project with cargo stylus
 
 cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
 
