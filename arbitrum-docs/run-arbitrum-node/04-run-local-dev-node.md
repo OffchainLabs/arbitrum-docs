@@ -147,7 +147,7 @@ Do not use any of these addresses in a production environment.
 
 ## Optional parameters
 
-We show here a list of the parameters that might be useful when you run a local devnode. You can also use the flag `./test-node.bash --help` to get them.
+Here, We show a list of the parameters that might be useful when running a local devnode. You can also use the flag `./test-node.bash --help` to get them.
 
 
 import OptionalDevNodeCLIFlagsPartial from '../partials/_local-devnet-flags.md';
