@@ -1,12 +1,10 @@
 ---
-title: USDC Bridge Standard
+title: How to adopt the bridged USDC standard on your Orbit chain
 description: How to implement Circle bridged USDC standard on Orbit chain
 author: shughesocl
 sidebar_position: 5
 content_type: how-to
 ---
-
-## How to adopt the bridged USDC standard on your Orbit chain
 
 Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-standard) is a specification and process for deploying a bridged form of USDC on EVM blockchains with optionality for Circle to seamlessly upgrade to native issuance in the future.
 
