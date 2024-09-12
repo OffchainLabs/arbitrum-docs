@@ -8,7 +8,7 @@ sidebar_label: Recommended libraries
 
 ## Using Public Rust Crates
 
-Rust provides a package registry at [crates.io](https://crates.io/) which lets developers conveniently access a plethora of open source libraries to utilize as dependencies in their code. Stylus Rust contracts can take advantage of these crates to simplify their development workflow.
+Rust provides a package registry at [crates.io](https://crates.io/), which lets developers conveniently access a plethora of open source libraries to utilize as dependencies in their code. Stylus Rust contracts can take advantage of these crates to simplify their development workflow.
 
 While **crates.io** is a fantastic resource, many of these libraries were not designed with the constraints of a blockchain environment in mind. Some of them produce large binaries that exceed the 24KB compressed size limit of WASM smart contracts on Arbitrum. Many also take advantage of unsupported features such as:
 
