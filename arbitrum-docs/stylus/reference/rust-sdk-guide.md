@@ -228,7 +228,7 @@ The above allows consumers of `Erc20` to choose immutable constants via speciali
 
 ## Functions
 
-This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance] and [Sending ether](/stylus-by-example/sending_ether.mdx).
+This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance](/stylus-by-example/inheritance.mdx) and [Sending ether](/stylus-by-example/sending_ether.mdx).
 
 ### Pure, View, and Write functions
 
@@ -379,7 +379,7 @@ pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
 }
 ```
 
-By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new_in] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
 ### Reentrant calls
 
@@ -535,6 +535,8 @@ When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CRE
 [fn_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html
 [fn_static_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html
 [fn_delegate_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html
+[transfer_eth]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html
+[Router]: https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html
 [RawCall]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html
 [RawCall_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call
 [RawCall_flush_storage_cache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache
