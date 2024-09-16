@@ -76,7 +76,7 @@ cacheManager.placeBid{value: bidAmount}(contractAddress);
 You can place a bid using the `cargo stylus cache bid` command:
 
 ```bash
-cargo stylus cache bid [privateKey] [contractAddress] [bidAmount]
+cargo stylus cache bid <--private-key-path <PRIVATE_KEY_PATH>|--private-key <PRIVATE_KEY>|--keystore-path <KEYSTORE_PATH>> [contractAddress] [bidAmount]
 ```
 
 - `[contractAddress]`: The address of the Stylus contract you want to cache.
