@@ -168,11 +168,13 @@ See `cargo stylus check --help` for more options.
 
 ## Deploying your contract
 
-Once you're ready to deploy your program on-chain, `cargo stylus deploy` will help you estimate your deployment's gas cost.
+Once you're ready to deploy your program on-chain, `cargo stylus deploy` will help you estimate your deployment's gas cost and deploy your contract.
 
 ### Estimating gas
 
-First, you can estimate the gas required to perform your contract's deployment by running:
+You can estimate the gas required to deploy your contract by running:
+
+For every transaction, we'll use the testnode pre-funded wallet, you can use it as your private key:
 
 ```shell
 cargo stylus deploy \
@@ -191,7 +193,7 @@ deployment tx total cost: "0.000712373700000000" ETH
 
 ### Deployment
 
-Next, you can attempt an actual deployment. Two transactions will be sent on-chain: the contract deployment and its activation.
+Let's move on to the actual contract actual deployment. Two transactions will be sent on-chain: the contract deployment and its [activation](stylus/stylus-gentle-introduction.md#activation).
 
 ```shell
 cargo stylus deploy \
@@ -199,7 +201,7 @@ cargo stylus deploy \
   --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659"
 ```
 
-Once the deployment is successful, you'll see an output similar to this:
+Once the deployment and activations are successful, you'll see an output similar to this:
 
 ```shell
 deployed code at address: 0x33f54de59419570a9442e788f5dd5cf635b3c7ac
@@ -207,7 +209,7 @@ deployment tx hash: 0xa55efc05c45efc63647dff5cc37ad328a47ba5555009d92ad4e297bf48
 wasm already activated!
 ```
 
-Make sure to save the contract address for future interactions!
+Make sure to save the contract's deployment address for future interactions!
 
 More options are available for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
 
@@ -250,20 +252,20 @@ In this example, we'll use Foundry's Cast to send a call and then a transaction 
 ### Calling your contract
 
 Our contract is a counter; in its initial state, it should store a counter value of `0`.
-To make sure, you can call your contract so it returns its current counter value by sending it the following command:
+You can call your contract so it returns its current counter value by sending it the following command:
 
 ```shell title="Call to the function: number()(uint256)"
 cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
-[your-deployed-contract-address] "number()(uint256)"
+[deployed-contract-address] "number()(uint256)"
 ```
 
 Let's break down the command:
 
-- Casts's `call` command sends a call to your contract
+- `cast call` command sends a call to your contract
 - The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
 - The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
-- The deployed contract address is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
-- The function we want to call is `number()(uint256)`, in Solidity-style signature. The function returns the current value of the counter
+- The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
+- `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
 
 ```shell title="Call returns:"
 0
@@ -274,7 +276,7 @@ Our counter now displays a value of `0`, the contract's initial state.
 ### Sending a transaction to your contract
 
 Let's increment the counter by sending a transaction to your contract's `increment()` function.
-We'll use Cast's `send` command to send a transaction to our contract.
+We'll use Cast's `send` command to send our transaction.
 
 ```shell title="Sending a transaction to the function: increment()"
 cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
@@ -305,5 +307,9 @@ l1BlockNumber             "0x1223"
 ```
 
 Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
+
+## Conclusion
+
+Congratulations! You've successfully written, deployed, and interacted with your first contract using Stylus and Rust.
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
