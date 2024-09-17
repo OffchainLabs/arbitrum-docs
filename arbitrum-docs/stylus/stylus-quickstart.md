@@ -25,7 +25,7 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 #### Rust toolchain
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you have access to the programs `rustup`, `rustc`, and cargo from your preferred terminal application.
+Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and cargo from your preferred terminal application.
 
 #### VS Code
 
@@ -50,7 +50,7 @@ You can download Docker from [Docker’s website](https://www.docker.com/product
 
 #### Nitro testnode
 
-Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort wallet provisioning or running out of tokens to send transactions.
+Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
 ```shell title="Instal your testnode"
 git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
@@ -68,7 +68,7 @@ The initialization part might take up to a few minutes, but you can move on to t
 
 ## Creating a Stylus project with cargo stylus
 
-cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
+cargo stylus is a CLI toolkit built to facilitate the development of Stylus contracts.
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
@@ -122,19 +122,19 @@ cargo stylus new <YOUR_PROJECT_NAME>
 
 `cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
 
-At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point, it offers many examples to quickly familiarize yourself with Stylus.
+At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point; it offers many examples to help you quickly familiarize yourself with Stylus.
 
 ## Checking if your Stylus project is valid
 
 By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** on-chain.
 
-**Important:** Ensure your Docker service is running for this command to work correctly.
+**Important:** Ensure your Docker service runs so this command works correctly.
 
 ```shell
 cargo stylus check
 ```
 
-`cargo stylus check` executes a dry-run on your project by compiling your contract to WASM and verifying if it can be deployed and activated on-chain.
+`cargo stylus check` executes a dry run on your project by compiling your contract to WASM and verifying if it can be deployed and activated on-chain.
 
 If the command above fails, you'll see detailed information about why your contract would be rejected:
 
@@ -249,7 +249,7 @@ In this example, we'll use Foundry's Cast to send a call and then a transaction 
 
 ### Calling your contract
 
-Our contract is a counter, in its initial state it should store a counter value of `0`.
+Our contract is a counter; in its initial state, it should store a counter value of `0`.
 To make sure, you can call your contract so it returns its current counter value by sending it the following command:
 
 ```shell title="Call to the function: number()(uint256)"
@@ -269,11 +269,11 @@ Let's break down the command:
 0
 ```
 
-Our counter now displays a value of `0`, that's the contract's initial state.
+Our counter now displays a value of `0`, the contract's initial state.
 
 ### Sending a transaction to your contract
 
-Now, let's increment the counter by sending a transaction to your contract's `increment()` function.
+Let's increment the counter by sending a transaction to your contract's `increment()` function.
 We'll use Cast's `send` command to send a transaction to our contract.
 
 ```shell title="Sending a transaction to the function: increment()"
@@ -304,6 +304,6 @@ gasUsedForL1             "0x0"
 l1BlockNumber             "0x1223"
 ```
 
-Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this calling your contract's `number()(uint256)` function again).
+Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
