@@ -25,7 +25,7 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 #### Rust toolchain
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 #### VS Code
 
@@ -40,34 +40,37 @@ Some helpful VS Code extensions for Rust development:
 
 #### Docker
 
-Some `cargo stylus` commands require Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
+The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
-#### Developer wallet/account
+You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
-We recommend creating an account specifically for development that doesn't hold any real assets.
+#### Foundry's Cast
 
-##### Creating a new account
+[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-If you’re using [MetaMask](https://metamask.io/), click the dropdown at the top middle of the plugin and then click “Add Account” to create a fresh account.
-Labeling the account as a dev wallet or “Stylus” can be helpful. You’ll need this newly created account’s private key. [Follow the instructions on MetaMask’s website](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key) to obtain your key.
+#### Nitro testnode
 
-##### Storing your private key
+Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-You might also want to add your developer's private key to your environment variables for easier and safer access with `export PRIV_KEY_PATH=<path-of-your-private-key>` 
+```shell title="Install your testnode"
+git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
+```
 
-#### Arbitrum Sepolia ETH
+```shell title="Launch your testnode"
+./test-node.bash --init
+```
 
-We will interact with the [Arbitrum Sepolia](./reference/testnet-information.md) testnet, so you will need a small amount of Sepolia ETH to deploy contracts and send transactions. 
+The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
 
-To add Arb Sepolia ETH to your wallet you can request it from these faucets:
-- [Alchemy's faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
-- [Quicknode's faucet](https://faucet.quicknode.com/arbitrum/sepolia) 
+```shell title="Re-use your testnode"
+./test-node.bash
+```
 
 ## Creating a Stylus project with cargo stylus
 
-cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
+[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
 
-It is available as a plugin to the standard `cargo` tool used for developing Rust programs.
+It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
 ### Installing cargo stylus
 
@@ -85,7 +88,7 @@ rustup target add wasm32-unknown-unknown
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
 
-```shell
+```shell title="cargo stylus --help returns:"
 Cargo command for developing Stylus projects
 
 Usage: cargo stylus <COMMAND>
@@ -119,19 +122,19 @@ cargo stylus new <YOUR_PROJECT_NAME>
 
 `cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
 
-At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference](./reference/overview) as a starting point, it offers many examples to quickly familiarize yourself with Stylus.
+At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point; it offers many examples to help you quickly familiarize yourself with Stylus.
 
 ## Checking if your Stylus project is valid
 
-By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** on-chain.
+By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** onchain.
 
-**Important:** Ensure your Docker service is running for this command to work correctly.
+**Important:** Ensure your Docker service runs so this command works correctly.
 
 ```shell
 cargo stylus check
 ```
 
-`cargo stylus check` executes a dry-run on your project by compiling your contract to WASM and verifying if it can be deployed and activated onchain.
+`cargo stylus check` executes a dry run on your project by compiling your contract to WASM and verifying if it can be deployed and activated onchain.
 
 If the command above fails, you'll see detailed information about why your contract would be rejected:
 
@@ -145,12 +148,12 @@ Caused by:
     binary exports reserved symbol stylus_ink_left
 
 Location:
-    prover/src/binary.rs:493:9, data: None)
+    prover/src/binary.rs:493:9, data: None
 ```
 
-The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
+The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
-If your program succeeds, you'll see something like this:
+If your contract succeeds, you'll see something like this:
 
 ```shell
 Finished release [optimized] target(s) in 1.88s
@@ -165,15 +168,18 @@ See `cargo stylus check --help` for more options.
 
 ## Deploying your contract
 
-Once you're ready to deploy your program on-chain, `cargo stylus deploy` will help you with the estimation of the deployment's gas cost, as well as with the deployment itself.
+Once you're ready to deploy your contract onchain, `cargo stylus deploy` will help you with the deployment and its gas estimation.
 
 ### Estimating gas
 
-First, you can estimate the gas required to perform your contract's deployment by running:
+Note: For every transaction, we'll use the testnode pre-funded wallet, you can use `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659` as your private key.
+
+You can estimate the gas required to deploy your contract by running:
 
 ```shell
 cargo stylus deploy \
-  --private-key-path=$PRIV_KEY_PATH \
+  --endpoint='http://localhost:8547' \
+  --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659" \
   --estimate-gas
 ```
 
@@ -187,20 +193,23 @@ deployment tx total cost: "0.000712373700000000" ETH
 
 ### Deployment
 
-Next, you can attempt an actual deployment. Two transactions will be sent on-chain: the contract deployment and its activation.
+Let's move on to the contract's actual deployment. Two transactions will be sent onchain: the contract deployment and its [activation](stylus/stylus-gentle-introduction.md#activation).
 
 ```shell
 cargo stylus deploy \
-  --private-key-path=$PRIV_KEY_PATH
+  --endpoint='http://localhost:8547' \
+  --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659"
 ```
 
-Once the deployment is successful, you'll see an output similar to this:
+Once the deployment and activations are successful, you'll see an output similar to this:
 
 ```shell
 deployed code at address: 0x33f54de59419570a9442e788f5dd5cf635b3c7ac
 deployment tx hash: 0xa55efc05c45efc63647dff5cc37ad328a47ba5555009d92ad4e297bf4864de36
 wasm already activated!
 ```
+
+Make sure to save the contract's deployment address for future interactions!
 
 More options are available for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
 
@@ -232,6 +241,75 @@ interface ICounter {
 }
 ```
 
-Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp">dApp</a>.
+Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp"><a data-quicklook-from="dapp">dApp</a></a>.
+
+## Interacting with your Stylus contract
+
+Stylus contracts are EVM-compatible, you can interact with them with your tool of choice, such as [Hardhat](https://hardhat.org/), [Foundry's Cast](https://book.getfoundry.sh/cast/), or any other Ethereum-compatible tool.
+
+In this example, we'll use Foundry's Cast to send a call and then a transaction to our contract.
+
+### Calling your contract
+
+Our contract is a counter; in its initial state, it should store a counter value of `0`.
+You can call your contract so it returns its current counter value by sending it the following command:
+
+```shell title="Call to the function: number()(uint256)"
+cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
+[deployed-contract-address] "number()(uint256)"
+```
+
+Let's break down the command:
+
+- `cast call` command sends a call to your contract
+- The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
+- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
+- The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
+- `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
+
+```shell title="Calling 'number()(uint256)' returns:"
+0
+```
+
+The `number()(uint256)` function returns a value of `0`, the contract's initial state.
+
+### Sending a transaction to your contract
+
+Let's increment the counter by sending a transaction to your contract's `increment()` function.
+We'll use Cast's `send` command to send our transaction.
+
+```shell title="Sending a transaction to the function: increment()"
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
+[deployed-contract-address] "increment()"
+```
+
+```shell title="Transaction returns:"
+blockHash               0xfaa2cce3b9995f3f2e2a2f192dc50829784da9ca4b7a1ad21665a25b3b161f7c
+blockNumber             20
+contractAddress
+cumulativeGasUsed       97334
+effectiveGasPrice       100000000
+from                    0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E
+gasUsed                 97334
+logs                    []
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+root
+status                  1 (success)
+transactionHash         0x28c6ba8a0b9915ed3acc449cf6c645ecc406a4b19278ec1eb67f5a7091d18f6b
+transactionIndex        1
+type                    2
+blobGasPrice
+blobGasUsed
+authorizationList
+to                      0x11B57FE348584f042E436c6Bf7c3c3deF171de49
+gasUsedForL1             "0x0"
+l1BlockNumber             "0x1223"
+```
+
+Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
+
+## Conclusion
+
+Congratulations! You've successfully initialized, deployed, and interacted with your first contract using Stylus and Rust.
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
