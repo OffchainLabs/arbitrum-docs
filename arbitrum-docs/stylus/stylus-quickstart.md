@@ -52,7 +52,7 @@ You can download Docker from [Docker’s website](https://www.docker.com/product
 
 Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-```shell title="Instal your testnode"
+```shell title="Install your testnode"
 git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
 ```
 
@@ -126,7 +126,7 @@ At this point, you can move on to the next step of this guide or develop your fi
 
 ## Checking if your Stylus project is valid
 
-By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** on-chain.
+By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** onchain.
 
 **Important:** Ensure your Docker service runs so this command works correctly.
 
@@ -134,7 +134,7 @@ By running `cargo stylus check` against your first contract, you can check if yo
 cargo stylus check
 ```
 
-`cargo stylus check` executes a dry run on your project by compiling your contract to WASM and verifying if it can be deployed and activated on-chain.
+`cargo stylus check` executes a dry run on your project by compiling your contract to WASM and verifying if it can be deployed and activated onchain.
 
 If the command above fails, you'll see detailed information about why your contract would be rejected:
 
@@ -168,7 +168,7 @@ See `cargo stylus check --help` for more options.
 
 ## Deploying your contract
 
-Once you're ready to deploy your contract on-chain, `cargo stylus deploy` will help you with the deployment and its gas estimation.
+Once you're ready to deploy your contract onchain, `cargo stylus deploy` will help you with the deployment and its gas estimation.
 
 ### Estimating gas
 
@@ -193,7 +193,7 @@ deployment tx total cost: "0.000712373700000000" ETH
 
 ### Deployment
 
-Let's move on to the actual contract actual deployment. Two transactions will be sent on-chain: the contract deployment and its [activation](stylus/stylus-gentle-introduction.md#activation).
+Let's move on to the contract's actual deployment. Two transactions will be sent onchain: the contract deployment and its [activation](stylus/stylus-gentle-introduction.md#activation).
 
 ```shell
 cargo stylus deploy \
@@ -261,11 +261,11 @@ cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3
 
 Let's break down the command:
 
-1. `cast call` command sends a call to your contract
-2. The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
-3. The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
-4. The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
-5. `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
+- `cast call` command sends a call to your contract
+- The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
+- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
+- The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
+- `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
 
 ```shell title="Calling 'number()(uint256)' returns:"
 0
