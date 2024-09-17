@@ -42,27 +42,21 @@ Some helpful VS Code extensions for Rust development:
 
 Some `cargo stylus` commands require Docker to operate. You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
-#### Developer wallet/account
+#### Foundry's Cast
 
-We recommend creating an account specifically for development that doesn't hold any real assets.
+[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
+### Nitro testnode
 
-##### Creating a new account
-
-If you’re using [MetaMask](https://metamask.io/), click the dropdown at the top middle of the plugin and then click “Add Account” to create a fresh account.
-Labeling the account as a dev wallet or “Stylus” can be helpful. You’ll need this newly created account’s private key. [Follow the instructions on MetaMask’s website](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key) to obtain your key.
-
-##### Storing your private key
-
-You might also want to add your developer's private key to your environment variables for easier and safer access with `export PRIV_KEY_PATH=<path-of-your-private-key>` 
-
-#### Arbitrum Sepolia ETH
-
-We will interact with the [Arbitrum Sepolia](./reference/testnet-information.md) testnet, so you will need a small amount of Sepolia ETH to deploy contracts and send transactions. 
-
-To add Arb Sepolia ETH to your wallet you can request it from these faucets:
-- [Alchemy's faucet](https://www.alchemy.com/faucets/arbitrum-sepolia)
-- [Quicknode's faucet](https://faucet.quicknode.com/arbitrum/sepolia) 
-
+```shell
+  `git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode`
+```
+```shell
+./test-node.bash --init
+```
+```bash
+```shell
+./test-node.bash
+```
 ## Creating a Stylus project with cargo stylus
 
 cargo stylus is a CLI toolkit built to facilitate Stylus contracts development.
@@ -145,7 +139,7 @@ Caused by:
     binary exports reserved symbol stylus_ink_left
 
 Location:
-    prover/src/binary.rs:493:9, data: None)
+    prover/src/binary.rs:493:9, data: None
 ```
 
 The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
@@ -202,6 +196,8 @@ deployment tx hash: 0xa55efc05c45efc63647dff5cc37ad328a47ba5555009d92ad4e297bf48
 wasm already activated!
 ```
 
+Make sure to save the contract address for future interactions.
+
 More options are available for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
 
 ## Exporting the Solidity ABI interface
@@ -232,6 +228,143 @@ interface ICounter {
 }
 ```
 
-Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp">dApp</a>.
+Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp"><a data-quicklook-from="dapp">dApp</a></a>.
+
+## Interacting with your Stylus contract
+
+Stylus contracts are EVM-compatible, you can interact with them with your tool of choice, such as [Hardhat](https://hardhat.org/), [Foundry's Cast](https://book.getfoundry.sh/cast/), or any other Ethereum-compatible tool.
+
+In this example, we'll use Foundry's Cast to send  a call and then a transaction to our contract.
+
+### Calling your contract
+
+Our contract is a counter, in its initial state it should store a counter value of `0`.
+To make sure, you can call your contract so it returns its current counter value by sending it the following command:
+
+
+```shell title="Call to the function: number()(uint256)"
+cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
+[your-deployed-contract-address] "number()(uint256)"
+```
+Let's break down the command:
+
+- Casts's `call` command sends a call to your contract
+- The `--rpc-url` option is the `RPC URL` endpoint of our testnode. 
+- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`.
+- The deployed contract address is the address we want to interact with
+- The function we want to call is `number()(uint256)`, in Solidity-style signature. The function returns the current value of the counter. 
+
+```shell title="Call returns:"
+0
+```
+
+Our counter now displays a value of `0`, that's the contract's initial state.
+
+### Sending a transaction to your contract
+
+Now, let's increment the counter by sending a transaction to the `increment()` function.
+We'll use Cast's `send` command to send a transaction to our contract.
+
+```shell title="Sending a transaction to the function: increment()"
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 
+0x11b57fe348584f042e436c6bf7c3c3def171de49 "increment()"
+```
+
+```shell title="Transaction returns:"
+blockHash               0xfaa2cce3b9995f3f2e2a2f192dc50829784da9ca4b7a1ad21665a25b3b161f7c
+blockNumber             20
+contractAddress         
+cumulativeGasUsed       97334
+effectiveGasPrice       100000000
+from                    0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E
+gasUsed                 97334
+logs                    []
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+root                    
+status                  1 (success)
+transactionHash         0x28c6ba8a0b9915ed3acc449cf6c645ecc406a4b19278ec1eb67f5a7091d18f6b
+transactionIndex        1
+type                    2
+blobGasPrice            
+blobGasUsed             
+authorizationList       
+to                      0x11B57FE348584f042E436c6Bf7c3c3deF171de49
+gasUsedForL1             "0x0"
+l1BlockNumber             "0x1223"
+```
+Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this calling your contract's `number()(uint256)` function again).
+
+
+=======
+Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp"><a data-quicklook-from="dapp">dApp</a></a>.
+
+## Interacting with your Stylus contract
+
+Stylus contracts are EVM-compatible, you can interact with them with your tool of choice, such as [Hardhat](https://hardhat.org/), [Foundry's Cast](https://book.getfoundry.sh/cast/), or any other Ethereum-compatible tool.
+
+In this example, we'll use Foundry's Cast to send  a call and then a transaction to our contract.
+
+
+
+### Calling your contract
+
+Our contract is a counter, in its initial state it should store a counter value of `0`.
+To make sure, you can call your contract so it returns its current counter value by sending it the following command:
+
+
+```shell title="Call to the function: number()(uint256)"
+cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
+[your-deployed-contract-address] "number()(uint256)"
+```
+Let's break down the command:
+
+- Casts's `call` command sends a call to your contract
+- The `--rpc-url` option is the `RPC URL` endpoint of our testnode. 
+- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`.
+- The deployed contract address is the address we want to interact with
+- The function we want to call is `number()(uint256)`, in Solidity-style signature. The function returns the current value of the counter. 
+
+```shell title="Call returns:"
+0
+```
+
+Our counter now displays a value of `0`, that's the contract's initial state.
+
+### Sending a transaction to your contract
+
+Now, let's increment the counter by sending a transaction to the `increment()` function.
+We'll use Cast's `send` command to send a transaction to our contract.
+
+```shell title="Sending a transaction to the function: increment()"
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 
+0x11b57fe348584f042e436c6bf7c3c3def171de49 "increment()"
+```
+
+```shell title="Transaction returns:"
+blockHash               0xfaa2cce3b9995f3f2e2a2f192dc50829784da9ca4b7a1ad21665a25b3b161f7c
+blockNumber             20
+contractAddress         
+cumulativeGasUsed       97334
+effectiveGasPrice       100000000
+from                    0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E
+gasUsed                 97334
+logs                    []
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+root                    
+status                  1 (success)
+transactionHash         0x28c6ba8a0b9915ed3acc449cf6c645ecc406a4b19278ec1eb67f5a7091d18f6b
+transactionIndex        1
+type                    2
+blobGasPrice            
+blobGasUsed             
+authorizationList       
+to                      0x11B57FE348584f042E436c6Bf7c3c3deF171de49
+gasUsedForL1             "0x0"
+l1BlockNumber             "0x1223"
+```
+Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this calling your contract's `number()(uint256)` function again).
+
+
+>>>>>>> Stashed changes
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
