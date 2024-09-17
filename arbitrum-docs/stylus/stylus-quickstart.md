@@ -33,10 +33,10 @@ We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for i
 
 Some helpful VS Code extensions for Rust development:
 
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
-- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
-- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
-- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
+1. [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
+1. [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
+1. [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
+1. [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
 
 #### Docker
 
@@ -57,7 +57,7 @@ git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-
 ```
 
 ```shell title="Launch your testnode"
-./test-node.bash --init --blockscout
+./test-node.bash --init
 ```
 
 The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
@@ -68,7 +68,7 @@ The initialization part might take up to a few minutes, but you can move on to t
 
 ## Creating a Stylus project with cargo stylus
 
-cargo stylus is a CLI toolkit built to facilitate the development of Stylus contracts.
+[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
@@ -151,9 +151,9 @@ Location:
     prover/src/binary.rs:493:9, data: None
 ```
 
-The program can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
+The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
-If your program succeeds, you'll see something like this:
+If your contract succeeds, you'll see something like this:
 
 ```shell
 Finished release [optimized] target(s) in 1.88s
@@ -168,13 +168,13 @@ See `cargo stylus check --help` for more options.
 
 ## Deploying your contract
 
-Once you're ready to deploy your program on-chain, `cargo stylus deploy` will help you estimate your deployment's gas cost and deploy your contract.
+Once you're ready to deploy your contract on-chain, `cargo stylus deploy` will help you with the deployment and its gas estimation.
 
 ### Estimating gas
 
-You can estimate the gas required to deploy your contract by running:
+Note: For every transaction, we'll use the testnode pre-funded wallet, you can use `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659` as your private key.
 
-For every transaction, we'll use the testnode pre-funded wallet, you can use it as your private key:
+You can estimate the gas required to deploy your contract by running:
 
 ```shell
 cargo stylus deploy \
@@ -261,17 +261,17 @@ cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3
 
 Let's break down the command:
 
-- `cast call` command sends a call to your contract
-- The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
-- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
-- The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
-- `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
+1. `cast call` command sends a call to your contract
+2. The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
+3. The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
+4. The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
+5. `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
 
-```shell title="Call returns:"
+```shell title="Calling 'number()(uint256)' returns:"
 0
 ```
 
-Our counter now displays a value of `0`, the contract's initial state.
+The `number()(uint256)` function returns a value of `0`, the contract's initial state.
 
 ### Sending a transaction to your contract
 
@@ -280,7 +280,7 @@ We'll use Cast's `send` command to send our transaction.
 
 ```shell title="Sending a transaction to the function: increment()"
 cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
-0x11b57fe348584f042e436c6bf7c3c3def171de49 "increment()"
+[deployed-contract-address] "increment()"
 ```
 
 ```shell title="Transaction returns:"
@@ -310,6 +310,6 @@ Our transactions returned a status of `1`, indicating success, and the counter h
 
 ## Conclusion
 
-Congratulations! You've successfully written, deployed, and interacted with your first contract using Stylus and Rust.
+Congratulations! You've successfully initialized, deployed, and interacted with your first contract using Stylus and Rust.
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
