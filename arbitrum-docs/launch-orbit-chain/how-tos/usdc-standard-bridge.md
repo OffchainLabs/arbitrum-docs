@@ -62,7 +62,7 @@ yarn build
 
 Populate .env based on env.example in this directory
 
-```solidity
+```shell
 PARENT_RPC=
 PARENT_DEPLOYER_KEY=
 CHILD_RPC=
