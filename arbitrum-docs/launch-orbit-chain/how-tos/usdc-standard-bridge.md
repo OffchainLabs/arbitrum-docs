@@ -46,9 +46,9 @@ Other requirements:
 
 <aside>
 
-Throughout the docs and code, terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, ie. if an Orbit chain is deployed on top of ArbitrumOne then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`. 
+Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Orbit chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`. 
 
-The usdc-bridge-deployment script and readme can be found [here](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment). 
+You can find more details by consulting the [usdc bridge deployment script and its README](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment). 
 
 </aside>
 
