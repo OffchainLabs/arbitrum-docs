@@ -21,7 +21,7 @@ By deploying the bridged USDC standard from the start, all USDC tokens that are 
 
 ## How to implement the bridged USDC Standard
 
-We provide a custom USDC gateway implementation (for parent and child chain) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO. 
+We provide a custom USDC gateway implementation (for parent and child chains) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO. 
 
 - On a parent chain the contract `L1USDCGateway` is used in case the child chain uses ETH as native currency, or `L1OrbitUSDCGateway` in case the child chain uses a custom fee token.
 - On a child chain, `L2USDCGateway` is used.
