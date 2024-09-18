@@ -77,7 +77,7 @@ ROLLUP_OWNER_KEY=
 
 Run the script
 
-```solidity
+```shell
 yarn deploy:usdc-token-bridge
 ```
 
