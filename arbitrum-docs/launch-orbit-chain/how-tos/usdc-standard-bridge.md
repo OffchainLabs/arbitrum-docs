@@ -52,7 +52,7 @@ You can find more details by consulting the [usdc bridge deployment script and i
 
 </aside>
 
-Checkout target code, install dependencies and build
+Checkout target code, install dependencies, and build
 
 ```solidity
 cd token-bridge-contracts
