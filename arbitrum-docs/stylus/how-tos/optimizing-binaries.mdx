@@ -1,5 +1,5 @@
 ---
-title: 'How to reduce the size of Stylus WASM binaries'
+title: 'How to optimize Stylus WASM binaries'
 description: 'A guide on optimizing Stylus WASM program sizes'
 author: rauljordan
 sme: rauljordan
@@ -8,13 +8,15 @@ content_type: how-to
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
 To be deployed onchain, the size of your **uncompressed WebAssembly (WASM) file** must not exceed 128Kb, while the **compressed binary** must not exceed 24KB. Stylus conforms with the same contract size limit as the EVM to remain fully interoperable with all smart contracts on Arbitrum chains.
 
-The [Stylus CLI](https://github.com/OffchainLabs/cargo-stylus) automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries. Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
+[cargo-stylus](https://github.com/OffchainLabs/cargo-stylus), the Stylus CLI tool, automatically compresses your WASM programs, but there are additional steps that you can take to further reduce the size of your binaries.
+
+Your options fall into two categories: Rust compiler flags, and third-party optimization tools.
 
 ## Rust compiler flags
 
@@ -33,32 +35,6 @@ debug = false            # no debug data
 rpath = false            # no run-time search path
 debug-assertions = false # prune debug assertions
 incremental = false      # no incremental builds
-```
-
-### `.cargo/config.toml`
-
-```toml
-[build]
-target = "wasm32-unknown-unknown"
-
-[target.wasm32-unknown-unknown]
-rustflags = [
-  "-C", "link-arg=-zstack-size=8192", # shrink the heap
-]
-```
-
-### `nightly flags`
-
-Additional unstable nightly flags may help too.
-
-```bash
-cargo +nightly build -Z build-std=std,panic_abort -Z build-std-features=panic_immediate_abort
-```
-
-The above configures the standard library to not include panic strings, which are useless on chain but may take up considerable space.
-
-```bash
-cargo stylus deploy --nightly
 ```
 
 ## Third-party optimization tooling

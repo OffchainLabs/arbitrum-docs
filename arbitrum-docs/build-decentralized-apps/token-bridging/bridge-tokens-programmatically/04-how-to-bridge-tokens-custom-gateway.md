@@ -368,7 +368,7 @@ We now deploy that gateway to L1.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
-const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk');
+const { getArbitrumNetwork, ParentToChildMessageStatus } = require('@arbitrum/sdk');
 const {
   AdminErc20Bridger,
   Erc20Bridger,
@@ -389,11 +389,11 @@ const main = async () => {
    * Use l2Network to create an Arbitrum SDK AdminErc20Bridger instance
    * We'll use AdminErc20Bridger for its convenience methods around registering tokens to a custom gateway
    */
-  const l2Network = await getL2Network(l2Provider);
+  const l2Network = await getArbitrumNetwork(l2Provider);
   const erc20Bridger = new Erc20Bridger(l2Network);
   const adminTokenBridger = new AdminErc20Bridger(l2Network);
-  const l1Router = l2Network.tokenBridge.l1GatewayRouter;
-  const l2Router = l2Network.tokenBridge.l2GatewayRouter;
+  const l1Router = l2Network.tokenBridge.parentGatewayRouter;
+  const l2Router = l2Network.tokenBridge.childGatewayRouter;
   const inbox = l2Network.ethBridge.inbox;
 
   /**
@@ -690,11 +690,12 @@ We now deploy that gateway to L2.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
-const { getL2Network, L1ToL2MessageStatus } = require('@arbitrum/sdk');
 const {
+  getArbitrumNetwork,
+  ParentToChildMessageStatus,
   AdminErc20Bridger,
   Erc20Bridger,
-} = require('@arbitrum/sdk/dist/lib/assetBridger/erc20Bridger');
+} = require('@arbitrum/sdk');
 require('dotenv').config();
 
 /**
@@ -711,7 +712,7 @@ const main = async () => {
    * Use l2Network to create an Arbitrum SDK AdminErc20Bridger instance
    * We'll use AdminErc20Bridger for its convenience methods around registering tokens to a custom gateway
    */
-  const l2Network = await getL2Network(l2Provider);
+  const l2Network = await getArbitrumNetwork(l2Provider);
   const erc20Bridger = new Erc20Bridger(l2Network);
   const adminTokenBridger = new AdminErc20Bridger(l2Network);
   const l1Router = l2Network.tokenBridge.l1GatewayRouter;
@@ -789,7 +790,7 @@ In this case, when using this function only one action will be performed:
 
 1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK and call the method [registerCustomToken](/sdk/assetBridger_erc20Bridger#registercustomtoken) of the [AdminErc20Bridger](/sdk/assetBridger_erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK and call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [AdminErc20Bridger](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
 
 ```tsx
 /**
@@ -816,7 +817,7 @@ console.log(
  * To compute this txn hash, we need our message's "sequence numbers", unique identifiers of each L1 to L2 message.
  * We'll fetch them from the event logs with a helper method.
  */
-const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider);
+const l1ToL2Msgs = await registerTokenRec.getParentToChildMessages(l2Provider);
 
 /**
  * In this case, the registerTokenOnL2 method creates 1 L1-to-L2 messages to set the L1 token to the Custom Gateway via the Router
@@ -825,7 +826,7 @@ const l1ToL2Msgs = await registerTokenRec.getL1ToL2Messages(l2Provider);
 expect(l1ToL2Msgs.length, 'Should be 1 message.').to.eq(1);
 
 const setGateways = await l1ToL2Msgs[0].waitForStatus();
-expect(setGateways.status, 'Set gateways not redeemed.').to.eq(L1ToL2MessageStatus.REDEEMED);
+expect(setGateways.status, 'Set gateways not redeemed.').to.eq(ParentToChildMessageStatus.REDEEMED);
 
 console.log('Your custom token and gateways are now registered on the token bridge 🥳!');
 ```
