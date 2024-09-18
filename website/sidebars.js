@@ -478,6 +478,11 @@ const sidebars = {
             ...stylusByExampleDocsSidebar,
             {
               type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
+            {
+              type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Advanced features',
             },
