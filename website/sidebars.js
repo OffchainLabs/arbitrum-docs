@@ -1,6 +1,7 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
+const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -296,6 +297,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              label: `Implement Circle bridged USDC`,
+            },
           ],
         },
         {
@@ -318,11 +324,31 @@ const sidebars = {
           ],
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
+              label: 'Deploy a mirror Data Availability Server',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
         },
         {
           type: 'html',
@@ -330,11 +356,6 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
-          label: 'Keyset generation (AnyTrust chains)',
         },
         {
           type: 'doc',
@@ -428,7 +449,11 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: true,
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview',
+      },
       items: [
         {
           type: 'doc',
@@ -446,24 +471,35 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
-          type: 'link',
-          label: 'Stylus by example',
-          href: 'https://stylus-by-example.org/',
-        },
-        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
           items: [
             {
               type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
+            {
+              type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
+              label: 'Advanced features',
             },
             {
               type: 'link',
               label: 'Rust crate docs',
               href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by example',
+              href: 'https://stylus-by-example.org/',
             },
           ],
         },
@@ -496,6 +532,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
+            },
+            {
+              type: 'doc',
               label: 'Optimize WASM binaries',
               id: 'stylus/how-tos/optimizing-binaries',
             },
@@ -526,13 +567,12 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: true,
+          collapsed: false,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/other-language-frameworks',
+          },
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'Other language frameworks',
-            },
             {
               type: 'doc',
               label: 'Add a new smart contract language',
@@ -583,6 +623,11 @@ const sidebars = {
           label: 'Run a local dev node',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
@@ -590,9 +635,11 @@ const sidebars = {
           // a: see note at end of file
         },
         {
-          type: 'doc',
-          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'category',
@@ -606,8 +653,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos30',
-              label: 'ArbOS 30 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos31',
+              label: 'ArbOS 31 Bianca',
             },
             {
               type: 'doc',
@@ -640,33 +687,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/get-started',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
@@ -706,6 +726,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+              label: 'Nitro database snapshots',
             },
           ],
         },
