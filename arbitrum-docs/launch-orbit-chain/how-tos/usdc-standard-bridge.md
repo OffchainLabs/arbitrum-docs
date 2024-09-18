@@ -71,7 +71,7 @@ L1_ROUTER=
 L2_ROUTER=
 INBOX=
 L1_USDC=
-## OPTIONAL arg. If set, script will register the gateway, otherwise it will store TX payload in a file
+## OPTIONAL arg. If set, the script will register the gateway. Otherwise, it will store the transaction's payload in a file
 ROLLUP_OWNER_KEY=
 ```
 
