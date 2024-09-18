@@ -24,12 +24,12 @@ By deploying the bridged USDC standard from the start, all USDC tokens that are 
 We provide a custom USDC gateway implementation (for parent and child chain) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO. 
 
 - On a parent chain the contract `L1USDCGateway` is used in case the child chain uses ETH as native currency, or `L1OrbitUSDCGateway` in case the child chain uses a custom fee token.
-- On a child chain `L2USDCGateway` is used.
+- On a child chain, `L2USDCGateway` is used.
 - For the USDC token contracts, Circle's reference [implementation](https://github.com/circlefin/stablecoin-evm/blob/master/doc/bridged_USDC_standard.md) is used.
 
-This page describes how to deploy USDC bridge compatible with both the Orbit token bridge and Circle’s Bridged USDC Standard.
+This page describes how to deploy a USDC bridge compatible with both the Orbit token bridge and Circle’s Bridged USDC Standard.
 
- Also steps for a transition to native USDC issuance are provided. Note that both Circle and the Orbit chain owner must agree to transition to native USDC issuance.
+ Steps for a transition to native USDC issuance are also provided. Note that both Circle and the Orbit chain owner must agree to transition to native USDC issuance.
 
 ## Requirements
 
