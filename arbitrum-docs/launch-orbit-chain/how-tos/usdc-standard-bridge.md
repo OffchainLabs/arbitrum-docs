@@ -38,9 +38,9 @@ This page describes how to deploy a USDC bridge compatible with both the Orbit t
 
 Other requirements:
 
-- It is assumed there is already USDC token deployed and used on the parent chain.
-- Also, it is assumed the standard Orbit chain ownership system is used, ie. UpgradeExecutor is the owner of the ownable contracts and there is an EOA or multisig which has the executor role on the UpgradeExecutor.
-- Refer to the [token bridge overview page](https://github.com/OffchainLabs/arbitrum-docs/blob/master/arbitrum-docs/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. More information about gateways can be found [here](https://docs.arbitrum.io/build-decentralized-apps/token-bridging/token-bridge-erc20#other-flavors-of-gateways).
+- It is assumed there is already a USDC token deployed and used on the parent chain.
+- Also, it is assumed that the standard Orbit chain ownership system is used, i.e., `UpgradeExecutor` is the owner of the `ownable` contracts, and there is an EOA or multi-sig that has the executor role on the `UpgradeExecutor`.
+- Refer to the [token bridge overview page](/arbitrum-docs/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/token-bridge-erc20#other-flavors-of-gateways).
 
 ## Deployment steps
 
