@@ -60,7 +60,7 @@ yarn install
 yarn build
 ```
 
-Populate .env based on env.example in this directory
+Populate your `.env` file based on `env.example` in the project's root  directory
 
 ```shell
 PARENT_RPC=
