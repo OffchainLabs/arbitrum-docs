@@ -92,10 +92,10 @@ The script will do the following:
 - deploy L2 USDC gateway
 - init both gateways
 - if `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
-- if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in `registerUsdcGatewayTx.json` file
+- if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
 - set minter role to L2 USDC gateway with max allowance
 
-Now new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance, if Circle and the Orbit chain owner agree to it. 
+Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance if Circle and the Orbit chain owner agree to it. 
 
 ## Transitioning to Native USDC
 
