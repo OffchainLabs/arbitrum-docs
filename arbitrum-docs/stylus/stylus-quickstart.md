@@ -18,6 +18,8 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 3. [Checking the validity of your contract](./stylus-quickstart#checking-if-your-stylus-project-is-valid)
 4. [Deploying your contract](./stylus-quickstart#deploying-your-contract)
 5. [Exporting your contract's ABIs](./stylus-quickstart#exporting-solidity-abis)
+6. [Calling your contract](./stylus-quickstart#calling-your-contract)
+7. [Sending a transaction to your contract](./stylus-quickstart#sending-a-transaction-to-your-contract)
 
 ## Setting up your development environment
 
