@@ -14,7 +14,7 @@ When USDC is bridged into an Orbit chain, the default path is to use the chain�
 
 The challenge with this user flow is twofold.
 
-1. **Native vs. non-Native USDC:** The USDC tokens issued by Circle (’native USDC’) are locked in the parent side bridge contract, and conversely the USDC tokens on the Orbit chain aren’t native USDC but are themselves collateralized by the locked tokens in the bridge. As such, Circle will not recognize these tokens across their product suite.  
+1. **Native vs. non-Native USDC:** The USDC tokens issued by Circle (’native USDC’) are locked in the parent side bridge contract. Conversely, the USDC tokens on the Orbit chain aren’t native USDC but are collateralized by the locked tokens in the bridge. As such, Circle will not recognize these tokens across their product suite.  
 2. **Fragmented UX:** If Circle were to provide native support for USDC by deploying a USDC contract on the Orbit chain, there would be two forms of USDC on the chain (native and non-native USDC). This leads to a fragmented user experience, and users with non-native USDC would have to withdraw to the parent chain to be able to turn their tokens into native USDC. 
 
 By deploying the bridged USDC standard from the start, all USDC tokens that are bridged are locked in a gateway contract that can be adopted by Circle should a chain upgrade its USDC into native USDC. This allows USDC adoption on Orbit chains today without encountering either of the two problems above. 
