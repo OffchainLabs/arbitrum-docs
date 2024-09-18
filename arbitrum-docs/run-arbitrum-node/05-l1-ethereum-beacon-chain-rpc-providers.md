@@ -32,7 +32,7 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 | [BlastAPI](https://blastapi.io/public-api/ethereum)                         |                            |                               | ✅                         |                            |
 | [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                         | ✅                            |                            |                            |
 | [NodeReal](https://nodereal.io/)                                            | ✅                         |                               |                            |                            |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                         | ✅                            |                            |                            |
+| [QuickNode](https://www.quicknode.com/docs/ethereum)                        | ✅                         | ✅                            | ✅                         | ✅                         |
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
