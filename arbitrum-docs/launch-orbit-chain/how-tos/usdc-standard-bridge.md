@@ -97,7 +97,7 @@ The script will do the following:
 
 Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance if Circle and the Orbit chain owner agree to it. 
 
-## Transitioning to Native USDC
+## Transitioning to native USDC
 
 Once a transition to native USDC is agreed upon, the following steps are required:
 
