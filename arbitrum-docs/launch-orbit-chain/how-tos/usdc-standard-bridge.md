@@ -54,7 +54,7 @@ You can find more details by consulting the [usdc bridge deployment script and i
 
 Checkout target code, install dependencies, and build
 
-```solidity
+```shell
 cd token-bridge-contracts
 yarn install
 yarn build
