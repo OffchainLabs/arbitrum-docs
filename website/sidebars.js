@@ -461,6 +461,11 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
+          type: 'doc',
+          label: 'Arbiscan contract verification',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
+        },
+        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
