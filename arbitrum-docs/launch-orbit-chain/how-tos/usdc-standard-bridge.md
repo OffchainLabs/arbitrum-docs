@@ -42,7 +42,7 @@ Other requirements:
 - Also, it is assumed the standard Orbit chain ownership system is used, ie. UpgradeExecutor is the owner of the ownable contracts and there is an EOA or multisig which has the executor role on the UpgradeExecutor.
 - Refer to the [token bridge overview page](https://github.com/OffchainLabs/arbitrum-docs/blob/master/arbitrum-docs/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. More information about gateways can be found [here](https://docs.arbitrum.io/build-decentralized-apps/token-bridging/token-bridge-erc20#other-flavors-of-gateways).
 
-## Deployment Steps
+## Deployment steps
 
 <aside>
 
