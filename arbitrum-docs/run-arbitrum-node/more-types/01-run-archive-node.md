@@ -10,13 +10,13 @@ An Arbitrum **archive node** is a full node that maintains an archive of histori
 
 :::caution
 
-**Most users won't need to configure an archive node**. This type of node is great for a small number of use-cases - for example, if you need to process historical data.
+**Most users won't need to configure an archive node**. This node type is great for a small number of use cases - for example if you need to process historical data.
 
 :::
 
 ### Before we begin
 
-Before the Nitro upgrade happened, Arbitrum One was running on the Classic stack for about one year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can't serve archive requests for pre-Nitro blocks**.
+Before the Nitro upgrade, Arbitrum One ran on the Classic stack for about one year (before block height 22207817). Although the Nitro chain uses the latest snapshot of the Classic chain's state as its genesis state, **the Nitro stack can't serve archive requests for pre-Nitro blocks**.
 
 Running an Arbitrum One **full node** in **archive mode** lets you access both pre-Nitro and post-Nitro blocks, but it requires you to run **both Classic and Nitro nodes** together. You may not need to do this, depending on your use case:
 
@@ -38,7 +38,7 @@ The Offchain Labs team is actively exploring and working on solutions to address
 
 :::caution
 
-The minimum storage requirements will change over time as the Nitro chains grow (growing rates are specified below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead.
+The minimum storage requirements will change as the Nitro chains grow (growing rates are specified below). We recommend exceeding the minimum requirements as much as you can to minimize risk and maintenance overhead.
 
 :::
 
@@ -47,15 +47,15 @@ The minimum storage requirements will change over time as the Nitro chains grow 
 3. **Storage (last updated on April 2024):**
    - Arbitrum One: 9.7TB SSD, currently growing at a rate of about 850GB per month
    - Arbitrum Nova: 4.3TB SSD, currently growing at a rate of about 1.8TB GB per month
-4. **Docker images:** We'll specify these in the below commands; you don't need to manually download them.
+4. **Docker images:** We'll specify these in the below commands; you don't need to download them manually.
    - Latest Docker image for **Arbitrum One Nitro**: <code>@latestNitroNodeImage@</code>
    - Latest Docker image for **Arbitrum One Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
    - Nitro database snapshot
-     - Use the parameter `--init.url=` on first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code>
+     - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code>
    - Arbitrum One Classic database snapshot
      - Download the latest Arbitrum One Classic database snapshot at [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@) and place it in the mounted point directory
-     - Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
+     - Note that other chains don't have Classic blocks and thus don't require an initial genesis database.
    - Snapshot Explorer
      - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
 
@@ -80,8 +80,8 @@ The minimum storage requirements will change over time as the Nitro chains grow 
 
 ### Run the Docker image(s)
 
-<!-- this is the procedure part, so we can focus on steps to take, and move "conceptual information" into a dedicated concept doc -->
-<!-- Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so has no classic blocks. -->
+<!-- This is the procedure part, so we can focus on steps to take and move "conceptual information" into a dedicated concept doc -->
+<!-- Arbitrum One has been upgraded to Nitro, the latest Arbitrum tech stack; "Arbitrum Classic" is our term for the old, pre-Nitro tech stack. The Nitro node databases have the raw data of all blocks, including pre-Nitro blocks. However, Nitro nodes cannot execute anything on pre-Nitro blocks. Arbitrum Nova started as a Nitro chain, so it has no classic blocks. -->
 
 When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point should be `/home/user/.arbitrum/mainnet`.
 
@@ -102,7 +102,7 @@ To run both Arbitrum Nitro and/or Arbitrum Classic in archive mode, follow one o
   docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url https://l1-node:8545 --chain.id=42161 --execution.rpc.classic-redirect=<classic node RPC> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --execution.caching.archive
   ```
 
-Note that the above commands both map to port `8547` on their hosts. If you want to run both on the same host, you should edit those mapping to different ports, and specify your Classic node RPC url as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
+Note that the above commands both map to port `8547` on their hosts. To run both on the same host, you should edit those mapping to different ports and specify your Classic node RPC URL as `<classic node RPC>` in your Nitro start command. To verify the connection health of your node(s), see [Docker network between containers - Docker Networking Example](https://www.middlewareinventory.com/blog/docker-network-example/).
 
 #### A note on permissions
 
