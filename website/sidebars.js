@@ -302,6 +302,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
               label: `Implement Circle bridged USDC`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/fast-withdrawals',
+              label: `Enable fast withdrawals`,
+            },
           ],
         },
         {
