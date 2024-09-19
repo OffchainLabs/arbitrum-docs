@@ -56,29 +56,29 @@ Delaying withdrawals incurs opportunity cost and impacts user experience for use
 
 #### Requiring a bond to become a validator
 
-The entities responsible for posting assertions about Arbitrum state to Ethereum are called validators. If posting assertions were free, anyone could create conflicting assertions to always delay withdrawals by 14 days instead of 7. As such, Arbitrum requires validators to put in a "security deposit", known as a **bond**, to be allowed to post assertions. Validators can withdraw their bond as soon as their latest posted assertion has been confirmed, and end their responsibilities.
+The entities responsible for posting assertions about Arbitrum state to Ethereum are called validators. If posting assertions were free, anyone could create conflicting assertions to always delay withdrawals by fourteen days instead of seven. As such, Arbitrum requires validators to put in a "security deposit", known as a **bond**, to be allowed to post assertions. Validators can withdraw their bond as soon as their latest posted assertion has been confirmed, ending their responsibilities.
 
 #### Pricing bonds
 
-Ensuring assertions are frequently posted is a requirement for Arbitrum, but at the same time, it should not be a privilege that is easily obtained. In terms of pricing this "security deposit" for Arbitrum validators, we choose to do so based on opportunity cost.
+Ensuring assertions are frequently posted is a requirement for Arbitrum, but at the same time, it should not be a privilege that is easily obtained, that's why the pricing of this "security deposit" is based on opportunity cost.
 
-To be highly conservative, in a bank-run scenario, the [Arbitrum One bridge](https://etherscan.io/address/0x8315177ab297ba92a06054ce80a67ed4dbd7ed3a) contains approximately $5.4bn worth of assets at the time of writing on April 15th, 2024. Assuming funds could earn a 5% APY if invested, the opportunity cost of 1 extra week of delay is approximately USD 5,200,000. Given this scenario, we recommend a bond for assertion posters somewhere in the range of ~$2.5M - $5M.
+To be highly conservative, in a bank-run scenario, the [Arbitrum One bridge](https://etherscan.io/address/0x8315177ab297ba92a06054ce80a67ed4dbd7ed3a) contains approximately $5.4BN worth of assets at the time of writing on April 15th, 2024. Assuming funds could earn a 5% APY if invested, the opportunity cost of 1 extra week of delay is approximately USD 5,200,000. Given this scenario, we recommend a bond for assertion posters to be somewhere in the range of ~$2.5M - $5M.
 
 Honest parties can always withdraw their bond once their assertions are confirmed. However, adversaries stand to lose the entirety of their bond if they post invalid claims. A large bond size drastically improves the economic security of the system based on these two axes.
 
 #### Centralization concerns
 
-Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing a allowlist of validators with instead a system that requires a lot of money to participate in. However, **BoLD ships with a trustless bonding pool** for assertion posting. That is, any group of honest parties can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. We believe that making it easy to pool the funds to become an assertion poster, without needing trust to dispute invalid claims, does not fundamentally affect the safety or decentralization of BoLD.
+Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing an allowlist of validators with a system that requires substantial funds to participate. However, **BoLD ships with a trustless bonding pool** for assertion posting. That is, any group of honest parties can pool funds into a simple contract that will post an assertion to Ethereum without needing to trust each other. We believe that making it easy to pool the funds to become an assertion poster, without needing trust to dispute invalid claims, does not affect the safety or decentralization of BoLD.
 
-We claim optimizing for the unhappy case is more important than the happy case. As there only needs to be one honest assertion poster, we believe it falls into the security budget of the chain to price in a $2M bond to become a validator. It *should* be expensive to delay Arbitrum One withdrawals, and it should also have a high barrier to entry to perform a key responsibility. As long as disputes can be made in a trustless manner, and trustless pools are available in production, we claim the security properties of assertion posting hold equally.
+We claim optimizing for the unhappy case is more important than the happy case. As there only needs to be one honest assertion poster, we believe it falls into the security budget of the chain to set a $2M bond fee in order to become a validator. It *should* be expensive to delay Arbitrum One withdrawals, and it should also have a high barrier to entry to perform a key responsibility. As long as disputes can be made in a trustless manner, and trustless pools are available in production, we claim the security properties of assertion posting hold equally.
 
 ## Resolving disputes
 
-One of the core properties BoLD achieves is providing a fixed, upper-bound for dispute resolution times. This section will discuss the constraints required to achieve this from first principles.
+One of the core properties BoLD achieves is providing a fixed upper-bound for dispute resolution times. This section will discuss the constraints required to achieve this from first principles.
 
 ### Dispute game overview
 
-Every game between adversarial parties needs a referee – that is, a neutral party that can enforce the rules to declare a fair winner. Arbitrum BoLD relies on Ethereum as its referee, for its properties as the most decentralized, censorship resistant smart contract chain in the world.
+Every game between adversarial parties needs a referee: a neutral party that can enforce the rules to declare a fair winner. Arbitrum BoLD relies on Ethereum as its referee, for its properties as the most decentralized, censorship resistant smart contract chain in the world.
 
 When a dispute happens about Arbitrum One assertions on Ethereum, there is a protocol for resolving them. A dispute, at its core, is about the blockhash of an Arbitrum One block at a given height. Ethereum does not know which claim is correct, and instead, relies on a dispute game to be played out. The game involves different parties making claims with proof to eventually narrow down their disagreement to a single step of execution within the execution of a block, called a one step proof (OSP). Ethereum can then verify this OSP by itself and, as the neutral referee, declare a winner .
 
