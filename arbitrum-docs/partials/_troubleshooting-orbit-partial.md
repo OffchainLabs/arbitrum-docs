@@ -54,13 +54,14 @@ Yes, you can make any changes you require to the underlying Nitro code base.
 
 ### What Data Availability (DA) solutions are currently available for Orbit chains?
 <p>
-Arbitrum Orbit currently supports 3 different DA solutions:
+Arbitrum Orbit currently supports 4 different DA solutions:
 </p>
 
 <ul>
 <li>Rollup, posting data to the parent chain which ultimately posts the data to Ethereum.</li>
 <li>AnyTrust, posting data to a Data Availability Committee, selected by the chain owner.</li>
 <li>Celestia, posting data to <a href="https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/">Celestia network</a>.</li>
+<li>AvailDA, posting data to <a href="https://blog.availproject.org/avail-ecosystem-series-arbitrum-orbit-chains/">AvailDA</a>.</li>
 </ul>
 <p>
 Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.
@@ -129,7 +130,7 @@ Similar to bridges and block explorers, there are many third-party indexing solu
 
 ### Can I increase the maximum contract size for my Orbit chain?
 <p>
-Yes, but only on testnets for now. You can use our <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk">Orbit SDK</a> (available for deployments on testnet), and configure the parameters <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29">MaxCodeSize and MaxInitCodeSize</a> when calling <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43">prepareNodeConfig</a>.
+Yes, Orbit supports an increased smart contract size limit of up to 96kB. You can use our <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk">Orbit SDK</a> and configure the parameters <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts#L29">MaxCodeSize and MaxInitCodeSize</a> when calling <a href="https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/prepare-node-config/index.ts#L43">prepareNodeConfig</a>. Note that the smart contract size limit parameters can't be changed via upgrade after deployment.
 </p>
 
 <p>

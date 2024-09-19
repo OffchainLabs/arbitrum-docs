@@ -36,19 +36,19 @@ Here's a basic checklist of actions to complete for DAC members:
 
 ## If you are a chain owner
 
-Chain owners will need to gather the information from the committee members to craft the necessary information to update their chain and the batch poster (more information in [How to configure the DAC in your chain](/run-arbitrum-node/data-availability-committees/04-configure-dac.md)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md#testing-the-das).
+Chain owners will need to gather the information from the committee members to craft the necessary data to update their chain and the batch poster (more information in [How to configure the DAC in your chain](/run-arbitrum-node/data-availability-committees/04-configure-dac.md)). They might also want to test each DAS individually, by following the testing guides available in [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#testing-the-das) and [How to deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.md#testing-the-das).
 
 Here's a basic checklist of actions to complete for chain owners:
 
 - Gather the following information from every member of the committee:
   - Public BLS Key
   - URL of the RPC endpoint
-  - URL(s) of the REST(s) endpoint
+  - URL(s) of the REST endpoint(s)
 - Ensure that at least one DAS is running as an [archive DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md#archive-da-servers)
-- Generate the keyset and keyset hash with all the information from the servers (guide coming soon)
-- Craft the new configuration for the batch poster (guide coming soon)
-- Craft the new configuration for your chain's nodes (guide coming soon)
-- Update the SequencerInbox contract (guide coming soon)
+- [Generate the keyset and keyset hash](/run-arbitrum-node/data-availability-committees/04-configure-dac.md#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with all the information from the servers
+- [Update the SequencerInbox contract](/run-arbitrum-node/data-availability-committees/04-configure-dac.md#step-2-update-the-sequencerinbox-contract)
+- [Craft the new configuration for the batch poster](/run-arbitrum-node/data-availability-committees/04-configure-dac.md#step-3-craft-the-new-configuration-for-the-batch-poster)
+- [Craft the new configuration for your chain's nodes](/run-arbitrum-node/data-availability-committees/04-configure-dac.md#step-4-craft-the-new-configuration-for-your-chains-nodes)
 
 ## Ask for help
 

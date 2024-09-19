@@ -37,31 +37,11 @@ Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orb
 
 ## 1. Custom gas token specification
 
-The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as gas. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
+The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as the gas token. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
 
 ## 2. Chain configuration
 
-You can configure your Orbit chain using the [`prepareChainConfig`](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/1f251f76a55bc1081f50938b0aa9f7965660ebf7/src/prepareChainConfig.ts#L3-L31) method and assigning it to a `chainConfig` variable.
-
-Example:
-
-```js
-import { prepareChainConfig } from '@arbitrum/orbit-sdk';
-
-const chainConfig = prepareChainConfig({
-    chainId: Some_Chain_ID,
-    nativeToken: yourERC-20TokenAddress,
-    DataAvailabilityCommittee: true,
-});
-```
-
-To use the `prepareChainConfig` method as shown in the example above, some inputs need to be defined:
-
-| Parameter                   | Type      | Description                                                                                                                                                     |
-| --------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                   | `number`  | Your Orbit chain's `chainId`.                                                                                                                                   |
-| `nativeToken`               | `Address` | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees. It needs to have 18 decimals to be accepted on Orbit chains. |
-| `DataAvailabilityCommittee` | `boolean` | Should be set to `true` since only AnyTrust chains can accept `ERC-20` tokens.                                                                                  |
+Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md#1-setting-up-the-chain-parameters).
 
 ## 3. Token approval before deployment process
 
@@ -72,15 +52,15 @@ In Custom gas token Orbit chains, the owner needs to give allowance to the `roll
 This API gets related inputs and checks if the `rollupCreator` contract has enough token `Allowance` from the owner:
 
 ```js
-import {createRollupEnoughCustomFeeTokenAllowance} from '@arbitrum/orbit-sdk';
+import { createRollupEnoughCustomFeeTokenAllowance } from '@arbitrum/orbit-sdk';
 
 const allowanceParams = {
-nativeToken,
-account: deployer.address,
-publicClient: parentChainPublicClient,
+  nativeToken,
+  account: deployer.address,
+  publicClient: parentChainPublicClient,
 };
 
-const enough Allowance = createRollupEnoughCustomFeeTokenAllowance(allowanceParams)
+const enoughAllowance = await createRollupEnoughCustomFeeTokenAllowance(allowanceParams);
 ```
 
 To build the `allowanceParams` object as shown in the example above, you need to provide with the following:
@@ -113,7 +93,7 @@ const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransac
 
 ## 4. Deployment process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
@@ -127,7 +107,7 @@ Example:
 const txRequest = await createRollupPrepareTransactionRequest({
   params: {
     config,
-    batchPoster,
+    batchPosters: [batchPoster],
     validators: [validator],
     nativeToken,
   },

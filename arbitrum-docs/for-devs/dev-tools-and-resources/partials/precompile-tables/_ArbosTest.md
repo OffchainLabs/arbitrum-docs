@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbosTest.sol#L13"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbosTest.sol#L13"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbosTest.go#L16"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbosTest.go#L16"
           target="_blank"
         >
           Implementation

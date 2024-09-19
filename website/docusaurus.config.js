@@ -11,7 +11,7 @@ const config = {
   tagline: 'Arbitrum Docs',
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
-  onBrokenLinks: 'ignore', // TODO: FIX ARBITRUM-SDK LINKS
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/logo.svg',
   markdown: {
@@ -79,7 +79,7 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: '../arbitrum-docs/sdk/reference',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -95,6 +95,7 @@ const config = {
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
           './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/stylusByExampleDocsHandler.ts',
         ],
 
         // typedoc-plugin-markdown options
@@ -137,14 +138,6 @@ const config = {
     ({
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
-      },
-      announcementBar: {
-        id: 'stylus',
-        content:
-          'Stylus is now live on Arbitrum Sepolia! Learn more about the Stylus Blitz hackathon <a target="_blank" rel="noopener noreferrer" href="https://arbitrumfoundation.medium.com/welcome-to-the-stylus-blitz-hackathon-0d8b27e0c057">here</a>.',
-        backgroundColor: 'var(--stylus-brand-color-dark)',
-        textColor: 'white',
-        isCloseable: false,
       },
       navbar: {
         title: 'Arbitrum Docs',
@@ -267,7 +260,7 @@ const config = {
         copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
-        additionalLanguages: ['solidity', 'rust'],
+        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
       },
       liveCodeBlock: {
         /**
@@ -308,7 +301,7 @@ if (isRunningLocally && isRunningOnWindows) {
 } else {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/dracula');
+  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
 }
 
 module.exports = config;
