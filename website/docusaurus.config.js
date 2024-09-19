@@ -260,7 +260,7 @@ const config = {
         copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
-        additionalLanguages: ['solidity', 'rust', 'bash'],
+        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
       },
       liveCodeBlock: {
         /**
