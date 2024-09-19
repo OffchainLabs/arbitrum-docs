@@ -796,6 +796,11 @@
             "permanent": false
         },
         {
+            "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+            "permanent": false
+        },
+        {
             "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
             "destination": "/run-arbitrum-node/run-local-dev-node",
             "permanent": false
