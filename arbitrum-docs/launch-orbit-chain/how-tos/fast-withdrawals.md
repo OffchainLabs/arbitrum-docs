@@ -1,5 +1,5 @@
 ---
-title: "Enable fast withdrawals"
+title: "Enable fast withdrawals on your Orbit chain"
 sidebar_label: 'Enable fast withdrawals'
 description: "Learn to deploy Fast Withdrawals"
 author: coopermidroni
@@ -7,8 +7,6 @@ sme: coopermidroni
 user_story: As a current or prospective Orbit chain owner, I need to understand how to integrate with the Fast Withdrawal feature.
 content_type: get-started
 ---
-
-## Enable fast withdrawals on your Orbit chain
 
 Fast Withdrawals is a feature allowing Orbit chains to achieve configurable, fast finality. With Fast Withdrawals, Orbit chains can achieve a finality time as low as 15 minutes. This is accomplished through the addition of a new `AnyTrustFastConfirmer` role set on the rollup contract, which is an address that has the permissions to confirm new state assertions. This role will be set to a committee or multisig of validators ("the Fast Withdrawals Committee") that unanimously votes to confirm new state transitions at the defined Fast Withdrawals frequency.  
 
