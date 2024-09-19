@@ -444,7 +444,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: false,
+      collapsed: true,
       link: {
         type: 'doc',
         id: 'stylus/stylus-overview',
@@ -567,7 +567,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: false,
+          collapsed: true,
           link: {
             type: 'doc',
             id: 'stylus/reference/other-language-frameworks',
@@ -906,7 +906,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'The BOLD dispute protocol',
+              label: 'The BoLD dispute protocol',
               items: [
                 {
                   type: 'doc',
@@ -921,7 +921,7 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BOLD Whitepaper',
+                  label: 'BoLD Whitepaper',
                 },
                 {
                   type: 'link',
