@@ -49,6 +49,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - This parameter is **required** when initializing an Arbitrum One node because the chain has _classic_ blocks. For the rest of chains, this parameter is optional.
   - This parameter is ignored if the database already exists.
   - Find more info in [Nitro database snapshots](/run-arbitrum-node/nitro/03-nitro-database-snapshots.md)
+  - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
 
 ### Required parameters
 

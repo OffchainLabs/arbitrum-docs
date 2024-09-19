@@ -31,7 +31,7 @@ Running an Arbitrum One **full node** in **archive mode** lets you access both p
 ### System requirements
 
 :::caution
-As of May 2024, archive node snapshots for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are no longer being updated on https://snapshot.arbitrum.foundation/index.html due to accelerated database and state growth. Teams who use these publicly available archive snapshots will need to wait longer than usual for their nodes to sync up.
+As of May 2024, archive node snapshots for Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia are no longer being updated on https://snapshot-explorer.arbitrum.io/ due to accelerated database and state growth. Teams who use these publicly available archive snapshots will need to wait longer than usual for their nodes to sync up.
 
 The Offchain Labs team is actively exploring and working on solutions to address this and will provide an update as soon as possible. In the meantime, the Offchain Labs team continues to recommend that teams periodically create their own snapshots by stopping one of their archive nodes and backing up their database.
 :::
@@ -56,6 +56,8 @@ The minimum storage requirements will change over time as the Nitro chains grow 
    - Arbitrum One Classic database snapshot
      - Download the latest Arbitrum One Classic database snapshot at [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@) and place it in the mounted point directory
      - Note that other chains don't have Classic blocks, and thus don't require an initial genesis database.
+   - Snapshot Explorer
+     - You can find more snapshots on our [snapshot explorer](https://snapshot-explorer.arbitrum.io/)
 
 ### Review and configure ports
 
