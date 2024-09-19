@@ -7,7 +7,7 @@ content_type: concept
 
 <!-- todo: remove this doc, redirect to existing ref doc -->
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
