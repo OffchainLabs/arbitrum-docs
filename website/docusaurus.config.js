@@ -260,7 +260,7 @@ const config = {
         copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
-        additionalLanguages: ['solidity', 'rust'],
+        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
       },
       liveCodeBlock: {
         /**
@@ -301,7 +301,7 @@ if (isRunningLocally && isRunningOnWindows) {
 } else {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/dracula');
+  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
 }
 
 module.exports = config;
