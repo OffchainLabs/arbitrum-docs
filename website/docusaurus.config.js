@@ -11,7 +11,7 @@ const config = {
   tagline: 'Arbitrum Docs',
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
-  onBrokenLinks: 'ignore', // TODO: FIX ARBITRUM-SDK LINKS
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/logo.svg',
   markdown: {
@@ -79,7 +79,7 @@ const config = {
         readme: 'none',
 
         // Output options
-        out: '../arbitrum-docs/sdk-docs',
+        out: '../arbitrum-docs/sdk/reference',
         hideGenerator: true,
         validation: {
           notExported: false,
@@ -95,6 +95,7 @@ const config = {
           'typedoc-plugin-markdown',
           `typedoc-plugin-frontmatter`,
           './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/stylusByExampleDocsHandler.ts',
         ],
 
         // typedoc-plugin-markdown options

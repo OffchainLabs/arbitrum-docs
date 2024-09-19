@@ -1,6 +1,7 @@
 // @ts-check
 
-const sdkDocsSidebar = require('../arbitrum-docs/sdk-docs/sidebar.js');
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
+const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -437,30 +438,40 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'stylus/concepts/stylus-cache-manager',
-          label: 'Stylus caching strategy',
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
-          // a: see note at end of file
-        },
-        {
-          type: 'doc',
-          label: 'Testnets',
+          label: 'Testnet',
           id: 'stylus/reference/testnet-information',
         },
         {
-          type: 'link',
-          label: 'Stylus by example',
-          href: 'https://stylus-by-example.org/',
+          type: 'category',
+          label: 'Stylus Rust SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/reference/rust-sdk-guide',
+              label: 'Advanced features',
+            },
+            {
+              type: 'link',
+              label: 'Rust crate docs',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by example',
+              href: 'https://stylus-by-example.org/',
+            },
+          ],
         },
-
         {
           type: 'category',
-          label: 'Gas and ink',
+          label: 'Gas, ink and caching',
           collapsed: true,
           items: [
             {
@@ -473,22 +484,61 @@ const sidebars = {
               id: 'stylus/reference/opcode-hostio-pricing',
               label: 'Gas and ink costs',
             },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/stylus-cache-manager',
+              label: 'Caching strategy',
+            },
           ],
         },
         {
           type: 'category',
-          label: 'Stylus SDK',
+          label: 'CLI tools (cargo-stylus)',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
+              label: 'Optimize WASM binaries',
+              id: 'stylus/how-tos/optimizing-binaries',
             },
             {
               type: 'doc',
+              label: 'Debug Stylus transactions',
+              id: 'stylus/how-tos/debugging-stylus-tx',
+            },
+            {
+              type: 'doc',
+              label: 'Verify Stylus contracts',
+              id: 'stylus/how-tos/verifying-contracts',
+            },
+            {
+              type: 'link',
+              label: 'cargo-stylus repository',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+          ],
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
+          // a: see note at end of file
+        },
+        {
+          type: 'category',
+          label: 'Other supported languages',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
               id: 'stylus/reference/stylus-sdk',
-              label: 'SDK repositories',
+              label: 'Other language frameworks',
+            },
+            {
+              type: 'doc',
+              label: 'Add a new smart contract language',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
             },
           ],
         },
@@ -496,22 +546,6 @@ const sidebars = {
           type: 'doc',
           label: 'Troubleshooting',
           id: 'stylus/troubleshooting-building-stylus',
-        },
-
-        {
-          type: 'doc',
-          label: 'Add a new smart contract language',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-        },
-        {
-          type: 'doc',
-          label: 'Reduce the size of WASM binaries',
-          id: 'stylus/how-tos/optimizing-binaries',
-        },
-        {
-          type: 'link',
-          label: 'Rust crate docs',
-          href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
         },
         {
           type: 'link',
@@ -574,8 +608,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos30',
-              label: 'ArbOS 30 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos31',
+              label: 'ArbOS 31 Bianca',
             },
             {
               type: 'doc',
@@ -674,6 +708,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+              label: 'Nitro database snapshots',
             },
           ],
         },

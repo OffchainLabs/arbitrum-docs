@@ -7,7 +7,7 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-import PublicPreviewBannerPartial from './partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
@@ -142,7 +142,7 @@ Location:
 
 ```
 
-To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
+To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
 
 ```
 Finished release [optimized] target(s) in 1.88s
