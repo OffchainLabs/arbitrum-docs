@@ -270,7 +270,7 @@ If enabled, the Stylus SDK will flush the storage cache in between reentrant cal
 
 The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
-### Inheritance, `#[inherit]`, and `#[borrow]`
+### Inheritance, `#[inherit]`, and `#[borrow]`.
 
 Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[public]`][public] provides, can be connected via inheritance.
 
@@ -493,9 +493,11 @@ When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CRE
 [SimpleStorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html
 [TopLevelStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html
 [Erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html
+[erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase
 [StorageCache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html
 [StorageCache_flush]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.flush
 [StorageCache_clear]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.clear
+[EagerStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.EagerStorage.html
 [StorageBool]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
 [StorageAddress]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html
 [StorageUint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageUint.html
@@ -547,9 +549,12 @@ When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CRE
 [public]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html
 [entrypoint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html
 [PhantomData]: https://doc.rust-lang.org/core/marker/struct.PhantomData.html
+[DerefMut]: https://doc.rust-lang.org/core/ops/trait.DerefMut.html
 [Vec]: https://doc.rust-lang.org/alloc/vec/struct.Vec.html
 [Borrow]: https://doc.rust-lang.org/core/borrow/trait.Borrow.html
 [File]: https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
 [sol_abi]: https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html
+[pure]: https://docs.soliditylang.org/en/develop/contracts.html#pure-functions
+[view]: https://docs.soliditylang.org/en/develop/contracts.html#view-functions
 [payable]: https://docs.alchemy.com/docs/solidity-payable-functions
 [mapping]: https://docs.soliditylang.org/en/latest/types.html#mapping-types
