@@ -23,7 +23,7 @@ import StylusSmartContractsAddresses from './partials/_stylus-smart-contract-add
 - Unlike the RPC Urls, the Sequencer endpoints only support `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
 - Arbitrum public RPCs do not provide Websocket support.
 - Stylus testnets v1 and v2 have been spun down and are not accessible anymore.
-- Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia) or [Alchemy's Arbitrum sepolia faucet](https://www.alchemy.com/faucets/arbitrum-sepolia) for testnet Sepolia tokens on L2.
+- Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia), [Alchemy's Arbitrum sepolia faucet](https://www.alchemy.com/faucets/arbitrum-sepolia), or [Getblock's Arbitrum Sepolia faucet](https://getblock.io/faucet/arb-sepolia) for testnet Sepolia tokens on L2.
 
 :::
 
