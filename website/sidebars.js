@@ -297,6 +297,11 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              label: `Implement Circle bridged USDC`,
+            },
           ],
         },
         {
@@ -471,6 +476,11 @@ const sidebars = {
               label: 'Overview',
             },
             ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -891,7 +901,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'The BOLD dispute protocol',
+              label: 'The BoLD dispute protocol',
               items: [
                 {
                   type: 'doc',
@@ -906,7 +916,7 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BOLD Whitepaper',
+                  label: 'BoLD Whitepaper',
                 },
                 {
                   type: 'link',
