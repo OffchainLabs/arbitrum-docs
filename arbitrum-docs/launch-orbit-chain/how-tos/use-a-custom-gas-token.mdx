@@ -25,6 +25,12 @@ There are other important considerations to keep in mind when deciding to use a 
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
 
+:::info
+
+While certain restrictions are in place today (see above), some of them may be removed in upcoming releases of the custom gas token feature. Please reach out to the Offchain Labs team with any questions or requests for additions to the custom gas token feature.
+
+:::
+
 ## Configuration of the Orbit chain when using a custom gas token
 
 There are several parameter changes required to ensure proper functioning of an Orbit chain configured to use a custom gas token.

@@ -11,7 +11,7 @@ content_type: how-to
 ---
 
 :::caution
-This page will walk you through how to verify your Stylus contracts locally. However, Stylus contract verification is available on [Arbiscan](https://arbiscan.io/) as well. Please note, however, that Stylus contract verification on Arbiscan is not yet supported on `cargo-stylus` 0.5.1 or higher. The Arbiscan team is currently working on closing this gap to ensure *all* Stylus contracts deployed using any version of `cargo-stylus` can be verified on Arbiscan.
+This page will walk you through how to verify your Stylus contracts locally. Stylus contract verification is also available on [Arbiscan](https://arbiscan.io/). Please note, however, that Stylus contract verification on Arbiscan is only supported for Stylus contracts deployed using `cargo-stylus` 0.5.0 or higher.
 :::
 
 ## Background
@@ -48,7 +48,8 @@ channel = "1.79.0"
 It **cannot** be `stable`, `nightly`, or `beta` by itself, as a specific version must be added. For instance, you can specify `nightly-YYYY-MM-DD` or `major.minor.patch` for your channel. This is so that deployments have a very specific version to prevent potential mismatches from being more generic.
 
 ```
-cargo stylus deploy --private-key=$PRIV_KEY --verbose
+# Replace {PRIV_KEY} with your actual private key or set it as a local variable
+cargo stylus deploy --private-key={PRIV_KEY} --verbose
 ```
 
 Upon completion, you will obtain the deployment transaction hash:
@@ -71,7 +72,8 @@ To verify a program, the verifier will need Docker installed and also know:
 Navigate to the project's directory and check out the git commit that was used at deployment. Ensure your `cargo stylus --version` matches what the deployer used.
 
 ```
-cargo stylus verify deployment-tx=$DEPLOYMENT_TX_HASH
+# Replace {DEPLOYMENT_TX_HASH} with the actual DEPLOYMENT_TX_HASH or set it as a local variable
+cargo stylus verify --deployment-tx={DEPLOYMENT_TX_HASH}
 ```
 
 This command will run the verification pipeline through a Docker environment, recreate the project metadata hash, and verify that the deployed program matches what the command reconstructed locally.

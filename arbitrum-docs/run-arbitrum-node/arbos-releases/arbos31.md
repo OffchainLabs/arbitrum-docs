@@ -15,7 +15,7 @@ Future versions of Nitro may remove support for Orbit chains which have historic
 
 ArbOS 31 "Bianca" is shipped via [Nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2), which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v3.1.2-309340a`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 31 "Bianca" upgrade requires a governance vote to activate.
 
-Please note that it is important that you only run the Nitro v3.1.1 against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (it might be inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. This is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
+Please note that it is important that you only run the Nitro v3.1.2 against trusted databases. If you want to use an untrusted database, you can first remove the `wasm` directory if it exists (it might be inside the `nitro` folder). Otherwise, the database may have malicious, unvalidated code that can result in remote code execution. This is also mitigated by ensuring you run the Arbitrum Nitro node inside Docker.
 
 The Arbitrum docs will remain the canonical home for information regarding ArbOS releases, with more details found on the [ArbOS Software Releases Overview page](./01-overview.md).
 
@@ -23,13 +23,13 @@ The Arbitrum docs will remain the canonical home for information regarding ArbOS
 
 - [Nitro 3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or higher
 - [nitro-contracts v2.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) or higher
-- WASM module root: `0x8b104a2e80ac6165dc58b9048de12f301d70b02a0ab51396c22b4b4b802a16a4`
+- WASM module root: `0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69`
 
 ### High-level description of ArbOS 31 changes
 
 ArbOS 31 Bianca is a major upgrade for Arbitrum chains. As a refresher, ArbOS upgrades can be treated as Arbitrum’s equivalent of a hard fork - more can be read about this subject over in [Arbitrum ArbOS upgrades](https://forum.arbitrum.foundation/t/arbitrum-arbos-upgrades/19695). Please note that ArbOS 31 Bianca is an upgrade that builds upon [ArbOS 20 Atlas](./arbos20.md).
 
-ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum chains. A full list of changes can be found in the Nitro release notes for [Nitro 3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1) or higher (as Nitro 3.1.1 is the endorsed Nitro node version for ArbOS 31 Bianca). Highlighted below are a few of the most impactful and critical features that are introduced with ArbOS 31 Bianca:
+ArbOS 31 Bianca brings many features, improvements, and bug fixes to Arbitrum chains. A full list of changes can be found in the Nitro release notes for [Nitro 3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or higher (as Nitro 3.1.2 is the endorsed Nitro node version for ArbOS 31 Bianca). Highlighted below are a few of the most impactful and critical features that are introduced with ArbOS 31 Bianca:
 
 - Addition and subsequent activation of [Stylus](../../stylus/stylus-gentle-introduction.md) on Arbitrum chains through the addition of a new WebAssembly-based (WASM) virtual machine that runs alongside the EVM. Stylus enables developers to write smart contracts in new programming languages that compile to WASM, like Rust, that are more efficient and safer than Solidity smart contracts while retaining complete interoperability.
 - Adding support for [RIP-7212](https://github.com/ethereum/RIPs/blob/master/RIPS/rip-7212.md) decreases the costs of verifying the secp256r1 curve on-chain [by 99% when compared to current implementations](https://www.alchemy.com/blog/what-is-rip-7212), making secp256r1 verification more feasible for everyday use and enabling dApp developers and protocols to offer their users improved UX on Arbitrum One and Arbitrum Nova. Without this precompile, verifying this signature on-chain is extremely expensive. Passkey-based wallets offer better security than a typical EOA and seamless cross-device support. Many wallets, notably apps using embedded wallets, have been requesting this feature for over a year.
@@ -52,9 +52,9 @@ After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have ful
 
 After you have upgraded your Orbit chain to ArbOS 31 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.md#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup, note that Fast Withdrawals is disabled by default unless explicitly set up and enabled by the Orbit chain owner/maintainer. 
 
-### Reference links for ArbOS 30 Bianca
+### Reference links for ArbOS 31 Bianca
 
-- [Nitro v3.1.1 release notes](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1)
+- [Nitro v3.1.2 release notes](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2)
 - [ArbOS 31 "Bianca" on-chain Tally vote](https://www.tally.xyz/gov/arbitrum/proposal/108288822474129076868455956066667369439381709547570289793612729242368710728616)
 - [AIP: Activate Stylus and Enable Next-Gen WebAssembly Smart Contracts (ArbOS 31)](https://forum.arbitrum.foundation/t/aip-activate-stylus-and-enable-next-gen-webassembly-smart-contracts-arbos-30/22970)
 - [AIP: Support RIP-7212 for Account Abstraction Wallets (ArbOS 31)](https://forum.arbitrum.foundation/t/aip-support-rip-7212-for-account-abstraction-wallets-arbos-30/23298)
