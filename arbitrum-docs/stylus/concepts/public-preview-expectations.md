@@ -13,7 +13,7 @@ Offchain Labs builds products in a way that aligns loosely with the spirit of "b
 
 To do this, some of our product offerings are documented with **public preview** disclaimers that look like this:
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

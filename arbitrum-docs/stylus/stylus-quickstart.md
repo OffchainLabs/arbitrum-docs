@@ -1,217 +1,317 @@
 ---
-title: 'Quickstart: Write a smart contract in Rust using Stylus'
+title: 'Quickstart: write a smart contract in Rust using Stylus'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
-author: chrisco512
-sme: chrisco512
+author: chrisco512, anegg0
+sme: chrisco512, anegg0
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
-## Prerequisites
+This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
+
+1. [Setting up your development environment](./stylus-quickstart#setting-up-your-development-environment)
+2. [Creating a Stylus project with cargo stylus](./stylus-quickstart#creating-a-stylus-project-with-cargo-stylus)
+3. [Checking the validity of your contract](./stylus-quickstart#checking-if-your-stylus-project-is-valid)
+4. [Deploying your contract](./stylus-quickstart#deploying-your-contract)
+5. [Exporting your contract's ABIs](./stylus-quickstart#exporting-solidity-abis)
+6. [Calling your contract](./stylus-quickstart#calling-your-contract)
+7. [Sending a transaction to your contract](./stylus-quickstart#sending-a-transaction-to-your-contract)
+
+## Setting up your development environment
+
+### Prerequisites
 
 #### Rust toolchain
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to get a full Rust toolchain installed on your system. Make sure after installation that you have access to the programs `rustup`, `rustc`, and `cargo` from your preferred command line terminal (programs should be added to your system’s PATH, more instructions available on Rust’s website)
+Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 #### VS Code
 
-We recommend VSCode as the IDE of choice for developing Stylus contracts for its excellent Rust support. See **[code.visualstudio.com](https://code.visualstudio.com/)** to install. Feel free to use another text editor or IDE if you’re comfortable with those.
+We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you’re comfortable with those.
 
 Some helpful VS Code extensions for Rust development:
 
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
-- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens)
-- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)
-- [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
+- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
+- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
+- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
+- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
 
-#### Testnet ETH for deployment
+#### Docker
 
-You’ll need some testnet ETH for deploying your Rust contract for live testing. Explained below in further detail.
+The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
-#### Developer wallet / account
+You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
-When deploying on and interacting with a testnet chain, it’s important to use a fresh wallet that does not contain any real assets. You’ll often be including private keys as CLI arguments to execute transactions programmatically, **_so avoid using personal accounts for development_**.
+#### Foundry's Cast
 
-If you’re using [MetaMask](https://metamask.io/), simply click the dropdown at the top middle of the plugin and then click “Add Account” to create a fresh account. It can be helpful to label the account as a dev wallet or “Stylus” for this purpose. You’ll need this newly created account’s private key (as well as some Sepolia ETH) for deploying a smart contract. [Follow the instructions on MetaMask’s website](https://support.metamask.io/hc/en-us/articles/360015289632-How-to-export-an-account-s-private-key) to obtain your key.
+[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-![Stylus Wallet](./assets/stylus-wallet.png)
+#### Nitro testnode
 
-:::caution
+Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-**_Never share your “secret recovery phrase” with anyone_**. Never enter it anywhere. A _private key_ is valid for an individual account only, but a _secret recovery phrase_ can be used to gain access to ALL accounts in your wallet.
-
-:::
-
-### Testnet ETH
-
-The Stylus testnet settles directly to the [Arbitrum Sepolia](/build-decentralized-apps/03-public-chains.md#arbitrum-sepolia) testnet. Follow these steps to acquire testnet ETH on the Stylus testnet:
-
-1. Navigate to [https://bwarelabs.com/faucets/arbitrum-sepolia](https://bwarelabs.com/faucets/arbitrum-sepolia).
-2. Enter your wallet address into the text field.
-3. Click `Claim` and optionally follow the second step to receive extra testnet tokens.
-4. You should now have Sepolia ETH on the Stylus testnet.
-
-For additional sources of testnet ETH, please use a faucet on Arbitrum Sepolia or Ethereum Sepolia:
-
-[https://faucet.quicknode.com/arbitrum/sepolia](https://faucet.quicknode.com/arbitrum/sepolia)
-
-[https://sepoliafaucet.com/](https://sepoliafaucet.com/)
-
-[https://sepolia-faucet.pk910.de/](https://sepolia-faucet.pk910.de/)
-
-## Creating a Stylus project
-
-![Cargo Stylus](./assets/cargo-stylus.png)
-
-`cargo-stylus` is our CLI tool for assisting with building, verifying, and deploying Arbitrum Stylus programs in Rust. This is available as a plugin to the standard `Cargo` tool used for developing Rust programs, integrating easily into common Rust workflows. Once [Rust has been installed](https://www.rust-lang.org/tools/install) on your system, install the Stylus CLI tool by running the following command:
-
-```bash
-cargo install --force cargo-stylus cargo-stylus-check
+```shell title="Install your testnode"
+git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
 ```
 
-In addition, add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
+```shell title="Launch your testnode"
+./test-node.bash --init
+```
 
-```bash
+The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
+
+```shell title="Re-use your testnode"
+./test-node.bash
+```
+
+## Creating a Stylus project with cargo stylus
+
+[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
+
+It is available as a plugin to the standard cargo tool used for developing Rust programs.
+
+### Installing cargo stylus
+
+In your terminal, run:
+
+```shell
+cargo install --force cargo-stylus
+```
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
+
+```shell
 rustup target add wasm32-unknown-unknown
 ```
 
-You should now have it available as a cargo command:
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
 
-```bash
-❯ cargo stylus --help
-Cargo subcommand for developing Stylus projects
+```shell title="cargo stylus --help returns:"
+Cargo command for developing Stylus projects
 
 Usage: cargo stylus <COMMAND>
 
 Commands:
-  new         Create a new Rust project
+  new         Create a new Stylus project
+  init        Initializes a Stylus project in the current directory
   export-abi  Export a Solidity ABI
-  check       Check a contract
-  deploy      Deploy a contract
-  replay      Replay a transaction in gdb
-  trace       Trace a transaction
-  c-gen       Generate C code
-  help        Print this message or the help of the given subcommand(s)
+  activate    Activate an already deployed contract [aliases: a]
+  cache       Cache a contract using the Stylus CacheManager for Arbitrum chains
+  check       Check a contract [aliases: c]
+  deploy      Deploy a contract [aliases: d]
+  verify      Verify the deployment of a Stylus contract [aliases: v]
+  cgen        Generate c code bindings for a Stylus contract
+  replay      Replay a transaction in gdb [aliases: r]
+  trace       Trace a transaction [aliases: t]
+  help        Print this message or the help of the given command(s)
 
 Options:
   -h, --help     Print help
   -V, --version  Print version
 ```
 
-### Overview
+### Creating a project
 
-The cargo stylus command comes with useful commands such as `new`, `check` and `deploy`, and `export-abi` for developing and deploying Stylus programs to Arbitrum chains. Here's a common workflow:
+Let's create our first Stylus project by running:
 
-Start a new Stylus project with
-
-```bash
+```shell
 cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
-The command above clones a local copy of the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) starter project, which implements a Rust version of the Solidity `Counter` smart contract example. See the [README](https://github.com/OffchainLabs/stylus-hello-world/blob/main/README.md) of stylus-hello-world for more details. Alternatively, you can use `cargo stylus new --minimal <YOUR_PROJECT_NAME>` to create a more barebones example with a Stylus entrypoint locally, useful for projects that don’t need all the Solidity plumbing.
+`cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
 
-Then, develop your Rust program normally and take advantage of all the features the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) has to offer.
+At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point; it offers many examples to help you quickly familiarize yourself with Stylus.
 
-### Checking your Stylus project is valid
+## Checking if your Stylus project is valid
 
-To check whether or not your program will successfully **deploy and activate** onchain, use the `cargo stylus check` subcommand:
+By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** onchain.
 
-```
+**Important:** Ensure your Docker service runs so this command works correctly.
+
+```shell
 cargo stylus check
 ```
 
-This command will attempt to verify that your program can be deployed and activated onchain without requiring a transaction by specifying a JSON-RPC endpoint. See `cargo stylus check --help` for more options.
+`cargo stylus check` executes a dry run on your project by compiling your contract to WASM and verifying if it can be deployed and activated onchain.
 
-If the command above fails, you'll see detailed information about why your WASM will be rejected:
+If the command above fails, you'll see detailed information about why your contract would be rejected:
 
-```
+```shell
 Reading WASM file at bad-export.wat
 Compressed WASM size: 55 B
-Stylus checks failed: program predeployment check failed when checking against
+Stylus checks failed: program pre-deployment check failed when checking against
 ARB_WASM_ADDRESS 0x0000…0071: (code: -32000, message: program activation failed: failed to parse program)
 
 Caused by:
     binary exports reserved symbol stylus_ink_left
 
 Location:
-    prover/src/binary.rs:493:9, data: None)
-
+    prover/src/binary.rs:493:9, data: None
 ```
 
-To read more about what counts as valid vs. invalid user WASM programs, see [VALID_WASM](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md). If your program succeeds, you'll see the following message:
+The contract can fail the check for various reasons (on compile, deployment, etc...). Reading the [Invalid Stylus WASM Contracts explainer](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) can help you understand what makes a WASM contract valid or not.
 
-```
+If your contract succeeds, you'll see something like this:
+
+```shell
 Finished release [optimized] target(s) in 1.88s
 Reading WASM file at hello-stylus/target/wasm32-unknown-unknown/release/hello-stylus.wasm
 Compressed WASM size: 3 KB
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
 
-Once you're ready to deploy your program onchain, you can use the `cargo stylus deploy` subcommand as follows. First, we can estimate the gas required to perform our deployment with:
+Note that running `cargo stylus check` may take a few minutes, especially if you're verifying a contract for the first time.
 
-```
+See `cargo stylus check --help` for more options.
+
+## Deploying your contract
+
+Once you're ready to deploy your contract onchain, `cargo stylus deploy` will help you with the deployment and its gas estimation.
+
+### Estimating gas
+
+Note: For every transaction, we'll use the testnode pre-funded wallet, you can use `0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659` as your private key.
+
+You can estimate the gas required to deploy your contract by running:
+
+```shell
 cargo stylus deploy \
-  --private-key-path=<PRIVKEY_FILE_PATH> \
-  --estimate-gas-only
+  --endpoint='http://localhost:8547' \
+  --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659" \
+  --estimate-gas
 ```
 
-and see:
+The command should return something like this:
 
-```
-Compressed WASM size: 3 KB
-Deploying program to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 12756792
+```shell
+deployment tx gas: 7123737
+gas price: "0.100000000" gwei
+deployment tx total cost: "0.000712373700000000" ETH
 ```
 
-Next, attempt an actual deployment. Two transactions will be sent onchain.
+### Deployment
 
-```
+Let's move on to the contract's actual deployment. Two transactions will be sent onchain: the contract deployment and its [activation](stylus/stylus-gentle-introduction.md#activation).
+
+```shell
 cargo stylus deploy \
-  --private-key-path=<PRIVKEY_FILE_PATH>
+  --endpoint='http://localhost:8547' \
+  --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659"
 ```
 
-and see:
+Once the deployment and activations are successful, you'll see an output similar to this:
 
-```
-Compressed WASM size: 3 KB
-Deploying program to address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 12756792
-Submitting tx...
-Confirmed tx 0x42db…7311, gas used 11657164
-Activating program at address 0x457b1ba688e9854bdbed2f473f7510c476a3da09
-Estimated gas: 14251759
-Submitting tx...
-Confirmed tx 0x0bdb…3307, gas used 14204908
-
+```shell
+deployed code at address: 0x33f54de59419570a9442e788f5dd5cf635b3c7ac
+deployment tx hash: 0xa55efc05c45efc63647dff5cc37ad328a47ba5555009d92ad4e297bf4864de36
+wasm already activated!
 ```
 
-More options exist for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
+Make sure to save the contract's deployment address for future interactions!
 
-## Deploying non-Rust WASM projects
+More options are available for sending and outputting your transaction data. See `cargo stylus deploy --help` for more details.
 
-The Stylus CLI tool can also deploy non-Rust, WASM projects to Stylus by specifying the WASM file directly with the `--wasm-file-path` flag to any of the cargo stylus commands.
+## Exporting the Solidity ABI interface
 
-Even WebAssembly Text [(WAT)](https://www.webassemblyman.com/wat_webassembly_text_format.html) files are supported. This means projects that are just individual WASM files can be deployed onchain without needing to have been compiled by Rust. WASMs produced by other languages, such as C, can be used with the tool this way.
+The cargo stylus tool makes it easy to export your contract's ABI using `cargo stylus export-abi`.
 
-For example:
+This command returns the Solidity ABI interface of your smart contract. If you have been running `cargo stylus new` without modifying the output, `cargo stylus export-abi` will return:
 
-```wasm
-(module
-    (type $t0 (func (param i32) (result i32)))
-    (func $add_one (export "add_one") (type $t0) (param $p0 i32) (result i32)
-        get_local $p0
-        i32.const 1
-        i32.add))
+```shell
+/**
+ * This file was automatically generated by Stylus and represents a Rust program.
+ * For more information, please see [The Stylus SDK](https://github.com/OffchainLabs/stylus-sdk-rs).
+ */
+
+// SPDX-License-Identifier: MIT-OR-APACHE-2.0
+pragma solidity ^0.8.23;
+
+interface ICounter {
+    function number() external view returns (uint256);
+
+    function setNumber(uint256 new_number) external;
+
+    function mulNumber(uint256 new_number) external;
+
+    function addNumber(uint256 new_number) external;
+
+    function increment() external;
+}
 ```
 
-can be saved as `add.wat` and used as `cargo stylus check --wasm-file-path=add.wat` or `cargo stylus deploy --priv-key-path=<YOUR PRIV KEY FILE PATH> --wasm-file-path=add.wat`
+Ensure you save the console output to a file that you'll be able to use with your <a data-quicklook-from="dapp"><a data-quicklook-from="dapp">dApp</a></a>.
 
-## Exporting Solidity ABIs
+## Interacting with your Stylus contract
 
-Stylus Rust projects that use the [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) have the option of exporting Solidity ABIs. The cargo stylus tool also makes this easy with the `export-abi` command:
+Stylus contracts are EVM-compatible, you can interact with them with your tool of choice, such as [Hardhat](https://hardhat.org/), [Foundry's Cast](https://book.getfoundry.sh/cast/), or any other Ethereum-compatible tool.
 
-`cargo stylus export-abi`
+In this example, we'll use Foundry's Cast to send a call and then a transaction to our contract.
+
+### Calling your contract
+
+Our contract is a counter; in its initial state, it should store a counter value of `0`.
+You can call your contract so it returns its current counter value by sending it the following command:
+
+```shell title="Call to the function: number()(uint256)"
+cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
+[deployed-contract-address] "number()(uint256)"
+```
+
+Let's break down the command:
+
+- `cast call` command sends a call to your contract
+- The `--rpc-url` option is the `RPC URL` endpoint of our testnode: http://localhost:8547
+- The `--private-key` option is the private key of our pre-funded development account. It corresponds to the address `0x3f1eae7d46d88f08fc2f8ed27fcb2ab183eb2d0e`
+- The [deployed-contract-address] is the address we want to interact with, it's the address that was returned by `cargo stylus deploy`
+- `number()(uint256)` is the function we want to call in Solidity-style signature. The function returns the counter's current value
+
+```shell title="Calling 'number()(uint256)' returns:"
+0
+```
+
+The `number()(uint256)` function returns a value of `0`, the contract's initial state.
+
+### Sending a transaction to your contract
+
+Let's increment the counter by sending a transaction to your contract's `increment()` function.
+We'll use Cast's `send` command to send our transaction.
+
+```shell title="Sending a transaction to the function: increment()"
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
+[deployed-contract-address] "increment()"
+```
+
+```shell title="Transaction returns:"
+blockHash               0xfaa2cce3b9995f3f2e2a2f192dc50829784da9ca4b7a1ad21665a25b3b161f7c
+blockNumber             20
+contractAddress
+cumulativeGasUsed       97334
+effectiveGasPrice       100000000
+from                    0x3f1Eae7D46d88F08fc2F8ed27FCb2AB183EB2d0E
+gasUsed                 97334
+logs                    []
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+root
+status                  1 (success)
+transactionHash         0x28c6ba8a0b9915ed3acc449cf6c645ecc406a4b19278ec1eb67f5a7091d18f6b
+transactionIndex        1
+type                    2
+blobGasPrice
+blobGasUsed
+authorizationList
+to                      0x11B57FE348584f042E436c6Bf7c3c3deF171de49
+gasUsedForL1             "0x0"
+l1BlockNumber             "0x1223"
+```
+
+Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
+
+## Conclusion
+
+Congratulations! You've successfully initialized, deployed, and interacted with your first contract using Stylus and Rust.
+
+Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
