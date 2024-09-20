@@ -130,7 +130,11 @@ The resource ratio will drive the price of disputes claims, impacting both hones
 
 #### The sweet spot
 
-At a resource ratio of 10x, resolving a single adversarial claim in a dispute would cost honest parties approximately $16M. Honest parties will always be refunded and possibly rewarded, while malicious parties always stand to lose 100% of their bond. The DAO could then consider the cost of incentivizing a single honest staker in the happy case to be the **security budget of the chain**. This means defending against a $1 billion attack would require $100M total to defend, with the entire amount being refunded while the attacker losing all $1bn.
+So, now that we've established that a higher resource ratio is better but comes with some trade-offs, what is the sweet spot? 
+
+We propose a resource of ratio of 6.46. While odd, this resource ratio was calculated taking the initial "bond" to become a proposer (mentioned earlier) and a worst case scenario of 500 gwei/gas on L1 for posting assertions and making sub-challenge moves (i.e. if an attack were to happen, the malicious actor could choose to perform their attack during a period of elevated gas prices). Again, we should emphasize that the ratio of malicious to honest cost should be high to sufficiently deter attacks. Under our current assumptions (500gwei/gas) and proposed parameters (bond sizes, etc) for every $6.46 spent by malicious parties attacking, only $1 is needed to defend it successfully in BoLD. Here's a [direct link to the calculations](https://www.desmos.com/calculator/usmdcuopme) where the X-axis is L1 gas costs in gwei and the Y-axis is the resource ratio. 
+
+Honest parties will always be refunded entirely and potentially rewarded using the bonds confiscated from malicious actors if a challenge occurs. Meanwhile, malicious parties always stand to lose 100% of their bond when they lose the challenge. The Arbitrum DAO could consider the cost of incentivizing or lending the assets to a single honest proposer in the happy case as the **security budget of the chain**.
 
 ## Thinking about incentives
 
