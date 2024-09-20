@@ -444,7 +444,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: false,
+      collapsed: true,
       link: {
         type: 'doc',
         id: 'stylus/stylus-overview',
@@ -464,6 +464,11 @@ const sidebars = {
           type: 'doc',
           label: 'Testnet',
           id: 'stylus/reference/testnet-information',
+        },
+        {
+          type: 'doc',
+          label: 'Arbiscan contract verification',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
         },
         {
           type: 'category',
@@ -562,7 +567,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: false,
+          collapsed: true,
           link: {
             type: 'doc',
             id: 'stylus/reference/other-language-frameworks',

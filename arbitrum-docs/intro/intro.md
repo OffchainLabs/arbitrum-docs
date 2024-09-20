@@ -4,10 +4,10 @@ description: 'Arbitrum is a suite of Ethereum Layer-2 scaling solutions that you
 author: dzgoldman
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
-import GentleIntroPartial from '../partials/_gentle-intro-partial.md';
+import GentleIntroPartial from '../partials/_gentle-intro-partial.mdx';
 
 <GentleIntroPartial />
