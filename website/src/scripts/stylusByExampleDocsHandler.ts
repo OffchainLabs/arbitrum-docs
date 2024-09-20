@@ -149,7 +149,6 @@ function addAdmonitionOneLineAboveFirstCodeBlock(content) {
   lines.splice(insertLineIndex, 0, admonition);
 
   const newText = lines.join('\n') + content.substring(index);
-  console.log(newText);
   return newText;
 }
 
