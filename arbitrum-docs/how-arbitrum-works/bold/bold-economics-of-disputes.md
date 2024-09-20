@@ -96,7 +96,7 @@ Because malicious parties can submit incorrect claims that make honest parties d
 
 When pricing the bonds required to make claims within disputes, we consider the marginal costs that the honest party incurs for each claim a malicious party makes. The BoLD research paper includes information such as the number of adversary moves multiplied by the gas cost of making bisections and claims and some estimates of the offchain computational costs. We deem this the **marginal cost** of a party in a dispute.
 
-With BoLD, the space of disagreements between parties is of max size 2^43. As such, the dispute game has to be played at different levels of granularity to make it computationally feasible.
+With BoLD, the space of disagreements between parties is of max size 2^69. As such, the dispute game has to be played at different levels of granularity to make it computationally feasible.
 
 Let's use an analogy: say we have two one-meter sticks that seem identical, and we want to determine where they differ. They appear identical at the centimeter level, so we need to go down to the millimeter level, then the micrometer level, and then figure out where they differ at the nanometer level.
 
