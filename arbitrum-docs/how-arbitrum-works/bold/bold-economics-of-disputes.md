@@ -64,7 +64,7 @@ Ensuring assertions are frequently posted is a requirement for Arbitrum, but at 
 
 To be highly conservative, in a bank-run scenario, the [Arbitrum One bridge](https://etherscan.io/address/0x8315177ab297ba92a06054ce80a67ed4dbd7ed3a) contains approximately $5.4BN worth of assets at the time of writing on April 15th, 2024. Assuming funds could earn a 5% APY if invested, the opportunity cost of 1 extra week of delay is approximately USD 5,200,000. Given this scenario, we recommend a bond for assertion posters to be somewhere in the range of ~$2.5M - $5M.
 
-Honest parties can always withdraw their bond once their assertions are confirmed. However, adversaries stand to lose the entirety of their bond if they post invalid claims. A large bond size drastically improves the economic security of the system based on these two axes.
+Honest proposers can always withdraw their bond once their assertions are confirmed. However, adversaries stand to lose the entirety of their bond if they propose invalid assertions. A large bond size drastically improves the economic security of the system based on these two axes by making the cost to propose high and by guaranteeing that malicious actors will lose their entire bond when they are proven wrong by the protocol.
 
 #### Centralization concerns
 
