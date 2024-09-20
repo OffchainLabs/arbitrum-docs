@@ -8,7 +8,7 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

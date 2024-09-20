@@ -9,7 +9,7 @@ sidebar_position: 3
 
 **Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Gas and ink costs](/stylus/reference/opcode-hostio-pricing).
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

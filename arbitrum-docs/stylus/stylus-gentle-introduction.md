@@ -9,7 +9,7 @@ sidebar_position: 1
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -100,7 +100,6 @@ EVM contracts continue to execute the same way they did before Stylus. When a co
 
 Nitro has a happy case and a sad case. Most of the time, it's in a happy case, compiling execution history to native code. In the sad case of a dispute between validators, Nitro compiles execution history to WASM to conduct interactive fraud proofs on Ethereum. Stylus is a natural extension to Nitro's fraud-proving technology, utilizing it to not only bisect execution history but also any WASM programs deployed by developers.
 
-
 ### New use cases
 
 It's impossible to list all of the use cases Stylus enables, think about the properties of all WASM compatible languages! 
@@ -124,7 +123,6 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 ### Wen mainnet?
 
 Stylus is now live on mainnet.
-
 
 To keep up with the latest announcements and updates about Stylus:
 - Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
