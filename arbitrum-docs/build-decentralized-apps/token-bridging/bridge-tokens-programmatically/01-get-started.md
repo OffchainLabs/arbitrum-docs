@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: overview
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
