@@ -124,7 +124,7 @@ If we desire a constant resource ratio of malicious to honest costs > 1, the req
 
 #### Trade-offs
 
-Having a 1000x resource ratio would be nice in theory, but it would, unfortunately, require a bond of 1M `ETH` ($3.5bn) to open a challenge in the first place, which is unreasonable. Instead, we can explore a more feasible ratio.
+Having a 1000x resource ratio would be nice in theory, but it would, unfortunately, require a bond of 1M `ETH` ($2.56B USD at time of writing) to open a challenge in the first place, which is unreasonable. Instead, we can explore a more feasible ratio.
 
 The resource ratio will drive the price of disputes claims, impacting both honest and malicious parties. However, claims can **always be made** through a **trustless pool**. Honest parties can pool together funds to participate in disputes.
 
