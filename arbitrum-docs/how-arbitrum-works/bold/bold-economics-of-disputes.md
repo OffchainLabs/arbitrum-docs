@@ -9,7 +9,7 @@ target_audience: 'Developers, users and researchers interested in the Arbitrum p
 sme: leeederek
 ---
 
-_The following document explains the economics and denial-of-service mechanisms built into Arbitrum BoLD. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way._
+_The following document explains the economics and denial-of-service protection mechanisms built into Arbitrum BoLD. It covers trade-offs Arbitrum has to make to enable permissionless validation, explaining the key problems in an accessible way._
 
 ## Background
 
