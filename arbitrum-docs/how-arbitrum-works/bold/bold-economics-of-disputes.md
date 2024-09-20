@@ -13,7 +13,7 @@ _The following document explains the economics and denial-of-service protection 
 
 ## Background
 
-[<a data-quicklook-from="arbitrum-one">Arbitrum One</a>](https://arbitrum.io/) is currently one of the most widely adopted Ethereum scaling solutions, with [~$18bn USD in total-value-locked](https://l2beat.com/scaling/projects/arbitrum) at the time of writing. Not only do its scaling properties, such as its 250ms block times, make it popular, but so do its security properties and approach to decentralization. Currently, Arbitrum One is governed by the Arbitrum DAO, one of the most active and robust onchain organizations.
+[<a data-quicklook-from="arbitrum-one">Arbitrum One</a>](https://arbitrum.io/) is currently one of the most widely used Ethereum scaling solutions, with [~$18bn USD in total-value-locked](https://l2beat.com/scaling/projects/arbitrum) at the time of writing. Not only do its scaling properties, such as its 250ms block times, make it popular, but so do its security properties and approach to decentralization. Currently, Arbitrum One is governed by the Arbitrum DAO, one of the most active and robust on-chain organizations.
 
 However, Arbitrum has not yet achieved its full promise of decentralization. Currently, withdrawals from Arbitrum One back to Ethereum are verified by a permissioned list of validators. These validators can still challenge invalid withdrawals, but the system prevents anyone outside this list from holding them accountable. This limits Arbitrum One to being categorized as a `Stage 1 Rollup` on the [L2Beat website](https://l2beat.com/scaling/summary), meaning it still has training wheels preventing it from reaching its full potential.
 
