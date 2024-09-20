@@ -1,12 +1,12 @@
 ---
 title: 'Public preview: What to expect'
 sidebar_label: 'Public preview'
-description: 'BOLD is currently tagged as an `alpha` release supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
+description: 'BoLD is currently tagged as an `alpha` release supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
 author: symbolpunk
 sidebar_position: 10
 ---
 
-BOLD, Arbitrum's new dispute protocol, is currently tagged as an `alpha` release supported by _public preview_ documentation. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
+BoLD, Arbitrum's new dispute protocol, is currently tagged as an `alpha` release supported by _public preview_ documentation. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
 
 ### How products are developed at Offchain Labs
 

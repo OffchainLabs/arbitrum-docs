@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -126,7 +126,7 @@ const approveTx = await erc20Bridger.approveToken({
 
 const approveRec = await approveTx.wait();
 console.log(
-  `You successfully allowed the Arbitrum Bridge to spend DappToken ${approveRec.transactionHash}`,
+  `You successfully allowed the Arbitrum Bridge to spend DappToken ${approveRec.transactionHash}`
 );
 ```
 
