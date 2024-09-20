@@ -1,5 +1,5 @@
 ---
-title: 'Economics of Disputes in Arbitrum BOLD'
+title: 'Economics of Disputes in Arbitrum BoLD'
 sidebar_label: 'Economics of Disputes'
 description: 'An in-depth explanation on BoLD economic mechanisms.'
 user_story: 'As a user or researcher of the Arbitrum product suite, I want to understand BoLD economics mechanisms.'
