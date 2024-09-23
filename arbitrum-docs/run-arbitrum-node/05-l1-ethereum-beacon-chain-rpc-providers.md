@@ -3,7 +3,7 @@ title: 'L1 Ethereum beacon chain RPC providers'
 author: dlee
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -32,7 +32,8 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 | [BlastAPI](https://blastapi.io/public-api/ethereum)                         |                            |                               | ✅                         |                            |
 | [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                         | ✅                            |                            |                            |
 | [NodeReal](https://nodereal.io/)                                            | ✅                         |                               |                            |                            |
-| [Quicknode](https://www.quicknode.com/docs/ethereum)                        | ✅                         | ✅                            |                            |                            |
+| [QuickNode](https://www.quicknode.com/docs/ethereum)                        | ✅                         | ✅                            | ✅                         | ✅                         |
+| [dRPC](https://drpc.org/chainlist/eth-beacon-chain)                         | ✅                         | ✅                            | ✅                         | ✅                         |
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
