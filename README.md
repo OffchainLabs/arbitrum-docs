@@ -10,7 +10,7 @@ For most of the docs content, you can contribute by simply reviewing our [docs c
 
 The following are the only exceptions:
 
-- Contributing to the three troubleshooting pages — [nodes](arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx), [builders](arbitrum-docs/partials/_troubleshooting-building-partial.mdx), and [users](arbitrum-docs/partials/_troubleshooting-users-partial.md), as well as the [glossary](arbitrum-docs/partials/_glossary-partial.md) page — requires internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
+- Contributing to the three troubleshooting pages — [nodes](arbitrum-docs/partials/_troubleshooting-nodes-partial.mdx), [builders](arbitrum-docs/partials/_troubleshooting-building-partial.mdx), and [users](arbitrum-docs/partials/_troubleshooting-users-partial.mdx), as well as the [glossary](arbitrum-docs/partials/_glossary-partial.md) page — requires internal Offchain Labs access. If you'd like to make a suggestion about content on any of those pages, open an [issue ticket](https://github.com/OffchainLabs/arbitrum-docs/issues).
 
 - To request to have your project added to the [3rd party node providers page](arbitrum-docs/build-decentralized-apps/reference/01-node-providers.md), use [this form](https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform).
 
