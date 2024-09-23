@@ -796,13 +796,8 @@
             "permanent": false
         },
         {
-            "source": "/sdk",
-            "destination": "/sdk-docs",
-            "permanent": false
-        },
-        {
-            "source": "/sdk/(.*)",
-            "destination": "/sdk-docs/$1",
+            "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
             "permanent": false
         },
         {

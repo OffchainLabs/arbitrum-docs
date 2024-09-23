@@ -144,3 +144,12 @@ You can fund other addresses by using the scripts `send-l1` and `send-l2` as exp
 Do not use any of these addresses in a production environment.
 
 :::
+
+## Optional parameters
+
+Here, We show a list of the parameters that might be useful when running a local devnode. You can also use the flag `./test-node.bash --help` to get them.
+
+
+import OptionalDevNodeCLIFlagsPartial from '../partials/_local-devnet-flags.md';
+
+<OptionalDevNodeCLIFlagsPartial />

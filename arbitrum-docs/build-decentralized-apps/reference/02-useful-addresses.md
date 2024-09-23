@@ -93,19 +93,21 @@ The following contracts are deployed on the corresponding L2 chain
 
 The following precompiles are deployed on every L2 chain and always have the same address
 
-|                  | Address                                                                      |
-| ---------------- | ---------------------------------------------------------------------------- |
-| ArbAddressTable  | <AEL address="0x0000000000000000000000000000000000000066" chainID={42161} /> |
-| ArbAggregator    | <AEL address="0x000000000000000000000000000000000000006D" chainID={42161} /> |
-| ArbFunctionTable | <AEL address="0x0000000000000000000000000000000000000068" chainID={42161} /> |
-| ArbGasInfo       | <AEL address="0x000000000000000000000000000000000000006C" chainID={42161} /> |
-| ArbInfo          | <AEL address="0x0000000000000000000000000000000000000065" chainID={42161} /> |
-| ArbOwner         | <AEL address="0x0000000000000000000000000000000000000070" chainID={42161} /> |
-| ArbOwnerPublic   | <AEL address="0x000000000000000000000000000000000000006b" chainID={42161} /> |
-| ArbRetryableTx   | <AEL address="0x000000000000000000000000000000000000006E" chainID={42161} /> |
-| ArbStatistics    | <AEL address="0x000000000000000000000000000000000000006F" chainID={42161} /> |
-| ArbSys           | <AEL address="0x0000000000000000000000000000000000000064" chainID={42161} /> |
-| NodeInterface    | <AEL address="0x00000000000000000000000000000000000000C8" chainID={42161} /> |
+|                  | Arbitrum One                                                                                       | Arbitrum Nova                                                                                      | Arbitrum Sepolia                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| ArbAddressTable  | <AEL address="0x0000000000000000000000000000000000000066" chainID={42161} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000066" chainID={42170} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000066" chainID={421614} shortenAddress={true} /> |
+| ArbAggregator    | <AEL address="0x000000000000000000000000000000000000006D" chainID={42161} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006D" chainID={42170} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006D" chainID={421614} shortenAddress={true} /> |
+| ArbFunctionTable | <AEL address="0x0000000000000000000000000000000000000068" chainID={42161} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000068" chainID={42170} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000068" chainID={421614} shortenAddress={true} /> |
+| ArbGasInfo       | <AEL address="0x000000000000000000000000000000000000006C" chainID={42161} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006C" chainID={42170} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006C" chainID={421614} shortenAddress={true} /> |
+| ArbInfo          | <AEL address="0x0000000000000000000000000000000000000065" chainID={42161} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000065" chainID={42170} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000065" chainID={421614} shortenAddress={true} /> |
+| ArbOwner         | <AEL address="0x0000000000000000000000000000000000000070" chainID={42161} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000070" chainID={42170} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000070" chainID={421614} shortenAddress={true} /> |
+| ArbOwnerPublic   | <AEL address="0x000000000000000000000000000000000000006b" chainID={42161} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006b" chainID={42170} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006b" chainID={421614} shortenAddress={true} /> |
+| ArbRetryableTx   | <AEL address="0x000000000000000000000000000000000000006E" chainID={42161} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006E" chainID={42170} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006E" chainID={421614} shortenAddress={true} /> |
+| ArbStatistics    | <AEL address="0x000000000000000000000000000000000000006F" chainID={42161} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006F" chainID={42170} shortenAddress={true} /> | <AEL address="0x000000000000000000000000000000000000006F" chainID={421614} shortenAddress={true} /> |
+| ArbSys           | <AEL address="0x0000000000000000000000000000000000000064" chainID={42161} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000064" chainID={42170} shortenAddress={true} /> | <AEL address="0x0000000000000000000000000000000000000064" chainID={421614} shortenAddress={true} /> |
+| ArbWasm          | -                                                                                                  | -                                                                                                  | <AEL address="0x0000000000000000000000000000000000000071" chainID={421614} shortenAddress={true} /> |
+| ArbWasmCache     | -                                                                                                  | -                                                                                                  | <AEL address="0x0000000000000000000000000000000000000072" chainID={421614} shortenAddress={true} /> |
+| NodeInterface    | <AEL address="0x00000000000000000000000000000000000000C8" chainID={42161} shortenAddress={true} /> | <AEL address="0x00000000000000000000000000000000000000C8" chainID={42170} shortenAddress={true} /> | <AEL address="0x00000000000000000000000000000000000000C8" chainID={421614} shortenAddress={true} /> |
 
 ## Misc
 
