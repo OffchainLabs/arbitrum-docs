@@ -388,6 +388,18 @@ Example:
 curl -I <YOUR REST ENDPOINT>/health
 ```
 
+### Test 4: Retrieve data from a batch poster transaction
+
+You can also do a test to retrieve the transaction data which posted by a batch poster transaction, the transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber,bytes data,uint256 afterDelayedMessagesRead,address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
+
+After you decode a batch poster transaction and get its `data` within the function data, you can continue to decode the `data` as follow:
+
+The first part (1 byte) is `header flag` which is used to specific which type of batch is it, here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
+
+The second part (32 bytes) is keyset hash, you can learn more about what is keyset [here](/how-arbitrum-works/inside-anytrust#keysets).
+
+The third part (32 bytes) is data hash, and this is what we need to retrieve data, when you get this hash, you can retrieve data directly by follow what we demonstrate in Step 4.
+
 ## Running a mirror DAS
 
 To avoid exposing the REST interface of your main DAS to the public in order to prevent spamming attacks (as explained in [Security considerations](#security-considerations)), you can choose to run a mirror DAS to complement your setup. The mirror DAS will handle all public REST requests, while reading information from the main DAS via its (now private) REST interface.
