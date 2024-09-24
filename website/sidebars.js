@@ -297,6 +297,16 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              label: `Implement Circle bridged USDC`,
+            },
           ],
         },
         {
@@ -439,7 +449,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Write Stylus contracts',
-      collapsed: false,
+      collapsed: true,
       link: {
         type: 'doc',
         id: 'stylus/stylus-overview',
@@ -461,6 +471,11 @@ const sidebars = {
           id: 'stylus/reference/testnet-information',
         },
         {
+          type: 'doc',
+          label: 'Arbiscan contract verification',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
+        },
+        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
@@ -471,6 +486,11 @@ const sidebars = {
               label: 'Overview',
             },
             ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -552,7 +572,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'Other supported languages',
-          collapsed: false,
+          collapsed: true,
           link: {
             type: 'doc',
             id: 'stylus/reference/other-language-frameworks',
@@ -891,7 +911,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'The BOLD dispute protocol',
+              label: 'The BoLD dispute protocol',
               items: [
                 {
                   type: 'doc',
@@ -906,7 +926,7 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BOLD Whitepaper',
+                  label: 'BoLD Whitepaper',
                 },
                 {
                   type: 'link',
