@@ -299,6 +299,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
               label: `Implement Circle bridged USDC`,
             },

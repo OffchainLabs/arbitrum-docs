@@ -40,6 +40,7 @@ const globalVars = {
 
   goEthereumCommit: 'e35bf9cdd3d02034ac1be34a479d101f12012ba6',
 
+  nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',
   nitroPathToStorage: 'arbos/storage',
 

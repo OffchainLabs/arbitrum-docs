@@ -7,10 +7,13 @@ content_type: how-to
 ---
 
 import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md'
 
 <PublicPreviewBannerPartial />
 
-## Preface
+<CustomizeCautionBannerPartial />
+
+## Introduction
 
 Before customizing your Orbit chain, it's important to understand what the State Transition Function (aka the STF) is.
 The STF defines how new blocks are produced from input messages (i.e. transactions).
@@ -81,6 +84,9 @@ git submodule update --init --recursive --force
 ### Step 2. Apply modifications
 
 Next, make your changes to the State Transition Function. For example, you could [add a custom precompile](./customize-precompile.mdx).
+
+After this step, you should visit [Customize ArbOS version](./customize-arbos.mdx) to see if your changes need to upgrade the ArbOS version. If so, please continue 
+follow that document to add an ArbOS upgrade logic to your code.
 
 ### Step 3. Run the node without fraud proofs
 
@@ -268,4 +274,4 @@ Make some transactions on your new blockchain, test out your modifications to th
 wait for a batch to be posted, and you should be seeing "validation succeeded" log lines!
 
 If you see "Error during validation", then the replay binary is likely not up-to-date with your modifications to the State Transition Function.
-Ensure that the replay binary is freshly built and is not missing any modifications, and that the WASM module root set in the rollup contract matches your replay binary.
+Ensure that the replay binary is freshly built, not missing any modifications, and that the WASM module root set in the rollup contract matches your replay binary.
