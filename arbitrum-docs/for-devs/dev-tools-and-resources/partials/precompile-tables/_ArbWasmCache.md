@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L13"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L13"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L16"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L16"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L17"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L17"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L21"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L21"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L20"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L20"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L26"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L26"
           target="_blank"
         >
           Implementation
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L26"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L26"
           target="_blank"
         >
           Interface
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L31"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L31"
           target="_blank"
         >
           Implementation
@@ -105,7 +105,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L30"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L30"
           target="_blank"
         >
           Interface
@@ -113,7 +113,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L40"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L40"
           target="_blank"
         >
           Implementation
@@ -129,7 +129,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L33"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L33"
           target="_blank"
         >
           Interface
@@ -137,7 +137,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L45"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L45"
           target="_blank"
         >
           Implementation
@@ -163,7 +163,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/61204dd455966cb678192427a07aa9795ff91c14/src/precompiles/ArbWasmCache.sol#L35"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbWasmCache.sol#L35"
           target="_blank"
         >
           Interface
@@ -171,7 +171,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.1.0/precompiles/ArbWasmCache.go#L62"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasmCache.go#L62"
           target="_blank"
         >
           Implementation
