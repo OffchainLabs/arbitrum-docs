@@ -1,0 +1,52 @@
+---
+title: 'The AEP fee router: introduction'
+sidebar_label: 'AEP fee router'
+description: 'Learn what is the AEP fee router.'
+author: Midroni
+sme: Midroni
+user_story: As a current Orbit chain owner, I need to understand what the AEP fee router is.
+content_type: get-started
+---
+
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription } from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+## What is the Arbitrum Expansion Program?
+
+The [Arbitrum Expansion Program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) (AEP) allows Orbit chains to permissionlessly deploy on *any chain*. As part of the [AEP license](https://docs.arbitrum.foundation/assets/files/Arbitrum%20Expansion%20Program%20Jan182024-4f08b0c2cb476a55dc153380fa3e64b0.pdf), Orbit chains deployed outside of Arbitrum One and Arbitrum Nova must pay 10% of their **Net Protocol Revenue** to the Arbitrum DAO. 
+
+
+<MermaidWithHtml>
+  <Nodes title="Lorem ipsum">
+    <Node id="1">firstInput</Node>
+    <Node id="2">secondInput</Node>
+    <Node id="3">someFunction(firstInput, secondInput)</Node>
+    <Node id="4">L1 Ethereum</Node>
+    <Connection from="1" to="3" label="foo"/>
+    <Connection from="2" to="3"/>
+    <Connection from="3" to="4"/>
+  </Nodes>
+</MermaidWithHtml>
+
+The Arbitrum Expansion Program and Developer Guild are initiatives launched in collaboration with Offchain Labs to promote the development of customized Arbitrum chains using the Orbit framework. The Expansion Program simplifies the process for teams to create Layer 2 (L2) and Layer 3 (L3) blockchains, offering self-service tools and customization options. 
+Projects benefit from features like:
+- Dedicated block space
+- Custom gas tokens
+- Flexible governance. 
+
+These chains can settle to any chain relying on the Ethereum security model.
+
+The Developer Guild incentivizes developers contributing to the Arbitrum codebase, with 2% of revenue from new chains going to a fund dedicated to this purpose. The Expansion Program is designed to align with Ethereum, encourage innovation, and enable projects to tailor the Arbitrum stack to their specific needs. The program also aims to streamline chain deployment, making it easier for developers to adopt Arbitrum's technology while contributing back to the community
+
+As an Orbit chain owner, you may have the following questions:
+
+## How do I send my AEP fees from my Orbit chain to the Arbitrum DAO?
+Arbitrum provides Orbit chains with easily deployable smart contracts that can streamline the transfer of AEP Fees into the Arbitrum DAO treasury. These contracts are known as **AEP Fee Routers**. 
+## What is Net Protocol Revenue?
+Net Protocol Revenue is equivalent to an Orbit chain’s profit (revenue minus costs).
+## How can I ensure I’m complying with the AEP license?
+The Arbitrum Foundation will track compliance based on fees received through the **AEP Fee Router**.
+
+
+
+
+    
