@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L33"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L33"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L93"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L93"
           target="_blank"
         >
           Implementation
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L170"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L170"
           target="_blank"
         >
           Implementation
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L57"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L57"
           target="_blank"
         >
           Implementation
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L179"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L179"
           target="_blank"
         >
           Implementation
@@ -132,7 +132,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L188"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L188"
           target="_blank"
         >
           Implementation
@@ -154,7 +154,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L197"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L197"
           target="_blank"
         >
           Implementation
@@ -176,7 +176,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L206"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L206"
           target="_blank"
         >
           Implementation
@@ -198,7 +198,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L215"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L215"
           target="_blank"
         >
           Implementation
@@ -220,7 +220,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L99"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L99"
           target="_blank"
         >
           Implementation
@@ -242,7 +242,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L105"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L105"
           target="_blank"
         >
           Implementation
@@ -264,7 +264,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L111"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L111"
           target="_blank"
         >
           Implementation
@@ -286,7 +286,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L117"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L117"
           target="_blank"
         >
           Implementation
@@ -308,7 +308,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L123"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L123"
           target="_blank"
         >
           Implementation
@@ -330,7 +330,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L129"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L129"
           target="_blank"
         >
           Implementation
@@ -352,7 +352,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L135"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L135"
           target="_blank"
         >
           Implementation
@@ -374,7 +374,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L146"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L146"
           target="_blank"
         >
           Implementation
@@ -396,7 +396,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L152"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L152"
           target="_blank"
         >
           Implementation
@@ -418,7 +418,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L158"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L158"
           target="_blank"
         >
           Implementation
@@ -440,7 +440,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L164"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L164"
           target="_blank"
         >
           Implementation
@@ -474,7 +474,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L53"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L53"
           target="_blank"
         >
           Implementation
@@ -496,7 +496,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbWasm.go#L69"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbWasm.go#L69"
           target="_blank"
         >
           Implementation

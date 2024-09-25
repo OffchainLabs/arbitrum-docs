@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbStatistics.go#L18"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbStatistics.go#L18"
           target="_blank"
         >
           Implementation

@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L24"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L24"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L30"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L30"
           target="_blank"
         >
           Implementation
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L35"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L35"
           target="_blank"
         >
           Implementation
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L39"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L39"
           target="_blank"
         >
           Implementation
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L62"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L62"
           target="_blank"
         >
           Implementation
@@ -132,7 +132,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L71"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L71"
           target="_blank"
         >
           Implementation
@@ -157,7 +157,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L93"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L93"
           target="_blank"
         >
           Implementation
@@ -179,7 +179,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbAggregator.go#L99"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L99"
           target="_blank"
         >
           Implementation

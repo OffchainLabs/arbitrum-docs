@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L34"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L34"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L25"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L25"
           target="_blank"
         >
           Implementation
@@ -68,7 +68,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L20"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L20"
           target="_blank"
         >
           Implementation
@@ -90,7 +90,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L39"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L39"
           target="_blank"
         >
           Implementation
@@ -112,7 +112,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L44"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L44"
           target="_blank"
         >
           Implementation
@@ -134,7 +134,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L52"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L52"
           target="_blank"
         >
           Implementation
@@ -159,7 +159,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L58"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L58"
           target="_blank"
         >
           Implementation
@@ -193,7 +193,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbOwnerPublic.go#L30"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwnerPublic.go#L30"
           target="_blank"
         >
           Implementation

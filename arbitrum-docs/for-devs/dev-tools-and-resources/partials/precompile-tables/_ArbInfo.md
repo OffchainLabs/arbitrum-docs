@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbInfo.go#L17"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbInfo.go#L17"
           target="_blank"
         >
           Implementation
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.2.0/precompiles/ArbInfo.go#L25"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbInfo.go#L25"
           target="_blank"
         >
           Implementation
