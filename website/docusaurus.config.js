@@ -277,6 +277,7 @@ const config = {
           securityLevel: 'loose',
           flowchart: {
             curve: 'basis',
+            theme: { light: 'neutral', dark: 'forest' },
           },
         },
       },
