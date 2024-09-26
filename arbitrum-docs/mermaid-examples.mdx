@@ -1,0 +1,113 @@
+---
+title: 'Get started with Mermaid in OCL docs'
+sidebar_label: 'Get started'
+description: 'Learn how to use Mermaid in OCL docs.'
+author: anegg0
+sme: anegg0
+content_type: get-started
+---
+
+
+
+import {
+  MermaidWithHtml,
+  Nodes,
+  Node,
+  Connection,
+  NodeDescriptions,
+  NodeDescription,
+} from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Orbit L2</Node>
+    <Node id="2">Orbit L3</Node>
+    <Node id="3">Arbitrum One (L2)</Node>
+    <Node id="4">Orbit L2</Node>
+    <Node id="5">Ethereum (L1)</Node>
+    <Connection from="1" to="5" />
+    <Connection from="2" to="3" />
+    <Connection from="3" to="5" />
+    <Connection from="4" to="5" />
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for="1,2,4">
+      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own
+      customizable L2 or L3 chain.
+    </NodeDescription>
+    <NodeDescription for="3">
+      L3 Orbit chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which
+      settles to Ethereum.
+    </NodeDescription>
+    <NodeDescription for="5">
+      <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
+    </NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
+``` mermaid
+---
+config:
+  layout: elk
+  look: neo
+---
+block-beta
+  columns 6
+  block:L3SettlingOnEthereumL2s:2
+    1("Orbit L3"):1
+    2("Orbit L3"):1 
+    end
+  block:L3SettlingOnArbitrumL2s:4
+    3("Orbit L3"):1 
+    4("Orbit L3"):1 
+    5("Orbit L3"):1 
+    6("Orbit L3"):1 
+    end
+  block:L2s:6
+  ETHL2("Ethereum L2"):2
+  ArbOneArbNov("Arbitrum One/Nova"):3
+  OrbitL2("Orbit L2"):1
+  end
+  EthereumL1("Ethereum L1"):6
+  1-->ETHL2
+  2-->ETHL2
+  3-->ArbOneArbNov
+  4-->ArbOneArbNov
+  5-->ArbOneArbNov
+  6-->ArbOneArbNov
+  ETHL2-->EthereumL1
+  ArbOneArbNov-->EthereumL1
+  OrbitL2-->EthereumL1
+```
+
+``` mermaid
+---
+config:
+  layout: elk
+  look: neo
+---
+flowchart TD
+ subgraph subGraph0["Orbit L3"]
+        L3A("Orbit L3")
+        L3B("Orbit L3")
+        L3C("Orbit L3")
+        L3D("Orbit L3")
+  end
+ subgraph Arbitrum["Arbitrum"]
+        L2A("Arbitrum One")
+        L2B("Arbitrum Nova")
+  end
+ subgraph subGraph2["Ethereum L2"]
+        L2C("Ethereum L2")
+        L2D("Orbit L2")
+  end
+    L3A --> L2C
+    L3B --> L2C
+    L3C --> L2A
+    L3D --> L2B
+    L2D --> L2C & L1("Ethereum L1")
+    L2A --> L1
+    L2B --> L1
+    L2C --> L1
+```
