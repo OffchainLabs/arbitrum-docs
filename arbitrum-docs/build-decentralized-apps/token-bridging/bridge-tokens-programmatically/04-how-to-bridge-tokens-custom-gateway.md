@@ -759,24 +759,24 @@ console.log('Setting token bridge information on L1CustomGateway:');
 const setTokenBridgeInfoOnL1 = await l1CustomGateway.setTokenBridgeInformation(
   l1CustomToken.address,
   l2CustomToken.address,
-  l2CustomGatewayAddress
+  l2CustomGatewayAddress,
 );
 
 const setTokenBridgeInfoOnL1Rec = await setTokenBridgeInfoOnL1.wait();
 console.log(
-  `Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`
+  `Token bridge information set on L1CustomGateway! L1 receipt is: ${setTokenBridgeInfoOnL1Rec.transactionHash}`,
 );
 
 console.log('Setting token bridge information on L2CustomGateway:');
 const setTokenBridgeInfoOnL2 = await l2CustomGateway.setTokenBridgeInformation(
   l1CustomToken.address,
   l2CustomToken.address,
-  l1CustomGatewayAddress
+  l1CustomGatewayAddress,
 );
 
 const setTokenBridgeInfoOnL2Rec = await setTokenBridgeInfoOnL2.wait();
 console.log(
-  `Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`
+  `Token bridge information set on L2CustomGateway! L2 receipt is: ${setTokenBridgeInfoOnL2Rec.transactionHash}`,
 );
 ```
 
@@ -801,15 +801,15 @@ const registerTokenTx = await adminTokenBridger.registerCustomToken(
   l1CustomToken.address,
   l2CustomToken.address,
   l1Wallet,
-  l2Provider
+  l2Provider,
 );
 
 const registerTokenRec = await registerTokenTx.wait();
 console.log(
-  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`
+  `Registering token txn confirmed on L1! 🙌 L1 receipt is: ${registerTokenRec.transactionHash}.`,
 );
 console.log(
-  `Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`
+  `Waiting for L2 retryable (takes 10-15 minutes); current time: ${new Date().toTimeString()})`,
 );
 
 /**

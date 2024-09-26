@@ -126,7 +126,7 @@ const approveTx = await erc20Bridger.approveToken({
 
 const approveRec = await approveTx.wait();
 console.log(
-  `You successfully allowed the Arbitrum Bridge to spend DappToken ${approveRec.transactionHash}`
+  `You successfully allowed the Arbitrum Bridge to spend DappToken ${approveRec.transactionHash}`,
 );
 ```
 

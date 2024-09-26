@@ -102,7 +102,7 @@ Nitro has a happy case and a sad case. Most of the time, it's in a happy case, c
 
 ### New use cases
 
-It's impossible to list all of the use cases Stylus enables, think about the properties of all WASM compatible languages! 
+It's impossible to list all of the use cases Stylus enables, think about the properties of all WASM compatible languages!
 
 That said, here are some new features that are particularly exciting:
 
@@ -125,6 +125,7 @@ If you're a developer interested in Stylus, visit the [quickstart](https://docs.
 Stylus is now live on mainnet.
 
 To keep up with the latest announcements and updates about Stylus:
+
 - Subscribe to the [Arbitrum Node Upgrade Announcement channel on Telegram](https://t.me/arbitrumnodeupgrade)
 - Join both the `#dev-announcements` and `#node-runners` Discord channels in the [Arbitrum Discord server](https://discord.gg/arbitrum)
 - Follow the official Arbitrum ([`@Arbitrum`](https://twitter.com/arbitrum)) and Arbitrum Developers ([`@ArbitrumDevs`](https://twitter.com/ArbitrumDevs)) X accounts, formerly Twitter.
