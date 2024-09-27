@@ -28,7 +28,7 @@
     "@docusaurus/core": "^3.3.2",
     "@docusaurus/preset-classic": "^3.3.2",
     "@docusaurus/theme-live-codeblock": "^3.3.2",
-    // "@docusaurus/theme-mermaid": "^3.3.2",
+    "@docusaurus/theme-mermaid": "^3.3.2",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-lunr-search": "^3.3.2",
@@ -58,16 +58,8 @@
     "typescript": "^5.1"
   },
   "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "engines": {
     "node": ">=16.14"
