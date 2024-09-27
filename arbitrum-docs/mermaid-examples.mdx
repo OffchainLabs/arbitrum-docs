@@ -9,63 +9,85 @@ content_type: get-started
 
 ## Example 1
 
-``` mermaid
----
-config:
-  layout: elk
-  look: neo
----
 
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'curve': 'stepBefore',
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff',
-      'rankSpacing': '150'
-    }
-  }
-}%%
-graph TD
-          L3A("Orbit L3")
-          L3B("Orbit L3")
-          L3C("Orbit L3")
-          L3D("Orbit L3")
-          L2A("Arbitrum One")
-          L2B("Arbitrum Nova")
-          L2C("Ethereum L2")
-          L2D("Orbit L2")
-    L1("Ethereum L1")
-    L3A --> L2C
-    L3B --> L2C
-    L3C --> L2A
-    L3D --> L2B
-    L2A --> L1
-    L2B --> L1
-    L2C --> L1
-    L2D --> L1 
-```
+import {
+  MermaidWithHtml,
+  Nodes,
+  Node,
+  Connection,
+  NodeDescriptions,
+  NodeDescription,
+} from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Orbit L2</Node>
+    <Node id="2">Orbit L3</Node>
+    <Node id="3">Arbitrum One (L2)</Node>
+    <Node id="4">Orbit L2</Node>
+    <Node id="5">Ethereum (L1)</Node>
+    <Connection from="1" to="5" />
+    <Connection from="2" to="3" />
+    <Connection from="3" to="5" />
+    <Connection from="4" to="5" />
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for="1,2,4">
+      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own
+      customizable L2 or L3 chain.
+    </NodeDescription>
+    <NodeDescription for="3">
+      L3 Orbit chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which
+      settles to Ethereum.
+    </NodeDescription>
+    <NodeDescription for="5">
+      <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
+    </NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
+
+
+<MermaidWithHtml>
+  <Nodes>
+    <Node id="1">Orbit L2</Node>
+    <Node id="2">Orbit L3</Node>
+    <Node id="3">Arbitrum One (L2)</Node>
+    <Node id="4">Orbit L2</Node>
+    <Node id="5">Ethereum (L1)</Node>
+    <Connection from="1" to="5" />
+    <Connection from="2" to="3" />
+    <Connection from="3" to="5" />
+    <Connection from="4" to="5" />
+  </Nodes>
+  <NodeDescriptions>
+    <NodeDescription for="1,2,4">
+      <strong>Arbitrum Orbit</strong> is a new product offering that lets you create your own
+      customizable L2 or L3 chain.
+    </NodeDescription>
+    <NodeDescription for="3">
+      L3 Orbit chains can settle to other L2 chains, such as <strong>Arbitrum One</strong>, which
+      settles to Ethereum.
+    </NodeDescription>
+    <NodeDescription for="5">
+      <strong>Ethereum</strong> is a public Layer 1 (L1) chain.
+    </NodeDescription>
+  </NodeDescriptions>
+</MermaidWithHtml>
 
 ## Example 2
 
 ``` mermaid
-
 %%{
   init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff',
-      'rankSpacing': '150'
+    "theme": "base",
+    "flowchart" : { "curve" : "stepAfter", "rankSpacing" : "80","wrappingWidth" :"800" },
+    "themeVariables": {
+      "primaryColor": "#BB2528",
+      "primaryTextColor": "#fff",
+      "primaryBorderColor": "#7C0000",
+      "lineColor": "#F8B229",
+      "secondaryColor": "#006100",
+      "tertiaryColor": "#fff"
     }
   }
 }%%
@@ -96,44 +118,51 @@ block-beta
   ETHL2-->EthereumL1
   ArbOneArbNov-->EthereumL1
   OrbitL2-->EthereumL1
+  style L2s fill:#636,stroke:#333,stroke-width:4px
 ```
+
+``` mermaid
+block-beta
+  id1 space id2
+  id1("Start")-->id2("Stop")
+  style id1 fill:#636,stroke:#333,stroke-width:4px
+  style id2 fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5,padding:80px
+```
+
+## Example 3
+
 
 ``` mermaid
 %%{
   init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff'
+    "theme": "base",
+    "flowchart" : { "curve" : "stepAfter", "rankSpacing" : "80"},
+    "themeVariables": {
+      "primaryColor": "#BB2528",
+      "primaryTextColor": "#fff",
+      "primaryBorderColor": "#7C0000",
+      "lineColor": "#F8B229",
+      "secondaryColor": "#006100",
+      "tertiaryColor": "#fff"
     }
   }
 }%%
-        graph TD
-          A[Christmas] -->|Get money| B(Go shopping)
-          B --> C{Let me think}
-          B --> G[/Another/]
-          C ==>|One| D[Laptop]
-          C -->|Two| E[iPhone]
-          C -->|Three| F[fa:fa-car Car]
-          subgraph section
-            C
-            D
-            E
-            F
-            G
-          end
+flowchart TD
+          L3A("Orbit L3")
+          L3B("Orbit L3")
+          L3C("Orbit L3")
+          L3D("Orbit L3")
+          L2A("Arbitrum One")
+          L2B("Arbitrum Nova")
+          L2C("Ethereum L2")
+          L2D("Orbit L2")
+    L1("Ethereum L1")
+    L3A --> L2C
+    L3B --> L2C
+    L3C --> L2A
+    L3D --> L2B
+    L2A --> L1
+    L2B --> L1
+    L2C --> L1
+    L2D --> L1 
 ```
-
-import Mermaid from '@theme/Mermaid';
-
-<Mermaid
-  value={`graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;`}
-/>
