@@ -21,6 +21,11 @@ const sidebars = {
           id: 'welcome/get-started',
           label: 'Get started',
         },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
       ],
     },
     {
@@ -190,7 +195,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/useful-addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
@@ -482,8 +487,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Testnet',
-          id: 'stylus/reference/testnet-information',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
         },
         {
           type: 'doc',

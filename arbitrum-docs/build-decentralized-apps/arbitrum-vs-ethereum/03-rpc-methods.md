@@ -86,7 +86,7 @@ On RPC calls that return a block, the following fields will have a different con
 | `extraData`  | This field is equivalent to `sendRoot`                                                                                                                                                                                                  |
 | `mixHash`    | First 8 bytes is equivalent to `sendCount`, second 8 bytes is equivalent to `l1BlockNumber`                                                                                                                                             |
 | `difficulty` | Fixed at `0x1`                                                                                                                                                                                                                          |
-| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/build-decentralized-apps/reference/03-chain-params.md) for the gas limit of other chains |
+| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/build-decentralized-apps/reference/03-chain-params.mdx) for the gas limit of other chains |
 
 ## Other methods that are slightly different
 

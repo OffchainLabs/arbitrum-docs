@@ -10,18 +10,18 @@ Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-stan
 
 ## Why adopt the bridged USDC standard?
 
-When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for ERC-20s](/build-decentralized-apps/token-bridging/token-bridge-erc20). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge. 
+When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for ERC-20s](/build-decentralized-apps/token-bridging/token-bridge-erc20). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
 
 The challenge with this user flow is twofold.
 
-1. **Native vs. non-Native USDC:** The USDC tokens issued by Circle (’native USDC’) are locked in the parent side bridge contract. Conversely, the USDC tokens on the Orbit chain aren’t native USDC but are collateralized by the locked tokens in the bridge. As such, Circle will not recognize these tokens across their product suite.  
-2. **Fragmented UX:** If Circle were to provide native support for USDC by deploying a USDC contract on the Orbit chain, there would be two forms of USDC on the chain (native and non-native USDC). This leads to a fragmented user experience, and users with non-native USDC would have to withdraw to the parent chain to be able to turn their tokens into native USDC. 
+1. **Native vs. non-Native USDC:** The USDC tokens issued by Circle (’native USDC’) are locked in the parent side bridge contract. Conversely, the USDC tokens on the Orbit chain aren’t native USDC but are collateralized by the locked tokens in the bridge. As such, Circle will not recognize these tokens across their product suite.
+2. **Fragmented UX:** If Circle were to provide native support for USDC by deploying a USDC contract on the Orbit chain, there would be two forms of USDC on the chain (native and non-native USDC). This leads to a fragmented user experience, and users with non-native USDC would have to withdraw to the parent chain to be able to turn their tokens into native USDC.
 
-By deploying the bridged USDC standard from the start, all USDC tokens that are bridged are locked in a gateway contract that can be adopted by Circle should a chain upgrade its USDC into native USDC. This allows USDC adoption on Orbit chains today without encountering either of the two problems above. 
+By deploying the bridged USDC standard from the start, all USDC tokens that are bridged are locked in a gateway contract that can be adopted by Circle should a chain upgrade its USDC into native USDC. This allows USDC adoption on Orbit chains today without encountering either of the two problems above.
 
 ## How to implement the bridged USDC Standard
 
-We provide a custom USDC gateway implementation (for parent and child chains) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO. 
+We provide a custom USDC gateway implementation (for parent and child chains) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO.
 
 - On a parent chain the contract `L1USDCGateway` is used in case the child chain uses ETH as native currency, or `L1OrbitUSDCGateway` in case the child chain uses a custom fee token.
 - On a child chain, `L2USDCGateway` is used.
@@ -29,7 +29,7 @@ We provide a custom USDC gateway implementation (for parent and child chains) th
 
 This page describes how to deploy a USDC bridge compatible with both the Orbit token bridge and Circle’s Bridged USDC Standard.
 
- Steps for a transition to native USDC issuance are also provided. Note that both Circle and the Orbit chain owner must agree to transition to native USDC issuance.
+Steps for a transition to native USDC issuance are also provided. Note that both Circle and the Orbit chain owner must agree to transition to native USDC issuance.
 
 ## Requirements
 
@@ -46,9 +46,9 @@ Other requirements:
 
 <aside>
 
-Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Orbit chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`. 
+Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Orbit chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`.
 
-You can find more details by consulting the [usdc bridge deployment script and its README](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment). 
+You can find more details by consulting the [usdc bridge deployment script and its README](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment).
 
 </aside>
 
@@ -60,7 +60,7 @@ yarn install
 yarn build
 ```
 
-Populate your `.env` file based on `env.example` in the project's root  directory
+Populate your `.env` file based on `env.example` in the project's root directory
 
 ```shell
 PARENT_RPC=
@@ -95,7 +95,7 @@ The script will do the following:
 - if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
 - set minter role to L2 USDC gateway with max allowance
 
-Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance if Circle and the Orbit chain owner agree to it. 
+Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance if Circle and the Orbit chain owner agree to it.
 
 ## Transitioning to native USDC
 
@@ -104,7 +104,7 @@ Once a transition to native USDC is agreed upon, the following steps are require
 - L1 gateway owner pauses deposits on the parent chain by calling `pauseDeposits()`
 - L2 gateway owner pauses withdrawals on the child chain by calling `pauseWithdrawals()`
 - master minter removes the minter role from the child chain gateway
-    - NOTE: there should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a USDC deposit
+  - NOTE: there should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a USDC deposit
 - L1 gateway owner sets Circle's account as burner on the parent chain gateway using `setBurner(address)`
 - L1 gateway owner reads the total supply of USDC on the child chain and then invokes `setBurnAmount(uint256)` on the parent/child gateway where the amount matches the total supply
 - USDC `masterMinter` gives the minter role with `0 `allowance to the L1 gateway so that the burn can be executed
@@ -112,5 +112,5 @@ Once a transition to native USDC is agreed upon, the following steps are require
 - if not already owned by the gateway, the L2 USDC owner transfers ownership to the gateway, and proxy admin transfers admin rights to the gateway
 - Circle uses the `usdcOwnershipTransferrer` account to trigger `transferUSDCRoles(address)`, which will set the caller as USDC proxy admin and will transfer USDC ownership to the provided address
 - Circle calls `burnLockedUSDC()` on the L1 gateway using the `burner` account to burn the `burnAmount` of USDC
-    - remaining USDC will be cleared off when remaining in-flight USDC withdrawals are executed, if any
-    - The L1 gateway owner is trusted to not front-run this transaction to modify the burning amount
+  - remaining USDC will be cleared off when remaining in-flight USDC withdrawals are executed, if any
+  - The L1 gateway owner is trusted to not front-run this transaction to modify the burning amount
