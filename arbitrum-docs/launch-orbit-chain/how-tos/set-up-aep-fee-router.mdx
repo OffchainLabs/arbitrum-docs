@@ -1,0 +1,113 @@
+---
+title: 'How to set up an AEP fee router'
+sidebar_label: 'Set up an AEP fee router'
+description: 'Learn how to implement AEP fee router.'
+author: Midroni
+sme: Midroni
+user_story: As a current Orbit chain owner, I need to learn how to set up an AEP fee router.
+content_type: how-to
+---
+
+
+# AEP fee router implementation
+
+## Quick start
+
+- You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
+
+### Canonical Contracts
+
+| Network       | Contract             | Address                                                                                                                                                    | Configured For |
+|---------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|
+| Ethereum      | `Parent2ChildRouter` | [https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999](https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999)         | `ETH`, `ERC-20`   |
+| Arbitrum Nova | `Child2ParentRouter` | [https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d](https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d) | `ETH`            |
+
+## The AEP fee router contract system
+
+### `RewardDistributor`
+
+The **AEP fee router** system relies on configuring an escrow contract as the intended rewards address for protocol fee components. This intermediary contract is known as the `RewardDistributor`. 
+
+The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. The `RewardDistributor` can be permissionlessly called to perform a withdrawal which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a routing contract on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO. 
+
+### `ChildToParentRouter`
+
+AEP fees from the `RewardDistributor` must first be sent to Ethereum before they can be deposited to the DAO-controlled address on Arbitrum One. To facilitate this transfer to Ethereum, AEP fees are sent through a series of contracts known as `ChildToParentRouters`. 
+
+The `ChildToParentRouter` is configured to withdraw a single token (immutable, and specified at  deployment) from the child chain to a specific target address on the parent chain (either another ChildToParentRouter or the ParentToChildRouter on Ethereum)
+
+### `ParentToChildRouter`
+
+All AEP fees from the network of Orbit chains will arrive at the `ParentToChildRouter` on Ethereum. This contract is capable of sending ETH and arbitrary ERC-20 tokens to a DAO-controlled address on Arbitrum one 
+
+## Deploying your AEP fee router contracts
+
+An Orbit chain is responsible for deploying all `ChildToParentRouters` necessary for their AEP funds to arrive at the `ParentToChildRouter` on Ethereum. This includes:
+
+- Deploying a `ChildToParentRouter` on their Orbit chain configured for their gas token and configured to send funds to either:
+    - The `ParentToChildRouter` on Ethereum (assuming the network is a Layer-2)
+    - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for an Layer-3 networks or higher)
+- Deploying a `RewardDistributor` contract that is configured to forward 10% of fees to the `ChildToParentRouter` and 90% of fees to the chain owner’s preferred reward-receiving address.
+
+In the event that a `ChildToParentRouter` does not connect to the `ParentToChildRouter` on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to `ParentToChildRouter` is established. 
+
+And optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](https://www.notion.so/AEP-Fee-Router-DOCS-4fe72e869dbf47338a1b2d0c084cdfbd?pvs=21) section:
+
+<aside>
+🚨 Layer-3 chains with custom gas tokens with L2-based token contracts are unable to send their custom gas tokens to Ethereum. A future version of AEP Fee Router may allow Orbit chains with L2-based tokens to distribute fees using the routing system. 
+
+In the absence of these, please send ETH through the AEP Fee Router to fulfill your AEP license obligations.
+
+</aside>
+
+## Deployment scripts
+
+The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to quickly deploy and setup the AEP fee router contracts.
+
+<aside>
+⚠️ The standard script deploys and setup the AEP fee router contracts for L2 chains. For L3 chains (or further layers), a different target address on the parent chain will need to be specified, depending on the native token of the chain. Please reach out to the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
+
+</aside>
+
+The script performs the following operations:
+
+1. Obtain the rollup and inbox contract of the chain. These are needed to execute the next steps.
+2. Obtain the current fee collectors of the chain: Orbit base fee collector, Orbit surplus fee collector, Parent chain surplus fee collector.
+3. Deploy the ChildToParentRouter contract, configured to send the amounts received to the appropriate Arbitrum DAO controlled address on the parent chain.
+4. Deploy a RewardDistributor contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
+5. Set each of the fee collectors to the RewardDistributor contracts
+
+<aside>
+ℹ️ Note that if all three fee types are collected by the same address, only one `RewardDistributor` contract will be deployed, which will collect all those fees.
+
+</aside>
+
+To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
+
+- `ROLLUP_ADDRESS`: address of the Rollup contract
+- `CHAIN_OWNER_PRIVATE_KEY`: private key of the account with executor privileges in the `UpgradeExecutor` admin contract for the chain
+- `ORBIT_CHAIN_ID`: `chainId` of the Orbit chain
+- `ORBIT_CHAIN_RPC`: RPC of the Orbit chain
+- `PARENT_CHAIN_ID`: `chainId` of the parent chain (should be a non-Arbitrum chain, including Ethereum)
+- `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in the [Canonical contracts](https://www.notion.so/AEP-Fee-Router-DOCS-4fe72e869dbf47338a1b2d0c084cdfbd?pvs=21) section of this document. If the parent chain your chain settles to is not in that list, contact the Arbitrum Foundation to obtain a specific target address for your chain.
+
+Finally, follow these steps to execute the script (from the `examples/setup-aep-fee-router` folder):
+
+1. Install dependencies
+    
+```shell
+yarn install
+```
+    
+2. Create .env file and add the env vars
+    
+```shell
+cp .env.example .env
+```
+    
+3. Run the script
+    
+```shell
+yarn dev
+```
+    
