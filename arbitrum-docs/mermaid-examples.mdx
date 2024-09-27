@@ -9,30 +9,26 @@ content_type: get-started
 
 This is a WIP page to test Mermaid in OCL docs. It will be updated with more examples and information for use by contributors.
 
+import { ClickableDiagram } from '@site/src/components/ClickableDiagram';
+
+ My Clickable SVG Diagram
+
+Here is my clickable diagram:
+
+<ClickableDiagram />
+
 ## Example 1
 
-``` mermaid
----
-config:
-  layout: elk
-  look: neo
----
 
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'curve': 'stepBefore',
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff',
-      'rankSpacing': '150'
-    }
-  }
-}%%
+``` mermaid
+flowchart LR
+    A:::someclass --> B
+    classDef someclass fill:#f96
+```
+
+
+
+``` mermaid
 graph TD
           L3A("Orbit L3")
           L3B("Orbit L3")
@@ -42,7 +38,7 @@ graph TD
           L2B("Arbitrum Nova")
           L2C("Ethereum L2")
           L2D("Orbit L2")
-    L1("Ethereum L1")
+    L1:::EthereumL1
     L3A --> L2C
     L3B --> L2C
     L3C --> L2A
@@ -51,26 +47,12 @@ graph TD
     L2B --> L1
     L2C --> L1
     L2D --> L1 
+    classDef EthereumL1 padding: 400;
 ```
 
 ## Example 2
 
 ``` mermaid
-
-%%{
-  init: {
-    'theme': 'base',
-    'themeVariables': {
-      'primaryColor': '#BB2528',
-      'primaryTextColor': '#fff',
-      'primaryBorderColor': '#7C0000',
-      'lineColor': '#F8B229',
-      'secondaryColor': '#006100',
-      'tertiaryColor': '#fff',
-      'rankSpacing': '150'
-    }
-  }
-}%%
 block-beta
   columns 6
   block:L3SettlingOnEthereumL2s:2
@@ -139,3 +121,4 @@ import Mermaid from '@theme/Mermaid';
     B-->D;
     C-->D;`}
 />
+
