@@ -310,7 +310,17 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/aep-fee-router-introduction',
-              label: `AEP fee router`,
+              label: `AEP fee router overview`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+              label: `Set up AEP fee router`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+              label: `Calculate AEP license fees`,
             },
           ],
         },
