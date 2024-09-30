@@ -23,7 +23,7 @@ The Arbitrum docs will remain the canonical home for information regarding ArbOS
 
 - [Nitro 3.2.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.2.1) or higher
 - [nitro-contracts v2.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v2.1.0) or higher
-- WASM module root: `0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69`
+- WASM module root: `0x184884e1eb9fefdc158f6c8ac912bb183bf3cf83f0090317e0bc4ac5860baa39`
 
 ### High-level description of ArbOS 32 changes
 
