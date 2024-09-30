@@ -89,8 +89,9 @@ To implement the deduction, the team should do the following:
 - Following this, the `RewardDistributor` will split the post-deduction funds between the **AEP Fee Router** contracts and the configured chain-owner controlled addresses.
 
 ## Special cases and exceptions
+Certain Orbit configurations and customizations require special handling of AEP fees. The following is a non-exhaustive list of applicable scenarios and how to ensure AEP compliance. If any of the following cases apply, the recommended approach for fee handling will require manual handling of a portion of or all AEP Fees. 
 
-- L2-based Custom Gas Token = pay in ETH
-    - Requires a similar multisig set up as above
-- Non-Ethereum L1
-- Identifying customizations and reporting additional revenue sources
+- L2-Based Custom Gas Tokens: If you are an L3 or higher chain with a custom gas token, it may be the case that your custom gas token contract is deployed on L2. If this L2 is not Arbitrum One, then it is possible for the L2 token to be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in ETH by manually sending fees to an ETH-configured routing system.
+- Non-Ethereum L1: If your Orbit chain is deployed on a non-Ethereum L1 (e.g. Solana, BNB Chain) your fees must be manually transferred to a DAO-controlled address.
+- Novel Fee-Earning Customizations: As discussed above in Additional revenue sources, if you have customized your Orbit chain to earn revenue through any enshrined component, this revenue must be calculated as part of the AEP fees. In such cases, we recommend engaging with the AF to agree on a revenue model and reporting cadence, and then manually send additional fees into the routing system as required.
+- Other: If you are uncertain if your Orbit configuration applies to the listed or unlisted special cases, we recommend engaging with the Arbitrum Foundation.
