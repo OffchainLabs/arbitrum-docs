@@ -663,7 +663,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos2',
+              id: 'run-arbitrum-node/arbos-releases/arbos32',
               label: 'ArbOS 32 Bianca',
             },
             {
