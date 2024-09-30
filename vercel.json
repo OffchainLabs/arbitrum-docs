@@ -804,6 +804,11 @@
             "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
             "destination": "/run-arbitrum-node/run-local-dev-node",
             "permanent": false
+        },
+        {
+            "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+            "permanent": false
         }
     ]
 }
