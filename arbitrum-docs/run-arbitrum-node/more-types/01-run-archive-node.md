@@ -52,7 +52,7 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
    - Latest Docker image for **Arbitrum One Classic**: <code>@latestClassicNodeImage@</code>
 5. **Database snapshots:**
    - Nitro database snapshot
-     - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot.arbitrum.foundation/index.html)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code>
+     - Use the parameter `--init.url=` on the first startup to initialize the Nitro database (you can find a list of snapshots [here](https://snapshot-explorer.arbitrum.io/)). Example: <code>--init.url="@arbOneNitroArchiveSnapshot@"</code>
    - Arbitrum One Classic database snapshot
      - Download the latest Arbitrum One Classic database snapshot at [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@) and place it in the mounted point directory
      - Note that other chains don't have Classic blocks and thus don't require an initial genesis database.
