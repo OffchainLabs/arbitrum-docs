@@ -281,7 +281,7 @@ Let's increment the counter by sending a transaction to your contract's `increme
 We'll use Cast's `send` command to send our transaction.
 
 ```shell title="Sending a transaction to the function: increment()"
-cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 \
 [deployed-contract-address] "increment()"
 ```
 
