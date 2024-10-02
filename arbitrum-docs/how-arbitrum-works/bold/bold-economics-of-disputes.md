@@ -20,9 +20,9 @@ However, Arbitrum has not yet achieved its [full promise of decentralization](ht
 The rollup technology powering Arbitrum One is called "optimistic" because claims about its state settled to and confirmed on Ethereum after a period of approximately seven days. During those 7 days, the claimed states can be disputed. 
 To make an analogy, a check can be cashed immediately but can be taken to court to dispute if there is a problem within a specific time frame. Because Arbitrum's state is deterministic, a validator that is running a node and following the chain will always know if a posted claim is invalid. A key decentralization property allows **anyone** who knows the correct claim to challenge invalid claims and **_win_** the challenge. This preserves the accurate history of Arbitrum settling to Ethereum and protects the integrity of users' funds and withdrawals using a "single honest party" property. As long as there is a single entity following the chain and willing to dispute a claim, Arbitrum's security guarantees are maintained.
 
-Today, Arbitrum One's security properties are defined by the size of its permissioned set of validators. Validators could collude or settle an incorrect history, and users have no recourse aside from the Arbitrum One security council stepping in. Elevating Arbitrum One's decentralization requires a different approach.
+Today, Arbitrum One's security properties are defined by the size of its permissioned set of validators. Validators could collude or finalize/confirm an incorrect state, and users have no recourse aside from the Arbitrum One security council stepping in. Elevating Arbitrum One's decentralization requires a different approach.
 
-In the fall of '23, Offchain Labs announced [Arbitrum BoLD](https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc), a new dispute resolution protocol built from the ground up that will bring Arbitrum chains to the next level of decentralization. BoLD, standing for Bounded Liquidity Delay, allows **permissionless** validation of Arbitrum chains. This means the DAO can remove the list of allowed validators, let anyone challenge claims made about Arbitrum states on Ethereum, and win against them if they are incorrect.
+In the Fall of 2023, Offchain Labs announced [Arbitrum BoLD](https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc), a new dispute resolution protocol built from the ground up that will bring Arbitrum chains to the next level of decentralization. BoLD, which is an acryonym for **Bo**unded **L**iquidity **D**elay, allows permissionless validation of Arbitrum chains. This means that the Arbitrum DAO can remove the list of permissioned validators to allow anyone to challenge claims made about Arbitrum states on Ethereum and win those claims if they are correct.
 
 In this document, we'll explore the economics and trade-offs enabling permissionless validation.
 
@@ -30,7 +30,7 @@ In this document, we'll explore the economics and trade-offs enabling permission
 
 We frequently state that "Arbitrum settles its state to Ethereum", and we'll elaborate on what that means. All Arbitrum One transactions can be recreated by reading data from Ethereum L1, as compressed batches of all L2 transactions are frequently posted to Ethereum. Once a batched transaction is included in a finalized block on Ethereum, its history will never be reverted on Arbitrum. Ethereum, however, does not know if a batch posted to it refers to a correct version of Arbitrum's history. To verify batch integrity, there is a separate process that confirms batch correctness on Ethereum: it is called the "assertion."
 
-Approximately every hour, entities known as validators check the correctness of batches by following the <a data-quicklook-from="arbitrum-chain"><a data-quicklook-from="arbitrum-chain">Arbitrum chain</a></a>. Validators then post something called an "assertion", which attests to the validity of a batch, saying, "I have verified this batch". As Ethereum does not know what is correct on Arbitrum, it allows about seven days for anyone to dispute one of these assertions.
+Approximately every hour, entities known as validators check the correctness of batches by following the <a data-quicklook-from="arbitrum-chain"><a data-quicklook-from="arbitrum-chain">Arbitrum chain</a></a>. Validators then post something called an "assertion", which attests to the validity of a batch, saying, "I have verified this batch". As Ethereum does not know what is correct on Arbitrum, it allows about seven days for anyone to dispute one of these assertions. Currently, there is a permissioned list of validators who can post assertions and challenge assertions. Arbitrum BoLD will enable the Arbitrum DAO to remove this permissioned list. Note that validators who opt to posting assertions are otherwise known as a "assertion proposers".
 
 ### Withdrawing assets back to Ethereum from Arbitrum
 
@@ -44,7 +44,7 @@ The reason there is a dispute window for assertions about Arbitrum One on Ethere
 
 ### Dispute resolution times
 
-An actual dispute occurs if a party disagrees with an assertion on Ethereum and posts an assertion they know to be correct. This creates a "fork" in the chain of assertions, requiring a resolution process. We'll get into the high-level details of how disputes are resolved later in this document.
+An actual dispute occurs if a party disagrees with an assertion on Ethereum and posts an assertion they know to be correct as a counter-claim. This creates a "fork" in the chain of assertions, requiring a resolution process. We'll get into the high-level details of how disputes are resolved later in this document.
 
 Once an actual dispute is ongoing, it will also take time to resolve, as, once again, Ethereum has no knowledge of the correctness of Arbitrum states. Ethereum must then give sufficient time for parties to submit their proofs and declare a winner. The new Arbitrum BoLD protocol **guarantees that a dispute will be resolved within seven days** so long as an honest party is present to defend against invalid claims.
 
@@ -56,13 +56,13 @@ Delaying withdrawals incurs opportunity costs and impacts user experience for us
 
 #### Requiring a bond to become a validator
 
-The entities responsible for posting assertions about Arbitrum state to Ethereum are called validators. If posting assertions were free, anyone could create conflicting assertions to always delay withdrawals by fourteen days instead of seven. As such, Arbitrum requires validators to put in a "security deposit," known as a **bond**, to be allowed to post assertions. Validators can withdraw their bond as soon as their latest posted assertion has been confirmed, ending their responsibilities.
+The entities responsible for posting assertions about Arbitrum state to Ethereum are a special type of validator, known as a proposer. If proposing assertions were free, anyone could create conflicting assertions to always delay withdrawals by fourteen days instead of seven. As such, Arbitrum requires validators, who wish to be proposers, to make a "security deposit," known as a **bond**, to be allowed to propose assertions. Validators can withdraw their bond as soon as their latest proposed assertion has been confirmed. Withdrawing their bond formally ends the proposer's responsibilities.
 
 #### Pricing bonds
 
 Ensuring assertions are frequently posted is a requirement for Arbitrum, but at the same time, it should not be a privilege that is easily obtained, which is why the pricing of this "security deposit" is based on opportunity cost.
 
-To be highly conservative, in a bank-run scenario, the [Arbitrum One bridge](https://etherscan.io/address/0x8315177ab297ba92a06054ce80a67ed4dbd7ed3a) contains approximately $5.4BN worth of assets at the time of writing on April 15th, 2024. Assuming funds could earn a 5% APY if invested, the opportunity cost of 1 extra week of delay is approximately USD 5,200,000. Given this scenario, we recommend a bond for assertion posters to be somewhere in the range of ~$2.5M - $5M.
+To be highly conservative, in a bank-run scenario, the [Arbitrum One bridge](https://etherscan.io/address/0x8315177ab297ba92a06054ce80a67ed4dbd7ed3a) contains approximately $3.5B USD worth of assets at the time of writing on Sept 20th, 2024. Assuming funds could earn a 5% APY if invested, the opportunity cost of 1 extra week of delay is approximately USD 3,400,000. Given this scenario, we recommend a bond for assertion posters to be greater than $3,400,000 USD.
 
 Honest proposers can always withdraw their bond once their assertions are confirmed. However, adversaries stand to lose the entirety of their bond if they propose invalid assertions. A large bond size drastically improves the economic security of the system based on these two axes by making the cost to propose high and by guaranteeing that malicious actors will lose their entire bond when they are proven wrong by the protocol.
 
