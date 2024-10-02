@@ -27,7 +27,7 @@ Visit [Inside Arbitrum Nitro](/how-arbitrum-works/inside-arbitrum-nitro.md) to l
 
 ## List of available ArbOS releases
 
-- [ArbOS 31 "Bianca"](/run-arbitrum-node/arbos-releases/arbos31.md)
+- [ArbOS 32 "Bianca"](/run-arbitrum-node/arbos-releases/arbos32.md)
 - [ArbOS 20 "Atlas"](/run-arbitrum-node/arbos-releases/arbos20.md)
 - [ArbOS 11](/run-arbitrum-node/arbos-releases/arbos11.md)
 
@@ -37,7 +37,7 @@ Beginning with ArbOS 20, ArbOS releases use the name of planetary moons in our s
 
 The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e., the next ArbOS upgrade after ArbOS 20 will be ArbOS 31). This was done because there are teams who have customized their Orbit chain's [behavior](/launch-orbit-chain/how-tos/customize-stf.mdx) or [precompiles](/launch-orbit-chain/how-tos/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g. ArbOS 12 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
 
-Note that there may be cases where special optimizations or changes are needed for a specific family of ArbOS releases that will diverge from the standard numbering scheme described above. For example, ArbOS 31 will be the canonical ArbOS version for the “Bianca” family of releases. Node operators and chain owners are expected to upgrade from ArbOS 20 directly to ArbOS 31 (instead of ArbOS 30).
+Note that there may be cases where special optimizations or critical fixes are needed for a specific family of ArbOS releases that will diverge from the standard numbering scheme described above. For example, ArbOS 32 will be the canonical ArbOS version for the “Bianca” family of releases. Node operators and chain owners are expected to upgrade from ArbOS 20 directly to ArbOS 32 (instead of ArbOS 30 or ArbOS 31).
 
 ## Network status
 

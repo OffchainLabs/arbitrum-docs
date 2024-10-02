@@ -663,8 +663,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos31',
-              label: 'ArbOS 31 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos32',
+              label: 'ArbOS 32 Bianca',
             },
             {
               type: 'doc',
@@ -939,8 +939,8 @@ const sidebars = {
                   label: 'Technical deep dive',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
                   label: 'Economics of disputes',
                 },
                 {
