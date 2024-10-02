@@ -3,3 +3,6 @@
 	url = https://github.com/OffchainLabs/arbitrum-sdk
 	branch = main
 
+[submodule "stylus-by-example"]
+	path = stylus-by-example
+	url = https://github.com/offchainlabs/stylus-by-example.git

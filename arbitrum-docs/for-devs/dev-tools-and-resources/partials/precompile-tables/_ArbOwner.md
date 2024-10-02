@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L16"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L18"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L34"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L37"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L19"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L21"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L39"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L42"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L22"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L24"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L48"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L51"
           target="_blank"
         >
           Implementation
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L25"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L27"
           target="_blank"
         >
           Interface
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L53"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L56"
           target="_blank"
         >
           Implementation
@@ -102,7 +102,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L28"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L30"
           target="_blank"
         >
           Interface
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L58"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L61"
           target="_blank"
         >
           Implementation
@@ -126,7 +126,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L31"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L33"
           target="_blank"
         >
           Interface
@@ -134,7 +134,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L63"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L66"
           target="_blank"
         >
           Implementation
@@ -148,7 +148,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L34"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L36"
           target="_blank"
         >
           Interface
@@ -156,7 +156,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L68"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L71"
           target="_blank"
         >
           Implementation
@@ -170,7 +170,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L37"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L39"
           target="_blank"
         >
           Interface
@@ -178,7 +178,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L73"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L79"
           target="_blank"
         >
           Implementation
@@ -192,7 +192,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L40"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L42"
           target="_blank"
         >
           Interface
@@ -200,7 +200,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L78"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L84"
           target="_blank"
         >
           Implementation
@@ -214,7 +214,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L43"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L45"
           target="_blank"
         >
           Interface
@@ -222,7 +222,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L83"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L89"
           target="_blank"
         >
           Implementation
@@ -236,7 +236,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L46"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L48"
           target="_blank"
         >
           Interface
@@ -244,7 +244,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L88"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L94"
           target="_blank"
         >
           Implementation
@@ -258,7 +258,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L49"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L51"
           target="_blank"
         >
           Interface
@@ -266,7 +266,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L93"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L99"
           target="_blank"
         >
           Implementation
@@ -280,7 +280,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L52"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L54"
           target="_blank"
         >
           Interface
@@ -288,7 +288,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L98"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L104"
           target="_blank"
         >
           Implementation
@@ -302,7 +302,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L55"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L57"
           target="_blank"
         >
           Interface
@@ -310,7 +310,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L103"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L109"
           target="_blank"
         >
           Implementation
@@ -324,7 +324,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L58"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L60"
           target="_blank"
         >
           Interface
@@ -332,7 +332,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L108"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L114"
           target="_blank"
         >
           Implementation
@@ -346,7 +346,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L61"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L63"
           target="_blank"
         >
           Interface
@@ -354,7 +354,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L113"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L119"
           target="_blank"
         >
           Implementation
@@ -368,7 +368,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L64"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L66"
           target="_blank"
         >
           Interface
@@ -376,7 +376,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L117"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L123"
           target="_blank"
         >
           Implementation
@@ -390,7 +390,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L67"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L69"
           target="_blank"
         >
           Interface
@@ -398,7 +398,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L121"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L127"
           target="_blank"
         >
           Implementation
@@ -412,7 +412,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L70"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L72"
           target="_blank"
         >
           Interface
@@ -420,7 +420,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L125"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L131"
           target="_blank"
         >
           Implementation
@@ -434,7 +434,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L73"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L75"
           target="_blank"
         >
           Interface
@@ -442,7 +442,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L129"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L135"
           target="_blank"
         >
           Implementation
@@ -456,7 +456,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L76"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L78"
           target="_blank"
         >
           Interface
@@ -464,7 +464,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L133"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L139"
           target="_blank"
         >
           Implementation
@@ -478,7 +478,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L79"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L81"
           target="_blank"
         >
           Interface
@@ -486,7 +486,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L137"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L143"
           target="_blank"
         >
           Implementation
@@ -500,7 +500,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L85"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L87"
           target="_blank"
         >
           Interface
@@ -508,7 +508,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L145"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L151"
           target="_blank"
         >
           Implementation
@@ -525,7 +525,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L88"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L90"
           target="_blank"
         >
           Interface
@@ -533,7 +533,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L141"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L147"
           target="_blank"
         >
           Implementation
@@ -547,7 +547,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L91"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L93"
           target="_blank"
         >
           Interface
@@ -555,7 +555,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L149"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L155"
           target="_blank"
         >
           Implementation
@@ -565,11 +565,11 @@
     </tr>
     <tr>
       <td>
-        <code>setChainConfig(string calldata chainConfig)</code>
+        <code>setInkPrice(uint32 price)</code>
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L94"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L97"
           target="_blank"
         >
           Interface
@@ -577,7 +577,271 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L169"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L176"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the amount of ink 1 gas buys</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmMaxStackDepth(uint32 depth)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L100"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L190"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the maximum depth (in wasm words) a wasm stack may grow</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmFreePages(uint16 pages)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L103"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L200"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Gets the number of free wasm pages a tx gets</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmPageGas(uint16 gas)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L106"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L210"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the base cost of each additional wasm page</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmPageLimit(uint16 limit)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L109"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L220"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the initial number of pages a wasm may allocate</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmMinInitGas(uint8 gas, uint16 cached)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L114"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L230"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the minimum costs to invoke a program</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmInitCostScalar(uint64 percent)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L118"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L241"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the linear adjustment made to program init costs</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmExpiryDays(uint16 _days)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L121"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L251"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the number of days after which programs deactivate</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmKeepaliveDays(uint16 _days)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L124"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L261"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the age a program must be to perform a keepalive</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setWasmBlockCacheSize(uint16 count)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L127"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L271"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Sets the number of extra programs ArbOS caches during a given block</td>
+    </tr>
+    <tr>
+      <td>
+        <code>addWasmCacheManager(address manager)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L130"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L281"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Adds account as a wasm cache manager</td>
+    </tr>
+    <tr>
+      <td>
+        <code>removeWasmCacheManager(address manager)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L133"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L286"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Removes account from the list of wasm cache managers</td>
+    </tr>
+    <tr>
+      <td>
+        <code>setChainConfig(string calldata chainConfig)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L136"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L298"
           target="_blank"
         >
           Implementation
@@ -603,7 +867,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbOwner.sol#L97"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbOwner.sol#L139"
           target="_blank"
         >
           Interface
@@ -611,13 +875,13 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbOwner.go#L0"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbOwner.go#L0"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td>Emitted when a successful call is made to this precompile</td>
+      <td>/ Emitted when a successful call is made to this precompile</td>
     </tr>
   </tbody>
 </table>
