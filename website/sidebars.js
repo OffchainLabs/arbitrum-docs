@@ -26,6 +26,11 @@ const sidebars = {
           id: 'for-devs/dev-tools-and-resources/chain-info',
           label: 'Chain info',
         },
+        {
+          type: 'doc',
+          id: 'clickable-diagrams',
+          label: 'clickable-diagrams',
+        },
       ],
     },
     {
