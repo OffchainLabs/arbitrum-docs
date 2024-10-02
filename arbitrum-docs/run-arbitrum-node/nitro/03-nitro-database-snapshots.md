@@ -22,7 +22,7 @@ Nitro has a CLI configuration for downloading the latest snapshot from a remote 
 
 When searching for the latest snapshot, Nitro uses the chain name provided in `--chain.name`. Make sure to set it correctly; otherwise, Nitro might be unable to find the snapshot. Nitro will look for a remote file in `<latest-base>/<chain-name>/latest-<kind>.txt`, where `<kind>` is the option supplied to `--init.latest`. This file should contain either the path or the full URL to the snapshot; if it only contains the path, Nitro will use the `<latest-base>` as the base URL.
 
-After finding the latest snapshot URL, Nitro will download the archive and temporarily store it in the directory specified in `--init.download-path`. Nitro looks for a SHA256 checksum on the remote server and verifies the checksum of the snapshot after finishing the download. (It is possible to disable this feature by setting `--init.validate-checksum` to false.) 
+After finding the latest snapshot URL, Nitro will download the archive and temporarily store it in the directory specified in `--init.download-path`. Nitro looks for a SHA256 checksum on the remote server and verifies the checksum of the snapshot after finishing the download. (It is possible to disable this feature by setting `--init.validate-checksum` to false.)
 
 The snapshot can be a single archive file or a series of parts. Nitro first tries to download the snapshot as a single archive. In this case, Nitro will look for a checksum file in `<archive-url>.sha256`. If the remote server returns not found (404 status code), Nitro will proceed to download the snapshot in parts. When downloading in parts, Nitro will look for a manifest file in `<archive-url>.manifest.txt` containing each part's name and checksum. In this case, Nitro will download each part in the manifest file and concatenate them into a single archive.
 
@@ -48,7 +48,7 @@ The first step is downloading the snapshot. The command below illustrates how to
 wget -c -P /tmp "$SNAPSHOT_URL"
 ```
 
-After downloading the snapshot, make sure to verify whether the checksum matches the one provided by the remote server. To fetch the checksum, you may run the command below. 
+After downloading the snapshot, make sure to verify whether the checksum matches the one provided by the remote server. To fetch the checksum, you may run the command below.
 
 ```shell
 wget -q -O - "$SNAPSHOT_URL".sha256

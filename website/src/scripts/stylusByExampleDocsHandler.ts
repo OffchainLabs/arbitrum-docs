@@ -5,18 +5,20 @@ const { parseMarkdownContentTitle } = require('@docusaurus/utils');
 
 const allowList = [
   'hello_world',
-  'bytes_in_bytes_out',
   'primitive_data_types',
   'variables',
   'constants',
-  'events',
+  'function',
   'errors',
+  'events',
+  'inheritance',
+  'vm_affordances',
   'sending_ether',
   'function_selector',
   'abi_encode',
   'abi_decode',
   'hashing',
-  'function',
+  'bytes_in_bytes_out',
 ];
 
 function load(app) {
@@ -116,13 +118,40 @@ function copyFiles(source, target) {
         const newFileName = `${parentDirName}.mdx`;
         const content = fs.readFileSync(sourcePath, 'utf8');
         const convertedContent = convertMetadataToFrontmatter(content);
-        fs.writeFileSync(path.join(targetPath, newFileName), convertedContent);
+        const convertedContentWithBanner =
+          addAdmonitionOneLineAboveFirstCodeBlock(convertedContent);
+        fs.writeFileSync(path.join(targetPath, newFileName), convertedContentWithBanner);
       }
     }
   }
 
   processDirectory(source, target, true);
 }
+
+// Adjust the file path
+const firstCodeBlock = `\`\`\`rust`;
+const admonition = `
+import NotForProductionBannerPartial from '../partials/_not-for-production-banner-partial.mdx';
+
+<NotForProductionBannerPartial />
+`;
+
+function addAdmonitionOneLineAboveFirstCodeBlock(content) {
+  const index = content.indexOf(firstCodeBlock);
+  if (index === -1) {
+    console.log('firstCodeBlock not found');
+    return;
+  }
+
+  // Find the position two lines before firstCodeBlock
+  const lines = content.substring(0, index).split('\n');
+  const insertLineIndex = lines.length - 2;
+  lines.splice(insertLineIndex, 0, admonition);
+
+  const newText = lines.join('\n') + content.substring(index);
+  return newText;
+}
+
 function convertMetadataToFrontmatter(content) {
   const metadataRegex = /export const metadata = ({[\s\S]*?});/;
   const match = content.match(metadataRegex);

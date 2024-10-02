@@ -9,7 +9,7 @@ sidebar_position: 3
 
 This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

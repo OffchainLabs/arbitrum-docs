@@ -21,6 +21,11 @@ const sidebars = {
           id: 'welcome/get-started',
           label: 'Get started',
         },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
       ],
     },
     {
@@ -190,7 +195,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/useful-addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
@@ -297,6 +302,16 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
               label: `Manage the fee collectors`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              label: `Implement Circle bridged USDC`,
+            },
           ],
         },
         {
@@ -319,11 +334,31 @@ const sidebars = {
           ],
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
+              label: 'Deploy a mirror Data Availability Server',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
         },
         {
           type: 'html',
@@ -331,11 +366,6 @@ const sidebars = {
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
           // q: why use an anchor html tag here?
           // a: see note at end of file
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
-          label: 'Keyset generation (AnyTrust chains)',
         },
         {
           type: 'doc',
@@ -425,6 +455,10 @@ const sidebars = {
       type: 'category',
       label: 'Write Stylus contracts',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview',
+      },
       items: [
         {
           type: 'doc',
@@ -438,8 +472,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Testnet',
-          id: 'stylus/reference/testnet-information',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
+        {
+          type: 'doc',
+          label: 'Arbiscan contract verification',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
         },
         {
           type: 'category',
@@ -448,20 +487,30 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
+            {
+              type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
-              },
-              ...stylusByExampleDocsSidebar,
-              {
-                type: 'link',
-                label: 'Rust crate docs',
-                href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-              },
-              {
-                type: 'link',
-                label: 'Stylus by example',
-                href: 'https://stylus-by-example.org/',
-              },
+              label: 'Advanced features',
+            },
+            {
+              type: 'link',
+              label: 'Rust crate docs',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by example',
+              href: 'https://stylus-by-example.org/',
+            },
           ],
         },
         {
@@ -491,6 +540,11 @@ const sidebars = {
           label: 'CLI tools (cargo-stylus)',
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
+            },
             {
               type: 'doc',
               label: 'Optimize WASM binaries',
@@ -524,12 +578,11 @@ const sidebars = {
           type: 'category',
           label: 'Other supported languages',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/other-language-frameworks',
+          },
           items: [
-            {
-              type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'Other language frameworks',
-            },
             {
               type: 'doc',
               label: 'Add a new smart contract language',
@@ -580,6 +633,11 @@ const sidebars = {
           label: 'Run a local dev node',
         },
         {
+          type: 'doc',
+          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
@@ -587,9 +645,11 @@ const sidebars = {
           // a: see note at end of file
         },
         {
-          type: 'doc',
-          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'category',
@@ -603,8 +663,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos31',
-              label: 'ArbOS 31 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos32',
+              label: 'ArbOS 32 Bianca',
             },
             {
               type: 'doc',
@@ -637,33 +697,6 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/get-started',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
@@ -883,7 +916,7 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'The BOLD dispute protocol',
+              label: 'The BoLD dispute protocol',
               items: [
                 {
                   type: 'doc',
@@ -898,7 +931,7 @@ const sidebars = {
                 {
                   type: 'link',
                   href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BOLD Whitepaper',
+                  label: 'BoLD Whitepaper',
                 },
                 {
                   type: 'link',
@@ -906,8 +939,8 @@ const sidebars = {
                   label: 'Technical deep dive',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
                   label: 'Economics of disputes',
                 },
                 {
