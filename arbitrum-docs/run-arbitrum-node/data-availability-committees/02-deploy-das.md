@@ -390,15 +390,15 @@ curl -I <YOUR REST ENDPOINT>/health
 
 ### Test 4: Retrieve data from a batch poster transaction
 
-You can also do a test to retrieve the transaction data which posted by a batch poster transaction, the transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber,bytes data,uint256 afterDelayedMessagesRead,address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
+You can also do a test to retrieve the transaction data posted by a batch poster transaction. The transaction will contain both keyset and data hash information in its `data` field in method `addSequencerL2BatchFromOrigin(uint256 sequenceNumber, bytes data,uint256 afterDelayedMessagesRead, address gasRefunder,uint256 prevMessageCount,uint256 newMessageCount)`.
 
-After you decode a batch poster transaction and get its `data` within the function data, you can continue to decode the `data` as follow:
+After you decode a batch poster transaction and get its `data` within the function data, you can continue to decode the `data` as follows:
 
-The first part (1 byte) is `header flag` which is used to specific which type of batch is it, here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
+The first part (1 byte) is the `header flag`, which is used to specify which type of batch it is. Here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
 
-The second part (32 bytes) is keyset hash, you can learn more about what is keyset [here](/how-arbitrum-works/inside-anytrust#keysets).
+The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/inside-anytrust#keysets).
 
-The third part (32 bytes) is data hash, and this is what we need to retrieve data, when you get this hash, you can retrieve data directly by follow what we demonstrate in Step 4.
+The third part (32 bytes) is the data hash, and this is what we need to retrieve data. When you get this hash, you can retrieve data directly by following what we demonstrate in Step 4.
 
 ## Running a mirror DAS
 
