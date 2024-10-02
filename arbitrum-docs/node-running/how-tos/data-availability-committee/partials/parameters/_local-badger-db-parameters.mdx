@@ -1,5 +1,6 @@
-| Parameter                                                  | Description                                                                                          |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| --data-availability.local-db-storage.enable                | Enables storage/retrieval of sequencer batch data from a database on the local filesystem            |
-| --data-availability.local-db-storage.data-dir              | Absolute path of the directory inside the volume in which to store the database (it must exist)      |
-| --data-availability.local-db-storage.discard-after-timeout | Whether to discard data after its expiry timeout (setting it to false, activates the “archive” mode) |
+| Parameter                                                  | Description                                                                                                     |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| --data-availability.local-db-storage.enable                | Enables storage/retrieval of sequencer batch data from a database on the local filesystem                       |
+| --data-availability.local-db-storage.data-dir              | Absolute path of the directory inside the volume in which to store the database (it must exist)                 |
+| --data-availability.local-db-storage.discard-after-timeout | Whether to discard data after its expiry timeout (setting it to false, activates the “archive” mode)            |
+| --data-availability.migrate-local-db-to-file-storage       | Migrate all data on startup from local-db-storage to local-file-storage, then mark local-db-storage as unusable |

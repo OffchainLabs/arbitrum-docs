@@ -7,7 +7,7 @@ target_audience: Developers writing and deploying Stylus programs
 sidebar_position: 2
 ---
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

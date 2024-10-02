@@ -5,17 +5,17 @@ reader_audience: developers who want to build on Ethereum/Arbitrum and bridge to
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
 :::caution Do you really need a custom gateway?
 
-Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.md) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.md). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 :::
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.md).
+In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -23,7 +23,7 @@ We will go through all steps involved in the process. However, if you want to ju
 
 ## Step 0: Review the prerequisites (a.k.a. do I really need a custom gateway?)
 
-Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.md) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.md). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
+Before starting to implement and deploy a custom gateway, it is strongly encouraged to analyze the current solutions that Arbitrum’s token bridge provides: the [standard gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) and the [generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx). These solutions provide enough functionality to solve the majority of bridging needs from projects. And if you are in doubt about your current approach, you can always ask for assistance on our [Discord server](https://discord.gg/arbitrum).
 
 Having said that, there are multiple prerequisites to keep in mind when deploying your own custom gateway.
 
@@ -46,7 +46,7 @@ On the other hand, the **L2 counterpart of the gateway**, must conform to the [I
 
 ### What about my custom tokens?
 
-If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.md).
+If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
 
 ## Step 1: Create a gateway and deploy it on L1
 
@@ -690,11 +690,11 @@ We now deploy that gateway to L2.
 ```tsx
 const { ethers } = require('hardhat');
 const { providers, Wallet, BigNumber } = require('ethers');
-const { 
-  getArbitrumNetwork, 
+const {
+  getArbitrumNetwork,
   ParentToChildMessageStatus,
   AdminErc20Bridger,
-  Erc20Bridger, 
+  Erc20Bridger,
 } = require('@arbitrum/sdk');
 require('dotenv').config();
 
@@ -742,7 +742,7 @@ main()
 
 This step will depend on your setup. In this case, as our simplified gateway supports only one token, we will deploy those on L1 and L2 to be able to call the `setTokenBridgeInformation` method on both gateways afterwards.
 
-We won’t go through the process of deploying custom tokens in this How-to, but you can see a detailed explanation of the steps to take in the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.md)
+We won’t go through the process of deploying custom tokens in this How-to, but you can see a detailed explanation of the steps to take in the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx)
 
 ## Step 4: Configure your custom tokens on your gateways
 
@@ -784,7 +784,7 @@ console.log(
 
 Once all contracts are deployed on their respective chains, and they all have the information of the gateways and tokens, it’s time to register the token in your custom gateway.
 
-As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.md), this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx), this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 In this case, when using this function only one action will be performed:
 
@@ -837,7 +837,7 @@ Once this step is done, your L1 and L2 gateways will be registered in the token 
 
 You can bridge tokens between L1 and L2 using the custom tokens, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.md), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
 
 The full code of this how-to and a more extensive deployment and testing script can be found [in this package of our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging).
 
@@ -845,4 +845,4 @@ The full code of this how-to and a more extensive deployment and testing script 
 
 1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
-3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts)
+3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)

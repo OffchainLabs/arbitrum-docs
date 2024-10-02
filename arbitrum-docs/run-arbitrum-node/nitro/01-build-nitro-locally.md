@@ -6,7 +6,7 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -42,6 +42,8 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo service docker start
 ```
+
+(Note that if you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.)
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
 
@@ -130,15 +132,15 @@ nvm install 18
 nvm use 18
 ```
 
-### Step 6. Configure Rust [1.73](https://www.rust-lang.org/tools/install)
+### Step 6. Configure Rust [1.80.1](https://www.rust-lang.org/tools/install)
 
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.73
-rustup default 1.73
-rustup target add wasm32-unknown-unknown --toolchain 1.73
-rustup target add wasm32-wasi --toolchain 1.73
+rustup install 1.80.1
+rustup default 1.80.1
+rustup target add wasm32-unknown-unknown --toolchain 1.80.1
+rustup target add wasm32-wasi --toolchain 1.80.1
 cargo install cbindgen
 ```
 
@@ -187,6 +189,21 @@ make
 
 ```shell
 make build
+```
+
+#### Warnings on MacOS
+
+In MacOS with Apple Silicon, warnings like the following might appear but they will not hinder the compilation process.
+
+```
+ld: warning: object file was built for newer 'macOS' version (14.4) than being linked (14.0)
+```
+
+To solve these warnings, export the following environment variables before building Nitro.
+
+```
+export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)
+export CGO_LDFLAGS=-Wl,-no_warn_duplicate_libraries
 ```
 
 ### Step 10. Run your node
