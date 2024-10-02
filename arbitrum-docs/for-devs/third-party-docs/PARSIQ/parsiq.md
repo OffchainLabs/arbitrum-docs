@@ -19,7 +19,7 @@ to get started.
 
 PARSIQ Tsunami API is a highly efficient API to fetch raw Web3 data:
 
-- Events, calls, transactions (internal included), transfers, contracts, blocks - you name it. Possibility to use unlimited blockrange makes Tsunami a hard-to-beat solution for realiably getting large amounts of data from the blockchain. CSV Export is available.
+- Events, calls, transactions (internal included), transfers, contracts, blocks - you name it. Possibility to use unlimited blockrange makes Tsunami a hard-to-beat solution for reliably getting large amounts of data from the blockchain. CSV Export is available.
 - Get decoded, human readable data right out of the box.
 - Need an up to date feeds of data streamed to you in real time? Give our low latency Real Time Streaming service a try.
 

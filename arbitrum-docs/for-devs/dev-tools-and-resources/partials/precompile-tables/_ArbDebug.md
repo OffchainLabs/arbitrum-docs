@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L13"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L13"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L55"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L55"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L16"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L16"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L27"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L27"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L19"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L19"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L45"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L45"
           target="_blank"
         >
           Implementation
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L38"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L38"
           target="_blank"
         >
           Interface
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L50"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L50"
           target="_blank"
         >
           Implementation
@@ -98,11 +98,11 @@
     </tr>
     <tr>
       <td>
-        <code>legacyError()</code>
+        <code>panic()</code>
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L40"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L40"
           target="_blank"
         >
           Interface
@@ -110,7 +110,29 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L59"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L60"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Halts the chain by panicking in the STF</td>
+    </tr>
+    <tr>
+      <td>
+        <code>legacyError()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L42"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L64"
           target="_blank"
         >
           Implementation
@@ -136,7 +158,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L22"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L22"
           target="_blank"
         >
           Interface
@@ -144,7 +166,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L32"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L32"
           target="_blank"
         >
           Implementation
@@ -160,7 +182,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L23"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L23"
           target="_blank"
         >
           Interface
@@ -168,7 +190,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L37"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L37"
           target="_blank"
         >
           Implementation
@@ -184,7 +206,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/1cab72ff3dfcfe06ceed371a9db7a54a527e3bfb/src/precompiles/ArbDebug.sol#L30"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbDebug.sol#L30"
           target="_blank"
         >
           Interface
@@ -192,7 +214,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.3.3/precompiles/ArbDebug.go#L0"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbDebug.go#L0"
           target="_blank"
         >
           Implementation

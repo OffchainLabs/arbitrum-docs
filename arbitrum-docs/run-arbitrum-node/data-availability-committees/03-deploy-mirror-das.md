@@ -6,7 +6,7 @@ sidebar_position: 3
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -111,26 +111,30 @@ To enable caching, you can use the following parameters:
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
+::::warning Local Badger database deprecated
+
+The local badger DB storage option (set with `local-db-storage`) has been deprecated and should be replaced with the local files storage option (set with `local-file-storage`).
+
+A migration tool has been included in Nitro to migrate all data from the local badger db to local files. You can activate it by using the parameter `--data-availability.migrate-local-db-to-file-storage`.
+
+::::
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
-import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
 import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
-import IPFSParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_ipfs-parameters.mdx';
+import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
 
 <div className="dynamic-content-tabs">
   <Tabs className="tabgroup" defaultValue={null}>
     <TabItem value="s3-bucket" label="AWS S3 bucket">
       <S3Parameters />
     </TabItem>
-    <TabItem value="badger-db" label="Local Badger database">
-      <LocalBadgerDBParameters />
-    </TabItem>
     <TabItem value="local-files" label="Local files">
       <LocalFilesParameters />
     </TabItem>
-    <TabItem value="ipfs" label="IPFS">
-      <IPFSParameters />
+    <TabItem value="badger-db" label="(Deprecated) Local Badger database">
+      <LocalBadgerDBParameters />
     </TabItem>
   </Tabs>
 </div>
@@ -139,10 +143,10 @@ Here's an example `daserver` command for a mirror DAS that:
 
 - Enables local cache
 - Enables AWS S3 bucket storage that doesn't discard data after expiring ([archive](#archive-da-servers))
-- Enables local Badger database storage that doesn't discard data after expiring ([archive](#archive-da-servers))
+- Enables local file storage that, by default, doesn't discard data after expiring ([archive](#archive-da-servers))
 - Uses a local main DAS as part of the REST aggregator
 
-```bash
+```shell
 daserver
     --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>"
     --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>"
@@ -163,9 +167,8 @@ daserver
     --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>"
     --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/"
     --data-availability.s3-storage.discard-after-timeout false
-    --data-availability.local-db-storage.enable
-    --data-availability.local-db-storage.data-dir /home/user/data/badgerdb
-    --data-availability.local-db-storage.discard-after-timeout false
+    --data-availability.local-file-storage.enable
+    --data-availability.local-file-storage.data-dir /home/user/data/das-data
 ```
 
 And here's an example of how to use a k8s deployment to run that command:
@@ -197,7 +200,7 @@ spec:
         - |
             mkdir -p /home/user/data/badgerdb
             mkdir -p /home/user/data/syncState
-            /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-main-das.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.rest-aggregator.sync-to-storage.eager  --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block "BLOCK NUMBER" --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-db-storage.enable --data-availability.local-db-storage.data-dir /home/user/data/badgerdb
+            /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-main-das.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.rest-aggregator.sync-to-storage.eager  --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block "BLOCK NUMBER" --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
         image: @latestNitroNodeImage@
         imagePullPolicy: Always
         resources:
@@ -236,12 +239,11 @@ Archive DA servers are servers that don't discard any data after expiring. Each 
 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
-```bash
+```shell
 --data-availability.s3-storage.discard-after-timeout=false
---data-availability.local-db-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` and `ipfs-storage` don't discard data after expiring, so the option `discard-after-timeout` is not available.
+Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
@@ -259,7 +261,7 @@ The REST interface enabled in the mirror DAS has a health check on the path `/h
 
 Example:
 
-```bash
+```shell
 curl -I <YOUR REST ENDPOINT>/health
 ```
 
