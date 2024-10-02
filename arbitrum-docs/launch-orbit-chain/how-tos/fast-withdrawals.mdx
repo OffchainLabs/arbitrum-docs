@@ -8,16 +8,15 @@ user_story: As a current or prospective Orbit chain owner, I need to understand 
 content_type: get-started
 ---
 
-Optimistic Rollups must sustain a multi-day challenge period to allow time for fraud proofs. This delays finality for users and apps, resulting in multi-day withdrawal times and cross-chain communication delays.
+Optimistic Rollups must sustain a multi-day challenge period to allow time for fraud proofs. This delays finality for users and dApps, resulting in multi-day withdrawal times and cross-chain communication delays.
 
 Fast Withdrawals is a new configuration allowing Orbit chains to achieve fast finality. When an Orbit chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
 
 This will allow:
 
-Orbit chains can configure a fast withdrawal frequency of any time period (up to 15 minutes)
-
-- Users' withdrawals are confirmed on the parent chain at frequencies up to ~15 minutes
-- Cross-chain apps can read the finalized state at the same rate as the fast withdrawal frequency
+- Setting up a withdrawal frequency of any time period (up to 15 minutes) 
+- Users' withdrawals confirmation on the parent chain at frequencies up to ~15 minutes
+- Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
 ## Recommended for AnyTrust
 
@@ -25,9 +24,7 @@ While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ Fast Withd
 
 This is because AnyTrust chains, as an optimum, already have a minimum trust assumption placed in their Data Availability Committee (DAC) - which allows their nodes to provide data availability.
 
-We recommend that Orbit chains built on AnyTrust set up their Fast Withdrawals Committee such that a
-
-- The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee, which leverages the existing trust assumption on the DAC. **This means enabling Fast Withdrawals does not add any new trusted parties.**
+The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee, which leverages the existing trust assumption on the DAC. **Enabling Fast Withdrawals does not add any new trusted parties.**
 
 An Orbit Rollup can adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
@@ -50,13 +47,13 @@ If your chain is not running with nitro-contracts v2.1.0 or above, you’ll need
 
 Upgrading to the new nitro-contracts version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should be running [nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1-beta.2) or above.
 
-Suppose you’re upgrading your nitro-contracts from v1.2.1 to v2.1.0 and using the standard wasm module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different wasm module root, you can still deploy the action contract referencing your modified wasm module root (pre and post upgrade).
+Suppose you’re upgrading your nitro-contracts from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
 
 ### Activating fast withdrawals
 
 Once the chain runs nitro-contracts v2.1.0 or above, the new fast withdrawal parameters will be available in the `RollupAdminLogic` and the `RollupUserLogic` contracts.
 
-Both the Orbit SDK and the Orbit actions repository provide configurable scripts to activate and configure fast withdrawals on an Anytrust chain. You can use either of those to activate the feature. Both scripts perform the same actions.
+Both the Orbit SDK and the Orbit actions repository provide configurable scripts to activate and configure fast withdrawals on an AnyTrust chain. You can use either of those to activate the feature. Both scripts perform the same actions.
 
 <aside>
   ℹ️ Even though two scripts are available to activate Fast Withdrawals, you only need to execute
@@ -69,19 +66,19 @@ The Orbit SDK provides an [example script](https://github.com/OffchainLabs/arbit
 
 1. Create a new n/n Safe wallet with the specified validators as signers
 2. Add the specified validators to the Rollup validators allowlist
-3. Set the new Safe wallet as the anytrustFastConfirmer in the Rollup contract
-4. Set the new minimumAssertionPeriod if needed
+3. Set the new Safe wallet as the `anytrustFastConfirmer` in the Rollup contract
+4. Set the new `minimumAssertionPeriod` if needed
 5. Show how to configure the batch poster and validator nodes
 
 To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-fast-withdrawal/.env.example):
 
 | Variable Name            | Description                                                                                                                                                                                                 |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CHAIN_OWNER_PRIVATE_KEY  | Private key of the account with executor privileges in the UpgradeExecutor admin contract for the chain. It will be the deployer of the multi-sig Safe wallet.                                              |
-| PARENT_CHAIN_ID          | ChainId of the parent chain.                                                                                                                                                                                |
-| ROLLUP_ADDRESS           | Address of the Rollup contract.                                                                                                                                                                             |
-| FC_VALIDATORS            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain. |
-| MINIMUM_ASSERTION_PERIOD | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in L1 blocks).                                                      |
+| `CHAIN_OWNER_PRIVATE_KEY`  | Private key of the account with executor privileges in the UpgradeExecutor admin contract for the chain. It will be the deployer of the multi-sig Safe wallet.                                              |
+| `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                |
+| `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                             |
+| `FC_VALIDATORS`            | Array of fast-withdrawal validators. They will be added as signers to the multisig Safe wallet and to the Rollup's validator allowlist. It is recommended that these are DAC members of the AnyTrust chain. |
+| `MINIMUM_ASSERTION_PERIOD` | Optional parameter that defaults to 75 blocks (~15 minutes). Minimum number of blocks that have to pass in between assertions (measured in L1 blocks).                                                      |
 
 Finally, follow these steps to execute the script (from the `examples/setup-fast-withdrawal` folder):
 
@@ -107,21 +104,21 @@ yarn run dev
 
 The Orbit actions repository also provides an [action script](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md) to activate fast withdrawals by performing the following operations:
 
-1. Validate fast confirmation has not been enabled yet
+1. Make sure the "Validate fast confirmation" has not been enabled yet
 2. Create a Safe contract for the fast confirmation committee
 3. Set the Safe contract as the fast confirmer on the Rollup
 4. Set the Safe contract as a validator on the Rollup
-5. Set setMinimumAssertionPeriod to 1 block to allow more frequent assertion
+5. Set `setMinimumAssertionPeriod` to 1 block to allow more frequent assertion
 
 To configure the action script, you need to specify the following [environment variables](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/.env.example):
 
 | Variable Name                   | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| UPGRADE_ACTION_ADDRESS          | Address of the upgrade action to execute. A standard version is deployed in all [supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#deployed-instances). If you need to deploy your own action, execute the first step of [this process](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#how-to-use-it). |
-| PARENT_UPGRADE_EXECUTOR_ADDRESS | Private key of the account with executor privileges in the UpgradeExecutor admin contract on the parent chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                                                                                  |
-| PARENT_CHAIN_RPC                | RPC endpoint of the parent chain.                                                                                                                                                                                                                                                                                                                                                                                     |
-| ROLLUP                          | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                                                       |
-| FAST_CONFIRM_COMMITTEE          | Comma-separated list of fast-withdrawal validators. They must be allowlisted validators in the Rollup contract. They will be added as signers to the multisig Safe wallet. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                                        |
+|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `UPGRADE_ACTION_ADDRESS`          | Address of the upgrade action to execute. A standard version is deployed in all [supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#deployed-instances). If you need to deploy your own action, execute the first step of [this process](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#how-to-use-it). |
+| `PARENT_UPGRADE_EXECUTOR_ADDRESS` | Private key of the account with executor privileges in the UpgradeExecutor admin contract on the parent chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                                                                                  |
+| `PARENT_CHAIN_RPC`                | RPC endpoint of the parent chain.                                                                                                                                                                                                                                                                                                                                                                                     |
+| `ROLLUP`                          | Address of the Rollup contract.                                                                                                                                                                                                                                                                                                                                                                                       |
+| `FAST_CONFIRM_COMMITTEE`          | Comma-separated list of fast-withdrawal validators. They must be allowlisted validators in the Rollup contract. They will be added as signers to the multisig Safe wallet. It is recommended that these are DAC members of the AnyTrust chain.                                                                                                                                                                        |
 
 Finally, follow these steps to execute the script (from the `scripts/foundry/fast-confirm` folder):
 
@@ -137,35 +134,34 @@ yarn install
 cp .env.example .env
 ```
 
-3. Execute the action. Upgrade can be executed using the `cast` CLI command (part of Foundry installation), using the owner account (the one with executor rights on parent chain UpgradeExecutor) to send the transaction:
+3. Execute the action. The upgrade can be executed using   `cast`  CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
 
 ```shell
 (export $(cat .env | xargs) && cast send $PARENT_UPGRADE_EXECUTOR_ADDRESS "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]) --rpc-url $PARENT_CHAIN_RPC --account EXECUTOR)
 # use --account XXX / --private-key XXX / --interactive / --ledger to set the account to send the transaction from
 ```
 
-**NOTE:** If you have a multisig as executor, you can use the following command to create the payload for calling into the PARENT_UPGRADE_EXECUTOR:
+**NOTE:** If you have a multisig as executor, you can use the following command to create the payload for calling into the `PARENT_UPGRADE_EXECUTOR`:
 
-```
+```shell
 (export $(cat .env | xargs) && cast calldata "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]))
 ```
 
 ### Configure fast withdrawal on nitro v3.1.1 or above
 
-To be able to use Fast Withdrawal in your chain, the batch poster and the validators of the chain need to be running [nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1-beta.2) or above.
+To be able to use Fast Withdrawal on your chain, the batch poster and the validators of the chain need to be running [nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1-beta.2) or above.
 
 The following parameters need to be configured in those nodes.
 
 **Batch poster**
 
 - `--node.batch-poster.max-delay=0h15m0s`
-  - Since batches need to be posted so validators can create and confirm assertions, the maximum delay should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value.
+   Since batches need to be posted so validators can create and confirm assertions, the maximum delay should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value.
 
 **Validators**
 
-- `--node.staker.enable-fast-confirmation=true`
-  - Enables fast withdrawals in the validator node
-- `--node.staker.fast-confirm-safe-address=<address of the Safe deployed>`
-  - Configures the node to sign the transaction on the Safe wallet that acts as the fast confirmer
-- `--node.staker.make-assertion-interval=0h15m0s`
-  - Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value.
+| Option                                              | Description                                                                                                                                                                                                                                              |
+|-----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--node.staker.enable-fast-confirmation=true`       | Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
+| `--node.staker.fast-confirm-safe-address=<address>` | Configures the node to sign the transaction on the Safe wallet that acts as the fast confirmer                                                                                                                                                           |
+| `--node.staker.make-assertion-interval=0h15m0s`     | Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
