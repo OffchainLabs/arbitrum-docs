@@ -10,11 +10,11 @@ sidebar_label: "ORA"
 As a verifiable oracle protocol, ORA brings AI and complex compute onchain.
 Its main product, **Onchain AI Oracle (OAO)**, integrates AI capabilities directly onchain.
 
-ORA breaks down the limitations of smart contracts by offering verifiable AI inference, so developers can innovate freely.
+ORA breaks down the limitations of smart contracts by offering verifiable AI inference so that developers can innovate freely.
 
-## OAO Quickstart
+## OAO quickstart
 
-This quickstart is designed to help you to build a smart-contract on Arbitrum able to interact with OAO. You can find more details in [our docs Quickstart](https://docs.ora.io/doc/oao-onchain-ai-oracle/develop-guide).
+This quickstart is designed to help you build a smart contract on Arbitrum able to interact with OAO. You can find more details in [our docs Quickstart](https://docs.ora.io/doc/oao-onchain-ai-oracle/develop-guide).
 
 ### Workflow
 
@@ -22,9 +22,9 @@ This quickstart is designed to help you to build a smart-contract on Arbitrum ab
 2. Each AI request will initiate an opML inference.
 3. OAO will emit a `requestCallback` event which will be collected by opML node.
 4. opML node will run the AI inference, and then upload the result on Arbitrum, waiting for the challenge period.
-    1. During the challenge period, the opML validators will check the result, and challenge it if the submitted result is incorrect.
+    1. During the challenge period, the opML validators will check the result and challenge it if the submitted result is incorrect.
     2. If the submitted result is successfully challenged by one of the validators, the submitted result will be updated on Arbitrum.
-    3. After the challenge period, the submitted result on chain is finalized.
+    3. After the challenge period, the submitted result onchain is finalized.
 5. When the result is uploaded or updated on Arbitrum, the provided AI inference in opML will be dispatched to the user's smart contract via its specific callback function.
 
 ## Integration
@@ -35,7 +35,7 @@ To integrate with OAO, you will need to write your own contract.
 
 To build with AI models of OAO, we provided an example of contract using OAO: [Prompt](https://arbiscan.io/address/0xC20DeDbE8642b77EfDb4372915947c87b7a526bD).
 
-### Smart Contract Integration
+### Smart contract integration
 
 1. Inherit `AIOracleCallbackReceiver` in your contract and bind with a specific OAO address:
 
@@ -71,7 +71,7 @@ Arbitrum One:
 - Prompt: [0xC20DeDbE8642b77EfDb4372915947c87b7a526bD](https://arbiscan.io/address/0xC20DeDbE8642b77EfDb4372915947c87b7a526bD)
 - SimplePrompt: [0xC3287BDEF03b925A7C7f54791EDADCD88e632CcD](https://arbiscan.io/address/0xC3287BDEF03b925A7C7f54791EDADCD88e632CcD)
 
-Arbitrum Sepolia Tesnet: 
+Arbitrum Sepolia tesnet: 
 
 - OAO Proxy: [0x0A0f4321214BB6C7811dD8a71cF587bdaF03f0A0](https://sepolia.arbiscan.io/address/0x0A0f4321214BB6C7811dD8a71cF587bdaF03f0A0)
 - Prompt: [0xC3287BDEF03b925A7C7f54791EDADCD88e632CcD](https://sepolia.arbiscan.io/address/0xC3287BDEF03b925A7C7f54791EDADCD88e632CcD)
