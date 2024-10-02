@@ -56,13 +56,12 @@ An example of `chain.info-json` is available in the next section.
 --chain.name=<My Arbitrum L3 Chain>
 ```
 
-
 #### 3. `execution.forwarding-target`
 
 You need to set the --execution.forwarding-target flag if you are running a regular full node (Not sequencer).
 
 ```shell
---execution.forwarding-targe=<Your Sequencer node endpoint url>
+--execution.forwarding-target=<Your Sequencer node endpoint url>
 ```
 
 #### 4. AnyTrust chains
@@ -155,6 +154,6 @@ After that, your node can synchronize the latest state from the sequencer feed.
 
 We show here a list of the parameters that are most commonly used when running your Orbit node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
-import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.md';
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.mdx';
 
 <OptionalOrbitCompatibleCLIFlagsPartial />

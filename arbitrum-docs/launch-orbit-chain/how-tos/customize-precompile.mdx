@@ -7,12 +7,15 @@ content_type: how-to
 ---
 
 import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
 
 <PublicPreviewBannerPartial />
 
+<CustomizeCautionBannerPartial />
+
 :::caution
 
-The guidance in this document will work only if you use `eth_call` to call the new precompiles. If you're calling from other contracts or adding non-view/pure methods, this approach will break block validation.
+The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure methods, this approach will break the block validation.
 
 To support these additional use-cases, follow the instructions described in [How to customize your Orbit chain's behavior](/launch-orbit-chain/how-tos/customize-stf.mdx).
 
@@ -111,7 +114,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 Then, update [precompile.go][precompile_main_file_link] to register the new precompile under the `Precompiles()` method:
 
 ```go
-insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
+insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
 Navigate to the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
@@ -185,9 +188,9 @@ type ArbSys struct {
 	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
 
 	// Add your customize event here:
-	Hi						func(ctx, mech, addr) error
+	Hi						       func(ctx, mech, addr) error
 	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
-	HiGasCost				func(addr) (uint64, error)
+	HiGasCost				    func(addr) (uint64, error)
 }
 ```
 
@@ -528,6 +531,10 @@ You should see something like this:
 ```
 2
 ```
+
+## Incorporate your changes to precompile into the ArbOS upgrade
+
+If you do not customize the precompile before launching your Orbit network, please continue to follow [customize arbos] to perform an ArbOS version control to avoid blockchain reorg.
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
