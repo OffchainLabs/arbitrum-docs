@@ -22,11 +22,11 @@ import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-
 
 - [Docker](https://docs.docker.com/get-docker/)
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
-- At least 1 testnet ETH (for custom gas token chains, 0.6 ETH and 0.4 native tokens)
+- At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
 
-You'll need at least 1 testnet $ETH for regular Orbit chains or 0.6 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
+You'll need at least 1.2 testnet $ETH for regular Orbit chains or 0.8 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
 
 At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Sepolia network to Arbitrum Sepolia L2 testnet:
 
