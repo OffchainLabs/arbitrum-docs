@@ -11,16 +11,16 @@ Familiarity with [oracles](/build-decentralized-apps/oracles/01-overview.md), sm
 
 ## Pyth
 
-The [Pyth network](https://pyth.network/) is the largest first-party oracle network, securely and transparently delivering real-time market data to [multiple chains](https://docs.pyth.network/price-feeds/contract-addresses).
+The [Pyth network](https://pyth.network/) a first-party oracle network, securely and transparently delivering real-time market data to [multiple chains](https://docs.pyth.network/price-feeds/contract-addresses).
 
 The network comprises some of the world’s [largest exchanges, market makers, and financial services providers](https://pyth.network/publishers). These publish proprietary data on-chain for aggregation and distribution to smart contract applications.
 
-### Pyth Price Feeds
+### Pyth price feeds
 
 The Pyth network introduces an innovative low-latency [pull oracle design](https://docs.pyth.network/price-feeds/pull-updates), where users can pull price updates on-chain when needed, enabling everyone in the blockchain environment to access that data point. Pyth network updates the prices every 400ms, making Pyth the fastest on-chain oracle.
 
-Here is a working example of a contract that fetches the latest price of ARB/USD on Arbitrum network.
-You have to pass Pyth's contract address for Arbitrum mainnet/testnet and the desired price feed id to fetch the latest price.
+Here is a working example of a contract that fetches the latest price of ARB/USD on the Arbitrum network.
+You have to pass Pyth's contract address for Arbitrum mainnet/testnet and the desired price feed ID to fetch the latest price.
 
 Install the Pyth SDK Solidity package in your project:
 ```tsx
@@ -65,12 +65,12 @@ Pyth Entropy allows developers to quickly and easily generate secure **random nu
 
 Check [how to generate random numbers in EVM contracts](https://docs.pyth.network/entropy/generate-random-numbers/evm) for a detailed walkthrough.
 
-#### Supported Networks for Arbitrum(Pyth Entropy):
+#### Supported networks for Arbitrum(Pyth Entropy):
 
 - Arbitrum: [`0x7698E925FfC29655576D0b361D75Af579e20AdAc`](https://arbiscan.io/address/0x7698E925FfC29655576D0b361D75Af579e20AdAc)
 - Arbitrum Sepolia: [`0x549Ebba8036Ab746611B4fFA1423eb0A4Df61440`](https://sepolia.arbiscan.io/address/0x549Ebba8036Ab746611B4fFA1423eb0A4Df61440)
 
-### Additoinal Resources
+### Additoinal resources
 Check out the following links to get started with Pyth.
 
 - [Pyth EVM Integration Guide](https://docs.pyth.network/price-feeds/use-real-time-data/evm)
