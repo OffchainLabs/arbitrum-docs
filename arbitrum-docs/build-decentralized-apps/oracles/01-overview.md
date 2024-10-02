@@ -48,7 +48,7 @@ Pull oracles, in contrast to push oracles, require smart contracts to request da
 sequenceDiagram
     participant SC as Smart Contract
     participant OC as Oracle Contract<br />(on-chain)
-    participant O as Oracle<br />(off-chain)
+    participant O as Oracle<br />(On-chain)
     participant DS as Data Source<br />(off-chain)
     SC->>OC: Request data from Oracle
     OC->>O: Query external data
