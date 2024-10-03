@@ -7,11 +7,13 @@ target_audience: Developers building on the Stylus testnet
 sidebar_position: 9
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 import StylusFaucets from './partials/_stylus-faucets.mdx';
 
-import StylusSmartContractsAddresses from './partials/_stylus-smart-contract-addresses.mdx';
+
+import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx'
+
 
 <PublicPreviewBannerPartial />
 
@@ -35,4 +37,4 @@ This section provides an overview of the available public RPC endpoints for diff
 
 <StylusFaucets />
 
-<StylusSmartContractsAddresses />
+<ArbitrumContractAddresses />
