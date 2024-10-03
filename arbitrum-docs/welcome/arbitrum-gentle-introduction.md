@@ -6,6 +6,6 @@ user_story: As a technical reader, I want to understand how Arbitrum scales Ethe
 content_type: gentle-introduction
 ---
 
-import GentleIntroPartial from '../partials/_gentle-intro-partial.md';
+import GentleIntroPartial from '../partials/_gentle-intro-partial.mdx';
 
 <GentleIntroPartial />

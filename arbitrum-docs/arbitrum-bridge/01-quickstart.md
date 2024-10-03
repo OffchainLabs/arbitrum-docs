@@ -108,4 +108,4 @@ Once the countdown is done, switch to the destination network on your wallet and
 
 ## What's next?
 
-The team working on Arbitrum is always interested and looking forward to engage with its users. Why not follow us on [Twitter](https://twitter.com/arbitrum) or join our community on [Discord](https://discord.gg/arbitrum)?
+The team working on Arbitrum is always interested and looking forward to engage with its users. Why not follow us on [X (Twitter)](https://x.com/arbitrum) or join our community on [Discord](https://discord.gg/arbitrum)?
