@@ -18,15 +18,18 @@ This will allow:
 - Users' withdrawals confirmation on the parent chain at frequencies up to ~15 minutes
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
-## Recommended for AnyTrust
+## Recommended Configuration
+While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ Fast Withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
 
-While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ Fast Withdrawals for AnyTrust chains.
+### Fast Withdrawals for AnyTrust Chains
+As AnyTrust chains are an optimium (an optimistic rollup using a separate data availability layer), AnyTrust chains are already placing a trust assumption on their Data Availability Committee (DAC) to provide the data needed for fraud proofs and recreating the chain.
 
-This is because AnyTrust chains, as an optimum, already have a minimum trust assumption placed in their Data Availability Committee (DAC) - which allows their nodes to provide data availability.
+The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee. This will leverages the existing trust assumption placed on the DAC operators such that **enabling Fast Withdrawals does not add any new trusted parties.**
 
-The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee, which leverages the existing trust assumption on the DAC. **Enabling Fast Withdrawals does not add any new trusted parties.**
+It is possible for an Orbit Rollup can adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
-An Orbit Rollup can adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
+### Minimum Validator and DAC Nodes
+We recommend that any Fast Withdrawals enabled chain have a minimum of 3 DAS members and 3 validators in the Fast Withdrawals committee. Given that Fast Withdrawals will enable confirmation of new rollup state much faster than the usual 7 day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
 
 ## Adoption instructions (example script)
 
