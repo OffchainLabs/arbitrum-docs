@@ -60,7 +60,7 @@ On RPC calls that return transaction receipts, the following fields are added to
 
 | Field name      | Description                                                                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `l1BlockNumber` | The L1 block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.md) |
+| `l1BlockNumber` | The L1 block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
 | `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/gas-fees.md)                                                                 |
 
 ## Blocks
@@ -73,7 +73,7 @@ On RPC calls that return a block, the following fields are added to the returned
 
 | Field name      | Description                                                                                                                                                                                  |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | An approximate L1 block number that occurred before this L2 block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.md) |
+| `l1BlockNumber` | An approximate L1 block number that occurred before this L2 block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
 | `sendCount`     | The number of L2 to L1 messages since Nitro genesis                                                                                                                                          |
 | `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                     |
 
@@ -86,7 +86,7 @@ On RPC calls that return a block, the following fields will have a different con
 | `extraData`  | This field is equivalent to `sendRoot`                                                                                                                                                                                                  |
 | `mixHash`    | First 8 bytes is equivalent to `sendCount`, second 8 bytes is equivalent to `l1BlockNumber`                                                                                                                                             |
 | `difficulty` | Fixed at `0x1`                                                                                                                                                                                                                          |
-| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/build-decentralized-apps/reference/03-chain-params.md) for the gas limit of other chains |
+| `gasLimit`   | Value is fixed at `0x4000000000000`, but it's important to note that Arbitrum One currently has a 32M gas limit per block. See [Chain params](/build-decentralized-apps/reference/03-chain-params.mdx) for the gas limit of other chains |
 
 ## Other methods that are slightly different
 

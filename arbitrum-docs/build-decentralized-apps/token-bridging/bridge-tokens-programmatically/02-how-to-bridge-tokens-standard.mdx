@@ -5,11 +5,11 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#default-standard-bridging). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.md).
+In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#default-standard-bridging). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -94,7 +94,7 @@ Now, here’s an explanation of the contracts and methods that need to be called
 - When bridging from Ethereum (L1) to Arbitrum (L2), you’ll need to interact with the `L1GatewayRouter` contract, by calling the `outboundTransferCustomRefund` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L1ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L1GatewayRouter` contract.
 - When bridging from Arbitrum (L2) to Ethereum (L1), you’ll need to interact with the `L2GatewayRouter` contract, by calling the `outBoundTransfer` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L2ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L2GatewayRouter` contract.
 
-You can find the addresses of the contracts involved in the process in [this page](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts).
+You can find the addresses of the contracts involved in the process in [this page](/build-decentralized-apps/reference/contract-addresses#token-bridge-smart-contracts).
 
 ## Step 3: Approve token allowance for the gateway contract
 
@@ -224,4 +224,5 @@ After finishing this process, you’ll now have a counterpart token contract aut
 
 1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
-3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md#token-bridge-smart-contracts)
+3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
+

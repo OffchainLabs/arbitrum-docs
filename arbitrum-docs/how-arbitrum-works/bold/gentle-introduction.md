@@ -128,7 +128,7 @@ Specifically, 1% (one percent) of the confiscated funds from a malicious actor i
 - How to reimburse the challenge bond and gas costs to honest parties, and
 - What to do with the funds confiscated from a malicious actor (including, but not limited to, rewarding the honest parties with a portion of the confiscated funds, burning the confiscated funds in its entirety, or sending the confiscated funds to the DAO treasury).
 
-Note that honest parties are not automatically rewarded with the funds confiscated from malicious actors to avoid creating a situation where honest parties wastefully compete to be the first one to make each honest move in the interactive fraud proof game. Additionally, BOLD resolves disputes by determining which top-level assertion is correct, without necessarily being able to classify every move as “honest” or “malicious” as part of the interactive fraud proof game without off-chain knowledge.
+Note that honest parties are not automatically rewarded with the funds confiscated from malicious actors to avoid creating a situation where honest parties wastefully compete to be the first one to make each honest move in the interactive fraud proof game. Additionally, BoLD resolves disputes by determining which top-level assertion is correct, without necessarily being able to classify every move as “honest” or “malicious” as part of the interactive fraud proof game without off-chain knowledge.
 
 Defenders are only eligible for this reward if they deposit a challenge bond (555 or 79 ETH, depending on the level), posted an on-chain assertion as part of a sub-challenge (i.e. not the top-level assertion), and have had their on-chain sub-challenge assertion get confirmed by the protocol. The calculation for this reward is conducted off-chain by the Arbitrum Foundation and payment will be made via an Arbitrum DAO vote (since confiscated funds go to a Arbitrum DAO-controlled address).
 
@@ -148,7 +148,7 @@ If you’re intrigued by what BoLD can unlock for Arbitrum chains, we encourage 
 
 ## Wen mainnet?
 
-:::caution Withdrawals leading up to a BOLD upgrade
+:::caution Withdrawals leading up to a BoLD upgrade
 
 The confirmation timing on any withdrawal that is in-flight when the BoLD upgrade is activated will be delayed until the first BoLD assertion is confirmed. This means that for any Arbitrum chain that upgrades to use BoLD, including Arbitrum One and Arbitrum Nova, all pending withdrawals to L1 Ethereum that were initiated _before_ the upgrade will be delayed by 1 challenge period, plus the time between the withdrawal was initiated and the time that the BoLD upgrade takes place. This is because the upgrade effectively "resets" the challenge period for that are not yet finalized.
 
@@ -156,9 +156,9 @@ For example, if the upgrade happened at time _t_, then a withdrawal initiated at
 
 :::
 
-BOLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BOLD's journey to being deployed to Arbitrum chains include:
+BoLD is in `alpha`, which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BoLD's journey to being deployed to Arbitrum chains include:
 
-- A comprehensive, third-party audit of the [BoLD source code](https://github.com/OffchainLabs/BoLD) to ensure the effectiveness and safety of the design.
+- A comprehensive, third-party audit of the [BoLD source code](https://github.com/OffchainLabs/bold) to ensure the effectiveness and safety of the design.
 - Tools and frameworks for the smooth migration of existing validators and a seamless onboarding for new validators to use BoLD for their respective Arbitrum chains.
 - Monitoring stack for people to use to see ongoing challenges on the testnet
 - A mechanism for the community to pool funds together to bond capital to an assertion made by validators
