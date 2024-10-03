@@ -31,6 +31,6 @@ When a transaction schedules another, the subsequent transaction's execution [wi
 
 Because a call to [`redeem`](/build-decentralized-apps/precompiles/02-reference.md#arbretryabletx) donates all of the call's gas, doing multiple requires limiting the amount of gas provided to each subcall. Otherwise the first will take all of the gas and force the second to necessarily fail irrespective of the estimation's gas limit.
 
-Gas estimation for Retryable submissions is possible via the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.md) and similarly requires the auto-redeem attempt to succeed.
+Gas estimation for Retryable submissions is possible via the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
 
 [estimation_inclusion_link]: https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999
