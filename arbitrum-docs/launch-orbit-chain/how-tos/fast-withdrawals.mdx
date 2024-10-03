@@ -14,7 +14,7 @@ Fast Withdrawals is a new configuration allowing Orbit chains to achieve fast fi
 
 This will allow:
 
-- Setting up a withdrawal frequency of any time period (up to 15 minutes) 
+- Setting up a withdrawal frequency of any time period (up to 15 minutes)
 - Users' withdrawals confirmation on the parent chain at frequencies up to ~15 minutes
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
@@ -34,7 +34,7 @@ To enable the Fast Withdrawals feature, there are three actions to take:
 
 1. Make sure the chain is using nitro-contracts v2.1.0 or above
 2. Activate the Fast Withdrawals feature
-3. Upgrade the node software to nitro v3.1.1 or above
+3. Upgrade the node software to nitro v3.1.2 or above
 
 ### Upgrading to nitro-contracts v2.1.0
 
@@ -45,7 +45,7 @@ If your chain is not running with nitro-contracts v2.1.0 or above, you’ll need
 - If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
 - If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
 
-Upgrading to the new nitro-contracts version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should be running [nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1-beta.2) or above.
+Upgrading to the new nitro-contracts version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should be running [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
 
 Suppose you’re upgrading your nitro-contracts from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
 
@@ -70,10 +70,10 @@ The Orbit SDK provides an [example script](https://github.com/OffchainLabs/arbit
 4. Set the new `minimumAssertionPeriod` if needed
 5. Show how to configure the batch poster and validator nodes
 
-To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-fast-withdrawal/.env.example):
+To configure the script, you need to specify the following environment variables:
 
-| Variable Name            | Description                                                                                                                                                                                                 |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Variable Name              | Description                                                                                                                                                                                                 |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CHAIN_OWNER_PRIVATE_KEY`  | Private key of the account with executor privileges in the UpgradeExecutor admin contract for the chain. It will be the deployer of the multi-sig Safe wallet.                                              |
 | `PARENT_CHAIN_ID`          | ChainId of the parent chain.                                                                                                                                                                                |
 | `ROLLUP_ADDRESS`           | Address of the Rollup contract.                                                                                                                                                                             |
@@ -110,10 +110,10 @@ The Orbit actions repository also provides an [action script](https://github.com
 4. Set the Safe contract as a validator on the Rollup
 5. Set `setMinimumAssertionPeriod` to 1 block to allow more frequent assertion
 
-To configure the action script, you need to specify the following [environment variables](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/.env.example):
+To configure the action script, you need to specify the following environment variables:
 
-| Variable Name                   | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
-|---------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Variable Name                     | Description                                                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `UPGRADE_ACTION_ADDRESS`          | Address of the upgrade action to execute. A standard version is deployed in all [supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#deployed-instances). If you need to deploy your own action, execute the first step of [this process](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md#how-to-use-it). |
 | `PARENT_UPGRADE_EXECUTOR_ADDRESS` | Private key of the account with executor privileges in the UpgradeExecutor admin contract on the parent chain. It will be the deployer of the multi-sig Safe wallet.                                                                                                                                                                                                                                                  |
 | `PARENT_CHAIN_RPC`                | RPC endpoint of the parent chain.                                                                                                                                                                                                                                                                                                                                                                                     |
@@ -134,7 +134,7 @@ yarn install
 cp .env.example .env
 ```
 
-3. Execute the action. The upgrade can be executed using   `cast`  CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
+3. Execute the action. The upgrade can be executed using  `cast`  CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
 
 ```shell
 (export $(cat .env | xargs) && cast send $PARENT_UPGRADE_EXECUTOR_ADDRESS "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]) --rpc-url $PARENT_CHAIN_RPC --account EXECUTOR)
@@ -147,21 +147,21 @@ cp .env.example .env
 (export $(cat .env | xargs) && cast calldata "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]))
 ```
 
-### Configure fast withdrawal on nitro v3.1.1 or above
+### Configure fast withdrawal on nitro v3.1.2 or above
 
-To be able to use Fast Withdrawal on your chain, the batch poster and the validators of the chain need to be running [nitro v3.1.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.1-beta.2) or above.
+To be able to use Fast Withdrawal on your chain, the batch poster and the validators of the chain need to be running [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
 
 The following parameters need to be configured in those nodes.
 
 **Batch poster**
 
-- `--node.batch-poster.max-delay=0h15m0s`
-   Since batches need to be posted so validators can create and confirm assertions, the maximum delay should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value.
+| Option                                  | Description                                                                                                                                                                                                                                   |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.batch-poster.max-delay=0h15m0s` | Since batches need to be posted so validators can create and confirm assertions, the maximum delay should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
 
 **Validators**
 
-| Option                                              | Description                                                                                                                                                                                                                                              |
-|-----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `--node.staker.enable-fast-confirmation=true`       | Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
-| `--node.staker.fast-confirm-safe-address=<address>` | Configures the node to sign the transaction on the Safe wallet that acts as the fast confirmer                                                                                                                                                           |
-| `--node.staker.make-assertion-interval=0h15m0s`     | Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
+| Option                                          | Description                                                                                                                                                                                                                                              |
+| ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.staker.enable-fast-confirmation=true`   | Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
+| `--node.staker.make-assertion-interval=0h15m0s` | Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
