@@ -24,6 +24,9 @@ const config = {
   projectName: 'docusaurus', // Usually your repo name.
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
+  markdown: {
+    mermaid: true,
+  },
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
@@ -274,6 +277,7 @@ const config = {
           securityLevel: 'loose',
           flowchart: {
             curve: 'basis',
+            theme: { light: 'neutral', dark: 'forest' },
           },
         },
       },

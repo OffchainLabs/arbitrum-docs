@@ -48,26 +48,18 @@
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@offchainlabs/prettier-config": "0.2.1",
     "@tsconfig/docusaurus": "^2.0.3",
+    "docusaurus-plugin-typedoc": "^1.0.1",
     "markdown-link-extractor": "^3.1.0",
     "prettier": "^2.8.3",
     "ts-node": "^10.9.1",
     "typedoc": "^0.25.13",
-    "docusaurus-plugin-typedoc": "^1.0.1",
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
     "typescript": "^5.1"
   },
   "browserslist": {
-    "production": [
-      ">0.5%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "production": [">0.5%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   },
   "engines": {
     "node": ">=16.14"
