@@ -162,9 +162,9 @@ BoLD is in `alpha`, which means there are a lot of planned improvements on the r
 - Tools and frameworks for the smooth migration of existing validators and a seamless onboarding for new validators to use BoLD for their respective Arbitrum chains.
 - Monitoring stack for people to use to see ongoing challenges on the testnet
 - A mechanism for the community to pool funds together to bond capital to an assertion made by validators
-- The launch of a public bounty program for white hat auditors and security professionals to help test and secure the BoLD protocol design.
-- Proposing, to the Arbitrum DAO, that the BoLD protocol be adopted - first for Arbitrum Sepolia and then eventually for Arbitrum One and Arbitrum Nova.
-- Cutting a GA release of Nitro that enables BoLD validation.
+- The launch of a public bounty program for white hat security auditors and security professionals to help test and secure the BOLD protocol design.
+- Proposing, to the Arbitrum DAO, that the BOLD protocol be adopted - first for Arbitrum Sepolia and then eventually for Arbitrum One and Arbitrum Nova.
+- Cutting a GA release of Nitro that enables BOLD validation.
 
 ## Frequently asked questions about BoLD (FAQ):
 
