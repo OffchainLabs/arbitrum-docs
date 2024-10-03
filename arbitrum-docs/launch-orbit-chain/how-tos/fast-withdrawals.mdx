@@ -26,10 +26,19 @@ As AnyTrust chains are an optimium (an optimistic rollup using a separate data a
 
 The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee. This will leverages the existing trust assumption placed on the DAC operators such that **enabling Fast Withdrawals does not add any new trusted parties.**
 
-It is possible for an Orbit Rollup can adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
+It is possible for an Orbit Rollup to adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
 ### Minimum Validator and DAC Nodes
 We recommend that any Fast Withdrawals enabled chain have a minimum of 3 DAS members and 3 validators in the Fast Withdrawals committee. Given that Fast Withdrawals will enable confirmation of new rollup state much faster than the usual 7 day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
+
+## Lower Bound for Fast Withdrawals
+Once Fast Withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, higher network load can cause the Fast Withdrawals committee to experience slight delays from the configured rate.   
+
+- For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals. 
+- For chains with higher throughput (>1 Mgas/s), the practical lower bound for Fast Withdrawals is between 1-2 minutes. 
+
+Chain owners and operators should be aware that the Fast Withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behaviour is to be expected and does not interfere with the security or trust model of the Fast Withdrawals committee.
+
 
 ## Adoption instructions (example script)
 
