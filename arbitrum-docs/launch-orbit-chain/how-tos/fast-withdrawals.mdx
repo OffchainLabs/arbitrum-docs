@@ -31,13 +31,25 @@ It is possible for an Orbit Rollup to adopt Fast Withdrawals. However, it would 
 ### Minimum Validator and DAC Nodes
 We recommend that any Fast Withdrawals enabled chain have a minimum of 3 DAS members and 3 validators in the Fast Withdrawals committee. Given that Fast Withdrawals will enable confirmation of new rollup state much faster than the usual 7 day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
 
-## Lower Bound for Fast Withdrawals
+## Technical lower bound for Fast Withdrawals
 Once Fast Withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, higher network load can cause the Fast Withdrawals committee to experience slight delays from the configured rate.   
 
 - For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals. 
 - For chains with higher throughput (>1 Mgas/s), the practical lower bound for Fast Withdrawals is between 1-2 minutes. 
 
 Chain owners and operators should be aware that the Fast Withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behaviour is to be expected and does not interfere with the security or trust model of the Fast Withdrawals committee.
+
+## Practical lower bounds with respect to parent chain finality
+While a Fast Withdrawals enabled chain can be configured to finality in as little as 15 seconds, there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
+
+For an Ethereum-based Layer-2, we recommend that the Fast Withdrawals frequency remain above 12.8 minutes, which is the the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1. 
+
+For an Arbitrum One based Layer-3, there are three tiers of finality to consider:
+1. Soft finality from the sequencer's confirmation of transaction inclusion (~250ms)
+2. Safe finality from batch inclusion, after Arbitrum One's assertion is included in an Ethereum block. 
+3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
+
+Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure Fast Withdrawals down to 15 seconds. 
 
 
 ## Adoption instructions (example script)
