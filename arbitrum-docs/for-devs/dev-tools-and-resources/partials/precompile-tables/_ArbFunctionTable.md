@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbFunctionTable.sol#L15"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbFunctionTable.sol#L15"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbFunctionTable.go#L19"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbFunctionTable.go#L19"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbFunctionTable.sol#L18"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbFunctionTable.sol#L18"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbFunctionTable.go#L24"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbFunctionTable.go#L24"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbFunctionTable.sol#L21"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbFunctionTable.sol#L21"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbFunctionTable.go#L29"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbFunctionTable.go#L29"
           target="_blank"
         >
           Implementation

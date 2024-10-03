@@ -5,6 +5,7 @@ description: 'How to configure a node using the Orbit SDK'
 author: GreatSoshiant
 sme: GreatSoshiant
 target_audience: 'Developers deploying and maintaining Orbit chains.'
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to configure a node using the Orbit SDK.
 content_type: how-to
 ---
 
@@ -15,7 +16,6 @@ This guide will walk you through configuring an Orbit node supporting a <a data-
 This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
 
 :::
-
 
 :::info
 
@@ -53,18 +53,20 @@ Example for a Rollup Orbit Chain:
   },
 };
 ```
+
 Here are some inputs details from the example above:
 
 | Parameters     | Description                                                                   |
 | :------------- | :---------------------------------------------------------------------------- |
 | `chain`        | Details about the hosted chain, including chain ID, name, and core contracts. |
 | `parent-chain` | Information for connecting to the parent chain.                               |
-| `http`         | Configuration parameters fot the HTTP server.                                 |
+| `http`         | Configuration parameters for the HTTP server.                                 |
 | `node`         | Specific node settings, including sequencer and batch-poster configurations.  |
 
-### Additional Configuration for AnyTrust Orbit Chains:
+### Additional configuration for AnyTrust Orbit chains:
 
 For AnyTrust Orbit chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
+
 - Sequencer's inbox address
 - Parent chain node URL
 - RPC aggregators
@@ -92,17 +94,17 @@ Example addition for AnyTrust Node Config:
 };
 ```
 
-### Preparing Your Node Config File
+### Preparing your node config file
 
-The Node Config file includes three types of fields:
+The Node Config file includes three fields types:
 
-1. **Information from the Orbit Deployment Chain**: Such as the addresses of the core contracts.
-2. **Parameters Configurable by the Chain Deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
-3. **Fields Not Typically Configured**: Like the HTTP section, which usually remains standard.
+1. **Information from the Orbit deployment chain**: Such as the addresses of the core contracts.
+2. **Parameters configurable by the chain deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
+3. **Fields not typically configured**: Like the HTTP section, which usually remains standard.
 
 Let's explore the parameters allowing you to set up a stable, and secure Orbit chain tailored to your project's requirements:
 
-### Node Config Generation With Orbit SDK
+### Node config generation with Orbit SDK
 
 Generating a Node Config `JSON` file to initiate your Orbit chain is a step in the deployment process. The Orbit SDK simplifies this task with an API named `prepareNodeConfig`. This API takes specific parameters for your Orbit chain and returns a `JSON` file that can be used as the Node Config to initiate the chain.
 
@@ -119,6 +121,7 @@ const nodeConfig = prepareNodeConfig({
   parentChainRpcUrl: parentChain_RPC_URL,
 });
 ```
+
 Here are some details about the parameters used in the example above:
 
 | Parameters                | Description                                                                                                                                                                                                                           |
@@ -131,7 +134,7 @@ Here are some details about the parameters used in the example above:
 | `parentChainId`           | Chain ID of the parent chain where your Orbit chain is deployed.                                                                                                                                                                      |
 | `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                               |
 
-In case you do not have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
+If you don't have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
 
 Here's an example of how to extract `chainConfig` and `coreContracts` using just the transaction hash from your deployment:
 
@@ -139,7 +142,7 @@ Here's an example of how to extract `chainConfig` and `coreContracts` using just
 import {
   ChainConfig,
   createRollupPrepareTransaction,
-  createRollupPrepareTransactionReceipt
+  createRollupPrepareTransactionReceipt,
 } from '@arbitrum/orbit-sdk';
 
 const tx = createRollupPrepareTransaction({ hash: txHash });
@@ -148,4 +151,4 @@ const chainConfig: ChainConfig = JSON.parse(tx.getInputs()[0].config.chainConfig
 const coreContracts = txReceipt.getCoreContracts();
 ```
 
-This process ensures that all necessary configurations and contract details are included in your Node Config, paving the way for a successful initiation and operation of your Orbit chain.
+This process ensures that all necessary configurations and contract details are included in your Node Config.

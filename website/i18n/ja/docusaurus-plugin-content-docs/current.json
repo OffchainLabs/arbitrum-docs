@@ -165,11 +165,11 @@
   },
   "sidebar.bridgeTokensSidebar.doc.Quickstart": {
     "message": "Quickstart",
-    "description": "The label for the doc item Quickstart in sidebar bridgeTokensSidebar, linking to the doc getting-started-users"
+    "description": "The label for the doc item Quickstart in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/quickstart"
   },
   "sidebar.bridgeTokensSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
-    "description": "The label for the doc item Troubleshooting in sidebar bridgeTokensSidebar, linking to the doc for-users/troubleshooting-users"
+    "description": "The label for the doc item Troubleshooting in sidebar bridgeTokensSidebar, linking to the doc arbitrum-bridge/troubleshooting"
   },
   "sidebar.runNodesSidebar.category.Get started": {
     "message": "Get started",
@@ -185,15 +185,15 @@
   },
   "sidebar.runNodesSidebar.doc.A gentle introduction": {
     "message": "A gentle introduction",
-    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc node-running/gentle-introduction-run-node"
+    "description": "The label for the doc item A gentle introduction in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/overview"
   },
   "sidebar.runNodesSidebar.doc.Quickstart": {
     "message": "Quickstart",
-    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc node-running/quickstart-running-a-node"
+    "description": "The label for the doc item Quickstart in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/quickstart"
   },
   "sidebar.runNodesSidebar.doc.Troubleshooting": {
     "message": "Troubleshooting",
-    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc node-running/troubleshooting-running-nodes"
+    "description": "The label for the doc item Troubleshooting in sidebar runNodesSidebar, linking to the doc run-arbitrum-node/troubleshooting"
   },
   "sidebar.runNodesSidebar.doc.Frequently asked questions": {
     "message": "Frequently asked questions",
@@ -253,11 +253,11 @@
   },
   "sidebar.learnMoreSidebar.doc.Why Nitro?": {
     "message": "Why Nitro?",
-    "description": "The label for the doc item Why Nitro? in sidebar learnMoreSidebar, linking to the doc why-nitro"
+    "description": "The label for the doc item Why Nitro? in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/why-nitro"
   },
   "sidebar.learnMoreSidebar.doc.Transaction lifecycle": {
     "message": "Transaction lifecycle",
-    "description": "The label for the doc item Transaction lifecycle in sidebar learnMoreSidebar, linking to the doc tx-lifecycle"
+    "description": "The label for the doc item Transaction lifecycle in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/tx-lifecycle"
   },
   "sidebar.learnMoreSidebar.doc.Sequencer": {
     "message": "Sequencer",
@@ -265,31 +265,31 @@
   },
   "sidebar.learnMoreSidebar.doc.AnyTrust protocol": {
     "message": "AnyTrust protocol",
-    "description": "The label for the doc item AnyTrust protocol in sidebar learnMoreSidebar, linking to the doc inside-anytrust"
+    "description": "The label for the doc item AnyTrust protocol in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/inside-anytrust"
   },
   "sidebar.learnMoreSidebar.doc.L2 gas": {
     "message": "L2 gas",
-    "description": "The label for the doc item L2 gas in sidebar learnMoreSidebar, linking to the doc arbos/gas"
+    "description": "The label for the doc item L2 gas in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/gas-fees"
   },
   "sidebar.learnMoreSidebar.doc.L1 pricing": {
     "message": "L1 pricing",
-    "description": "The label for the doc item L1 pricing in sidebar learnMoreSidebar, linking to the doc arbos/l1-pricing"
+    "description": "The label for the doc item L1 pricing in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/l1-gas-pricing"
   },
   "sidebar.learnMoreSidebar.doc.Deep dive: Inside Arbitrum": {
     "message": "Deep dive: Inside Arbitrum",
-    "description": "The label for the doc item Deep dive: Inside Arbitrum in sidebar learnMoreSidebar, linking to the doc inside-arbitrum-nitro/inside-arbitrum-nitro"
+    "description": "The label for the doc item Deep dive: Inside Arbitrum in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/inside-arbitrum-nitro"
   },
   "sidebar.learnMoreSidebar.doc.Assertion tree": {
     "message": "Assertion tree",
-    "description": "The label for the doc item Assertion tree in sidebar learnMoreSidebar, linking to the doc assertion-tree"
+    "description": "The label for the doc item Assertion tree in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/assertion-tree"
   },
   "sidebar.learnMoreSidebar.doc.L1-to-L2 messaging": {
     "message": "L1-to-L2 messaging",
-    "description": "The label for the doc item L1-to-L2 messaging in sidebar learnMoreSidebar, linking to the doc arbos/l1-to-l2-messaging"
+    "description": "The label for the doc item L1-to-L2 messaging in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/l1-l2-messaging"
   },
   "sidebar.learnMoreSidebar.doc.L2-to-L1 messaging": {
     "message": "L2-to-L1 messaging",
-    "description": "The label for the doc item L2-to-L1 messaging in sidebar learnMoreSidebar, linking to the doc arbos/l2-to-l1-messaging"
+    "description": "The label for the doc item L2-to-L1 messaging in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/l2-l1-messaging"
   },
   "sidebar.learnMoreSidebar.doc.ArbOS": {
     "message": "ArbOS",
@@ -297,31 +297,31 @@
   },
   "sidebar.learnMoreSidebar.doc.Geth": {
     "message": "Geth",
-    "description": "The label for the doc item Geth in sidebar learnMoreSidebar, linking to the doc arbos/geth"
+    "description": "The label for the doc item Geth in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/arbos/geth"
   },
   "sidebar.learnMoreSidebar.doc.Interactive challenges": {
     "message": "Interactive challenges",
-    "description": "The label for the doc item Interactive challenges in sidebar learnMoreSidebar, linking to the doc proving/challenge-manager"
+    "description": "The label for the doc item Interactive challenges in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/challenge-manager"
   },
   "sidebar.learnMoreSidebar.doc.One step proof assumptions": {
     "message": "One step proof assumptions",
-    "description": "The label for the doc item One step proof assumptions in sidebar learnMoreSidebar, linking to the doc proving/osp-assumptions"
+    "description": "The label for the doc item One step proof assumptions in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/osp-assumptions"
   },
   "sidebar.learnMoreSidebar.doc.Wasm To WAVM": {
     "message": "Wasm To WAVM",
-    "description": "The label for the doc item Wasm To WAVM in sidebar learnMoreSidebar, linking to the doc proving/wasm-to-wavm"
+    "description": "The label for the doc item Wasm To WAVM in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wasm-wavm"
   },
   "sidebar.learnMoreSidebar.doc.Custom WAVM opcodes": {
     "message": "Custom WAVM opcodes",
-    "description": "The label for the doc item Custom WAVM opcodes in sidebar learnMoreSidebar, linking to the doc proving/wavm-custom-opcodes"
+    "description": "The label for the doc item Custom WAVM opcodes in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-custom-opcodes"
   },
   "sidebar.learnMoreSidebar.doc.WAVM floats": {
     "message": "WAVM floats",
-    "description": "The label for the doc item WAVM floats in sidebar learnMoreSidebar, linking to the doc proving/wavm-floats"
+    "description": "The label for the doc item WAVM floats in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-floats"
   },
   "sidebar.learnMoreSidebar.doc.WAVM modules": {
     "message": "WAVM modules",
-    "description": "The label for the doc item WAVM modules in sidebar learnMoreSidebar, linking to the doc proving/wavm-modules"
+    "description": "The label for the doc item WAVM modules in sidebar learnMoreSidebar, linking to the doc how-arbitrum-works/fraud-proofs/wavm-modules"
   },
   "sidebar.learnMoreSidebar.doc.Audit reports": {
     "message": "Audit reports",

@@ -1,5 +1,8 @@
 // @ts-check
 
+const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
+const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
+
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
   buildDecentralizedAppsSidebar: [
@@ -17,6 +20,11 @@ const sidebars = {
           type: 'doc',
           id: 'welcome/get-started',
           label: 'Get started',
+        },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
         },
       ],
     },
@@ -56,7 +64,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Block numbers and time',
+              label: 'Block gas limit, numbers and time',
               id: 'build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time',
             },
             {
@@ -187,7 +195,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/useful-addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
@@ -228,9 +236,9 @@ const sidebars = {
           id: 'for-devs/troubleshooting-building',
         },
         {
-          type: 'link',
+          type: 'category',
           label: 'Arbitrum SDK',
-          href: '/sdk',
+          items: sdkDocsSidebar,
         },
         {
           type: 'link',
@@ -284,6 +292,26 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/customize-stf',
               label: `Customize your chain's behavior`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              label: `Configure delayed inbox finality`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
+              label: `Manage the fee collectors`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              label: `Implement Circle bridged USDC`,
+            },
           ],
         },
         {
@@ -294,11 +322,9 @@ const sidebars = {
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/node-running/reference/arbos-software-releases/overview">ArbOS software releases</a>',
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/arbos-releases/overview">ArbOS software releases</a>',
               // q: why use an anchor html tag here?
-              // a: because this page lives in multiple sidebar sections, we pick one to be the "canonical" location for the page in the sidebar
-              //    if we link to them both via id or standard href, multiple sections of the sidebar will be opened at once when the user visits this page; we don't want that
-              //    if we use a fully qualified link, localhost won't work
+              // a: see note at end of file
             },
             {
               type: 'doc',
@@ -308,16 +334,38 @@ const sidebars = {
           ],
         },
         {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/data-availability-committee/introduction">Data Availability Committees <span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
+          type: 'category',
+          label: 'Data Availability Committees',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/get-started',
+              label: 'Get started',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
+              label: 'Deploy a Data Availability Server (DAS)',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
+              label: 'Deploy a mirror Data Availability Server',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
+              label: 'Configure a Data Availability Committee (DAC)',
+            },
+          ],
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation',
-          label: 'Keyset generation (AnyTrust chains)',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'doc',
@@ -351,8 +399,13 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/infra-options-orbit-chains',
+          label: 'Third-party infrastructure providers',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
-          label: 'FAQ'
+          label: 'FAQ',
         },
         {
           type: 'category',
@@ -402,6 +455,10 @@ const sidebars = {
       type: 'category',
       label: 'Write Stylus contracts',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'stylus/stylus-overview',
+      },
       items: [
         {
           type: 'doc',
@@ -415,17 +472,50 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Run a local dev node',
-          id: 'stylus/how-tos/local-stylus-dev-node',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
         },
         {
           type: 'doc',
-          label: 'Testnets',
-          id: 'stylus/reference/testnet-information',
+          label: 'Arbiscan contract verification',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
         },
         {
           type: 'category',
-          label: 'Gas and ink',
+          label: 'Stylus Rust SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            ...stylusByExampleDocsSidebar,
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended libraries',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/rust-sdk-guide',
+              label: 'Advanced features',
+            },
+            {
+              type: 'link',
+              label: 'Rust crate docs',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by example',
+              href: 'https://stylus-by-example.org/',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Gas, ink and caching',
           collapsed: true,
           items: [
             {
@@ -438,22 +528,65 @@ const sidebars = {
               id: 'stylus/reference/opcode-hostio-pricing',
               label: 'Gas and ink costs',
             },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/stylus-cache-manager',
+              label: 'Caching strategy',
+            },
           ],
         },
         {
           type: 'category',
-          label: 'Stylus SDK',
+          label: 'CLI tools (cargo-stylus)',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Rust SDK overview',
+              label: 'Overview',
+              id: 'stylus/cli-tools-overview',
             },
             {
               type: 'doc',
-              id: 'stylus/reference/stylus-sdk',
-              label: 'SDK repositories',
+              label: 'Optimize WASM binaries',
+              id: 'stylus/how-tos/optimizing-binaries',
+            },
+            {
+              type: 'doc',
+              label: 'Debug Stylus transactions',
+              id: 'stylus/how-tos/debugging-stylus-tx',
+            },
+            {
+              type: 'doc',
+              label: 'Verify Stylus contracts',
+              id: 'stylus/how-tos/verifying-contracts',
+            },
+            {
+              type: 'link',
+              label: 'cargo-stylus repository',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+          ],
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
+          // a: see note at end of file
+        },
+        {
+          type: 'category',
+          label: 'Other supported languages',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'stylus/reference/other-language-frameworks',
+          },
+          items: [
+            {
+              type: 'doc',
+              label: 'Add a new smart contract language',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
             },
           ],
         },
@@ -461,22 +594,6 @@ const sidebars = {
           type: 'doc',
           label: 'Troubleshooting',
           id: 'stylus/troubleshooting-building-stylus',
-        },
-
-        {
-          type: 'doc',
-          label: 'Add a new smart contract language',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-        },
-        {
-          type: 'doc',
-          label: 'Reduce the size of WASM binaries',
-          id: 'stylus/how-tos/optimizing-binaries',
-        },
-        {
-          type: 'link',
-          label: 'Rust crate docs',
-          href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
         },
         {
           type: 'link',
@@ -497,23 +614,28 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'node-running/gentle-introduction-run-node',
+          id: 'run-arbitrum-node/overview',
           label: 'Overview',
         },
         {
           type: 'doc',
-          id: 'node-running/quickstart-running-a-node',
+          id: 'run-arbitrum-node/quickstart',
           label: 'Quickstart',
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/running-a-full-node',
+          id: 'run-arbitrum-node/run-full-node',
           label: 'Run a full node',
         },
         {
           type: 'doc',
-          id: 'node-running/how-tos/local-dev-node',
+          id: 'run-arbitrum-node/run-local-dev-node',
           label: 'Run a local dev node',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
+          label: 'L1 Ethereum RPC providers',
         },
         {
           type: 'html',
@@ -523,28 +645,35 @@ const sidebars = {
           // a: see note at end of file
         },
         {
-          type: 'doc',
-          id: 'node-running/reference/ethereum-beacon-rpc-providers',
-          label: 'L1 Ethereum RPC providers',
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
+          // q: why use an anchor html tag here?
+          // a: see note at end of file
         },
         {
           type: 'category',
-          label: 'Customize your chain',
+          label: 'ArbOS software releases',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/overview',
+              id: 'run-arbitrum-node/arbos-releases/overview',
               label: 'Overview',
             },
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos20',
+              id: 'run-arbitrum-node/arbos-releases/arbos32',
+              label: 'ArbOS 32 Bianca',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/arbos-releases/arbos20',
               label: 'ArbOS 20 Atlas',
             },
             {
               type: 'doc',
-              id: 'node-running/reference/arbos-software-releases/arbos11',
+              id: 'run-arbitrum-node/arbos-releases/arbos11',
               label: 'ArbOS 11',
             },
           ],
@@ -556,45 +685,18 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-an-archive-node',
+              id: 'run-arbitrum-node/more-types/run-archive-node',
               label: 'Run an archive node',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-validator',
+              id: 'run-arbitrum-node/more-types/run-validator-node',
               label: 'Run a validator',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-classic-node',
+              id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/introduction',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/deploy-a-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain',
-              label: 'Configure a Data Availability Committee (DAC)',
             },
           ],
         },
@@ -605,17 +707,17 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-feed-relay',
+              id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/read-sequencer-feed',
+              id: 'run-arbitrum-node/sequencer/read-sequencer-feed',
               label: 'Read the sequencer feed',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/running-a-sequencer-coordinator-manager',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-coordination-manager',
               label: 'Run a Sequencer Coordination Manager (SQM)',
             },
           ],
@@ -627,19 +729,24 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'node-running/how-tos/build-nitro-locally',
+              id: 'run-arbitrum-node/nitro/build-nitro-locally',
               label: 'Build Nitro locally',
             },
             {
               type: 'doc',
-              id: 'node-running/how-tos/migrate-state-and-history-from-classic',
+              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
               label: 'Migrate to Nitro from Classic',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+              label: 'Nitro database snapshots',
             },
           ],
         },
         {
           type: 'doc',
-          id: 'node-running/troubleshooting-running-nodes',
+          id: 'run-arbitrum-node/troubleshooting',
           label: 'Troubleshooting',
         },
         {
@@ -656,18 +763,18 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'getting-started-users',
+          id: 'arbitrum-bridge/quickstart',
           label: 'Quickstart',
         },
         {
           type: 'doc',
-          id: 'for-users/troubleshooting-users',
-          label: 'Troubleshooting',
+          id: 'arbitrum-bridge/usdc-arbitrum-one',
+          label: 'USDC on Arbitrum One',
         },
         {
           type: 'doc',
-          id: 'bridge-tokens/concepts/usdc-concept',
-          label: 'USDC on Arbitrum One',
+          id: 'arbitrum-bridge/troubleshooting',
+          label: 'Troubleshooting',
         },
       ],
     },
@@ -683,22 +790,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'why-nitro',
+              id: 'how-arbitrum-works/why-nitro',
               label: 'Why Nitro?',
             },
             {
               type: 'doc',
-              id: 'tx-lifecycle',
+              id: 'how-arbitrum-works/tx-lifecycle',
               label: 'Transaction lifecycle',
             },
             {
               type: 'doc',
-              id: 'sequencer',
+              id: 'how-arbitrum-works/sequencer',
               label: 'Sequencer',
             },
             {
               type: 'doc',
-              id: 'inside-anytrust',
+              id: 'how-arbitrum-works/inside-anytrust',
               label: 'AnyTrust protocol',
             },
             {
@@ -707,12 +814,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/gas',
-                  label: 'L2 gas',
+                  id: 'how-arbitrum-works/gas-fees',
+                  label: 'L2 gas and fees',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l1-pricing',
+                  id: 'how-arbitrum-works/l1-gas-pricing',
                   label: 'L1 pricing',
                 },
               ],
@@ -726,7 +833,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'inside-arbitrum-nitro/inside-arbitrum-nitro',
+              id: 'how-arbitrum-works/inside-arbitrum-nitro',
               label: 'Deep dive: Inside Arbitrum',
             },
             {
@@ -736,7 +843,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'assertion-tree',
+              id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
             },
             {
@@ -745,12 +852,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/l1-to-l2-messaging',
+                  id: 'how-arbitrum-works/arbos/l1-l2-messaging',
                   label: 'L1-to-L2 messaging',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/l2-to-l1-messaging',
+                  id: 'how-arbitrum-works/arbos/l2-l1-messaging',
                   label: 'L2-to-L1 messaging',
                 },
               ],
@@ -761,12 +868,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'arbos/arbos',
+                  id: 'how-arbitrum-works/arbos/introduction',
                   label: 'ArbOS',
                 },
                 {
                   type: 'doc',
-                  id: 'arbos/geth',
+                  id: 'how-arbitrum-works/arbos/geth',
                   label: 'Geth',
                 },
               ],
@@ -777,33 +884,84 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'proving/challenge-manager',
+                  id: 'how-arbitrum-works/fraud-proofs/challenge-manager',
                   label: 'Interactive challenges',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/osp-assumptions',
+                  id: 'how-arbitrum-works/fraud-proofs/osp-assumptions',
                   label: 'One step proof assumptions',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wasm-to-wavm',
+                  id: 'how-arbitrum-works/fraud-proofs/wasm-wavm',
                   label: 'Wasm To WAVM',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-custom-opcodes',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-custom-opcodes',
                   label: 'Custom WAVM opcodes',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-floats',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-floats',
                   label: 'WAVM floats',
                 },
                 {
                   type: 'doc',
-                  id: 'proving/wavm-modules',
+                  id: 'how-arbitrum-works/fraud-proofs/wavm-modules',
                   label: 'WAVM modules',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'The BoLD dispute protocol',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/gentle-introduction',
+                  label: 'A gentle introduction',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+                  label: 'Deploy a validator on testnet',
+                },
+                {
+                  type: 'link',
+                  href: 'https://arxiv.org/abs/2404.10491',
+                  label: 'BoLD Whitepaper',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  label: 'Technical deep dive',
+                },
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
+                  label: 'Economics of disputes',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/OffchainLabs/bold',
+                  label: 'Specification on Github',
+                },
+                {
+                  type: 'link',
+                  href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
+                  label: 'Audit Report by Trail of Bits',
+                },
+                {
+                  type: 'link',
+                  href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
+                  label: 'Audit Report by Code4rena',
+                },
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/public-preview-expectations',
+                  label: 'Public preview',
                 },
               ],
             },

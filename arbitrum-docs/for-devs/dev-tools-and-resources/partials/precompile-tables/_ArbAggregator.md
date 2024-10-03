@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L14"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L14"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L24"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L24"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L18"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L18"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L30"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L30"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L22"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L22"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L35"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L35"
           target="_blank"
         >
           Implementation
@@ -80,7 +80,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L27"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L27"
           target="_blank"
         >
           Interface
@@ -88,7 +88,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L39"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L39"
           target="_blank"
         >
           Implementation
@@ -102,7 +102,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L32"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L32"
           target="_blank"
         >
           Interface
@@ -110,7 +110,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L62"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L62"
           target="_blank"
         >
           Implementation
@@ -124,7 +124,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L38"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L38"
           target="_blank"
         >
           Interface
@@ -132,7 +132,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L71"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L71"
           target="_blank"
         >
           Implementation
@@ -149,7 +149,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L43"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L43"
           target="_blank"
         >
           Interface
@@ -157,7 +157,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L93"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L93"
           target="_blank"
         >
           Implementation
@@ -171,7 +171,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbAggregator.sol#L51"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbAggregator.sol#L51"
           target="_blank"
         >
           Interface
@@ -179,7 +179,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbAggregator.go#L99"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbAggregator.go#L99"
           target="_blank"
         >
           Implementation

@@ -1,6 +1,221 @@
 {
     "redirects": [
         {
+            "source": "/(bold/bold-gentle-introduction/?)",
+            "destination": "/how-arbitrum-works/bold/gentle-introduction",
+            "permanent": false
+        },
+        {
+            "source": "/(bold/concepts/public-preview-expectations/?)",
+            "destination": "/how-arbitrum-works/bold/public-preview-expectations",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/challenge-manager/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/osp-assumptions/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/wasm-to-wavm/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/wasm-wavm",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/wavm-custom-opcodes/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/wavm-floats/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/wavm-floats",
+            "permanent": false
+        },
+        {
+            "source": "/(proving/wavm-modules/?)",
+            "destination": "/how-arbitrum-works/fraud-proofs/wavm-modules",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/geth/?)",
+            "destination": "/how-arbitrum-works/arbos/geth",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/?)",
+            "destination": "/how-arbitrum-works/arbos/introduction",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/l2-to-l1-messaging/?)",
+            "destination": "/how-arbitrum-works/arbos/l2-l1-messaging",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/l1-to-l2-messaging/?)",
+            "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+            "permanent": false
+        },
+        {
+            "source": "/(assertion-tree/?)",
+            "destination": "/how-arbitrum-works/assertion-tree",
+            "permanent": false
+        },
+        {
+            "source": "/(inside-arbitrum-nitro/?)",
+            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/l1-pricing/?)",
+            "destination": "/how-arbitrum-works/l1-gas-pricing",
+            "permanent": false
+        },
+        {
+            "source": "/(arbos/gas/?)",
+            "destination": "/how-arbitrum-works/gas-fees",
+            "permanent": false
+        },
+        {
+            "source": "/(inside-anytrust/?)",
+            "destination": "/how-arbitrum-works/inside-anytrust",
+            "permanent": false
+        },
+        {
+            "source": "/(why-nitro/?)",
+            "destination": "/how-arbitrum-works/why-nitro",
+            "permanent": false
+        },
+        {
+            "source": "/(tx-lifecycle/?)",
+            "destination": "/how-arbitrum-works/tx-lifecycle",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/troubleshooting-running-nodes/?)",
+            "destination": "/run-arbitrum-node/troubleshooting",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/migrate-state-and-history-from-classic/?)",
+            "destination": "/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/build-nitro-locally/?)",
+            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-sequencer-coordinator-manager/?)",
+            "destination": "/run-arbitrum-node/sequencer/run-sequencer-coordination-manager",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/read-sequencer-feed/?)",
+            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-feed-relay/?)",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/data-availability-committee/introduction/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-classic-node/?)",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-validator/?)",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-an-archive-node/?)",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos20",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/arbos-software-releases/arbos11/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos11",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/arbos-software-releases/overview/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/overview",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/reference/ethereum-beacon-rpc-providers/?)",
+            "destination": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/local-dev-node/?)",
+            "destination": "/run-arbitrum-node/run-local-dev-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/how-tos/running-a-full-node/?)",
+            "destination": "/run-arbitrum-node/run-full-node",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/quickstart-running-a-node/?)",
+            "destination": "/run-arbitrum-node/quickstart",
+            "permanent": false
+        },
+        {
+            "source": "/(node-running/gentle-introduction-run-node/?)",
+            "destination": "/run-arbitrum-node/overview",
+            "permanent": false
+        },
+        {
+            "source": "/(bridge-tokens/concepts/usdc-concept/?)",
+            "destination": "/arbitrum-bridge/usdc-arbitrum-one",
+            "permanent": false
+        },
+        {
+            "source": "/(for-users/troubleshooting-users/?)",
+            "destination": "/arbitrum-bridge/troubleshooting",
+            "permanent": false
+        },
+        {
+            "source": "/(getting-started-users/?)",
+            "destination": "/arbitrum-bridge/quickstart",
+            "permanent": false
+        },
+        {
             "source": "/(mainnet-risks/?)",
             "destination": "/build-decentralized-apps/reference/mainnet-risks",
             "permanent": false
@@ -152,7 +367,7 @@
         },
         {
             "source": "/(node-running/reference/software-releases/?)",
-            "destination": "/node-running/reference/arbos-software-releases/overview",
+            "destination": "/run-arbitrum-node/arbos-releases/overview",
             "permanent": false
         },
         {
@@ -207,7 +422,7 @@
         },
         {
             "source": "/migration/state-migration",
-            "destination": "/node-running/how-tos/migrate-state-and-history-from-classic",
+            "destination": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
             "permanent": false
         },
         {
@@ -217,12 +432,12 @@
         },
         {
             "source": "/docs/inside_arbitrum",
-            "destination": "/inside-arbitrum-nitro",
+            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
             "permanent": false
         },
         {
             "source": "/docs/l1_l2_messages",
-            "destination": "/arbos/l1-to-l2-messaging",
+            "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
             "permanent": false
         },
         {
@@ -247,7 +462,7 @@
         },
         {
             "source": "/docs/anytrust",
-            "destination": "/inside-anytrust",
+            "destination": "/how-arbitrum-works/inside-anytrust",
             "permanent": false
         },
         {
@@ -262,22 +477,22 @@
         },
         {
             "source": "/docs/running_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_goerli_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/docs/running_rinkeby_nitro_node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
@@ -302,7 +517,7 @@
         },
         {
             "source": "/docs/installation",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
@@ -352,12 +567,12 @@
         },
         {
             "source": "/docs/finality",
-            "destination": "/tx-lifecycle",
+            "destination": "/how-arbitrum-works/tx-lifecycle",
             "permanent": false
         },
         {
             "source": "/docs/withdrawals",
-            "destination": "/tx-lifecycle",
+            "destination": "/how-arbitrum-works/tx-lifecycle",
             "permanent": false
         },
         {
@@ -397,47 +612,47 @@
         },
         {
             "source": "/docs/censorship_resistance",
-            "destination": "/sequencer",
+            "destination": "/how-arbitrum-works/sequencer",
             "permanent": false
         },
         {
             "source": "/docs/arbgas",
-            "destination": "/arbos/gas",
+            "destination": "/how-arbitrum-works/gas-fees",
             "permanent": false
         },
         {
             "source": "/docs/arbos",
-            "destination": "/arbos",
+            "destination": "/how-arbitrum-works/arbos/introduction",
             "permanent": false
         },
         {
             "source": "/docs/tx_lifecycle",
-            "destination": "/tx-lifecycle",
+            "destination": "/how-arbitrum-works/tx-lifecycle",
             "permanent": false
         },
         {
             "source": "/docs/rollup_protocol",
-            "destination": "/assertion-tree",
+            "destination": "/how-arbitrum-works/assertion-tree",
             "permanent": false
         },
         {
             "source": "/docs/avm_design",
-            "destination": "/inside-arbitrum-nitro",
+            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
             "permanent": false
         },
         {
             "source": "/docs/dispute_resolution",
-            "destination": "/proving/challenge-manager",
+            "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
             "permanent": false
         },
         {
             "source": "/docs/arbos_formats",
-            "destination": "/arbos",
+            "destination": "/how-arbitrum-works/arbos/introduction",
             "permanent": false
         },
         {
             "source": "/docs/avm_specification",
-            "destination": "/proving/wavm-custom-opcodes",
+            "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
             "permanent": false
         },
         {
@@ -527,57 +742,72 @@
         },
         {
             "source": "/node-running/running-a-classic-node",
-            "destination": "/node-running/how-tos/running-a-classic-node",
+            "destination": "/run-arbitrum-node/more-types/run-classic-node",
             "permanent": false
         },
         {
             "source": "/node-running/running-an-archive-node",
-            "destination": "/node-running/how-tos/running-an-archive-node",
+            "destination": "/run-arbitrum-node/more-types/run-archive-node",
             "permanent": false
         },
         {
             "source": "/node-running/local-dev-node",
-            "destination": "/node-running/how-tos/local-dev-node",
+            "destination": "/run-arbitrum-node/run-local-dev-node",
             "permanent": false
         },
         {
             "source": "/node-running/running-a-feed-relay",
-            "destination": "/node-running/how-tos/running-a-feed-relay",
+            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
             "permanent": false
         },
         {
             "source": "/node-running/running-a-validator",
-            "destination": "/node-running/how-tos/running-a-validator",
+            "destination": "/run-arbitrum-node/more-types/run-validator-node",
             "permanent": false
         },
         {
             "source": "/node-running/read-sequencer-feed",
-            "destination": "/node-running/how-tos/read-sequencer-feed",
+            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
             "permanent": false
         },
         {
             "source": "/node-running/build-nitro-locally",
-            "destination": "/node-running/how-tos/build-nitro-locally",
+            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
             "permanent": false
         },
         {
             "source": "/node-running/running-a-node",
-            "destination": "/node-running/how-tos/running-a-full-node",
+            "destination": "/run-arbitrum-node/run-full-node",
             "permanent": false
         },
         {
             "source": "/das/daserver-instructions",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {
             "source": "/node-running/how-tos/running-a-daserver",
-            "destination": "/node-running/how-tos/data-availability-committee/introduction",
+            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
             "permanent": false
         },
         {
             "source": "/(launch-orbit-chain/reference/command-line-options/?)",
             "destination": "/node-running/how-tos/running-an-orbit-node",
+            "permanent": false
+        },
+        {
+            "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
+            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+            "permanent": false
+        },
+        {
+            "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+            "destination": "/run-arbitrum-node/run-local-dev-node",
+            "permanent": false
+        },
+        {
+            "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
+            "destination": "/run-arbitrum-node/arbos-releases/arbos32",
             "permanent": false
         }
     ]

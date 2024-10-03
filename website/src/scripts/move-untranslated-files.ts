@@ -24,7 +24,7 @@ const getFiles = async (dir: string) => {
     }),
   );
   return files.reduce((a, f) => a.concat(f), []);
-}
+};
 
 const getTranslatedFiles = async (filePath: string) => {
   const translatedRoot = 'docusaurus-plugin-content-docs/translated/';
@@ -36,9 +36,15 @@ const getUnTranslatedFiles = async () => {
   return await getFiles(docsPath);
 };
 
-const putTogether = async (translateFiles: string[], untranslatedFiles: string[], language: string) => {
+const putTogether = async (
+  translateFiles: string[],
+  untranslatedFiles: string[],
+  language: string,
+) => {
   const outputFilesMap = new Map<string, string>();
-  const translatedRoot = resolve('./i18n/' + language +'/docusaurus-plugin-content-docs/translated');
+  const translatedRoot = resolve(
+    './i18n/' + language + '/docusaurus-plugin-content-docs/translated',
+  );
   const unTranslatedRoot = resolve('../arbitrum-docs');
   translateFiles.forEach((file) => {
     const key = file.replace(translatedRoot, '');

@@ -19,11 +19,17 @@ The main requirements for a custom gas token is that it must be an ERC-20 token,
 
 There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the ERC-20 token include:
 
-- Currently, the token must be configured with 18 decimals.
 - The token can't be rebasing or have a transfer fee.
+- The token must not revert on transfers of 0 value (as per standard implementations).
 - The token must only be transferrable via a call to the token address itself.
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
+
+:::info
+
+While certain restrictions are in place today (see above), some of them may be removed in upcoming releases of the custom gas token feature. Please reach out to the Offchain Labs team with any questions or requests for additions to the custom gas token feature.
+
+:::
 
 ## Configuration of the Orbit chain when using a custom gas token
 
@@ -38,4 +44,4 @@ _Note: these methods use L1 to refer to the parent chain of the Orbit chain._
 
 These parameter changes are strongly recommended to avoid charging users for a non-existent parent chain's base fee. The impact of not doing this is that Nitro will apply a parent chain's fee to all transactions. As Nitro assumes the native asset is ETH, all fees are expected to be denominated in ETH. This has the consequence of overcharging users for parent chain fees in native tokens that are more expensive than ETH (for example, if you use wrapped BTC as the custom gas token). In the case for tokens with prices much lower than ETH, the impact is far less pronounced.
 
-In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/arbos/gas.mdx).
+In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/how-arbitrum-works/gas-fees.md).

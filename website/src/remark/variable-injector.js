@@ -12,7 +12,7 @@
 //    @ FOO @ => /\@\s*([a-zA-Z0-9_-]+)\s*\@/g
 //    :: FOO :: => /\:\:\s*([a-zA-Z0-9_-]+)\s*\:\:/g
 
-const visit = require('unist-util-visit');
+const { visit } = require('unist-util-visit');
 
 // Allowed types (in alphabetical order)
 const allowedTypes = ['code', 'definition', 'inlineCode', 'jsx', 'link', 'text'];

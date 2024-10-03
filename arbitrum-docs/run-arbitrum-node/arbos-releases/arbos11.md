@@ -1,0 +1,37 @@
+---
+title: 'ArbOS 11'
+sidebar_label: 'ArbOS 11'
+sidebar_position: 4
+author: dlee
+---
+
+ArbOS 11 is shipped via Nitro v2.2.0, which is available on Docker hub with the image tag: `offchainlabs/nitro-node:v2.2.0-f7dc9de`. This release of Nitro is a mandatory upgrade for Arbitrum One and Nova validators. For Arbitrum One and Nova, the ArbOS 11 upgrade requires a governance vote to activate.
+
+Formal release notes can be found [here](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0).
+
+### Requirements:
+
+- [Nitro v2.2.0](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0) or higher
+- [nitro-contracts v1.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v1.1.0) or higher
+- Wasm module root: `0x6b94a7fc388fd8ef3def759297828dc311761e88d8179c7ee8d3887dc554f3c3`
+
+### High-level description of ArbOS 11 changes
+
+- Addition of all EVM changes made on L1 Ethereum as part of the [Shanghai upgrade](https://github.com/ethereum/execution-specs/blob/master/network-upgrades/mainnet-upgrades/shanghai.md#included-eips). This includes:
+  - [EIP-3651: Warm COINBASE](https://eips.ethereum.org/EIPS/eip-3651)
+  - [EIP-3855: PUSH0 instruction](https://eips.ethereum.org/EIPS/eip-3855)
+  - [EIP-3860: Limit and meter initcode](https://eips.ethereum.org/EIPS/eip-3860)
+  - [EIP-6049: Deprecate SELFDESTRUCT](https://eips.ethereum.org/EIPS/eip-6049)
+- Improvements and fixes for [retryable tickets](/how-arbitrum-works/arbos/l1-l2-messaging.md) to ensure that the fee calculation to redeem retryable tickets will take into account both the infrastructure fee and the network fee. The infrastructure fee is the minimum L2 base fee only, while the network fee collects L2 congestion charges. This is important for [AnyTrust chains](/how-arbitrum-works/inside-anytrust.md) like Arbitrum Nova because members of the Data Availability Committee (DAC) gets paid a percentage of the infrastructure fee but not the network fee. Previously, the calculations to determine the fee for redeeming retryable tickets did not consider the infrastructure fee.
+- Fixes an issue where the [`ArbOwnerPublic` precompile](/build-decentralized-apps/precompiles/02-reference.md#arbownerpublic) returned the incorrect list of chain owners. This does not change the parties who are able to perform chain owner actions. As intended, only the Arbitrum DAO is able to take chain owner actions for Arbitrum One and Nova.
+- Resolves an issue where the [`arbBlockHash` method](/build-decentralized-apps/precompiles/02-reference.md#arbsys) would take up all the gas when reverting. The previous incorrect behavior meant that if a transaction calls `arbBlockHash` with an out-of-range block number, then the transaction would consume all the gas when reverting.
+- Addition of the [`L1RewardReceipient`](/build-decentralized-apps/precompiles/02-reference.md#arbgasinfo) and [`L1RewardRate`](/build-decentralized-apps/precompiles/02-reference.md#arbgasinfo) precompile methods to view L1 pricing parameters and make it easier to view the current chain configuration.
+- Fix the `ArbOwner` precompile to disallow emitting logs in `STATICCALL` contexts, bringing this in line with how the EVM is expected to behave as `STATICCALL` invocations should never be able to emit logs. The previous incorrect behavior would mean that a log was emitted when a chain owner made a `STATICCALL` on the `ArbOwner` precompile.
+
+### Reference links for ArbOS 11
+
+- [Nitro v2.2.0 Release details on Github](https://github.com/OffchainLabs/nitro/releases/tag/v2.2.0)
+- Original DAO proposal: [AIP: ArbOS Version 11](https://forum.arbitrum.foundation/t/aip-arbos-version-11/19696)
+- [AIP: ArbOS Version 11 Snapshot Vote](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0xa635e39a2c527f7a1eabf5ea22bdec6f4a265d6c69a06076e65fde0ae0a5941b)
+- [Formal Tally (on-chain) vote for AIP: ArbOS Version 11](https://www.tally.xyz/gov/arbitrum/proposal/77069694702187027448745871790562515795432836429094222862498991082283032976814)
+- [ArbOS 11 Audit Report by Trail of Bits](https://drive.google.com/file/d/1N3197Z7DuqBpu9qdt-GWPewe8HQakfLY/view)

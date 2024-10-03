@@ -5,6 +5,8 @@ user_story: As a user, I want to review a list of frequently asked questions and
 content_type: faq
 ---
 
-import FAQStructuredData from '@site/src/components/FAQStructuredData';
+import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
+import FAQQuestions from '../partials/_troubleshooting-users-partial.mdx';
 
-<FAQStructuredData faqsId="get-started" />
+<FAQStructuredDataJsonLd faqsId="get-started" />
+<FAQQuestions />

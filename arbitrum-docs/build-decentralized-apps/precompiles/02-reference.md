@@ -21,6 +21,8 @@ This section is divided into two tables. We first list precompiles we expect use
 | [ArbGasInfo](#arbgasinfo)         | `0x6c`  | [Interface][arbgasinfo_link_interface]     | [Implementation][arbgasinfo_link_implementation]     | Info about gas pricing              |
 | [ArbRetryableTx](#arbretryabletx) | `0x6e`  | [Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation] | Managing retryables                 |
 | [ArbSys](#arbsys)                 | `0x64`  | [Interface][arbsys_link_interface]         | [Implementation][arbsys_link_implementation]         | System-level functionality          |
+| [ArbWasm](#arbwasm)               | `0x71`  | [Interface][arbwasm_link_interface]        | [Implementation][arbwasm_link_implementation]        | Manages Stylus contracts            |
+| [ArbWasmCache](#arbwasmcache)     | `0x72`  | [Interface][arbwasmcache_link_interface]   | [Implementation][arbwasmcache_link_implementation]   | Manages Stylus cache                |
 
 ### Other precompiles
 
@@ -50,6 +52,8 @@ This section is divided into two tables. We first list precompiles we expect use
 [arbretryabletx_link_interface]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/ArbRetryableTx.sol
 [arbstatistics_link_interface]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/ArbStatistics.sol
 [arbsys_link_interface]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/ArbSys.sol
+[arbwasm_link_interface]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/ArbWasm.sol
+[arbwasmcache_link_interface]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/ArbWasmCache.sol
 [arbaddresstable_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbAddressTable.go
 [arbaggregator_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbAggregator.go
 [arbdebug_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbDebug.go
@@ -62,6 +66,8 @@ This section is divided into two tables. We first list precompiles we expect use
 [arbretryabletx_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbRetryableTx.go
 [arbstatistics_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbStatistics.go
 [arbsys_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbSys.go
+[arbwasm_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbWasm.go
+[arbwasmcache_link_implementation]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/ArbWasmCache.go
 
 ## Precompiles reference
 
@@ -173,7 +179,7 @@ import ArbOwnerPublicRef from '../../for-devs/dev-tools-and-resources/partials/p
 
 ### ArbRetryableTx
 
-ArbRetryableTx ([Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation]) provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](arbos#Retryables).
+ArbRetryableTx ([Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation]) provides methods for managing retryables. The model has been adjusted for Nitro, most notably in terms of how retry transactions are scheduled. For more information on retryables, please see [the retryable documentation](/how-arbitrum-works/arbos/introduction.md#Retryables).
 
 Precompile address: `0x000000000000000000000000000000000000006E`
 
@@ -200,3 +206,23 @@ Precompile address: `0x0000000000000000000000000000000000000064`
 import ArbSysRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_ArbSys.md';
 
 <ArbSysRef />
+
+### ArbWasm
+
+ArbWasm ([Interface][arbwasm_link_interface] | [Implementation][arbwasm_link_implementation]) provides helper methods for managing Stylus contracts
+
+Precompile address: `0x0000000000000000000000000000000000000071`
+
+import ArbWasmRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_ArbWasm.md';
+
+<ArbWasmRef />
+
+### ArbWasmCache
+
+ArbWasmCache ([Interface][arbwasmcache_link_interface] | [Implementation][arbwasmcache_link_implementation]) provides helper methods for managing Stylus cache
+
+Precompile address: `0x0000000000000000000000000000000000000072`
+
+import ArbWasmCacheRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_ArbWasmCache.md';
+
+<ArbWasmCacheRef />

@@ -3,6 +3,7 @@
 
 const variableInjector = require('./src/remark/variable-injector');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
+const sdkCodebasePath = '../arbitrum-sdk';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -64,14 +65,58 @@ const config = {
     ],
   ],
   plugins: [
-    // See below hack - this gets modified if you're running locally on windows
     [
-      '@docusaurus/plugin-content-docs',
+      'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
-        path: './sdk-docs',
-        routeBasePath: 'sdk',
-        sidebarItemsGenerator: sdkSidebarGenerator,
+        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${sdkCodebasePath}/src/lib`],
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        excludeNotDocumented: true,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
+
+        // Output options
+        out: '../arbitrum-docs/sdk/reference',
+        hideGenerator: true,
+        validation: {
+          notExported: false,
+          invalidLink: true,
+          notDocumented: true,
+        },
+        logLevel: 'Verbose',
+        sidebar: {
+          autoConfiguration: false,
+        },
+
+        plugin: [
+          'typedoc-plugin-markdown',
+          `typedoc-plugin-frontmatter`,
+          './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/stylusByExampleDocsHandler.ts',
+        ],
+
+        // typedoc-plugin-markdown options
+        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: true,
+          toc_max_heading_level: 5,
+        },
       },
     ],
     [
@@ -215,7 +260,7 @@ const config = {
         copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
-        additionalLanguages: ['solidity', 'rust'],
+        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
       },
       liveCodeBlock: {
         /**
@@ -256,7 +301,7 @@ if (isRunningLocally && isRunningOnWindows) {
 } else {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/dracula');
+  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
 }
 
 module.exports = config;

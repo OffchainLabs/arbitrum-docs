@@ -6,7 +6,7 @@ author: dzgoldman
 
 # Arbitrum: Understanding the risks
 
-Arbitrum One — the first permissionless Ethereum layer 2 rollup with full Ethereum smart contract functionality — is [live on mainnet](https://offchain.medium.com/mainnet-for-everyone-27ce0f67c85e) — as is [Nova](https://medium.com/offchainlabs/its-time-for-a-new-dawn-nova-is-open-to-the-public-a081df1e4ad2), our first [AnyTrust chain](/inside-anytrust.mdx); We're sure you're (almost) as excited as we are!
+Arbitrum One — the first permissionless Ethereum layer 2 rollup with full Ethereum smart contract functionality — is [live on mainnet](https://offchain.medium.com/mainnet-for-everyone-27ce0f67c85e) — as is [Nova](https://medium.com/offchainlabs/its-time-for-a-new-dawn-nova-is-open-to-the-public-a081df1e4ad2), our first [AnyTrust chain](/how-arbitrum-works/inside-anytrust.md); We're sure you're (almost) as excited as we are!
 Here are some risks you should know about before using the system:
 
 ### State Of progressive decentralization

@@ -5,6 +5,8 @@ user_story: As a developer, I want to understand how to troubleshoot common issu
 content_type: troubleshooting
 ---
 
-import FAQStructuredData from '@site/src/components/FAQStructuredData';
+import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
+import FAQQuestions from '../partials/_troubleshooting-building-partial.mdx';
 
-<FAQStructuredData faqsId="building" />
+<FAQStructuredDataJsonLd faqsId="building" />
+<FAQQuestions />

@@ -14,7 +14,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L22"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L22"
           target="_blank"
         >
           Interface
@@ -22,7 +22,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L26"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L26"
           target="_blank"
         >
           Implementation
@@ -36,7 +36,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L44"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L44"
           target="_blank"
         >
           Interface
@@ -44,7 +44,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L91"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L101"
           target="_blank"
         >
           Implementation
@@ -58,7 +58,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L58"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L58"
           target="_blank"
         >
           Interface
@@ -66,7 +66,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L96"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L106"
           target="_blank"
         >
           Implementation
@@ -82,7 +82,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L69"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L69"
           target="_blank"
         >
           Interface
@@ -90,7 +90,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L138"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L158"
           target="_blank"
         >
           Implementation
@@ -104,7 +104,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L80"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L80"
           target="_blank"
         >
           Interface
@@ -112,7 +112,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L143"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L163"
           target="_blank"
         >
           Implementation
@@ -126,7 +126,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L90"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L90"
           target="_blank"
         >
           Interface
@@ -134,7 +134,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L151"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L171"
           target="_blank"
         >
           Implementation
@@ -148,7 +148,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L93"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L93"
           target="_blank"
         >
           Interface
@@ -156,7 +156,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L156"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L176"
           target="_blank"
         >
           Implementation
@@ -170,7 +170,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L96"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L96"
           target="_blank"
         >
           Interface
@@ -178,7 +178,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L161"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L181"
           target="_blank"
         >
           Implementation
@@ -194,7 +194,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L100"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L100"
           target="_blank"
         >
           Interface
@@ -202,7 +202,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L166"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L186"
           target="_blank"
         >
           Implementation
@@ -216,7 +216,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L104"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L104"
           target="_blank"
         >
           Interface
@@ -224,7 +224,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L171"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L191"
           target="_blank"
         >
           Implementation
@@ -238,7 +238,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L107"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L107"
           target="_blank"
         >
           Interface
@@ -246,7 +246,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L176"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L196"
           target="_blank"
         >
           Implementation
@@ -260,7 +260,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L110"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L110"
           target="_blank"
         >
           Interface
@@ -268,7 +268,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L181"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L201"
           target="_blank"
         >
           Implementation
@@ -282,7 +282,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L113"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L113"
           target="_blank"
         >
           Interface
@@ -290,7 +290,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L186"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L206"
           target="_blank"
         >
           Implementation
@@ -304,7 +304,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L116"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L116"
           target="_blank"
         >
           Interface
@@ -312,13 +312,13 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L191"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L211"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td>GetPricingInertia gets the L2 basefee in response to backlogged gas</td>
+      <td>Returns how slowly ArbOS updates the L2 basefee in response to backlogged gas</td>
     </tr>
     <tr>
       <td>
@@ -326,7 +326,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L119"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L119"
           target="_blank"
         >
           Interface
@@ -334,7 +334,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L196"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L216"
           target="_blank"
         >
           Implementation
@@ -351,7 +351,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L122"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L122"
           target="_blank"
         >
           Interface
@@ -359,7 +359,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L200"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L221"
           target="_blank"
         >
           Implementation
@@ -373,7 +373,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L125"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L125"
           target="_blank"
         >
           Interface
@@ -381,7 +381,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L236"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L245"
           target="_blank"
         >
           Implementation
@@ -397,7 +397,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L128"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L128"
           target="_blank"
         >
           Interface
@@ -405,7 +405,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L240"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L250"
           target="_blank"
         >
           Implementation
@@ -419,7 +419,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L131"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L131"
           target="_blank"
         >
           Interface
@@ -427,7 +427,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L244"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L255"
           target="_blank"
         >
           Implementation
@@ -441,7 +441,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L135"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L135"
           target="_blank"
         >
           Interface
@@ -449,13 +449,16 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L248"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L260"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>
+        Returns the equilibration units parameter for L1 price adjustment algorithm (Available since
+        ArbOS 20)
+      </td>
     </tr>
     <tr>
       <td>
@@ -463,7 +466,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L139"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L139"
           target="_blank"
         >
           Interface
@@ -471,13 +474,13 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L252"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L265"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>Returns the last time the L1 calldata pricer was updated (Available since ArbOS 20)</td>
     </tr>
     <tr>
       <td>
@@ -485,7 +488,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L143"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L143"
           target="_blank"
         >
           Interface
@@ -493,13 +496,16 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L256"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L270"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>
+        Returns the amount of L1 calldata payments due for rewards (per the L1 reward rate)
+        (Available since ArbOS 20)
+      </td>
     </tr>
     <tr>
       <td>
@@ -507,7 +513,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L147"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L147"
           target="_blank"
         >
           Interface
@@ -515,13 +521,15 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L260"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L275"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>
+        Returns the amount of L1 calldata posted since the last update (Available since ArbOS 20)
+      </td>
     </tr>
     <tr>
       <td>
@@ -529,7 +537,7 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/9a6bfad2363322099d399698751551ff044c7a72/src/precompiles/ArbGasInfo.sol#L151"
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/7396313311ab17cb30e2eef27cccf96f0a9e8f7f/src/precompiles/ArbGasInfo.sol#L151"
           target="_blank"
         >
           Interface
@@ -537,13 +545,16 @@
       </td>
       <td>
         <a
-          href="https://github.com/OffchainLabs/nitro/blob/v2.2.5/precompiles/ArbGasInfo.go#L264"
+          href="https://github.com/OffchainLabs/nitro/blob/v3.2.1/precompiles/ArbGasInfo.go#L280"
           target="_blank"
         >
           Implementation
         </a>
       </td>
-      <td></td>
+      <td>
+        Returns the L1 pricing surplus as of the last update (may be negative) (Available since
+        ArbOS 20)
+      </td>
     </tr>
   </tbody>
 </table>

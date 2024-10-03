@@ -54,6 +54,10 @@ const precompilesInformation = {
       getl1pricingsurplus: {
         description: 'Returns the surplus of funds for L1 batch posting payments (may be negative)',
       },
+      getpricinginertia: {
+        description:
+          'Returns how slowly ArbOS updates the L2 basefee in response to backlogged gas',
+      },
       getperbatchgascharge: {
         description:
           'Returns the base charge (in L1 gas) attributed to each data batch in the calldata pricer',
@@ -63,6 +67,26 @@ const precompilesInformation = {
       },
       getl1feesavailable: {
         description: 'Returns the available funds from L1 fees',
+      },
+      getl1pricingequilibrationunits: {
+        description:
+          'Returns the equilibration units parameter for L1 price adjustment algorithm (Available since ArbOS 20)',
+      },
+      getlastl1pricingupdatetime: {
+        description:
+          'Returns the last time the L1 calldata pricer was updated (Available since ArbOS 20)',
+      },
+      getl1pricingfundsdueforrewards: {
+        description:
+          'Returns the amount of L1 calldata payments due for rewards (per the L1 reward rate) (Available since ArbOS 20)',
+      },
+      getl1pricingunitssinceupdate: {
+        description:
+          'Returns the amount of L1 calldata posted since the last update (Available since ArbOS 20)',
+      },
+      getlastl1pricingsurplus: {
+        description:
+          'Returns the L1 pricing surplus as of the last update (may be negative) (Available since ArbOS 20)',
       },
     },
   },
@@ -158,6 +182,23 @@ const precompilesInformation = {
       },
       sendmerkleupdate: {
         description: 'Logs a new merkle branch needed for constructing outbox proofs',
+      },
+    },
+  },
+  ArbWasm: {
+    eventOverrides: {
+      programactivated: {
+        description: 'Emitted when activating a WASM program',
+      },
+      programlifetimeextended: {
+        description: 'Emitted when extending the expiration date of a WASM program',
+      },
+    },
+  },
+  ArbWasmCache: {
+    eventOverrides: {
+      updateprogramcache: {
+        description: 'Emitted when caching a WASM program',
       },
     },
   },
