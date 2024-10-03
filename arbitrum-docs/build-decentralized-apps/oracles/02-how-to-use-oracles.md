@@ -72,10 +72,10 @@ Refer to [Chainlink’s documentation](https://docs.chain.link/) for more exampl
 
 ## Chronicle  
 
-[Chronicle Protocol](https://chroniclelabs.org/) is a novel Oracle solution that has exclusively secured over $10B in assets for MakerDAO and its ecosystem since 2017. Chronicle overcomes the current limitations of transferring data on-chain by developing scalable, cost-efficient, decentralized, and verifiable Oracles, rewriting the rulebook on data transparency and accessibility.
+[Chronicle Protocol](https://chroniclelabs.org/) is a novel Oracle solution that overcomes the current limitations of transferring data on-chain by developing scalable, cost-efficient, decentralized, and verifiable Oracles, rewriting the rulebook on data transparency and accessibility.
 
 ### Querying the price of $ARB using Chronicle
-Chronicle contracts are read-protected by a whitelist, meaning you won't be able to read them on-chain without your address being added to the whitelist. On the Testnet, users can add themselves to the whitelist through the SelfKisser contract, a process playfully referred to as "kissing" themselves. For access to production Oracles on the Mainnet, please open a support ticket in [Discord](https://discord.com/invite/CjgvJ9EspJ) in the 🆘｜support channel.
+Chronicle contracts are read-protected by a whitelist, meaning you won't be able to read them on-chain without your address being added to the whitelist. On the Testnet, users can add themselves to the whitelist through the SelfKisser contract; a process playfully referred to as "kissing" themselves. To access production Oracles on the Mainnet, please open a support ticket in [Discord](https://discord.com/invite/CjgvJ9EspJ) in the 🆘｜support channel.
 
 For the deployment addresses, please check out the [Dashboard](https://chroniclelabs.org/dashboard/oracles). 
 ```solidity
@@ -146,7 +146,7 @@ interface ISelfKisser {
 }
 ```
 ### More examples
-For more examples on integrating Chronicle Oracles, please check the [documentation portal](https://docs.chroniclelabs.org/). 
+For more examples of integrating Chronicle Oracles, please check the [documentation portal](https://docs.chroniclelabs.org/). 
 
 ## API3
 
@@ -154,7 +154,7 @@ For more examples on integrating Chronicle Oracles, please check the [documentat
 
 ### Querying the price of $ARB through API3
 
-Here’s an example on how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
+Here’s an example of how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
 
 API3 provides an npm package with the contracts needed to access their feeds. We first install that package in our project:
 
@@ -168,7 +168,7 @@ To use a data feed, we retrieve the information through the specific proxy addre
 import "@api3/contracts/api3-server-v1/proxies/interfaces/IProxy.sol";
 ```
 
-In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the address of the proxy that will provide that information. We will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active and if it is, we can check its configuration parameters, deploy the proxy contract and click on `Integrate`. You can find the proxy address of ARB/USD [here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
+In this case, we want to obtain the current price of $ARB in $USD in Arbitrum One, so we need to know the proxy address that will provide that information. We will search the feed on the API3 Market and connect our wallet. We would then want to see if the feed is active, and if it is, we can check its configuration parameters, deploy the proxy contract and click on `Integrate.` You can find the proxy address of ARB/USD [here](https://market.api3.org/arbitrum?search=ARB%2FUSD).
 
 :::info
 If a dAPI is already active, you can use the proxy address directly. If it is not active, you can activate it by clicking on `Activate` and following the instructions to deploy a proxy contract.
@@ -200,7 +200,7 @@ contract ARBPriceConsumer {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the address of the asset you want to request the price for in the appropriate network and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
 
 ### Querying a random number through API3
 
@@ -216,7 +216,7 @@ API3 provides an npm package with the contracts needed to access the ANU QRNG ai
 yarn add @api3/airnode-protocol
 ```
 
-We’ll need several information to request a random number:
+We’ll need several pieces of data to request a random number:
 
 - `address airnodeRrp`: Address of the protocol contract. See the [Chains](https://docs.api3.org/reference/qrng/chains.html) page for a list of addresses on different chains. For Arbitrum, we’ll use `0xb015ACeEdD478fc497A798Ab45fcED8BdEd08924`.
 - `address airnode`: The address that belongs to the Airnode that will be called to get the QRNG data via its endpoints. See the [Providers](https://docs.api3.org/reference/qrng/providers.html) page for a list of addresses on different chains. For Arbitrum we’ll use `0x9d3C147cA16DB954873A498e0af5852AB39139f2`.
@@ -296,7 +296,7 @@ contract QrngRequester is RrpRequesterV0 {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to set the `sponsorWallet` address before making the request and use the addresses of the appropriate network, and to **deploy your contract to the same network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to set the `sponsorWallet` address before making the request to use the appropriate network's addresses, and to **deploy your contract to the same network**. Remember, we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
 
 ### More examples
 
@@ -314,7 +314,7 @@ You can also check out some other detailed guides:
 
 ### Querying the price of $ETH through Tellor
 
-Here’s an example on how to use a Tellor data feed to query the current price of $ETH on-chain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found in the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
+Here’s an example of how to use a Tellor data feed to query the current price of $ETH on-chain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found on the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
 
 Tellor provides an npm package with the contracts needed to query the contract. We first install that package in our project:
 
@@ -322,7 +322,7 @@ Tellor provides an npm package with the contracts needed to query the contract. 
 npm install usingtellor
 ```
 
-Our function will just wrap the call to the oracle contract with the query we are interested in. In this case we want to obtain the “SpotPrice” of “eth” against “usd”. We will request this information to the Arbitrum oracle contract `0xD9157453E2668B2fc45b7A803D3FEF3642430cC0`. We’ll use this example contract:
+Our function will just wrap the call to the Oracle contract with the query we are interested in. In this case, we want to obtain the “SpotPrice” of “eth” against “usd”. We will request this information to the Arbitrum oracle contract `0xD9157453E2668B2fc45b7A803D3FEF3642430cC0`. We’ll use this example contract:
 
 ```solidity
 contract ARBPriceConsumer is UsingTellor {
@@ -350,7 +350,7 @@ contract ARBPriceConsumer is UsingTellor {
 }
 ```
 
-You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for, and to **deploy your contract to the appropriate network, with the address of the oracle contract in that network**. Remember we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
+You can adapt this contract to your needs. Just remember to use the ticker of the assets you want to request the price for and to **deploy your contract to the appropriate network, with the address of the Oracle contract in that network**. Remember, we have a [Quickstart](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) available that goes through the process of compiling and deploying a contract.
 
 ### See also
 
