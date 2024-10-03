@@ -1,6 +1,6 @@
 ---
 title: 'Enable fast withdrawals on your Orbit chain'
-sidebar_label: 'Enable fast withdrawals'
+sidebar_label: 'Enable fast withdrawals.'
 description: 'Learn to deploy Fast Withdrawals'
 author: coopermidroni, tucksondev
 sme: tucksondev
@@ -10,7 +10,7 @@ content_type: get-started
 
 Optimistic Rollups must sustain a multi-day challenge period to allow time for fraud proofs. This delays finality for users and dApps, resulting in multi-day withdrawal times and cross-chain communication delays.
 
-Fast Withdrawals is a new configuration allowing Orbit chains to achieve fast finality. When an Orbit chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
+Fast withdrawals is a new configuration allowing Orbit chains to achieve fast finality. When an Orbit chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
 
 This will allow:
 
@@ -18,58 +18,58 @@ This will allow:
 - Users' withdrawals confirmation on the parent chain at frequencies up to ~15 minutes
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
-## Recommended Configuration
-While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ Fast Withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
+## Recommended configuration
+While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
 
-### Fast Withdrawals for AnyTrust Chains
-As AnyTrust chains are an optimium (an optimistic rollup using a separate data availability layer), AnyTrust chains are already placing a trust assumption on their Data Availability Committee (DAC) to provide the data needed for fraud proofs and recreating the chain.
+### Fast withdrawals for AnyTrust chains
+As AnyTrust chains are an optimum (an optimistic rollup using a separate data availability layer), AnyTrust chains are already placing a trust assumption on their Data Availability Committee (DAC) to provide the data needed for fraud proofs and recreating the chain.
 
-The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the Fast Withdrawals committee. This will leverage the existing trust assumption placed on the DAC operators such that **enabling Fast Withdrawals does not add any new trusted parties.**
+The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the fast withdrawals committee. This will leverage the existing trust assumption placed on the DAC operators such that **enabling fast withdrawals does not add any new trusted parties.**
 
-It is possible for an Orbit Rollup to adopt Fast Withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
+It is possible for an Orbit Rollup to adopt fast withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
-### Minimum Validator and DAC Nodes
-We recommend that any Fast Withdrawals enabled chain have a minimum of 3 DAS members and 3 validators in the Fast Withdrawals committee. Given that Fast Withdrawals will enable confirmation of new rollup state much faster than the usual 7 day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
+### Minimum validator and DAC nodes
+We recommend that any Fast Withdrawals-enabled chain have at least three DAS members and three validators in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 7-day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
 
-## Technical lower bound for Fast Withdrawals
-Once Fast Withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, higher network load can cause the Fast Withdrawals committee to experience slight delays from the configured rate.   
+## Technical lower bound for fast withdrawals
+Once fast withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, a higher network load can cause the fast withdrawals committee to experience slight delays from the configured rate.   
 
 - For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals. 
-- For chains with higher throughput (>1 Mgas/s), the practical lower bound for Fast Withdrawals is between 1-2 minutes. 
+- For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes. 
 
-Chain owners and operators should be aware that the Fast Withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behaviour is to be expected and does not interfere with the security or trust model of the Fast Withdrawals committee.
+Chain owners and operators should be aware that the fast withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behavior is to be expected and does not interfere with the security or trust model of the fast withdrawals committee.
 
-## Practical lower bounds with respect to parent chain finality
-While a Fast Withdrawals enabled chain can be configured to finality in as little as 15 seconds, there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
+## Practical lower bounds concerning parent chain finality
+While a fast withdrawals-enabled chain can be configured to finality in as little as 15 seconds, there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
 
-For an Ethereum-based Layer-2, we recommend that the Fast Withdrawals frequency remain above 12.8 minutes, which is the the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1. 
+For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1. 
 
-For an Arbitrum One based Layer-3, there are three tiers of finality to consider:
+For an Arbitrum One-based Layer-3, there are three tiers of finality to consider:
 1. Soft finality from the sequencer's confirmation of transaction inclusion (~250ms)
-2. Safe finality from batch inclusion, after Arbitrum One's assertion is included in an Ethereum block. 
+2. Safe finality from batch inclusion after Arbitrum One's assertion is included in an Ethereum block. 
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
 
-Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure Fast Withdrawals down to 15 seconds. 
+Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure fast withdrawals down to 15 seconds. 
 
 
 ## Adoption instructions (example script)
 
-To enable the Fast Withdrawals feature, there are three actions to take:
+To enable the fast withdrawals feature, there are three actions to take:
 
 1. Make sure the chain is using nitro-contracts v2.1.0 or above
-2. Activate the Fast Withdrawals feature
+2. Activate the fast withdrawals feature
 3. Upgrade the node software to nitro v3.1.2 or above
 
 ### Upgrading to nitro-contracts v2.1.0
 
-As mentioned above, the Fast Withdrawals feature is available for chains that are using nitro-contracts v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [orbit versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path).
+As mentioned above, the fast withdrawals feature is available for chains that are using nitro-contracts v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [orbit versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path).
 
 If your chain is not running with nitro-contracts v2.1.0 or above, you’ll need to perform an upgrade to enable this version. The [orbit versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) will provide the upgrade paths needed to reach v2.1.0, but basically:
 
 - If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
 - If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
 
-Upgrading to the new nitro-contracts version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should be running [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
+Upgrading to the new nitro-contracts version also requires updating the node software. For v2.1.0, validator nodes and the batch poster node should run [nitro v3.1.2](https://github.com/OffchainLabs/nitro/releases/tag/v3.1.2) or above.
 
 Suppose you’re upgrading your nitro-contracts from v1.2.1 to v2.1.0 and using the standard WASM module root (without customizations). In that case, there are [action contracts available in the supported chains](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md#deployed-instances). If you’re using a customized nitro software, with a different WASM module root, you can still deploy the action contract referencing your modified WASM module root (pre and post upgrade).
 
