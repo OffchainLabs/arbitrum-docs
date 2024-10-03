@@ -312,6 +312,21 @@ const sidebars = {
               id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
               label: `Implement Circle bridged USDC`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/aep-fee-router-introduction',
+              label: `AEP fee router overview`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+              label: `Set up AEP fee router`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+              label: `Calculate AEP license fees`,
+            },
           ],
         },
         {
