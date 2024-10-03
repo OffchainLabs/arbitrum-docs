@@ -21,6 +21,11 @@ const sidebars = {
           id: 'welcome/get-started',
           label: 'Get started',
         },
+        {
+          type: 'doc',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
+        },
       ],
     },
     {
@@ -190,7 +195,7 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Smart contract addresses',
-              id: 'build-decentralized-apps/reference/useful-addresses',
+              id: 'build-decentralized-apps/reference/contract-addresses',
             },
             {
               type: 'doc',
@@ -299,8 +304,18 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
               label: `Implement Circle bridged USDC`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/fast-withdrawals',
+              label: `Enable fast withdrawals`,
             },
           ],
         },
@@ -462,8 +477,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Testnet',
-          id: 'stylus/reference/testnet-information',
+          id: 'for-devs/dev-tools-and-resources/chain-info',
+          label: 'Chain info',
         },
         {
           type: 'doc',
@@ -653,8 +668,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/arbos-releases/arbos31',
-              label: 'ArbOS 31 Bianca',
+              id: 'run-arbitrum-node/arbos-releases/arbos32',
+              label: 'ArbOS 32 Bianca',
             },
             {
               type: 'doc',
@@ -929,8 +944,8 @@ const sidebars = {
                   label: 'Technical deep dive',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/Economics.pdf',
+                  type: 'doc',
+                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
                   label: 'Economics of disputes',
                 },
                 {
