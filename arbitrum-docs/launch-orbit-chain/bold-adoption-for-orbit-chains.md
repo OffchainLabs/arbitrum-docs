@@ -37,8 +37,8 @@ Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security ben
     - Improved resistance to delay attacks                                                                               
     - Increased censorship resistance for L3s                                                                            
     - Use of any `ERC-20` as the bonding token                                                                           
-    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up 
-    - Less engineering overhead and infrastructure costs                                                                 
+    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up
+    - Continue to be secured with interactive fraud proofs, with a 1/N honest party trust assumption                                                                   
 
 ##### Caveats 
     - Permissioned validation: only entities on allowlist can resolve disputes
@@ -47,20 +47,20 @@ Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security ben
 
 ##### Benefits                                                                                                           
     - Improved resistance to delay attacks                                                                               
-    - Increased censorship resistance for L3s                                                                            
+    - Increased censorship resistance for L3s (via Censorship Timeout)                                                                           
     - Use of any `ERC-20` as the bonding token                                                                           
-    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up 
-    - Less engineering overhead and infrastructure costs                                                                 
-    - More trust in the system's integrity and fairness                                                                  
+    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up                                                              
+    - Anyone can propose state roots                                                                 
     - Creates a more open ecosystem for third-party developers and users                                                 
 
 ##### Caveats 
-    - Resource exhaustion attacks: challenges require computing and financial resources to participate in, and an attacker could have significantly more resources than the defenders
-    - Liveness impact: each challenge takes time to resolve, and so if the cost of a challenge is cheap, then an attacker can open challenges and prevent the progress of the chain at a low price 
-    - Liquidity and price impacts: if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs                                                                                        ### Benefits of adopting Arbitrum BoLD
+    - Resource exhaustion attacks: challenges require computing and financial resources to participate in. An attacker that has significantly more resources than the defenders could compromise safety of the chain.
+    - Liveness impact: if the cost of a challenge is cheap, then an attacker can cheaply open a challenge and prevent the progress of the chain for as long as they can censor honest moves
+    - Liquidity and price impacts: if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs    
     - Grieving attacks: if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack
-    - More expensive engineering overhead and infrastructure costs
+    - More expensive engineering overhead and infrastructure costs                                                                                    
 
+### Benefits of adopting Arbitrum BoLD
 Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
 
 Below are some benefits for an Orbit chain that come with adopting Arbitrum BoLD - **regardless of whether validation is kept permissioned or not**:
@@ -93,7 +93,8 @@ Enabling permissionless validation means that any entity can spin up a validator
 Where malicious entities can acquire and utilize more resources than honest parties can put together during a challenge. Such an attack can take many forms and includes both on-chain and off-chain computational/infra costs. For example, a well-coordinated attack on an Orbit chain could overwhelm honest parties if the malicious actors can spend more gas and computational power and acquire more of the bonding asset than the defenders can. This risk can be mitigated by a combination of high bond sizes, use of a price-independent bonding asset, use of a bonding asset with high liquidity, strong economic guarantees that attackers will lose most of their resources, sufficiently long challenge periods, and robust infrastructure operations and resources that can respond and scale up when necessary. More information on resource exhaustion attacks and how Arbitrum BoLD's design accounts for this risk can be found in Section 6.1.4 of the [BoLD whitepaper](https://arxiv.org/abs/2404.10491).
 
 #### Risks to liveness or delays of the chain
-If the bond sizes are set too low, making challenges relatively cheap to open compared to the benefits of delaying the chain. Remember that challenges, while time-bound, still take time to complete. This means that each challenge adds a fixed amount of time to confirm assertions. If the bond sizes are carefully calculated and chosen, confirmations of an Orbit chain's state may be completed on time if the cost to open a challenge is low. Delaying the confirmation of assertions for a chain could negatively impact the chain in many ways that an attacker could benefit from (e.g., profiting from price volatility and price impacts on the Orbit chain's token may make delaying the chain worthwhile for an attacker).
+If the bond sizes are set too low, an adversary can cheaply create a challenge and delay confirmation of an assertion for up to an entire extra challenge period if they can censor honest BOLD moves. Remember that challenges, while time-bound, still take time to complete. Delaying the confirmation of assertions for a chain could negatively impact the chain in many ways that an attacker could benefit from (e.g., profiting from price volatility and price impacts on the Orbit chain's token may make delaying the chain worthwhile for an attacker).
+
 ### Conclusion for Orbit chains considering BoLD Permissionless Validation
 Due to the uniquely different tokenomics, sizes, and varying types of <a data-quicklook-from= "arbitrum-orbit">Arbitrum Orbit</a> chains deployed (or in active development) today, <a data-quicklook-from= "offchain-labs">Offchain Labs</a> does not provide a "one-size-fits-all" recommendation for how best to safely set up and enable permissionless validation for Orbit chains. Instead, we recommend teams adopt Arbitrum BoLD but keep validation permissioned. 
 
