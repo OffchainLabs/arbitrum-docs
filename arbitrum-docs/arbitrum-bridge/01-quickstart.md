@@ -1,4 +1,4 @@
----
+bridge arbitrum to rara---
 title: 'Quickstart: Arbitrum bridge'
 description: "Learn how to use Arbitrum's bridge to transfer ETH or ERC-20 tokens between a parent chain and a child chain"
 author: mahsamoosavi
