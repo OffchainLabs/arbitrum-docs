@@ -59,7 +59,7 @@ git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-
 ```
 
 ```shell title="Launch your testnode"
-./test-node.bash --init
+./test-node.bash --init --blockscout
 ```
 
 The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
