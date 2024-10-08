@@ -173,13 +173,13 @@ A validator can make a move on an edge as long as that edge is “rivaled”. Th
 
 #### Subchallenges
 
-The number of steps of execution at which validators could disagree within a single Arbitrum block has a max of 2^43. To play a game of bisections on this amount of hashes would be unreasonable from a space requirement, as each history commitment would require 8.7Tb worth of hashes. Instead, BoLD plays the bisection game over different levels of granularity of this space of 2^43 hashes.
+The number of steps of execution at which validators could disagree within a single Arbitrum block has a max of 2^42. To play a game of bisections on this amount of hashes would be unreasonable from a space requirement, as each history commitment would require 4.35Tb worth of hashes. Instead, BoLD plays the bisection game over different levels of granularity of this space of 2^42 hashes.
 
 The bisection game is an iterative process. Initially, validators disagree over Arbitrum blocks between two assertions. They create “edges” containing history commitments to all the blocks in between those two assertions, and commence the bisection game. As they progressively narrow down to a single block of disagreement, they then focus on identifying the point of disagreement in the actual `WASM` execution of the block through the Arbitrum state transition function. This marks the first “subchallenge”.
 
-The subchallenge is over a max of 2^43 hashes where validators need to narrow down their single hash of disagreement. As the space of hashes is too large, we explore this space in _ranges_ of steps.
+The first subchallenge is over a max of 2^26 hashes where validators need to narrow down their single hash of disagreement. As the space of hashes is too large, we explore this space in _ranges_ of steps. Each hash represents a max of 2^26 blocks, with each block containing a max of 2^42 WASM steps of execution
 
-First, validators disagree over **Gigasteps** of `WASM` execution. That is, over ranges of 2^30 steps. Then, they open another subchallenge once they reach a single gigastep of disagreement. They then play games over ranges of **Megasteps**, then **Kilosteps**, until they reach a subchallenge over individual steps. The bisection game is the same at each subchallenge level, and opening a subchallenge requires placing another “challenge bond”. The magnitudes of challenge bonds are different at each subchallenge level.
+First, validators disagree over execution of up to 2^26 L2 Blocks. Then, they open another subchallenge once they reach a single block of disagreement. They then play a subchallenge over up to 2^19 **BigSteps**, which are each 2^23 steps of WASM execution. Once they reach a single disagreement at the BigStep level, they open a final subchallenge over up to 2^23 SmallSteps, which are each a single step of WASM execution . The bisection game is the same at each subchallenge level, and opening a subchallenge requires placing another “challenge bond”. The magnitudes of challenge bonds are different at each subchallenge level.
 
 #### One step proof
 
