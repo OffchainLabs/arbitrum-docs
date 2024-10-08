@@ -20,16 +20,23 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 5. [Exporting your contract's ABIs](./stylus-quickstart#exporting-solidity-abis)
 6. [Calling your contract](./stylus-quickstart#calling-your-contract)
 7. [Sending a transaction to your contract](./stylus-quickstart#sending-a-transaction-to-your-contract)
+8. [Using scripts to interact with a contract](./stylus-quickstart#handling-contracts-interactions-with-a-script)
 
-## Setting up your development environment
+## Prerequisites
 
-### Prerequisites
+This guide assumes you are familiar with:
 
-#### Rust toolchain
+- [Rust](https://www.rust-lang.org/learn)
+- [Solidity](https://docs.soliditylang.org/en/v0.8.9/)
+- [Docker](https://www.docker.com)
+- CLI commands (bash, zsh, etc.)
+
+### Setting up your environment
+#### 1. Rust toolchain
 
 Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-#### VS Code
+#### 2. VS Code
 
 We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you’re comfortable with those.
 
@@ -40,17 +47,17 @@ Some helpful VS Code extensions for Rust development:
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
 - [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
 
-#### Docker
+#### 3. Docker
 
 The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
 You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
 
-#### Foundry's Cast
+#### 4. Foundry's Cast
 
 [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-#### Nitro testnode
+#### 5. Nitro testnode
 
 Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
@@ -59,7 +66,7 @@ git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-
 ```
 
 ```shell title="Launch your testnode"
-./test-node.bash --init --blockscout
+./test-node.bash --init
 ```
 
 The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
@@ -309,6 +316,189 @@ l1BlockNumber             "0x1223"
 ```
 
 Our transactions returned a status of `1`, indicating success, and the counter has been incremented (you can verify this by calling your contract's `number()(uint256)` function again).
+
+## Handling contracts interactions with a script
+
+The `counter` example is nice as a warm up, but probably not something you'd need in production, so let's take things a bit further with a more complex contract: the `Vending Machine`.
+The `Vending Machine` contract represents a cupcake vending machine that distributes cupcakes to users, ensuring they can only receive one every 5 seconds, and allows users to check their cupcake balance:
+
+```solidity
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.9;
+
+// Rule 2: The vending machine's rules can't be changed by anyone.
+contract VendingMachine {
+    // state variables = internal memory of the vending machine
+    mapping(address => uint) private _cupcakeBalances;
+    mapping(address => uint) private _cupcakeDistributionTimes;
+
+    function giveCupcakeTo(address userAddress) public returns (bool) {
+        // this code is unnecessary, but we're keeping it here so you can compare it to the JS implementation
+        if (_cupcakeDistributionTimes[userAddress] == 0) {
+            _cupcakeBalances[userAddress] = 0;
+            _cupcakeDistributionTimes[userAddress] = 0;
+        }
+
+        // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
+        uint fiveSecondsFromLastDistribution = _cupcakeDistributionTimes[userAddress] + 5 seconds;
+        bool userCanReceiveCupcake = fiveSecondsFromLastDistribution <= block.timestamp;
+        if (userCanReceiveCupcake) {
+            _cupcakeBalances[userAddress]++;
+            _cupcakeDistributionTimes[userAddress] = block.timestamp;
+            return true;
+        } else {
+            revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+        }
+    }
+
+    // Getter function for the cupcake balance of a user
+    function getCupcakeBalanceFor(address userAddress) public view returns (uint) {
+        return _cupcakeBalances[userAddress];
+    }
+}
+```
+
+To play with this contract just clone the `stylus-quickstart-vending-machine` repository:
+
+```shell
+git clone git@github.com:OffchainLabs/stylus-quickstart-vending-machine.git && cd stylus-quickstart-vending-machine
+```
+
+You've already installed `cargo stylus`, and you've learned the basics, so you should be able to check this contract and deploy it.
+
+Once done with the deployment, you can interact with the contract using the same commands as before, but the `stylus-quickstart-vending-machine` example also includes a Rust script that automates the interaction with the contract.
+
+You'll find this `ethers-rs` script under `examples/vending_machine.rs`.
+
+```rust
+use ethers::{
+    middleware::SignerMiddleware,
+    prelude::abigen,
+    providers::{Http, Middleware, Provider},
+    signers::{LocalWallet, Signer},
+    types::Address,
+};
+use eyre::eyre;
+use std::io::{BufRead, BufReader};
+use std::str::FromStr;
+use std::sync::Arc;
+use dotenv::dotenv;
+use std::env;
+
+/// Your private key file path.
+const PRIV_KEY_PATH: &str = "PRIV_KEY_PATH";
+
+/// Stylus RPC endpoint url.
+const RPC_URL: &str = "RPC_URL";
+
+/// Deployed contract address.
+const STYLUS_CONTRACT_ADDRESS: &str = "STYLUS_CONTRACT_ADDRESS";
+const USER_ADDRESS: &str = "USER_ADDRESS";
+
+#[tokio::main]
+async fn main() -> eyre::Result<()> {
+    // Load environment variables from .env file
+    dotenv().ok();
+
+    // Debugging: Print environment variables
+    println!("PRIV_KEY_PATH: {:?}", env::var(PRIV_KEY_PATH));
+    println!("RPC_URL: {:?}", env::var(RPC_URL));
+    println!("STYLUS_CONTRACT_ADDRESS: {:?}", env::var(STYLUS_CONTRACT_ADDRESS));
+    println!("USER_ADDRESS: {:?}", env::var(USER_ADDRESS));
+
+    let priv_key_path = env::var(PRIV_KEY_PATH).map_err(|_| eyre!("No {} env var set", PRIV_KEY_PATH))?;
+    let rpc_url = env::var(RPC_URL).map_err(|_| eyre!("No {} env var set", RPC_URL))?;
+    let contract_address = env::var(STYLUS_CONTRACT_ADDRESS)
+        .map_err(|_| eyre!("No {} env var set", STYLUS_CONTRACT_ADDRESS))?;
+    let user_address_str = env::var(USER_ADDRESS).map_err(|_| eyre!("No {} env var set", USER_ADDRESS))?;
+    let user_address: Address = user_address_str.parse().map_err(|e| eyre!("Failed to parse user address: {}", e))?;
+
+    abigen!( //abigen! macro is used to generate type-safe bindings to the VendingMachine contract based on its ABI
+        VendingMachine,
+        r#"[
+            function giveCupcakeTo(address user_address) external returns (bool)
+            function getCupcakeBalanceFor(address user_address) external view returns (uint256)
+        ]"#
+    );
+
+    let provider = Provider::<Http>::try_from(rpc_url)?;
+    let address: Address = contract_address.parse()?;
+
+    let privkey = read_secret_from_file(&priv_key_path)?;
+    println!("Private key read from file: {}", privkey); // Debugging line
+
+    let wallet = LocalWallet::from_str(&privkey)?;
+    let chain_id = provider.get_chainid().await?.as_u64();
+    let client = Arc::new(SignerMiddleware::new(
+        provider,
+        wallet.clone().with_chain_id(chain_id),
+    ));
+
+    let vending_machine = VendingMachine::new(address, client);
+
+    let balance = vending_machine.get_cupcake_balance_for(user_address).call().await?;
+    println!("User cupcake balance = {:?}", balance);
+
+    let tx_receipt = vending_machine.give_cupcake_to(user_address).send().await?.await?;
+    match tx_receipt {
+        Some(receipt) => {
+            if receipt.status == Some(1.into()) {
+                println!("Successfully gave cupcake to user via a tx");
+            } else {
+                println!("Failed to give cupcake to user, tx failed");
+            }
+        }
+        None => {
+            println!("Failed to get transaction receipt");
+        }
+    }
+
+    let balance = vending_machine.get_cupcake_balance_for(user_address).call().await?;
+    println!("New user cupcake balance = {:?}", balance);
+
+    Ok(())
+}
+
+fn read_secret_from_file(fpath: &str) -> eyre::Result<String> {
+    let f = std::fs::File::open(fpath)?;
+    let mut buf_reader = BufReader::new(f);
+    let mut secret = String::new();
+    buf_reader.read_line(&mut secret)?;
+    Ok(secret.trim().to_string())
+}
+```
+
+As you can see in the code above, the script:
+
+- Reads the private key from a file
+- Connects to the nitro-testnode RPC endpoint
+- Adds a cupcake to the user's balance
+- Prints the user's cupcake balance
+
+Remember: your contracts are also Ethereum ABI equivalent if using the Stylus SDK, meaning they can be called and transacted with using any other Ethereum tooling.
+
+To run the example, set the following env vars or place them in a `.env` file this project, then:
+
+```shell
+STYLUS_CONTRACT_ADDRESS=<the onchain address of your deployed contract>
+PRIV_KEY_PATH=<the file path for your priv key to transact with>
+RPC_URL=http://localhost:8547
+USER_ADDRESS=<the address of the user you want to interact with>
+```
+
+Alternatively, you can copy the `.env-sample` into a `.env` file:
+
+```shell
+cp .env-sample .env
+```
+
+Next, run:
+
+```shell
+cargo run --example vending_machine --target=<YOUR_ARCHITECTURE>
+```
+
+Where you can find `YOUR_ARCHITECTURE` by running `rustc -vV | grep host`. For M1 Apple computers, for example, this is `aarch64-apple-darwin` and for most Linux x86 it is `x86_64-unknown-linux-gnu`.
 
 ## Conclusion
 
