@@ -319,6 +319,8 @@ Our transactions returned a status of `1`, indicating success, and the counter h
 
 ## Handling contracts interactions with a script
 
+Let's take this a bit further with an example of how to use a Rust script to interact with a contract.
+
 The `counter` example is nice as a warm up, but probably not something you'd need in production, so let's take things a bit further with a more complex contract: the `Vending Machine`.
 The `Vending Machine` contract represents a cupcake vending machine that distributes cupcakes to users, ensuring they can only receive one every 5 seconds, and allows users to check their cupcake balance:
 
