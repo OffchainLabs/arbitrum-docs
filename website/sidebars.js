@@ -616,6 +616,10 @@ const sidebars = {
       type: 'category',
       label: 'Run an Arbitrum node',
       collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'node-running/node-running-content-map',
+      },
       items: [
         {
           type: 'doc',
