@@ -11,6 +11,15 @@
   transition: transform 0.3s ease;
 }
 
+[data-theme='dark'] .card {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .cardH3,
+[data-theme='dark'] .cardP {
+  color: #ffffff;
+}
+
 .card:hover {
   transform: translateY(-5px);
 }
