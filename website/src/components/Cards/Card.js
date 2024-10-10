@@ -7,13 +7,12 @@ function Card({ title, description, to, href }) {
   const linkProps = isExternal ? { href } : { to };
 
   return (
-    <div className={styles.card}>
-      <h3 className={styles.cardTitle}>{title}</h3>
-      <p>{description}</p>
-      <Link {...linkProps} className={styles.cardLink}>
-        Learn more →
-      </Link>
-    </div>
+    <Link {...linkProps} className={styles.card}>
+      <div>
+        <h3 className={styles.cardH3}>{title}</h3>
+        <p className={styles.cardP}>{description}</p>
+      </div>
+    </Link>
   );
 }
 
