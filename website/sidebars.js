@@ -462,7 +462,7 @@ const sidebars = {
       collapsed: true,
       link: {
         type: 'doc',
-        id: 'stylus/stylus-overview',
+        id: 'stylus/stylus-content-map',
       },
       items: [
         {
