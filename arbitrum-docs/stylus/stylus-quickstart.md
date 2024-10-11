@@ -82,12 +82,6 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
-
-```shell
-rustup target add wasm32-unknown-unknown
-```
-
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
 
 ```shell title="cargo stylus --help returns:"
@@ -123,6 +117,13 @@ cargo stylus new <YOUR_PROJECT_NAME>
 ```
 
 `cargo stylus new` generates a starter template that implements a Rust version of the [Solidity `Counter` smart contract example](https://github.com/OffchainLabs/counter_contract/blob/master/contracts/Counter.sol).
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
+
+```shell
+cd <YOUR_PROJECT_NAME>
+rustup target add wasm32-unknown-unknown
+```
 
 At this point, you can move on to the next step of this guide or develop your first Rust smart contract. Feel free to use the [Stylus Rust SDK reference section](./reference/overview) as a starting point; it offers many examples to help you quickly familiarize yourself with Stylus.
 
