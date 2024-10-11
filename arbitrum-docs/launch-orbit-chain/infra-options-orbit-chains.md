@@ -64,6 +64,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [The Graph](https://thegraph.com/)
 - [Goldsky](https://goldsky.com/)
 - [Ormi](https://www.ormilabs.xyz/)
+- [Traceye](https://traceye.io/)
 
 ## Oracles
 
