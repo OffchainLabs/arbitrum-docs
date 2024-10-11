@@ -2,9 +2,9 @@ import React from 'react';
 import Link from '@docusaurus/Link';
 import styles from './Card.module.css';
 
-function Card({ title, description, to, href }) {
+function Card({ title, description, to, href, target }) {
   const isExternal = href !== undefined;
-  const linkProps = isExternal ? { href } : { to };
+  const linkProps = isExternal ? { href, target } : { to, target };
 
   return (
     <Link {...linkProps} className={styles.card}>
