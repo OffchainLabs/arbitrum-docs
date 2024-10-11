@@ -628,8 +628,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/quickstart',
-          label: 'Quickstart',
+          id: 'run-arbitrum-node/node-types',
+          label: 'What node should I run?',
         },
         {
           type: 'doc',
