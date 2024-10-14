@@ -126,6 +126,28 @@ It depends on your definition of "app chain". Orbit chains can be used as applic
 - Your Orbit chain can be special-purpose, general-purpose, and everything in-between.
 - You could even build an app that uses multiple Orbit chains to support strange new forms of redundancy, high availability, and trustlessness.
 
+### What's the best model: AnyTrust or Rollup?
+
+The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilemma (scalability vs. security vs. decentralization), so the best option depends on what features matter most for your use case.
+
+Here's a short list to help you pick the model that meets your chain's requirements:
+
+#### I need my chain to be cost-efficient
+
+- **AnyTrust:** By leveraging a Data Availability Committee (DAC), AnyTrust significantly reduces data availability costs compared to storing all data on Ethereum L1.
+
+#### I need the most robust security model
+
+- **Rollup:** By storing raw transaction data on Arbitrum One or Ethereum L1, Rollup chains inherit Ethereum's robust security model, offering high resilience against attacks.
+
+#### I need my chain to use a custom gas token
+
+- **AnyTrust:** The AnyTrust model allows you to use any `ERC-20` token for gas fees.
+
+#### I want my chain to be trust-minimized and decentralized
+
+- **Rollup:** If your Rollup Orbit chain settles to Arbitrum One or Ethereum, it inherits the highest levels of trustlessness and decentralization of the Ethereum environment.
+
 ### Can my Orbit chain talk to other Orbit chains?
 
 Yes! All Orbit chains are powered by self-managed nodes running their own instance of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>'s node software. This software implements both **AnyTrust** and **Rollup** protocols; your Orbit chain can be configured to use either.

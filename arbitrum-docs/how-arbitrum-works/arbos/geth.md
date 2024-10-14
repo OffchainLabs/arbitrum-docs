@@ -207,11 +207,11 @@ A [geth message][geth_message_link] may be processed for various purposes. For e
 
 A message [derived from a transaction][asmessage_link] will carry that transaction in a field accessible via its [`UnderlyingTransaction`][underlying_link] method. While this is related to the way a given message is used, they are not one-to-one. The table below shows the various run modes and whether each could have an underlying transaction.
 
-| Run Mode                                 | Scope                   | Carries an Underlying Tx?                                                                                   |
-| :--------------------------------------- | :---------------------- | :---------------------------------------------------------------------------------------------------------- |
-| [`MessageCommitMode`][mc0]               | state transition &nbsp; | always                                                                                                      |
-| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.md) or when scheduled |
-| [`MessageEthcallMode`][mc2]              | eth_calls               | never                                                                                                       |
+| Run Mode                                 | Scope                   | Carries an Underlying Tx?                                                                                    |
+| :--------------------------------------- | :---------------------- | :----------------------------------------------------------------------------------------------------------- |
+| [`MessageCommitMode`][mc0]               | state transition &nbsp; | always                                                                                                       |
+| [`MessageGasEstimationMode`][mc1] &nbsp; | gas estimation          | when created via [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx) or when scheduled |
+| [`MessageEthcallMode`][mc2]              | eth_calls               | never                                                                                                        |
 
 [mc0]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654
 [mc1]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L655
