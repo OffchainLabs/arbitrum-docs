@@ -64,6 +64,19 @@ article {
       font-weight: 600;
     }
 
+    img[alt='200px-img'] {
+      width: 200px;
+    }
+    img[alt='400px-img'] {
+      width: 400px;
+    }
+    img[alt='600px-img'] {
+      width: 600px;
+    }
+    img[alt='900px-img'] {
+      width: 900px;
+    }
+
     .theme-admonition {
       margin-bottom: 2em;
 
