@@ -76,6 +76,7 @@ The following Oracle providers can be used to integrate off-chain data with your
 - [Redstone](https://redstone.finance/)
 - [Randomizer](http://Randomizer.ai) (VRF only)
 - [Supra](https://supra.com/)
+- [RedStone](https://redstone.finance/)
 
 ## RPC endpoints
 
