@@ -7,7 +7,7 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -257,7 +257,7 @@ Our contract is a counter; in its initial state, it should store a counter value
 You can call your contract so it returns its current counter value by sending it the following command:
 
 ```shell title="Call to the function: number()(uint256)"
-cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 /
+cast call --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 \
 [deployed-contract-address] "number()(uint256)"
 ```
 
@@ -281,7 +281,7 @@ Let's increment the counter by sending a transaction to your contract's `increme
 We'll use Cast's `send` command to send our transaction.
 
 ```shell title="Sending a transaction to the function: increment()"
-cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659
+cast send --rpc-url 'http://localhost:8547' --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 \
 [deployed-contract-address] "increment()"
 ```
 

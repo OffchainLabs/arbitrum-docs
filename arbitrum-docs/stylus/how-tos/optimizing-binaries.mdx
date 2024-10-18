@@ -8,7 +8,7 @@ content_type: how-to
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -44,6 +44,12 @@ Additional WASM-specific tooling exists to shrink binaries. Due to being 3rd par
 ### `wasm-opt`
 
 [wasm-opt](https://docs.rs/wasm-opt/0.113.0/wasm_opt/) applies techniques to further reduce binary size, usually netting around 10%.
+
+### `twiggy`
+
+[twiggy](https://github.com/rustwasm/twiggy) is a code size profiler for WASM, it can help you estimate the impact of each added component on your binaries' size.
+
+Our team has also curated a [list of recommended libraries](/stylus/recommended-libraries) that are helpful to Stylus development and optimally sized.
 
 ### Frequently asked questions
 

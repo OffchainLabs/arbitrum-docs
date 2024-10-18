@@ -6,7 +6,7 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -16,7 +16,7 @@ This how-to assumes that you're running one of the following operating systems:
 
 - [Debian 11.7 (arm64)](https://cdimage.debian.org/cdimage/archive/11.7.0/arm64/iso-cd/debian-11.7.0-arm64-netinst.iso)
 - [Ubuntu 22.04 (amd64)](https://releases.ubuntu.com/22.04.2/ubuntu-22.04.2-desktop-amd64.iso)
-- [MacOS Ventura 13.4](https://developer.apple.com/documentation/macos-release-notes/macos-13_4-release-notes).
+- [MacOS Sonoma 14.3](https://developer.apple.com/documentation/macos-release-notes/macos-14_3-release-notes).
 
 ## Build a Docker image
 
@@ -42,6 +42,7 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo service docker start
 ```
+
 (Note that if you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.)
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
@@ -104,10 +105,10 @@ echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 Install essentials:
 
 ```shell
-brew install git curl make cmake npm go gvm golangci-lint wabt llvm gotestsum
+brew install git curl make cmake npm go golangci-lint wabt llvm lld libusb gotestsum
 npm install --global yarn
 sudo mkdir -p /usr/local/bin
-sudo ln -s  /opt/homebrew/opt/llvm/bin/wasm-ld /usr/local/bin/wasm-ld
+echo "export PATH=/opt/homebrew/opt/llvm/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
 ### Step 5. Configure node [18](https://github.com/nvm-sh/nvm)
@@ -138,12 +139,16 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
 rustup install 1.80.1
 rustup default 1.80.1
+rustup install nightly
 rustup target add wasm32-unknown-unknown --toolchain 1.80.1
 rustup target add wasm32-wasi --toolchain 1.80.1
+rustup target add wasm32-unknown-unknown --toolchain nightly
+rustup target add wasm32-wasi --toolchain nightly
+rustup component add rust-src --toolchain nightly
 cargo install cbindgen
 ```
 
-### Step 7. Configure Go [1.21](https://github.com/moovweb/gvm)
+### Step 7. Configure Go [1.23](https://github.com/moovweb/gvm)
 
 #### Install Bison
 
@@ -164,8 +169,8 @@ brew install bison
 ```shell
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
 source "$HOME/.gvm/scripts/gvm"
-gvm install go1.21
-gvm use go1.21 --default
+gvm install go1.23
+gvm use go1.23 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
