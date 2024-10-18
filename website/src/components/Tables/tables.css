@@ -1,0 +1,51 @@
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders are combined */
+    border-radius: 10px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures rounded corners are visible */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+/* Header Styles */
+th {
+    background-color: #f4f4f4; /* Light gray background for header */
+    color: #333; /* Dark text color */
+    padding: 10px; /* Padding inside header cells */
+    text-align: center; /* Align text to the left */
+    border-bottom: 2px solid #ddd; /* Bottom border for header */
+}
+
+/* Row Styles */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternating row colors */
+}
+
+/* Cell Styles */
+td {
+    padding: 10px; /* Padding inside cells */
+    border-bottom: 1px solid #930909; /* Bottom border for cells */
+    text-align: left; /* Align text to the left */
+}
+
+/* Column Specific Styles */
+td:first-child {
+    background-color: #e9f7ef; /* Different background for the first column */
+}
+
+
+/* Corner Radius for Cells */
+td, th {
+    border-radius: 10px; /* Rounded corners for individual cells */
+}
+
+/* Responsive Table */
+@media (max-width: 600px) {
+    table, th, td {
+        display: block; /* Make table elements block for small screens */
+        width: 100%; /* Full width for each element */
+    }
+    tr {
+        margin-bottom: 10px; /* Space between rows */
+    }
+}
