@@ -82,10 +82,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using.  The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
 
 ```shell
-rustup target add wasm32-unknown-unknown
+rustup default 1.80
+rustup target add wasm32-unknown-unknown --toolchain 1.80
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
