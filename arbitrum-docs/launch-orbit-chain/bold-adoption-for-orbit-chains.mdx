@@ -9,6 +9,8 @@ target_audience: 'Developers who want to build on Arbitrum using popular program
 sidebar_position: 1
 ---
 
+
+
 :::info PUBLIC PREVIEW DOCUMENT
 
 This document is currently in **public preview** and may change significantly as feedback is captured from readers like you. Click the _Request an update_ button at the top of this document or [join the Arbitrum Discord](https://discord.gg/arbitrum) to share your feedback.
@@ -30,35 +32,75 @@ Arbitrum BoLD is an upgrade to the existing dispute protocol used by Arbitrum ch
 
 Adopting <a data-quicklook-from="bold">Arbitrum BoLD</a> brings new security benefits to Orbit chains that are independent of whether or not validation is permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. Because of these new security benefits, we strongly recommend teams to upgrade their Orbit chains to use Arbitrum BoLD (for the security benefits) but **keep validation permissioned**. Below is a quick breakdown of the impacts of permissioned BoLD vs. permissionless BoLD on your Orbit chain:
 
+ <table style={{width: '100%'}}>
+      <thead>
+        <tr>
+          <th colSpan="2">
+            <strong>Permissioned BoLD on an Orbit chain</strong>
+          </th>
+        </tr>
+        <tr>
+          <th style={{width: '50%'}}><strong>Benefits</strong></th>
+          <th style={{width: '50%'}}><strong>Caveats</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style={{width: '50%'}}><strong>Improved resistance to delay attacks</strong></td>
+          <td style={{width: '50%'}}>Permissioned validation: only entities on allowlist can resolve disputes</td>
+        </tr>
+        <tr>
+          <td style={{width: '50%'}}><strong>Increased censorship resistance for L3s</strong></td>
+          <td style={{width: '50%'}}></td>
+        </tr>
+        <tr>
+          <td style={{width: '50%'}}><strong>Use of any <code>ERC-20</code> as the bonding token</strong></td>
+          <td style={{width: '50%'}}></td>
+        </tr>
+        <tr>
+          <td style={{width: '50%'}}><strong>Be on the latest iteration of Arbitrum technology</strong>. Simplify future security & feature updates</td>
+          <td style={{width: '50%'}}></td>
+        </tr>
+      </tbody>
+    </table>
 
-#### Permissioned BoLD on an Orbit chain
 
-##### Benefits                                                                                                           
-    - Improved resistance to delay attacks                                                                               
-    - Increased censorship resistance for L3s                                                                            
-    - Use of any `ERC-20` as the bonding token                                                                           
-    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up
-    - Continue to be secured with interactive fraud proofs, with a 1/N honest party trust assumption                                                                   
+<table style={{width: '100%'}}>
+    <thead>
+        <tr>
+            <th colSpan="2">
+                <strong>Permissionless BoLD on an Orbit chain</strong>
+            </th>
+        </tr>
+        <tr>
+            <th style={{width: '50%'}}><strong>Benefits</strong></th>
+            <th style={{width: '50%'}}><strong>Caveats</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style={{width: '50%'}}><strong>Improved resistance to delay attacks</strong></td>
+            <td style={{width: '50%'}}>Resource exhaustion attacks: challenges require computing and financial resources to participate in. An attacker with significantly more resources than defenders could compromise chain safety.</td>
+        </tr>
+        <tr>
+            <td style={{width: '50%'}}><strong>Increased censorship resistance for L3s (via Censorship Timeout)</strong></td>
+            <td style={{width: '50%'}}>Liveness impact: if the cost of a challenge is cheap, an attacker can cheaply open a challenge and prevent chain progress by censoring honest moves.</td>
+        </tr>
+        <tr>
+            <td style={{width: '50%'}}><strong>Use of any <code>ERC-20</code> as the bonding token</strong></td>
+            <td style={{width: '50%'}}>Liquidity and price impacts: if a low-liquidity <code>ERC-20</code> token is used as the bonding token, and a challenge occurs, it might have adverse effects on liquidity and price.</td>
+        </tr>
+        <tr>
+            <td style={{width: '50%'}}><strong>Be on the latest iteration of Arbitrum technology, simplifying future updates</strong></td>
+            <td style={{width: '50%'}}>Grieving attacks: a higher reward for defenders might incentivize self-challenges, effectively lowering the cost of attack.</td>
+        </tr>
+        <tr>
+            <td style={{width: '50%'}}><strong>Anyone can propose state roots</strong></td>
+            <td style={{width: '50%'}}>More expensive engineering overhead and infrastructure costs.</td>
+        </tr>
+    </tbody>
+</table>
 
-##### Caveats 
-    - Permissioned validation: only entities on allowlist can resolve disputes
-
-#### Permissionless BoLD on an Orbit chain
-
-##### Benefits                                                                                                           
-    - Improved resistance to delay attacks                                                                               
-    - Increased censorship resistance for L3s (via Censorship Timeout)                                                                           
-    - Use of any `ERC-20` as the bonding token                                                                           
-    - Be on the latest iteration of Arbitrum technology, making future security & feature updates much easier to pick up                                                              
-    - Anyone can propose state roots                                                                 
-    - Creates a more open ecosystem for third-party developers and users                                                 
-
-##### Caveats 
-    - Resource exhaustion attacks: challenges require computing and financial resources to participate in. An attacker that has significantly more resources than the defenders could compromise safety of the chain.
-    - Liveness impact: if the cost of a challenge is cheap, then an attacker can cheaply open a challenge and prevent the progress of the chain for as long as they can censor honest moves
-    - Liquidity and price impacts: if a low-liquidity (relative) `ERC-20` token is used as the bonding token and a challenge occurs    
-    - Grieving attacks: if the reward to defenders incentivizes self-challenges (by being too high), effectively lowering the cost of attack
-    - More expensive engineering overhead and infrastructure costs                                                                                    
 
 ### Benefits of adopting Arbitrum BoLD
 Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
