@@ -50,7 +50,7 @@ Timeboost is implemented using three separate components that work together:
 - **An off-chain auction** for determining the controller of the express lane for a given round. This auction is managed by an <a data-quicklook-from='autonomous-auctioneer'>autonomous auctioneer</a>.
 - **An <a data-quicklook-from='auction-contract'>auction contract</a>**, deployed on the target chain, to serve as the canonical source of truth for the auction results and handling of auction proceeds.
 
-To start, the default duration of a round is 60 seconds. Transactions not in the express lane will be subject to a default 200 milisecond “speed bump” for their transaction to be sequenced, which means that non-express lane transactions may get delayed to the next block. It’s important to call out that the default Arbitrum block time will remain at 250 miliseconds (or lower for Arbitrum chains if desired). Let’s dive in to how each of these components work.
+To start, the default duration of a round is 60 seconds. Transactions not in the express lane will be subject to a default 200 milisecond “speed bump” for their transaction to be sequenced, which means that non-express lane transactions may get delayed to the next block. It’s important to call out that the default Arbitrum block time will remain at 250 milliseconds (which can be adjusted down to 100 milliseconds, if desired). Let’s dive in to how each of these components work.
 
 ### The express lane
 
