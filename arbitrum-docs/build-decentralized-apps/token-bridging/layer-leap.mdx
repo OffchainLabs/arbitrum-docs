@@ -1,0 +1,84 @@
+---
+title: 'Layer leap contracts'
+description: 'Learn to use Layer leap contracts.'
+author: leerderek
+sme: amarrazza
+target_audience: 'Developers who want to implement Layer leap contracts on their Orbit chain'
+sidebar_position: 1
+---
+
+import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
+
+<PublicPreviewBannerPartial />
+
+## Single click bridging from L1 to L3 is now possible with layer leap
+
+- [ Main repository ](https://github.com/OffchainLabs/l1-l3-teleport-contracts) 
+- [ SDK support ](https://www.npmjs.com/package/@arbitrum/sdk/v/3.5.1-teleporter.0) (pre-release!)
+- [ Request Feature ](https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new?assignees=&labels=feat,triage&projects=&template=add-layerleap-request.yml&title=[feat]) 
+
+Contract Addresses
+
+| Contract              | Address                                                                 |
+| --------------------- | ----------------------------------------------------------------------- |
+| Arb One L1Teleporter  | https://etherscan.io/address/0xCBd9c6e310D6AaDeF9F025f716284162F0158992 |
+| Arb Nova L1Teleporter | https://etherscan.io/address/0xCBd9c6e310D6AaDeF9F025f716284162F0158992 |
+
+## Launch details
+
+_Key timelines & announcements_
+
+**Orbit Onboarding:** We are looking for interested Orbit L3s with ETH gas for immediate rollout **AND** Orbit L3s with custom gas tokens for future adoption in our next release.
+
+_Upcoming launches & future releases_
+
+A future release of Layer Leap is not yet scheduled, but upcoming features including providing support for Orbit L3s with custom gas tokens.
+
+## Value & user impact
+
+**End-users:** Can now bridge `ETH` and `ERC-20`s from Ethereum to your Orbit L3 in a single click.
+
+- Bridging `ETH` requires one call on L1
+- Bridging an `ERC-20` requires one approval and one call on L1
+
+**Orbit L3s:** Can more seamlessly onboard `ETH` and `ERC-20`s from Ethereum mainnet.
+
+_Which Orbit configurations can adopt this feature?_
+
+**Any L3 Orbit Chains on top of an Arbitrum chain** **_with ETH gas fees_** can use Layer Leap.
+
+- Layer Leap contracts are currently only deployed for Arb One and Arb Nova, but contracts can be deployed for additional Arbitrum Layer-2s by Offchain Labs or your RaaS provider.
+  - The Layer 2 must be an Arbitrum chain due to the use of retryables.
+- _Future support: Layer Leap will support Orbit chains with custom gas tokens in a future release_
+
+## Implementation
+
+_How can Orbit chains adopt this feature?_
+
+**UI Adoption:** Layer leap contracts can be integrated into your own bridge or added to your chain’s UI for the Arbitrum bridge (bridge.arbitrum.io)
+
+### Arbitrum bridge UI: if you are already on the arbitrum bridge UI then you can sign up for layer leap adoption by using this [github template](https://github.com/offchainlabs/arbitrum-token-bridge/issues/new?assignees=&labels=feat%2ctriage&projects=&template=add-layerleap-request.yml&title=%5bfeat%5d%3a+enable+layer+leap+for+%3corbit+chain%3e).
+
+    - If you are not on the Arbitrum Bridge UI yet you can sign up by filling out this [GitHub Template](https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new?assignees=&labels=feat%2Ctriage&projects=&template=add-orbit-chain-request.yml&title=%5Bfeat%5D%3A+), and then also fill out the template above.
+    - You can demo Layer Leap on the Arbitrum Bridge by bridging to [Rari](https://bridge.arbitrum.io/?destinationChain=rari-mainnet&sourceChain=ethereum) and [Proof of Play](https://bridge.arbitrum.io/?destinationChain=pop-apex&sourceChain=ethereum).
+
+### Custom bridge UI: if you want to integrate layer leap functionality into your custom bridge UI, read the [info page on the layer leap github](https://github.com/offchainlabs/l1-l3-teleport-contracts/blob/main/docs/info.md) to learn more.
+
+_What chains are currently supported?_
+
+Layer Leap requires an L1 teleporter contract for each L2 chain. `L1Teleporter` contracts are deployed on Ethereum L1 for Arb One and Arb Nova.
+
+| Contract              | Address                                                                 |
+| --------------------- | ----------------------------------------------------------------------- |
+| Arb One L1Teleporter  | https://etherscan.io/address/0xCBd9c6e310D6AaDeF9F025f716284162F0158992 |
+| Arb Nova L1Teleporter | https://etherscan.io/address/0xCBd9c6e310D6AaDeF9F025f716284162F0158992 |
+
+For non Arbitrum One L3s:
+
+- To enable Layer Leap for your Layer 3 you can follow the Deployment Procedure defined [here](https://github.com/OffchainLabs/l1-l3-teleport-contracts/blob/main/docs/info.md). Before self deploying, let Offchain Labs know about your request!
+
+_Implementation requirements for RaaSes?_
+
+Sending tokens from L2 to L3 relies on creation of a retryable. If you are supporting Layer Leap for your Orbit chains it’s highly recommended to be running the Retryables Monitoring tool: https://github.com/OffchainLabs/arb-retryables-monitoring. This will allow you to track and redeem any failed retryables
+
+_What configuration options or parameter changes should I consider?_
