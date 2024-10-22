@@ -19,9 +19,11 @@ This will allow:
 - Cross-chain dApps to read the finalized state at the same rate as the fast withdrawal frequency
 
 ## Recommended configuration
+
 While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
 
 ### Fast withdrawals for AnyTrust chains
+
 As AnyTrust chains are an optimum (an optimistic rollup using a separate data availability layer), AnyTrust chains are already placing a trust assumption on their Data Availability Committee (DAC) to provide the data needed for fraud proofs and recreating the chain.
 
 The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the fast withdrawals committee. This will leverage the existing trust assumption placed on the DAC operators such that **enabling fast withdrawals does not add any new trusted parties.**
@@ -29,28 +31,31 @@ The optimal setup for an AnyTrust chain is to have all DAC members _also_ run va
 It is possible for an Orbit Rollup to adopt fast withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
 ### Minimum validator and DAC nodes
-We recommend that any Fast Withdrawals-enabled chain have at least three DAS members and three validators in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 7-day challenge period (as fast as 15 minutes), it becomes even more important to have more parties involved in validation to further reduce trust assumptions.
+
+We recommend that any Fast Withdrawals-enabled chain have at least three DAC members and three validators acting in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 7-day challenge period (15 minutes for L2s and 15 seconds for L3s), it becomes even more important to have additional parties involved in validation to further reduce trust assumptions. This requirement can be be met with three total operators, who each run a single DAS node and a single validator.
 
 ## Technical lower bound for fast withdrawals
-Once fast withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, a higher network load can cause the fast withdrawals committee to experience slight delays from the configured rate.   
 
-- For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals. 
-- For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes. 
+Once fast withdrawals is enabled, the committee will confirm transactions at the configured frequency. However, a higher network load can cause the fast withdrawals committee to experience slight delays from the configured rate.
+
+- For low-to-medium activity chains (< 1 Mgas/s), 15 seconds is considered to be the sustained lower bound for Fast Withdrawals.
+- For chains with higher throughput (>1 Mgas/s), the practical lower bound for fast withdrawals is between 1-2 minutes.
 
 Chain owners and operators should be aware that the fast withdrawals committee may take longer to confirm new assertions under conditions with greater network load. This behavior is to be expected and does not interfere with the security or trust model of the fast withdrawals committee.
 
 ## Practical lower bounds concerning parent chain finality
+
 While a fast withdrawals-enabled chain can be configured to finality in as little as 15 seconds, there are externalities on the parent chain and from cross-chain messaging layers that must be considered.
 
-For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1. 
+For an Ethereum-based Layer-2, we recommend that the fast withdrawal frequency remain above 12.8 minutes, which is the time for Ethereum to achieve finality. For non-Ethereum L1s, we similarly recommend staying above the accepted finality threshold specific to that L1.
 
 For an Arbitrum One-based Layer-3, there are three tiers of finality to consider:
+
 1. Soft finality from the sequencer's confirmation of transaction inclusion (~250ms)
-2. Safe finality from batch inclusion after Arbitrum One's assertion is included in an Ethereum block. 
+2. Safe finality from batch inclusion after Arbitrum One's assertion is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
 
-Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure fast withdrawals down to 15 seconds. 
-
+Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure fast withdrawals down to 15 seconds.
 
 ## Adoption instructions (example script)
 
