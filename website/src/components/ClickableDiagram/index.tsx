@@ -56,8 +56,8 @@ export const ClickableDiagram = (props) => {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             id="svg42"
-            width={1026.711}
-            height={1450.403}
+            width={926.0}
+            height={700.0}
             viewBox="0 0 513.356 725.202"
             {...props}
           >
