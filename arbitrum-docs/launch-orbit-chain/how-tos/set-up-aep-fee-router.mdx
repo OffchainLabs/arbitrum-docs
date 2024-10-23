@@ -52,7 +52,6 @@ This includes:
 
 In the event that a `ChildToParentRouter` does not connect to the `ParentToChildRouter` on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to `ParentToChildRouter` is established.
 
-<!-- I changed the Link to the assertion costs as it was pointing to a [ notion draft page ](https://www.notion.so/arbitrum/AEP-Fee-Router-DOCS-4fe72e869dbf47338a1b2d0c084cdfbd) is my new Link relevant? -->
 
 And optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/how-tos/calculate-aep-fees#assertion-costs) section:
 
@@ -68,7 +67,6 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
 <aside>
-<!-- How do they reach out to the Arbitrum Foundation? Can you lmk? That's IF you know it-->
 ⚠️ The standard script deploys and sets up the AEP fee router contracts for L2 chains. For L3 chains (or further layers), a different target address on the parent chain will need to be specified, depending on the native token of the chain. Please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
 </aside>
 
@@ -92,7 +90,6 @@ To configure the script, you need to specify the following [environment variable
 - `ORBIT_CHAIN_ID`: `chainId` of the Orbit chain
 - `ORBIT_CHAIN_RPC`: RPC of the Orbit chain
 - `PARENT_CHAIN_ID`: `chainId` of the parent chain, which can neither be an Arbitrum chain nor Ethereum.
-<!-- Should we add a link to the contracts' source code instead? -->
 - `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in the [Canonical contracts](https://www.notion.so/AEP-Fee-Router-DOCS-4fe72e869dbf47338a1b2d0c084cdfbd?pvs=21) section of this document. If the parent chain your chain settles to is not on that list, contact the Arbitrum Foundation to obtain a specific target address for your chain.
 
 Finally, follow these steps to execute the script (from the `examples/setup-aep-fee-router` folder):
