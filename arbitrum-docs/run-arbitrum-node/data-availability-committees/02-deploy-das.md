@@ -291,7 +291,7 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: RPC health check
 
-The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns `200` if the DAS is active.
+The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns a status `200` if the DAS is active.
 
 Example:
 
@@ -380,7 +380,7 @@ The retention period defaults to 24 hours, but can be configured when calling `d
 
 ### Test 3: REST health check
 
-The REST interface has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise `503`.
+The REST interface has a health check on the path `/health` which will return a status `200` if the underlying storage is working, otherwise `503`.
 
 Example:
 
