@@ -1,10 +1,10 @@
 ---
-title: 'Quickstart: Run a node'
+title: 'What node should I run?'
 description: Learn more about what type of ARb node one needs to run.
 author-objective: Build a quickstart that helps readers understand why they might want to run a specific type of an Arbitrum node.
 reader-audience: Moderately-technical readers who are familiar with command lines, but not Ethereum / Arbitrum infrastructure
-reader-task: Run a node with minimal effort and maximum understanding
-content_type: quickstart
+reader-task: Learn about the different types of Arbitrum nodes and understand the benefits and trade-offs of each type.
+content_type: overview
 ---
 
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
