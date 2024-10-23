@@ -88,3 +88,9 @@ Using the feed relay, you can also retrieve the `L2 block number` of a message:
 
 - On <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, this can be done by adding the Arbitrum One genesis block number (22207817) to the sequence number of the feed message.
 - Note that in the case of <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, the Nitro genesis number is `0`, so it doesn't need to be included when adding to the feed message's sequence number.
+
+:::info
+
+Note that the `messagess[0].message.message.header.blockNumber` is `L1 block number` instead of `L2 block number`
+
+:::

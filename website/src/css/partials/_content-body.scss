@@ -37,9 +37,24 @@ article {
     }
 
     a {
-      font-weight: 600;
+      &:link {
+        color: #5b7bb6; /* Change the link color */
+        text-decoration: none !important;
+        font-weight: 600;
+      }
 
       &:hover {
+        color: #86b8da; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:visited {
+        color: #7c93cf; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:active {
+        color: #86b8da; /* Change the link color */
         cursor: pointer;
         opacity: 0.9;
       }
