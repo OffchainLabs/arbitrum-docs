@@ -1,0 +1,371 @@
+---
+title: 'How to use Timeboost'
+description: Learn how to use timeboost
+author: jose-franco
+content_type: how-to
+---
+
+Timeboost is a new transaction ordering policy for Arbitrum chains where any participant can bid for the right to access an express lane on the sequencer for faster transaction inclusion.
+
+In this how-to, you'll learn how to bid for the right to use the express lane, how to submit transactions to it, and how to transfer that right to someone else. To learn more about Timeboost, refer to the gentle introduction.
+
+This how-to assumes that you're familiar with:
+
+- [How Timeboost works](#)
+- [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
+
+## How to submit bids for the right to be the express lane controller
+
+To use the express lane for faster transaction inclusion, we must win an auction for the right to be the express lane controller for a specific round.
+
+::::info
+
+Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured in a chain with the `roundDurationSeconds` and `auctionClosingSeconds` parameters respectively.
+
+::::
+
+Auctions are held in an auction contract, and bids are submitted to an autonomous auctioneer, that also communicates with the contract. Let's take a look at the process of submitting bids and finding out the winner of an auction.
+
+### Step 0: pre-requirements
+
+To run the following steps, we'll need this information:
+
+- Address of the auction contract
+- Endpoint of the autonomous auctioneer
+
+### Step 1: deposit funds into the auction contract
+
+Before bidding on an auction, we need to deposit funds in the auction contract. These funds are deposited in the form of the ERC-20 token used to bid, also known as, the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
+
+To see the amount of tokens we have deposited in the auction contract, we can call the function `balanceOf` in the auction contract:
+
+```tsx
+const depositedBalance = await publicClient.readContract({
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'balanceOf',
+  args: [address],
+});
+console.log(`Current balance of ${address} in auction contract: ${depositedBalance}`);
+```
+
+If we want to deposit more funds to the auction contract, we first need to know what the bidding token is. To obtain the address of the bidding token, we can call the function `biddingToken` in the auction contract:
+
+```tsx
+const biddingTokenContractAddress = await publicClient.readContract({
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'biddingToken',
+});
+console.log(`biddingToken: ${biddingTokenContractAddress}`);
+```
+
+<aside>On Arbitrum One and Arbitrum Nova, the bidding token is WETH.</aside>
+
+Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract, after having it approved as spender of the amount we want to deposit:
+
+```tsx
+// Approving spending tokens
+const approveHash = await walletClient.writeContract({
+  account,
+  address: biddingTokenContractAddress,
+  abi: parseAbi(['function approve(address,uint256)']),
+  functionName: 'approve',
+  args: [auctionContract, amountToDeposit],
+});
+console.log(`Approve transaction sent: ${approveHash}`);
+
+// Making the deposit
+const depositHash = await walletClient.writeContract({
+  account,
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'deposit',
+  args: [amountToDeposit],
+});
+console.log(`Deposit transaction sent: ${depositHash}`);
+```
+
+### Step 2: submit bids
+
+Once we have deposited funds into the auction contract, we can start submitting bids for the current auction round.
+
+We can obtain the current round by calling the function `currentRound` in the auction contract:
+
+```tsx
+const currentRound = await publicClient.readContract({
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'currentRound',
+});
+console.log(`Current round: ${currentRound}`);
+```
+
+This is the current round that's running. And, at the same time, the auction for the next round might be open. For example, if `currentRound` is 10, that means that the auction for round 11 is happening right now. To check whether or not that auction is open, we can call the function `isAuctionRoundClosed` of the auction contract:
+
+```tsx
+let currentAuctionRoundIsClosed = await publicClient.readContract({
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'isAuctionRoundClosed',
+});
+```
+
+<aside>
+  Remember that, by default, auctions open 60 seconds before the round starts, and close 15 seconds
+  before the round starts, so there might be no auctions opened at certain times.
+</aside>
+
+Once we know what is the current round we can bid for (`currentRound + 1`) and we have verified that the auction is still open (`!currentAuctionRoundIsClosed`), we can submit a bid.
+
+Bids are submitted to the autonomous auctioneer endpoint. We need to send a `auctioneer_submitBid` request with the following information:
+
+- chain id
+- address of the express lane controller candidate (for example, our address if we want to be the express lane controller)
+- address of the auction contract
+- round we are bidding for (in our example, `currentRound + 1`)
+- amount in wei of the deposit ERC-20 token to bid
+- signature (explained below)
+
+Let's see an example of a call to this RPC method:
+
+```tsx
+const currentAuctionRound = currentRound + 1;
+const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
+
+const res = await fetch(<AUTONOMOUS_AUCTIONEER_ENDPOINT>, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({
+    jsonrpc: '2.0',
+    id: 'submit-bid',
+    method: 'auctioneer_submitBid',
+    params: [
+      {
+        chainId: hexChainId,
+        expressLaneController: address,
+        auctionContractAddress: auctionContractAddress,
+        round: `0x${currentAuctionRound.toString(16)}`,
+        amount: `0x${Number(amountToBid).toString(16)}`,
+        signature: signature,
+      },
+    ],
+  }),
+});
+```
+
+The signature that needs to be sent is an Ethereum signature over the bytes encoding of the following information:
+
+- Hash of `keccak256("TIMEBOOST_BID")`
+- Chain id in hexadecimal, padded to 32 bytes
+- Auction contract address
+- Auction round number in hexadecimal, padded to 8 bytes
+- Amount to bid in hexadecimal, padded to 32 bytes
+- Address of the express lane controller candidate
+
+Here's an example to produce that signature:
+
+```tsx
+const currentAuctionRound = currentRound + 1;
+const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
+
+const signatureData = concat([
+  keccak256(toHex('TIMEBOOST_BID')),
+  pad(hexChainId),
+  auctionContractAddress,
+  toHex(numberToBytes(currentAuctionRound, { size: 8 })),
+  toHex(numberToBytes(amountToBid, { size: 32 })),
+  address,
+]);
+const signature = await account.signMessage({
+  message: { raw: signatureData },
+});
+```
+
+::::info
+
+You can also call the function `getBidBytes` in the auction contract to obtain the `signatureData` , specifying the `round`, `amountToBid` and `address`.
+
+::::
+
+When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if it received the request correctly. If the result returned contains an error message, it'll mean that something went wrong. Following are some of the error messages that can help us understand what's happening:
+
+| Error                   | Description                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `MALFORMED_DATA`        | wrong input data, failed to deserialize, missing certain fields, etc.                                       |
+| `NOT_DEPOSITOR`         | the address is not an active depositor in the auction contract                                              |
+| `WRONG_CHAIN_ID`        | wrong chain id for the target chain                                                                         |
+| `WRONG_SIGNATURE`       | signature failed to verify                                                                                  |
+| `BAD_ROUND_NUMBER`      | incorrect round, such as one from the past                                                                  |
+| `RESERVE_PRICE_NOT_MET` | bid amount does not meet the minimum required reserve price on-chain                                        |
+| `INSUFFICIENT_BALANCE`  | the bid amount specified in the request is higher than the deposit balance of the depositor in the contract |
+
+### Step 3: find out the winner of the auction
+
+After the auction closes, and before the round starts, the autonomous auctioneer will call the auction contract with the two highest bids received, so the contract can declare the winner and subtract the second-highest bid from the winner's deposited funds. After this, the contract will emit an event with the new express lane controller address.
+
+We can use this event to determine whether or not we've won the auction. The event signature is:
+
+```solidity
+event SetExpressLaneController(
+    uint64 round,
+    address indexed previousExpressLaneController,
+    address indexed newExpressLaneController,
+    address indexed transferor,
+    uint64 startTimestamp,
+    uint64 endTimestamp
+);
+```
+
+Here's an example to get the log from the auction contract to determine the new express lane controller:
+
+```tsx
+const fromBlock = <any recent block, for example during the auction>
+const logs = await publicClient.getLogs({
+  address: auctionContractAddress,
+  event: auctionContractAbi.filter((abiEntry) => abiEntry.name === 'SetExpressLaneController')[0],
+  fromBlock,
+});
+
+const newExpressLaneController = logs[0].args.newExpressLaneController;
+console.log(`New express lane controller: ${newExpressLaneController}`);
+```
+
+If you won the auction, congratulations! You are the express lane controller for the next round, which, by default, will start 15 seconds after the auction closed. The following section explains how we can submit a transaction to the express lane.
+
+## How to submit transactions to the express lane
+
+Transactions that are sent to the express lane are immediately sequenced by the sequencer, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction to be the express lane controller for a given round.
+
+The express lane is handled by the sequencer, so transactions are sent to the sequencer endpoint. We need to send a `timeboost_sendExpressLaneTransaction` request with the following information:
+
+- chain id
+- current round (following the example above, `currentRound`)
+- address of the auction contract
+- sequence number: a per-round nonce of express lane submissions, which is reset to 0 at the beginning of each round
+- RLP encoded transaction payload
+- conditional options for Arbitrum transactions ([source](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
+- signature (explained below)
+
+Let's see an example of a call to this RPC method:
+
+```tsx
+const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
+
+const transaction = await walletClient.prepareTransactionRequest(...);
+const serializedTransaction = await walletClient.signTransaction(transaction);
+
+const res = await fetch(<SEQUENCER_ENDPOINT>, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({
+    jsonrpc: '2.0',
+    id: 'express-lane-tx',
+    method: 'timeboost_sendExpressLaneTransaction',
+    params: [
+      {
+        chainId: hexChainId,
+        round: `0x${currentRound.toString(16)}`,
+        auctionContractAddress: auctionContractAddress,
+        sequence: `0x${sequenceNumber.toString(16)}`,
+        transaction: serializedTransaction,
+        options: {},
+        signature: signature,
+      },
+    ],
+  }),
+});
+```
+
+The signature that needs to be sent is an Ethereum signature over the bytes encoding of the following information:
+
+- Hash of `keccak256("TIMEBOOST_BID")`
+- Chain id in hexadecimal, padded to 32 bytes
+- Auction contract address
+- Round number in hexadecimal, padded to 8 bytes
+- Sequence number in hexadecimal, padded to 8 bytes
+- Serialized transaction
+
+Here's an example to produce that signature:
+
+```tsx
+const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
+
+const transaction = await walletClient.prepareTransactionRequest(...);
+const serializedTransaction = await walletClient.signTransaction(transaction);
+
+const signatureData = concat([
+  keccak256(toHex('TIMEBOOST_BID')),
+  pad(hexChainId),
+  auctionContract,
+  toHex(numberToBytes(currentRound, { size: 8 })),
+  toHex(numberToBytes(sequenceNumber, { size: 8 })),
+  serializedTransaction,
+]);
+const signature = await account.signMessage({
+  message: { raw: signatureData },
+});
+```
+
+When sending the request, the sequencer will return an empty result with an HTTP status `200` if it received the request correctly. If the result returned contains an error message, it'll mean that something went wrong. Following are some of the error messages that can help us understand what's happening:
+
+| Error                         | Description                                                           |
+| ----------------------------- | --------------------------------------------------------------------- |
+| `MALFORMED_DATA`              | wrong input data, failed to deserialize, missing certain fields, etc. |
+| `WRONG_CHAIN_ID`              | wrong chain id for the target chain                                   |
+| `WRONG_SIGNATURE`             | signature failed to verify                                            |
+| `BAD_ROUND_NUMBER`            | incorrect round, such as one from the past                            |
+| `NOT_EXPRESS_LANE_CONTROLLER` | the sender is not the express lane controller                         |
+| `NO_ONCHAIN_CONTROLLER`       | there is no defined, on-chain express lane controller for the round   |
+
+::::info What happens if you're not the express lane controller?
+
+If you are not the express lane controller and you try to submit a transaction to the express lane, the sequencer will respond with the error `NOT_EXPRESS_LANE_CONTROLLER` or `NO_ONCHAIN_CONTROLLER`.
+
+::::
+
+## How to transfer the right to use the express lane to someone else
+
+If you are the express lane controller, you also have the right to transfer the right to use the express lane to someone else.
+
+To do that, you can call the function `transferExpressLaneController` in the auction contract:
+
+```tsx
+const transferELCTransaction = await walletClient.writeContract({
+  currentELCAccount,
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'transferExpressLaneController',
+  args: [currentRound, newELCAddress],
+});
+console.log(`Transfer EL controller transaction hash: ${transferELCTransaction}`);
+```
+
+From that moment, the previous express lane controller will not be able to send new transactions to the express lane.
+
+### Setting a transferor account
+
+A `transferor` is an address that has the right to transfer express lane controller rights on behalf an express lane controller. We can set a transferor for our account using the auction contract. Additionally, we can choose to fix that transferor account until a specific round, to guarantee to other parties that we will not change the transferor until the specified round finishes.
+
+To set a transferor, we can call the function `setTransferor` in the auction contract:
+
+```tsx
+// Fixing the transferor for 10 rounds
+const fixedUntilRound = currentRound + 10n;
+
+const setTransferorTransaction = await walletClient.writeContract({
+  currentELCAccount,
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'setTransferor',
+  args: [
+    {
+      addr: transferorAddress,
+      fixedUntilRound: fixedUntilRound,
+    },
+  ],
+});
+console.log(`Set transferor transaction hash: ${setTransferorTransaction}`);
+```
+
+From that moment on (until the transferor is changed or disabled), the transferor will be able to call `transferExpressLaneController` while the express lane controller is `currentELCAccount` to transfer the rights to use the express lane to a different account.
