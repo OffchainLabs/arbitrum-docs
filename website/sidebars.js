@@ -634,8 +634,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-local-full-node-simulation',
-          label: 'Run a local full node simulation',
+          id: 'run-arbitrum-node/run-local-full-chain-simulation',
+          label: 'Run a local full chain simulation',
         },
         {
           type: 'doc',

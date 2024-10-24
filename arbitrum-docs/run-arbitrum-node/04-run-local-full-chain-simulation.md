@@ -1,5 +1,5 @@
 ---
-title: 'How to run a local full node simulation'
+title: 'How to run a local full chain simulation'
 description: This page provides instructions for setting up a complete local development environment for testing Arbitrum contracts in a fully simulated environment.
 author: jose-franco
 sme: jose-franco
@@ -9,7 +9,7 @@ content_type: how-to
 
 ## Overview
 
-A local full node simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode Geth L1, and multiple instances with different roles
+A local full chain simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode Geth L1, and multiple instances with different roles
 
 Note that the node is now Stylus-enabled by default, and the setup instructions remain the same as for running a Stylus dev node.
 
