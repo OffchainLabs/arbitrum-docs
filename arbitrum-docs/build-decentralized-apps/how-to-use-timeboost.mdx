@@ -369,3 +369,43 @@ console.log(`Set transferor transaction hash: ${setTransferorTransaction}`);
 ```
 
 From that moment on (until the transferor is changed or disabled), the transferor will be able to call `transferExpressLaneController` while the express lane controller is `currentELCAccount` to transfer the rights to use the express lane to a different account.
+
+## How to withdraw funds deposited in the auction contract
+
+Funds are deposited in the auction contract to have the right the bid in auctions. These funds can be withdrawn through a two-step process: initiate withdrawal, wait for two rounds, finalize withdrawal.
+
+To initiate a withdrawal, we can call the function `initiateWithdrawal` in the auction contract:
+
+```tsx
+const initWithdrawalTransaction = await walletClient.writeContract({
+  account,
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'initiateWithdrawal',
+});
+console.log(`Initiate withdrawal transaction sent: ${initWithdrawalTransaction}`);
+```
+
+This transaction will initiate a withdrawal of all funds deposited by the sender account. When executing it, the contract will emit a `WithdrawalInitiated` event, with the following structure:
+
+```solidity
+event WithdrawalInitiated(
+    address indexed account,
+    uint256 withdrawalAmount,
+    uint256 roundWithdrawable
+);
+```
+
+In this event, `account` refers to the address whose funds are being withdrawn, `withdrawalAmount` refers to the amount being withdrawn from the contract, and `roundWithdrawable` refers to the round at which the withdrawal can be finalized.
+
+After two rounds have passed, we can call the method `finalizeWithdrawal` in the auction contract to finalize the withdrawal:
+
+```tsx
+const finalizeWithdrawalTransaction = await walletClient.writeContract({
+  account,
+  address: auctionContractAddress,
+  abi: auctionContractAbi,
+  functionName: 'finalizeWithdrawal',
+});
+console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransaction}`);
+```
