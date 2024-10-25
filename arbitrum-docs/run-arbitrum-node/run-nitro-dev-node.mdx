@@ -72,7 +72,7 @@ Chain ownership is important because it allows the owner to perform certain crit
 
 The script automatically sets the chain owner to the pre-funded dev account before registering the `Cache Manager` contract. Here’s how the `becomeChainOwner()` function is called within the script:
 
-```bash
+```shell
 cast send 0x00000000000000000000000000000000000000FF "becomeChainOwner()" --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 --rpc-url http://127.0.0.1:8547
 ```
 
