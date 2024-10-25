@@ -82,7 +82,7 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using.  The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
 
 ```shell
 rustup default 1.80

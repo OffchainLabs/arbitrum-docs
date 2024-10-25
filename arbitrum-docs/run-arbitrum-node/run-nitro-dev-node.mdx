@@ -31,11 +31,10 @@ Before beginning, ensure [Docker](https://docs.docker.com/get-docker/) is instal
 Start the Nitro dev node in `--dev` mode using the following command. If the Docker image is not already present, Docker will automatically pull it for you.
 
 ```bash
-docker run -it --rm --name nitro-dev -p 8547:8547 offchainlabs/nitro-node:v3.2.1-d81324d --dev --http.addr 0.0.0.0local Nitro dev node in `--dev` mode
-
+docker run -it --rm --name nitro-dev -p 8547:8547 offchainlabs/nitro-node:@latestNitroNodeImage@ --dev --http.addr 0.0.0.0
 ```
 
-- Replace `offchainlabs/nitro-node:v3.2.1-d81324d` with the latest version of the Nitro image (<code>@latestNitroNodeImage@</code>) to ensure you're using the most up-to-date node.
+- <code>@latestNitroNodeImage@</code> is the latest version of the Nitro image.
 - The node will listen for JSON-RPC requests on port 8547.
 - The `--dev` flag initializes the node in development mode, providing an L2-only environment for testing.
 - `--http.addr 0.0.0.0` binds the node to all available interfaces, making it accessible via both IPv4 (127.0.0.1) and IPv6 (::1).
