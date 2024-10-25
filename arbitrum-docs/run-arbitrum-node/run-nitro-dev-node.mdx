@@ -91,11 +91,13 @@ cast send 0x00000000000000000000000000000000000000FF "becomeChainOwner()" --priv
 
 Once you're the chain owner, you'll be able to access various Arbitrum-specific functions, such as:
 
-- Managing the Sequencer
-- Modifying chain parameters
-- Accessing debugging features
+- Adding or removing other chain owners
+- Setting the L1 and L2 base fees directly
+- Adjusting the gas pricing inertia and backlog tolerance
+- Modifying the computational speed limit and transaction gas limits
+- Managing network and infrastructure fee accounts
 
-This functionality is especially useful for development and testing purposes when using Nitro in `--dev` mode.
+These functions allow you to fully configure and optimize the chain for your development needs.
 
 ## Running Nitro dev node for Stylus testing
 
