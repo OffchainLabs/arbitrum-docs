@@ -966,8 +966,8 @@ const sidebars = {
                   label: 'BoLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
                 },
                 {
