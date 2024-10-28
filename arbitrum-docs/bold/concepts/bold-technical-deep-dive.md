@@ -87,19 +87,19 @@ A key responsibility for Arbitrum proposers is to regularly post claims about th
 
 2. The batch number it corresponds to for the Arbitrum chain
 
-3. The number of messages in the Arbitrum inbox at the time the assertion was posted on-chain
+3. The number of messages in the Arbitrum seqiemcer inbox at the time the assertion was posted on-chain
 
-The following assertion to be posted on-chain must consume, at least, the specified number of inbox messages from its parent. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to equal 1 hour for BoLD.
+The following assertion to be posted on-chain must consume the specified number of inbox messages from the previous assertion. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to equal 1 hour for BoLD.
 
 Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion on-chain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
 
 Validators must become proposers in the Rollup contract before being allowed to post assertions. For Arbitrum One and Arbitrum Nova, this involves placing a one-time bond of 3600 `WETH` that is locked in the contract until they choose to withdraw. Validators can only withdraw their bond if their latest posted assertion gets confirmed. Every assertion a validator posts will become their latest bonded assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” a validator’s bonds to their latest posted assertion.
 
-Assertions form a chain in which there can be forks. For instance, a validator might disagree with the L2 blockhash of an assertion at a given batch. All <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> nodes are configured to warn users if they observe an assertion they disagree with posted on-chain. However, if a node is configured as a validator and has deposited a bond to the Rollup contract, then that validator post the correct, rival assertion to any invalid one it just observed. The validator will also be able to initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling it is disputing an assertion.
+Assertions form a chain in which there can be forks. For instance, a validator might disagree on the history committment of block state hashes, which an assertion contains. All <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> nodes are configured to warn users if they observe an assertion they disagree with posted on-chain. However, if a node is configured as a validator and has deposited a bond to the Rollup contract, then that validator post the correct, rival assertion to any invalid one it just observed. The validator will also be able to initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling it is disputing an assertion.
 
 #### Overflow assertions
 
-Given the mandatory delay of one hour between assertions posted on-chain, and each assertion is a claim to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion only supports a maximum of 2^26 Arbitrum blocks since its parent. If this value is overflowed, one or more follow-up overflow assertions needs to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory 1-hour delay between assertions.
+Given the mandatory delay of one hour between assertions posted on-chain, and each assertion is a claim to a specific Arbitrum batch, there could be a very large number of blocks in between assertions. However, a single assertion only supports a maximum of 2^26 Arbitrum blocks since the previous assertion. If this value is overflowed, one or more follow-up overflow assertions needs to be posted to consume the rest of the blocks above the maximum. This overflow assertion will not be subject to the mandatory 1-hour delay between assertions.
 
 #### Trustless bonding pools
 
@@ -135,7 +135,7 @@ Their disagreement is about an Arbitrum block somewhere between batch 5 and batc
 
 Validators have to fetch all blocks between batch 5 and batch 10 and create a Merkle commitment out of them as a Merkle tree with 2^26+1 leaves. If there are fewer than 2^26 blocks in between the assertions, the last block is repeated to pad the leaves of the tree to that value. Validators then create an “edge” data structure, which contains the following fields:
 
-- **start_hash:** the start hash of the block from the common parent assertion
+- **start_hash:** the start_hash of the claimed assertion and is also the end_hash of the previous assertion
 
 - **end_hash:** the end hash of the last block in the child assertion that a validator claims is correct.
 
@@ -187,7 +187,7 @@ Once a validator creates an edge, and if it does not have any rival edge contest
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
-We believe timer inheritance from ancestor edges is fundamentally broken. Honest edges could have evil ancestors or vice versa, and edges could steal/claim timer credit from others to which they should not be entitled. The [research specification](https://arxiv.org/abs/2404.10491) goes in-depth into the proven lemmas of timer inheritance and why children's inheritance solves critical attack vectors.
+Feel free to read the [BoLD whitepaper](https://arxiv.org/abs/2404.10491) for more details around how timers are tracked.
 
 #### Cached timer updates
 
@@ -199,7 +199,7 @@ Once an edge has a total on-chain timer greater than or equal to a challenge per
 
 ### Bonding in challenges
 
-To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the parent assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a "challenge bond". Note that to open a new assertion-level challenge, the challenge bond is equal to the assertion bond for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>.
+To create a challenge, there must be a fork in the Arbitrum assertion chain smart contract. A validator that wishes to initiate a challenge must then post an “edge” claiming a history of block hashes from the previous assertion to the claimed assertion they believe is correct. To do so, they need to put up some value called a "challenge bond". Note that to open a new assertion-level challenge, the challenge bond is equal to the assertion bond for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>.
 
 <a data-quicklook-from="challenge">Challenge</a> bonds are named as such because they are bonds required
 for opening challenges. The mechanism of how challenge bond economics are decided is contained in the
