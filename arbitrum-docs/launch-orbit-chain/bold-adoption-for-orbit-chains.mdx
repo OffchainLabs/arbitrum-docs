@@ -1,6 +1,6 @@
 ---
 title: 'BoLD for Orbit chains'
-description: ''
+description: 'Learn how to integrate BoLD with your Orbit chain'
 user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about BoLD, a next-generation dispute protocol that enables permissionless validation.'
 content_type: release announcement
 author: leeederek
@@ -39,9 +39,6 @@ Below is a quick breakdown of the impacts of permissioned BoLD vs. permissionles
 ./assets/bold-orbit-permissionless-vs-permissioned.png
 )
 
-
-
-
 ### Benefits of adopting Arbitrum BoLD
 Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
 
@@ -50,14 +47,20 @@ Below are some benefits for an Orbit chain that come with adopting Arbitrum BoLD
 #### Improved resistance to delay attacks
 Disputes on a BoLD-enabled chain are resolved in a round-robin style format where disputes can be concurrently resolved. This is an evolution from the current dispute protocol, where challenges are resolved one-by-one. This evolution means that an upper time bound can be placed on all disputes such that a malicious actor cannot delay the chain indefinitely like they can today. Even when validation is kept permissioned, this upper time bound is critical to mitigating the risk of [delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a) by parties on the validator allowlist for an Orbit chain.
 
-#### Increased censorship resistance for `L3` Orbit chains
-Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with the *Censorship Timeout* feature that will automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the sequencer goes offline. This massively benefits Orbit `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
+#### Being on the latest version of Arbitrum technology
+Adopting Arbitrum BoLD for your Orbit chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Orbit chain owners upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant on-chain contracts. This is critical to ensure your Orbit chain benefits from the latest security improvements and features that the Offchain Labs team is constantly churning out.
+
+
+#### Secured by interactive fraud-proofs
+
+ Arbitrum chains will continue to be secured with an interactive proving game between validators using fraud proofs.
 
 #### Use of your project's native token as the bonding asset to secure the chain
 Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for Arbitrum One and we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
 
-#### Being on the latest version of Arbitrum technology
-Adopting Arbitrum BoLD for your Orbit chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Orbit chain owners upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant on-chain contracts. This is critical to ensure your Orbit chain benefits from the latest security improvements and features that the Offchain Labs team is constantly churning out.
+#### Increased censorship resistance for `L3` Orbit chains
+Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with the *Censorship Timeout* feature that will automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the sequencer goes offline. This massively benefits Orbit `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
+
 
 ### Caveats that come with adopting Arbitrum BoLD for permissionless validation
 
