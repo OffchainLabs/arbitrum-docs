@@ -152,7 +152,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Layer leap',
+              label: 'Layer Leap contracts',
               id: 'build-decentralized-apps/token-bridging/layer-leap',
             },
             {
