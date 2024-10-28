@@ -50,23 +50,18 @@ You can download Docker from [Docker’s website](https://www.docker.com/product
 
 [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-#### Nitro testnode
+#### Nitro devnode
 
-Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
+Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-```shell title="Install your testnode"
-git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
-```
+````shell title="Run the devnode"
+git clone https://github.com/OffchainLabs/nitro-devnode.git
+cd nitro-devnode
+``
 
-```shell title="Launch your testnode"
-./test-node.bash --init
-```
-
-The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
-
-```shell title="Re-use your testnode"
-./test-node.bash
-```
+```shell title="Launch your devnode"
+./run-dev-node.sh
+````
 
 ## Creating a Stylus project with cargo stylus
 
