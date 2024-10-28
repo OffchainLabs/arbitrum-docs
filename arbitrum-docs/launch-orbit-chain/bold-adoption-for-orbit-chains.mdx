@@ -40,7 +40,7 @@ Below is a quick breakdown of the benefits of permissioned BoLD vs. permissionle
 )
 
 ### Benefits of adopting Arbitrum BoLD
-Arbitrum BoLD enables an Arbitrum chain to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an Arbitrum Orbit chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
+Arbitrum BoLD enables an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to be permissionlessly validated thanks to several key improvements to the existing dispute protocol. These key improvements benefit an <a data-quicklook-from="arbitrum-orbit">Arbitrum Orbit</a> chain even if validation is kept permissioned on a BoLD-enabled Orbit chain. 
 
 Below are some benefits for an Orbit chain that come with adopting Arbitrum BoLD - **regardless of whether validation is kept permissioned or not**:
 
@@ -56,7 +56,7 @@ Adopting Arbitrum BoLD for your Orbit chain will require upgrading the Nitro nod
  Arbitrum chains will continue to be secured with an interactive proving game between validators using fraud proofs.
 
 #### Use of your project's native token as the bonding asset to secure the chain
-Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for Arbitrum One and we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
+Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
 
 #### Increased censorship resistance for `L3` Orbit chains
 Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with the *Censorship Timeout* feature that will automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the sequencer goes offline. This massively benefits Orbit `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
