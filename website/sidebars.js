@@ -156,6 +156,11 @@ const sidebars = {
               id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
             {
+              type: 'doc',
+              label: 'Layer leap contracts',
+              id: 'build-decentralized-apps/token-bridging/layer-leap',
+            },
+            {
               type: 'category',
               label: 'Bridge tokens programmatically',
               items: [
