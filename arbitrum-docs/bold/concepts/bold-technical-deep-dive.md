@@ -87,7 +87,7 @@ A key responsibility for Arbitrum proposers is to regularly post claims about th
 
 2. The batch number it corresponds to for the Arbitrum chain
 
-3. The number of messages in the Arbitrum seqiemcer inbox at the time the assertion was posted on-chain
+3. The number of messages in the Arbitrum sequencer inbox at the time the assertion is created
 
 The following assertion to be posted on-chain must consume the specified number of inbox messages from the previous assertion. There is a required delay in L1 blocks for assertion posting. Currently, this value is set to equal 1 hour for BoLD.
 
