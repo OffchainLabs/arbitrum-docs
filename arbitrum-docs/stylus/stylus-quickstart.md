@@ -54,14 +54,14 @@ You can download Docker from [Docker’s website](https://www.docker.com/product
 
 Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-````shell title="Run the devnode"
+```shell title="Run the devnode"
 git clone https://github.com/OffchainLabs/nitro-devnode.git
 cd nitro-devnode
-``
+```
 
 ```shell title="Launch your devnode"
 ./run-dev-node.sh
-````
+```
 
 ## Creating a Stylus project with cargo stylus
 
