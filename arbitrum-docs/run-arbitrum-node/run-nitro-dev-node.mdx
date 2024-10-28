@@ -20,7 +20,7 @@ While some teams use `nitro-testnode` for testing cross-layer messaging, which i
 
 However, if you need more advanced functionality—such as cross-layer messaging, working with both L1 and L2 chains, or testing interactions between different layers—`nitro-testnode` is the preferred option. The testnode setup allows you to simulate a full L1-L2 environment, which is critical for those scenarios. See here for instructions.
 
-Note that Nitro `--dev` mode is particularly ideal for Stylus contract testing, as it is much lighter and faster to set up compared to the full nitro-testnode environment.
+Note that Nitro `--dev` mode is ideal for Stylus contract testing, as it is much lighter and faster to set up than the full nitro-testnode environment.
 
 ## Prerequisites
 
@@ -32,9 +32,9 @@ Before beginning, ensure the following is installed and running on your machine:
 
 ## Clone the [nitro-devnode](https://github.com/OffchainLabs/nitro-devnode) repository
 
-use the following command to clone the repository:
+Use the following command to clone the repository:
 
-```bash
+```shell
 git clone https://github.com/OffchainLabs/nitro-devnode.git
 cd nitro-devnode
 ```
@@ -43,7 +43,7 @@ cd nitro-devnode
 
 Run the script to start the Nitro dev node, deploy the Stylus `Cache Manager` contract, and register it as a WASM cache manager using the default development account:
 
-```bash
+```shell
 ./run-dev-node.sh
 ```
 
@@ -76,7 +76,7 @@ Chain ownership is important because it allows the owner to perform certain crit
 
 The script automatically sets the chain owner to the pre-funded dev account before registering the `Cache Manager` contract. Here’s how the `becomeChainOwner()` function is called within the script:
 
-```bash
+```shell
 cast send 0x00000000000000000000000000000000000000FF "becomeChainOwner()" --private-key 0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659 --rpc-url http://127.0.0.1:8547
 ```
 
