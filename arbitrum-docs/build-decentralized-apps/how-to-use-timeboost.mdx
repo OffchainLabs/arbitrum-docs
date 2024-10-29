@@ -247,9 +247,9 @@ The express lane is handled by the sequencer, so transactions are sent to the se
 - conditional options for Arbitrum transactions ([more information](https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71))
 - signature (explained below)
 
-::::info Transactions signed by third parties
+::::info Timeboost-ing third party transactions
 
-Notice that, while the express lane controller needs to sign the `timeboost_sendExpressLaneTransaction` request, the actual transaction to be executed can be signed by any party. In other terms, the express lane controller can receive transactions signed by other parties and send them to the express lane.
+Notice that, while the express lane controller needs to sign the `timeboost_sendExpressLaneTransaction` request, the actual transaction to be executed can be signed by any party. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
 
 ::::
 
