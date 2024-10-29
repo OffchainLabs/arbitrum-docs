@@ -597,7 +597,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
           // a: see note at end of file
         },
@@ -656,7 +656,12 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-local-dev-node',
+          id: 'run-arbitrum-node/run-local-full-chain-simulation',
+          label: 'Run a local full chain simulation',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/run-nitro-dev-node',
           label: 'Run a local dev node',
         },
         {
@@ -961,8 +966,8 @@ const sidebars = {
                   label: 'BoLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
                 },
                 {
