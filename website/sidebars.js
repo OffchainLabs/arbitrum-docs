@@ -822,11 +822,6 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'how-arbitrum-works/why-nitro',
-              label: 'Why Nitro?',
-            },
-            {
-              type: 'doc',
               id: 'how-arbitrum-works/tx-lifecycle',
               label: 'Transaction lifecycle',
             },
@@ -877,6 +872,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/why-nitro',
+              label: 'Nitro vs. Classic',
             },
             {
               type: 'category',
