@@ -21,9 +21,9 @@ This document is currently in **public preview** and may change significantly as
 ## Launch details and key dates
 
 - **Status:** Alpha - continued testing and evaluation of performance of BoLD with Stylus
-- **Arbitrum Sepolia** Q4 2024                                           
-- <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a> Q4 2024
-- <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a> Q4 2024
+- **Arbitrum Sepolia** Q4 2024                                        
+- <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a> Q1 2025
+- <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a> Q1 2025
 
 
 ### tldr;
@@ -50,10 +50,8 @@ Disputes on a BoLD-enabled chain are resolved in a round-robin style format wher
 #### Being on the latest version of Arbitrum technology
 Adopting Arbitrum BoLD for your Orbit chain will require upgrading the Nitro node software and deploying a new set of contracts on your parent chain. While not specifically related to Arbitrum BoLD, it is always strongly recommended that Orbit chain owners upgrade and keep their chain on the latest stable releases of both Nitro node software and the relevant on-chain contracts. This is critical to ensure your Orbit chain benefits from the latest security improvements and features that the Offchain Labs team is constantly churning out.
 
-
 #### Secured by interactive fraud-proofs
-
- Arbitrum chains will continue to be secured with an interactive proving game between validators using fraud proofs.
+Arbitrum chains will continue to be secured with an interactive proving game between validators using fraud proofs.
 
 #### Use of your project's native token as the bonding asset to secure the chain
 Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent chain as the bond for validators to participate in securing the network. By default, this token will be `WETH` for <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and we recommend teams consult our documentation to understand [why `WETH` was selected for Arbitrum One](https://docs.arbitrum.io/how-arbitrum-works/bold/gentle-introduction#q-why-is-arb-not-the-bonding-token-used-in-bold-on-arbitrum-one) (and not `ARB`).
@@ -68,7 +66,7 @@ Arbitrum BoLD's implementation and specification have been thoroughly tested and
 
 :::warning
 
-It is strongly recommended that existing and prospective Orbit chains upgrade to use Arbitrum BoLD but **keep validation permissioned**.
+It is strongly recommended that existing and prospective Orbit chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below.
 
 :::
 
