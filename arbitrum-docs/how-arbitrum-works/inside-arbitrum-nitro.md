@@ -1,6 +1,6 @@
 ---
 title: 'Inside Arbitrum Nitro'
-sidebar_label: 'Get started'
+sidebar_label: 'Deep dive: Inside Arbitrum'
 description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
 author: dzgoldman
 sme: dzgoldman
