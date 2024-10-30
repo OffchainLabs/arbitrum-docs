@@ -27,7 +27,7 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 #### Rust toolchain
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 #### VS Code
 
@@ -50,22 +50,17 @@ You can download Docker from [Docker’s website](https://www.docker.com/product
 
 [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-#### Nitro testnode
+#### Nitro devnode
 
-Stylus is available on Arbitrum Sepolia, but we'll use nitro testnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
+Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
-```shell title="Install your testnode"
-git clone -b release --recurse-submodules https://github.com/OffchainLabs/nitro-testnode.git && cd nitro-testnode
+```shell title="Install your devnode"
+git clone https://github.com/OffchainLabs/nitro-devnode.git
+cd nitro-devnode
 ```
 
-```shell title="Launch your testnode"
-./test-node.bash --init
-```
-
-The initialization part might take up to a few minutes, but you can move on to the next section while it launches.
-
-```shell title="Re-use your testnode"
-./test-node.bash
+```shell title="Launch your devnode"
+./run-dev-node.sh
 ```
 
 ## Creating a Stylus project with cargo stylus
@@ -82,10 +77,11 @@ In your terminal, run:
 cargo install --force cargo-stylus
 ```
 
-Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for your Rust compiler with the following command:
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
 
 ```shell
-rustup target add wasm32-unknown-unknown
+rustup default 1.80
+rustup target add wasm32-unknown-unknown --toolchain 1.80
 ```
 
 You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:

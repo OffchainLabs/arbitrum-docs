@@ -13,11 +13,11 @@ import MacosVerifyTxIssueBannerPartial from '../../partials/_macos-verify-tx-iss
 
 <PublicPreviewBannerPartial />
 
-Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus-replay` crate simplifies the debugging process by allowing developers to replay Stylus transactions. This tool leverages GDB to provide an interactive debugging experience, enabling developers to set breakpoints, inspect state changes, and trace the execution flow step-by-step. This capability is crucial for identifying and resolving issues, ensuring that smart contracts function correctly and efficiently.
+Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by allowing developers to replay Stylus transactions. This tool leverages GDB to provide an interactive debugging experience, enabling developers to set breakpoints, inspect state changes, and trace the execution flow step-by-step. This capability is crucial for identifying and resolving issues, ensuring that smart contracts function correctly and efficiently.
 
 ### Overview
 
-Cargo Stylus is a tool designed to simplify the development and debugging process for smart contracts written in Rust for the Stylus execution environment. One of its powerful features is the `cargo-stylus-replay` crate, which provides essential functionalities for developers:
+Cargo Stylus is a tool designed to simplify the development and debugging process for smart contracts written in Rust for the Stylus execution environment. One of its powerful features is the `cargo stylus` subcommand, which provides essential functionalities for developers:
 
 1. **Trace transactions**: Perform trace calls against Stylus transactions using Ethereum nodes' `debug_traceTransaction` RPC. This feature enables developers to analyze the execution flow and state changes of their transactions in a detailed manner.
 2. **Debugging with GDB**: Replay and debug the execution of a Stylus transaction using the GNU Debugger (GDB). This allows developers to set breakpoints, inspect variables, and step through the transaction execution line by line, providing an in-depth understanding of the transaction's behavior.
@@ -29,19 +29,19 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 #### Requirements
 
 - **Rust** (version 1.77 or higher)
-- **Crates**: `cargo-stylus`, `cargo-stylus-replay`, `cargo-stylus-check`
+- **Crate**: `cargo-stylus`
 - **GNU Debugger (GDB)**
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
 - **Local Arbitrum Sepolia node** with tracing endpoints enabled or a [local Stylus dev node](https://arbitrum-docs-ncyp5gty1-offchain-labs.vercel.app/run-arbitrum-node/run-local-dev-node)
 
-`cargo-stylus-replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) against the Rust source code.
+`cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) against the Rust source code.
 
 ### Installation and setup
 
 1. **Install the required crates and GDB**: First, let's ensure that the following crates are installed:
 
 ```sh
-cargo install cargo-stylus cargo-stylus-replay cargo-stylus-check
+cargo install cargo-stylus
 ```
 
 Install GDB if it's not already installed:
@@ -118,7 +118,7 @@ GDB will load and set a breakpoint automatically at the `user_entrypoint` intern
 ```sh
 [Detaching after vfork from child process 370003]
 
-Thread 1 "cargo-stylus-re" hit Breakpoint 1, stylus_hello_world::user_entrypoint (len=4) at src/lib.rs:38
+Thread 1 "cargo-stylus" hit Breakpoint 1, stylus_hello_world::user_entrypoint (len=4) at src/lib.rs:38
 38	    #[entrypoint]
 (gdb)
 ```
@@ -139,7 +139,7 @@ Then, type `c` to continue the execution and you will reach that line where `inc
 Once you reach the `increment` method, inspect the state:
 
 ```sh
-Thread 1 "cargo-stylus-re" hit Breakpoint 2, stylus_hello_world::Counter::increment (self=0x7fffffff9ae8) at src/lib.rs:69
+Thread 1 "cargo-stylus" hit Breakpoint 2, stylus_hello_world::Counter::increment (self=0x7fffffff9ae8) at src/lib.rs:69
 69	        let number = self.number.get();
 (gdb) p number
 ```
