@@ -542,6 +542,18 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Concepts',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              label: 'How Stylus Works',
+              id: 'stylus/concepts/how-it-works',
+            }
+          ],
+        },
+        {
+          type: 'category',
           label: 'Gas, ink and caching',
           collapsed: true,
           items: [
