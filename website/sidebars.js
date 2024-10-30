@@ -827,11 +827,6 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'how-arbitrum-works/why-nitro',
-              label: 'Why Nitro?',
-            },
-            {
-              type: 'doc',
               id: 'how-arbitrum-works/tx-lifecycle',
               label: 'Transaction lifecycle',
             },
@@ -882,6 +877,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/why-nitro',
+              label: 'Nitro vs. Classic',
             },
             {
               type: 'category',
@@ -971,8 +971,8 @@ const sidebars = {
                   label: 'BoLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
                 },
                 {

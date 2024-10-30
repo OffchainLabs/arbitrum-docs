@@ -27,7 +27,7 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 #### Rust toolchain
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 #### VS Code
 

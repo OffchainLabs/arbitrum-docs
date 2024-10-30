@@ -1,12 +1,11 @@
 ---
+title: Nitro vs. Classic
 author: dzgoldman
 ---
 
-# Why Nitro?
+Why Nitro?
 
 Nitro represents the latest step in the evolution of Arbitrum technology; it is an upgrade from the tech stack first released on the mainnet Arbitrum One chain, which we now refer to as “Arbitrum Classic” (and several steps beyond what was described in the [initial Arbitrum whitepaper back in 2018](https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-kalodner.pdf)). Here, we’ll explain the rationale behind the Nitro upgrade, and outline Nitro’s core benefits over the classic system.
-
-### Nitro vs. Classic
 
 Viewed from a distance, the Classic and Nitro systems do similar things: both seek to create an execution environment as close to the EVM as possible which operates as a second layer to Ethereum; i.e., safety of the L2 virtual machine’s state updates can be guaranteed and enforced via succinct fraud proofs on Ethereum itself.
 

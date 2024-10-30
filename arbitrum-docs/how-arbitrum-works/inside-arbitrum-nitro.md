@@ -1,10 +1,14 @@
 ---
+title: 'Inside Arbitrum Nitro'
+sidebar_label: 'Deep dive: Inside Arbitrum'
+description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
 author: dzgoldman
+sme: dzgoldman
+user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+content_type: get-started
 ---
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
-
-# Inside Arbitrum Nitro
 
 This document is a deep-dive explanation of Arbitrum Nitro’s design and the rationale for it. This isn’t API documentation, nor is it a guided tour of the code--look elsewhere for those. “Inside Arbitrum Nitro” is for people who want to understand Nitro's design.
 
