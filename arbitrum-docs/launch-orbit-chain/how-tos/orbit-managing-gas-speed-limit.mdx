@@ -1,0 +1,41 @@
+---
+title: 'Guidance for Orbit chains gas speed limit'
+sidebar_label: 'Manage gas speed limit'
+description: 'How to manage your Orbit chain gas speed limit'
+author: anegg0
+sme: anegg0
+target_audience: 'Developers deploying and maintaining Orbit chains.'
+sidebar_position: 6
+user_story: As a current or prospective Orbit chain deployer, I need to understand how to manage my gas speed limit.
+content_type: how-to
+---
+
+
+### What is the speed limit on an Orbit chain?
+
+The parameter that governs an Orbit chain's throughput limit is known as the `gas speed limit`. The gas speed limit is measured in *gas per second* and is used as a threshold for increasing gas prices.
+
+For example, Arbitrum One and Arbitrum Nova have a gas speed limit of 7 million gas per second. This means that when cumulative usage onchain exceeds 7 million gas per second, the `L2 base fee` rises to increase the amount of gwei charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md). 
+
+### Why do we have throughput limits on blockchains?
+
+The effect of raising gas prices at the speed limit is to curb user demand when the chain is congested. Doing so protects the chain's underlying infrastructure from being overloaded. 
+
+This is because blockchain nodes have computation constraints that should not be exceeded. Charging more during congested periods ensures that high-priority transactions can still be processed while deterring users and apps from submitting low-priority transactions until a lower activity period. 
+
+The speed limit, therefore, is fundamentally a protective mechanism. If the chain load exceeds what a Nitro validator node can process, then a chain risks halting due to validator downtime. It's important to note here that the security and liveness of an Orbit chain are always maintained through its parent chain contracts, but undoubtedly, the best user experience requires the validators and sequencer to be online.
+
+### What is the recommended speed limit for Orbit chains?
+
+**Please note: We recommend against teams raising their chain's default speed target beyond 7 million gas per second.**
+
+### What are the risks of increasing my gas speed limit?
+
+An increase in the speed target allows users and apps to perform more on-chain actions without incurring additional costs. This makes it possible for a chain's nodes to experience higher and unexpected loads. When faced with high, sustained demand, the additional load could eventually lead to undesirable increases in infrastructure costs, cause nodes to lag behind the chain, and risk halting if the demand exceeds the resources of validator nodes. 
+
+See [State Growth & Corresponding Issues](https://www.notion.so/State-Growth-Size-Guidance-10301a3f59f880fba7ade76c2f7af0c7?pvs=21).
+
+## Is Offchain Labs working on software improvements to allow Orbit chain owners to *safely* raise their chain's speed target?
+
+Yes. Offchain Labs is currently working on several key initiatives to improve the core Nitro node software that would result in a safe and formally endorsed increase in the speed targets for Arbitrum chains. These initiatives include migrations to PathDB and PebbleDB (alongside their respective optimizations for Arbitrum chains) and alternative execution layer client implementations for Nitro (e.g., Reth). We will share updates and news on these initiatives when we have them - stay tuned!
+
