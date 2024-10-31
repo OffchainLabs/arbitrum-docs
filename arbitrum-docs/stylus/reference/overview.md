@@ -12,7 +12,6 @@ import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-
 
 <PublicPreviewBannerPartial />
 
-<StylusNoMultiInheritanceBannerPartial />
 
 This section provides an in-depth overview of the features provided by the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs). For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.md).
 
