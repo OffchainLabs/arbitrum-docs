@@ -645,13 +645,8 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'run-arbitrum-node/overview',
-          label: 'Overview',
-        },
-        {
-          type: 'doc',
           id: 'run-arbitrum-node/node-types',
-          label: 'What node should I run?',
+          label: 'Overview',
         },
         {
           type: 'doc',
