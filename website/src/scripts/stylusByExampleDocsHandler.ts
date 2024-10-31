@@ -130,7 +130,7 @@ function copyFiles(source, target) {
 
 // Adjust the file path
 const firstCodeBlock = `\`\`\`rust`;
-const admonition = `
+const admonitionNotForProduction = `
 import NotForProductionBannerPartial from '../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
@@ -146,7 +146,7 @@ function addAdmonitionOneLineAboveFirstCodeBlock(content) {
   // Find the position two lines before firstCodeBlock
   const lines = content.substring(0, index).split('\n');
   const insertLineIndex = lines.length - 2;
-  lines.splice(insertLineIndex, 0, admonition);
+  lines.splice(insertLineIndex, 0, admonitionNotForProduction);
 
   const newText = lines.join('\n') + content.substring(index);
   return newText;
