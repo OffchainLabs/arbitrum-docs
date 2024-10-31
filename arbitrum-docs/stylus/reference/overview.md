@@ -8,7 +8,6 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 ---
 
 import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx'
 
 <PublicPreviewBannerPartial />
 
