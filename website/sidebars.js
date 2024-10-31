@@ -279,6 +279,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/use-a-custom-gas-token',
               label: `Use a custom gas token`,
             },
