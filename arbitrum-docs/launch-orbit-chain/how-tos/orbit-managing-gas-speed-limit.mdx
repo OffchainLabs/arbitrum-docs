@@ -13,7 +13,9 @@ content_type: how-to
 
 ### What is the speed limit on an Orbit chain?
 
-The parameter that governs an Orbit chain's throughput limit is known as the `gas speed limit`. The gas speed limit is measured in *gas per second* and is used as a threshold for increasing gas prices.
+The parameter that governs an Orbit chain's throughput limit is known as the `gas speed limit`.
+
+The gas speed limit is measured in *gas per second* and is used as a threshold for increasing gas prices.
 
 For example, Arbitrum One and Arbitrum Nova have a gas speed limit of 7 million gas per second. This means that when cumulative usage onchain exceeds 7 million gas per second, the `L2 base fee` rises to increase the amount of gwei charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md). 
 
@@ -37,5 +39,6 @@ See [State Growth & Corresponding Issues](https://www.notion.so/State-Growth-Siz
 
 ## Is Offchain Labs working on software improvements to allow Orbit chain owners to *safely* raise their chain's speed target?
 
-Yes. Offchain Labs is currently working on several key initiatives to improve the core Nitro node software that would result in a safe and formally endorsed increase in the speed targets for Arbitrum chains. These initiatives include migrations to PathDB and PebbleDB (alongside their respective optimizations for Arbitrum chains) and alternative execution layer client implementations for Nitro (e.g., Reth). We will share updates and news on these initiatives when we have them - stay tuned!
+Yes. Offchain Labs is currently working on several key initiatives to improve the core Nitro node software that would result in a safe and formally endorsed increase in the speed targets for Arbitrum chains. 
+These initiatives include migrations to PathDB and PebbleDB (alongside their respective optimizations for Arbitrum chains) and alternative execution layer client implementations for Nitro (e.g., Reth). We will share updates and news on these initiatives when we have them - stay tuned!
 
