@@ -7,7 +7,7 @@ author: dlee
 
 :::caution
 
-Please upgrade directly to ArbOS 32 from ArbOS 20 and not to ArbOS 30 or ArbOS 31. The ArbOS 32 release builds upon ArbOS 30 and ArBbOS 31 and includes critical fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 32 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases. 
+Please upgrade directly to ArbOS 32 from ArbOS 20 and not to ArbOS 30 or ArbOS 31. The ArbOS 32 release builds upon ArbOS 30 and ArBbOS 31 and includes critical fixes & optimizations coming out of rigorous testing and feedback from Stylus teams. ArbOS 32 “Bianca” will be the canonical ArbOS version for the “Bianca” family of releases.
 
 Future versions of Nitro may remove support for Orbit chains which have historically upgraded to, and remain on, ArbOS 30 or ArbOS 31. Due to this, we highly recommend upgrading immediately and directly to ArbOS 32.
 
