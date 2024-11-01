@@ -14,6 +14,15 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/logo.svg',
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https:use.fontawesome.com/releases/v5.0.1/css/all.css',
+      },
+    },
+  ],
   markdown: {
     mermaid: true,
   },
