@@ -107,16 +107,8 @@ As an alternative solution, you can use <a href="https://docs.arbitrum.io/stylus
 
 </p>
 
-### Is there anything special I need to do whenever Stylus gets upgraded on the chain I'm deployed on?
-<p>
-Stylus smart contracts will need to be re-activated once per year (365 days) or whenever an upgrade to Stylus is rolled out (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [cargo-stylus](https://github.com/OffchainLabs/cargo-stylus), specifically the `cargo stylus activate --address=$ADDR` sub-command. `cargo-stylus` is a cargo sub-command for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust. Note that the gas fee required to make this call will depend on the current demand for Stylus contract activations at any given moment in time. It is recommended that you estimate the gas and then use that value, or a value slightly higher, to re-activate your Stylus contract.
-</p>
 
-<p>
-To stay up to date with proposals, timelines, and statuses of network upgrades to Arbitrum One and Nova, we recommend you subscribe to the <a href="https://t.me/arbitrumnodeupgrade">Arbitrum Node Upgrade Announcement channel on Telegram</a>, join both the #dev-announcements and #node-runners Discord channels in the <a href="https://discord.com/invite/arbitrum">Arbitrum Discord server</a>, and follow the official Arbitrum <a href="https://x.com/ArbitrumDevs">Arbitrum Developers X accounts</a>.
-</p>
-
-### Why do I get an error "no library targets found in package" when trying to compile an old example?
+### Why do I get an error "no library targets found in package" when trying to compile and old example?
 <p>
 Some of the first Stylus examples were built and deployed using a previous version of <a href="https://github.com/OffchainLabs/cargo-stylus">cargo-stylus</a> (<code>0.1.x</code>). In that version, Stylus projects were structured as regular Rust binaries.
 </p>
