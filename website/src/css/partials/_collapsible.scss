@@ -24,13 +24,13 @@
 //The link which when clicked opens the collapsable area
 .Collapsible__trigger {
   display: block;
-  font-weight: 900;
+  font-weight: 600;
   text-decoration: none;
   position: relative;
   border: 1px solid white;
-  padding: 10px;
-  background: grey;
-  color: white;
+  padding: 8px;
+  background: rgb(207, 207, 207);
+  color: rgb(83, 82, 82);
 
   &:after {
     font-family: 'Font Awesome\ 5 Free';
