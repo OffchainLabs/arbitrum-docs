@@ -279,6 +279,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage state growth`,
+            },
+            {
+              type: 'doc',
               id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
               label: `Manage gas speed limit`,
             },
