@@ -6,6 +6,7 @@ sme: chrisco512, anegg0
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
+
 import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
@@ -24,11 +25,11 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 ### Prerequisites
 
-
 <details>
 <summary>Rust toolchain</summary>
 
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
 </details>
 
 <details>
@@ -42,7 +43,7 @@ Some helpful VS Code extensions for Rust development:
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
 - [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
-</details>
+  </details>
 
 <details>
 <summary>Docker</summary>
@@ -50,12 +51,14 @@ Some helpful VS Code extensions for Rust development:
 The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
 You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
+
 </details>
 
 <details>
 <summary>Foundry's Cast</summary>
 
 [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
+
 </details>
 
 <details>
@@ -71,6 +74,7 @@ cd nitro-devnode
 ```shell title="Launch your devnode"
 ./run-dev-node.sh
 ```
+
 </details>
 
 ## Creating a Stylus project with cargo stylus
