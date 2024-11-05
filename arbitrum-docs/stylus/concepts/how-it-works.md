@@ -2,11 +2,10 @@
 title: How Stylus Works
 sidebar_label: How Stylus Works
 ---
-### How does it work?
 
-There are four main steps for bringing a Stylus program to life: coding, activation, execution, and proving.
+There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>
 
-#### Coding
+### Coding
 
 Developers can now write smart contracts in any programming language that compiles to WASM. Note that some high-level languages generate far more performant WASMs than others.
 
@@ -14,7 +13,7 @@ Initially, there will be support for Rust, C, and C++. However, the levels of su
 
 The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use in Stylus. The SDK also makes it possible to perform all of the EVM-specific functionalities that smart contract developers are used to. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html).
 
-#### Activation
+### Activation
 
 Stylus programs are compiled to WASM and then lowered to assembly. Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens either using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in a process called activation, WASM gets lowered to a node's native machine code (such as ARM or x86).
 
@@ -22,13 +21,13 @@ Activating a Stylus program requires a new precompile, ArbWasm. This precompile 
 
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called “ink,” similar to Ethereum's gas but thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that thousands of WASM opcodes could be executed in the same time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements. For a conceptual introduction to Stylus gas and ink, see [gas and ink (Stylus)](https://docs.arbitrum.io/stylus/concepts/stylus-gas).
 
-#### Execution
+### Execution
 
 Stylus programs are executed in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
 EVM contracts continue to execute the same way they did before Stylus. When a contract is called, the difference between an EVM contract and a WASM program can be seen via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract is executed using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider what language the contract was written in. Everything is interoperable.
 
-#### Proving
+### Proving
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
 Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
