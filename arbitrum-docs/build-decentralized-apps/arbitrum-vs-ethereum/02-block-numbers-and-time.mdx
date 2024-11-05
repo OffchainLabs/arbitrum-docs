@@ -23,9 +23,11 @@ This page describes what this mechanism means for the block gas limit, block num
 
 ## Block gas limit
 
-When submitting a transaction to Arbitrum, the user is required to cover the execution cost on Arbitrum and the relative cost of posting its calldata to Ethereum. Arbitrum manages this [2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) by adjusting the transaction's gas limit to cover the L1 posting costs. Hence, a given transaction might show a very high value as the gas limit.
+When submitting a transaction to Arbitrum, users are charged for both the execution cost on Arbitrum and the cost of posting its calldata to Ethereum. This dual cost structure is managed by adjusting the transaction's gas limit to reflect these two dimensions, resulting in a higher gas limit value than what would be seen for pure execution.
 
-Then, the gas limit of an Arbitrum block is set as the sum of the total gas limit (execution + adjustment of the L1 costs) of all transactions. Because of that, the `gasLimit` shown when querying a block will likely be higher than the effective block gas limit (32 million). To check the actual gas used for execution on a specific block, we can look at the `gasUsed` field.
+The gas limit of an Arbitrum block is set as the sum of all transaction gas limits, including the costs related to L1 data posting. To accommodate potential variations in L1 costs, Arbitrum assigns an artificially large gas limit (1,125,899,906,842,624) for each block. However, the effective execution gas limit is capped at 32 million. This means that while the visible gas limit might appear very high, the actual execution costs are constrained within this limit. Understanding this distinction helps clarify why querying a block might show an inflated gas limit that doesn’t match the effective execution costs.
+
+For a more detailed breakdown of the gas model, refer to [this article on Arbitrum's 2-dimensional fee structure](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9).
 
 ## Block numbers: Arbitrum vs. Ethereum
 
