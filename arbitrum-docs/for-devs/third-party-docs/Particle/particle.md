@@ -12,11 +12,11 @@ Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the fo
 
 :::
 
-[Particle Network](https://particle.network) provides Wallet Abstraction services through its Account Abstraction stack, which is designed to simplify and speed up user onboarding with a suite of SDKs. 
+[Particle Network](https://particle.network) enables one-click onboarding into smart accounts through its Wallet Abstraction stack, providing social logins and wallet connection kits compatible with Arbitrum.
 
 By integrating customizable Externally Owned Account (EOA) and Account Abstraction (AA) modules, Particle enables fast 2-click onboarding via social login options like Google, email, and phone, along with traditional Web3 options. 
 
-This approach lets developers embed application-specific wallets, bypassing the need for conventional wallet management and provides users with a seamless and tailored Web3 interaction experience.
+This approach lets developers implement embedded wallets, bypassing the need for conventional wallet management and provides users with a seamless and tailored Web3 interaction experience, very akin to that of Web2.
 
 Arbitrum was one of the first blockchains supported by Particle Network. Because of this, Particle Network has extensive support for:
 
@@ -41,7 +41,7 @@ The user flow with Particle Network begins with social logins (using either a cu
 
 ---
 
-This document outlines the high-level steps for building a demo application on Arbitrum Sepolia using the [Particle Connect SDK](https://developers.particle.network/api-reference/connect/desktop/web) — Particle's flagship onboarding SDK. The Particle Connect SDK enables quick 2-click onboarding with social and Web3 login options in a single modal. In this demo, we'll onboard users through a SimpleAccount instance of a smart account via social login and execute a gasless (sponsored) transaction.
+This document outlines the high-level steps for building a demo application on Arbitrum Sepolia using the [Particle Connect SDK](https://developers.particle.network/api-reference/connect/desktop/web) — Particle's flagship onboarding SDK. The Particle Connect SDK enables unified onboarding with social and Web3 login options within a single modal. In this demo, we'll onboard users through a SimpleAccount instance of a smart account via social login and execute a gasless (sponsored) transaction.
 
 ## Getting started
 
@@ -126,7 +126,7 @@ export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
 };
 ```
 
-This code sets up Particle Connect with a configuration for wallet authentication and blockchain interactions on Arbitrum Sepolia. It includes social logins and traditional Web3 options through WalletConnect and enables Account Abstraction (AA) with a `simpleAccount` instance version 2.0.0. The configured `ConnectKitProvider` component then wraps the app’s content, making this configuration available.
+This code sets up Particle Connect with a configuration for wallet authentication and blockchain interactions on Arbitrum Sepolia. It includes social logins and traditional Web3 options through WalletConnect and enables Account Abstraction (AA) with a `SimpleAccount` instance version 2.0.0. The configured `ConnectKitProvider` component then wraps the app’s content, making this configuration available.
 
 ## Integrate Particle Connect in Your App
 
@@ -168,7 +168,7 @@ In `page.tsx`, you’ll define the core features: login flow, data visualization
 
 ### Connecting the Wallet
 
-With `layout.tsx` configured, the next step is to add a primary **Connect Wallet** button to facilitate user login. Import `ConnectButton` from `@particle-network/connectkit` and add it to the interface. After the user logs in, the `ConnectButton` turns into an embedded wallet widget.
+With `layout.tsx` configured, the next step is to add a primary **Connect Wallet** button to facilitate user login. Import `ConnectButton` from `@particle-network/connectkit` and add it to the interface. After the user logs in, the `ConnectButton` component will throw a unified login modal upon clicking, an example of this modal is viewable [here](https://demo.particle.network).
 
 ```tsx
 "use client";
