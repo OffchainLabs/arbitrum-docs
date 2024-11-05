@@ -9,7 +9,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 
 import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
 
-import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx'
+import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
 <PublicPreviewBannerPartial />
 
@@ -273,8 +273,6 @@ If enabled, the Stylus SDK will flush the storage cache in between reentrant cal
 The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
 ### Inheritance, `#[inherit]`, and `#[borrow]`.
-
-
 
 <StylusNoMultiInheritanceBannerPartial />
 
