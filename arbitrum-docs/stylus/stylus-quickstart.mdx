@@ -392,35 +392,40 @@ use std::sync::Arc;
 use dotenv::dotenv;
 use std::env;
 
-/// Your private key file path.
+/// Constant for the environment variable containing the path to the private key.
 const PRIV_KEY_PATH: &str = "PRIV_KEY_PATH";
 
-/// Stylus RPC endpoint url.
+/// Constant for the environment variable containing the Stylus RPC endpoint URL.
 const RPC_URL: &str = "RPC_URL";
 
-/// Deployed contract address.
+/// Constant for the environment variable containing the deployed contract address.
 const STYLUS_CONTRACT_ADDRESS: &str = "STYLUS_CONTRACT_ADDRESS";
+
+/// Constant for the environment variable containing the user address to interact with.
 const USER_ADDRESS: &str = "USER_ADDRESS";
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
-    // Load environment variables from .env file
+    // Loads environment variables from a .env file into the application's environment.
     dotenv().ok();
 
-    // Debugging: Print environment variables
+    // Debug outputs for environment variable values to ensure they are correctly loaded.
     println!("PRIV_KEY_PATH: {:?}", env::var(PRIV_KEY_PATH));
     println!("RPC_URL: {:?}", env::var(RPC_URL));
     println!("STYLUS_CONTRACT_ADDRESS: {:?}", env::var(STYLUS_CONTRACT_ADDRESS));
     println!("USER_ADDRESS: {:?}", env::var(USER_ADDRESS));
 
+    // Retrieve and handle errors for each required environment variable.
     let priv_key_path = env::var(PRIV_KEY_PATH).map_err(|_| eyre!("No {} env var set", PRIV_KEY_PATH))?;
     let rpc_url = env::var(RPC_URL).map_err(|_| eyre!("No {} env var set", RPC_URL))?;
     let contract_address = env::var(STYLUS_CONTRACT_ADDRESS)
         .map_err(|_| eyre!("No {} env var set", STYLUS_CONTRACT_ADDRESS))?;
     let user_address_str = env::var(USER_ADDRESS).map_err(|_| eyre!("No {} env var set", USER_ADDRESS))?;
+    // Convert the user address string to an Address type.
     let user_address: Address = user_address_str.parse().map_err(|e| eyre!("Failed to parse user address: {}", e))?;
 
-    abigen!( //abigen! macro is used to generate type-safe bindings to the VendingMachine contract based on its ABI
+    // Use the abigen! macro to generate type-safe Rust bindings for the VendingMachine smart contract.
+    abigen!(
         VendingMachine,
         r#"[
             function giveCupcakeTo(address user_address) external returns (bool)
@@ -428,26 +433,39 @@ async fn main() -> eyre::Result<()> {
         ]"#
     );
 
+    // Initialize the network provider for Ethereum using an HTTP connection.
     let provider = Provider::<Http>::try_from(rpc_url)?;
+
+    // Parse the contract address to an Address type.
     let address: Address = contract_address.parse()?;
 
+    // Read the private key from a specified file.
     let privkey = read_secret_from_file(&priv_key_path)?;
     println!("Private key read from file: {}", privkey); // Debugging line
 
+    // Create a LocalWallet instance from the private key.
     let wallet = LocalWallet::from_str(&privkey)?;
+
+    // Fetch the chain ID of the network.
     let chain_id = provider.get_chainid().await?.as_u64();
+
+    // Create a client that signs transactions with the loaded wallet.
     let client = Arc::new(SignerMiddleware::new(
         provider,
         wallet.clone().with_chain_id(chain_id),
     ));
 
+    // Create a new instance of the VendingMachine contract with the client.
     let vending_machine = VendingMachine::new(address, client);
 
+    // Fetch and print the cupcake balance for the specified user address.
     let balance = vending_machine.get_cupcake_balance_for(user_address).call().await?;
     println!("User cupcake balance = {:?}", balance);
 
+    // Call the giveCupcakeTo function and wait for the transaction receipt.
     let tx_receipt = vending_machine.give_cupcake_to(user_address).send().await?.await?;
     match tx_receipt {
+        // Check transaction success status and print the appropriate message.
         Some(receipt) => {
             if receipt.status == Some(1.into()) {
                 println!("Successfully gave cupcake to user via a tx");
@@ -460,12 +478,16 @@ async fn main() -> eyre::Result<()> {
         }
     }
 
+    // Fetch and print the new cupcake balance for the user.
     let balance = vending_machine.get_cupcake_balance_for(user_address).call().await?;
     println!("New user cupcake balance = {:?}", balance);
 
+    // Return a Result indicating successful completion.
     Ok(())
 }
 
+/// Reads a secret (e.g., private key) from a file given its path.
+/// Uses a buffered reader to read the file, trims any extra whitespace, and returns the content.
 fn read_secret_from_file(fpath: &str) -> eyre::Result<String> {
     let f = std::fs::File::open(fpath)?;
     let mut buf_reader = BufReader::new(f);
