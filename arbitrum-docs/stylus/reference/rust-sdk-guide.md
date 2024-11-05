@@ -258,7 +258,7 @@ The above will make the public methods of `Contract` the first to consider durin
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
+If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus contracts revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
 
 ```rust
 stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
