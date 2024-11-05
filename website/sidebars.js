@@ -499,6 +499,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'How Stylus Works',
+          id: 'stylus/concepts/how-it-works',
+        },
+        {
+          type: 'doc',
           id: 'for-devs/dev-tools-and-resources/chain-info',
           label: 'Chain info',
         },
@@ -538,18 +543,6 @@ const sidebars = {
               label: 'Stylus by example',
               href: 'https://stylus-by-example.org/',
             },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'How Stylus Works',
-              id: 'stylus/concepts/how-it-works',
-            }
           ],
         },
         {
