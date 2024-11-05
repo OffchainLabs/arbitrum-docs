@@ -370,6 +370,9 @@ Once done with the deployment, you can interact with the contract using the same
 
 You'll find this `ethers-rs` script under `examples/vending_machine.rs`.
 
+<details>
+<summary>Rust script</summary>
+
 ```rust
 use ethers::{
     middleware::SignerMiddleware,
@@ -489,6 +492,8 @@ fn read_secret_from_file(fpath: &str) -> eyre::Result<String> {
     Ok(secret.trim().to_string())
 }
 ```
+
+</details>
 
 As you can see in the code above, the script:
 
