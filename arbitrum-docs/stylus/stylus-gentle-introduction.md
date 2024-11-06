@@ -9,10 +9,6 @@ sidebar_position: 1
 
 # A gentle introduction: Stylus
 
-
-
-
-
 This introduction is for developers who want to build on <a data-quicklook-from="arbitrum">Arbitrum</a> using popular programming languages like Rust. This capability is made possible by <a data-quicklook-from="stylus">Stylus</a>, a new way to write EVM-compatible smart contracts using your favorite programming languages.
 
 ### In a nutshell:

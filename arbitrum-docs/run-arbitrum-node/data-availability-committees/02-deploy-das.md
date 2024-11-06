@@ -6,7 +6,6 @@ sidebar_position: 2
 content_type: how-to
 ---
 
-
 <p>
   <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data
   Availability Committee (DAC) to store data and provide it on-demand instead of using its{' '}

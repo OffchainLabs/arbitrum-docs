@@ -8,10 +8,6 @@ author: leeederek
 sme: leeederek
 ---
 
-
-
-
-
 This introduction is for those who want to learn about BoLD: a new dispute protocol for Optimistic Rollups that can enable **permissionless validation for Arbitrum chains**. BoLD stands for Bounded Liquidity Delay and is currently deployed on a public testnet for anyone to join and test how challenges will work.
 
 This next-generation dispute protocol technology will soon be available for any Arbitrum chain, and pending a governance vote, will eventually be made available on Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova.

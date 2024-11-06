@@ -11,8 +11,6 @@ import StylusFaucets from './partials/_stylus-faucets.mdx';
 
 import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx';
 
-
-
 ## Arbitrum public RPC endpoints
 
 :::caution
