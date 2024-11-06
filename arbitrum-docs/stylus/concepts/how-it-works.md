@@ -1,6 +1,12 @@
 ---
-title: How Stylus works
-sidebar_label: How Stylus works
+id: stylus-how-it-works
+title: 'How Stylus works'
+sidebar_label: 'How Stylus works'
+description: 'Learn what powers Stylus'
+author: srinjoyc
+SME: srinjoyc
+user_story: As an Ethereum developer/project owner, I need to vet the Stylus.
+content_type: concept
 ---
 
 There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>
