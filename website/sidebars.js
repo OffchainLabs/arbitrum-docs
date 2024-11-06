@@ -495,7 +495,12 @@ const sidebars = {
         {
           type: 'doc',
           id: 'stylus/stylus-quickstart',
-          label: 'Quickstart (Rust)',
+          label: 'Quickstart',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/concepts/how-it-works',
+          label: 'How Stylus Works',
         },
         {
           type: 'doc',
