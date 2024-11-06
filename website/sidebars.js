@@ -264,7 +264,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Guidance for Orbit chain operation',
+          label: 'Guidance for Orbit chain operators',
           collapsed: true,
           items: [
             {
