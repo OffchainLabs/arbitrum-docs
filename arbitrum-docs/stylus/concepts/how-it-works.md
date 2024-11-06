@@ -1,5 +1,5 @@
 ---
-id: stylus-how-it-works
+id: how-it-works
 title: 'How Stylus works'
 sidebar_label: 'How Stylus works'
 description: 'Learn what powers Stylus'
