@@ -264,6 +264,23 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Guidance for Orbit chain operators',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage gas state growth`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Production Orbit chain setup',
           collapsed: true,
           items: [
@@ -318,16 +335,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/reference/additional-configuration-parameters',
               label: `Additional configuration parameters`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
-              label: `Manage state growth`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
-              label: `Manage gas speed limit`,
             },
             {
               type: 'doc',
