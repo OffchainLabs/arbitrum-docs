@@ -3,9 +3,9 @@ title: 'L1 Ethereum beacon chain RPC providers'
 author: dlee
 ---
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
 
-<PublicPreviewBannerPartial />
+
+
 
 :::info Note
 This reference document provides an overview of Ethereum beacon chain RPC providers for Arbitrum validators to use for accessing blob data following Ethereum's Dencun upgrade in March 2024. The list curated here is **not comprehensive and in no way does Offchain Labs endorse or benefit from your use of any of these providers.**

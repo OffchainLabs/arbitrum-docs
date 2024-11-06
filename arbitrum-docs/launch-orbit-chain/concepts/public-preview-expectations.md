@@ -23,9 +23,6 @@ Offchain Labs builds products in a way that aligns loosely with the spirit of "b
 
 To do this, some of our product offerings are documented with **public preview** disclaimers that look like this:
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 This banner's purpose is to set expectations while inviting readers like you to express your needs so that we can incorporate them into the way that we iterate on product.
 

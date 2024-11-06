@@ -7,9 +7,6 @@ target_audience: Developers writing and deploying Stylus contracts
 sidebar_position: 2
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
 
 If you are looking to write and deploy Stylus contracts, please see the following SDKs.
 
