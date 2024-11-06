@@ -17,7 +17,7 @@ sidebar_position: 1
 
 ### What's Stylus?
 
-Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **MultiVM** since **everything is entirely additive.** 
+Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **MultiVM** since **everything is entirely additive.**
 
 ![Stylus gives you MultiVM](./assets/stylus-multivm.jpg)
 
@@ -29,14 +29,22 @@ With a WASM VM, any programming language that can compile to WASM is within Styl
 
 While many developers will be drawn to new use cases, rebuilding existing applications in Stylus will also open the door to innovation and optimization. dApps have never been faster, cheaper, or safer. Stylus can be easily integrated into existing Solidity projects by calling a Stylus contract to optimize specific parts of your dApp or building the entire dApp with Stylus.It's impossible to list all of the use cases Stylus enables, think about the properties of all WASM compatible languages! That said, here are some ideas that are particularly exciting:
 
-- <b>Efficient On-Chain Verification with ZK-Proofs</b>: Enable cost-effective onchain verification using zero-knowledge proving systems for privacy, interoperability, and more (see [case study](https://blog.arbitrum.io/renegade-stylus-case-study/)).
-- <b>Advanced DeFi Instruments</b>:  Power complex financial instruments and processes like synthetic assets, options, and futures with onchain computation via extending current protocols (ie. Uniswap V4 hooks) or building your own.
-- <b>High-Performance On-Chain Logic</b>: Support memory and compute-intensive applications like onchain games and generative art either by writing all of the application in Stylus or enhance performance of existing Solidity contracts by optimizing specific parts.
+- <b>Efficient On-Chain Verification with ZK-Proofs</b>: Enable cost-effective onchain verification
+  using zero-knowledge proving systems for privacy, interoperability, and more (see [case
+  study](https://blog.arbitrum.io/renegade-stylus-case-study/)).
+- <b>Advanced DeFi Instruments</b>: Power complex financial instruments and processes like synthetic
+  assets, options, and futures with onchain computation via extending current protocols (ie. Uniswap
+  V4 hooks) or building your own.
+- <b>High-Performance On-Chain Logic</b>: Support memory and compute-intensive applications like
+  onchain games and generative art either by writing all of the application in Stylus or enhance
+  performance of existing Solidity contracts by optimizing specific parts.
 
 ### Getting Started
+
 1. Utilize our [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart), [examples](https://docs.arbitrum.io/stylus/stylus-quickstart), and [tutorials](https://docs.arbitrum.io/stylus/stylus-quickstart) to help you start building.
 2. Join our Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for support as well as the official Arbitrum ([@Arbitrum](https://twitter.com/arbitrum)) and Arbitrum Developers ([@ArbitrumDevs](https://twitter.com/ArbitrumDevs)) X accounts for announcements.
 3. Check out the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for various community contributed Stylus projects and tools, if you build something useful, we'd be happy to add it there.
 
 ### Contributing
+
 Stylus is open to everyone, with a strong focus on delivering an exceptional programming experience. But the journey doesn't end here—developer feedback is crucial to enhancing Stylus’s tooling, documentation, and language features. By becoming an early adopter, you can explore its full potential and help shape its future. We’re actively seeking builders eager to push the limits of the EVM or develop tooling for Stylus. With over $5M in grant funding available through the Stylus Sprint, now’s the time to get involved!
