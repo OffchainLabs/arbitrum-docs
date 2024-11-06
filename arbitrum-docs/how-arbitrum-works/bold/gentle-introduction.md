@@ -8,9 +8,9 @@ author: leeederek
 sme: leeederek
 ---
 
-import PublicPreviewBannerPartial from './partials/_bold-public-preview-banner-partial.md';
 
-<PublicPreviewBannerPartial />
+
+
 
 This introduction is for those who want to learn about BoLD: a new dispute protocol for Optimistic Rollups that can enable **permissionless validation for Arbitrum chains**. BoLD stands for Bounded Liquidity Delay and is currently deployed on a public testnet for anyone to join and test how challenges will work.
 

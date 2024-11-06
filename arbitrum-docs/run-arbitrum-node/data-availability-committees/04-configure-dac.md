@@ -8,9 +8,6 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
 
 <p>
   <a data-quicklook-from="arbitrum-anytrust-protocol">AnyTrust</a> chains rely on an external Data

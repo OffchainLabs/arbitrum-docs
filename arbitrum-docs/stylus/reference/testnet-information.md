@@ -7,13 +7,11 @@ target_audience: Developers building on the Stylus testnet
 sidebar_position: 9
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
 import StylusFaucets from './partials/_stylus-faucets.mdx';
 
 import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx';
 
-<PublicPreviewBannerPartial />
+
 
 ## Arbitrum public RPC endpoints
 
