@@ -264,6 +264,65 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Guidance for Orbit chain operators',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage gas state growth`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Production Orbit chain setup',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              label: `AnyTrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Customize your chain',
           collapsed: true,
           items: [
@@ -438,48 +497,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
           label: 'FAQ',
-        },
-        {
-          type: 'category',
-          label: 'Orbit SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-introduction',
-              label: `Introduction`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
-              label: `Rollup Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
-              label: `AnyTrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
-              label: `Orbit Chain Configuration`,
-            },
-          ],
         },
       ],
     },

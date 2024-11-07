@@ -6,10 +6,6 @@ sidebar_position: 3
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 :::caution Running a regular DAS vs running a mirror DAS
 
 The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.md)_ if needed.
