@@ -10,10 +10,6 @@ sme: leeederek
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../../how-arbitrum-works/bold/partials/_bold-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 ## Overview
 
 Arbitrum's current dispute protocol involves defending against challengers individually in a 1-vs-1 tournament setting. In contrast, BoLD enables an all-vs-all battle royale between Good and Evil, with a single winner always determined.

@@ -5,10 +5,6 @@ author: symbolpunk
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';

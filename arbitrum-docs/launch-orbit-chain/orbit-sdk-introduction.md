@@ -8,10 +8,6 @@ user_story: As a current or prospective Orbit chain owner, I need to onboard int
 content_type: get-started
 ---
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 The Arbitrum Orbit SDK lets you programmatically create and manage your own Orbit chain(s). Its capabilities include:
 
 - Configuration and deployment of your Orbit chain's core contracts
