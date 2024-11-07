@@ -631,38 +631,6 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Reference',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'for-devs/dev-tools-and-resources/chain-info',
-              label: 'Chain info',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas & Ink Pricing',
-            },
-            {
-              type: 'link',
-              label: 'Cargo Stylus CLI Github',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
-            },
-            {
-              type: 'link',
-              label: 'Rust SDK Crate',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
-            {
-              type: 'link',
-              label: 'Source code repository',
-              href: 'https://github.com/OffchainLabs/stylus',
-            },
-          ],
-        },
-        {
-          type: 'category',
           label: 'Examples',
           collapsed: true,
           items: [
@@ -695,6 +663,38 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/opcode-hostio-pricing',
               label: 'ERC-721',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'for-devs/dev-tools-and-resources/chain-info',
+              label: 'Chain info',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/opcode-hostio-pricing',
+              label: 'Gas & Ink Pricing',
+            },
+            {
+              type: 'link',
+              label: 'Cargo Stylus CLI Github',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+            {
+              type: 'link',
+              label: 'Rust SDK Crate',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Source code repository',
+              href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
         },
