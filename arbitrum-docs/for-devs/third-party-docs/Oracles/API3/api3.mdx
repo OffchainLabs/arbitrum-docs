@@ -1,7 +1,7 @@
 ---
 id: 'oracle-api3'
-title: 'How to query with API3'
-sidebar_label: 'Querying with API3'
+title: 'API3'
+sidebar_label: 'API3'
 description: 'Learn how to query $ARB random numbers and more.'
 author: GreatSoshiant
 sme: GreatSoshiant
@@ -9,12 +9,10 @@ user_story: As an Arbitrum developer, I want to learn how to use oracles in my d
 content_type: get-started
 ---
 
-## API3
-
 [API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push off-chain data to on-chain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
 
 ### Querying the price of $ARB through API3
-         
+
 Here’s an example of how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
 
 API3 provides an npm package with the contracts needed to access their feeds. We first install that package in our project:
