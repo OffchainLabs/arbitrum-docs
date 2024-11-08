@@ -131,3 +131,71 @@ Note that if the sync process encounters an error while trying to collect the da
 - If `batchSeen` > `batchProcessed`, some batches have still not been processed
 - If `msgCount` > `messageOfLastBlock`, some messages have been processed, but not all relevant blocks have been built (this is usually the longest stage while syncing a new node)
 - If `broadcasterQueuedMessagesPos` > `msgCount`, the feed is ahead of the last message known to the node
+
+### `debug_traceTransaction`
+
+The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
+HostIOs are calls the WasmVM makes to read and write data in the EVM.
+With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
+
+:::info
+
+The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
+More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-stylus-tx).
+
+:::
+
+The table below describes each field of the `stylusTracer` return value.
+
+| Field Name | Description                                                     |
+| ---------- | --------------------------------------------------------------- |
+| `name`     | Name of the execute HostIO.                                     |
+| `args`     | Arguments of the HostIO encoded as hex.                         |
+| `outs`     | Outputs of the HostIO encoded as hex.                           |
+| `startInk` | Amount of Ink before executing the HostIO.                      |
+| `endInk`   | Amount of Ink after executing the HostIO.                       |
+| `address`  | For \*call HostIOs, the address of the called contract.         |
+| `steps`    | For \*call HostIOs, the steps performed by the called contract. |
+
+For example, the command below illustrates how to call this tracer for a transaction.
+
+```
+curl -s \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"jsonrpc":"2.0","method":"debug_traceTransaction","params":["<transaction-hash>", {"tracer": "stylusTracer"}],"id":1}' \
+    <nitro-node-rpc>
+```
+
+The result of this call will be something along the lines of.
+
+```
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": [
+    {
+      "args": "0x00000024",
+      "endInk": 116090000,
+      "name": "user_entrypoint",
+      "outs": "0x",
+      "startInk": 116090000
+    },
+    {
+      "args": "0x",
+      "endInk": 116057558,
+      "name": "msg_reentrant",
+      "outs": "0x00000000",
+      "startInk": 116065958
+    },
+    {
+      "args": "0x",
+      "endInk": 115937952,
+      "name": "read_args",
+      "outs": "0x6c5283490000000000000000000000003bdff922e18bc03f1cf7b2a8b65a070cbec944f2",
+      "startInk": 115951512
+    },
+    ...
+  ]
+}
+```
