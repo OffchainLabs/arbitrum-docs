@@ -81,8 +81,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Overview',
-          id: 'build-decentralized-apps/oracles/overview',
+          label: 'Oracles',
+          id: 'build-decentralized-apps/oracles/overview-oracles',
         },
         {
           type: 'category',
