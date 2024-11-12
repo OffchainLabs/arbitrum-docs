@@ -9,10 +9,6 @@ sidebar_position: 3
 
 **Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Gas and ink costs](/stylus/reference/opcode-hostio-pricing).
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 <!-- todo as a future optimization: pull the "Ink and gas" content up top; give devs what they need to know in order to build stuff - the "just in time" information - progressively disclose the "just in case" details. An example flow:
    1. "think of gas and ink as dollars and cents"
    2. "here's what you need to know about how it works, how it differs from traditional Solidity dApp cost modeling"

@@ -12,10 +12,6 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md#list-of-available-arbos-releases).
 
-import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 #### Step 1: Update Nitro on nodes and validators
 
 Refer to the [requirements for the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.1` (Docker image: `offchainlabs/nitro-node:v2.3.1-26fad6f`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
