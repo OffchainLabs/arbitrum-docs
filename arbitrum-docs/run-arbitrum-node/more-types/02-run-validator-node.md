@@ -5,12 +5,6 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-::::info
-
-Validation of Arbitrum chains is now permissionless! Learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.md).
-
-::::
-
 Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.md).
 
 This page shows the different strategies that a validator may follow, and provides instructions to run a validator for an Arbitrum chain.
