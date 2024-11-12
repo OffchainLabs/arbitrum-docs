@@ -1,76 +1,156 @@
 ---
 title: 'How to run a validator'
-description: Learn how to run an Arbitrum feed relay on your local machine.
+description: Learn how to run an Arbitrum validator node
 sidebar_position: 4
 content_type: how-to
 ---
 
-Some Arbitrum nodes will choose to act as validators. This means that they watch the progress of the rollup protocol and perhaps also participate in that protocol to advance the state of the chain securely.
-Not all nodes will choose to do this. Because the rollup protocol doesn’t decide what the chain will do but merely confirms the correct behavior that is fully determined by the inbox messages, a node can ignore the rollup protocol and simply compute for itself the correct behavior.
-Here we describe different strategies that validators follow and provide instructions on how to run them.
+::::info
 
-### Validation strategies
+Validation of Arbitrum chains is now permissionless! Learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.md).
 
-- Currently, the ability to post assertions on-chain for mainnet Arbitrum chains is allowlisted.
-- Here's a full list of validation strategies:
-  - `Defensive` (allowlist required)
-    - Post stake and create challenge if local state disagrees with on-chain assertion (wallet required, will only post stake on-chain if bad assertion found)
-  - `StakeLatest` (allowlist required)
-    - Stay staked on latest assertion and challenge any bad assertions found (wallet required, always staked, uses some gas every time new assertion created)
-  - `ResolveNodes` (allowlist required)
-    - Stay staked on latest assertion, resolve any unconfirmed assertions and challenge any bad assertions found (wallet required, always staked, uses some gas every time unconfirmed assertion resolved or new assertion created)
-  - `MakeNodes` (allowlist required)
-    - Continuously create new assertions, challenging any bad assertions found (wallet required, always staked, most expensive node to run)
-    - Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, and the others will have still spent gas on reverted calls that didn't do anything.
-- There's one more validation strategy that is not allowlisted and is available for all types of node: `Watchtower`. A node in `Watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state. It doesn't require a wallet, as it never takes any action on-chain. This strategy is enabled by default in all nodes (full and archive).
+::::
 
-### Running a Watchtower validator
+Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.md).
 
-- By default, all nodes (full and archive) will run in `Watchtower` mode.
-- If a deviation is detected, a node running in Watchtower mode will log an error containing the string `found incorrect assertion in watchtower mode`
-- To verify that the Watchtower mode is enabled, this line should appear in the logs:
-  ```shell
-  INFO [09-28|18:43:49.367] running as validator                     txSender=nil actingAsWallet=nil whitelisted=false strategy=Watchtower
-  ```
-  - `strategy` should be `Watchtower`
-  - The log line `validation succeeded` shows that the L2 block validator is working
-  - The log line `found correct assertion` shows that the L1 validator is working
-- Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode by using the parameter `--node.staker.enable=false`.
+This page shows the different strategies that a validator may follow, and provides instructions to run a validator for an Arbitrum chain.
 
-### Creating a wallet for an allowlisted validator
+This how-to assumes that you're familiar with:
 
-- Watchtower validators never need a wallet, because they never post on-chain
-- Defensive validators need a wallet configured, but the wallet does not need to be funded until it logs that an assertion has been found
-- All other validators require a funded wallet to immediately post stake, as well as additional funds that will be spent at regular intervals
-- Here is an example of how to tell Nitro to create validator wallet for Arbitrum One and exit:
-  ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
-  ```
-- Wallet file will be created under the mounted directory inside the `arb1/wallet/` directory for Arb1, or `nova/wallet/` directory for Nova. Be sure to backup the wallet, it will be the only way to withdraw stake when desired
+- How to run a full node (see instructions [here](/run-arbitrum-node/03-run-full-node.md) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains)
+- [How the Rollup protocol works](/how-arbitrum-works/inside-arbitrum-nitro.md#arbitrum-rollup-protocol)
+- [How BoLD works](/bold/concepts/bold-technical-deep-dive.md#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
 
-### Running an allowlisted defensive validator
+## Validation strategies
 
-- A defensive validator requires that a wallet has already been created using the above steps
-- Defensive validator wallets do not need to be funded initially
-- If a defensive validator detects a deviation, it will log `bringing defensive validator online because of incorrect assertion`, and wait for funds to be added to wallet so stake can be posted and a dispute created
-- Here is an example of how to run an allowlisted defensive validator for Arbitrum One:
-  ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
-  ```
-- For Orbit chains, you need to set the `--chain.info-json=<Orbit Chain's chain info>` flag instead of `--chain.id=<chain id>`
-- To verify validator is working, this log line shows the wallet is setup correctly:
-  ```shell
-  INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
-  ```
-  - `whitelisted` should be `true` after your wallet has been added to the allowlist
-  - `strategy` should be `Defensive`
-  - `txSender` and `actingAsWallet` should both be present and not `nil`
-  - The log line `validation succeeded` shows that the L2 block validator is working
-  - The log line `found correct assertion` shows that the L1 validator is working
+Validators can be configured to follow a specific validation strategy. Here we describe what strategies are available in Nitro:
 
-#### Orbit chains: grant whitlelist
+| Strategy           | Description                                                                                                                                                                                                                                                                                                                                                   | Gas usage                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **`Defensive`**    | If the local state disagrees with the on-chain assertion, this validator will post a stake and create a challenge                                                                                                                                                                                                                                             | Only acts if a bad assertions is found                                                                     |
+| **`StakeLatest`**  | This validator will stay staked on the latest assertion found, and will challenge any bad assertions that it finds (this mode is only available in pre-BoLD chains)                                                                                                                                                                                           | Gas used every time a new assertion is created                                                             |
+| **`ResolveNodes`** | This validator will stay staked on the latest assertion found, resolve any unconfirmed assertions, and it will challenge any bad assertions that it finds                                                                                                                                                                                                     | Gas used every time a new assertion is created, and to resolve unconfirmed assertions                      |
+| **`MakeNodes`**    | This validator continuously creates new assertions, resolves any unconfirmed assertions, and challenges bad assertions found. Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, while the others will have their transactions reverted | Gas used to create new assertions, move the stake to the latest one, and to resolve unconfirmed assertions |
 
-- You need to be the chain owner to include a new validator address in the allowlist:
-- Find your `upgradeExecutor` contract address.
-- Send transactions to the `executeCall` method of the`upgradeExecutor` contract and set the `target` address to your Rollup contract's address, set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
-- Call your Rollup contract's `isValidator(address)` and check the result.
+### The watchtower strategy
+
+There's one more validation strategy that is available for all types of node: **`Watchtower`**. This strategy is enabled by default in all nodes (full and archive) and it doesn't require a wallet, as it never takes any action on-chain.
+
+A node in `watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state.
+
+```shell
+found incorrect assertion in watchtower mode
+```
+
+To verify that the watchtower mode is enabled, this line should appear in the logs:
+
+```shell
+INFO [09-28|18:43:49.367] running as validator                     txSender=nil actingAsWallet=nil whitelisted=false strategy=Watchtower
+```
+
+Additionally, the following logs indicate whether all components are working correctly:
+
+- The log line `validation succeeded` shows that the node is validating chain blocks successfully
+- The log line `found correct assertion` shows that the node is finding assertions on the parent chain successfully
+
+Watchtower mode adds a small amount of execution and memory overhead to your node. You can deactivate this mode by using the parameter `--node.staker.enable=false`.
+
+## How to run a validator node
+
+This section explains how to configure your node to act as a validator.
+
+### Step 0: prerequisites
+
+A validator node is basically a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/03-run-full-node.md) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains.
+
+Additionally, you'll need a wallet with enough funds to perform actions on-chain, and enough tokens to stake. Keep in mind that:
+
+- The token used to perform actions on-chain is the native token of the parent chain (usually `ETH`)
+- For chains that have BoLD activated, the token used to stake depends on the configuration of the chain. For Arbitrum One and Arbitrum Nova, the stake token is `WETH`
+- For chains that don't have BoLD activated, the token used to stake is the native token of the parent chain (usually `ETH`)
+
+### Step 1: configure and run your validator
+
+On top of the configuration of a regular full node, you'll need to configure the following parameters for it to act as a validator:
+
+| Parameter                                       | Value                                                   | Description                                                                                                                                                           |
+| ----------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--node.staker.enable`                          | `true`                                                  | Enables validation                                                                                                                                                    |
+| `--node.staker.strategy`                        | `Defensive`, `StakeLatest`, `ResolveNodes`, `MakeNodes` | Strategy that your node will use (only needed if BoLD is not enabled)                                                                                                 |
+| `--node.staker.parent-chain-wallet.private-key` | 0xPrivateKey                                            | Private key of the wallet used to perform the operations on-chain. Use either `private-key` or `password` (below)                                                     |
+| `--node.staker.parent-chain-wallet.password`    | Password                                                | Password of a wallet generated with nitro (see instructions [here](#use-nitro-to-create-a-wallet-for-your-validator)). Use either `private-key` (above) or `password` |
+| `--node.bold.enable`                            | true                                                    | Enables validation with BoLD (not needed if BoLD is not activated)                                                                                                    |
+| `--node.bold.mode`                              | `defensive-mode`, `resolve-mode`, `make-mode`           | Strategy that your node will use (not needed if BoLD is not activated)                                                                                                |
+
+Here's an example of how to run a defensive validator for Arbitrum One:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.bold.enable --node.bold.mode=defensive-mode
+```
+
+### Step 2: verify that your node is running as a validator
+
+To verify that your node is acting as a validator, you can look for the following log line:
+
+```shell
+INFO [09-28|18:43:49.367] running as validator                     txSender=0x... actingAsWallet=0x... whitelisted=true strategy=Defensive
+```
+
+Note that `strategy` should be the strategy configured, and `txSender` and `actingAsWallet` should both be present and not `nil`.
+
+Furthermore, the following logs will indicate that all components are working as intended:
+
+- The log line `validation succeeded` shows that the node is validating chain blocks successfully
+- The log line `found correct assertion` shows that the node is finding assertions on the parent chain successfully
+
+## Run a validator for an Orbit chain
+
+Validation for Orbit chains works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/node-running/how-tos/running-an-orbit-node.mdx#2-child-chain-parameters), you need to include the information of the chain when configuring your node, by using `--chain.info-json`.
+
+```shell
+--chain.info-json=<Orbit chain's info>
+```
+
+Additionally, keep in mind that some chains might not have BoLD enabled yet, so BoLD specific parameters will not be needed.
+
+## Advanced features
+
+### Use Nitro to create a wallet for your validator
+
+Nitro includes a tool to automatically create a validator wallet for a specific chain. You can access it by using the option `--node.staker.parent-chain-wallet.only-create-key`, and setting a password for the wallet with `--node.staker.parent-chain-wallet.password`.
+
+Here is an example of how to create a validator wallet for Arbitrum One and exit:
+
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
+```
+
+The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet, as it will be the only way to withdraw the stake when desired.
+
+Once the wallet is created, you can instruct your validator to use by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
+
+### Enable the BoLD API
+
+When activating BoLD on a chain, the amount of logs produced by a validator in case a challenge occurs can be overwhelming, and it might be hard to follow the progress of a challenge. To allow for a better visualization of ongoing challenges, as well as querying specific information, Nitro includes an API to capture information about assertions and challenges that the validator observes. You can enable this API by using the following parameters:
+
+| Parameter              | Value | Description       |
+| ---------------------- | ----- | ----------------- |
+| `--node.bold.api`      | true  | Enables the API   |
+| `--node.bold.api-host` | IP    | IP to listen on   |
+| `--node.bold.api-port` | Port  | Port to listen on |
+
+We are working on specific documentation about the methods available on this API and will be published soon.
+
+### How to add new validators to the allowlist (Orbit chains)
+
+On permissioned validation setups, the set of validators that can act on a given chain are limited to the ones added to the allowlist of validators in the Rollup contract.
+
+Follow these instructions to add a new validator address to the allowlist. Keep in mind that you need to be able to perform admin actions to the chain to complete this operation.
+
+1. Find your `upgradeExecutor` contract address
+2. Call the `executeCall` method of the `upgradeExecutor` contract:
+   - set the `target` address to your Rollup contract's address
+   - set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
+3. Call your Rollup contract's `isValidator(address)` and check the result
+
+After performing this operation, the new validator will be able to run a validator node to participate in the chain.
