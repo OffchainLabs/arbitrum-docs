@@ -1065,7 +1065,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'for-devs/third-party-docs/contribute',
+          id: 'for-devs/contribute',
         },
       ],
     },
