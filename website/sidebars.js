@@ -258,28 +258,6 @@ const sidebars = {
           label: 'A gentle introduction',
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
-          label: 'Quickstart',
-        },
-        {
-          type: 'category',
-          label: 'Guidance for Orbit chain operators',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
-              label: `Manage gas state growth`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
-              label: `Manage gas speed limit`,
-            },
-          ],
-        },
-        {
           type: 'category',
           label: 'Production Orbit chain setup',
           collapsed: true,
