@@ -259,6 +259,28 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Configure your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-precompile',
+              label: `Customize your chain's precompiles`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-stf',
+              label: `Customize your chain's behavior`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              label: `Customize ArbOS version`,
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Production Orbit chain setup',
           collapsed: true,
           items: [
@@ -296,75 +318,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
               label: `Orbit Chain Configuration`,
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Customize your chain',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Customize your chain's deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-              label: `Additional configuration parameters`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/use-a-custom-gas-token',
-              label: `Use a custom gas token`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-precompile',
-              label: `Customize your chain's precompiles`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
-              label: `Customize your chain's behavior`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-arbos',
-              label: `Customize ArbOS version`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
-              label: `Implement Circle bridged USDC`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/fast-withdrawals',
-              label: `Enable fast withdrawals`,
-            },
-            {
-              type: 'category',
-              label: 'AEP fee router',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/aep-fee-router-introduction',
-                  label: `AEP fee router overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
-                  label: `Set up AEP fee router`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
-                  label: `Calculate AEP license fees`,
-                },
-              ],
             },
           ],
         },
