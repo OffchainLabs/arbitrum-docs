@@ -236,9 +236,21 @@ const sidebars = {
       collapsed: true,
       items: [
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/orbit-gentle-introduction',
-          label: 'A gentle introduction',
+          type: 'category',
+          label: 'Introduction',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-gentle-introduction',
+              label: 'A gentle introduction',
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-start-your-journey',
+              label: 'Start your journey',
+            },
+          ],
         },
         {
           type: 'category',
