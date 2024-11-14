@@ -767,7 +767,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
-          label: 'Nitro database snapshots',
+          label: 'Database snapshots',
         },
         {
           type: 'doc',
