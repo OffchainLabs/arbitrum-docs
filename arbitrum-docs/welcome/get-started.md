@@ -30,21 +30,21 @@ The Arbitrum suite includes the protocols, chains, services, and SDKs that power
 
 **Users** interact with Arbitrum either through the Arbitrum bridge or by using dApps that have been deployed to an Arbitrum chain.
 
-| Resource                                                 | Description                                                                              |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| [Arbitrum bridge](https://bridge.arbitrum.io/)           | Lets you move ETH and ERC-20 tokens between Ethereum, Arbitrum, and select Orbit chains. |
-| [Arbitrum Portal](https://portal.arbitrum.io/)           | A directory of dApps on Arbitrum.                                                        |
-| [Quickstart (bridge)](/arbitrum-bridge/01-quickstart.md) | Provides step-by-step instructions for first-time bridge users.                          |
+| Resource                                                  | Description                                                                              |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| [Arbitrum bridge](https://bridge.arbitrum.io/)            | Lets you move ETH and ERC-20 tokens between Ethereum, Arbitrum, and select Orbit chains. |
+| [Arbitrum Portal](https://portal.arbitrum.io/)            | A directory of dApps on Arbitrum.                                                        |
+| [Quickstart (bridge)](/arbitrum-bridge/01-quickstart.mdx) | Provides step-by-step instructions for first-time bridge users.                          |
 
 ## Arbitrum for developers
 
 **Developers** build Arbitrum dApps by deploying smart contracts to an Arbitrum chain.
 
-| Resource                                                                             | Description                                                                                              |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| [A gentle introduction to Arbitrum](/welcome/arbitrum-gentle-introduction)           | A technical introduction to Arbitrum's suite of scaling solutions.                                       |
-| [Quickstart (Solidity)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) | Targeted at web2 developers who want to deploy their first Solidity smart contract to Arbitrum.          |
-| [Quickstart (Rust)](/stylus/stylus-quickstart)                                       | Targeted at web3 developers who want to deploy their first Rust smart contract to Arbitrum using Stylus. |
+| Resource                                                                              | Description                                                                                              |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [A gentle introduction to Arbitrum](/welcome/arbitrum-gentle-introduction)            | A technical introduction to Arbitrum's suite of scaling solutions.                                       |
+| [Quickstart (Solidity)](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) | Targeted at web2 developers who want to deploy their first Solidity smart contract to Arbitrum.          |
+| [Quickstart (Rust)](/stylus/stylus-quickstart)                                        | Targeted at web3 developers who want to deploy their first Rust smart contract to Arbitrum using Stylus. |
 
 ## Arbitrum for node runners
 

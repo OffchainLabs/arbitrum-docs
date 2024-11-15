@@ -52,7 +52,6 @@ This includes:
 
 In the event that a `ChildToParentRouter` does not connect to the `ParentToChildRouter` on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to `ParentToChildRouter` is established.
 
-
 And optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/how-tos/calculate-aep-fees#assertion-costs) section:
 
 <aside>
@@ -67,7 +66,10 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
 <aside>
-⚠️ The standard script deploys and sets up the AEP fee router contracts for L2 chains. For L3 chains (or further layers), a different target address on the parent chain will need to be specified, depending on the native token of the chain. Please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
+  ⚠️ The standard script deploys and sets up the AEP fee router contracts for L2 chains. For L3
+  chains (or further layers), a different target address on the parent chain will need to be
+  specified, depending on the native token of the chain. Please contact the Arbitrum Foundation to
+  confirm the target address to withdraw the AEP fees to.
 </aside>
 
 The script performs the following operations:

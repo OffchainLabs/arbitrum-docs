@@ -1,4 +1,5 @@
 ---
+id: stylus-quickstart
 title: 'Quickstart: write a smart contract in Rust using Stylus'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512, anegg0
@@ -6,10 +7,6 @@ sme: chrisco512, anegg0
 sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
-
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
 
 This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
 
@@ -25,13 +22,17 @@ This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>'
 
 ### Prerequisites
 
-#### Rust toolchain
+<details>
+<summary>Rust toolchain</summary>
 
-Follow the instructions on [Rust Lang’s installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
-#### VS Code
+</details>
 
-We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you’re comfortable with those.
+<details>
+<summary>VS Code</summary>
+
+We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
 
 Some helpful VS Code extensions for Rust development:
 
@@ -40,17 +41,26 @@ Some helpful VS Code extensions for Rust development:
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
 - [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
 
-#### Docker
+ </details>
+
+<details>
+<summary>Docker</summary>
 
 The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
-You can download Docker from [Docker’s website](https://www.docker.com/products/docker-desktop).
+You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
 
-#### Foundry's Cast
+</details>
+
+<details>
+<summary>Foundry's Cast</summary>
 
 [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
 
-#### Nitro devnode
+</details>
+
+<details>
+<summary>Nitro devnode</summary>
 
 Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
 
@@ -62,6 +72,8 @@ cd nitro-devnode
 ```shell title="Launch your devnode"
 ./run-dev-node.sh
 ```
+
+</details>
 
 ## Creating a Stylus project with cargo stylus
 

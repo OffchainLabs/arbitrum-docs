@@ -80,26 +80,9 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
+          type: 'doc',
           label: 'Oracles',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/oracles/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Use oracles in your app',
-              id: 'build-decentralized-apps/oracles/how-to-use-oracles',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/oracles/reference',
-            },
-          ],
+          id: 'build-decentralized-apps/oracles/overview-oracles',
         },
         {
           type: 'category',
@@ -261,6 +244,65 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/orbit-quickstart',
           label: 'Quickstart',
+        },
+        {
+          type: 'category',
+          label: 'Guidance for Orbit chain operators',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage gas state growth`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Production Orbit chain setup',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              label: `AnyTrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
         },
         {
           type: 'category',
@@ -433,48 +475,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
           label: 'FAQ',
-        },
-        {
-          type: 'category',
-          label: 'Orbit SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-introduction',
-              label: `Introduction`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
-              label: `Rollup Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
-              label: `AnyTrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
-              label: `Orbit Chain Configuration`,
-            },
-          ],
         },
       ],
     },
@@ -1031,8 +1031,51 @@ const sidebars = {
       collapsed: true,
       items: [
         {
+          type: 'category',
+          label: 'Oracles',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'for-devs/oracles/oracles-content-map',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/api3/api3',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chainlink/chainlink',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chronicle/chronicle',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/ora/ora',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-price-feed',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-vrf',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/trellor/trellor',
+            },
+          ],
+        },
+        {
           type: 'autogenerated',
           dirName: 'for-devs/third-party-docs',
+        },
+        {
+          type: 'doc',
+          id: 'for-devs/contribute',
         },
       ],
     },
