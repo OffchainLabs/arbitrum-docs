@@ -755,26 +755,19 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
-              label: 'Nitro database snapshots',
-            },
-          ],
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/build-nitro-locally',
+          label: 'Build Nitro locally',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+          label: 'Migrate to Nitro from Classic',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+          label: 'Database snapshots',
         },
         {
           type: 'doc',
