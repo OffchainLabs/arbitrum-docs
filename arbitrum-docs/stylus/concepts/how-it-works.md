@@ -1,6 +1,6 @@
 ---
-title: How Stylus Works
-sidebar_label: How Stylus Works
+title: How Stylus works
+sidebar_label: How Stylus works
 ---
 
 There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>

@@ -498,11 +498,6 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
-          type: 'doc',
-          id: 'stylus/concepts/how-it-works',
-          label: 'How Stylus works',
-        },
-        {
           type: 'category',
           label: 'Stylus Rust SDK',
           collapsed: true,
@@ -522,45 +517,20 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Stylus Rust SDK',
+          label: 'Concepts',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'stylus/reference/overview',
-              label: 'Overview',
+              id: 'stylus/concepts/how-it-works',
+              label: 'How Stylus works',
             },
             {
               type: 'doc',
-              id: 'stylus-by-example/vending_machine',
-              label: 'Vending machine',
+              id: 'stylus/concepts/stylus-gas',
+              label: 'How Stylus uses gas',
             },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc20',
-              label: 'ERC-20',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc721',
-              label: 'ERC-721',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/multi_call',
-              label: 'Multi-Call',
-            },
-            {
-              type: 'link',
-              label: 'Awesome Stylus',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/reference/rust-sdk-guide',
-              label: 'Advanced features',
-            },
-          ],
+          ]
         },
         {
           type: 'category',
