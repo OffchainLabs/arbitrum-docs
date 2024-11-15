@@ -1,6 +1,12 @@
 ---
-title: How Stylus works
-sidebar_label: How Stylus works
+id: how-it-works
+title: 'How Stylus works'
+sidebar_label: 'How Stylus works'
+description: 'Learn what powers Stylus'
+author: srinjoyc
+SME: srinjoyc
+user_story: As an Ethereum developer/project owner, I need to vet the Stylus.
+content_type: concept
 ---
 
 There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>
@@ -28,6 +34,7 @@ Stylus programs are executed in a fork of [Wasmer](https://wasmer.io/), the lead
 EVM contracts continue to execute the same way they did before Stylus. When a contract is called, the difference between an EVM contract and a WASM program can be seen via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract is executed using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider what language the contract was written in. Everything is interoperable.
 
 ### Proving
+
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
 Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
