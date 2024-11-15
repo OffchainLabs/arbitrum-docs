@@ -490,7 +490,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'stylus/stylus-gentle-introduction',
-          label: 'A Gentle Introduction',
+          label: 'A gentle introduction',
         },
         {
           type: 'doc',
@@ -500,7 +500,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'stylus/concepts/how-it-works',
-          label: 'How Stylus Works',
+          label: 'How Stylus works',
         },
         {
           type: 'category',
@@ -522,20 +522,85 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Stylus Rust SDK',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/reference/overview',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/vending_machine',
+              label: 'Vending machine',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/erc20',
+              label: 'ERC-20',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/erc721',
+              label: 'ERC-721',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/multi_call',
+              label: 'Multi-Call',
+            },
+            {
+              type: 'link',
+              label: 'Awesome Stylus',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/rust-sdk-guide',
+              label: 'Advanced features',
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Tutorials',
           collapsed: true,
           items: [
             {
               type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
+              value: '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
             },
-            { type: 'doc', id: 'stylus/how-tos/debugging-stylus-tx', label: 'Debug transactions' },
-            { type: 'doc', id: 'stylus/concepts/stylus-cache-manager', label: 'Cache contracts' },
-            { type: 'doc', id: 'stylus/how-tos/optimizing-binaries', label: 'Optimize WASM Binaries' },
-            { type: 'doc', id: 'stylus/how-tos/verifying-contracts', label: 'Verify contracts' },
-            { type: 'doc', id: 'stylus/how-tos/verifying-contracts-arbiscan', label: 'Arbiscan Verification' },
-            { type: 'doc', id: 'stylus/how-tos/adding-support-for-new-languages', label: 'Using other languages' },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/debugging-stylus-tx',
+              label: 'Debug transactions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/stylus-cache-manager',
+              label: 'Cache contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts',
+              label: 'Verify contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Arbiscan verification',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/adding-support-for-new-languages',
+              label: 'Using other languages',
+            },
           ],
         },
         {
@@ -543,11 +608,31 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            { type: 'doc', id: 'stylus-by-example/vending_machine', label: 'Vending machine' },
-            { type: 'doc', id: 'stylus-by-example/erc20', label: 'ERC-20' },
-            { type: 'doc', id: 'stylus-by-example/erc721', label: 'ERC-721' },
-            { type: 'doc', id: 'stylus-by-example/multi_call', label: 'Multi-Call' },
-            { type: 'link', label: 'Awesome Stylus', href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html' },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/vending_machine',
+              label: 'Vending machine',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/erc20',
+              label: 'ERC-20',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/erc721',
+              label: 'ERC-721',
+            },
+            {
+              type: 'doc',
+              id: 'stylus-by-example/multi_call',
+              label: 'Multi-Call',
+            },
+            {
+              type: 'link',
+              label: 'Awesome Stylus',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
           ],
         },
         {
@@ -555,11 +640,31 @@ const sidebars = {
           label: 'Reference',
           collapsed: true,
           items: [
-            { type: 'doc', id: 'for-devs/dev-tools-and-resources/chain-info', label: 'Chain Info' },
-            { type: 'doc', id: 'stylus/reference/opcode-hostio-pricing', label: 'Gas & Ink Pricing' },
-            { type: 'link', label: 'Cargo Stylus CLI GitHub', href: 'https://github.com/OffchainLabs/cargo-stylus' },
-            { type: 'link', label: 'Rust SDK Crate', href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html' },
-            { type: 'link', label: 'Source Code Repository', href: 'https://github.com/OffchainLabs/stylus' },
+            {
+              type: 'doc',
+              id: 'for-devs/dev-tools-and-resources/chain-info',
+              label: 'Chain Info',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/opcode-hostio-pricing',
+              label: 'Gas & Ink Pricing',
+            },
+            {
+              type: 'link',
+              label: 'Cargo Stylus CLI GitHub',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+            {
+              type: 'link',
+              label: 'Rust SDK Crate',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Source Code Repository',
+              href: 'https://github.com/OffchainLabs/stylus',
+            },
           ],
         },
         {
