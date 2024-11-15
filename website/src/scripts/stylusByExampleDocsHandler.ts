@@ -21,20 +21,30 @@ const allowList = [
   'bytes_in_bytes_out',
 ];
 
+const appsAllowList = [
+  'erc20',
+  'erc721',
+  'vending_machine',
+  'multi_call',
+];
+
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
   const sourceDir = path.join(outputDir, '../../stylus-by-example/src/app/basic_examples');
+  const sourceDirApps = path.join(outputDir, '../../stylus-by-example/src/app/applications');
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(outputDir);
   });
 
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, outputDir);
-
+    copyFiles(sourceDir, outputDir, allowList);
+    // only generate sidebar for basic_examples
     const sidebarItems = generateSidebar(outputDir);
     const sidebarConfig = { items: sidebarItems };
     const sidebarPath = path.join(outputDir, 'sidebar.js');
+    // copy applications after sidebar for Rust SDK is generated
+    copyFiles(sourceDirApps, outputDir, appsAllowList);
 
     fs.writeFileSync(
       sidebarPath,
@@ -62,7 +72,7 @@ function cleanDirectory(directory) {
   }
 }
 
-function copyFiles(source, target) {
+function copyFiles(source, target, allowList) {
   if (!fs.existsSync(source)) {
     console.error(`Source path does not exist: ${source}`);
     return;
