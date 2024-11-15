@@ -21,12 +21,7 @@ const allowList = [
   'bytes_in_bytes_out',
 ];
 
-const appsAllowList = [
-  'erc20',
-  'erc721',
-  'vending_machine',
-  'multi_call',
-];
+const appsAllowList = ['erc20', 'erc721', 'vending_machine', 'multi_call'];
 
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
