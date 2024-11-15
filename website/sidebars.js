@@ -530,7 +530,7 @@ const sidebars = {
               id: 'stylus/concepts/stylus-gas',
               label: 'How Stylus uses gas',
             },
-          ]
+          ],
         },
         {
           type: 'category',
@@ -539,7 +539,8 @@ const sidebars = {
           items: [
             {
               type: 'html',
-              value: '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
+              value:
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
             },
             {
               type: 'doc',
@@ -643,7 +644,7 @@ const sidebars = {
           label: 'Troubleshooting',
         },
       ],
-    },    
+    },
     {
       type: 'category',
       label: 'Run an Arbitrum node',
