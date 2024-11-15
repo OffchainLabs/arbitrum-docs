@@ -247,8 +247,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/orbit-supported-parent-chains-and-configurations',
-              label: 'Supported parent chains and configurations',
+              id: 'launch-orbit-chain/orbit-supported-parent-chains',
+              label: 'Supported parent chains',
             },
           ],
         },
