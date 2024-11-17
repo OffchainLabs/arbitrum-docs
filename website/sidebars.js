@@ -261,11 +261,6 @@ const sidebars = {
               label: 'how-to-configure-your-chain',
             },
             {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/configuration-parameters',
-              label: 'Configuration parameters',
-            },
-            {
               type: 'category',
               label: 'AEP fee router',
               collapsed: true,
@@ -360,7 +355,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/reference/configuration-parameters',
+              id: 'launch-orbit-chain/reference/orbit-configuration-parameters',
               label: `Orbit configuration parameters`,
             },
             {
