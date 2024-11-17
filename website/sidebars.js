@@ -261,6 +261,33 @@ const sidebars = {
               label: 'how-to-configure-your-chain',
             },
             {
+              type: 'doc',
+              id: 'launch-orbit-chain/reference/orbit-configuration-parameters',
+              label: `Orbit configuration parameters`,
+            },
+            {
+              type: 'category',
+              label: 'Core configuration',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-fast-block-times',
+                  label: 'orbit-fast-block-times',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/smart-contract-size-limit',
+                  label: 'smart-contract-size-limit',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  label: `Calculate AEP license fees`,
+                },
+              ],
+            },
+            {
               type: 'category',
               label: 'AEP fee router',
               collapsed: true,
@@ -352,11 +379,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
               label: `Customize your chain's deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/orbit-configuration-parameters',
-              label: `Orbit configuration parameters`,
             },
             {
               type: 'doc',
