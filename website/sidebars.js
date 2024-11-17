@@ -252,6 +252,45 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Configure your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/how-to-configure-your-chain',
+              label: 'how-to-configure-your-chain',
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/reference/configuration-parameters',
+              label: 'Configuration parameters',
+            },
+            {
+              type: 'category',
+              label: 'AEP fee router',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/aep-fee-router-introduction',
+                  label: `AEP fee router overview`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+                  label: `Set up AEP fee router`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  label: `Calculate AEP license fees`,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,
           items: [
