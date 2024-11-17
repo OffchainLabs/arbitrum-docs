@@ -360,8 +360,8 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-              label: `Additional configuration parameters`,
+              id: 'launch-orbit-chain/reference/configuration-parameters',
+              label: `Orbit configuration parameters`,
             },
             {
               type: 'doc',
