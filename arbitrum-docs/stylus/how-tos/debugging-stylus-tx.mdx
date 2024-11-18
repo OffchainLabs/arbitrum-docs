@@ -107,7 +107,7 @@ export TX_HASH=0x18b241841fa0a59e02d3c6d693750ff0080ad792204aac7e5d4ce9e20c46683
 And replay the transaction:
 
 ```sh
-cargo stylus replay --tx=$TX_HASH --endpoint=$RPC_URL
+cargo stylus replay --tx=$TX_HASH --endpoint=$RPC_URL --use-native-tracer
 ```
 
 GDB will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function.
@@ -171,7 +171,7 @@ This will produce a trace of the functions called and [ink](https://docs.arbitru
 [{"args":[0,0,0,4],"endInk":846200000,"name":"user_entrypoint","outs":[],"startInk":846200000},{"args":[],"endInk":846167558,"name":"msg_reentrant","outs":[0,0,0,0],"startInk":846175958},{"args":[],"endInk":846047922,"name":"read_args","outs":[208,157,224,138],"startInk":846061362},{"args":[],"endInk":845914924,"name":"msg_value","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":845928364},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"endInk":227196069,"name":"storage_load_bytes32","outs":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"startInk":844944549},{"args":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],"endInk":226716083,"name":"storage_cache_bytes32","outs":[],"startInk":226734563},{"args":[0],"endInk":226418732,"name":"storage_flush_cache","outs":[],"startInk":226486805},{"args":[],"endInk":226362319,"name":"write_result","outs":[],"startInk":226403481},{"args":[],"endInk":846200000,"name":"user_returned","outs":[0,0,0,0],"startInk":846200000}]
 ```
 
-RPC providers can trace transactions and use `debug_traceTransaction` on live networks with the `stylusTracer`. Some providers that support Stylus transaction tracing include:
+RPC providers can trace transactions and enable use of `debug_traceTransaction` on live networks with the `stylusTracer`. This will allow you to leverage both `cargo stylus replay` and `cargo stylus trace` with their endpoints. Some providers that support Stylus transaction tracing include:
 
 - **[QuickNode](https://www.quicknode.com/)**: Testnet tracing supported on the free tier.
 - **[Tenderly](https://tenderly.co/)**: Testnet tracing supported on the free tier.
