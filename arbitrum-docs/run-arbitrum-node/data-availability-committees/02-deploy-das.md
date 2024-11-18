@@ -81,7 +81,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 Gather the following information:
 
 - The latest Nitro docker image: `@latestNitroNodeImage@`
-- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.md#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
+- An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
 
