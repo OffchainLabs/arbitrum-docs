@@ -277,8 +277,8 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/reference/smart-contract-size-limit',
-                  label: 'smart-contract-size-limit',
+                  id: 'launch-orbit-chain/reference/orbit-smart-contract-size-limit',
+                  label: 'smart contract size limit',
                 },
                 {
                   type: 'doc',
