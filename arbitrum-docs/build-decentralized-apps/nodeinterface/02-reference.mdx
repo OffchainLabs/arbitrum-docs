@@ -9,6 +9,6 @@ The Arbitrum Nitro software includes a special `NodeInterface` contract availabl
 
 ## NodeInterface methods
 
-import NodeInterfaceRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_NodeInterface.md';
+import NodeInterfaceRef from '../../for-devs/dev-tools-and-resources/partials/precompile-tables/_NodeInterface.mdx';
 
 <NodeInterfaceRef />
