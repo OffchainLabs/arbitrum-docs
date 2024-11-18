@@ -46,4 +46,4 @@ With your node configuration specified and token bridge deployed, you'll be read
 ## See also
 
 - Learn more about the [AnyTrust consensus mechanism](/how-arbitrum-works/inside-arbitrum-nitro.md#inside-anytrust)
-- Learn more about the [`ERC-20` token bridge architecture](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md)
+- Learn more about the [`ERC-20` token bridge architecture](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx)

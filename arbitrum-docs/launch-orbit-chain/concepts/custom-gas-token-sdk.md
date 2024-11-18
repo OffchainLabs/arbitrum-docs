@@ -32,7 +32,7 @@ Custom gas token support in the Arbitrum SDK introduces a suite of APIs designed
 
 ### Registering a custom token in the Token Bridge
 
-When [registering a custom token in the Token Bridge](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md#setting-up-your-token-with-the-generic-custom-gateway) of a custom-gas-token Orbit chain, there's an additional step to perform before calling `registerTokenToL2`.
+When [registering a custom token in the Token Bridge](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#setting-up-your-token-with-the-generic-custom-gateway) of a custom-gas-token Orbit chain, there's an additional step to perform before calling `registerTokenToL2`.
 
 Since the Token Bridge [router](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1OrbitGatewayRouter.sol#L142-L144) and the [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1OrbitCustomGateway.sol#L203-L210) expect to have allowance to transfer the native token from the `msg.sender()` to the inbox contract, it's usually the token in the parent chain who handles those approvals. In the [TestCustomTokenL1](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol#L158-L168), we offer as an example of implementation. We see that the contract transfers the native tokens to itself and then approves the router and gateway contracts. If we follow that implementation, we only need to send an approval transaction to the native token to allow the TestCustomTokenL1 to transfer the native token from the caller of the `registerTokenToL2` function to itself.
 
