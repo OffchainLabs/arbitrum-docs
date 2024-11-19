@@ -15,7 +15,7 @@ Debugging smart contracts can be challenging, especially when dealing with compl
 Cargo Stylus is a tool designed to simplify the development and debugging process for smart contracts written in Rust for the Stylus execution environment. One of its powerful features is the `cargo stylus` subcommand, which provides essential functionalities for developers:
 
 1. **Trace transactions**: Perform trace calls against Stylus transactions using Ethereum nodes' `debug_traceTransaction` RPC. This feature enables developers to analyze the execution flow and state changes of their transactions in a detailed manner.
-2. **Debugging with GDB**: Replay and debug the execution of a Stylus transaction using the GNU Debugger (GDB). This allows developers to set breakpoints, inspect variables, and step through the transaction execution line by line, providing an in-depth understanding of the transaction's behavior.
+2. **Debugging with GDB or LLDB**: Replay and debug the execution of a Stylus transaction using a debugger. This allows developers to set breakpoints, inspect variables, and step through the transaction execution line by line, providing an in-depth understanding of the transaction's behavior.
 
 ### Replaying transactions
 
@@ -25,13 +25,13 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 - **Crate**: `cargo-stylus`
 - **GNU Debugger (GDB)** (Linux) or **LLDB (via Xcode Command Line Tools)**(MacOS)
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
-- **Local Arbitrum Sepolia node** with tracing endpoints enabled or a [local Stylus dev node](https://arbitrum-docs-ncyp5gty1-offchain-labs.vercel.app/run-arbitrum-node/run-local-dev-node)
+- **[Arbitrum RPC Provider](#rpc-endpoint-compatibility)** with tracing endpoints enabled or a [local Stylus dev node](https://arbitrum-docs-ncyp5gty1-offchain-labs.vercel.app/run-arbitrum-node/run-local-dev-node)
 
 `cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) or [LLDB](https://lldb.llvm.org/) against the Rust source code.
 
 ### Installation and setup
 
-1. **Install the required crates and GDB**: First, let's ensure that the following crates are installed:
+1. **Install the required crates and debugger**: First, let's ensure that the following crates are installed:
 
 ```sh
 cargo install cargo-stylus
@@ -43,7 +43,7 @@ If on Linux, install GDB if it's not already installed:
 sudo apt-get install gdb
 ```
 
-If on MacOS, you should have LLDB installed already. If you do not, you can install it with:
+If on MacOS, install LLDB if it's not already installed:
 
 ```sh
 xcode-select --install
@@ -99,7 +99,7 @@ And send a transaction using `Cast`:
 cast send --rpc-url=$RPC_URL --private-key=$PRIV_KEY $ADDR "increment()"
 ```
 
-4. **Replay the transaction with GDB**: Now, we can replay the transaction with cargo stylus and GDB to inspect each step of it against our source code. Make sure GDB is installed and that you are on a Linux, x86 system.
+4. **Replay the transaction with the debugger**: Now, we can replay the transaction with cargo stylus and the debugger to inspect each step of it against our source code. Make sure GDB is installed and that you are on a Linux, x86 system.
    Also, you should set the transaction hash as an environment variable:
 
 ```sh
@@ -121,10 +121,10 @@ Options:
 ```
 
 :::caution Supported RPC Endpoints Only
-The `--use-native-tracer` flag requires access to an RPC endpoint with Stylus tracing support, see the list of providers that support Stylus tracing [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
+The `--use-native-tracer` flag requires the RPC provider to support the `stylusTracer`. See more details [below](#rpc-endpoint-compatibility).
 :::
 
-GDB / LLDB will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function.
+The debugger will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function. While the examples below showcase GDB commands, you can find the LLDB equivalents [here](https://lldb.llvm.org/use/map.html).
 
 ```sh
 [Detaching after vfork from child process 370003]
@@ -134,7 +134,7 @@ Thread 1 "cargo-stylus" hit Breakpoint 1, stylus_hello_world::user_entrypoint (l
 (gdb)
 ```
 
-5. **Debugging with GDB / LLDB**: Now, set a breakpoint at the `increment()` method:
+5. **Debugging**: Now, set a breakpoint at the `increment()` method:
 
 ```sh
 (gdb) b stylus_hello_world::Counter::increment
@@ -188,9 +188,6 @@ This will produce a trace of the functions called and [ink](https://docs.arbitru
 
 ### RPC endpoint compatibility
 
-Both `cargo stylus replay` and `cargo stylus trace` rely on RPC endpoints to fetch transaction and tracing data. However, their requirements differ slightly:
-
-- **cargo stylus trace**: Requires an RPC endpoint that supports `debug_traceTransaction` using the `stylusTracer`. This is generally available on nodes configured for Stylus or compatible third-party RPC providers.
-- **cargo stylus replay**: While it also uses the `stylusTracer`, this command is designed for local debugging. A local node (e.g., Arbitrum Sepolia or Stylus dev node) is highly recommended to ensure accurate debugging and control over the environment.
-
-For live networks, you can use third-party RPC providers that support `debug_traceTransaction` with the `stylusTracer`. See the list of providers that offer this support [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
+Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
+By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is applied, which is widely supported.
+See this [list of RPC providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support.
