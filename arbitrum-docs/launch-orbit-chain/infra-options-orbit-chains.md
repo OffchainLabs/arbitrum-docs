@@ -59,12 +59,13 @@ One way to reduce transaction fees for Orbit chains is to configure a Data Avail
 
 Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
 
-- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
 - [Alchemy](https://www.alchemy.com/)
-- [The Graph](https://thegraph.com/)
+- [Chainstack](https://chainstack.com/)
 - [Goldsky](https://goldsky.com/)
 - [Ormi](https://www.ormilabs.xyz/)
+- [The Graph](https://thegraph.com/)
 - [Traceye](https://traceye.io/)
+- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
 
 ## Oracles
 
