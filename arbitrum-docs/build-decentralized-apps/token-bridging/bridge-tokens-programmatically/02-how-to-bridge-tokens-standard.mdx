@@ -172,7 +172,7 @@ As mentioned before, you can also call the method `outboundTransferCustomRefund`
 
 ## Step 5: Wait for execution on L2
 
-After calling the deposit method (or the `outboundTransferCustomRefund`, if you’re choosing the manual way), you’ll have to wait a bit until the message is executed on L2. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page, to know more about [L1-to-L2 messages, also known as retryables](/how-arbitrum-works/arbos/l1-l2-messaging.md).
+After calling the deposit method (or the `outboundTransferCustomRefund`, if you’re choosing the manual way), you’ll have to wait a bit until the message is executed on L2. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page, to know more about [L1-to-L2 messages, also known as retryables](/how-arbitrum-works/arbos/l1-l2-messaging.mdx).
 
 You can programmatically wait for the execution of the transaction on L2 using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the L2 transaction.
 
