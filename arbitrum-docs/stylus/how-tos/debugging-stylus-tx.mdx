@@ -8,8 +8,6 @@ content_type: how-to
 sidebar_position: 2
 ---
 
-import MacosVerifyTxIssueBannerPartial from '../../partials/_macos-verify-tx-issue-banner-partial.mdx';
-
 Debugging smart contracts can be challenging, especially when dealing with complex transactions. The `cargo-stylus` crate simplifies the debugging process by allowing developers to replay Stylus transactions. This tool leverages GDB to provide an interactive debugging experience, enabling developers to set breakpoints, inspect state changes, and trace the execution flow step-by-step. This capability is crucial for identifying and resolving issues, ensuring that smart contracts function correctly and efficiently.
 
 ### Overview
@@ -29,7 +27,7 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
 - **Local Arbitrum Sepolia node** with tracing endpoints enabled or a [local Stylus dev node](https://arbitrum-docs-ncyp5gty1-offchain-labs.vercel.app/run-arbitrum-node/run-local-dev-node)
 
-`cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) against the Rust source code.
+`cargo stylus replay` allows users to debug the execution of a Stylus transaction using [GDB](https://sourceware.org/gdb/) or [LLDB](https://lldb.llvm.org/) against the Rust source code.
 
 ### Installation and setup
 
@@ -39,13 +37,13 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 cargo install cargo-stylus
 ```
 
-If on Linux or Windows, install GDB if it's not already installed:
+If on Linux, install GDB if it's not already installed:
 
 ```sh
 sudo apt-get install gdb
 ```
 
-If on MacOS, you should have LLDB installed already. If you don't you can install it with:
+If on MacOS, you should have LLDB installed already. If you do not, you can install it with:
 
 ```sh
 xcode-select --install
@@ -173,7 +171,7 @@ Options:
   -p, --project <PROJECT>    Project path [default: .]
   -h, --help                 Print help
   -V, --version              Print version
-      --use-native-tracer:   Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
+      --use-native-tracer    Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
 Run the following command to obtain a trace output:
