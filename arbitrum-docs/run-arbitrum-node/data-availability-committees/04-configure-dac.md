@@ -21,7 +21,7 @@ In this how-to, you'll learn how to configure the DAC in your chain. Refer to th
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.md)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 - [How to deploy a Data Availability Server (DAS)](/run-arbitrum-node/data-availability-committees/02-deploy-das.md). This is needed to understand where the data we'll be handling in this guide comes from.
 - The [Foundry toolkit](https://github.com/foundry-rs/foundry)

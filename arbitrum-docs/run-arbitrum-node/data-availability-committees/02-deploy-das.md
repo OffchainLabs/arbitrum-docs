@@ -22,7 +22,7 @@ For more information related to configuring a DAC, refer to the _[Introduction](
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.md)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?

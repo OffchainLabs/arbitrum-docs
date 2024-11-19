@@ -176,11 +176,11 @@ Represents a user deposit from L1 to L2. This increases the user's balance by th
 
 ### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]{#ArbitrumSubmitRetryableTx}
 
-Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
+Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.mdx#Retryables) for more info.
 
 ### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
-These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.md#Retryables) for more info.
+These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.mdx#Retryables) for more info.
 
 ### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
@@ -228,7 +228,7 @@ Nitro's Geth may be configured with the following [l2-specific chain parameters]
 
 ### `EnableArbos`
 
-Introduces [ArbOS](/how-arbitrum-works/arbos/introduction.md), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
+Introduces [ArbOS](/how-arbitrum-works/arbos/introduction.mdx), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
 
 ### `AllowDebugPrecompiles`
 
@@ -256,7 +256,7 @@ To aid with [outbox proof construction][proof_link], the root hash and leaf coun
 
 ### Retryable Support
 
-Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/arbos/introduction.md#retryables). Some modifications were required in Geth to support them.
+Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/arbos/introduction.mdx#retryables). Some modifications were required in Geth to support them.
 
 - Added ScheduledTxes field to ExecutionResult. This lists transactions scheduled during the execution. To enable using this field, we also pass the ExecutionResult to callers of ApplyTransaction.
 - Added gasEstimation param to DoCall. When enabled, DoCall will also also executing any retryable activated by the original call. This allows estimating gas to enable retryables.
