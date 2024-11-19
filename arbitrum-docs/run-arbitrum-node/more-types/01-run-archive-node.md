@@ -78,7 +78,7 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
 | -                                                          | `--node.cache.allow-slow-lookup`            | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache.                                            |
 | -                                                          | `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum One Classic** archival node.                                                                                                                                   |
 
-=======
+
 | Arbitrum Nitro | Arbitrum Classic | Description |
 | ---------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `--parent-chain.connection.url=<Layer 1 Ethereum RPC URL>` | `--l1.url=<Layer 1 Ethereum RPC URL>` | Provide an standard L1 node RPC endpoint that you run yourself or from a third-party node provider (see [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx)) |
@@ -87,7 +87,6 @@ The minimum storage requirements will change as the Nitro chains grow (growing r
 | - | `--node.cache.allow-slow-lookup` | Required for running an **Arbitrum One Classic** archival node. When this option is present, it will load old blocks from disk if not in memory cache. |
 | - | `--core.checkpoint-gas-frequency=156250000` | Required for running an **Arbitrum One Classic** archival node. |
 
-> > > > > > > 902b67ee (convert md to mdx build-dapps-reference)
 
 ### Run the Docker image(s)
 
