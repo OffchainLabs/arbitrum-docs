@@ -10,11 +10,11 @@ sidebar_position: 3
 
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
 
-The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md#list-of-available-arbos-releases).
+The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx#list-of-available-arbos-releases).
 
 #### Step 1: Update Nitro on nodes and validators
 
-Refer to the [requirements for the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.1` (Docker image: `offchainlabs/nitro-node:v2.3.1-26fad6f`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
+Refer to the [requirements for the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx) to identify the specific [Nitro release](https://github.com/OffchainLabs/nitro/releases/) that supports the ArbOS version that you're upgrading to. For example, if your upgrade targets ArbOS 20, you'd use Nitro `v2.3.1` (Docker image: `offchainlabs/nitro-node:v2.3.1-26fad6f`) or higher. This is the version of the Nitro stack that needs to be running on each of your Orbit chain's nodes. A list of [all Nitro releases can be found on Github](https://github.com/OffchainLabs/nitro/releases).
 
 Begin by upgrading your validator node(s) to the specified Nitro version, then update each remaining Orbit node to match this version.
 
@@ -24,9 +24,9 @@ Note that upgrading your node version _must occur_ before the deadline establish
 
 While every ArbOS upgrade will require an update to the Wasm module root, not every ArbOS upgrade will require an upgrade to the chain's `nitro-contracts` version.
 
-If necessary, as defined in the release notes for each ArbOS release ([example of ArbOS 20](../../run-arbitrum-node/arbos-releases/arbos20.md)), you may need to deploy new versions of some (or all) of the Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, bridging logic, fraud-proof contracts, and interfaces for interacting with Nitro precompiles. To verify the current version of your Nitro contracts, follow [these instructions](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) while replacing the inbox contract address and network name with that of your Orbit chain. This information will allow you to find the correct upgrade path for your Nitro contracts.
+If necessary, as defined in the release notes for each ArbOS release ([example of ArbOS 20](../../run-arbitrum-node/arbos-releases/arbos20.mdx)), you may need to deploy new versions of some (or all) of the Nitro contracts to the parent chain of your Orbit chain. These contracts include the rollup logic, bridging logic, fraud-proof contracts, and interfaces for interacting with Nitro precompiles. To verify the current version of your Nitro contracts, follow [these instructions](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) while replacing the inbox contract address and network name with that of your Orbit chain. This information will allow you to find the correct upgrade path for your Nitro contracts.
 
-To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs (obtained from the [requirements for the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md)):
+To update the Wasm module root and deploy your chain's Nitro contracts to the parent chain for the most recent ArbOS release, you will need the following inputs (obtained from the [requirements for the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx)):
 
 - The WASM module root, and if necessary,
 - The required `nitro-contracts` version
@@ -68,8 +68,8 @@ When scheduling the ArbOS upgrade through `ArbOwner.scheduleArbOSUpgrade` you mu
 
 #### Step 4: Enable ArbOS specific configurations or feature flags (not always required)
 
-For some ArbOS upgrades, such as [ArbOS 20 Atlas](/run-arbitrum-node/arbos-releases/arbos20.md), there may be additional requirements or steps that need to be satisfied to ensure your Orbit chain can use all of the new features and improvements made available in that particular ArbOS release.
+For some ArbOS upgrades, such as [ArbOS 20 Atlas](/run-arbitrum-node/arbos-releases/arbos20.mdx), there may be additional requirements or steps that need to be satisfied to ensure your Orbit chain can use all of the new features and improvements made available in that particular ArbOS release.
 
-If there are additional requirements for the targeted ArbOS release you're attempting to upgrade to; the additional requirements will be listed on the reference pages for [the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.md#list-of-available-arbos-releases). For example, the additional requirements for Orbit chains upgrading to ArbOS 20 can be found [here on the ArbOS 20 docs](/run-arbitrum-node/arbos-releases/arbos20.md).
+If there are additional requirements for the targeted ArbOS release you're attempting to upgrade to; the additional requirements will be listed on the reference pages for [the targeted ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx#list-of-available-arbos-releases). For example, the additional requirements for Orbit chains upgrading to ArbOS 20 can be found [here on the ArbOS 20 docs](/run-arbitrum-node/arbos-releases/arbos20.mdx).
 
 Congratulations! You've upgraded your Orbit chain(s) to the specified ArbOS version.

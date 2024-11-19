@@ -16,7 +16,7 @@ Before customizing your Orbit chain, it's important to understand what the State
 The STF defines how new blocks are produced from input messages (i.e. transactions).
 This guide is only necessary for changes that modify the State Transition Function.
 To customize other node behavior, such as RPC behavior or the sequencer's ordering policy, you can simply
-[build your own node](/run-arbitrum-node/nitro/01-build-nitro-locally.md) without worrying about the rest of this guide.
+[build your own node](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx) without worrying about the rest of this guide.
 However, changes that modify the STF require updating the fraud proving system to recognize the new behavior as correct.
 Otherwise, the fraud prover would side with unmodified nodes, which would win fraud proofs against your modified node.
 
@@ -136,7 +136,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.md) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
