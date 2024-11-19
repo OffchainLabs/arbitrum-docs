@@ -120,7 +120,7 @@ Options:
 --use-native-tracer: Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
-**Note:** The `--use-native-tracer` flag enables `stylusTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
+**Note:** The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
 
 The debugger will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function. While the examples below showcase GDB commands, you can find the LLDB equivalents [here](https://lldb.llvm.org/use/map.html).
 
@@ -187,5 +187,6 @@ This will produce a trace of the functions called and [ink](https://docs.arbitru
 ### RPC endpoint compatibility
 
 Both `cargo stylus trace` and `cargo stylus replay` require an RPC endpoint that supports `debug_traceTransaction`.
-By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is applied, which is widely supported.
+By default, the `jsTracer` type is used, which is not supported by most RPC providers. If the `--use-native-tracer` flag is used, the `stylusTracer` type is used, which is supported by many RPC providers.
+Both `jsTracer` and `stylusTracer` are available on local nodes, but `stylusTracer` is more efficient.
 See this [list of RPC providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) for tracing support.
