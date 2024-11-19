@@ -21,8 +21,6 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 
 ### Replaying transactions
 
-<MacosVerifyTxIssueBannerPartial />
-
 #### Requirements
 
 - **Rust** (version 1.77 or higher)
@@ -115,11 +113,11 @@ Options:
 ```sh
 --tx: Specifies the transaction hash to replay.
 --endpoint: Specifies the RPC endpoint for fetching transaction data.
---use-native-tracer: Utilizes the native Stylus tracer for enhanced debugging. This tracer is specifically designed for the Stylus runtime and improves debugging accuracy.
+--use-native-tracer: Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
 :::caution Supported RPC Endpoints Only
-The `--use-native-tracer` flag requires access to an RPC endpoint with Stylus tracing support, See the list of providers that support Stylus tracing [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
+The `--use-native-tracer` flag requires access to an RPC endpoint with Stylus tracing support, see the list of providers that support Stylus tracing [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
 :::
 
 GDB will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function.
@@ -169,6 +167,7 @@ Options:
   -p, --project <PROJECT>    Project path [default: .]
   -h, --help                 Print help
   -V, --version              Print version
+      --use-native-tracer:   Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
 Run the following command to obtain a trace output:
@@ -189,4 +188,5 @@ Both `cargo stylus replay` and `cargo stylus trace` rely on RPC endpoints to fet
 
 - **cargo stylus trace**: Requires an RPC endpoint that supports `debug_traceTransaction` using the `stylusTracer`. This is generally available on nodes configured for Stylus or compatible third-party RPC providers.
 - **cargo stylus replay**: While it also uses the `stylusTracer`, this command is designed for local debugging. A local node (e.g., Arbitrum Sepolia or Stylus dev node) is highly recommended to ensure accurate debugging and control over the environment.
-  For live networks, you can use third-party RPC providers that support `debug_traceTransaction` with the stylusTracer. See the list of providers that offer this support [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
+
+For live networks, you can use third-party RPC providers that support `debug_traceTransaction` with the `stylusTracer`. See the list of providers that offer this support [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
