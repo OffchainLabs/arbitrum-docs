@@ -25,7 +25,7 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 
 - **Rust** (version 1.77 or higher)
 - **Crate**: `cargo-stylus`
-- **GNU Debugger (GDB)**
+- **GNU Debugger (GDB)** (Linux) or **LLDB (via Xcode Command Line Tools)**(MacOS)
 - **[Cast](https://book.getfoundry.sh/cast/)** (an Ethereum CLI tool)
 - **Local Arbitrum Sepolia node** with tracing endpoints enabled or a [local Stylus dev node](https://arbitrum-docs-ncyp5gty1-offchain-labs.vercel.app/run-arbitrum-node/run-local-dev-node)
 
@@ -39,10 +39,16 @@ Cargo Stylus is a tool designed to simplify the development and debugging proces
 cargo install cargo-stylus
 ```
 
-Install GDB if it's not already installed:
+If on Linux or Windows, install GDB if it's not already installed:
 
 ```sh
 sudo apt-get install gdb
+```
+
+If on MacOS, you should have LLDB installed already. If you don't you can install it with:
+
+```sh
+xcode-select --install
 ```
 
 2. **Deploy your Stylus contract**: For this guide, we demonstrate how to debug the execution of the `increment()` method in the [stylus-hello-world](https://github.com/OffchainLabs/stylus-hello-world) smart contract. In Rust, it looks something like this, within `src/lib.rs`:
@@ -120,7 +126,7 @@ Options:
 The `--use-native-tracer` flag requires access to an RPC endpoint with Stylus tracing support, see the list of providers that support Stylus tracing [here](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers).
 :::
 
-GDB will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function.
+GDB / LLDB will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function.
 
 ```sh
 [Detaching after vfork from child process 370003]
@@ -130,7 +136,7 @@ Thread 1 "cargo-stylus" hit Breakpoint 1, stylus_hello_world::user_entrypoint (l
 (gdb)
 ```
 
-5. **Debugging with GDB**: Now, set a breakpoint at the `increment()` method:
+5. **Debugging with GDB / LLDB**: Now, set a breakpoint at the `increment()` method:
 
 ```sh
 (gdb) b stylus_hello_world::Counter::increment
