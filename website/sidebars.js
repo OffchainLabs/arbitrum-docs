@@ -516,6 +516,11 @@ const sidebars = {
           ],
         },
         {
+          type: 'doc',
+          id: 'stylus/using-stylus-cli',
+          label: 'Using Stylus CLI',
+        },
+        {
           type: 'category',
           label: 'Concepts',
           collapsed: true,

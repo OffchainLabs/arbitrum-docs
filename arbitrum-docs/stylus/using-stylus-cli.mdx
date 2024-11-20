@@ -1,0 +1,115 @@
+---
+id: using-stylus-cli
+title: 'Using Stylus CLI'
+description: 'Get started with Stylus CLI, a Rust toolkit for developing Stylus contracts'
+author: 'anegg0'
+sme: 'anegg0'
+sidebar_position: 2
+target_audience: Developers writing Stylus contracts in Rust using Stylus
+---
+
+This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
+
+## Setting up your development environment
+
+### Prerequisites
+
+<details>
+<summary>Rust toolchain</summary>
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</details>
+
+<details>
+<summary>VS Code</summary>
+
+We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
+
+Some helpful VS Code extensions for Rust development:
+
+- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
+- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
+- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
+- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
+
+ </details>
+
+<details>
+<summary>Docker</summary>
+
+The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
+
+You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
+
+</details>
+
+<details>
+<summary>Foundry's Cast</summary>
+
+[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
+
+</details>
+
+<details>
+<summary>Nitro devnode</summary>
+
+Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
+
+```shell title="Install your devnode"
+git clone https://github.com/OffchainLabs/nitro-devnode.git
+cd nitro-devnode
+```
+
+```shell title="Launch your devnode"
+./run-dev-node.sh
+```
+
+</details>
+
+[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
+
+It is available as a plugin to the standard cargo tool used for developing Rust programs.
+
+### Installing cargo stylus
+
+In your terminal, run:
+
+```shell
+cargo install --force cargo-stylus
+```
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.80 as well as adding the WASM build target:
+
+```shell
+rustup default 1.80
+rustup target add wasm32-unknown-unknown --toolchain 1.80
+```
+
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
+
+```shell title="cargo stylus --help returns:"
+Cargo command for developing Stylus projects
+
+Usage: cargo stylus <COMMAND>
+
+Commands:
+  new         Create a new Stylus project
+  init        Initializes a Stylus project in the current directory
+  export-abi  Export a Solidity ABI
+  activate    Activate an already deployed contract [aliases: a]
+  cache       Cache a contract using the Stylus CacheManager for Arbitrum chains
+  check       Check a contract [aliases: c]
+  deploy      Deploy a contract [aliases: d]
+  verify      Verify the deployment of a Stylus contract [aliases: v]
+  cgen        Generate c code bindings for a Stylus contract
+  replay      Replay a transaction in gdb [aliases: r]
+  trace       Trace a transaction [aliases: t]
+  help        Print this message or the help of the given command(s)
+
+Options:
+  -h, --help     Print help
+  -V, --version  Print version
+```
+
+Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
