@@ -463,6 +463,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
+          label: 'BoLD for Orbit chains',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
