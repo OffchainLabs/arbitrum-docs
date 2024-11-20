@@ -209,7 +209,7 @@ You might wonder why we need the rollup protocol. If everyone knows the results 
 
 With those preliminaries behind us, let’s jump into the details of the rollup protocol.
 
-The parties who participate in the protocol are called _validators_. Some validators will choose to be stakers--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be staked, since as long as it's staked on the current outcome, and there are no conflicting claims, there's no need for other parties to stake / take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/stakers are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
+The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
 The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
 
@@ -218,6 +218,12 @@ The key security property of the rollup protocol is that any one honest validato
 The rollup protocol tracks a chain of rollup blocks---we'll call these "RBlocks" for clarity. They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 Nitro blocks. You can think of the RBlocks as forming a separate chain, which the Arbitrum rollup protocol manages and oversees.
 
 Validators can propose RBlocks. New RBlocks will be _unresolved_ at first. Eventually every RBlock will be _resolved_, by being either _confirmed_ or _rejected_. The confirmed RBlocks make up the confirmed history of the chain.
+
+:::note
+
+Validators and proposers serve different roles. Validators validate transactions to the State Transition Function (STF) and chain state, whereas proposers can also assert and challenge the chain state. 
+
+:::
 
 Each RBlock contains:
 
@@ -233,7 +239,7 @@ An RBlock is implicitly claiming that its predecessor RBlock is correct. This im
 
 An RBlock is also implicitly claiming that its older siblings (older RBlocks with the same predecessor), if there are any, are incorrect. If two RBlocks are siblings, and the older sibling is correct, then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
-The RBlock is assigned a deadline, which says how long other validators have to respond to it. If you’re a validator, and you agree that an RBlock is correct, you don’t need to do anything. If you disagree with an RBlock, you can post another RBlock with a different result, and you’ll probably end up in a challenge against the first RBlock's staker. (More on challenges below.)
+The RBlock is assigned a deadline, which says how long other validators have to respond to it. If you’re a validator, and you agree that an RBlock is correct, you don’t need to do anything. If you disagree with an RBlock, you can post another RBlock with a different result, and you’ll probably end up in a challenge against the first RBlock's bonder. (More on challenges below.)
 
 In the normal case, the rollup chain will look like this:
 
@@ -322,31 +328,31 @@ There’s a lot going on here, so let’s unpack it.
 - RBlock 110 claims to follow 109. It is unresolved. If 109 is rejected, 110 will be automatically rejected too.
 - RBlock 111 claims to follow 104. 111 will inevitably be rejected because its predecessor has already been rejected. But it hasn’t been rejected yet, because the protocol resolves RBlocks in RBlock number order, so the protocol will have to resolve 106 through 110, in order, before it can resolve 111. After 110 has been resolved, 111 can be rejected immediately.
 
-Again: this sort of thing is very unlikely in practice. In this diagram, at least four parties must have staked on wrong RBlocks, and when the dust settles at least four parties will have lost their stakes. The protocol handles these cases correctly, of course, but they’re rare corner cases. This diagram is designed to illustrate the variety of situations that are possible in principle, and how the protocol would deal with them.
+Again: this sort of thing is very unlikely in practice. In this diagram, at least four parties must have bonded on wrong RBlocks, and when the dust settles at least four parties will have lost their bonds. The protocol handles these cases correctly, of course, but they’re rare corner cases. This diagram is designed to illustrate the variety of situations that are possible in principle, and how the protocol would deal with them.
 
 ### Staking
 
-At any given time, some validators will be stakers, and some will not. Stakers deposit funds that are held by the Arbitrum Layer 1 contracts and will be confiscated if the staker loses a challenge. Nitro chains accept stakes in ETH.
+At any given time, some validators will be bonders, and some will not. Bonders deposit funds that are held by the Arbitrum Layer 1 contracts and will be confiscated if the bonder loses a challenge. Nitro chains accept bonds in ETH.
 
-A single stake can cover a chain of RBlocks. Every staker is staked on the latest confirmed RBlock; and if you’re staked on an RBlock, you can also stake on one successor of that RBlock. So you might be staked on a sequence of RBlocks that represent a single coherent claim about the correct history of the chain. A single stake suffices to commit you to that sequence of RBlocks.
+A single bond can cover a chain of RBlocks. Every bonder is bonded on the latest confirmed RBlock; and if you’re bonded on an RBlock, you can also bond on one successor of that RBlock. So you might be bonded on a sequence of RBlocks that represent a single coherent claim about the correct history of the chain. A single bond suffices to commit you to that sequence of RBlocks.
 
-In order to create a new RBlock, you must be a staker, and you must already be staked on the predecessor of the new RBlock you’re creating. The stake requirement for RBlock creation ensures that anyone who creates a new RBlock has something to lose if that RBlock is eventually rejected.
+In order to create a new RBlock, you must be a bonder, and you must already be bonded on the predecessor of the new RBlock you’re creating. The bond requirement for RBlock creation ensures that anyone who creates a new RBlock has something to lose if that RBlock is eventually rejected.
 
-The protocol keeps track of the current required stake amount. Normally this will equal the base stake amount, which is a parameter of the Nitro chain. But if the chain has been slow to make progress lately, the required stake will increase, as described in more detail below.
+The protocol keeps track of the current required bond amount. Normally this will equal the base bond amount, which is a parameter of the Nitro chain. But if the chain has been slow to make progress lately, the required bond will increase, as described in more detail below.
 
 The rules for staking are as follows:
 
-- If you’re not staked, you can stake on the latest confirmed RBlock. When doing this, you deposit the current minimum stake amount.
-- If you’re staked on an RBlock, you can also add your stake to any one successor of that RBlock. (The protocol tracks the maximum RBlock number you’re staked on, and lets you add your stake to any successor of that RBlock, updating your maximum to that successor.) This doesn’t require you to place a new stake.
-  - A special case of adding your stake to a successor RBlock is when you create a new RBlock as a successor to an RBlock you’re already staked on.
-- If you’re staked only on the latest confirmed RBlock (and possibly earlier RBlocks), you or anyone else can ask to have your stake refunded. Your staked funds will be returned to you, and you will no longer be a staker.
-- If you lose a challenge, your stake is removed from all RBlocks and you forfeit your staked funds.
+- If you’re not bonded, you can bond on the latest confirmed RBlock. When doing this, you deposit the current minimum bond amount.
+- If you’re bonded on an RBlock, you can also add your bond to any one successor of that RBlock. (The protocol tracks the maximum RBlock number you’re bonded on, and lets you add your bond to any successor of that RBlock, updating your maximum to that successor.) This doesn’t require you to place a new bond.
+  - A special case of adding your bond to a successor RBlock is when you create a new RBlock as a successor to an RBlock you’re already bonded on.
+- If you’re bonded only on the latest confirmed RBlock (and possibly earlier RBlocks), you or anyone else can ask to have your bond refunded. Your bonded funds will be returned to you, and you will no longer be a bonder.
+- If you lose a challenge, your bond is removed from all RBlocks and you forfeit your bonded funds.
 
-Notice that once you are staked on an RBlock, there is no way to unstake. You are committed to that RBlock. Eventually one of two things will happen: that RBlock will be confirmed, or you will lose your stake. The only way to get your stake back is to wait until all of the RBlocks you are staked on are confirmed.
+Notice that once you are bonded on an RBlock, there is no way to unbond. You are committed to that RBlock. Eventually one of two things will happen: that RBlock will be confirmed, or you will lose your bond. The only way to get your bond back is to wait until all of the RBlocks you are bonded on are confirmed.
 
-#### Setting the current minimum stake amount
+#### Setting the current minimum bond amount
 
-One detail we deferred earlier is how the current minimum stake amount is set. Normally, this is just equal to the base stake amount, which is a parameter of the Nitro chain. However, if the chain has been slow to make progress in confirming RBlocks, the stake requirement will escalate temporarily. Specifically, the base stake amount is multiplied by a factor that is exponential in the time since the deadline of the first unresolved RBlock passed. This ensures that if malicious parties are placing false stakes to try to delay progress (despite the fact that they’re losing those stakes), the stake requirement goes up so that the cost of such a delay attack increases exponentially. As RBlock resolution starts advancing again, the stake requirement will go back down.
+One detail we deferred earlier is how the current minimum bond amount is set. Normally, this is just equal to the base bond amount, which is a parameter of the Nitro chain. However, if the chain has been slow to make progress in confirming RBlocks, the bond requirement will escalate temporarily. Specifically, the base bond amount is multiplied by a factor that is exponential in the time since the deadline of the first unresolved RBlock passed. This ensures that if malicious parties are placing false bonds to try to delay progress (despite the fact that they’re losing those bonds), the bond requirement goes up so that the cost of such a delay attack increases exponentially. As RBlock resolution starts advancing again, the bond requirement will go back down.
 
 ### Rules for Confirming or Rejecting RBlocks
 
@@ -356,18 +362,18 @@ The first unresolved RBlock can be confirmed if:
 
 - the RBlock's predecessor is the latest confirmed RBlock, and
 - the RBlock's deadline has passed, and
-- there is at least one staker, and
-- all stakers are staked on the RBlock.
+- there is at least one bonder, and
+- all bondrs are bonded on the RBlock.
 
 The first unresolved RBlock can be rejected if:
 
 - the RBlock's predecessor has been rejected, or
 - all of the following are true:
   - the RBlock's deadline has passed, and
-  - there is at least one staker, and
-  - no staker is staked on the RBlock.
+  - there is at least one bonder, and
+  - no bonder is bonded on the RBlock.
 
-A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one staker staked on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one staker is staked on it and at least one staker is staked on a different RBlock with the same predecessor. If this happens, the two stakers are disagreeing about which RBlock is correct. It’s time for a challenge, to resolve the disagreement.
+A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one bonder bonded on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one bonder is bonded on it and at least one bonder is bonded on a different RBlock with the same predecessor. If this happens, the two bonders are disagreeing about which RBlock is correct. It’s time for a challenge, to resolve the disagreement.
 
 ## Challenges
 
@@ -375,11 +381,11 @@ Suppose the rollup chain looks like this:
 
 ![img](https://lh4.googleusercontent.com/kAZY9H73dqcHvboFDby9nrtbYZrbsHCYtE5X9NIZQsvcz58vV0WUWUq1xsYKzYWQSc1nPZ8W86LLX0lD3y-ctEaG2ISa2Wpz2pYxTzW09P1UvqSDuoqkHlGDYLLMTzLqX4rlP8Ca)
 
-RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is staked on 93 and Bob is staked on 95.
+RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is bonded on 93 and Bob is bonded on 95.
 
-At this point we know that Alice and Bob disagree about the correctness of RBlock 93, with Alice committed to 93 being correct and Bob committed to 93 being incorrect. (Bob is staked on 95, and 95 implicitly claims that 92 is the last correct RBlock before it, which implies that 93 must be incorrect.)
+At this point we know that Alice and Bob disagree about the correctness of RBlock 93, with Alice committed to 93 being correct and Bob committed to 93 being incorrect. (Bob is bonded on 95, and 95 implicitly claims that 92 is the last correct RBlock before it, which implies that 93 must be incorrect.)
 
-Whenever two stakers are staked on sibling RBlocks, and neither of those stakers is already in a challenge, anyone can start a challenge between the two. The rollup protocol will record the challenge and referee it, eventually declaring a winner and confiscating the loser’s stake. The loser will be removed as a staker.
+Whenever two bonders are bonded on sibling RBlocks, and neither of those bonders is already in a challenge, anyone can start a challenge between the two. The rollup protocol will record the challenge and referee it, eventually declaring a winner and confiscating the loser’s bond. The loser will be removed as a bonder.
 
 The challenge is a game in which Alice and Bob alternate moves, with an Ethereum contract as the referee. Alice, the defender, moves first.
 
@@ -439,18 +445,18 @@ Offchain Labs provides open source validator software, including a pre-built Doc
 
 Every validator can choose their own approach, but we expect validators to follow three common strategies:
 
-- The _active validator_ strategy tries to advance the state of the chain by proposing new RBlocks. An active validator is always staked, because creating an RBlock requires being staked. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
-- The _defensive validator_ strategy watches the rollup protocol operate. If only correct RBlocks are proposed, this strategy doesn't stake. But if an incorrect RBlock is proposed, this strategy intervenes by posting a correct RBlock or staking on a correct RBlock that another party has posted. This strategy avoids staking when things are going well, but if someone is dishonest it stakes in order to defend the correct outcome.
-- The _watchtower validator_ strategy never stakes. It simply watches the rollup protocol and if an incorrect RBlock is proposed, it raises the alarm (by whatever means it chooses) so that others can intervene. This strategy assumes that other parties who are willing to stake will be willing to intervene in order to take some of the dishonest proposer’s stake, and that that can happen before the dishonest RBlock’s deadline expires. (In practice this will allow several days for a response.)
+- The _active validator_ strategy tries to advance the state of the chain by proposing new RBlocks. An active validator is always bonded, because creating an RBlock requires being bonded. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
+- The _defensive validator_ strategy watches the rollup protocol operate. If only correct RBlocks are proposed, this strategy doesn't bond. But if an incorrect RBlock is proposed, this strategy intervenes by posting a correct RBlock or staking on a correct RBlock that another party has posted. This strategy avoids staking when things are going well, but if someone is dishonest it bonds in order to defend the correct outcome.
+- The _watchtower validator_ strategy never bonds. It simply watches the rollup protocol and if an incorrect RBlock is proposed, it raises the alarm (by whatever means it chooses) so that others can intervene. This strategy assumes that other parties who are willing to bond will be willing to intervene in order to take some of the dishonest proposer’s bond, and that that can happen before the dishonest RBlock’s deadline expires. (In practice this will allow several days for a response.)
 
 Under normal conditions, validators using the defensive and watchtower strategies won’t do anything except observe. A malicious actor who is considering whether to try cheating won’t be able to tell how many defensive and watchtower validators are operating incognito. Perhaps some defensive validators will announce themselves, but others probably won’t, so a would-be attacker will always have to worry that defenders are waiting to emerge.
 
-The underlying protocol supports permissionless validation, i.e.,--anyone can do it. Currently on Arbitrum One, validators that require stake (i.e., active and defensive validators) are whitelisted; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization).
+The underlying protocol supports permissionless validation, i.e.,--anyone can do it. Currently on Arbitrum One, validators that require bond (i.e., active and defensive validators) are whitelisted; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization).
 
 Who will be validators? Anyone will be able to do it, but most people will choose not to. In practice we expect people to validate a chain for several reasons.
 
 - Validators could be paid for their work, by the party that created the chain or someone else. A chain could be configured such that a portion of the funds from user transaction fees are paid directly to validators.
-- Parties who have significant assets at stake on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
+- Parties who have significant assets at bond on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.
 
 ## ArbOS
@@ -606,7 +612,7 @@ The total fee charged to a transaction is the L2 basefee, multiplied by the sum 
 
 AnyTrust is a variant of Arbitrum Nitro technology that lowers costs by accepting a mild trust assumption.
 
-The Arbitrum protocol requires that all Arbitrum nodes, including validators (nodes that verify correctness of the chain and are prepared to stake on correct results), have access to the data of every L2 transaction in the Arbitrum chain's inbox. An Arbitrum rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as calldata. The Ethereum gas to pay for this is the largest component of cost in Arbitrum.
+The Arbitrum protocol requires that all Arbitrum nodes, including validators (nodes that verify correctness of the chain and are prepared to bond on correct results), have access to the data of every L2 transaction in the Arbitrum chain's inbox. An Arbitrum rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as calldata. The Ethereum gas to pay for this is the largest component of cost in Arbitrum.
 
 AnyTrust relies instead on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand. The Committee has N members, of which AnyTrust assumes at least two are honest. This means that if N - 1 Committee members promise to provide access to some data, at least one of the promising parties must be honest. Since there are two honest members, and only one failed to make the promise, it follows that at least one of the promisers must be honest — and that honest member will provide data when it is needed to ensure the chain can properly function.
 
