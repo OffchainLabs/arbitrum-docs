@@ -112,4 +112,59 @@ Options:
   -V, --version  Print version
 ```
 
+
+Cargo Stylus Commands
+
+| Command | Description                 | Options                         |
+|---------|-----------------------------|---------------------------------|
+| new     | Create a new Stylus project | • name: Project name (required) |
+• --minimal: Create a minimal contract |
+| init | Initialize a Stylus project in current directory | • --minimal: Create a minimal contract |
+| export-abi | Export a Solidity ABI | • --output: Output file (defaults to stdout)
+• --json: Write JSON ABI using solc |
+| activate | Activate an already deployed contract | • --address: Contract address to activate
+• --data-fee-bump-percent: Percent to bump estimated fee (default 20%)
+• --estimate-gas: Only estimate gas without sending tx |
+| cache | Cache contract using Stylus CacheManager | Subcommands:
+• bid: Place bid on contract
+• status: Check contract status
+• suggest-bid: Get suggested minimum bid |
+| check | Check a contract | • --wasm-file: WASM to check
+• --contract-address: Deploy address |
+| deploy | Deploy a contract | • --estimate-gas: Only perform estimation
+• --no-verify: Skip reproducible container
+• --cargo-stylus-version: Version for Docker image |
+| verify | Verify contract deployment | • --deployment-tx: Hash of deployment tx
+• --no-verify: Skip reproducible container
+• --cargo-stylus-version: Version for Docker image |
+| cgen | Generate C code bindings | • input: Input file path
+• out_dir: Output directory path |
+| replay | Replay transaction in gdb | • --stable-rust: Use stable Rust
+• --child: Child process flag |
+| trace | Trace a transaction | • --endpoint: RPC endpoint
+• --tx: Transaction hash
+• --project: Project path
+• --use-native-tracer: Use native tracer |
+
+
+Common Options
+These options are available across multiple commands:
+| Option | Description |
+|--------|-------------|
+| --endpoint | Arbitrum RPC endpoint (default: http://localhost:8547) |
+| --verbose | Print debug info |
+| --source-files-for-project-hash | Paths to source files for project hash |
+| --max-fee-per-gas-gwei | Optional max fee per gas in gwei |
+Authentication Options
+Available for commands that interact with the blockchain:
+
+| Option | Description |
+|--------|-------------|
+| --private-key-path | Path to file containing hex-encoded private key |
+| --private-key | Private key as hex string (exposes to shell history) |
+| --keystore-path | Path to Ethereum wallet keystore file |
+| --keystore-password-path | Keystore password file path |
+
+
+
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
