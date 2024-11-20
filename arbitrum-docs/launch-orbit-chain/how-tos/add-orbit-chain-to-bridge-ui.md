@@ -10,7 +10,7 @@ This how-to will walk you through the process of adding your Orbit chain to the 
 
 ## Request adding a mainnet Orbit chain to the Arbitrum bridge
 
-Mainnet Orbit chains can be added to the Arbitrum Bridge by filling out [this form](https://forms.gle/LrVskEd3DTtXSPwx7).
+Mainnet Orbit chains can be added to the Arbitrum Bridge by filling out [this form](https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
 
 Once receiving your request, our team will review and apply internal criteria to include your chain in the bridge. Here are some of the criteria that a chain must follow to be added to the bridge:
 

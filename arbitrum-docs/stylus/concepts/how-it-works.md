@@ -37,9 +37,9 @@ EVM contracts continue to execute the same way they did before Stylus. When a co
 
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
-Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
+Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx#general-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
 
-For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.md) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
+For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 
 ### Why does this matter?
 

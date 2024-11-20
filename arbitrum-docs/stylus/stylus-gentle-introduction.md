@@ -32,13 +32,15 @@ While many developers will be drawn to new use cases, rebuilding existing applic
 - <b>Efficient On-Chain Verification with ZK-Proofs</b>: Enable cost-effective onchain verification
   using zero-knowledge proving systems for privacy, interoperability, and more (see [case
   study](https://blog.arbitrum.io/renegade-stylus-case-study/)).
-- <b>Advanced DeFi Instruments</b>: Power complex financial instruments and processes like custom pricing curves for AMMs, synthetic
-  assets, options, and futures with onchain computation via extending current protocols (ie. Uniswap
-  V4 hooks) or building your own.
+- <b>Advanced DeFi Instruments</b>: Power complex financial instruments and processes like custom
+  pricing curves for AMMs, synthetic assets, options, and futures with onchain computation via
+  extending current protocols (ie. Uniswap V4 hooks) or building your own.
 - <b>High-Performance On-Chain Logic</b>: Support memory and compute-intensive applications like
   onchain games and generative art either by writing all of the application in Stylus or enhance
   performance of existing Solidity contracts by optimizing specific parts.
-- <b>**Endless Possibilities**:</b> Enable innovative use cases such as generative art, compute-heavy AI models, on-chain games, and projects utilizing advanced cryptography, unlocking the full potential of resource-intensive applications on-chain.
+- <b>**Endless Possibilities**:</b> Enable innovative use cases such as generative art, compute-heavy
+  AI models, on-chain games, and projects utilizing advanced cryptography, unlocking the full potential
+  of resource-intensive applications on-chain.
 
 ### Getting Started
 
