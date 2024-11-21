@@ -814,136 +814,56 @@ const sidebars = {
       collapsed: true,
       items: [
         {
-          type: 'category',
-          label: 'Introductory concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/tx-lifecycle',
-              label: 'Transaction lifecycle',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/sequencer',
-              label: 'Sequencer',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/inside-anytrust',
-              label: 'AnyTrust protocol',
-            },
-            {
-              type: 'category',
-              label: 'Gas / fees',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/gas-fees',
-                  label: 'L2 gas and fees',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/l1-gas-pricing',
-                  label: 'L1 pricing',
-                },
-              ],
-            },
-          ],
+          type: 'doc',
+          id: 'how-arbitrum-works/a-gentle-introduction',
+          label: 'A gentle introduction',
         },
         {
-          type: 'category',
-          label: 'Advanced concepts',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/inside-arbitrum-nitro',
-              label: 'Deep dive: Inside Arbitrum',
-            },
-            {
-              type: 'link',
-              href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
-              label: 'Deeper dive: Whitepaper',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/assertion-tree',
-              label: 'Assertion tree',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/why-nitro',
-              label: 'Nitro vs. Classic',
-            },
-            {
-              type: 'category',
-              label: 'Cross-chain messaging',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/l1-l2-messaging',
-                  label: 'L1-to-L2 messaging',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/l2-l1-messaging',
-                  label: 'L2-to-L1 messaging',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'ArbOS',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/introduction',
-                  label: 'ArbOS',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/geth',
-                  label: 'Geth',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Fraud proofs',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/challenge-manager',
-                  label: 'Interactive challenges',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/osp-assumptions',
-                  label: 'One step proof assumptions',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wasm-wavm',
-                  label: 'Wasm To WAVM',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-custom-opcodes',
-                  label: 'Custom WAVM opcodes',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-floats',
-                  label: 'WAVM floats',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-modules',
-                  label: 'WAVM modules',
-                },
-              ],
-            },
+          type: 'doc',
+          id: 'how-arbitrum-works/transaction-lifecycle',
+          label: 'Transaction Lifecycle',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/sequencer',
+          label: 'Sequencer',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/state-transition-function',
+          label: 'State Transition Function',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/validation',
+          label: 'Validation',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/challenges',
+          label: 'Challenges',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/anytrust-protocol',
+          label: 'AnyTrust protocol',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/gas-fees',
+          label: 'Gas/fees',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/nitro-vs-classic',
+          label: 'Nitro vs. Classic',
+        },
+        {
+          type: 'link',
+          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+          label: 'Nitro whitepaper',
+        },
+
             {
               type: 'category',
               label: 'The BoLD dispute protocol',
@@ -996,8 +916,6 @@ const sidebars = {
               ],
             },
           ],
-        },
-      ],
     },
     {
       type: 'doc',
