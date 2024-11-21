@@ -9,10 +9,6 @@ sidebar_position: 3
 
 **Gas and ink** are the pricing primitives that are used to determine the cost of handling specific opcodes and host I/Os on Stylus. For an overview of specific opcode and host I/O costs, see [Gas and ink costs](/stylus/reference/opcode-hostio-pricing).
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 <!-- todo as a future optimization: pull the "Ink and gas" content up top; give devs what they need to know in order to build stuff - the "just in time" information - progressively disclose the "just in case" details. An example flow:
    1. "think of gas and ink as dollars and cents"
    2. "here's what you need to know about how it works, how it differs from traditional Solidity dApp cost modeling"
@@ -34,7 +30,7 @@ Stylus introduces new pricing models for WASM programs. Intended for high-comput
 There are, however, minor overheads to using Stylus that may matter to your application:
 
 - The first time a WASM is deployed, it must be _activated_. This is generally a few million gas, though to avoid testnet DoS, we've set it to a fixed 14 million. Note that you do not have to activate future copies of the same program. For example, the same NFT template can be deployed many times without paying this cost more than once. We will soon make the fees paid depend on the program, so that the gas used is based on the complexity of the WASM instead of this very conservative, worst-case estimate.
-- Calling a Stylus program costs 128-2048 gas. We're working with Wasmer to improve setup costs, but there will likely always be some amount of gas one pays to jump into WASM execution. This means that if a contract does next to nothing, it may be cheaper in Solidity. However if a contract starts doing interesting work, the dynamic fees will quickly make up for this fixed-cost overhead.
+- Calling a Stylus contract costs 128-2048 gas. We're working with Wasmer to improve setup costs, but there will likely always be some amount of gas one pays to jump into WASM execution. This means that if a contract does next to nothing, it may be cheaper in Solidity. However if a contract starts doing interesting work, the dynamic fees will quickly make up for this fixed-cost overhead.
 
 Though conservative bounds have been chosen for testnet, all of this is subject to change as pricing models mature and further optimizations are made. Since gas numbers will vary across updates, it may make more sense to clock the time it takes to perform an operation rather than going solely by the numbers reported in receipts.
 

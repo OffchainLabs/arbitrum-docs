@@ -9,10 +9,6 @@ sidebar_position: 1
 
 # A gentle introduction: Stylus
 
-import PublicPreviewBannerPartial from '../partials/_public-preview-banner-partial.mdx';
-
-<PublicPreviewBannerPartial />
-
 This introduction is for developers who want to build on <a data-quicklook-from="arbitrum">Arbitrum</a> using popular programming languages like Rust. This capability is made possible by <a data-quicklook-from="stylus">Stylus</a>, a new way to write EVM-compatible smart contracts using your favorite programming languages.
 
 ### In a nutshell:
@@ -38,13 +34,13 @@ Compared to using Solidity, WASM programs are much more efficient. There are man
 
 ### How is this possible?
 
-Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.md#general-bisection-protocol)
+Stylus is only possible because of Arbitrum Nitro's unique fraud-proving technology. When there's a dispute on an Arbitrum network, Nitro replays the execution of the chain **in WASM.** Honest Arbitrum validators will then bisect what is being disputed until a single invalid step is identified and checked on-chain via a [“one-step proof.”](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx#general-bisection-protocol)
 
 Nitro's fraud-proving enables it to prove **arbitrary WASM** in a deterministic way.
 
 Because any code logic can be proven with WASM, the correctness of **any program** compiling to WASM can also be proven. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
 
-For a detailed overview of Nitro's technical architecture, see the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.md) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
+For a detailed overview of Nitro's technical architecture, see the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 
 ### Why does this matter?
 
@@ -72,7 +68,7 @@ Solidity programs and WASM programs are completely composable. If working in Sol
 
 ### How does it work?
 
-There are four main steps for bringing a Stylus program to life: coding, activation, execution, and proving.
+There are four main steps for bringing a Stylus contract to life: coding, activation, execution, and proving.
 
 #### Coding
 
@@ -84,15 +80,15 @@ The Stylus SDK for Rust contains the smart contract development framework and la
 
 #### Activation
 
-Stylus programs are compiled to WASM and then lowered to assembly. Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens either using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in a process called activation, WASM gets lowered to a node's native machine code (such as ARM or x86).
+Stylus contracts are compiled to WASM and then lowered to assembly. Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens either using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in a process called activation, WASM gets lowered to a node's native machine code (such as ARM or x86).
 
-Activating a Stylus program requires a new precompile, ArbWasm. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure user programs can be safely executed and deterministically fraud-proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute. Stylus contracts can be called only after they've been activated.
+Activating a Stylus contract requires a new precompile, ArbWasm. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure user programs can be safely executed and deterministically fraud-proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute. Stylus contracts can be called only after they've been activated.
 
 Gas metering is essential for certifying that computational resources are paid for. In Stylus, the unit for measuring cost is called “ink,” similar to Ethereum's gas but thousands of times smaller. There are two reasons why a new measurement is used: First, WASM execution is so much faster than the EVM that thousands of WASM opcodes could be executed in the same time it takes the EVM to execute one. Second, the conversion rate of ink to gas can change based on future hardware or VM improvements. For a conceptual introduction to Stylus gas and ink, see [gas and ink (Stylus)](https://docs.arbitrum.io/stylus/concepts/stylus-gas).
 
 #### Execution
 
-Stylus programs are executed in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
+Stylus contracts are executed in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
 EVM contracts continue to execute the same way they did before Stylus. When a contract is called, the difference between an EVM contract and a WASM program can be seen via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract is executed using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider what language the contract was written in. Everything is interoperable.
 

@@ -8,10 +8,6 @@ user_story: As a current or prospective Orbit chain owner, I need to onboard int
 content_type: get-started
 ---
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 The Arbitrum Orbit SDK lets you programmatically create and manage your own Orbit chain(s). Its capabilities include:
 
 - Configuration and deployment of your Orbit chain's core contracts
@@ -21,11 +17,11 @@ The Arbitrum Orbit SDK lets you programmatically create and manage your own Orbi
 
 There are three types of Orbit chains. Review the following table to determine which type best fits your needs:
 
-| Chain Type           | Description                                                                                                                                                                                                                                                                                                                                                    | Use Case                                                                              |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| **Rollup**           | Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to [Arbitrum One](https://arbitrum.io/).                                                                                                                                                                                                              | Ideal for applications that require high security guarantees.                         |
-| **AnyTrust**         | Implements the [AnyTrust protocol](/how-arbitrum-works/inside-arbitrum-nitro.md#inside-anytrust), relying on an external [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) to store data and provide it on-demand instead of using their [parent chain](/intro/glossary/#parent-chain) as the Data Availability (DA) layer. | Suitable for applications that require lower transaction fees.                        |
-| **Custom gas token** | An AnyTrust Orbit chain with the ability to specify a custom `ERC-20` gas token.                                                                                                                                                                                                                                                                               | Ideal for applications that require custom gas fee tokens and lower transaction fees. |
+| Chain Type           | Description                                                                                                                                                                                                                                                                                                                                                     | Use Case                                                                              |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| **Rollup**           | Offers Ethereum-grade security by batching, compressing, and posting data to the parent chain, similarly to [Arbitrum One](https://arbitrum.io/).                                                                                                                                                                                                               | Ideal for applications that require high security guarantees.                         |
+| **AnyTrust**         | Implements the [AnyTrust protocol](/how-arbitrum-works/inside-arbitrum-nitro.mdx#inside-anytrust), relying on an external [Data Availability Committee (DAC)](/intro/glossary#data-availability-committee-dac) to store data and provide it on-demand instead of using their [parent chain](/intro/glossary/#parent-chain) as the Data Availability (DA) layer. | Suitable for applications that require lower transaction fees.                        |
+| **Custom gas token** | An AnyTrust Orbit chain with the ability to specify a custom `ERC-20` gas token.                                                                                                                                                                                                                                                                                | Ideal for applications that require custom gas fee tokens and lower transaction fees. |
 
 ## 2. Deploy your chain
 
@@ -49,5 +45,5 @@ With your node configuration specified and token bridge deployed, you'll be read
 
 ## See also
 
-- Learn more about the [AnyTrust consensus mechanism](/how-arbitrum-works/inside-arbitrum-nitro.md#inside-anytrust)
-- Learn more about the [`ERC-20` token bridge architecture](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.md)
+- Learn more about the [AnyTrust consensus mechanism](/how-arbitrum-works/inside-arbitrum-nitro.mdx#inside-anytrust)
+- Learn more about the [`ERC-20` token bridge architecture](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx)

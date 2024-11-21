@@ -7,11 +7,9 @@ sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
+import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
-<PublicPreviewBannerPartial />
-
-This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.md).
+This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.mdx).
 
 :::info
 
@@ -256,7 +254,7 @@ The above will make the public methods of `Contract` the first to consider durin
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
+If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus contracts revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
 
 ```rust
 stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
@@ -271,6 +269,8 @@ If enabled, the Stylus SDK will flush the storage cache in between reentrant cal
 The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
 ### Inheritance, `#[inherit]`, and `#[borrow]`.
+
+<StylusNoMultiInheritanceBannerPartial />
 
 Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[public]`][public] provides, can be connected via inheritance.
 
