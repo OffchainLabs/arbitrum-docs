@@ -415,3 +415,11 @@ const finalizeWithdrawalTransaction = await walletClient.writeContract({
 });
 console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransaction}`);
 ```
+
+## How to identify timeboosted transactions
+
+Transactions that have been sent to the express lane by the express lane controller, and that have been executed (regardless of them being successful or having reverted), can be identified by looking at their receipts, or the message broadcasted by the sequencer feed.
+
+Transaction receipts include now a new field `timeboosted`, which will be `true` for timeboosted transactions, and `false` for regular non-timeboosted transactions.
+
+In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMetadata` field that represents whether a particular transaction in the block was timeboosted or not. The field blockMetadata is an array of bytes and it starts with a byte representing the version (`0`), followed by `ceil(N/8)` number of bytes where `N` is the number of transactions in the block. If a particular transaction was timeboosted, the bit representing its position in the block will be set to `1`, while the rest will be set to `0`. For example, if the `blockMetadata` of a particular message, viewed as bits is `00000000 01100000`, then the 2nd and 3rd transactions in that block were timeboosted.
