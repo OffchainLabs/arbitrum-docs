@@ -8,7 +8,6 @@ user_story: As a current or prospective Arbitrum user, I want to use Timeboost i
 content_type: API Reference
 ---
 
-
 ## Auctioneer API Reference
 
 ### Overview
@@ -47,8 +46,6 @@ keccak256(abi.encodePacked(
 ```
 
 See signature verification implementation:
-
-
 
 ```solidity title="416:478:prototype/contracts/src/ExpressLaneAuction.sol"
     function verifySignature(
@@ -152,7 +149,7 @@ See signature verification implementation:
       "type": "bytes",
       "description": "Ethereum signature over the bytes encoding of (keccak256(TIMEBOOST_BID), padTo32Bytes(chainId), auctionContractAddress, uint64ToBytes(round), uint64ToBytes(sequenceNumber), transaction)"
     }
-  },
+  }
 }
 ```
 
@@ -562,9 +559,9 @@ func TestWinningBidderBecomesExpressLaneController(t *testing.T) {
 
     // Set up auctioneer
     am, err := NewAuctioneer(
-        testSetup.accounts[2].txOpts, 
-        testSetup.chainId, 
-        testSetup.backend.Client(), 
+        testSetup.accounts[2].txOpts,
+        testSetup.chainId,
+        testSetup.backend.Client(),
         testSetup.auctionContract,
     )
     require.NoError(t, err)
@@ -583,7 +580,7 @@ func TestWinningBidderBecomesExpressLaneController(t *testing.T) {
     // Verify winner
     upcomingRound := CurrentRound(am.initialRoundTimestamp, am.roundDuration) + 1
     controller, err := testSetup.auctionContract.ExpressLaneControllerByRound(
-        &bind.CallOpts{}, 
+        &bind.CallOpts{},
         big.NewInt(int64(upcomingRound)),
     )
     require.NoError(t, err)
