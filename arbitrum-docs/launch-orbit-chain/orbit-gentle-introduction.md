@@ -156,7 +156,7 @@ Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentrali
 
 ### What should I know about Orbit's licensing?
 
-You can launch any Orbit chain permissionlessly. Nitro is licensed under a Business Source license, similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova. However, Orbit chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the AEP.
+You can launch any Orbit chain permissionlessly. Nitro is licensed under a Business Source license, similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova. However, Orbit chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
 ### I'd love to tinker with Orbit! What should I do next?
 
