@@ -8,70 +8,21 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
-
-## Setting up your development environment
-
-### Prerequisites
-
-<details>
-<summary>Rust toolchain</summary>
-
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
-
-</details>
-
-<details>
-<summary>VS Code</summary>
-
-We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
-
-Some helpful VS Code extensions for Rust development:
-
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
-- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
-- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
-- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
-
- </details>
-
-<details>
-<summary>Docker</summary>
-
-The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
-
-You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
-
-</details>
-
-<details>
-<summary>Foundry's Cast</summary>
-
-[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
-
-</details>
-
-<details>
-<summary>Nitro devnode</summary>
-
-Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
-
-```shell title="Install your devnode"
-git clone https://github.com/OffchainLabs/nitro-devnode.git
-cd nitro-devnode
-```
-
-```shell title="Launch your devnode"
-./run-dev-node.sh
-```
-
-</details>
-
-[cargo stylus](https://github.com/OffchainLabs/cargo-stylus/blob/main/main/VALID_WASM.md) is a CLI toolkit built to facilitate the development of Stylus contracts.
+This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus) is a CLI toolkit built to facilitate the development of Stylus contracts.
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
+
+
 ### Installing cargo stylus
+
+#### Prerequisites
+
+Rust toolchain
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+#### Installation
 
 In your terminal, run:
 
@@ -86,77 +37,40 @@ rustup default 1.80
 rustup target add wasm32-unknown-unknown --toolchain 1.80
 ```
 
-You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands, we will use some of them in this guide:
+You can verify that cargo stylus is installed by running `cargo stylus -V` in your terminal, returning something like:`stylus 0.5.6`
 
-```shell title="cargo stylus --help returns:"
-Cargo command for developing Stylus projects
+### Using cargo stylus
 
-Usage: cargo stylus <COMMAND>
+#### Cargo Stylus Commands
 
-Commands:
-  new         Create a new Stylus project
-  init        Initializes a Stylus project in the current directory
-  export-abi  Export a Solidity ABI
-  activate    Activate an already deployed contract [aliases: a]
-  cache       Cache a contract using the Stylus CacheManager for Arbitrum chains
-  check       Check a contract [aliases: c]
-  deploy      Deploy a contract [aliases: d]
-  verify      Verify the deployment of a Stylus contract [aliases: v]
-  cgen        Generate c code bindings for a Stylus contract
-  replay      Replay a transaction in gdb [aliases: r]
-  trace       Trace a transaction [aliases: t]
-  help        Print this message or the help of the given command(s)
-
-Options:
-  -h, --help     Print help
-  -V, --version  Print version
-```
-
-
-Cargo Stylus Commands
-
-| Command | Description                 | Options                         |
-|---------|-----------------------------|---------------------------------|
-| new     | Create a new Stylus project | • name: Project name (required) |
-• --minimal: Create a minimal contract |
+| Command | Description | Options |
+|---------|-------------|----------|
+| new | Create a new Stylus project | • name: Project name (required) <br />• --minimal: Create a minimal contract |
 | init | Initialize a Stylus project in current directory | • --minimal: Create a minimal contract |
-| export-abi | Export a Solidity ABI | • --output: Output file (defaults to stdout)
-• --json: Write JSON ABI using solc |
-| activate | Activate an already deployed contract | • --address: Contract address to activate
-• --data-fee-bump-percent: Percent to bump estimated fee (default 20%)
-• --estimate-gas: Only estimate gas without sending tx |
-| cache | Cache contract using Stylus CacheManager | Subcommands:
-• bid: Place bid on contract
-• status: Check contract status
-• suggest-bid: Get suggested minimum bid |
-| check | Check a contract | • --wasm-file: WASM to check
-• --contract-address: Deploy address |
-| deploy | Deploy a contract | • --estimate-gas: Only perform estimation
-• --no-verify: Skip reproducible container
-• --cargo-stylus-version: Version for Docker image |
-| verify | Verify contract deployment | • --deployment-tx: Hash of deployment tx
-• --no-verify: Skip reproducible container
-• --cargo-stylus-version: Version for Docker image |
-| cgen | Generate C code bindings | • input: Input file path
-• out_dir: Output directory path |
-| replay | Replay transaction in gdb | • --stable-rust: Use stable Rust
-• --child: Child process flag |
-| trace | Trace a transaction | • --endpoint: RPC endpoint
-• --tx: Transaction hash
-• --project: Project path
-• --use-native-tracer: Use native tracer |
+| export-abi | Export a Solidity ABI | • --output: Output file (defaults to stdout) <br />• --json: Write JSON ABI using solc |
+| activate | Activate an already deployed contract | • --address: Contract address to activate <br />• --data-fee-bump-percent: Percent to bump estimated fee (default 20%) <br />• --estimate-gas: Only estimate gas without sending tx |
+| cache | Cache contract using Stylus CacheManager | Subcommands: <br />• bid: Place bid on contract <br />• status: Check contract status <br />• suggest-bid: Get suggested minimum bid |
+| check | Check a contract | • --wasm-file: WASM to check <br />• --contract-address: Deploy address |
+| deploy | Deploy a contract | • --estimate-gas: Only perform estimation <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image |
+| verify | Verify contract deployment | • --deployment-tx: Hash of deployment tx <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image |
+| cgen | Generate C code bindings | • input: Input file path <br />• out_dir: Output directory path |
+| replay | Replay transaction in gdb | • --stable-rust: Use stable Rust <br />• --child: Child process flag |
+| trace | Trace a transaction | • --endpoint: RPC endpoint <br />• --tx: Transaction hash <br />• --project: Project path <br />• --use-native-tracer: Use native tracer |
 
+##### Common Options
 
-Common Options
-These options are available across multiple commands:
+ These options are available across multiple commands:
+
 | Option | Description |
 |--------|-------------|
 | --endpoint | Arbitrum RPC endpoint (default: http://localhost:8547) |
 | --verbose | Print debug info |
 | --source-files-for-project-hash | Paths to source files for project hash |
 | --max-fee-per-gas-gwei | Optional max fee per gas in gwei |
-Authentication Options
-Available for commands that interact with the blockchain:
+
+##### Authentication Options
+
+Available for commands involving transactions:
 
 | Option | Description |
 |--------|-------------|
@@ -166,5 +80,75 @@ Available for commands that interact with the blockchain:
 | --keystore-password-path | Keystore password file path |
 
 
+### Example Usage
+
+#### Create a new Stylus project
+
+```shell
+cargo stylus new my_project
+```
+
+#### Initialize a Stylus project in the current directory
+
+```shell
+cargo stylus init
+```
+
+#### Export a Solidity ABI
+
+```shell
+cargo stylus export-abi --output abi.json
+```
+
+#### Activate an already deployed contract
+
+```shell
+cargo stylus activate --address 0x1234567890123456789012345678901234567890
+```
+
+#### Deploy a contract
+
+```shell
+cargo stylus deploy --RPC-endpoint http://localhost:8547 --private-key-path /path/to/private-key --max-fee-per-gas-gwei 100
+```
+
+
+#### Cache a contract using the Stylus CacheManager for Arbitrum chains
+
+```shell
+cargo stylus cache bid --address 0x1234567890123456789012345678901234567890
+```
+
+#### Verify a contract deployment
+
+```shell
+cargo stylus verify --deployment-tx 0x1234567890123456789012345678901234567890
+```
+
 
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
+
+
+<!-- ```shell title="cargo stylus --help returns:" -->
+<!-- Cargo command for developing Stylus projects -->
+
+<!-- Usage: cargo stylus <COMMAND> -->
+
+<!-- Commands: -->
+<!--   new         Create a new Stylus project -->
+<!--   init        Initializes a Stylus project in the current directory -->
+<!--   export-abi  Export a Solidity ABI -->
+<!--   activate    Activate an already deployed contract [aliases: a] -->
+<!--   cache       Cache a contract using the Stylus CacheManager for Arbitrum chains -->
+<!--   check       Check a contract [aliases: c] -->
+<!--   deploy      Deploy a contract [aliases: d] -->
+<!--   verify      Verify the deployment of a Stylus contract [aliases: v] -->
+<!--   cgen        Generate c code bindings for a Stylus contract -->
+<!--   replay      Replay a transaction in gdb [aliases: r] -->
+<!--   trace       Trace a transaction [aliases: t] -->
+<!--   help        Print this message or the help of the given command(s) -->
+
+<!-- Options: -->
+<!--   -h, --help     Print help -->
+<!--   -V, --version  Print version -->
+<!-- ``` -->
