@@ -946,6 +946,22 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'Timeboost',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/timeboost/gentle-introduction',
+                  label: 'A gentle introduction',
+                },
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/timeboost/api-reference',
+                  label: 'API reference',
+                },
+              ],
+            },
+            {
+              type: 'category',
               label: 'The BoLD dispute protocol',
               items: [
                 {

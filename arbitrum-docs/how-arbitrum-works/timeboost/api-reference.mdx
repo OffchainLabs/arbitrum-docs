@@ -1,0 +1,592 @@
+---
+title: 'Timeboost: API Reference'
+sidebar_label: 'API Reference'
+description: 'Learn how to use Timeboost with your Arbitrum-based project.'
+author: anegg0
+sme: anegg0
+user_story: As a current or prospective Arbitrum user, I want to use Timeboost in my project.
+content_type: API Reference
+---
+
+
+## Auctioneer API Reference
+
+### Overview
+
+The auctioneer exposes a namespace called `auctioneer` with methods for managing bids in the express lane auction system. This API allows bidders to participate in auctions for controlling express lane access in each round.
+
+### Methods
+
+#### `auctioneer_submitBid`
+
+Submit a bid to become an express lane controller for an upcoming round.
+
+##### Parameters
+
+| Parameter              | Type    | Description                                                         |
+| ---------------------- | ------- | ------------------------------------------------------------------- |
+| chainId                | bigInt  | Chain ID of the target chain                                        |
+| expressLaneController  | address | Hex string of desired express lane controller address (0x-prefixed) |
+| auctionContractAddress | address | Hex string of auction contract address (0x-prefixed)                |
+| round                  | uint64  | Round number (0-indexed) for target round                           |
+| amount                 | bigInt  | Bid amount in wei of deposit ERC-20 token                           |
+| signature              | bytes   | Ethereum signature over bid data                                    |
+
+##### Signature Format
+
+The signature must be created over the following packed values:
+
+```solidity
+keccak256(abi.encodePacked(
+    domainValue,    // uint16 domain separator
+    chainId,        // uint64
+    round,          // uint64
+    amount,         // uint256
+    expressLaneController // address
+))
+```
+
+See signature verification implementation:
+
+
+
+```solidity title="416:478:prototype/contracts/src/ExpressLaneAuction.sol"
+    function verifySignature(
+        address signer,
+        bytes memory message,
+        bytes memory signature
+    ) public pure returns (bool) {
+        bytes32 messageHash = getMessageHash(message);
+        bytes32 ethSignedMessageHash = getEthSignedMessageHash(messageHash);
+        address recoveredSigner = recoverSigner(ethSignedMessageHash, signature);
+        return recoveredSigner == signer;
+    }
+
+    // Function to hash the message
+    function getMessageHash(bytes memory message) internal pure returns (bytes32) {
+        return keccak256(message);
+    }
+
+    // Function to recreate the Ethereum signed message hash
+    function getEthSignedMessageHash(bytes32 messageHash) internal pure returns (bytes32) {
+        /*
+            Signature is produced from the Keccak256 hash of the concatenation of
+            "\x19Ethereum Signed Message:\n" with the length of the message and the message itself.
+            Here, "\x19" is the control character used to indicate that the string is a signed message.
+            "\n" is a new line character.
+        */
+        return keccak256(
+            abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash)
+        );
+    }
+
+    // Function to recover the signer from the signature
+    function recoverSigner(
+        bytes32 _ethSignedMessageHash, bytes memory _signature
+    ) internal pure returns (address) {
+        (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
+        return ecrecover(_ethSignedMessageHash, v, r, s);
+    }
+
+    // Helper function to split the signature into r, s and v
+    function splitSignature(bytes memory sig)
+        internal
+        pure
+        returns (
+            bytes32 r,
+            bytes32 s,
+            uint8 v
+        )
+    {
+        require(sig.length == 65, "invalid signature length");
+
+        assembly {
+            // First 32 bytes, after the length prefix
+            r := mload(add(sig, 32))
+            // Second 32 bytes
+            s := mload(add(sig, 64))
+            // Final byte (first byte of the next 32 bytes)
+            v := byte(0, mload(add(sig, 96)))
+        }
+
+        // If the signature is valid (and not malleable), v should be 27 or 28
+        // However, as of EIP-155, v = 27 or 28 + chainId * 2 + 8
+        if (v < 27) v += 27;
+        return (r, s, v);
+    }
+```
+
+##### Example Usage
+
+###### `timeboost_sendExpressLaneTransaction`
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "chainId": {
+      "type": "bigInt",
+      "description": "chain id of the target chain"
+    },
+    "round": {
+      "type": "uint64",
+      "description": "round number (0-indexed) for the round the transaction is submitted for"
+    },
+    "auctionContractAddress": {
+      "type": "address",
+      "description": "hex string of the auction contract address that the bid corresponds to"
+    },
+    "sequenceNumber": {
+      "type": "uint64",
+      "description": "the per-round nonce of express lane submissions. Each submission to the express lane during a round increases this sequence number by one, and if submissions are received out of order, the sequencer will queue them for processing in order. This is reset to 0 at each round"
+    },
+    "transaction": {
+      "type": "bytes",
+      "description": "hex string of the RLP encoded transaction payload that submitter wishes to be sequenced through the express lane"
+    },
+    "options": {
+      "type": "ArbitrumConditionalOptions",
+      "description": "conditional options for Arbitrum transactions, supported by normal sequencer endpoint https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71"
+    },
+    "signature": {
+      "type": "bytes",
+      "description": "Ethereum signature over the bytes encoding of (keccak256(TIMEBOOST_BID), padTo32Bytes(chainId), auctionContractAddress, uint64ToBytes(round), uint64ToBytes(sequenceNumber), transaction)"
+    }
+  },
+}
+```
+
+```go
+bid := &Bid{
+    chainId: chainId,
+    address: bidderAddr,
+    round:   currentRound + 1,
+    amount:  big.NewInt(1000),
+}
+
+// Sign the bid
+packedBidBytes, _ := encodeBidValues(
+    domainValue,
+    new(big.Int).SetUint64(bid.chainId),
+    new(big.Int).SetUint64(bid.round),
+    bid.amount,
+)
+signature, _ := sign(packedBidBytes, privateKey)
+bid.signature = signature
+
+// Submit bid
+err := auctioneer.SubmitBid(ctx, bid)
+```
+
+##### Validation
+
+The auctioneer performs the following validation:
+
+- All bid fields must be non-nil
+- Auction contract address must be valid
+- Express lane controller address must be defined
+- Chain ID must match target chain
+- Bid must be for an upcoming round
+- Bidding must be open when bid is received
+- Bid must meet minimum reserve price
+- Signature must be valid and recover correct sender
+- Sender must be a depositor with sufficient balance
+
+##### Error Responses
+
+| Error Code            | Description                                                    |
+| --------------------- | -------------------------------------------------------------- |
+| MALFORMED_DATA        | Invalid input data, missing fields, or deserialization failure |
+| NOT_DEPOSITOR         | Address is not an active depositor in auction contract         |
+| WRONG_CHAIN_ID        | Chain ID does not match target chain                           |
+| WRONG_SIGNATURE       | Invalid or unverifiable signature                              |
+| BAD_ROUND_NUMBER      | Invalid round number (e.g. past round)                         |
+| INSUFFICIENT_BALANCE  | Bid amount exceeds depositor's balance                         |
+| RESERVE_PRICE_NOT_MET | Bid below minimum reserve price                                |
+
+##### Error Prevention
+
+1. Always verify bidder has sufficient deposit before submitting bid:
+
+212:225:prototype/bidder_client.go
+
+```go
+func (bd *BidderClient) Deposit(ctx context.Context, amount *big.Int) error {
+	tx, err := bd.auctionContract.SubmitDeposit(bd.txOpts, amount)
+	if err != nil {
+		return err
+	}
+	receipt, err := bind.WaitMined(ctx, bd.client, tx)
+	if err != nil {
+		return err
+	}
+	if receipt.Status != types.ReceiptStatusSuccessful {
+		return errors.New("deposit failed")
+	}
+	return nil
+}
+```
+
+2. Ensure bid is for upcoming round using current round calculation:
+
+```solidity
+    function currentRound() public view returns (uint64) {
+        if (initialTimestamp > block.timestamp) {
+            return type(uint64).max;
+        }
+        return uint64((block.timestamp - initialTimestamp) / roundDuration);
+    }
+```
+
+3. Validate signature format matches expected encoding:
+
+134:136:prototype/bids.go
+
+```go
+func verifySignature(pubkey *ecdsa.PublicKey, message []byte, sig []byte) bool {
+	hash := crypto.Keccak256(message)
+	prefixed := crypto.Keccak256([]byte("\x19Ethereum Signed Message:\n32"), hash)
+```
+
+### Events
+
+The auction contract emits events for important state changes:
+
+#### DepositSubmitted
+
+```28:29:prototype/contracts/src/ExpressLaneAuction.sol
+    /// @param amount    the amount in wei of the deposit
+    event DepositSubmitted(address indexed bidder, uint256 amount);
+```
+
+#### AuctionResolved
+
+47:52:prototype/contracts/src/ExpressLaneAuction.sol
+
+```solidity
+    event AuctionResolved(
+        uint256 winningBidAmount,
+        uint256 secondPlaceBidAmount,
+        address indexed winningBidder,
+        uint256 indexed winnerRound
+    );
+```
+
+#### ExpressLaneControlDelegated
+
+57:61:prototype/contracts/src/ExpressLaneAuction.sol
+
+```solidity
+    event ExpressLaneControlDelegated(
+        address indexed from,
+        address indexed to,
+        uint64 round
+    );
+```
+
+### Testing
+
+See example test implementation for bid submission and validation:
+
+12:68:prototype/bids_test.go
+
+```go
+func TestWinningBidderBecomesExpressLaneController(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	testSetup := setupAuctionTest(t, ctx)
+
+	// Set up two different bidders.
+	alice := setupBidderClient(t, ctx, "alice", testSetup.accounts[0], testSetup)
+	bob := setupBidderClient(t, ctx, "bob", testSetup.accounts[1], testSetup)
+	require.NoError(t, alice.Deposit(ctx, big.NewInt(5)))
+	require.NoError(t, bob.Deposit(ctx, big.NewInt(5)))
+
+	// Set up a new auctioneer instance that can validate bids.
+	am, err := NewAuctioneer(
+		testSetup.accounts[2].txOpts, testSetup.chainId, testSetup.backend.Client(), testSetup.auctionContract,
+	)
+	require.NoError(t, err)
+	alice.auctioneer = am
+	bob.auctioneer = am
+
+	// Form two new bids for the round, with Alice being the bigger one.
+	aliceBid, err := alice.Bid(ctx, big.NewInt(2))
+	require.NoError(t, err)
+	bobBid, err := bob.Bid(ctx, big.NewInt(1))
+	require.NoError(t, err)
+	_, _ = aliceBid, bobBid
+
+	// Resolve the auction.
+	require.NoError(t, am.resolveAuctions(ctx))
+
+	// Expect Alice to have become the next express lane controller.
+	upcomingRound := CurrentRound(am.initialRoundTimestamp, am.roundDuration) + 1
+	controller, err := testSetup.auctionContract.ExpressLaneControllerByRound(&bind.CallOpts{}, big.NewInt(int64(upcomingRound)))
+	require.NoError(t, err)
+	require.Equal(t, alice.txOpts.From, controller)
+}
+
+func TestSubmitBid_OK(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	testSetup := setupAuctionTest(t, ctx)
+
+	// Make a deposit as a bidder into the contract.
+	bc := setupBidderClient(t, ctx, "alice", testSetup.accounts[0], testSetup)
+	require.NoError(t, bc.Deposit(ctx, big.NewInt(5)))
+
+	// Set up a new auctioneer instance that can validate bids.
+	am, err := NewAuctioneer(
+		testSetup.accounts[1].txOpts, testSetup.chainId, testSetup.backend.Client(), testSetup.auctionContract,
+	)
+	require.NoError(t, err)
+	bc.auctioneer = am
+
+	// Form a new bid with an amount.
+	newBid, err := bc.Bid(ctx, big.NewInt(5))
+	require.NoError(t, err)
+```
+
+## Sequencer API Reference
+
+### Overview
+
+The sequencer exposes a namespace called `timeboost` with methods for submitting transactions through the express lane system. This API allows express lane controllers to submit prioritized transactions during their assigned rounds.
+
+### Methods
+
+#### `timeboost_sendExpressLaneTransaction`
+
+Submit a transaction to be processed through the express lane with priority sequencing.
+
+##### Parameters
+
+| Parameter              | Type                       | Description                                          |
+| ---------------------- | -------------------------- | ---------------------------------------------------- |
+| chainId                | bigInt                     | Chain ID of the target chain                         |
+| round                  | uint64                     | Round number (0-indexed) for target round            |
+| auctionContractAddress | address                    | Hex string of auction contract address (0x-prefixed) |
+| sequenceNumber         | uint64                     | Per-round nonce for express lane submissions         |
+| transaction            | bytes                      | RLP encoded transaction payload                      |
+| options                | ArbitrumConditionalOptions | Conditional options for Arbitrum transactions        |
+| signature              | bytes                      | Ethereum signature over transaction data             |
+
+##### Signature Format
+
+The signature must be created over the following packed values:
+
+```solidity
+keccak256(abi.encodePacked(
+    TIMEBOOST_BID,     // domain separator
+    chainId,           // uint64
+    auctionContractAddress,  // address
+    round,             // uint64
+    sequenceNumber,    // uint64
+    transaction        // bytes
+))
+```
+
+##### Example Usage
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "chainId": {
+      "type": "bigInt",
+      "description": "chain id of the target chain"
+    },
+    "round": {
+      "type": "uint64",
+      "description": "round number (0-indexed) for the round the transaction is submitted for"
+    },
+    "auctionContractAddress": {
+      "type": "address",
+      "description": "hex string of the auction contract address that the bid corresponds to"
+    },
+    "sequenceNumber": {
+      "type": "uint64",
+      "description": "the per-round nonce of express lane submissions. Each submission to the express lane during a round increases this sequence number by one, and if submissions are received out of order, the sequencer will queue them for processing in order. This is reset to 0 at each round"
+    },
+    "transaction": {
+      "type": "bytes",
+      "description": "hex string of the RLP encoded transaction payload that submitter wishes to be sequenced through the express lane"
+    },
+    "options": {
+      "type": "ArbitrumConditionalOptions",
+      "description": "conditional options for Arbitrum transactions, supported by normal sequencer endpoint https://github.com/OffchainLabs/go-ethereum/blob/48de2030c7a6fa8689bc0a0212ebca2a0c73e3ad/arbitrum_types/txoptions.go#L71"
+    },
+    "signature": {
+      "type": "bytes",
+      "description": "Ethereum signature over the bytes encoding of (keccak256(TIMEBOOST_BID), padTo32Bytes(chainId), auctionContractAddress, uint64ToBytes(round), uint64ToBytes(sequenceNumber), transaction)"
+    }
+  }
+}
+```
+
+```go
+tx := &ExpressLaneTx{
+    chainId: chainId,
+    round: currentRound,
+    sequenceNumber: 0,
+    transaction: encodedTx,
+    options: &ArbitrumTxOptions{
+        // Set desired options
+    },
+}
+
+// Sign the transaction data
+signature := signExpressLaneTx(
+    tx.chainId,
+    tx.round,
+    tx.sequenceNumber,
+    tx.transaction,
+    controllerPrivKey,
+)
+tx.signature = signature
+
+// Submit to sequencer
+err := sequencer.SendExpressLaneTransaction(ctx, tx)
+```
+
+##### Validation
+
+The sequencer performs the following validation:
+
+- All fields must be non-nil
+- Chain ID must match target chain
+- Auction contract address must be valid
+- Current round must have an express lane controller
+- Transaction must be for current round
+- Signature must be valid and recover correct sender
+- Sender must be current express lane controller
+- Sequence number must be in order (queued if not)
+
+##### Error Responses
+
+| Error Code                  | Description                                                    |
+| --------------------------- | -------------------------------------------------------------- |
+| MALFORMED_DATA              | Invalid input data, missing fields, or deserialization failure |
+| WRONG_CHAIN_ID              | Chain ID does not match target chain                           |
+| WRONG_SIGNATURE             | Invalid or unverifiable signature                              |
+| BAD_ROUND_NUMBER            | Invalid round number (e.g. past round)                         |
+| NOT_EXPRESS_LANE_CONTROLLER | Sender is not the express lane controller                      |
+| NO_ONCHAIN_CONTROLLER       | No defined controller for the round                            |
+
+##### Error Prevention
+
+1. Check if you are the controller for the current round:
+
+The sequencer will perform the following validation:
+
+- check the fields are not nil
+- check if the chain id is correct
+- check if the auction contract address is correct
+
+2. Track sequence numbers to ensure in-order submission:
+
+```go
+// Example sequence number tracking
+type ExpressLaneController struct {
+    currentSequenceNumber uint64
+    mutex sync.Mutex
+}
+
+func (c *ExpressLaneController) NextSequenceNumber() uint64 {
+    c.mutex.Lock()
+    defer c.mutex.Unlock()
+    seq := c.currentSequenceNumber
+    c.currentSequenceNumber++
+    return seq
+}
+```
+
+3. Verify transaction round matches current round:
+
+```solidity
+function currentRound() public view returns (uint64) {
+    if (initialTimestamp > block.timestamp) {
+        return type(uint64).max;
+    }
+    return uint64((block.timestamp - initialTimestamp) / roundDuration);
+}
+```
+
+### Events
+
+The sequencer emits events for express lane transaction processing:
+
+#### ExpressLaneTxProcessed
+
+```solidity
+event ExpressLaneTxProcessed(
+    address indexed controller,
+    uint64 indexed round,
+    uint64 sequenceNumber,
+    bytes32 txHash
+);
+```
+
+#### ExpressLaneTxQueued
+
+```solidity
+event ExpressLaneTxQueued(
+    address indexed controller,
+    uint64 indexed round,
+    uint64 sequenceNumber,
+    bytes32 txHash
+);
+```
+
+### Testing
+
+See example test implementation for express lane transaction submission:
+
+Basic Express Lane Controller Test
+
+```go
+func TestWinningBidderBecomesExpressLaneController(t *testing.T) {
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()
+
+    testSetup := setupAuctionTest(t, ctx)
+
+    // Set up bidders
+    alice := setupBidderClient(t, ctx, "alice", testSetup.accounts[0], testSetup)
+    bob := setupBidderClient(t, ctx, "bob", testSetup.accounts[1], testSetup)
+    require.NoError(t, alice.Deposit(ctx, big.NewInt(5)))
+    require.NoError(t, bob.Deposit(ctx, big.NewInt(5)))
+
+    // Set up auctioneer
+    am, err := NewAuctioneer(
+        testSetup.accounts[2].txOpts, 
+        testSetup.chainId, 
+        testSetup.backend.Client(), 
+        testSetup.auctionContract,
+    )
+    require.NoError(t, err)
+    alice.auctioneer = am
+    bob.auctioneer = am
+
+    // Submit bids
+    aliceBid, err := alice.Bid(ctx, big.NewInt(2))
+    require.NoError(t, err)
+    bobBid, err := bob.Bid(ctx, big.NewInt(1))
+    require.NoError(t, err)
+
+    // Resolve auction
+    require.NoError(t, am.resolveAuctions(ctx))
+
+    // Verify winner
+    upcomingRound := CurrentRound(am.initialRoundTimestamp, am.roundDuration) + 1
+    controller, err := testSetup.auctionContract.ExpressLaneControllerByRound(
+        &bind.CallOpts{}, 
+        big.NewInt(int64(upcomingRound)),
+    )
+    require.NoError(t, err)
+    require.Equal(t, alice.txOpts.From, controller)
+}
+```
