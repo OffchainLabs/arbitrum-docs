@@ -8,9 +8,11 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus) is a CLI toolkit built to facilitate the development of Stylus contracts.
+This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit  to help developers manage, compile, and optimize their Stylus contracts efficiently.
 
-It is available as a plugin to the standard cargo tool used for developing Rust programs.
+This overview is meant to help discover cargo stylus' tools and learn to use them effectively.
+
+Cargo stylus is available as a plugin to the standard cargo tool used for developing Rust programs.
 
 ### Installing cargo stylus
 
@@ -39,7 +41,7 @@ You can verify that cargo stylus is installed by running `cargo stylus -V` in yo
 
 ### Using cargo stylus
 
-#### Cargo Stylus Commands
+#### Cargo Stylus commands reference
 
 | Command    | Description                                      | Options                                                                                                                                                                             |
 | ---------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -55,7 +57,7 @@ You can verify that cargo stylus is installed by running `cargo stylus -V` in yo
 | replay     | Replay transaction in gdb                        | • --stable-rust: Use stable Rust <br />• --child: Child process flag                                                                                                                |
 | trace      | Trace a transaction                              | • --endpoint: RPC endpoint <br />• --tx: Transaction hash <br />• --project: Project path <br />• --use-native-tracer: Use native tracer                                            |
 
-##### Common Options
+##### Common options
 
 These options are available across multiple commands:
 
@@ -66,7 +68,7 @@ These options are available across multiple commands:
 | --source-files-for-project-hash | Paths to source files for project hash                 |
 | --max-fee-per-gas-gwei          | Optional max fee per gas in gwei                       |
 
-##### Authentication Options
+##### Authentication options
 
 Available for commands involving transactions:
 
@@ -77,7 +79,7 @@ Available for commands involving transactions:
 | --keystore-path          | Path to Ethereum wallet keystore file                |
 | --keystore-password-path | Keystore password file path                          |
 
-### Example Usage
+### Example usage
 
 #### Create a new Stylus project
 
@@ -97,56 +99,46 @@ cargo stylus init
 cargo stylus export-abi --output abi.json
 ```
 
-#### Activate an already deployed contract
-
-```shell
-cargo stylus activate --address 0x1234567890123456789012345678901234567890
-```
-
-#### Deploy a contract
-
-```shell
-cargo stylus deploy --RPC-endpoint http://localhost:8547 --private-key-path /path/to/private-key --max-fee-per-gas-gwei 100
-```
-
 #### Cache a contract using the Stylus CacheManager for Arbitrum chains
 
 ```shell
 cargo stylus cache bid --address 0x1234567890123456789012345678901234567890
 ```
 
-#### Verify a contract deployment
+#### Additional resources
 
-```shell
-cargo stylus verify --deployment-tx 0x1234567890123456789012345678901234567890
-```
+For more advanced usage and detailed guides, refer to the following resources:
 
-Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
+##### Optimize WASM binaries
 
-<!-- ```shell title="cargo stylus --help returns:" -->
+The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.
 
-<!-- Cargo command for developing Stylus projects -->
+###### [Learn how to optimize WASM binaries](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries)
 
-<!-- Usage: cargo stylus <COMMAND> -->
+##### Debug Stylus transactions
 
-<!-- Commands: -->
-<!--   new         Create a new Stylus project -->
-<!--   init        Initializes a Stylus project in the current directory -->
-<!--   export-abi  Export a Solidity ABI -->
-<!--   activate    Activate an already deployed contract [aliases: a] -->
-<!--   cache       Cache a contract using the Stylus CacheManager for Arbitrum chains -->
-<!--   check       Check a contract [aliases: c] -->
-<!--   deploy      Deploy a contract [aliases: d] -->
-<!--   verify      Verify the deployment of a Stylus contract [aliases: v] -->
-<!--   cgen        Generate c code bindings for a Stylus contract -->
-<!--   replay      Replay a transaction in gdb [aliases: r] -->
-<!--   trace       Trace a transaction [aliases: t] -->
-<!--   help        Print this message or the help of the given command(s) -->
+Gain insights into your Stylus contracts by debugging transactions.
 
-<!-- Options: -->
+###### [Debug Stylus transactions](https://docs.arbitrum.io/stylus/how-tos/debug-stylus-transactions)
 
-<!--   -h, --help     Print help -->
+A guide to debugging transactions, helping you identify and fix issues.
 
-<!--   -V, --version  Print version -->
+##### Verify contracts
 
-<!-- ``` -->
+Ensure that your Stylus contracts are correctly verified.
+
+###### [Verify contracts](https://docs.arbitrum.io/stylus/how-tos/verify-contracts)
+
+Step-by-step instructions on how to verify your contracts using `cargo-stylus`.
+
+###### [Optimize WASM binaries](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries)
+###### [Troubleshooting](https://docs.arbitrum.io/stylus/troubleshooting-building-stylus)
+###### [Run a Stylus dev node](https://docs.arbitrum.io/run-arbitrum-node/run-local-dev-node)
+
+This overview page serves as the starting point for mastering the CLI tools available for Stylus development. From optimizing your contracts to debugging and verifying them, the `cargo-stylus` toolset is integral to a smooth development experience.
+
+#### Source code repository
+
+The source code for `cargo-stylus` is available on GitHub. Explore the code, contribute, or use it as a reference.
+
+###### [cargo-stylus repository](https://github.com/OffchainLabs/stylus):** Visit the GitHub repository for more information.
