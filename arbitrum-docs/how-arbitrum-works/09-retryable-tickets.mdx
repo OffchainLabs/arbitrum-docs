@@ -1,4 +1,5 @@
-<!-- from crosschain messaging > l1-l2 messaging --> 
+<!-- from crosschain messaging > l1-l2 messaging -->
+
 ## Retryable Tickets
 
 Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages, i.e., L1 transactions that initiate a message to be executed on L2. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at L1; its _submission_ on L1 is separable / asynchronous with its _execution_ on L2. Retryables provide atomicity between the cross chain operations; if the L1 transaction to request submission succeeds (i.e. does not revert) then the execution of the Retryable on L2 has a strong guarantee to ultimately succeed as well.
@@ -6,8 +7,6 @@ Retryable tickets are Arbitrum's canonical method for creating L1 to L2 messages
 ## Retryable Tickets Lifecycle
 
 Here we walk through the different stages of the lifecycle of a retryable ticket; (1) submission, (2) auto-redemption, and (3) manual redemption.
-
-
 
 ### Submission
 
@@ -69,8 +68,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 
-
-
 ### Automatic Redemption
 
 4. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
@@ -110,8 +107,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
-
-
 
 ### Manual Redemption
 
@@ -180,9 +175,6 @@ If a redeem is not done at submission or the submission's initial redeem fails, 
 
 [retryable_dashboard_link]: https://retryable-dashboard.arbitrum.io/tx
 
-
-
-
 ### Receipts
 
 In the lifecycle of a retryable ticket, two types of L2 transaction receipts will be emitted:
@@ -190,13 +182,9 @@ In the lifecycle of a retryable ticket, two types of L2 transaction receipts wil
 - **Ticket Creation Receipt**: This receipt indicates that a ticket was successfully created; any successful L1 call to the `Inbox`'s `createRetryableTicket` method is guaranteed to create a ticket. The ticket creation receipt includes a `TicketCreated` event (from `ArbRetryableTx`), which includes a `ticketId` field. This `ticketId` is computable via RLP encoding and hashing the transaction; see [calculateSubmitRetryableId](https://github.com/OffchainLabs/arbitrum-sdk/blob/6cc143a3bb019dc4c39c8bcc4aeac9f1a48acb01/src/lib/message/L1ToL2Message.ts#L109).
 - **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted L2 execution of a ticket, i.e, success / failure of that specific redeem attempt. It includes a `RedeemScheduled` event from `ArbRetryableTx`, with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided L2 gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
 
-
-
 ### Alternative "unsafe" Retryable Ticket Creation
 
 The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their address alias (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
-
-
 
 ## Eth deposits
 
@@ -206,13 +194,9 @@ Note that depositing Eth via `depositEth` into a contract on L2 will _not_ trigg
 
 In principle, retryable tickets can alternatively be used to deposit Ether; this could be preferable to the special eth-deposit message type if, e.g., more flexibility for the destination address is needed, or if one wants to trigger the fallback function on the L2 side.
 
-
-
 ## Transacting via the Delayed Inbox
 
 While retryables and Eth deposits _must_ be submitted through the delayed inbox, in principle, _any_ message can be included this way; this is a necessary recourse to ensure the Arbitrum chain preserves censorship resistance even if the Sequencer misbehaves (see [The Sequencer and Censorship Resistance](/how-arbitrum-works/sequencer.mdx)). However, under ordinary/happy circumstances, the expectation/recommendation is that clients use the delayed inbox only for Retryables and Eth deposits, and transact via the Sequencer for all other messages.
-
-
 
 ### Address Aliasing
 
@@ -237,8 +221,6 @@ modifier onlyFromMyL1Contract() override {
     _;
 }
 ```
-
-
 
 ### Signed Messages
 

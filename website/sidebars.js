@@ -855,6 +855,16 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'how-arbitrum-works/retryable-tickets',
+          label: 'Retryable Tickets',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/cross-chain-messaging',
+          label: 'Cross-chain messaging',
+        },
+        {
+          type: 'doc',
           id: 'how-arbitrum-works/nitro-vs-classic',
           label: 'Nitro vs. Classic',
         },
@@ -864,58 +874,58 @@ const sidebars = {
           label: 'Nitro whitepaper',
         },
 
+        {
+          type: 'category',
+          label: 'The BoLD dispute protocol',
+          items: [
             {
-              type: 'category',
-              label: 'The BoLD dispute protocol',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/gentle-introduction',
-                  label: 'A gentle introduction',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-                  label: 'Deploy a validator on testnet',
-                },
-                {
-                  type: 'link',
-                  href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BoLD Whitepaper',
-                },
-                {
-                  type: 'doc',
-                  id: 'bold/concepts/bold-technical-deep-dive',
-                  label: 'Technical deep dive',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
-                  label: 'Economics of disputes',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold',
-                  label: 'Specification on Github',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-                  label: 'Audit Report by Trail of Bits',
-                },
-                {
-                  type: 'link',
-                  href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-                  label: 'Audit Report by Code4rena',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/public-preview-expectations',
-                  label: 'Public preview',
-                },
-              ],
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/gentle-introduction',
+              label: 'A gentle introduction',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2404.10491',
+              label: 'BoLD Whitepaper',
+            },
+            {
+              type: 'doc',
+              id: 'bold/concepts/bold-technical-deep-dive',
+              label: 'Technical deep dive',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
+              label: 'Economics of disputes',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/bold',
+              label: 'Specification on Github',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
+              label: 'Audit Report by Trail of Bits',
+            },
+            {
+              type: 'link',
+              href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
+              label: 'Audit Report by Code4rena',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/bold/public-preview-expectations',
+              label: 'Public preview',
             },
           ],
+        },
+      ],
     },
     {
       type: 'doc',

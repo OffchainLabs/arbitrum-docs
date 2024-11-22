@@ -35,8 +35,8 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 [estimation_inclusion_link]: https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999
 
-
 <!-- from inside-arbitrum-nitro -->
+
 ## Gas and Fees
 
 NitroGas (so-called to avoid confusion with Layer 1 Ethereum gas) is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
@@ -84,10 +84,11 @@ The price per estimated byte is set by a dynamic algorithm that compares the tot
 #### Total fee and gas estimation
 
 The total fee charged to a transaction is the L2 basefee, multiplied by the sum of the L2 gas used plus the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a basefee limit that is below the current basefee. Ethereum also allows a "tip" but Nitro ignores this field and never collects any tips.
+
 <!-- -->
 
-
 <!-- from l1-gas-pricing -->
+
 # L1 gas pricing
 
 ArbOS dynamically prices L1 gas, with the price adjusting to ensure that the amount collected in L1 gas fees is as close as possible to the costs that must be covered, over time.
@@ -144,4 +145,5 @@ A second term is added to the L1 Gas Basefee, based on the derivative of the sur
 The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/build-decentralized-apps/nodeinterface/02-reference.mdx) or [NodeInterface.gasEstimateL1Component()](/build-decentralized-apps/nodeinterface/02-reference.mdx) method can be used.
 
 Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.
+
 <!-- -->

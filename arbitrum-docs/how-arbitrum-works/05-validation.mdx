@@ -1,4 +1,5 @@
 <!-- from inside-arbitrum-nitro -->
+
 ## Optimistic Rollup
 
 Arbitrum is an optimistic rollup. Let’s unpack that term.
@@ -15,17 +16,11 @@ Arbitrum is optimistic, which means that Arbitrum advances the state of its chai
 
 Because a party who tries to cheat will lose a deposit, attempts to cheat should be very rare, and the normal case will be a single party posting a correct rollup block, and nobody challenging it.
 
-
-
-
 ## Resolving disputes using interactive fraud proofs
 
 Among optimistic rollups, the most important design decision is how to resolve disputes. Suppose Alice claims that the chain will produce a certain result, and Bob disagrees. How will the protocol decide which version to accept?
 
 There are basically two choices: interactive proving, or re-executing transactions. Arbitrum uses interactive proving, which we believe is more efficient and more flexible. Much of the design of Arbitrum follows from this fact.
-
-
-
 
 ### Interactive proving
 
@@ -35,15 +30,9 @@ Arbitrum's approach is based on dissection of the dispute. If Alice's claim cove
 
 The key principle behind interactive proving is that if Alice and Bob are in a dispute, Alice and Bob should do as much off-chain work as possible needed to resolve their dispute, rather than putting that work onto an L1 contract.
 
-
-
-
 ### Re-executing transactions
 
 The alternative to interactive proving would be to have a rollup block contain a claimed machine state hash after every individual transaction. Then in case of a dispute, the L1 referee would emulate the execution of an entire transaction, to see whether the outcome matches Alice's claim.
-
-
-
 
 ### Why interactive proving is better
 
@@ -57,15 +46,9 @@ We believe strongly that interactive proving is the superior approach, for the f
 
 **More implementation flexibility:** Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on Ethereum. By contrast, reexecution approaches are tethered to limitations of the EVM.
 
-
-
-
 ### Interactive proving drives the design of Arbitrum
 
 Much of the design of Arbitrum is driven by the opportunities opened up by interactive proving. If you're reading about some feature of Arbitrum, and you're wondering why it exists, two good questions to ask are: "How does this support interactive proving?" and "How does this take advantage of interactive proving?" The answers to most "why" questions about Arbitrum relate to interactive proving.
-
-
-
 
 ## Arbitrum Rollup Protocol
 
@@ -84,9 +67,6 @@ With those preliminaries behind us, let’s jump into the details of the rollup 
 The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
 The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
-
-
-
 
 ### The Rollup Chain
 
@@ -205,9 +185,6 @@ There’s a lot going on here, so let’s unpack it.
 
 Again: this sort of thing is very unlikely in practice. In this diagram, at least four parties must have bonded on wrong RBlocks, and when the dust settles at least four parties will have lost their bonds. The protocol handles these cases correctly, of course, but they’re rare corner cases. This diagram is designed to illustrate the variety of situations that are possible in principle, and how the protocol would deal with them.
 
-
-
-
 ### Staking
 
 At any given time, some validators will be bonders, and some will not. Bonders deposit funds that are held by the Arbitrum Layer 1 contracts and will be confiscated if the bonder loses a challenge. Nitro chains accept bonds in ETH.
@@ -228,15 +205,9 @@ The rules for staking are as follows:
 
 Notice that once you are bonded on an RBlock, there is no way to unbond. You are committed to that RBlock. Eventually one of two things will happen: that RBlock will be confirmed, or you will lose your bond. The only way to get your bond back is to wait until all of the RBlocks you are bonded on are confirmed.
 
-
-
-
 #### Setting the current minimum bond amount
 
 One detail we deferred earlier is how the current minimum bond amount is set. Normally, this is just equal to the base bond amount, which is a parameter of the Nitro chain. However, if the chain has been slow to make progress in confirming RBlocks, the bond requirement will escalate temporarily. Specifically, the base bond amount is multiplied by a factor that is exponential in the time since the deadline of the first unresolved RBlock passed. This ensures that if malicious parties are placing false bonds to try to delay progress (despite the fact that they’re losing those bonds), the bond requirement goes up so that the cost of such a delay attack increases exponentially. As RBlock resolution starts advancing again, the bond requirement will go back down.
-
-
-
 
 ### Rules for Confirming or Rejecting RBlocks
 
@@ -261,8 +232,8 @@ A consequence of these rules is that once the first unresolved RBlock's deadline
 
 <!-- -->
 
-
 <!-- from assertion-tree -->
+
 # The Assertion Tree
 
 ### Overview
@@ -292,4 +263,5 @@ The only delay that users experience during a dispute is of their [L2 to L1 mess
 ### Detailed Spec
 
 For a more detailed breakdown / specification of the assertion tree protocol, see [Inside Arbitrum](/how-arbitrum-works/inside-arbitrum-nitro.mdx#arbitrum#rollup#protocol).
+
 <!-- -->
