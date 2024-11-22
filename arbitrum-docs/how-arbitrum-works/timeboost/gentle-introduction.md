@@ -25,7 +25,7 @@ Timeboost is the culmination of over a year of research and development by the t
 
 ## Why do Arbitrum chains need Timeboost?
 
-Today, Arbitrum chains order incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy was chosen as the default for Arbitrum chains because it is simple to understand and implement, enables fast block times (starting at 250ms and down to 100ms if so desired), and protects users from harmful types of MEV like front-running & sandwich attacks.
+Today, Arbitrum chains order incoming transactions on a <a data-quicklook-from='first-come-first-serve-fcfs'>"First-Come, First-Serve (FCFS)"</a> basis. This ordering policy was chosen as the default for Arbitrum chains because it is simple to understand and implement, enables fast block times (starting at 250ms and down to 100ms if desired), and protects users from harmful types of MEV like front-running & sandwich attacks.
 
 However, there are a few downsides to an FCFS ordering policy. Under FCFS, searchers are incentivized to participate in and try to win latency races through investments in off-chain hardware. This means that for searchers on Arbitrum chains, generating a profit from arbitrage and liquidation opportunities involves a lot of spam, placing stress on chain infrastructure and contributing to congestion. Additionally, all of the captured MEV on an Arbitrum chain today under FCFS goes to searchers - returning none of the available MEV to the chain owner or the applications on the chain.
 
@@ -51,7 +51,7 @@ Timeboost retains most FCFS benefits while addressing FCFS limitations.
 
 Timeboost is a _transaction ordering policy_. It's a set of rules that the sequencer of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
 
-For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy and then publish the final sequence to a real-time feed and in compressed batches to the chain’s data availability layer. The current transaction ordering policy is FCFS, and Timeboost is a modified FCFS ordering policy.
+For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a real-time feed and in compressed batches to the chain’s data availability layer. The current transaction ordering policy is FCFS, and Timeboost is a modified FCFS ordering policy.
 
 Timeboost is implemented using three separate components that work together:
 
@@ -63,7 +63,7 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
-The express lane is implemented using a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name, express lane. The sequencer will only accept valid transaction payloads to this endpoint if they are correctly signed by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>. Other transactions can still be submitted to the sequencer as normal, but these will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by 200 milliseconds. It is important to note that transactions from both the express lane and the non-express lane are eventually sequenced together into a single, ordered stream of transactions for node operators to produce an assertion and later post the data to a data availability layer. The express lane controller does _not_:
+The express lane is implemented using a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name, express lane. The sequencer will only accept valid transaction payloads to this endpoint if they are correctly signed by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>. Other transactions can still be submitted to the sequencer as normal, but these will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by 200 milliseconds. It is important to note that transactions from both the express and non-express lanes are eventually sequenced into a single, ordered stream of transactions for node operators to produce an assertion and later post the data to a data availability layer. The express lane controller does _not_:
 Have the right to re-order transactions.
 Have a guarantee that their transactions will always be first at the “top-of-the-block.”
 Guarantee a profit at all.
@@ -79,26 +79,27 @@ The auction for a round has a closing time that is `auctionClosingSeconds` (def
 
 ### Auction contract
 
-Before bidding in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds added to an existing deposit, at any time. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token). These deposits are fully withdrawable, with some nominal delay, so as not to impact the outcome of an existing round.
+Before bidding in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds can be added to an existing deposit at any time. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token). These deposits are fully withdrawable, with some nominal delay, so as not to impact the outcome of an existing round.
 
-Once the autonomous auctioneer determines an auction winner, the auction contract will deduct the second-highest bid amount from the account of the highest bidder, and transfer those funds to a `beneficiary` account designated by the chain owner, by default.
+Once the autonomous auctioneer determines an auction winner, the auction contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default.
 
 The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
 
-The auction contract also has functions that enable the express lane controller to update the address they wish to use for the express lane, which enables unique express lane control reselling use cases.
+The auction contract also has functions that enable the express lane controller to update the address they wish to use for the express lane, which allows unique express lane control reselling use cases.
 
 ### Default parameters
 
-Below are a few of the default Timeboost parameters mentioned earlier. All of these parameters, and more, are configurable by the chain owner.
-| Parameter name | Description | Recommended default value |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| `roundDurationSeconds` | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller. | 60 seconds |
-| `auctionClosingSeconds`| Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval. | 15 seconds |
-| `beneficiary` | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract. | An address controlled by the chain's owner |
-| `_biddingToken` | Address of the token used to make bids in the Timeboost auction. Can be any ERC20 token (assuming the token address chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard ERC20 logic). | WETH |
-| `nonExpressDelayMsec` | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced. | 0.2 seconds, or 200 milliseconds |
-| `reservePrice` | The minimum bid amount accepted by the auction contract for Timeboost auctions, denominated in `_biddingToken`. | None |
-| `_minReservePrice` | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract. | 0.001 `WETH` |
+Below are a few of the default Timeboost parameters mentioned earlier. All these parameters and more are configurable by the chain owner.
+
+| Parameter name          | Description                                                                                                                                                                                                                    | Recommended default value                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller.                                                                             | 60 seconds                                 |
+| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval.                                                                                                             | 15 seconds                                 |
+| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract.                                                                                            | An address controlled by the chain's owner |
+| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any ERC20 token (assuming the token address chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard ERC20 logic). | WETH                                       |
+| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced.                                                                               | 0.2 seconds, or 200 milliseconds           |
+| `reservePrice`          | The minimum bid amount accepted by the auction contract for Timeboost auctions, denominated in `_biddingToken`.                                                                                                                | None                                       |
+| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract.                                                                                    | 0.001 `WETH`                               |
 
 ## Who is Timeboost for, and how do I use it?
 
@@ -116,11 +117,11 @@ Timeboost represents a unique way to accrue value to their token and generate re
 
 #### For searchers/arbitrageurs:
 
-Timeboost adds a unique twist to your existing or prospective MEV strategies that may become more profitable than before. For instance, purchasing the time advantage offered by Timeboost’s auction may end up costing _less_ than the costs to invest in hardware and win latency races. Another example is the potential new business model of reselling express lane rights to other parties, either in time slots or as granular asa per-transaction basis.
+Timeboost adds a unique twist to your existing or prospective MEV strategies that may become more profitable than before. For instance, purchasing the time advantage offered by Timeboost’s auction may end up costing _less_ than the costs to invest in hardware and win latency races. Another example is the potential new business model of reselling express lane rights to other parties in time slots or on a granular, per-transaction basis.
 
 ### Special note on Timeboost for chain owners
 
-As with many of the new features and upgrades to Arbitrum Nitro, Timeboost is an optional feature that chain owners may choose to deploy and customize in any way they see fit. Deploying and enabling/disabling Timeboost on a live Arbitrum chain will not halt or impact the chain but will instead influence the chain's transaction ordering policy. An Arbitrum chain will, by default, fall back to FCFS if Timeboost is deployed but disabled or if there is no express lane controller for a given round.
+As with many new features and upgrades to Arbitrum Nitro, Timeboost is an optional feature that chain owners may choose to deploy and customize however they see fit. Deploying and enabling/disabling Timeboost on a live Arbitrum chain will not halt or impact the chain but will instead influence the chain's transaction ordering policy. An Arbitrum chain will, by default, fall back to FCFS if Timeboost is deployed but disabled or if there is no express lane controller for a given round.
 
 It is recommended that Arbitrum teams holistically assess the applicability and use cases of Timeboost for their chain before deploying and enabling Timeboost. This is because some Arbitrum chains may not have that much MEV (e.g., arbitrage) to begin with. Furthermore, we recommend that Arbitrum chains start with the default parameters recommended by Offchain Labs and closely monitor the results and impacts on your chain’s ecosystem over time before considering adjusting any of the parameters.
 
