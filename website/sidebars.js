@@ -272,6 +272,16 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-sequencer-configuration',
+                  label: 'orbit-sequencer-configuration',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-batch-poster-configuration',
+                  label: 'orbit-batch-poster-configuration',
+                },
+                {
+                  type: 'doc',
                   id: 'launch-orbit-chain/reference/orbit-fast-block-times',
                   label: 'orbit-fast-block-times',
                 },
