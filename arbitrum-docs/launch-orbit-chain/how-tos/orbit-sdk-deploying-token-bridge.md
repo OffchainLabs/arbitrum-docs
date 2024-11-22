@@ -44,8 +44,8 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 
 The token bridge deployment process is the same for all Orbit chains types except for the following:
 
-- **Custom fee token Orbit chains** which require [token approval](#step-1).
-- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#step-5).
+- **Custom fee token Orbit chains** which require [token approval](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge#step-1).
+- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge#step-5).
 
 :::
 

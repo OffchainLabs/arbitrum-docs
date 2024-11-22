@@ -246,6 +246,11 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/AEPLicense',
+          label: 'AEP License',
+        },
+        {
           type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,

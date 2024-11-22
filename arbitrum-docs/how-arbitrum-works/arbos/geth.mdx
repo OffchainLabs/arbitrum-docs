@@ -21,7 +21,7 @@ Please note any links on this page may be referencing old releases of Nitro or o
 
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
 
-Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#EnableArbOS) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
+Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](/how-arbitrum-works/arbos/geth#EnableArbOS) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
 
 - `core.ApplyTransaction` ⮕ `core.applyTransaction` ⮕ `core.ApplyMessage`
   - `core.NewStateTransition`
@@ -34,7 +34,7 @@ Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additiona
       - `evm.Call`
         - `core.vm.EVMInterpreter.Run`
           - [`PushCaller`](#PushCaller)
-          - [`PopCaller`](#PopCaller)
+          - [`PopCaller`](/how-arbitrum-works/arbos/geth#PopCaller)
       - `core.StateTransition.refundGas`
         - [`ForceRefundGas`](#ForceRefundGas)
         - [`NonrefundableGas`](#NonrefundableGas)
@@ -176,7 +176,7 @@ Represents a user deposit from L1 to L2. This increases the user's balance by th
 
 ### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]{#ArbitrumSubmitRetryableTx}
 
-Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.mdx#Retryables) for more info.
+Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/introduction.mdx#retryables) for more info.
 
 ### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
