@@ -17,6 +17,9 @@ The game will operate in two phases: dissection, followed by one-step proof. Dis
 
 We’ll describe the dissection part of the protocol twice. First, we’ll give a simplified version which is easier to understand but less efficient. Then we’ll describe how the real version differs from the simplified one.
 
+
+
+
 ### Dissection Protocol: Simplified Version
 
 Alice is defending the claim that starting with the state in the predecessor RBlock, the state of the Virtual Machine can advance to the state specified in RBlock A. Essentially she is claiming that the Virtual Machine can execute N instructions, and that that execution will consume M inbox messages and transform the hash of outputs from H’ to H.
@@ -27,6 +30,9 @@ Now Alice has effectively bisected her N-step assertion into two (N/2)-step asse
 
 At this point we’re effectively back in the original situation: Alice having made an assertion that Bob disagrees with. But we have cut the size of the assertion in half, from N to N/2. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to N/4. And we can continue bisecting, so that after a logarithmic number of rounds Alice and Bob will be disagreeing about a single step of execution. That’s where the dissection phase of the protocol ends, and Alice must make a one-step proof which will be checked by the EthBridge.
 
+
+
+
 ### Why Dissection Correctly Identifies a Cheater
 
 Before talking about the complexities of the real challenge protocol, let’s stop to understand why the simplified version of the protocol is correct. Here correctness means two things: (1) if Alice’s initial claim is correct, Alice can always win the challenge, and (2) if Alice’s initial claim is incorrect, Bob can always win the challenge.
@@ -36,6 +42,9 @@ To prove (1), observe that if Alice’s initial claim is correct, she can offer 
 To prove (2), observe that if Alice’s initial claim is incorrect, this can only be because her claimed endpoint after N steps is incorrect. Now when Alice offers her midpoint state claim, that midpoint claim is either correct or incorrect. If it’s incorrect, then Bob can challenge Alice’s first-half claim, which will be incorrect. If Alice’s midpoint state claim is correct, then her second-half claim must be incorrect, so Bob can challenge that. So whatever Alice does, Bob will be able to challenge an incorrect half-size claim. At each stage of the protocol, Bob can identify an incorrect claim to challenge. At the end, Alice will have an incorrect one-step claim to prove, which she will be unable to do, so Bob can win the challenge.
 
 (If you’re a stickler for mathematical precision, it should be clear how these arguments can be turned into proofs by induction on N.)
+
+
+
 
 ### The Real Dissection Protocol
 
@@ -53,11 +62,17 @@ The real dissection protocol is conceptually similar to the simplified one descr
 
 It should be clear that these changes don’t affect the basic correctness of the challenge protocol. They do, however, improve its efficiency and enable it to handle all of the cases that can come up in practice.
 
+
+
+
 ### Efficiency
 
 The challenge protocol is designed so that the dispute can be resolved with a minimum of work required by the protocol (via its Layer 1 Ethereum contracts) in its role as referee. When it is Alice’s move, the protocol only needs to keep track of the time Alice uses, and ensure that her move does include K-1 intermediate points as required. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”.
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
+
+
+
 
 ## Validators
 
@@ -83,9 +98,15 @@ Who will be validators? Anyone will be able to do it, but most people will choos
 - Parties who have significant assets at bond on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.
 
+
+
+
 ## ArbOS
 
 ArbOS is a trusted "system glue" component that runs at Layer 2 as part of the State Transition Function. ArbOS provides functions needed for a Layer 2 system, such as cross-chain communication, resource accounting and Layer 2 related fee economics, and chain management.
+
+
+
 
 ### Why ArbOS?
 
@@ -93,11 +114,15 @@ In Arbitrum, much of the work that would otherwise have to be done expensively a
 
 Supporting these functions in Layer 2 trusted software, rather than building them in to the L1-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at Layer 2, instead of having to manage those resources as part of a Layer 1 contract. Having a trusted operating system at Layer 2 also has significant advantages in flexibility, because Layer 2 code is easier to evolve, or to customize for a particular chain, than a Layer-1 enforced architecture would be.
 
+
+
 ## Full Nodes
 
 As the name suggests, full nodes in Arbitrum play the same role that full nodes play in Ethereum: they know the state of the chain and they provide an API that others can use to interact with the chain.
 
 Arbitrum full nodes normally "live at Layer 2" which means that they don’t worry about the rollup protocol but simply treat their Arbitrum chain as a mechanism that feeds inbox messages to the State Transition Function to evolve the Layer 2 chain and produce outputs.
+
+
 
 ## The Sequencer
 
@@ -107,11 +132,17 @@ Clients interact with the Sequencer in exactly the same way they would interact 
 
 [Currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization), on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
 
+
+
+
 ### Instant confirmation
 
 Without a Sequencer, a node can predict what the results of a client transaction will be, but the node can't be sure, because it can't know or control how the transactions it submits will be ordered in the inbox, relative to transactions submitted by other nodes.
 
 The Sequencer is given more control over ordering, so it has the power to assign its clients' transactions a position in the inbox queue, thereby ensuring that it can determine the results of client transactions immediately. The Sequencer's power to reorder has limits (see below for details) but it does have more power than anyone else to influence transaction ordering.
+
+
+
 
 ### Inboxes, fast and slow
 
@@ -121,6 +152,8 @@ When we add a Sequencer, the operation of the inbox changes.
 - Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "delayed inbox" queue, which is managed by an L1 Ethereum contract.
   - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
   - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
+
+
 
 ### If the Sequencer is well-behaved...
 
@@ -134,6 +167,8 @@ This is the basic tradeoff of having a Sequencer: if your message uses the Seque
 
 So a Sequencer is generally a win, if the Sequencer is well behaved.
 
+
+
 ### If the Sequencer is malicious...
 
 A malicious Sequencer, on the other hand, could cause some pain. If it refuses to handle your transactions, you're forced to go through the delayed inbox, with longer delay. And a malicious Sequencer has great power to front-run everyone's transactions, so it could profit greatly at users' expense.
@@ -141,6 +176,8 @@ A malicious Sequencer, on the other hand, could cause some pain. If it refuses t
 On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to decentralized, fair sequencing, as described below.
 
 Because the Sequencer will be run by a trusted party at first, and will be decentralized later, we haven't built in a mechanism to directly punish a misbehaving Sequencer. We're asking users to trust the centralized Sequencer at first, until we switch to decentralized fair sequencing later.
+
+
 
 ### Decentralized fair sequencing
 
@@ -159,6 +196,8 @@ The `ChallengeManager` arbitrates challenge games. Here's a diagram of the chall
 
 <ChallengeManagerDiagram />
 
+
+
 ## Block challenge
 
 The challenge begins by bisecting over global states (including block hashes).
@@ -168,6 +207,8 @@ Once the challenge has been bisected down to an individual block,
 This operates similarly to a bisection in that the responder must provide a competing global state and machine state,
 but it uses that information to transition to the execution challenge phase.
 
+
+
 ## Execution challenge
 
 Once narrowed down to an individual block, the actual machine execution can be bisected.
@@ -176,6 +217,8 @@ Once the execution has been bisected down to an individual step,
 The current responder must provide proof data to execute a step of the machine.
 If executing that step ends in a different state than was previously asserted,
 the current responder wins the challenge.
+
+
 
 ## General bisection protocol
 
@@ -206,6 +249,8 @@ What happens there is specific to the phase of the challenge, as either a `chall
 Note that unlike in a traditional bisection protocol, where one party proposes segments and the other decides which to challenge,
 this protocol is symmetric in that both players take turns deciding where to challenge and proposing bisections
 when challenging.
+
+
 
 ## Winning the challenge
 
@@ -250,6 +295,8 @@ such a case were reached in correct execution, could lead to a security failure.
 
 The following assumptions, together, must prevent an unreachable case from arising in correct execution.
 
+
+
 ## The WAVM code is generated by Arbitrator from valid WASM
 
 WAVM is the name of the custom instruction set similar to WASM used for proving.
@@ -261,6 +308,8 @@ mismatch types, or do any other number of invalid things which are prevented by 
 
 WAVM code generated from by Arbitrator from valid WASM is assumed to never encounter an unreachable case.
 
+
+
 ## Inbox messages must not be too large
 
 The current method of inbox hashing requires the full inbox message be available for proving.
@@ -270,6 +319,8 @@ which is enforced by the inboxes.
 The current length limit is 117,964 bytes, which is 90% of the
 [max transaction size Geth will accept](https://github.com/ethereum/go-ethereum/blob/356bbe343a30789e77bb38f25983c8f2f2bfbb47/core/tx_pool.go#L53),
 leaving 13,108 bytes for other proving data.
+
+
 
 ## Requested preimages must be known and not too large
 
@@ -282,6 +333,8 @@ The current length limit is 117,964 bytes for the reasons mentioned above.
 Here's a list of which preimages may be requested by Nitro, and why they're known to all parties,
 and not too large:
 
+
+
 ### Block headers
 
 Nitro may request up to the last 256 L2 block headers.
@@ -289,6 +342,8 @@ The last block header is required to determine the current state,
 and blocks before it are required to implement the `BLOCKHASH` evm instruction.
 
 This is safe as previous block headers are a fixed size, and are known to all nodes.
+
+
 
 ### State trie access
 
@@ -313,6 +368,8 @@ This document lists those which are not, and explains how they're expressed in W
 Many of the WAVM representations use opcodes not in WASM,
 which are documented in [`wavm-custom-opcodes.mdx`](/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes.mdx).
 
+
+
 ## `block` and `loop`
 
 In WASM, a block contains instructions.
@@ -322,6 +379,8 @@ A normal `block`'s destination is the end of the block, whereas a `loop`'s desti
 In WAVM, instructions are flat.
 At transpilation time, any branch instructions are replaced with jumps to the corresponding block's destination.
 This means that WAVM interpreters don't need to track blocks, and thus block instructions are unnecessary.
+
+
 
 ## `if` and `else`
 
@@ -341,6 +400,8 @@ end
 `br` and `br_if` are translated into `ArbitraryJump` and `ArbitraryJumpIf` respectively.
 The jump locations can be known at transpilation time, making blocks obsolete.
 
+
+
 ## `br_table`
 
 `br_table` is translated to a check for each possible branch in the table,
@@ -349,9 +410,13 @@ and then if none of the checks hit, a branch of the default level.
 Each of the non-default branches has a conditional jump to a section afterwards,
 containing a `drop` for the selector, and then a jump to the target branch.
 
+
+
 ## `local.tee`
 
 `local.tee` is translated to a WAVM `Dup` and then a `LocalSet`.
+
+
 
 ## `return`
 
@@ -360,6 +425,8 @@ A WAVM `MoveFromStackToInternal` is added for each return value.
 Then, a loop checks `IsStackBoundary` (which implicitly pops a value) until it's true and the stack boundary has been popped.
 Next, a `MoveFromInternalToStack` is added for each return value to put the return values back on the stack.
 Finally, a WAVM `Return` is added, returning control flow to the caller.
+
+
 
 ## Floating point instructions
 
@@ -383,12 +450,16 @@ WAVM implements the multi value and sign extension ops WASM proposals.
 WAVM also implements the following unique opcodes,
 which are not part of WASM nor any WASM proposal.
 
+
+
 ## Invariants
 
 Many of these opcodes have implicit invariants about what's on the stack,
 e.g. "Pops an i32 from the stack" assumes that the top of the stack has an i32.
 If these conditions are not satisfied, execution is generally not possible.
 These invariants are maintained by WASM validation and Arbitrator codegen. (See [One Step Proof Assumptions](/how-arbitrum-works/fraud-proofs/osp-assumptions.mdx).)
+
+
 
 ## Codegen internal
 
@@ -419,6 +490,8 @@ The above opcodes eliminate the need for the following WASM opcodes (which are t
 - br_table
 - local.tee
 
+
+
 ## Linking
 
 This is only generated to link modules together.
@@ -428,6 +501,8 @@ which handles the actual work needed to change modules.
 | Opcode | Name            | Description                                                                                                                                                                                                                                                          |
 | ------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0x8009 | CrossModuleCall | Pushes the current program counter, module number, and module's internals offset to the stack. Then splits its argument data into the lower 32 bits being a function index, and the upper 32 bits being a module index, and jumps to the beginning of that function. |
+
+
 
 ## Host calls
 
@@ -484,6 +559,8 @@ and floating points may be used outside core state transition code for imprecise
 but the former is well exercised as used in Nitro,
 and the latter generally doesn't rely on details like the minimum of NaN and infinity.
 
+
+
 ## Known divergences from the WASM specification
 
 Floating point to integer truncation will saturate on overflow, instead of erroring.
@@ -515,6 +592,8 @@ and then calls the main module's main function, which is language specific.
 For Go it sets argv to `["js"]` to match the JS environment, and calls `run`.
 For Rust it calls `main` with no arguments.
 
+
+
 ## Library exports
 
 Libraries may export functions with the name pattern `module__name`,
@@ -522,6 +601,8 @@ which future libraries or the main module can import as `"module" "name"`.
 
 For instance, this is used for wasi-stub to provide functions rust imports according
 to the WebAssembly System Interface.
+
+
 
 ## Floating point operations
 
@@ -533,6 +614,8 @@ Their type signature is also the same, except all `f32`s and `f64`s are bitcaste
 Future modules can implicitly use these by using WASM floating point operations,
 which are replaced at the WASM->WAVM level with bitcasts and cross module calls to these functions.
 
+
+
 ## WAVM guest calls
 
 Libraries may call the main module's exports via `"env" "wavm_guest_call__*"`.
@@ -540,6 +623,8 @@ Libraries may call the main module's exports via `"env" "wavm_guest_call__*"`.
 For instance, go-stub calls Go's resume function when queueing async events
 via `wavm_guest_call_resume()`, and then retrieves the new stack pointer with
 `wavm_guest_call_getsp()`.
+
+
 
 ## Caller module internals call
 
