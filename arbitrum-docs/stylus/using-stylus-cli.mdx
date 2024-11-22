@@ -79,68 +79,28 @@ Available for commands involving transactions:
 | --keystore-path          | Path to Ethereum wallet keystore file                |
 | --keystore-password-path | Keystore password file path                          |
 
-### Example usage
+### Examples usage
 
-#### Create a new Stylus project
+| Description                                                        | Command                                                                       |
+|--------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| Create a new Stylus project                                        | `cargo stylus new my_project`                                                 |
+| Initialize a Stylus project in the current directory               | `cargo stylus init`                                                           |
+| Export a Solidity ABI                                              | `cargo stylus export-abi --output abi.json`                                   |
+| Cache a contract using the Stylus CacheManager for Arbitrum chains | `cargo stylus cache bid --address 0x1234567890123456789012345678901234567890` |
 
-```shell
-cargo stylus new my_project
-```
+#### How-tos
 
-#### Initialize a Stylus project in the current directory
-
-```shell
-cargo stylus init
-```
-
-#### Export a Solidity ABI
-
-```shell
-cargo stylus export-abi --output abi.json
-```
-
-#### Cache a contract using the Stylus CacheManager for Arbitrum chains
-
-```shell
-cargo stylus cache bid --address 0x1234567890123456789012345678901234567890
-```
+| Topic                                                                                              | Description                                                                                                                                 |
+|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| [Learn how to optimize WASM binaries](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries) | The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.      |
+| [Debug Stylus transactions](https://docs.arbitrum.io/stylus/how-tos/debug-stylus-transactions)     | A guide to debugging transactions, helping you identify and fix issues. Gain insights into your Stylus contracts by debugging transactions. |
+| [Verify contracts](https://docs.arbitrum.io/stylus/how-tos/verify-contracts)                       | Ensure that your Stylus contracts are correctly verified. Step-by-step instructions on how to verify your contracts using `cargo-stylus`.   |
+|[Run a Stylus dev node](https://docs.arbitrum.io/run-arbitrum-node/run-local-dev-node)             | Learn how to run a local Arbitrum dev node to test your Stylus contracts.                                                                    |
 
 #### Additional resources
 
-For more advanced usage and detailed guides, refer to the following resources:
+#### [Troubleshooting](https://docs.arbitrum.io/stylus/troubleshooting-building-stylus): solve the most common issues.
 
-##### Optimize WASM binaries
-
-The `cargo-stylus` tool allows you to optimize WebAssembly (WASM) binaries, ensuring that your contracts are as efficient as possible.
-
-###### [Learn how to optimize WASM binaries](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries)
-
-##### Debug Stylus transactions
-
-Gain insights into your Stylus contracts by debugging transactions.
-
-###### [Debug Stylus transactions](https://docs.arbitrum.io/stylus/how-tos/debug-stylus-transactions)
-
-A guide to debugging transactions, helping you identify and fix issues.
-
-##### Verify contracts
-
-Ensure that your Stylus contracts are correctly verified.
-
-###### [Verify contracts](https://docs.arbitrum.io/stylus/how-tos/verify-contracts)
-
-Step-by-step instructions on how to verify your contracts using `cargo-stylus`.
-
-###### [Optimize WASM binaries](https://docs.arbitrum.io/stylus/how-tos/optimizing-binaries)
-
-###### [Troubleshooting](https://docs.arbitrum.io/stylus/troubleshooting-building-stylus)
-
-###### [Run a Stylus dev node](https://docs.arbitrum.io/run-arbitrum-node/run-local-dev-node)
+#### [cargo-stylus repository](https://github.com/OffchainLabs/stylus): consult cargo stylus' source code. 
 
 This overview page serves as the starting point for mastering the CLI tools available for Stylus development. From optimizing your contracts to debugging and verifying them, the `cargo-stylus` toolset is integral to a smooth development experience.
-
-#### Source code repository
-
-The source code for `cargo-stylus` is available on GitHub. Explore the code, contribute, or use it as a reference.
-
-###### [cargo-stylus repository](https://github.com/OffchainLabs/stylus):\*\* Visit the GitHub repository for more information.
