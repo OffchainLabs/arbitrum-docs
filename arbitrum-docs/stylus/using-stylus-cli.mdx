@@ -12,8 +12,6 @@ This guide will get you started using [cargo stylus](https://github.com/Offchain
 
 It is available as a plugin to the standard cargo tool used for developing Rust programs.
 
-
-
 ### Installing cargo stylus
 
 #### Prerequisites
@@ -43,42 +41,41 @@ You can verify that cargo stylus is installed by running `cargo stylus -V` in yo
 
 #### Cargo Stylus Commands
 
-| Command | Description | Options |
-|---------|-------------|----------|
-| new | Create a new Stylus project | • name: Project name (required) <br />• --minimal: Create a minimal contract |
-| init | Initialize a Stylus project in current directory | • --minimal: Create a minimal contract |
-| export-abi | Export a Solidity ABI | • --output: Output file (defaults to stdout) <br />• --json: Write JSON ABI using solc |
-| activate | Activate an already deployed contract | • --address: Contract address to activate <br />• --data-fee-bump-percent: Percent to bump estimated fee (default 20%) <br />• --estimate-gas: Only estimate gas without sending tx |
-| cache | Cache contract using Stylus CacheManager | Subcommands: <br />• bid: Place bid on contract <br />• status: Check contract status <br />• suggest-bid: Get suggested minimum bid |
-| check | Check a contract | • --wasm-file: WASM to check <br />• --contract-address: Deploy address |
-| deploy | Deploy a contract | • --estimate-gas: Only perform estimation <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image |
-| verify | Verify contract deployment | • --deployment-tx: Hash of deployment tx <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image |
-| cgen | Generate C code bindings | • input: Input file path <br />• out_dir: Output directory path |
-| replay | Replay transaction in gdb | • --stable-rust: Use stable Rust <br />• --child: Child process flag |
-| trace | Trace a transaction | • --endpoint: RPC endpoint <br />• --tx: Transaction hash <br />• --project: Project path <br />• --use-native-tracer: Use native tracer |
+| Command    | Description                                      | Options                                                                                                                                                                             |
+| ---------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| new        | Create a new Stylus project                      | • name: Project name (required) <br />• --minimal: Create a minimal contract                                                                                                        |
+| init       | Initialize a Stylus project in current directory | • --minimal: Create a minimal contract                                                                                                                                              |
+| export-abi | Export a Solidity ABI                            | • --output: Output file (defaults to stdout) <br />• --json: Write JSON ABI using solc                                                                                              |
+| activate   | Activate an already deployed contract            | • --address: Contract address to activate <br />• --data-fee-bump-percent: Percent to bump estimated fee (default 20%) <br />• --estimate-gas: Only estimate gas without sending tx |
+| cache      | Cache contract using Stylus CacheManager         | Subcommands: <br />• bid: Place bid on contract <br />• status: Check contract status <br />• suggest-bid: Get suggested minimum bid                                                |
+| check      | Check a contract                                 | • --wasm-file: WASM to check <br />• --contract-address: Deploy address                                                                                                             |
+| deploy     | Deploy a contract                                | • --estimate-gas: Only perform estimation <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image                                 |
+| verify     | Verify contract deployment                       | • --deployment-tx: Hash of deployment tx <br />• --no-verify: Skip reproducible container <br />• --cargo-stylus-version: Version for Docker image                                  |
+| cgen       | Generate C code bindings                         | • input: Input file path <br />• out_dir: Output directory path                                                                                                                     |
+| replay     | Replay transaction in gdb                        | • --stable-rust: Use stable Rust <br />• --child: Child process flag                                                                                                                |
+| trace      | Trace a transaction                              | • --endpoint: RPC endpoint <br />• --tx: Transaction hash <br />• --project: Project path <br />• --use-native-tracer: Use native tracer                                            |
 
 ##### Common Options
 
- These options are available across multiple commands:
+These options are available across multiple commands:
 
-| Option | Description |
-|--------|-------------|
-| --endpoint | Arbitrum RPC endpoint (default: http://localhost:8547) |
-| --verbose | Print debug info |
-| --source-files-for-project-hash | Paths to source files for project hash |
-| --max-fee-per-gas-gwei | Optional max fee per gas in gwei |
+| Option                          | Description                                            |
+| ------------------------------- | ------------------------------------------------------ |
+| --endpoint                      | Arbitrum RPC endpoint (default: http://localhost:8547) |
+| --verbose                       | Print debug info                                       |
+| --source-files-for-project-hash | Paths to source files for project hash                 |
+| --max-fee-per-gas-gwei          | Optional max fee per gas in gwei                       |
 
 ##### Authentication Options
 
 Available for commands involving transactions:
 
-| Option | Description |
-|--------|-------------|
-| --private-key-path | Path to file containing hex-encoded private key |
-| --private-key | Private key as hex string (exposes to shell history) |
-| --keystore-path | Path to Ethereum wallet keystore file |
-| --keystore-password-path | Keystore password file path |
-
+| Option                   | Description                                          |
+| ------------------------ | ---------------------------------------------------- |
+| --private-key-path       | Path to file containing hex-encoded private key      |
+| --private-key            | Private key as hex string (exposes to shell history) |
+| --keystore-path          | Path to Ethereum wallet keystore file                |
+| --keystore-password-path | Keystore password file path                          |
 
 ### Example Usage
 
@@ -112,7 +109,6 @@ cargo stylus activate --address 0x1234567890123456789012345678901234567890
 cargo stylus deploy --RPC-endpoint http://localhost:8547 --private-key-path /path/to/private-key --max-fee-per-gas-gwei 100
 ```
 
-
 #### Cache a contract using the Stylus CacheManager for Arbitrum chains
 
 ```shell
@@ -125,11 +121,10 @@ cargo stylus cache bid --address 0x1234567890123456789012345678901234567890
 cargo stylus verify --deployment-tx 0x1234567890123456789012345678901234567890
 ```
 
-
 Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for more information on using Stylus in your Arbitrum projects.
 
-
 <!-- ```shell title="cargo stylus --help returns:" -->
+
 <!-- Cargo command for developing Stylus projects -->
 
 <!-- Usage: cargo stylus <COMMAND> -->
@@ -149,6 +144,9 @@ Feel free to explore the [Stylus Rust SDK reference](./reference/overview) for m
 <!--   help        Print this message or the help of the given command(s) -->
 
 <!-- Options: -->
+
 <!--   -h, --help     Print help -->
+
 <!--   -V, --version  Print version -->
+
 <!-- ``` -->
