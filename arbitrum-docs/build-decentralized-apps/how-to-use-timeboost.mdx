@@ -5,9 +5,9 @@ author: jose-franco
 content_type: how-to
 ---
 
-Timeboost is a new transaction ordering policy for Arbitrum chains where any participant can bid for the right to access an express lane on the sequencer for faster transaction inclusion.
+Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the sequencer for faster transaction inclusion.
 
-In this how-to, you'll learn how to bid for the right to use the express lane, how to submit transactions to it, and how to transfer that right to someone else. To learn more about Timeboost, refer to the gentle introduction.
+In this how-to, you'll learn how to bid for the right to use the express lane, how to submit transactions through the express lane, and how to transfer that express lane rights to someone else. To learn more about Timeboost, refer to the [gentle introduction](#).
 
 This how-to assumes that you're familiar with:
 
@@ -16,19 +16,19 @@ This how-to assumes that you're familiar with:
 
 ## How to submit bids for the right to be the express lane controller
 
-To use the express lane for faster transaction inclusion, we must win an auction for the right to be the express lane controller for a specific round.
+To use the express lane for faster transaction inclusion, you must win an auction for the right to be the express lane controller for a specific round.
 
 ::::info
 
-Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured in a chain with the `roundDurationSeconds` and `auctionClosingSeconds` parameters respectively.
+Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters, respectively.
 
 ::::
 
 Auctions are held in an auction contract, and bids are submitted to an autonomous auctioneer, that also communicates with the contract. Let's take a look at the process of submitting bids and finding out the winner of an auction.
 
-### Step 0: pre-requirements
+### Step 0: gather required information
 
-To run the following steps, we'll need this information:
+Before we begin, make sure you have:
 
 - Address of the auction contract
 - Endpoint of the autonomous auctioneer
@@ -44,9 +44,9 @@ const depositedBalance = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
   functionName: 'balanceOf',
-  args: [address],
+  args: [userAddress],
 });
-console.log(`Current balance of ${address} in auction contract: ${depositedBalance}`);
+console.log(`Current balance of ${userAddress} in auction contract: ${depositedBalance}`);
 ```
 
 If we want to deposit more funds to the auction contract, we first need to know what the bidding token is. To obtain the address of the bidding token, we can call the function `biddingToken` in the auction contract:
@@ -112,8 +112,9 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 ```
 
 <aside>
-  Remember that, by default, auctions open 60 seconds before the round starts, and close 15 seconds
-  before the round starts, so there might be no auctions opened at certain times.
+  Remember that, by default, auctions for a given round open 60 seconds before that round starts,
+  and close 15 seconds before the round starts, so there might be no auctions opened at certain
+  times.
 </aside>
 
 Once we know what is the current round we can bid for (`currentRound + 1`) and we have verified that the auction is still open (`!currentAuctionRoundIsClosed`), we can submit a bid.
@@ -126,6 +127,12 @@ Bids are submitted to the autonomous auctioneer endpoint. We need to send a `auc
 - round we are bidding for (in our example, `currentRound + 1`)
 - amount in wei of the deposit ERC-20 token to bid
 - signature (explained below)
+
+::::info Minimum reserve price
+
+The amount to bid must be above the minimum reserve price at the moment you are bidding. This parameter is configurable per chain. You can obtain the minimum reserve price by calling the method `minReservePrice()(uint256)` in the auction contract.
+
+::::
 
 Let's see an example of a call to this RPC method:
 
@@ -143,7 +150,7 @@ const res = await fetch(<AUTONOMOUS_AUCTIONEER_ENDPOINT>, {
     params: [
       {
         chainId: hexChainId,
-        expressLaneController: address,
+        expressLaneController: userAddress,
         auctionContractAddress: auctionContractAddress,
         round: `0x${currentAuctionRound.toString(16)}`,
         amount: `0x${Number(amountToBid).toString(16)}`,
@@ -175,7 +182,7 @@ const signatureData = concat([
   auctionContractAddress,
   toHex(numberToBytes(currentAuctionRound, { size: 8 })),
   toHex(numberToBytes(amountToBid, { size: 32 })),
-  address,
+  userAddress,
 ]);
 const signature = await account.signMessage({
   message: { raw: signatureData },
@@ -184,7 +191,7 @@ const signature = await account.signMessage({
 
 ::::info
 
-You can also call the function `getBidBytes` in the auction contract to obtain the `signatureData` , specifying the `round`, `amountToBid` and `address`.
+You can also call the function `getBidBytes` in the auction contract to obtain the `signatureData` , specifying the `round`, `amountToBid` and `userAddress`.
 
 ::::
 
@@ -351,7 +358,9 @@ From that moment, the previous express lane controller will not be able to send 
 
 ### Setting a transferor account
 
-A `transferor` is an address that has the right to transfer express lane controller rights on behalf an express lane controller. We can set a transferor for our account using the auction contract. Additionally, we can choose to fix that transferor account until a specific round, to guarantee to other parties that we will not change the transferor until the specified round finishes.
+A `transferor` is an address that has the right to transfer express lane controller rights on behalf an express lane controller. The reason to include this function (setTransferor) is so the express lane controller has a way to nominate an address that can transfer rights to anyone they see fit, in order to improve the reselling rights user experience.
+
+We can set a transferor for our account using the auction contract. Additionally, we can choose to fix that transferor account until a specific round, to guarantee to other parties that we will not change the transferor until the specified round finishes.
 
 To set a transferor, we can call the function `setTransferor` in the auction contract:
 
