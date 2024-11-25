@@ -13,10 +13,6 @@ This initialization process, if repeated frequently, may lead to inefficiencies.
 
 **Note that Stylus smart contracts will need to be re-activated once per year (365 days) or whenever a upgrade to Stylus (which will always involve an ArbOS upgrade), even if they are in the cache. This re-activation can be done using [`cargo-stylus`](https://github.com/OffchainLabs/cargo-stylus), a cargo subcommand for building, verifying, and deploying Arbitrum Stylus WASM contracts in Rust.**
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 ## CacheManager contract
 
 The core component of our caching strategy is the [CacheManager contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/chain/CacheManager.sol). This smart contract manages the cache, interacts with precompiles, and determines which contracts should be cached. The `CacheManager` can hold approximately 4,000 contracts in memory.

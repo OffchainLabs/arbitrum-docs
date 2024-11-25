@@ -80,26 +80,9 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
+          type: 'doc',
           label: 'Oracles',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/oracles/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Use oracles in your app',
-              id: 'build-decentralized-apps/oracles/how-to-use-oracles',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/oracles/reference',
-            },
-          ],
+          id: 'build-decentralized-apps/oracles/overview-oracles',
         },
         {
           type: 'category',
@@ -263,6 +246,70 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/AEPLicense',
+          label: 'AEP License',
+        },
+        {
+          type: 'category',
+          label: 'Guidance for Orbit chain operators',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage gas state growth`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Production Orbit chain setup',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/orbit-sdk-introduction',
+              label: `Introduction`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              label: `Rollup Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              label: `AnyTrust Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              label: `Custom Gas Token Orbit Deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+              label: `Node Config Generation`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              label: `Token bridge deployment`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              label: `Orbit Chain Configuration`,
+            },
+          ],
+        },
+        {
           type: 'category',
           label: 'Customize your chain',
           collapsed: true,
@@ -311,6 +358,33 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
               label: `Implement Circle bridged USDC`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/fast-withdrawals',
+              label: `Enable fast withdrawals`,
+            },
+            {
+              type: 'category',
+              label: 'AEP fee router',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/aep-fee-router-introduction',
+                  label: `AEP fee router overview`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+                  label: `Set up AEP fee router`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  label: `Calculate AEP license fees`,
+                },
+              ],
             },
           ],
         },
@@ -394,6 +468,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
+          label: 'BoLD for Orbit chains',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
@@ -406,48 +485,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/troubleshooting-building-orbit',
           label: 'FAQ',
-        },
-        {
-          type: 'category',
-          label: 'Orbit SDK',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-introduction',
-              label: `Introduction`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
-              label: `Rollup Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
-              label: `AnyTrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
-              label: `Orbit Chain Configuration`,
-            },
-          ],
         },
       ],
     },
@@ -570,7 +607,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-local-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
           // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
           // a: see note at end of file
         },
@@ -629,7 +666,12 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'run-arbitrum-node/run-local-dev-node',
+          id: 'run-arbitrum-node/run-local-full-chain-simulation',
+          label: 'Run a local full chain simulation',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/run-nitro-dev-node',
           label: 'Run a local dev node',
         },
         {
@@ -723,26 +765,19 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
-              label: 'Nitro database snapshots',
-            },
-          ],
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/build-nitro-locally',
+          label: 'Build Nitro locally',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+          label: 'Migrate to Nitro from Classic',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+          label: 'Database snapshots',
         },
         {
           type: 'doc',
@@ -788,11 +823,6 @@ const sidebars = {
           label: 'Introductory concepts',
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/why-nitro',
-              label: 'Why Nitro?',
-            },
             {
               type: 'doc',
               id: 'how-arbitrum-works/tx-lifecycle',
@@ -845,6 +875,11 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/assertion-tree',
               label: 'Assertion tree',
+            },
+            {
+              type: 'doc',
+              id: 'how-arbitrum-works/why-nitro',
+              label: 'Nitro vs. Classic',
             },
             {
               type: 'category',
@@ -934,8 +969,8 @@ const sidebars = {
                   label: 'BoLD Whitepaper',
                 },
                 {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold/blob/main/docs/research-specs/TechnicalDeepDive.pdf',
+                  type: 'doc',
+                  id: 'bold/concepts/bold-technical-deep-dive',
                   label: 'Technical deep dive',
                 },
                 {
@@ -989,8 +1024,51 @@ const sidebars = {
       collapsed: true,
       items: [
         {
+          type: 'category',
+          label: 'Oracles',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'for-devs/oracles/oracles-content-map',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/api3/api3',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chainlink/chainlink',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chronicle/chronicle',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/ora/ora',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-price-feed',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-vrf',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/trellor/trellor',
+            },
+          ],
+        },
+        {
           type: 'autogenerated',
           dirName: 'for-devs/third-party-docs',
+        },
+        {
+          type: 'doc',
+          id: 'for-devs/contribute',
         },
       ],
     },
