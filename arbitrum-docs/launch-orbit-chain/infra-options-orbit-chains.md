@@ -46,14 +46,18 @@ For applications that require the ability to transfer assets to chains outside o
 - [Across](https://across.to/)
 - [Decent](https://www.decent.xyz/)
 
-## Data availability
+## Data availability Committee Operators 
+To reduce transaction fees for Orbit chains, you can configure a Data Availability (DA) solution that stores chain data off-chain with Anytrust Chains. 
+If you are enabling Fast Withdrawals, you will set up a Data Availability Committee (DAC). We currently recommend (for security and decentralization purposes) to configure a DAC with at least 3 nodes. Here are a few providers: 
+- Chainbase (https://chainbase.com/)
+- Ankr (https://www.ankr.com/)
+- Kiln (https://www.kiln.fi/)
+- Chainstack (https://chainstack.com/)
+- Nansen (https://www.nansen.ai/)
+- Unifra (https://unifra.io/)
+- BCW Group (https://bcw.group/)
+- Caldera (https://www.caldera.xyz/)
 
-One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
-
-- [Celestia](https://celestia.org/)
-- [EigenDA](https://www.eigenlayer.xyz/)
-- [AvailDA](https://www.availproject.org/)
-- [Near](https://near.org/data-availability) (coming soon)
 
 ## Indexers
 
@@ -86,3 +90,13 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+
+## Alternative Data availability
+
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+
+- [Celestia](https://celestia.org/)
+- [EigenDA](https://www.eigenlayer.xyz/)
+- [AvailDA](https://www.availproject.org/)
+- [Near](https://near.org/data-availability) (coming soon)
+
