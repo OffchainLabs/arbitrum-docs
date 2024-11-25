@@ -10,8 +10,6 @@ content_type: gentle-introduction
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
 
-# A gentle Introduction: Timeboost
-
 This introduction will walk you through <a data-quicklook-from='timeboost'>Arbitrum Timeboost</a>: a novel <a data-quicklook-from='transaction-ordering-policy'>transaction ordering policy</a> for Arbitrum chains that allows chain owners to capture the Maximal Extractable Value (MEV) on their chain and reduce spam, all while preserving fast block times and protecting users from harmful types of MEV, such as sandwich attacks and front-running.
 
 Timeboost is the culmination of over a year of research and development by the team at Offchain Labs and will soon be available for any Arbitrum chain, including Arbitrum One and Arbitrum Nova (should the Arbitrum DAO choose to adopt it). Like all features and upgrades to the Arbitrum technology stack, Timeboost will be rolled out on Arbitrum Sepolia first for testing, and chain owners will have the option of adopting Timeboost at any time or customizing Timeboost in any way they choose.
