@@ -46,9 +46,11 @@ For applications that require the ability to transfer assets to chains outside o
 - [Across](https://across.to/)
 - [Decent](https://www.decent.xyz/)
 
-## Data availability Committee Operators 
-To reduce transaction fees for Orbit chains, you can configure a Data Availability (DA) solution that stores chain data off-chain with Anytrust Chains. 
-If you are enabling Fast Withdrawals, you will set up a Data Availability Committee (DAC). We currently recommend (for security and decentralization purposes) to configure a DAC with at least 3 nodes. Here are a few providers: 
+## Data availability Committee Operators
+
+To reduce transaction fees for Orbit chains, you can configure a Data Availability (DA) solution that stores chain data off-chain with Anytrust Chains.
+If you are enabling Fast Withdrawals, you will set up a Data Availability Committee (DAC). We currently recommend (for security and decentralization purposes) to configure a DAC with at least 3 nodes. Here are a few providers:
+
 - Chainbase (https://chainbase.com/)
 - Ankr (https://www.ankr.com/)
 - Kiln (https://www.kiln.fi/)
@@ -57,7 +59,6 @@ If you are enabling Fast Withdrawals, you will set up a Data Availability Commit
 - Unifra (https://unifra.io/)
 - BCW Group (https://bcw.group/)
 - Caldera (https://www.caldera.xyz/)
-
 
 ## Indexers
 
@@ -99,4 +100,3 @@ One way to reduce transaction fees for Orbit chains is to configure a Data Avail
 - [EigenDA](https://www.eigenlayer.xyz/)
 - [AvailDA](https://www.availproject.org/)
 - [Near](https://near.org/data-availability) (coming soon)
-
