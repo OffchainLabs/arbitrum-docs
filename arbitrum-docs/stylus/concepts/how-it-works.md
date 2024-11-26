@@ -9,7 +9,7 @@ user_story: As an Ethereum developer/project owner, I need to vet the Stylus.
 content_type: concept
 ---
 
-There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>
+There are four main steps for bringing a Stylus program to life: **coding, activation, execution, and proving**.
 
 ## Coding
 
