@@ -8,13 +8,9 @@ content_type: how-to
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 [Arbitrum Stylus](../stylus-gentle-introduction.md) is a new technology developed for Arbitrum chains which gives smart contract developers superpowers. With Stylus, developers can write EVM-compatible smart contracts in many different programming languages, and reap massive performance gains. Stylus slashes fees, with performance gains ranging from 10-70x, and memory efficiency gains as high as 100-500x.
 
-This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus programs compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
+This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus contracts compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
 
 Today, the Stylus testnet also comes with 2 officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
 
@@ -110,7 +106,7 @@ Calling the contract via RPC should simply return the value `0` as we programmed
 
 ### Reading input and writing output data
 
-Smart contracts on Ethereum, at the bare minimum, can take in data and output data as bytes. Stylus programs are no different, and to do anything useful, we need to be able to read from user input also write our output to the caller. To do this, the Stylus runtime provides all Stylus programs with two additional, useful host-ios:
+Smart contracts on Ethereum, at the bare minimum, can take in data and output data as bytes. Stylus contracts are no different, and to do anything useful, we need to be able to read from user input also write our output to the caller. To do this, the Stylus runtime provides all Stylus contracts with two additional, useful host-ios:
 
 ```c
 pub extern "vm_hooks" fn read_args(dest: *u8) void;
@@ -277,7 +273,7 @@ Our uncompressed size is big because of that giant array of booleans, but the pr
 
 An instance of this program has been deployed to the Stylus testnet at address `0x0c503Bb757b1CaaD0140e8a2700333C0C9962FE4`
 
-## Interacting With Stylus Programs Using Ethers-rs
+## Interacting With Stylus contracts Using Ethers-rs
 
 An example is included in this repo under `rust-example` which uses the popular [ethers-rs](https://github.com/gakonst/ethers-rs) library to interact with our prime sieve contract on the Stylus testnet. To run it, do:
 

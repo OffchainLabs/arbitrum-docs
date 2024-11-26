@@ -53,7 +53,7 @@ One way to reduce transaction fees for Orbit chains is to configure a Data Avail
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)
-- [Avail](https://www.availproject.org/) (coming soon)
+- [AvailDA](https://www.availproject.org/)
 - [Near](https://near.org/data-availability) (coming soon)
 
 ## Indexers
@@ -65,16 +65,19 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [The Graph](https://thegraph.com/)
 - [Goldsky](https://goldsky.com/)
 - [Ormi](https://www.ormilabs.xyz/)
+- [Traceye](https://traceye.io/)
 
 ## Oracles
 
 The following Oracle providers can be used to integrate off-chain data with your Orbit chain's smart contracts:
 
 - [Chainlink](https://chain.link/)
+- [Chronicle](https://chroniclelabs.org/)
 - [Pyth](https://pyth.network/)
 - [Redstone](https://redstone.finance/)
 - [Randomizer](http://Randomizer.ai) (VRF only)
 - [Supra](https://supra.com/)
+- [RedStone](https://redstone.finance/)
 
 ## RPC endpoints
 

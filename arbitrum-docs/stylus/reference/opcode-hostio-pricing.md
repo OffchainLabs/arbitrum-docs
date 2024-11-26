@@ -1,5 +1,5 @@
 ---
-title: 'Opcode and host I/O pricing'
+title: 'Gas and ink costs'
 description: 'A reference of how much opcodes and host I/Os cost in Stylus, with measurements in ink and gas.'
 author: rachel-bousfield
 sme: rachel-bousfield
@@ -8,10 +8,6 @@ sidebar_position: 3
 ---
 
 This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
-
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 ## Opcode costs
 
