@@ -27,7 +27,7 @@ With a WASM VM, any programming language compilable to WASM is within Stylus's s
 
 ### Use Cases
 
-While many developers will be drawn to new use cases, rebuilding existing applications in Stylus will also open the door to innovation and optimization. dApps have never been faster, cheaper, or safer. Stylus can be easily integrated into existing Solidity projects by calling a Stylus contract to optimize specific parts of your dApp or building the entire dApp with Stylus.It's impossible to list all of the use cases Stylus enables, think about the properties of all WASM compatible languages! That said, here are some ideas that are particularly exciting:
+While many developers will be drawn to new use cases, rebuilding existing applications in Stylus will also open the door to innovation and optimization. dApps have never been faster, cheaper, or safer. Stylus can integrate easily into existing Solidity projects by calling a Stylus contract to optimize specific parts of your dApp or building the entire dApp with Stylus. It's impossible to list all of the use cases Stylus enables; think about the properties of all WASM-compatible languages! That said, here are some particularly exciting ideas:
 
 - <b>Efficient On-Chain Verification with ZK-Proofs</b>: Enable cost-effective onchain verification
   using zero-knowledge proving systems for privacy, interoperability, and more (see [case
