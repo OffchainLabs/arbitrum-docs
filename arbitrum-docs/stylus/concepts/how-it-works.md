@@ -63,7 +63,7 @@ Stylus is a more efficient execution environment than the EVM, leading directly 
 
 #### Opt-in reentrancy
 
-Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability that developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default unless intentionally overridden.
+Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default unless intentionally overridden.
 
 ### Fully interoperable
 
