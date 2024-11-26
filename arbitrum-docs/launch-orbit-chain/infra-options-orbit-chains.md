@@ -46,14 +46,14 @@ For applications that require the ability to transfer assets to chains outside o
 - [Across](https://across.to/)
 - [Decent](https://www.decent.xyz/)
 
-## Data availability
+## Data Availability providers for AnyTrust Chains 
 
-One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least 3 members as part of your Data Availability Committee. Here are some providers we recommend: 
 
-- [Celestia](https://celestia.org/)
-- [EigenDA](https://www.eigenlayer.xyz/)
-- [AvailDA](https://www.availproject.org/)
-- [Near](https://near.org/data-availability) (coming soon)
+- Chainstack 
+- Chainbase 
+- Kiln 
+
 
 ## Indexers
 
@@ -86,3 +86,12 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+
+## Alternative Data availability
+
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+
+- [Celestia](https://celestia.org/)
+- [EigenDA](https://www.eigenlayer.xyz/)
+- [AvailDA](https://www.availproject.org/)
+- [Near](https://near.org/data-availability) (coming soon)
