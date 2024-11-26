@@ -23,7 +23,7 @@ Initially, there will be support for Rust, C, and C++. However, the levels of su
 
 The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use in Stylus. The SDK also makes it possible to perform all EVM-specific functionalities that smart contract developers use. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html).
 
-### Activation
+## Activation
 
 Stylus programs are compiled to WASM, and then lowered to assembly. Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in an activation process, WASM gets lowered to a node's native machine code (such as ARM or x86).
 
