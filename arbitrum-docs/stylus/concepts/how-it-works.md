@@ -61,7 +61,7 @@ Stylus' MultiVM brings the best of both worlds. Developers still get all of the 
 
 Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation and memory can be significantly cheaper. Deploying cryptography libraries can be done permissionlessly as custom application layer precompiles. Use cases that are impractical in the EVM are now possible in Stylus.
 
-#### Opt-in reentrancy
+### Opt-in reentrancy
 
 Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default unless intentionally overridden.
 
