@@ -59,7 +59,7 @@ Stylus' MultiVM brings the best of both worlds. Developers still get all of the 
 
 #### Cheaper execution
 
-Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation and memory can be significantly cheaper. Cryptography libraries can be permissionlessly deployed as custom application layer precompiles. Use cases that are impractical in the EVM are now possible in Stylus.
+Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation and memory can be significantly cheaper. Deploying cryptography libraries can be done permissionlessly as custom application layer precompiles. Use cases that are impractical in the EVM are now possible in Stylus.
 
 #### Opt-in reentrancy
 
