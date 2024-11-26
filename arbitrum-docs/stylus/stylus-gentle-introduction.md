@@ -11,7 +11,7 @@ sidebar_position: 1
 
 ### In a nutshell:
 
-- Stylus lets you write smart contracts in programming languages that compile to WASM, such as **Rust, C, C++, and many others**, allowing you to tap into their ecosystem of libraries and tools. Rich language and tooling support already exists for Rust. You can try the SDK and CLI with the [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart).
+- Stylus lets you write smart contracts in programming languages that compile to WASM, such as **Rust, C, C++, and many others**, allowing you to tap into their ecosystem of libraries and tools. Rich language and tooling support already exist for Rust. You can try the SDK and CLI with the [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart).
 - Solidity contracts and Stylus contracts are <b>fully interoperable</b>. In Solidity, you can call a Rust program and vice versa, thanks to a second, coequal WASM virtual machine.
 - Stylus contracts offer significantly <b>faster execution and lower gas fees </b> for memory and compute-intensive operations, thanks to the superior efficiency of <a data-quicklook-from="wasm">WASM</a> programs.
 
