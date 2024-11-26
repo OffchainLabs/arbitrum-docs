@@ -51,7 +51,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 ### One chain, many languages
 
-There are roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is  interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
+There are roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
 
 ### A better EVM
 
