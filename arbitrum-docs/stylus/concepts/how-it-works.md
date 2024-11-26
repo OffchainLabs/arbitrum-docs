@@ -35,7 +35,7 @@ Gas metering is essential for certifying that computational resources are paid f
 
 Stylus programs execute in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
-EVM contracts continue to execute the same way they did before Stylus. When a contract is called, the difference between an EVM contract and a WASM program can be seen via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract is executed using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider what language the contract was written in. Everything is interoperable.
+EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
 
 ### Proving
 
