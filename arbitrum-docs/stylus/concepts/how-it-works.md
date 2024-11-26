@@ -53,7 +53,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 There are estimated to be roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers are now free to use their preferred programming language, all interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
 
-#### A better EVM
+### A better EVM
 
 Stylus' MultiVM brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++, all without changing anything about how the EVM works. EVM equivalence is no longer the ceiling; it's the floor.
 
