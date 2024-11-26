@@ -11,7 +11,7 @@ content_type: concept
 
 There are four main steps for bringing a Stylus program to life: <b>coding, activation, execution, and proving.</b>
 
-### Coding
+## Coding
 
 Developers can now write smart contracts in any programming language that compiles to WASM.
 
