@@ -13,7 +13,11 @@ There are four main steps for bringing a Stylus program to life: <b>coding, acti
 
 ### Coding
 
-Developers can now write smart contracts in any programming language that compiles to WASM. Note that some high-level languages generate far more performant WASMs than others.
+Developers can now write smart contracts in any programming language that compiles to WASM.
+
+:::note
+Some high-level languages generate far more performant WASMs than others.
+:::
 
 Initially, there will be support for Rust, C, and C++. However, the levels of support will differ at first. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat, too, enabling the deployment of existing contracts in those languages on-chain with minimal modifications.
 
