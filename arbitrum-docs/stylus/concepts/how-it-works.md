@@ -65,6 +65,6 @@ Stylus is a more efficient execution environment than the EVM, leading directly 
 
 Stylus doesn't just improve on cost and speed. WASM programs are also safer. Reentrancy is a common vulnerability that developers can only attempt to mitigate in Solidity. Stylus provides cheap reentrancy detection, and using the Rust SDK, reentrancy is disabled by default unless intentionally overridden.
 
-#### Fully interoperable
+### Fully interoperable
 
 Solidity programs and WASM programs are completely composable. If working in Solidity, a developer can call a Rust program or rely on another dependency in a different language. If working in Rust, all Solidity functionalities are accessible out of the box.
