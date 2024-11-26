@@ -57,7 +57,7 @@ There are estimated to be roughly 20k Solidity developers, compared to 3 million
 
 Stylus' MultiVM brings the best of both worlds. Developers still get all of the benefits of the EVM, including the ecosystem and liquidity, while getting efficiency improvements and access to existing libraries in Rust, C, and C++, all without changing anything about how the EVM works. EVM equivalence is no longer the ceiling; it's the floor.
 
-#### Cheaper execution
+### Cheaper execution
 
 Stylus is a more efficient execution environment than the EVM, leading directly to gas savings for complex smart contracts. Computation and memory can be significantly cheaper. Deploying cryptography libraries can be done permissionlessly as custom application layer precompiles. Use cases that are impractical in the EVM are now possible in Stylus.
 
