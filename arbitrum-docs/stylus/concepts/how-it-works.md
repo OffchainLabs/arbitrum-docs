@@ -37,7 +37,7 @@ Stylus programs execute in a fork of [Wasmer](https://wasmer.io/), the leading W
 
 EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
 
-### Proving
+## Proving
 
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
