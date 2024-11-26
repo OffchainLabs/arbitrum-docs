@@ -45,7 +45,7 @@ Stylus is made possible by Nitro’s ability to replay and verify disputes using
 
 For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/inside-arbitrum-nitro.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 
-### Why does this matter?
+## Why does this matter?
 
 Stylus innovates on many levels, with the key ones described here:
 
