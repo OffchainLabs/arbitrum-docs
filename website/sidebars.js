@@ -516,6 +516,36 @@ const sidebars = {
           ],
         },
         {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/debugging-stylus-tx',
+          label: 'Debug transactions',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/verifying-contracts',
+          label: 'Verify contracts',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/concepts/stylus-cache-manager',
+          label: 'Cache contracts',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/verifying-contracts-arbiscan',
+          label: 'Arbiscan verification',
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+          label: 'Using other languages',
+        },
+        {
           type: 'category',
           label: 'Concepts',
           collapsed: true,
@@ -529,48 +559,6 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/concepts/stylus-gas',
               label: 'How Stylus uses gas',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Tutorials',
-          collapsed: true,
-          items: [
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-stylus-tx',
-              label: 'Debug transactions',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
-              label: 'Cache contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts',
-              label: 'Verify contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Arbiscan verification',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Using other languages',
             },
           ],
         },
@@ -615,6 +603,11 @@ const sidebars = {
               type: 'doc',
               id: 'for-devs/dev-tools-and-resources/chain-info',
               label: 'Chain Info',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
             },
             {
               type: 'doc',
