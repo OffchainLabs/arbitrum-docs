@@ -161,37 +161,47 @@ const res = await fetch(<AUTONOMOUS_AUCTIONEER_ENDPOINT>, {
 });
 ```
 
-The signature that needs to be sent is an Ethereum signature over the bytes encoding of the following information:
+The signature that needs to be sent is an [EIP-712](https://eips.ethereum.org/EIPS/eip-712) signature over the following typed structure data:
 
-- Hash of `keccak256("TIMEBOOST_BID")`
-- Chain id in hexadecimal, padded to 32 bytes
-- Auction contract address
-- Auction round number in hexadecimal, padded to 8 bytes
-- Amount to bid in hexadecimal, padded to 32 bytes
-- Address of the express lane controller candidate
+- Domain: `Bid(uint64 round,address expressLaneController,uint256 amount)`
+- `round`: auction round number
+- `expressLaneController`: address of the express lane controller candidate
+- `amount`: amount to bid
 
-Here's an example to produce that signature:
+Here's an example to produce that signature with viem:
 
 ```tsx
 const currentAuctionRound = currentRound + 1;
-const hexChainId: `0x${string}` = `0x${Number(publicClient.chain.id).toString(16)}`;
 
-const signatureData = concat([
-  keccak256(toHex('TIMEBOOST_BID')),
-  pad(hexChainId),
-  auctionContractAddress,
-  toHex(numberToBytes(currentAuctionRound, { size: 8 })),
-  toHex(numberToBytes(amountToBid, { size: 32 })),
-  userAddress,
-]);
-const signature = await account.signMessage({
-  message: { raw: signatureData },
+const signatureData = hashTypedData({
+  domain: {
+    name: 'ExpressLaneAuction',
+    version: '1',
+    chainId: Number(publicClient.chain.id),
+    verifyingContract: auctionContractAddress,
+  },
+  types: {
+    Bid: [
+      { name: 'round', type: 'uint64' },
+      { name: 'expressLaneController', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+  },
+  primaryType: 'Bid',
+  message: {
+    round: currentAuctionRound,
+    expressLaneController: userAddress,
+    amount: amountToBid,
+  },
+});
+const signature = await account.sign({
+  hash: signatureData,
 });
 ```
 
 ::::info
 
-You can also call the function `getBidBytes` in the auction contract to obtain the `signatureData` , specifying the `round`, `amountToBid` and `userAddress`.
+You can also call the function `getBidHash` in the auction contract to obtain the `signatureData`, specifying the `round`, `userAddress` and `amountToBid`.
 
 ::::
 
