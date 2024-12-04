@@ -3,7 +3,7 @@ title: Nitro vs. Classic
 author: dzgoldman
 ---
 
-Why Nitro?
+## Why Nitro?
 
 Nitro represents the latest step in the evolution of Arbitrum technology; it is an upgrade from the tech stack first released on the mainnet Arbitrum One chain, which we now refer to as “Arbitrum Classic” (and several steps beyond what was described in the [initial Arbitrum whitepaper back in 2018](https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-kalodner.pdf)). Here, we’ll explain the rationale behind the Nitro upgrade, and outline Nitro’s core benefits over the classic system.
 
@@ -15,9 +15,9 @@ In Nitro, instead of using the AVM for low-level instructions, we use WebAssembl
 
 This architecture—in which Geth’s EVM implementation can be used directly—is Nitro’s defining feature, and is principally what we’re talking about when we talk about “Nitro.” Most of Nitro’s benefits are a direct or indirect consequence of this design choice. We can summarize these benefits as follows: lower fees, better Ethereum compatibility, and simplicity.
 
-### Lower Fees
+## Lower Fees
 
-#### (Optimistic)^2 Execution
+### (Optimistic)^2 Execution
 
 To understand the core of Nitro’s efficiency, we have to dig a little deeper into the classic AVM. In classic, high-level code (Solidity, Vyper, etc.) would be initially compiled down to the EVM bytecode (as though it were to be deployed on Ethereum). This bytecode would then be transpiled to its corresponding AVM instructions by ArbOS; this AVM bytecode would function both as the instructions for running the L2 VM, and the inputs used to prove fraud; in an interactive fraud proof, two validators dissect a segment of AVM bytecode until a “one step proof” — i.e., a state transition that represents a single AVM opcode — would be executed in the EVM of the L1 itself.
 
@@ -25,7 +25,7 @@ Nitro has a similar bytecode-sandwich-like structure; [to prove fraud in Nitro](
 
 It’s worth reiterating this distinction: in classic, the code executed in the happy/common case is equivalent to the code used in a fraud proof, whereas in Nitro, we can have different contexts for the two cases for execution and for proving. When a claim is being disputed, we ultimately compile down to Wasm bytecode, but in the happy/common case, we can execute the node’s Go code natively, i.e., in whatever execution environment one’s machine uses. Essentially, Nitro is capable of being even more “optimistic” in its execution, compiling to Wasm only just-in-time as required. The common case of native execution is happily far faster and more performant, and better node performance, of course, translates to lower fees for end users.
 
-#### Calldata Compression
+### Calldata Compression
 
 Typically, the bulk of an Arbitrum Rollup transaction’s fee is covering the cost to post its data on Ethereum. Fundamentally, any rollup must post data on L1 sufficient for reconstruction and validation of the L2 state; beyond that, L2s can be flexible in deciding on what data format to use. Given the relatively high cost of posting data to L1, a natural optimization is to (losslessly) compress data before posting it on L1, and have the L2 environment handle decompressing it.
 

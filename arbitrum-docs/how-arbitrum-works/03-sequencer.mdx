@@ -1,4 +1,4 @@
-# The Sequencer and Censorship Resistance
+## The Sequencer and Censorship Resistance
 
 The Sequencer is a specially designated Arbitrum full node which, under normal conditions, is responsible for submitting users’ transactions onto L1. In principle, a chain’s Sequencer can take different forms; as [Arbitrum One currently stands](https://docs.arbitrum.foundation/state-of-progressive-decentralization), the Sequencer is a single, centralized entity; eventually, sequencing affordances could be given to a distributed committee of sequencers which come to consensus on ordering. However, regardless of its form, the Sequencer has a fundamental limitation that doesn’t apply to any other part of the system: it must operate under its own security assumptions; i.e., it can’t, in principle, derive security directly from layer 1. This brings up the question of how Arbitrum Rollup maintains its claim to censorship resistance when-and-if the Sequencer misbehaves.
 
@@ -8,19 +8,19 @@ Clients interact with the Sequencer in exactly the same way they would interact 
 
 [Currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization), on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
 
-## The Core Inbox
+### The Core Inbox
 
 When we talk about “submitting a transaction into an Arbitrum chain,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `Bridge`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “Transaction Lifecycle”). The Sequencer’s role (or lack thereof) concerns strictly what happens prior; i.e., how a transaction makes its way into the core Inbox. We’ll break down the possible routes a transaction can take into two scenarios: a well-behaved Sequencer, and a faulty Sequencer.
 
 <!-- from inside-arbitrum-nitro -->
 
-## Bridging
+### Bridging
 
 We have already covered how users interact with L2 contracts--they submit transactions by putting messages into the chain’s inbox, or having a full node Sequencer or aggregator do so on their behalf. Let’s talk about how contracts interact between L1 and L2--how an L1 contract calls an L2 contract, and vice versa.
 
 The L1 and L2 chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same transaction as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. As a consequence, a cross-chain contract-to-contract call can never produce a result that is available to the calling contract (except for acknowledgement that the call was successfully submitted for later execution).
 
-### L1 contracts can submit L2 transactions
+#### L1 contracts can submit L2 transactions
 
 An L1 contract can submit an L2 transaction, just like a user would, by calling the Nitro chain's inbox contract on Ethereum. This L2 transaction will run later, producing results that will not be available to the L1 caller. The transaction will execute at L2, but the L1 caller won’t be able to see any results from the L2 transaction.
 
@@ -28,7 +28,7 @@ The advantage of this method is that it is simple and has relatively low latency
 
 This would introduce a serious a problem for certain types of L1 to L2 interactions. Consider a transaction that includes depositing a token on L1 to be made available at some address on L2. If the L1 side succeeds, but the L2 side reverts, you've just sent some tokens to the L1 inbox contract that are unrecoverable on either L2 or L1. Not good.
 
-### L1 to L2 ticket-based transactions
+#### L1 to L2 ticket-based transactions
 
 Fortunately, we have another method for L1 to L2 calls, which is more robust against gas-related failures, that uses a ticket-based system. The idea is that an L1 contract can submit a “retryable” transaction. The Nitro chain will try to run that transaction. If the transaction succeeds, nothing else needs to happen. But if the transaction fails, Nitro will create a “ticketID” that identifies that failed transaction. Later, anyone can call a special pre-compiled contract at L2, providing the ticketID, to try redeeming the ticket and re-executing the transaction.
 
@@ -44,7 +44,7 @@ When the ticket is redeemed, the pre-packaged transaction runs with sender and o
 
 This mechanism is a bit more cumbersome than ordinary L1 to L2 transactions, but it has the advantage that the submission cost is predictable and the ticket will always be available for redemption if the submission cost is paid. As long as there is some user who is willing to redeem the ticket, the L2 transaction will eventually be able to execute and will not be silently dropped.
 
-### L2 to L1 ticket-based calls
+#### L2 to L1 ticket-based calls
 
 Calls from L2 to L1 operate in a similar way, with a ticket-based system. An L2 contract can call a method of the precompiled ArbSys contract, to send a transaction to L1. When the execution of the L2 transaction containing the submission is confirmed at L1 (some days later), a ticket is created in the L1 outbox contract. That ticket can be triggered by anyone who calls a certain L1 outbox method and submits the ticketID. The ticket is only marked as redeemed if the L1 transaction does not revert.
 
@@ -52,7 +52,7 @@ These L2-to-L1 tickets have unlimited lifetime, until they’re successfully red
 
 <!-- -->
 
-## Happy/Common Case: Sequencer Is Live and Well-behaved
+### Happy/Common Case: Sequencer Is Live and Well-behaved
 
 Here, we start by assuming that the Sequencer is fully operational, and is running with the intent of processing users’ transactions in as safe and timely a manner as possible. The Sequencer can receive a user’s transaction two ways — either directly via an RPC request, or via the underlying L1.
 
@@ -63,7 +63,7 @@ Alternatively, a user can submit their L2 message to the Sequencer by posting it
 
 In sum — in either happy case, the user first delivers their message to the Sequencer, who in turn ensures that it arrives in the core Inbox.
 
-## Unhappy/Uncommon Case: Sequencer Isn’t Doing Its Job
+### Unhappy/Uncommon Case: Sequencer Isn’t Doing Its Job
 
 Now let’s suppose the Sequencer, for whatever reason, is entirely failing to carry out its task of submitting messages. A user can still get their transaction included in two steps:
 
@@ -79,7 +79,7 @@ While the slow, “unhappy” path isn’t optimal, and should rarely, if ever, 
 
 <!-- from inside-arbitrum-nitro -->
 
-### How the Sequencer Publishes the Sequence
+#### How the Sequencer Publishes the Sequence
 
 So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed, and batches posted on L1 Ethereum.
 
