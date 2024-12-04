@@ -516,6 +516,11 @@ const sidebars = {
           ],
         },
         {
+          type: 'doc',
+          id: 'stylus/using-stylus-cli',
+          label: 'Using Stylus CLI',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
