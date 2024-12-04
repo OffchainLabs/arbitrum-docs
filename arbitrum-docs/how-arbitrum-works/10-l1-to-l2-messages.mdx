@@ -30,8 +30,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 [inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol
 
-
-
 <!-- vercel having issues
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
@@ -73,8 +71,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 -->
 
-
-
 ### Automatic Redemption
 
 4. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
@@ -82,7 +78,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 - If the ticket is successfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user on L2 (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, one could use the Arbitrum SDK which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending L1-L2 messages.
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
-
 
 <!-- vercel having issues
 <MermaidWithHtml>
@@ -118,7 +113,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 </MermaidWithHtml>
 -->
 
-
 ### Manual Redemption
 
 5. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx)'s `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is NOT limited by the original gasLimit set during the ticket creation. ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. Note that the redeem attempt's gas comes from the call to redeem, so there's no chance the block's gas limit is reached before execution.
@@ -129,7 +123,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 [exhaust_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L135
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
-
 
 <!-- vercel having issues
 <MermaidWithHtml>
@@ -164,7 +157,6 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 -->
-
 
 :::caution Avoid Losing Funds!
 
@@ -224,6 +216,7 @@ L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
 :::tip Try it out
 
 <!--         <AddressAliasHelper />          -->
+
 :::
 
 The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.
