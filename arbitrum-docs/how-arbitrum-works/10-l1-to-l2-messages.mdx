@@ -30,6 +30,9 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 [inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol
 
+
+
+<!-- vercel having issues
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
     <Node id="1">🧍</Node>
@@ -68,6 +71,10 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 
+-->
+
+
+
 ### Automatic Redemption
 
 4. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
@@ -77,6 +84,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
 
+<!-- vercel having issues
 <MermaidWithHtml>
   <Nodes title="Automatic Redemption of the Ticket">
     <Node id="1">Auto-redeem succeeds?</Node>
@@ -108,7 +116,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
-
+-->
 
 
 ### Manual Redemption
@@ -123,6 +131,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
 
 
+<!-- vercel having issues
 <MermaidWithHtml>
   <Nodes title="Manual Redemption of the Ticket">
     <Node id="1">Ticket manually cancelled or not redeemed in 7 days?</Node>
@@ -154,6 +163,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
+-->
 
 
 :::caution Avoid Losing Funds!
