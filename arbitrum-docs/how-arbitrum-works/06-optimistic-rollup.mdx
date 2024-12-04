@@ -233,9 +233,8 @@ A consequence of these rules is that once the first unresolved RBlock's deadline
 
 <!-- -->
 
-
-
 <!-- fraud proofs/challenges -->
+
 ## Validators
 
 Arbitrum full nodes normally "live at Layer 2" which means that they don’t worry about the rollup protocol but simply treat their Arbitrum chain as a mechanism that feeds inbox messages to the State Transition Function to evolve the Layer 2 chain and produce outputs.
@@ -243,7 +242,6 @@ Arbitrum full nodes normally "live at Layer 2" which means that they don’t wor
 Some Arbitrum nodes will choose to act as _validators_. This means that they watch the progress of the rollup protocol and participate in that protocol to advance the state of the chain securely.
 
 Not all nodes will choose to do this. Because the rollup protocol doesn’t decide what the chain will do but merely confirms the correct behavior that is fully determined by the inbox messages, a node can ignore the rollup protocol and simply compute for itself the correct behavior. For more on what such nodes might do, see the [Full Nodes](#full-nodes) section.
-
 
 Offchain Labs provides open source validator software, including a pre-built Docker image.
 
@@ -263,10 +261,6 @@ Who will be validators? Anyone will be able to do it, but most people will choos
 - Parties who have significant assets at bond on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.
 <!-- -->
-
-
-
-
 
 <!-- from assertion-tree -->
 
