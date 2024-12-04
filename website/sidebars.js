@@ -546,7 +546,7 @@ const sidebars = {
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↓</span></a>',
         },
         {
           type: 'category',
