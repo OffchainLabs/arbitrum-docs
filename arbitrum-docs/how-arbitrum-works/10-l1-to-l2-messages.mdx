@@ -76,6 +76,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
+
 <MermaidWithHtml>
   <Nodes title="Automatic Redemption of the Ticket">
     <Node id="1">Auto-redeem succeeds?</Node>
@@ -108,6 +109,8 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
   </NodeDescriptions>
 </MermaidWithHtml>
 
+
+
 ### Manual Redemption
 
 5. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx)'s `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is NOT limited by the original gasLimit set during the ticket creation. ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. Note that the redeem attempt's gas comes from the call to redeem, so there's no chance the block's gas limit is reached before execution.
@@ -118,6 +121,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 [exhaust_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L135
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
+
 
 <MermaidWithHtml>
   <Nodes title="Manual Redemption of the Ticket">
@@ -150,6 +154,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
     </NodeDescription>
   </NodeDescriptions>
 </MermaidWithHtml>
+
 
 :::caution Avoid Losing Funds!
 
@@ -208,7 +213,7 @@ L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
 
 :::tip Try it out
 
-<AddressAliasHelper />
+<!--         <AddressAliasHelper />          -->
 :::
 
 The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.

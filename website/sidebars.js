@@ -830,18 +830,23 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/state-transition-function',
-          label: 'State Transition Function',
+          id: 'how-arbitrum-works/geth-at-the-core',
+          label: 'Geth at the Core',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/validation',
-          label: 'Validation',
+          id: 'how-arbitrum-works/separating-execution-from-proving',
+          label: 'Separating Execution from Proving',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/challenges',
-          label: 'Challenges',
+          id: 'how-arbitrum-works/optimistic-rollup',
+          label: 'Optimistic Rollup',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/interactive-fraud-proofs',
+          label: 'Interactive Fraud Proofs',
         },
         {
           type: 'doc',
@@ -855,13 +860,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/retryable-tickets',
-          label: 'Retryable Tickets',
+          id: 'how-arbitrum-works/l1-to-l2-messages',
+          label: 'L1 to L2 messages',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/cross-chain-messaging',
-          label: 'Cross-chain messaging',
+          id: 'how-arbitrum-works/l2-to-l1-messages',
+          label: 'L2 to L1 messages',
         },
         {
           type: 'doc',
