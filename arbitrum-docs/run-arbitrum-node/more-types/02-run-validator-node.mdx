@@ -5,30 +5,30 @@ sidebar_position: 4
 content_type: how-to
 ---
 
-Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.md).
+Validators are nodes that choose to participate in the rollup protocol to advance the state of the chain securely. Since the activation of <a data-quicklook-from="bold">BoLD</a>, chains can now choose to make validation permissionless. You can learn more about BoLD [here](/how-arbitrum-works/bold/gentle-introduction.mdx).
 
-This page shows the different strategies that a validator may follow, and provides instructions to run a validator for an Arbitrum chain.
+This page describes the different strategies that a validator may follow, and provides instructions to run a validator for an Arbitrum chain.
 
 This how-to assumes that you're familiar with:
 
-- How to run a full node (see instructions [here](/run-arbitrum-node/03-run-full-node.md) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains)
-- [How the Rollup protocol works](/how-arbitrum-works/inside-arbitrum-nitro.md#arbitrum-rollup-protocol)
-- [How BoLD works](/bold/concepts/bold-technical-deep-dive.md#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
+- How to run a full node (see instructions [here](/run-arbitrum-node/03-run-full-node.mdx) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains)
+- [How the Rollup protocol works](/how-arbitrum-works/inside-arbitrum-nitro.mdx#arbitrum-rollup-protocol)
+- [How BoLD works](/bold/concepts/bold-technical-deep-dive.mdx#how-bold-uses-ethereum), if you're running a validator for a chain that has BoLD activated
 
 ## Validation strategies
 
 Validators can be configured to follow a specific validation strategy. Here we describe what strategies are available in Nitro:
 
-| Strategy           | Description                                                                                                                                                                                                                                                                                                                                                   | Gas usage                                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **`Defensive`**    | If the local state disagrees with the on-chain assertion, this validator will post a stake and create a challenge                                                                                                                                                                                                                                             | Only acts if a bad assertions is found                                                                     |
-| **`StakeLatest`**  | This validator will stay staked on the latest assertion found, and will challenge any bad assertions that it finds (this mode is only available in pre-BoLD chains)                                                                                                                                                                                           | Gas used every time a new assertion is created                                                             |
-| **`ResolveNodes`** | This validator will stay staked on the latest assertion found, resolve any unconfirmed assertions, and it will challenge any bad assertions that it finds                                                                                                                                                                                                     | Gas used every time a new assertion is created, and to resolve unconfirmed assertions                      |
-| **`MakeNodes`**    | This validator continuously creates new assertions, resolves any unconfirmed assertions, and challenges bad assertions found. Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, while the others will have their transactions reverted | Gas used to create new assertions, move the stake to the latest one, and to resolve unconfirmed assertions |
+| Strategy           | Description                                                                                                                                                                                                                                                                                                                                                   | Gas usage                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **`Defensive`**    | If the local state disagrees with the on-chain assertion, this validator will post a stake and create a challenge                                                                                                                                                                                                                                             | Only acts if a bad assertions is found                                                                  |
+| **`StakeLatest`**  | This validator will stay staked on the latest assertion found, and will challenge any bad assertions that it finds (this mode is only available in pre-BoLD chains)                                                                                                                                                                                           | Gas used every time a new assertion is created                                                          |
+| **`ResolveNodes`** | This validator will stay staked on the latest assertion found, resolve any unconfirmed assertions, and it will challenge any bad assertions that it finds                                                                                                                                                                                                     | Gas used every time a new assertion is created, and to resolve unconfirmed assertions                   |
+| **`MakeNodes`**    | This validator continuously creates new assertions, resolves any unconfirmed assertions, and challenges bad assertions found. Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion at same time. In that case, only one will be successful, while the others will have their transactions reverted | Gas used to create new assertions, move the stake to the latest one, and resolve unconfirmed assertions |
 
 ### The watchtower strategy
 
-There's one more validation strategy that is available for all types of node: **`Watchtower`**. This strategy is enabled by default in all nodes (full and archive) and it doesn't require a wallet, as it never takes any action on-chain.
+There's one more validation strategy that is available for all types of node: `watchtower`. This strategy is enabled by default in all nodes (full and archive) and it doesn't require a wallet, as it never takes any action on-chain.
 
 A node in `watchtower` mode will immediately log an error if an on-chain assertion deviates from the locally computed chain state.
 
@@ -55,7 +55,7 @@ This section explains how to configure your node to act as a validator.
 
 ### Step 0: prerequisites
 
-A validator node is basically a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/03-run-full-node.md) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains.
+A validator node is basically a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/03-run-full-node.mdx) for DAO-governed chains, and [here](/node-running/how-tos/running-an-orbit-node.mdx) for Orbit chains.
 
 Additionally, you'll need a wallet with enough funds to perform actions on-chain, and enough tokens to stake. Keep in mind that:
 
@@ -105,7 +105,7 @@ Validation for Orbit chains works the same way as for DAO-governed Arbitrum chai
 --chain.info-json=<Orbit chain's info>
 ```
 
-Additionally, keep in mind that some chains might not have BoLD enabled yet, so BoLD specific parameters will not be needed.
+Additionally, keep in mind that some chains might not have BoLD activated yet, so BoLD specific parameters will not be needed.
 
 ## Advanced features
 
@@ -121,17 +121,17 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNit
 
 The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet, as it will be the only way to withdraw the stake when desired.
 
-Once the wallet is created, you can instruct your validator to use by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
+Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 
 ### Enable the BoLD API
 
 When activating BoLD on a chain, the amount of logs produced by a validator in case a challenge occurs can be overwhelming, and it might be hard to follow the progress of a challenge. To allow for a better visualization of ongoing challenges, as well as querying specific information, Nitro includes an API to capture information about assertions and challenges that the validator observes. You can enable this API by using the following parameters:
 
-| Parameter              | Value | Description       |
-| ---------------------- | ----- | ----------------- |
-| `--node.bold.api`      | true  | Enables the API   |
-| `--node.bold.api-host` | IP    | IP to listen on   |
-| `--node.bold.api-port` | Port  | Port to listen on |
+| Parameter              | Value | Description                             |
+| ---------------------- | ----- | --------------------------------------- |
+| `--node.bold.api`      | true  | Enables the API                         |
+| `--node.bold.api-host` | IP    | IP to listen on (defaults to 127.0.0.1) |
+| `--node.bold.api-port` | Port  | Port to listen on (defaults to 9393)    |
 
 We are working on specific documentation about the methods available on this API and will be published soon.
 
