@@ -25,7 +25,7 @@ The Stylus SDK for Rust contains the smart contract development framework and la
 
 ## Activation
 
-Stylus programs are compiled to WASM, and then lowered to assembly. Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in an activation process, WASM gets lowered to a node's native machine code (such as ARM or x86).
+Starting from a high-level language (such as Rust, C, or C++), the first compilation stage happens using the CLI provided in the Stylus SDK for Rust or any other compiler, such as Clang for C and C++. Once compiled, the WASM is posted onchain. Then, in an activation process, WASM gets lowered to a node's native machine code (such as ARM or x86).
 
 Activating a Stylus program requires a new precompile, ArbWasm. This precompile produces efficient binary code tailored to a node's native assembly. During this step, a series of middlewares ensure that user programs execute safely and are deterministically fraud-proven. Instrumentation includes gas metering, depth-checking, memory charging, and more to guarantee all WASM programs are safe for the chain to execute. Stylus contracts can be called only after activation.
 
