@@ -860,13 +860,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/l1-to-l2-messages',
-          label: 'L1 to L2 messages',
+          id: 'how-arbitrum-works/l1-to-l2-messaging',
+          label: 'L1 to L2 messaging',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messages',
-          label: 'L2 to L1 messages',
+          id: 'how-arbitrum-works/l2-to-l1-messaging',
+          label: 'L2 to L1 messaging',
         },
         {
           type: 'doc',

@@ -1,3 +1,7 @@
+---
+title: Sequencer
+---
+
 ## The Sequencer and Censorship Resistance
 
 The Sequencer is a specially designated Arbitrum full node which, under normal conditions, is responsible for submitting users’ transactions onto L1. In principle, a chain’s Sequencer can take different forms; as [Arbitrum One currently stands](https://docs.arbitrum.foundation/state-of-progressive-decentralization), the Sequencer is a single, centralized entity; eventually, sequencing affordances could be given to a distributed committee of sequencers which come to consensus on ordering. However, regardless of its form, the Sequencer has a fundamental limitation that doesn’t apply to any other part of the system: it must operate under its own security assumptions; i.e., it can’t, in principle, derive security directly from layer 1. This brings up the question of how Arbitrum Rollup maintains its claim to censorship resistance when-and-if the Sequencer misbehaves.

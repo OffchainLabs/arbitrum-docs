@@ -1,8 +1,8 @@
 ---
+title: Gas and Fees
 author: dzgoldman
 ---
 
-## Gas and Fees
 
 There are two parties a user pays when submitting a tx:
 
@@ -13,19 +13,19 @@ The L1 component is the product of the transaction's estimated contribution to i
 
 The L2 component consists of the traditional fees Geth would pay to stakers in a vanilla L1 chain, such as the computation and storage charges applying the state transition function entails. ArbOS charges additional fees for executing its L2-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
 
-### Gas Price Floor
+## Gas Price Floor
 
 The L2 gas price on a given Arbitrum chain has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @arbOneGasFloorGwei@ gwei on Arbitrum One and @novaGasFloorGwei@ gwei on Nova).
 
-### Estimating Gas
+## Estimating Gas
 
 Calling an Arbitrum Node's `eth_estimateGas` RPC gives a value sufficient to cover the full transaction fee at the given L2 gas price; i.e., the value returned from `eth_estimateGas` multiplied by the L2 gas price tells you how much total Ether is required for the transaction to succeed. Note that this means that for a given operation, the value returned by `eth_estimateGas` will change over time (as the L1 calldata price fluctuates.) (See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more.)
 
-### Tips in L2
+## Tips in L2
 
 The sequencer prioritizes transactions on a first-come first-served basis. Because tips do not make sense in this model, they are ignored. Arbitrum users always just pay the basefee regardless of the tip they choose.
 
-### Gas Estimating Retryables
+## Gas Estimating Retryables
 
 When a transaction schedules another, the subsequent transaction's execution [will be included][estimation_inclusion_link] when estimating gas via the node's RPC. A transaction's gas estimate, then, can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
 
@@ -37,11 +37,11 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 <!-- from inside-arbitrum-nitro -->
 
-### Gas and Fees
+## Gas and Fees
 
 NitroGas (so-called to avoid confusion with Layer 1 Ethereum gas) is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
 
-#### The Speed Limit
+### The Speed Limit
 
 The security of Nitro chains depends on the assumption that when one validator creates an RBlock, other validators will check it, and respond with a correct RBlock and a challenge if it is wrong. This requires that the other validators have the time and resources to check each RBlock quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for RBlocks.
 
@@ -49,7 +49,7 @@ This sets an effective speed limit on execution of a Nitro chain: in the long ru
 
 Being able to set the speed limit accurately depends on being able to estimate the time required to validate an RBlock, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower, to be safe. And we do not want to set the speed limit lower, so we try to enable accurate estimation.
 
-#### Fees
+### Fees
 
 User transactions pay fees, to cover the cost of operating the chain. These fees are assessed and collected by ArbOS at L2. They are denominated in ETH.
 
@@ -59,7 +59,7 @@ Fees are charged for two resources that a transaction can use:
 
 * _L1 calldata_: a fee per unit of L1 calldata attributable to the transaction, which is charged only if the transaction came in via the Sequencer, and is paid to the Sequencer to cover its costs,
 
-##### L2 gas fees
+#### L2 gas fees
 
 L2 gas fees work very similarly to gas on Ethereum. A transaction uses some amount of gas, and this is multiplied by the current basefee to get the L2 gas fee charged to the transaction.
 
@@ -71,7 +71,7 @@ Intuitively, if the backlog grows, the algorithm should increase the gas price, 
 
 To make this more precise, the basefee is an exponential function of the backlog, _F = exp(-a(B-b))_, where a and b are suitably chosen constants: _a_ controls how rapidly the price escalates with backlog, and _b_ allows a small backlog before the basefee escalation begins.
 
-##### L1 calldata fees
+#### L1 calldata fees
 
 L1 calldata fees exist because the Sequencer, or the batch poster which posts the Sequencer's transaction batches on Ethereum, incurs costs in L1 gas to post transactions on Ethereum as calldata. Funds collected in L1 calldata fees are credited to the batch poster to cover its costs.
 
@@ -81,7 +81,7 @@ The L1 pricing algorithm assigns an L1 calldata fee to each Sequencer transactio
 
 The price per estimated byte is set by a dynamic algorithm that compares the total L1 calldata fees collected to the total fees actually paid by batch posters, and tries to bring the two as close to equality as possible. If the batch posters' costs have been less than fee receipts, the price will increase, and if batch poster costs have exceeded fee receipts, the price will decrease.
 
-##### Total fee and gas estimation
+#### Total fee and gas estimation
 
 The total fee charged to a transaction is the L2 basefee, multiplied by the sum of the L2 gas used plus the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a basefee limit that is below the current basefee. Ethereum also allows a "tip" but Nitro ignores this field and never collects any tips.
 

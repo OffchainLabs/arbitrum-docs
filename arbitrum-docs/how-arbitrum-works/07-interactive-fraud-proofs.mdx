@@ -1,6 +1,10 @@
+---
+title: Interactive Fraud Proofs
+---
+
 <!-- from inside-arbitrum-nitro -->
 
-## Fraud Proofs: Challenges
+
 
 Suppose the rollup chain looks like this:
 
@@ -18,7 +22,7 @@ The game will operate in two phases: dissection, followed by one-step proof. Dis
 
 We’ll describe the dissection part of the protocol twice. First, we’ll give a simplified version which is easier to understand but less efficient. Then we’ll describe how the real version differs from the simplified one.
 
-### Dissection Protocol: Simplified Version
+## Dissection Protocol: Simplified Version
 
 Alice is defending the claim that starting with the state in the predecessor RBlock, the state of the Virtual Machine can advance to the state specified in RBlock A. Essentially she is claiming that the Virtual Machine can execute N instructions, and that that execution will consume M inbox messages and transform the hash of outputs from H’ to H.
 
@@ -28,7 +32,7 @@ Now Alice has effectively bisected her N-step assertion into two (N/2)-step asse
 
 At this point we’re effectively back in the original situation: Alice having made an assertion that Bob disagrees with. But we have cut the size of the assertion in half, from N to N/2. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to N/4. And we can continue bisecting, so that after a logarithmic number of rounds Alice and Bob will be disagreeing about a single step of execution. That’s where the dissection phase of the protocol ends, and Alice must make a one-step proof which will be checked by the EthBridge.
 
-### Why Dissection Correctly Identifies a Cheater
+## Why Dissection Correctly Identifies a Cheater
 
 Before talking about the complexities of the real challenge protocol, let’s stop to understand why the simplified version of the protocol is correct. Here correctness means two things: (1) if Alice’s initial claim is correct, Alice can always win the challenge, and (2) if Alice’s initial claim is incorrect, Bob can always win the challenge.
 
@@ -38,7 +42,7 @@ To prove (2), observe that if Alice’s initial claim is incorrect, this can onl
 
 (If you’re a stickler for mathematical precision, it should be clear how these arguments can be turned into proofs by induction on N.)
 
-### The Real Dissection Protocol
+## The Real Dissection Protocol
 
 The real dissection protocol is conceptually similar to the simplified one described above, but with several changes that improve efficiency or deal with necessary corner cases. Here is a list of the differences.
 
@@ -54,19 +58,19 @@ The real dissection protocol is conceptually similar to the simplified one descr
 
 It should be clear that these changes don’t affect the basic correctness of the challenge protocol. They do, however, improve its efficiency and enable it to handle all of the cases that can come up in practice.
 
-### Efficiency
+## Efficiency
 
 The challenge protocol is designed so that the dispute can be resolved with a minimum of work required by the protocol (via its Layer 1 Ethereum contracts) in its role as referee. When it is Alice’s move, the protocol only needs to keep track of the time Alice uses, and ensure that her move does include K-1 intermediate points as required. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”.
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
-### Instant confirmation
+## Instant confirmation
 
 Without a Sequencer, a node can predict what the results of a client transaction will be, but the node can't be sure, because it can't know or control how the transactions it submits will be ordered in the inbox, relative to transactions submitted by other nodes.
 
 The Sequencer is given more control over ordering, so it has the power to assign its clients' transactions a position in the inbox queue, thereby ensuring that it can determine the results of client transactions immediately. The Sequencer's power to reorder has limits (see below for details) but it does have more power than anyone else to influence transaction ordering.
 
-### Inboxes, fast and slow
+## Inboxes, fast and slow
 
 When we add a Sequencer, the operation of the inbox changes.
 
@@ -75,7 +79,7 @@ When we add a Sequencer, the operation of the inbox changes.
   - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
   - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
 
-### If the Sequencer is well-behaved...
+## If the Sequencer is well-behaved...
 
 A well-behaved Sequencer will accept transactions from all requesters and treat them fairly, giving each one a promised transaction result as quickly as it can.
 
@@ -87,7 +91,7 @@ This is the basic tradeoff of having a Sequencer: if your message uses the Seque
 
 So a Sequencer is generally a win, if the Sequencer is well behaved.
 
-### If the Sequencer is malicious...
+## If the Sequencer is malicious...
 
 A malicious Sequencer, on the other hand, could cause some pain. If it refuses to handle your transactions, you're forced to go through the delayed inbox, with longer delay. And a malicious Sequencer has great power to front-run everyone's transactions, so it could profit greatly at users' expense.
 
@@ -95,7 +99,7 @@ On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/stat
 
 Because the Sequencer will be run by a trusted party at first, and will be decentralized later, we haven't built in a mechanism to directly punish a misbehaving Sequencer. We're asking users to trust the centralized Sequencer at first, until we switch to decentralized fair sequencing later.
 
-### Decentralized fair sequencing
+## Decentralized fair sequencing
 
 Viewed from 30,000 feet, decentralized fair sequencing isn't too complicated. Instead of being a single centralized server, the Sequencer is a committee of servers, and as long as a large enough supermajority of the committee is honest, the Sequencer will establish a fair ordering over transactions.
 
