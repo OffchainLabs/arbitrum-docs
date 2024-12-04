@@ -13,7 +13,7 @@ Before starting to implement and deploy a custom gateway, it is strongly encoura
 
 In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
-Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.md), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.md) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
+Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-hardhat.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging) that encapsulates the entire process.
 
@@ -38,7 +38,7 @@ On the other hand, the **L2 counterpart of the gateway**, must conform to the [I
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
 - A method `finalizeInboundTransfer`, to handle messages coming ONLY from L1’s gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
-- Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.md#arbsys). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
+- Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
 ### What about my custom tokens?
 
@@ -839,6 +839,6 @@ The full code of this how-to and a more extensive deployment and testing script 
 
 ## Resources
 
-1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.md)
+1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
