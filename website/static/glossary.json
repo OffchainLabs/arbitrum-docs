@@ -1,4 +1,5 @@
 {
+"-state-transition-function":{"title":"🧱 State Transition Function","text":"<p>\nThe STF (State Transition Function) defines how new blocks are produced from input messages (i.e. transactions) in an Arbitrum chain.\n</p>"},
 "active-validator":{"title":"Active Validator","text":"<p>\nA staked <a href=\"/intro/glossary#validator\">Validator</a>  that makes disputable assertions to advance the state of an Arbitrum chain or to challenge the validity of others' assertions. (Not to be confused with the <a href=\"/intro/glossary#sequencer\">Sequencer</a> ).\n</p>"},
 "address-alias":{"title":"Address Alias","text":"<p>\nAn address deterministically generated from an L1 contract address used on L2 to safely identify the source of an L1 to L2 message.\n</p>"},
 "arb-token-bridge":{"title":"Arb Token Bridge","text":"<p>\nA series of contracts on an Arbitrum chain and its underlying chain that facilitate trustless movement of ERC-20 tokens between the two layers.\n</p>"},
