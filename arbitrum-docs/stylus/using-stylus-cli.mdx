@@ -8,7 +8,7 @@ sidebar_position: 2
 target_audience: Developers writing Stylus contracts in Rust using Stylus
 ---
 
-This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit to help developers manage, compile, and optimize their Stylus contracts efficiently.
+This guide will get you started using [cargo stylus](https://github.com/OffchainLabs/cargo-stylus), a CLI toolkit to help developers manage, compile, deploy, and optimize their Stylus contracts efficiently.
 
 This overview will help you discover and learn how to uses cargo stylus tools.
 
@@ -24,20 +24,6 @@ Cargo stylus is a plugin to the standard cargo tool for developing Rust programs
 Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older; v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
 
 </details>
-
-<details>
-<summary>VS Code</summary>
-
-We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
-
-Some helpful VS Code extensions for Rust development:
-
-- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer): Provides advanced features like smart code completion and on-the-fly error checks
-- [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
-- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
-- [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
-
- </details>
 
 <details>
 <summary>Docker</summary>
@@ -100,7 +86,7 @@ You can verify the cargo stylus installation by running `cargo stylus -V` in you
 | activate   | Activate an already deployed contract            | • `--address`: Contract address to activate                                                                        | • `--data-fee-bump-percent`: Percent to bump estimated fee (default 20%) <br />• `--estimate-gas`: Only estimate gas without sending tx                                                                                                                                                                                                                                                                                                                                                   | `cargo stylus new <YOUR_PROJECT_NAME>`                |
 | cache      | Cache contract using Stylus CacheManager         | • bid: Place bid on contract <br />• status: Check contract status <br />• suggest-bid: Get suggested minimum bid  |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | `cargo stylus cache bid --address <CONTRACT_ADDRESS>` |
 | check      | Check a contract                                 |                                                                                                                    | • `--wasm-file`: WASM to check <br />• `--contract-address`: Deploy address                                                                                                                                                                                                                                                                                                                                                                                                               |                                                       |
-| deploy     | Deploy a contract                                | • `--contract-address <CONTRACT_ADDRESS>` Where to deploy and activate the contract (defaults to a random address) | • `--estimate-gas`: Only perform estimation <br />• `--no-verify`: Skip reproducible container <br />• `--cargo-stylus-version`: Version for Docker image <br />• `--source-files-for-project-hash <SOURCE_FILES_FOR_PROJECT_HASH>` Path to source files to include in the project hash <br />•`--max-fee-per-gas-gwei <MAX_FEE_PER_GAS_GWEI>` Optional max fee per gas in gwei units <br />•`--wasm-file <WASM_FILE>` The WASM to check (defaults to any found in the current directory) |
+| deploy     | Deploy a contract                                | • `--contract-address <CONTRACT_ADDRESS>` Where to deploy and activate the contract (defaults to a random address) | • `--estimate-gas`: Only perform estimation <br />• `--no-verify`: Skip reproducible container <br />• `--cargo-stylus-version`: Version for Docker image <br />• `--source-files-for-project-hash <SOURCE_FILES_FOR_PROJECT_HASH>` Path to source files to include in the project hash <br />•`--max-fee-per-gas-gwei <MAX_FEE_PER_GAS_GWEI>` Optional max fee per gas in gwei units <br />•`--wasm-file <WASM_FILE>` The WASM to check (defaults to any found in the current directory) |                                                       |
 
 `cargo stylus deploy \
   --endpoint='http://localhost:8547' \
@@ -148,4 +134,3 @@ Available for commands involving transactions:
 #### [Troubleshooting](https://docs.arbitrum.io/stylus/troubleshooting-building-stylus): solve the most common issues.
 
 #### [cargo-stylus repository](https://github.com/OffchainLabs/stylus): consult cargo stylus' source code.
-
