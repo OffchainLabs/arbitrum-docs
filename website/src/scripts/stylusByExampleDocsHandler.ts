@@ -45,7 +45,7 @@ function load(app) {
     copyFiles(sourceDirBasicExamples, basicExamplesOutputDir, allowList);
 
     // Generate sidebar for basic examples
-    const basicExamplesSidebarItems = generateSidebar(basicExamplesOutputDir);
+    const basicExamplesSidebarItems = generateSidebar(basicExamplesOutputDir, '/basic_examples');
     const basicExamplesSidebarConfig = { items: basicExamplesSidebarItems };
     const basicExamplesSidebarPath = path.join(basicExamplesOutputDir, 'sidebar.js');
 
@@ -63,7 +63,7 @@ function load(app) {
     copyFiles(sourceDirApplications, applicationsOutputDir, appsAllowList);
 
     // Generate sidebar for applications
-    const applicationsSidebarItems = generateSidebar(applicationsOutputDir);
+    const applicationsSidebarItems = generateSidebar(applicationsOutputDir, '/applications');
     const applicationsSidebarConfig = { items: applicationsSidebarItems };
     const applicationsSidebarPath = path.join(applicationsOutputDir, 'sidebar.js');
 
