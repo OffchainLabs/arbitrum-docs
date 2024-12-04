@@ -1,0 +1,63 @@
+---
+title: 'Supported parent chains'
+sidebar_label: 'Supported parent chains'
+description: 'List of chains officially supported in Orbit'
+sidebar_position: '2'
+author: 'mahsamoosavi'
+sme: 'mahsamoosavi'
+editor: 'anegg0'
+target_audience: 'Orbit chains owners and operators'
+---
+
+This page lists the parent chains that are officially supported in Orbit, including mainnets, testnets, and options for local development. While the Orbit SDK provides functionality to enable custom parent chains, support is limited to the chains explicitly listed on this page. Developers are welcome to use the Orbit SDK to configure and deploy custom parent chains; however, such setups, including deploying the required creator and template contracts, are beyond the scope of our official support.
+
+:::caution Supported Chains Only
+
+Please note that we cannot guarantee compatibility or offer assistance for custom configurations outside of the supported chains detailed below.
+
+:::
+
+#### Supported chains
+
+<div class="chain-cards">
+
+- **Ethereum Mainnet**  
+  **Chain ID:** `1`
+
+- **Arbitrum One**  
+  **Chain ID:** `42161`
+
+- **Arbitrum Nova**  
+  **Chain ID:** `42170`
+
+- **Base**  
+  **Chain ID:** `8453`
+
+- **Sepolia**  
+  **Chain ID:** `11155111`
+
+- **Holesky**  
+  **Chain ID:** `17000`
+
+- **Arbitrum Sepolia**  
+  **Chain ID:** `421613`
+
+- **Base Sepolia**  
+  **Chain ID:** `84531`
+
+- **Nitro Testnode L1**  
+  **Chain ID:** `1337`
+
+- **Nitro Testnode L2**  
+  **Chain ID:** `412346`
+
+- **Nitro Testnode L3**  
+  **Chain ID:** `333333`
+
+</div>
+
+### Adding custom parent chains
+
+Although Orbit primarily supports a predefined set of chains, it provides developers with the flexibility to add custom parent chains through [the `registerCustomParentChain` function of the Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/729facd4d50156d7a84cf1204552c900eb86655c/src/chains.ts#L102). This capability enables integration with chains beyond the officially supported list, offering opportunities for customization and expanding the Orbit ecosystem.
+
+However, adding a custom chain requires deploying essential contracts, such as the creator contract and template contract, on the target chain. These contracts are fundamental for ensuring the proper functioning of the Orbit framework on the custom chain.
