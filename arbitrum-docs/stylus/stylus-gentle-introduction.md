@@ -46,7 +46,7 @@ While many developers will be drawn to new use cases, rebuilding existing applic
 
 1. Utilize our [quickstart](https://docs.arbitrum.io/stylus/stylus-quickstart), [Rust SDK](https://docs.arbitrum.io/stylus/reference/overview), to help you start building.
 2. Join our Stylus Developer [Telegram](https://t.me/arbitrum_stylus) group and [Arbitrum Discord](https://discord.gg/arbitrum) for support as well as the official Arbitrum ([@Arbitrum](https://twitter.com/arbitrum)) and Arbitrum Developers ([@ArbitrumDevs](https://twitter.com/ArbitrumDevs)) X accounts for announcements.
-3. Check out the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for various community contributed Stylus projects and tools, if you build something useful, we'd be happy to add it there.
+3. Check out the [Awesome Stylus](https://github.com/OffchainLabs/awesome-stylus) repository for various community contributed Stylus projects and tools. If you build something useful, we'd be happy to add it there.
 
 ### Contributing
 

@@ -1,7 +1,8 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
-const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
+const stylusByExampleDocsSidebarSDK = require('../arbitrum-docs/stylus-by-example/basic_examples/sidebar.js');
+const stylusByExampleDocsSidebarExamples = require('../arbitrum-docs/stylus-by-example/applications/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -499,7 +500,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Stylus Rust SDK',
+          label: 'Rust SDK',
           collapsed: true,
           items: [
             {
@@ -507,7 +508,7 @@ const sidebars = {
               id: 'stylus/reference/overview',
               label: 'Overview',
             },
-            ...stylusByExampleDocsSidebar,
+            ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -516,39 +517,36 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'stylus/using-stylus-cli',
-          label: 'Using Stylus CLI',
+          type: 'category',
+          label: 'Rust CLI',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/using-stylus-cli',
+              label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/debugging-stylus-tx',
+              label: 'Debug transactions',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts',
+              label: 'Verify contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/stylus-cache-manager',
+              label: 'Cache contracts',
+            },
+          ],
         },
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/debugging-stylus-tx',
-          label: 'Debug transactions',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/verifying-contracts',
-          label: 'Verify contracts',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/concepts/stylus-cache-manager',
-          label: 'Cache contracts',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/verifying-contracts-arbiscan',
-          label: 'Arbiscan verification',
-        },
-        {
-          type: 'doc',
-          id: 'stylus/how-tos/adding-support-for-new-languages',
-          label: 'Using other languages',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
@@ -572,26 +570,7 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'stylus-by-example/vending_machine',
-              label: 'Vending machine',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc20',
-              label: 'ERC-20',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc721',
-              label: 'ERC-721',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/multi_call',
-              label: 'Multi-Call',
-            },
+            ...stylusByExampleDocsSidebarExamples,
             {
               type: 'link',
               label: 'Awesome Stylus',
@@ -608,6 +587,11 @@ const sidebars = {
               type: 'doc',
               id: 'for-devs/dev-tools-and-resources/chain-info',
               label: 'Chain Info',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Arbiscan verification',
             },
             {
               type: 'doc',
@@ -635,6 +619,11 @@ const sidebars = {
               href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+          label: 'Using other languages',
         },
         {
           type: 'doc',
