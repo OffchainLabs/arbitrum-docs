@@ -26,7 +26,7 @@ Orbit chains have three areas of configuration:
 
 ## 1. Parent chain configuration
 
-Configuring the parent chain is the initial step to setting up your Orbit chain. Most of the parent chain configurations are specified during the setup phase. Detailed instructions can be found in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain#rollup-deployment-parameter) section of the Rollup deployment guide.
+Configuring the parent chain is the initial step to setting up your Orbit chain. Most of the parent chain configurations are specified during the setup phase. Detailed instructions can be found in the [Rollup Deployment Parameters](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md#rollup-deployment-parameters) section of the Rollup deployment guide.
 
 After the initial setup, the chain owner can modify configurations as needed. For instance, the validator set can be updated by invoking the [`setValidKeyset`](https://github.com/OffchainLabs/nitro-contracts/blob/90037b996509312ef1addb3f9352457b8a99d6a6/src/bridge/SequencerInbox.sol#L751) function with a new set of validators. This adaptability facilitates your chain's optimization and management.
 
