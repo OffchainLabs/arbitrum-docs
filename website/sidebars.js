@@ -247,6 +247,11 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/AEPLicense',
+          label: 'AEP License',
+        },
+        {
           type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,
@@ -461,6 +466,11 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
+          label: 'BoLD for Orbit chains',
         },
         {
           type: 'doc',
