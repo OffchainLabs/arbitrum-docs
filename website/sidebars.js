@@ -242,8 +242,84 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
-          label: 'Quickstart',
+          id: 'launch-orbit-chain/orbit-start-your-journey',
+          label: 'Start your journey',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/orbit-license',
+          label: 'Orbit license',
+        },
+        {
+          type: 'category',
+          label: 'Configure your chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/how-to-configure-your-chain',
+              label: 'how-to-configure-your-chain',
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/reference/orbit-configuration-parameters',
+              label: `Orbit configuration parameters`,
+            },
+            {
+              type: 'category',
+              label: 'Core configuration',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-sequencer-configuration',
+                  label: 'orbit-sequencer-configuration',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-batch-poster-configuration',
+                  label: 'orbit-batch-poster-configuration',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-fast-block-times',
+                  label: 'orbit-fast-block-times',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/orbit-smart-contract-size-limit',
+                  label: 'smart contract size limit',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  label: `Calculate AEP license fees`,
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'AEP fee router',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/aep-fee-router-introduction',
+                  label: `AEP fee router overview`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+                  label: `Set up AEP fee router`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  label: `Calculate AEP license fees`,
+                },
+              ],
+            },
+          ],
         },
         {
           type: 'doc',
@@ -318,11 +394,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
               label: `Customize your chain's deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-              label: `Additional configuration parameters`,
             },
             {
               type: 'doc',
