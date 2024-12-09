@@ -541,12 +541,22 @@ const sidebars = {
               id: 'stylus/concepts/stylus-cache-manager',
               label: 'Cache contracts',
             },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Verify on Arbiscan',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
+            },
           ],
         },
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↓</span></a>',
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
@@ -556,12 +566,12 @@ const sidebars = {
             {
               type: 'doc',
               id: 'stylus/concepts/how-it-works',
-              label: 'How Stylus works',
+              label: 'Architecture overview',
             },
             {
               type: 'doc',
               id: 'stylus/concepts/stylus-gas',
-              label: 'How Stylus uses gas',
+              label: 'Gas metering',
             },
           ],
         },
@@ -584,19 +594,9 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'for-devs/dev-tools-and-resources/chain-info',
-              label: 'Chain Info',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Arbiscan verification',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
             },
             {
               type: 'doc',

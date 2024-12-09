@@ -1,7 +1,7 @@
 ---
 id: how-it-works
-title: 'How Stylus works'
-sidebar_label: 'How Stylus works'
+title: 'Architecture overview'
+sidebar_label: 'Architecture overview'
 description: 'Learn what powers Stylus'
 author: srinjoyc
 SME: srinjoyc
