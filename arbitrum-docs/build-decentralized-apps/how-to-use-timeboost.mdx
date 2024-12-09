@@ -439,6 +439,29 @@ console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransacti
 
 Transactions that have been sent to the express lane by the express lane controller, and that have been executed (regardless of them being successful or having reverted), can be identified by looking at their receipts, or the message broadcasted by the sequencer feed.
 
-Transaction receipts include now a new field `timeboosted`, which will be `true` for timeboosted transactions, and `false` for regular non-timeboosted transactions.
+Transaction receipts include now a new field `timeboosted`, which will be `true` for timeboosted transactions, and `false` for regular non-timeboosted transactions. For example:
+
+```shell
+blockHash               0x56325449149b362d4ace3267681c3c90823f1e5c26ccc4df4386be023f563eb6
+blockNumber             105169374
+contractAddress
+cumulativeGasUsed       58213
+effectiveGasPrice       100000000
+from                    0x193cA786e7C7CC67B6227391d739E41C43AF285f
+gasUsed                 58213
+logs                    []
+logsBloom               0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+root
+status                  1 (success)
+transactionHash         0x62ea458ad2bb408fab57d1a31aa282fe3324b2711e0d73f4777db6e34bc1bef5
+transactionIndex        1
+type                    2
+blobGasPrice
+blobGasUsed
+to                      0x0000000000000000000000000000000000000001
+gasUsedForL1            "0x85a5"
+l1BlockNumber           "0x6e8b49"
+timeboosted             true
+```
 
 In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMetadata` field that represents whether a particular transaction in the block was timeboosted or not. The field blockMetadata is an array of bytes and it starts with a byte representing the version (`0`), followed by `ceil(N/8)` number of bytes where `N` is the number of transactions in the block. If a particular transaction was timeboosted, the bit representing its position in the block will be set to `1`, while the rest will be set to `0`. For example, if the `blockMetadata` of a particular message, viewed as bits is `00000000 01100000`, then the 2nd and 3rd transactions in that block were timeboosted.
