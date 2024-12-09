@@ -79,7 +79,7 @@ On top of the configuration of a regular full node, you'll need to configure the
 Here's an example of how to run a defensive validator for Arbitrum One:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.bold.enable --node.bold.mode=defensive-mode
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @latestNitroNodeImage@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.bold.enable --node.bold.mode=Defensive
 ```
 
 ### Step 2: verify that your node is running as a validator
@@ -133,7 +133,7 @@ When activating BoLD on a chain, the amount of logs produced by a validator in c
 | `--node.bold.api-host` | IP    | IP to listen on (defaults to 127.0.0.1) |
 | `--node.bold.api-port` | Port  | Port to listen on (defaults to 9393)    |
 
-We are working on specific documentation about the methods available on this API and will be published soon.
+You can find specific documentation about the methods available on this API in [BoLD validator API](/run-arbitrum-node/more-types/04-bold-validator-api.mdx).
 
 ### How to add new validators to the allowlist (Orbit chains)
 
@@ -144,7 +144,7 @@ Follow these instructions to add a new validator address to the allowlist. Keep 
 1. Find your `upgradeExecutor` contract address
 2. Call the `executeCall` method of the `upgradeExecutor` contract:
    - set the `target` address to your Rollup contract's address
-   - set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}`. (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`)
+   - set the `targetCalldata` to `0xa3ffb772{Your new allowlist validator address}` (`0xa3ffb772` is the signature of `setValidator(address[],bool[])`). For example, if you want to add the address `0x1234567890123456789012345678901234567890`, your `targetCalldata` should be `0xa3ffb7721234567890123456789012345678901234567890`.
 3. Call your Rollup contract's `isValidator(address)` and check the result
 
 After performing this operation, the new validator will be able to run a validator node to participate in the chain.

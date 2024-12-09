@@ -40,65 +40,29 @@ The following endpoints are available at the configured host and port to query i
 
 Lists all assertions up to chain head.
 
-This request will return an array of objects with information about each assertion. Each object will look like this:
-
-```
-{
-    "hash": "0xd5a45645fb142ae37b2728a7b326c512183a50e411cafb3c7e85a3595b22d904",
-    "confirmPeriodBlocks": 7200,
-    "requiredStake": "24000000000000000000",
-    "parentAssertionHash": "0xe70c95ca2b5becf6c199d21ce489350c111878d20d0535d314d4db280ed50fd8",
-    "inboxMaxCount": "20791",
-    "afterInboxBatchAcc": "0x9e97378509984dc8d3454ce30a0a12d174fc71bbb2b28db41ead3e54ca7b1c4f",
-    "wasmModuleRoot": "0x260f5fa5c3176a856893642e149cf128b5a8de9f828afec8d11184415dd8dc69",
-    "challengeManager": "0x0a925b791b640781b0253694ec29ac6ddcb8ce1d",
-    "creationBlock": 7203264,
-    "transactionHash": "0x593fdf8b9704324ee3b4a47d1005c64f27f07abeee8c099eb1da2737516464d7",
-    "beforeStateBlockHash": "0x8f641a2943d6a0ba15a7ca01f95b8710db5a7dd2c8930b3dbb8844e279c35116",
-    "beforeStateSendRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "beforeStateBatch": 20788,
-    "beforeStatePosInBatch": 0,
-    "beforeStateMachineStatus": 1,
-    "afterStateBlockHash": "0x67ee9231bf6edff5051104ea19d09ac09e3e62a02006cca11de15def0d04c44a",
-    "afterStateSendRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "afterStateBatch": 20789,
-    "afterStatePosInBatch": 0,
-    "afterStateMachineStatus": 1,
-    "firstChildBlock": 0,
-    "secondChildBlock": 0,
-    "isFirstChild": true,
-    "status": "confirmed",
-    "lastUpdatedAt": "2024-12-04T15:48:42Z"
-},
-```
+This request will return an array of objects with information about each assertion.
 
 ### `/api/v1/assertions/<assertion-hash>`
 
-Gets an assertion by its hash.
-
-For example, to obtain the assertion of the example above, we'd make the following request:
-
-```
-/api/v1/assertions/0xd5a45645fb142ae37b2728a7b326c512183a50e411cafb3c7e85a3595b22d904
-```
+Returns information of a specific assertion.
 
 ### `/api/v1/challenge/<assertion-hash>/edges`
 
-Gets all edges for a challenged assertion.
+Returns all edges for a challenged assertion.
 
-This request will return an array of objects with information about each edge. Each object will look like this:
+This request will return an array of objects with information about each edge.
 
 ### `/api/v1/challenge/<assertion-hash>/edges/history/<history-commitment>`
 
-Get an edge by a history commitment.
+Returns information about a specific edge, given its history commitment.
 
 ### `/api/v1/challenge/<assertion-hash>/ministakes`
 
-Gets all the ministakes under a challenged assertion.
+Returns all the ministakes bonded under a challenged assertion.
 
 ### `/api/v1/tracked/royal-edges`
 
-Gets the locally-tracked, royal edges kept in-memory by the validator.
+Returns the locally-tracked, royal edges kept in-memory by the validator.
 
 ### `/api/v1/healthz`
 
