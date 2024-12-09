@@ -594,7 +594,7 @@ const sidebars = {
             {
               type: 'link',
               label: 'Awesome Stylus',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+              href: 'https://github.com/OffchainLabs/awesome-stylus',
             },
           ],
         },
