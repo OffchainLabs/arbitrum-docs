@@ -54,7 +54,7 @@ No. Stylus contracts are compiled down to WASM. The user writes a program in Rus
 
 ### How is a Stylus contract deployed?
 <p>
-Stylus contracts are deployed on chain as a blob of bytes, just like EVM ones. The only difference is that when the contract is executed, instead of invoking the EVM, we invoke a separate WASM runtime. Note that a special EOF-inspired prefix distinguishes Stylus contracts from traditional EVM contracts: when a contract's bytecode starts with the magic <code>0xEF000000</code> prefix, it's a Stylus WASM contract.
+Stylus contracts are deployed on chain as a blob of bytes, just like EVM ones. The only difference is that when the contract is executed, instead of invoking the EVM, we invoke a separate WASM runtime. Note that a special EOF-inspired prefix distinguishes Stylus contracts from traditional EVM contracts: when a contract's bytecode starts with the magic <code>0xEFF00000</code> prefix, it's a Stylus WASM contract.
 </p>
 
 <p>

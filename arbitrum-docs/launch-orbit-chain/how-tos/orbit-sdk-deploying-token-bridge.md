@@ -44,8 +44,8 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 
 The token bridge deployment process is the same for all Orbit chains types except for the following:
 
-- **Custom fee token Orbit chains** which require [token approval](#step-1).
-- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#step-5).
+- **Custom fee token Orbit chains** which require [token approval](#1-token-approval).
+- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#5-setting-up-the-weth-gateway).
 
 :::
 
@@ -93,7 +93,7 @@ Please note that after generating the raw transaction, the deployer must still s
 
 Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain.
 
-The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#retryable-ticketsO).
+The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#retryable-tickets).
 
 Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
 

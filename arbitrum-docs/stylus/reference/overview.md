@@ -13,6 +13,6 @@ The Stylus Rust SDK is built on top of [Alloy](https://www.paradigm.xyz/2023/06/
 
 The Stylus Rust SDK has been audited in August 2024 at [commit #62bd831](https://github.com/OffchainLabs/stylus-sdk-rs/tree/62bd8318c7f3ab5be954cbc264f85bf2ba3f4b06) by Open Zeppelin which can be viewed [on our audits page](audit-reports.mdx).
 
-This section contains a set of pages that describe a certain aspect of the Stylus Rust SDK, like how to work with [variables](/stylus-by-example/variables.mdx), or what ways are there to [send ether](/stylus-by-example/sending_ether.mdx). Additionally, there's also a page that compiles a set of [advanced features](/stylus/reference/rust-sdk-guide.md) that the Stylus Rust SDK provides.
+This section contains a set of pages that describe a certain aspect of the Stylus Rust SDK, like how to work with [variables](/stylus-by-example/basic_examples/variables.mdx), or what ways are there to [send ether](/stylus-by-example/basic_examples/sending_ether.mdx). Additionally, there's also a page that compiles a set of [advanced features](/stylus/reference/rust-sdk-guide.md) that the Stylus Rust SDK provides.
 
 Finally, there's also a [Stylus by example](https://stylus-by-example.org) portal available that provides most of the information included in this section, as well as many different example contracts.

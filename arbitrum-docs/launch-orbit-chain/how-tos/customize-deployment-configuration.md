@@ -17,7 +17,7 @@ Let's briefly review each of the deployment configuration parameters, the ration
 
 ### Chain ID
 
-Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
+Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 ### Chain name
 

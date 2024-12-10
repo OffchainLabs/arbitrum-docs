@@ -194,3 +194,9 @@ The following parameters need to be configured in those nodes.
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--node.staker.enable-fast-confirmation=true`   | Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
 | `--node.staker.make-assertion-interval=0h15m0s` | Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
+
+:::note
+
+Immediately after configuring fast withdrawals, your chain may not operate at full speed yet. This ramp-up is because the validators must work through the backlog of assertions that have yet to be confirmed. You will see a series of 'NodeCreated' and 'NodeConfirmed' events. Once the backlog is processed, your chain should operate fully at speed.
+
+:::
