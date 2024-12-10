@@ -81,4 +81,4 @@ When deploying your Orbit chain, this address must be a standard Ethereum wallet
 
 ## Additional configuration parameters
 
-There are a number of [additional parameters](/launch-orbit-chain/reference/additional-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.
+There are a number of [additional parameters](/launch-orbit-chain/reference/orbit-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.
