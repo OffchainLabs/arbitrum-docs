@@ -872,11 +872,6 @@ const sidebars = {
           label: 'L2 to L1 messaging',
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/nitro-vs-classic',
-          label: 'Nitro vs. Classic',
-        },
-        {
           type: 'link',
           href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
           label: 'Nitro whitepaper',
