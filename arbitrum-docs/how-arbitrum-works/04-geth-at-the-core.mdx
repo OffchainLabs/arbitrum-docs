@@ -149,7 +149,8 @@ Please note any links on this page may be referencing old releases of Nitro or o
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
 
 Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
->>>>>>> master:arbitrum-docs/how-arbitrum-works/arbos/geth.mdx
+
+> > > > > > > master:arbitrum-docs/how-arbitrum-works/arbos/geth.mdx
 
 - `core.ApplyTransaction` ⮕ `core.applyTransaction` ⮕ `core.ApplyMessage`
   - `core.NewStateTransition`
