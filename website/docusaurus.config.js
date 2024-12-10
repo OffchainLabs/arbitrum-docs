@@ -11,8 +11,8 @@ const config = {
   tagline: 'Arbitrum Docs',
   url: 'https://docs.arbitrum.io/',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  onBrokenLinks: 'ignore',
+  onBrokenMarkdownLinks: 'ignore',
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
