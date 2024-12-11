@@ -76,4 +76,3 @@ However, developers optimizing contracts may choose to measure performance in in
 
 - [Gas and ink costs](/stylus/reference/opcode-hostio-pricing): Detailed costs per opcode and host I/O
 - [Caching strategy](/stylus/how-tos/caching-contracts): Description of the Stylus caching strategy and the `CacheManager` contract
-
