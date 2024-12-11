@@ -604,11 +604,6 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
-            },
-            {
               type: 'doc',
               id: 'stylus/reference/opcode-hostio-pricing',
               label: 'Gas & Ink Pricing',
