@@ -533,7 +533,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/using-stylus-cli',
+              id: 'stylus/using-cli',
               label: 'Overview',
             },
             {
