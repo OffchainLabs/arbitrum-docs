@@ -4,8 +4,6 @@ title: CLI Tools (cargo-stylus)
 sidebar_label: CLI tools overview
 ---
 
-# CLI tools (cargo-stylus)
-
 The CLI tools provided for Stylus, specifically the `cargo-stylus` tool, are designed to help developers manage, compile, and optimize their Stylus contracts efficiently. This overview provides a summary of the tools available and how to use them effectively.
 
 ## Available tools
