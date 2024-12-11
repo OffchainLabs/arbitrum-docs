@@ -538,7 +538,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/debugging-stylus-tx',
+              id: 'stylus/how-tos/debugging-tx',
               label: 'Debug transactions',
             },
             {
