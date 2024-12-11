@@ -14,7 +14,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Stylus',
     Svg: require('@site/static/img/stylus-logo.svg').default,
-    href: '/stylus/stylus-quickstart',
+    href: '/stylus/quickstart',
     description: 'Use Stylus to write an EVM-compatible smart contract in Rust.',
   },
   {
