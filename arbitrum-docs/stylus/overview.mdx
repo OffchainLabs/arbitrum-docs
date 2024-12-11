@@ -25,7 +25,7 @@ Let's learn how to write contracts with Stylus!
   <Card
     title="Quickstart (Rust)"
     description="Get started quickly with Rust."
-    href="https://docs.arbitrum.io/stylus/stylus-quickstart"
+    href="https://docs.arbitrum.io/stylus/quickstart"
   />
   <Card
     title="Testnet"
