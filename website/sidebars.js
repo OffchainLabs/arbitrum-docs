@@ -505,7 +505,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
+          id: 'stylus/quickstart',
           label: 'Quickstart',
         },
         {
