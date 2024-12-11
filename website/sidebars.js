@@ -580,7 +580,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-gas',
+              id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
             },
           ],
