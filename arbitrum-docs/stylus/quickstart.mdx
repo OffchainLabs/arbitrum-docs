@@ -1,5 +1,5 @@
 ---
-id: stylus-quickstart
+id: quickstart
 title: 'Quickstart: write a smart contract in Rust using Stylus'
 description: 'Leads a developer from 0 to 1 writing and deploying a smart contract in Rust using Stylus'
 author: chrisco512, anegg0
@@ -10,13 +10,13 @@ target_audience: Developers writing Stylus contracts in Rust using Stylus
 
 This guide will get you started with <a data-quicklook-from="stylus">Stylus</a>' basics. We'll cover the following steps:
 
-1. [Setting up your development environment](./stylus-quickstart#setting-up-your-development-environment)
-2. [Creating a Stylus project with cargo stylus](./stylus-quickstart#creating-a-stylus-project-with-cargo-stylus)
-3. [Checking the validity of your contract](./stylus-quickstart#checking-if-your-stylus-project-is-valid)
-4. [Deploying your contract](./stylus-quickstart#deploying-your-contract)
+1. [Setting up your development environment](./quickstart#setting-up-your-development-environment)
+2. [Creating a Stylus project with cargo stylus](./quickstart#creating-a-stylus-project-with-cargo-stylus)
+3. [Checking the validity of your contract](./quickstart#checking-if-your-stylus-project-is-valid)
+4. [Deploying your contract](./quickstart#deploying-your-contract)
 5. [Exporting your contract's ABIs](#exporting-the-solidity-abi-interface)
-6. [Calling your contract](./stylus-quickstart#calling-your-contract)
-7. [Sending a transaction to your contract](./stylus-quickstart#sending-a-transaction-to-your-contract)
+6. [Calling your contract](./quickstart#calling-your-contract)
+7. [Sending a transaction to your contract](./quickstart#sending-a-transaction-to-your-contract)
 
 ## Setting up your development environment
 
@@ -204,7 +204,7 @@ deployment tx total cost: "0.000712373700000000" ETH
 
 ### Deployment
 
-Let's move on to the contract's actual deployment. Two transactions will be sent onchain: the contract deployment and its [activation](/stylus/stylus-gentle-introduction.md#activation).
+Let's move on to the contract's actual deployment. Two transactions will be sent onchain: the contract deployment and its activation.
 
 ```shell
 cargo stylus deploy \

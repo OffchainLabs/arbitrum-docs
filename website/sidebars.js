@@ -500,12 +500,12 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
+          id: 'stylus/quickstart',
           label: 'Quickstart',
         },
         {
@@ -533,7 +533,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/using-stylus-cli',
+              id: 'stylus/using-cli',
               label: 'Overview',
             },
             {
