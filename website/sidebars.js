@@ -500,7 +500,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
