@@ -20,7 +20,7 @@ Let's learn how to write contracts with Stylus!
   <Card
     title="A gentle introduction"
     description="Start with the basics of Stylus contracts."
-    href="https://docs.arbitrum.io/stylus/stylus-gentle-introduction"
+    href="https://docs.arbitrum.io/stylus/gentle-introduction"
   />
   <Card
     title="Quickstart (Rust)"
