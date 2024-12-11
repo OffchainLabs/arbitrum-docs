@@ -548,7 +548,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
+              id: 'stylus/how-tos/caching-contracts',
               label: 'Cache contracts',
             },
             {
