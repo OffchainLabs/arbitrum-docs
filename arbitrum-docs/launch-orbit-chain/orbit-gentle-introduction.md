@@ -17,7 +17,7 @@ If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart
 - Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
 - Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
 - **You own your Orbit chain** and can decentralize its ownership, validation, and other dependencies.
-- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/stylus-gentle-introduction), and continuous improvements.
+- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/gentle-introduction), and continuous improvements.
 
 ### What's Orbit?
 
