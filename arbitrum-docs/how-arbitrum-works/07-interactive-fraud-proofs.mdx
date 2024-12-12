@@ -67,12 +67,12 @@ The challenge protocol is designed so that the dispute can be resolved with a mi
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
 
-<!--import ChallengeManagerDiagram from '../../diagrams/_challenge-manager.mdx'; -->
+import ChallengeManagerDiagram from '../../diagrams/_challenge-manager.mdx';
 
 ## ChallengeManager
 This section is a technical deep dive into the `ChallengeManager` and will walk through the arbitration of a challenge game in great detail. The `ChallengeManager` plays the role of the arbiter of challenge games. Here's a diagram of the challenge state machine:
 
-<!--         <ChallengeManagerDiagram />        -->
+<ChallengeManagerDiagram />
 
 ### Block challenge
 

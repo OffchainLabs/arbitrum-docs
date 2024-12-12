@@ -21,9 +21,8 @@ Because the top and bottom layers rely heavily on code from geth, this structure
 
 The State Transition Function consists of the bottom Geth layer, and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code, and implicitly includes all of the code called by that function. The STF takes as input the bytes of a transaction received in the inbox, and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state, and at the end will emit the header of a new block (in Ethereum's block header format) which will be appended to the Nitro chain.
 
-<!-- 
-	We should add one more paragraph here explaining that the rest of the section in this page go into the technical details of both ArbOS and geth. That way the average non-deep-technical reader is aware that the next sections might not be relevant for them.
-	from arbos/introduction -->
+The rest of this section will be a deep dive into Geth and ArbOS. If deep technical knowledge does not suit you, skip to the next section [Separating Execution from Proving](/how-arbitrum-works/separating-execution-from-proving.mdx).
+
 
 
 ## Geth

@@ -42,7 +42,7 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 
 
-<!-- REMOVE and incorporate all below to the above sections where applicable -->
+<!-- REMOVE and incorporate all below to the above sections where applicable
 
 ### The Speed Limit
 
@@ -88,9 +88,7 @@ The price per estimated byte is set by a dynamic algorithm that compares the tot
 
 The total fee charged to a transaction is the L2 basefee, multiplied by the sum of the L2 gas used plus the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a basefee limit that is below the current basefee. Ethereum also allows a "tip" but Nitro ignores this field and never collects any tips.
 
-<!-- -->
 
-<!-- from l1-gas-pricing -->
 
 ## L1 gas pricing
 
@@ -147,6 +145,4 @@ A second term is added to the L1 Gas Basefee, based on the derivative of the sur
 
 The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/build-decentralized-apps/nodeinterface/02-reference.mdx) or [NodeInterface.gasEstimateL1Component()](/build-decentralized-apps/nodeinterface/02-reference.mdx) method can be used.
 
-Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas.
-
-<!-- -->
+Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas. -->
