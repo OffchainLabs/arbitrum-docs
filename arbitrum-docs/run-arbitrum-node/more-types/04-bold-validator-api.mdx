@@ -1,16 +1,18 @@
 ---
 title: 'BoLD validator API'
 description: Describes the API available on BoLD validator nodes
+author: TucksonDev
+sme: TucksonDev
 content_type: concept
 ---
 
 When <a data-quicklook-from="bold">BoLD</a> is activated, validators have access to an optional API that Nitro provides, which provides information about the assertions being posted and the current challenges going on.
 
-This page describes the rationale behind providing this API, and the different endpoints that are available.
+This page describes the rationale behind providing this API and the available endpoints.
 
 ## Why do we need an API?
 
-BoLD is a complex protocol that enables validators to defend claims about an Arbitrum chain on its parent chain. By default, uncontested claims are confirmed within 7 days, and contested claims can be confirmed within 14 days. Within that sliding window, there can be a significant amount of challenges and activities of validators making moves to defend their claims. Nitro is equipped to automatically make moves on behalf of honest validators, and logs a lot of information about ongoing challenges.
+BoLD is a complex protocol that enables validators to defend claims about an Arbitrum chain on its parent chain. By default, uncontested claims are confirmed within 7 days, and contested claims can be confirmed within 14 days. Within that sliding window, there can be a significant amount of challenges and activities of validators making moves to defend their claims. Nitro is equipped to make moves on behalf of honest validators automatically and logs a lot of information about ongoing challenges.
 
 However, the amount of information logged between a simple Alice vs. Bob dispute is enormous. Each move made in a challenge emits a log, and there are many other things occurring in a validator node's runtime that are also logged in the process. Because BoLD challenges can be concurrent, we can quickly see an explosion of logs if many participants are involved.
 
