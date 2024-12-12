@@ -1,8 +1,12 @@
 ---
-title: Transaction Lifecycle
+title: Sequencing, Followed by Deterministic Execution
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
 
-## Sequencing, Followed by Deterministic Execution
 
 This diagram summarizes how transactions are processed in Nitro.
 
@@ -20,13 +24,13 @@ The state transition function is deterministic, which means that its behavior de
 
 It follows that anyone who knows the transaction sequence can compute the state transition function for themselves--and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
 
-## Overview: The Lifecycle of an Arbitrum Transaction
+## Deep dive: The lifecycle of an Arbitrum transaction
 
-As an introduction to the various components that compose the Arbitrum protocol, we'll go step-by-step over the phases an Arbitrum transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 1.
+We'll now go step-by-step over the phases an Arbitrum transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 1.
 
 We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
 
-This overview will be focused on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
+This section will focus on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
 
 For clarity on any terminology that may be unfamiliar, see our [glossary](/intro/glossary.mdx).
 
@@ -64,7 +68,7 @@ Upon receiving a transaction, the Sequencer will:
 
 #### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
 
-At this phase, the client's acceptance of finality relies on trusting the Sequencer. I.e., a malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch (see phase 3).
+At this phase, the client's acceptance of finality relies on trusting the Sequencer, i.e., a malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch (see phase 3).
 
 :::note
 

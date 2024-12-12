@@ -1,9 +1,21 @@
 ---
-title: L1 to L2 Messaging
-author: dzgoldman
+title: L1 to L2 messaging
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
 
-<!-- from crosschain messaging > l1-l2 messaging -->
+<!-- from sequencer needs reworked as an intro -->
+### Bridging
+
+We have already covered how users interact with L2 contracts--they submit transactions by putting messages into the chain’s inbox, or having a full node Sequencer or aggregator do so on their behalf. Let’s talk about how contracts interact between L1 and L2--how an L1 contract calls an L2 contract, and vice versa.
+
+The L1 and L2 chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same transaction as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. As a consequence, a cross-chain contract-to-contract call can never produce a result that is available to the calling contract (except for acknowledgement that the call was successfully submitted for later execution).
+
+
+
 
 ## Retryable Tickets
 

@@ -1,7 +1,13 @@
 ---
 title: Gas and Fees
-author: dzgoldman
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
+
+Gas is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
 
 There are two parties a user pays when submitting a tx:
 
@@ -34,11 +40,9 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 [estimation_inclusion_link]: https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999
 
-<!-- from inside-arbitrum-nitro -->
 
-## Gas and Fees
 
-NitroGas (so-called to avoid confusion with Layer 1 Ethereum gas) is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
+<!-- REMOVE and incorporate all below to the above sections where applicable -->
 
 ### The Speed Limit
 

@@ -1,8 +1,12 @@
 ---
-title: Interactive Fraud Proofs
+title: Challenges: Interactive Fraud Proofs
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
 
-<!-- from inside-arbitrum-nitro -->
 
 Suppose the rollup chain looks like this:
 
@@ -62,56 +66,11 @@ The challenge protocol is designed so that the dispute can be resolved with a mi
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
-## Instant confirmation
-
-Without a Sequencer, a node can predict what the results of a client transaction will be, but the node can't be sure, because it can't know or control how the transactions it submits will be ordered in the inbox, relative to transactions submitted by other nodes.
-
-The Sequencer is given more control over ordering, so it has the power to assign its clients' transactions a position in the inbox queue, thereby ensuring that it can determine the results of client transactions immediately. The Sequencer's power to reorder has limits (see below for details) but it does have more power than anyone else to influence transaction ordering.
-
-## Inboxes, fast and slow
-
-When we add a Sequencer, the operation of the inbox changes.
-
-- Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
-- Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "delayed inbox" queue, which is managed by an L1 Ethereum contract.
-  - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
-  - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
-
-## If the Sequencer is well-behaved...
-
-A well-behaved Sequencer will accept transactions from all requesters and treat them fairly, giving each one a promised transaction result as quickly as it can.
-
-It will also minimize the delay it imposes on non-Sequencer transactions by releasing delayed messages promptly, consistent with the goal of providing strong promises of transaction results. Specifically, if the Sequencer believes that 40 confirmation blocks are needed to have good confidence of finality on Ethereum, then it will release delayed messages after 40 blocks. This is enough to ensure that the Sequencer knows exactly which transactions will precede its current transaction, because those preceding transactions have finality. There is no need for a benign Sequencer to delay non-Sequencer messages more than that, so it won't.
-
-This does mean that transactions that go through the delayed inbox will take longer to get finality. Their time to finality will roughly double, because they will have to wait one finality period for promotion, then another finality period for the Ethereum transaction that promoted them to achieve finality.
-
-This is the basic tradeoff of having a Sequencer: if your message uses the Sequencer, finality is C blocks faster; but if your message doesn't use the Sequencer, finality is C blocks slower. This is usually a good tradeoff, because most transactions will use the Sequencer; and because the practical difference between instant and 10-minute finality is bigger than the difference between 10-minute and 20-minute finality.
-
-So a Sequencer is generally a win, if the Sequencer is well behaved.
-
-## If the Sequencer is malicious...
-
-A malicious Sequencer, on the other hand, could cause some pain. If it refuses to handle your transactions, you're forced to go through the delayed inbox, with longer delay. And a malicious Sequencer has great power to front-run everyone's transactions, so it could profit greatly at users' expense.
-
-On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to decentralized, fair sequencing, as described below.
-
-Because the Sequencer will be run by a trusted party at first, and will be decentralized later, we haven't built in a mechanism to directly punish a misbehaving Sequencer. We're asking users to trust the centralized Sequencer at first, until we switch to decentralized fair sequencing later.
-
-## Decentralized fair sequencing
-
-Viewed from 30,000 feet, decentralized fair sequencing isn't too complicated. Instead of being a single centralized server, the Sequencer is a committee of servers, and as long as a large enough supermajority of the committee is honest, the Sequencer will establish a fair ordering over transactions.
-
-How to achieve this is more complicated. Research by a team at Cornell Tech, including Offchain Labs CEO and Co-founder Steven Goldfeder, developed the first-ever decentralized fair sequencing algorithm. With some improvements that are under development, these concepts will form the basis for our longer-term solution, of a fair decentralized Sequencer.
-
-<!-- -->
-
-<!-- from fraud-proofs/challenge-manager -->
 
 <!--import ChallengeManagerDiagram from '../../diagrams/_challenge-manager.mdx'; -->
 
 ## ChallengeManager
-
-The `ChallengeManager` arbitrates challenge games. Here's a diagram of the challenge state machine:
+This section is a technical deep dive into the `ChallengeManager` and will walk through the arbitration of a challenge game in great detail. The `ChallengeManager` plays the role of the arbiter of challenge games. Here's a diagram of the challenge state machine:
 
 <!--         <ChallengeManagerDiagram />        -->
 
@@ -172,9 +131,7 @@ valid moves, so it will eventually lose by timeout.
 This is done as a precaution, so that if a challenge is resolved incorrectly,
 there is time to diagnose and fix the error with a contract upgrade.
 
-<!-- -->
 
-<!-- from fraud-proofs/osp-assumptions -->
 
 ## One Step Proof Assumptions
 
@@ -252,9 +209,6 @@ each trie branch is of a fixed size,
 and the only variable sized entry in the trie is contract code,
 which is limited by EIP-170 to about 24KB.
 
-<!-- -->
-
-<!-- from fraud-proofs/wasm-wavm -->
 
 ## WASM to WAVM
 
@@ -318,9 +272,6 @@ They are translated by bitcasting `f32` and `f64` arguments to `i32`s and `i64`s
 then a cross module call to the floating point library,
 and finally bitcasts of any return values from `i32`s and `i64`s to `f32`s and `f64`s.
 
-<!-- -->
-
-<!-- from fraud-proofs/wavm-custom-opcodes -->
 
 ## WAVM Custom opcodes not in WASM
 
@@ -397,9 +348,7 @@ For these instruction descriptions, all pointers and offsets are represented as 
 | 0x8021 | ReadInboxMessage         | Pops an offset, then a pointer, and then an i64 message number from the stack. If the pointer mod 32 is not zero, errors. If the pointer + 32 is outside the programs memory, errors. Attempts to read an inbox message from the inbox identifier contained in the argument data (0 for the sequencer inbox, 1 for the delayed inbox) at the specified message number. If this exceeds the machine's inbox limit, enters the "too far" state. Otherwise, writes up to 32 bytes of the specified inbox message, beginning with the `offset` byte of the message. If `offset` is greater than or equal to the number of bytes in the preimage, writes nothing. Pushes the number of bytes written to the stack as an i32. |
 | 0x8022 | HaltAndSetFinished       | Sets the machine status to finished, halting execution and marking it as a success.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-<!-- -->
 
-<!-- from fraud-proofs/wavm-floats -->
 
 ## WAVM Floating point implementation
 
@@ -434,9 +383,6 @@ Floating point to integer truncation will saturate on overflow, instead of error
 This is generally safer, because on x86, overflowing simply produces an undefined result.
 A WASM proposal exists to add new opcodes which are defined to saturate, but it's not widely adopted.
 
-<!-- -->
-
-<!-- from fraud-proofs/wavm-modules -->
 
 ## WAVM Modules
 
@@ -495,5 +441,3 @@ Only libraries can access their caller's memory; the main module cannot.
 
 For instance, this is used to read arguments from and write return values to the Go stack,
 when Go calls into go-stub.
-
-<!-- -->

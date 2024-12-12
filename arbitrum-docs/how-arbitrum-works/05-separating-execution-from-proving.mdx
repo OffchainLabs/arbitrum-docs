@@ -1,6 +1,12 @@
 ---
 title: Separating Execution from Proving
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
+
 
 One of the challenges in designing a practical rollup system is the tension between wanting the system to perform well in ordinary execution, versus being able to reliably prove the results of execution. Nitro resolves this tension by using the same source code for both execution and proving, but compiling it to different targets for the two cases.
 
@@ -29,5 +35,3 @@ As an example, the state of a Nitro chain is maintained in Ethereum's state tree
 The only other use of `ReadPreImage` is to fetch the contents of recent L2 block headers, given the header hash. This is safe because the block headers are publicly known and have bounded size.
 
 This "hash oracle trick" of storing the Merkle hash of a data structure, and relying on protocol participants to store the full structure and thereby support fetch-by-hash of the contents, goes back to the original Arbitrum design.
-
-<!-- -->

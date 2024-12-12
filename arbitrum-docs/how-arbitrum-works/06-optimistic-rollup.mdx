@@ -1,5 +1,10 @@
 ---
 title: Optimistic Rollup
+description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about Nitros design.
+content_type: get-started
 ---
 
 <!-- from inside-arbitrum-nitro -->
@@ -70,6 +75,8 @@ With those preliminaries behind us, let’s jump into the details of the rollup 
 The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
 The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
+
+
 
 ### The Rollup Chain
 
@@ -233,9 +240,18 @@ The first unresolved RBlock can be rejected if:
 
 A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one bonder bonded on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one bonder is bonded on it and at least one bonder is bonded on a different RBlock with the same predecessor. If this happens, the two bonders are disagreeing about which RBlock is correct. It’s time for a challenge, to resolve the disagreement.
 
-<!-- -->
 
-<!-- fraud proofs/challenges -->
+## Delays
+
+Even if the Assertion Tree has multiple conflicting RBlocks and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid RBlock (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
+
+The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/arbos/l2-l1-messaging.mdx) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
+
+
+### Detailed Spec
+
+For a more detailed breakdown / specification of the assertion tree protocol, see [Inside Arbitrum](/how-arbitrum-works/assertion-tree.mdx).
+
 
 ## Validators
 
@@ -262,38 +278,6 @@ Who will be validators? Anyone will be able to do it, but most people will choos
 - Validators could be paid for their work, by the party that created the chain or someone else. A chain could be configured such that a portion of the funds from user transaction fees are paid directly to validators.
 - Parties who have significant assets at bond on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.
-<!-- -->
 
-<!-- from assertion-tree -->
 
-# The Assertion Tree
 
-### Overview
-
-The state of an Arbitrum chain is confirmed back on Ethereum via "assertions," aka "disputable assertions" or "DAs." These are claims made by Arbitrum validators about the chain's state. To make an assertion, a validator must post a bond in Ether.
-
-In the happy / common case, all outstanding assertions will be valid; i.e., a valid assertion will build on another valid assertion, which builds on another valid assertion, and so on. After the dispute period (~ 1 week) passes and an assertion goes unchallenged, it can be confirmed back on L1.
-
-If, however, two or more conflicting assertions exist, the Assertion Tree bifurcates into multiple branches:
-
-![img](../assets/assertionTree.png)
-
-Crucially, the rules of advancing an Arbitrum chain are deterministic; this means that given a chain state and some new inputs, there is only one valid output. Thus, if the Assertion Tree contains more than one leaf, then at most only one leaf can represent the valid chain-state; if we assume there is at least one honest active validator, _exactly_ one leaf will be valid.
-
-Two conflicting assertions can be put into a dispute; see [Interactive Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx) for details on the dispute process. For the sake of understanding the Assertion Tree protocol, suffice it to say that 2-party disputes last at most a fixed amount of time (1 week), at the end of which one of the two conflicting assertions will be rejected, and the validator who posted it will lose their stake.
-
-In order for an assertion to be confirmed and for its stake to be recovered, two conditions must be met: sufficient time for disputes must have passed, and no other conflicting branches in the Assertion Tree can exist (i.e., they've all been disputed / "pruned" off.)
-
-These properties together ensure that as long as at least one honest, active validator exists, the valid chain state will ultimately be confirmed.
-
-### Delays
-
-Even if the Assertion Tree has multiple conflicting leaves and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid leaf (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
-
-The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/arbos/l2-l1-messaging.mdx) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
-
-### Detailed Spec
-
-For a more detailed breakdown / specification of the assertion tree protocol, see [Inside Arbitrum](/how-arbitrum-works/assertion-tree.mdx).
-
-<!-- -->
