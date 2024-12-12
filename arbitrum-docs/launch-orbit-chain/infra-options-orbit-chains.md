@@ -46,13 +46,13 @@ For applications that require the ability to transfer assets to chains outside o
 - [Across](https://across.to/)
 - [Decent](https://www.decent.xyz/)
 
-## Data availability providers for AnyTrust Chains 
+## Data availability providers for AnyTrust Chains
 
-AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least 3 members as part of your Data Availability Committee. Here are some providers we recommend: 
+AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least 3 members as part of your Data Availability Committee. Here are some providers we recommend:
 
-- Chainstack 
-- Chainbase 
-- Kiln 
+- Chainstack
+- Chainbase
+- Kiln
 
 ## Indexers
 
