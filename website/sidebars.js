@@ -248,8 +248,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/AEPLicense',
-          label: 'AEP License',
+          id: 'launch-orbit-chain/aep-license',
+          label: 'Orbit licensing',
         },
         {
           type: 'category',
