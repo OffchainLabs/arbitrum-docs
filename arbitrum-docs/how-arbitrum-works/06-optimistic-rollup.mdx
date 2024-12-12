@@ -73,8 +73,6 @@ The parties who participate in the protocol are called _validators_. Some valida
 
 The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
 
-
-
 ### The Rollup Chain
 
 The rollup protocol tracks a chain of rollup blocks---we'll call these "RBlocks" for clarity. They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 Nitro blocks. You can think of the RBlocks as forming a separate chain, which the Arbitrum rollup protocol manages and oversees.
@@ -237,18 +235,15 @@ The first unresolved RBlock can be rejected if:
 
 A consequence of these rules is that once the first unresolved RBlock's deadline has passed (and assuming there is at least one bonder bonded on something other than the latest confirmed RBlock), the only way the RBlock can be unresolvable is if at least one bonder is bonded on it and at least one bonder is bonded on a different RBlock with the same predecessor. If this happens, the two bonders are disagreeing about which RBlock is correct. It’s time for a challenge, to resolve the disagreement.
 
-
 ## Delays
 
 Even if the Assertion Tree has multiple conflicting RBlocks and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid RBlock (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
 
 The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/arbos/l2-l1-messaging.mdx) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
 
-
 ### Detailed Spec
 
 For a more detailed breakdown / specification of the assertion tree protocol, see [Inside Arbitrum](/how-arbitrum-works/assertion-tree.mdx).
-
 
 ## Validators
 

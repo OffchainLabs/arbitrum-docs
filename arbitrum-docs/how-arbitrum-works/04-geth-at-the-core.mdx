@@ -23,8 +23,6 @@ The State Transition Function consists of the bottom Geth layer, and a portion o
 
 The rest of this section will be a deep dive into Geth and ArbOS. If deep technical knowledge does not suit you, skip to the next section [Separating Execution from Proving](/how-arbitrum-works/separating-execution-from-proving.mdx).
 
-
-
 ## Geth
 
 Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This section will explore the relationship between Geth and ArbOS, which consists of a series of hooks, interface implementations, and strategic re-appropriations of Geth's basic types.
@@ -45,7 +43,6 @@ Please note any links on this page may be referencing old releases of Nitro or o
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`][applytransaction_link] function.
 
 Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additional info on where the various Arbitrum-specific hooks are inserted. Click on any to go to their section. By default, these hooks do nothing so as to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#ReadyEVMForL2) installs the alternative L2 hooks.
-
 
 - `core.ApplyTransaction` ⮕ `core.applyTransaction` ⮕ `core.ApplyMessage`
   - `core.NewStateTransition`
@@ -315,8 +312,6 @@ Genesis block in nitro is not necessarily block #0. Nitro supports importing blo
 [underlyingtransaction_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_transition.go#L69
 [writeheadblock_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/genesis.go#L415
 
-
-
 ## ArbOS
 
 ArbOS is the Layer 2 EVM hypervisor that facilitates the execution environment of L2 Arbitrum. ArbOS is a trusted "system glue" component that runs at Layer 2 as part of the State Transition Function, it accounts for and manages network resources, produces blocks from incoming messages, cross-chain messaging, and operates its instrumented instance of Geth for smart contract execution.
@@ -423,4 +418,3 @@ ArbOS's per-block gas limit is distinct from Geth's block limit, which ArbOS [se
 [use_geth_pool_link]: https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L67
 [deduct_space_link]: https://github.com/OffchainLabs/nitro/blob/faf55a1da8afcabb1f3c406b291e721bfde71a05/arbos/block_processor.go#L272
 [negligible_amounts_link]: https://github.com/OffchainLabs/nitro/blob/faf55a1da8afcabb1f3c406b291e721bfde71a05/arbos/block_processor.go#L328
-

@@ -19,7 +19,6 @@ Clients interact with the Sequencer in exactly the same way they would interact 
 
 When we talk about “submitting a transaction into an Arbitrum chain,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `Bridge`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “[Transaction Lifecycle](/how-arbitrum-works/arbos/transaction-lifecycle.mdx)”). The Sequencer’s role (or lack thereof) concerns strictly what happens prior; i.e., how a transaction makes its way into the core Inbox. We’ll break down the possible routes a transaction can take into two scenarios: a well-behaved Sequencer, and a faulty Sequencer.
 
-
 ## Happy/Common Case: Sequencer Is Live and Well-behaved
 
 Here, we start by assuming that the Sequencer is fully operational, and is running with the intent of processing users’ transactions in as safe and timely a manner as possible. The Sequencer can receive a user’s transaction two ways — either directly via an RPC request, or via the underlying L1.
@@ -75,7 +74,6 @@ On top of the delay itself, the `forceInclusion` path has the downside of uncert
 
 While the slow, “unhappy” path isn’t optimal, and should rarely, if ever, be necessary, its availability as an option ensures Arbitrum Rollup always preserves its trustless security model, even if the permissioned parts of the system act faulty.
 
-
 ### How the Sequencer Publishes the Sequence
 
 So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed, and batches posted on L1 Ethereum.
@@ -85,7 +83,6 @@ The real-time feed is published by the Sequencer so that anyone who subscribes t
 The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically--perhaps every few minutes in production--the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the result as calldata on Ethereum. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction has finality on Ethereum, the Layer 2 Nitro transactions it records will have finality. These transactions are final because their position in the sequence has finality, and the outcome of the transactions is deterministic and knowable to any party. This is "hard finality".
 
 The Sequencer's batches are compressed using a general-purpose data compression algorithm called "brotli", on its highest-compression setting.
-
 
 ## Instant confirmation
 
