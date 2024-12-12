@@ -70,6 +70,8 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [Goldsky](https://goldsky.com/)
 - [Ormi](https://www.ormilabs.xyz/)
 - [Traceye](https://traceye.io/)
+- [Sequence](https://sequence.xyz/indexer)
+
 
 ## Oracles
 
@@ -91,6 +93,7 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+- [Sequence](https://sequence.xyz/node-gateway)
 
 ## Alternative Data availability
 
