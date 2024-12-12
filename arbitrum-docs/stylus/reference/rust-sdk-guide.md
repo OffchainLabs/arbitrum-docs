@@ -9,7 +9,7 @@ target_audience: Developers using the Stylus Rust SDK to write and deploy smart 
 
 import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
-This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.mdx).
+This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
 
 :::info
 
@@ -19,7 +19,7 @@ Many of the affordances use macros. Though this section details what each does, 
 
 ## Storage
 
-This section provides extra information about how the Stylus Rust SDK handles storage. You can find more information and basic examples in [Variables](/stylus-by-example/variables.mdx).
+This section provides extra information about how the Stylus Rust SDK handles storage. You can find more information and basic examples in [Variables](/stylus-by-example/basic_examples/variables.mdx).
 
 Rust smart contracts may use state that persists across transactions. There’s two primary ways to define storage, depending on if you want to use Rust or Solidity definitions. Both are equivalent, and are up to the developer depending on their needs.
 
@@ -226,7 +226,7 @@ The above allows consumers of `Erc20` to choose immutable constants via speciali
 
 ## Functions
 
-This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance](/stylus-by-example/inheritance.mdx) and [Sending ether](/stylus-by-example/sending_ether.mdx).
+This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/basic_examples/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/basic_examples/bytes_in_bytes_out.mdx), [Inheritance](/stylus-by-example/basic_examples/inheritance.mdx) and [Sending ether](/stylus-by-example/basic_examples/sending_ether.mdx).
 
 ### Pure, View, and Write functions
 

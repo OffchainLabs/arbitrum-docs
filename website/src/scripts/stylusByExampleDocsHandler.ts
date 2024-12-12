@@ -21,28 +21,59 @@ const allowList = [
   'bytes_in_bytes_out',
 ];
 
+const appsAllowList = ['erc20', 'erc721', 'vending_machine', 'multi_call'];
+
 function load(app) {
   const outputDir = path.join(app.options.getValue('out'), '../../stylus-by-example');
-  const sourceDir = path.join(outputDir, '../../stylus-by-example/src/app/basic_examples');
+  const basicExamplesOutputDir = path.join(outputDir, 'basic_examples');
+  const applicationsOutputDir = path.join(outputDir, 'applications');
+  const sourceDirBasicExamples = path.join(
+    outputDir,
+    '../../stylus-by-example/src/app/basic_examples',
+  );
+  const sourceDirApplications = path.join(
+    outputDir,
+    '../../stylus-by-example/src/app/applications',
+  );
 
   app.renderer.on(RendererEvent.START, async () => {
     cleanDirectory(outputDir);
   });
 
   app.renderer.on(RendererEvent.END, async () => {
-    copyFiles(sourceDir, outputDir);
+    // Copy basic examples into their directory
+    copyFiles(sourceDirBasicExamples, basicExamplesOutputDir, allowList);
 
-    const sidebarItems = generateSidebar(outputDir);
-    const sidebarConfig = { items: sidebarItems };
-    const sidebarPath = path.join(outputDir, 'sidebar.js');
+    // Generate sidebar for basic examples
+    const basicExamplesSidebarItems = generateSidebar(basicExamplesOutputDir, '/basic_examples');
+    const basicExamplesSidebarConfig = { items: basicExamplesSidebarItems };
+    const basicExamplesSidebarPath = path.join(basicExamplesOutputDir, 'sidebar.js');
 
     fs.writeFileSync(
-      sidebarPath,
-      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst typedocSidebar = ${JSON.stringify(
-        sidebarConfig,
+      basicExamplesSidebarPath,
+      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
+        basicExamplesSidebarConfig,
         null,
         2,
-      )};\nmodule.exports = typedocSidebar.items;`,
+      )};\nmodule.exports = sidebar.items;`,
+      'utf8',
+    );
+
+    // Copy applications into their directory
+    copyFiles(sourceDirApplications, applicationsOutputDir, appsAllowList);
+
+    // Generate sidebar for applications
+    const applicationsSidebarItems = generateSidebar(applicationsOutputDir, '/applications');
+    const applicationsSidebarConfig = { items: applicationsSidebarItems };
+    const applicationsSidebarPath = path.join(applicationsOutputDir, 'sidebar.js');
+
+    fs.writeFileSync(
+      applicationsSidebarPath,
+      `// @ts-check\n/** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */\nconst sidebar = ${JSON.stringify(
+        applicationsSidebarConfig,
+        null,
+        2,
+      )};\nmodule.exports = sidebar.items;`,
       'utf8',
     );
   });
@@ -62,7 +93,7 @@ function cleanDirectory(directory) {
   }
 }
 
-function copyFiles(source, target) {
+function copyFiles(source, target, allowList) {
   if (!fs.existsSync(source)) {
     console.error(`Source path does not exist: ${source}`);
     return;
@@ -131,7 +162,7 @@ function copyFiles(source, target) {
 // Adjust the file path
 const firstCodeBlock = `\`\`\`rust`;
 const admonitionNotForProduction = `
-import NotForProductionBannerPartial from '../partials/_not-for-production-banner-partial.mdx';
+import NotForProductionBannerPartial from '../../partials/_not-for-production-banner-partial.mdx';
 
 <NotForProductionBannerPartial />
 `;
