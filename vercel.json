@@ -1,814 +1,814 @@
 {
-    "redirects": [
-        {
-            "source": "/(bold/bold-gentle-introduction/?)",
-            "destination": "/how-arbitrum-works/bold/gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/(bold/concepts/public-preview-expectations/?)",
-            "destination": "/how-arbitrum-works/bold/public-preview-expectations",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/challenge-manager/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/osp-assumptions/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/wasm-to-wavm/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/wasm-wavm",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/wavm-custom-opcodes/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/wavm-floats/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/wavm-floats",
-            "permanent": false
-        },
-        {
-            "source": "/(proving/wavm-modules/?)",
-            "destination": "/how-arbitrum-works/fraud-proofs/wavm-modules",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/geth/?)",
-            "destination": "/how-arbitrum-works/arbos/geth",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/?)",
-            "destination": "/how-arbitrum-works/arbos/introduction",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/l2-to-l1-messaging/?)",
-            "destination": "/how-arbitrum-works/arbos/l2-l1-messaging",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/l1-to-l2-messaging/?)",
-            "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
-            "permanent": false
-        },
-        {
-            "source": "/(assertion-tree/?)",
-            "destination": "/how-arbitrum-works/assertion-tree",
-            "permanent": false
-        },
-        {
-            "source": "/(inside-arbitrum-nitro/?)",
-            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/l1-pricing/?)",
-            "destination": "/how-arbitrum-works/l1-gas-pricing",
-            "permanent": false
-        },
-        {
-            "source": "/(arbos/gas/?)",
-            "destination": "/how-arbitrum-works/gas-fees",
-            "permanent": false
-        },
-        {
-            "source": "/(inside-anytrust/?)",
-            "destination": "/how-arbitrum-works/inside-anytrust",
-            "permanent": false
-        },
-        {
-            "source": "/(why-nitro/?)",
-            "destination": "/how-arbitrum-works/why-nitro",
-            "permanent": false
-        },
-        {
-            "source": "/(tx-lifecycle/?)",
-            "destination": "/how-arbitrum-works/tx-lifecycle",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/troubleshooting-running-nodes/?)",
-            "destination": "/run-arbitrum-node/troubleshooting",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/migrate-state-and-history-from-classic/?)",
-            "destination": "/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/build-nitro-locally/?)",
-            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-a-sequencer-coordinator-manager/?)",
-            "destination": "/run-arbitrum-node/sequencer/run-sequencer-coordination-manager",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/read-sequencer-feed/?)",
-            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-a-feed-relay/?)",
-            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
-            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
-            "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
-            "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/data-availability-committee/introduction/?)",
-            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-a-classic-node/?)",
-            "destination": "/run-arbitrum-node/more-types/run-classic-node",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-a-validator/?)",
-            "destination": "/run-arbitrum-node/more-types/run-validator-node",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-an-archive-node/?)",
-            "destination": "/run-arbitrum-node/more-types/run-archive-node",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
-            "destination": "/run-arbitrum-node/arbos-releases/arbos20",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/reference/arbos-software-releases/arbos11/?)",
-            "destination": "/run-arbitrum-node/arbos-releases/arbos11",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/reference/arbos-software-releases/overview/?)",
-            "destination": "/run-arbitrum-node/arbos-releases/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/reference/ethereum-beacon-rpc-providers/?)",
-            "destination": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/local-dev-node/?)",
-            "destination": "/run-arbitrum-node/run-local-dev-node",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/how-tos/running-a-full-node/?)",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/quickstart-running-a-node/?)",
-            "destination": "/run-arbitrum-node/quickstart",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/gentle-introduction-run-node/?)",
-            "destination": "/run-arbitrum-node/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(bridge-tokens/concepts/usdc-concept/?)",
-            "destination": "/arbitrum-bridge/usdc-arbitrum-one",
-            "permanent": false
-        },
-        {
-            "source": "/(for-users/troubleshooting-users/?)",
-            "destination": "/arbitrum-bridge/troubleshooting",
-            "permanent": false
-        },
-        {
-            "source": "/(getting-started-users/?)",
-            "destination": "/arbitrum-bridge/quickstart",
-            "permanent": false
-        },
-        {
-            "source": "/(mainnet-risks/?)",
-            "destination": "/build-decentralized-apps/reference/mainnet-risks",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/debugging-tools/?)",
-            "destination": "/build-decentralized-apps/reference/debugging-tools",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/monitoring-tools-block-explorers/?)",
-            "destination": "/build-decentralized-apps/reference/monitoring-tools-block-explorers",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/web3-libraries-tools/?)",
-            "destination": "/build-decentralized-apps/reference/web3-libraries-tools",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/development-frameworks/?)",
-            "destination": "/build-decentralized-apps/reference/development-frameworks",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/chain-params/?)",
-            "destination": "/build-decentralized-apps/reference/chain-params",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/useful-addresses/?)",
-            "destination": "/build-decentralized-apps/reference/useful-addresses",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/node-providers/?)",
-            "destination": "/build-decentralized-apps/reference/node-providers",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/token-bridge/token-bridge-erc20/?)",
-            "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/token-bridge/token-bridge-ether/?)",
-            "destination": "/build-decentralized-apps/token-bridging/token-bridge-ether",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway/?)",
-            "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom/?)",
-            "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard/?)",
-            "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
-            "destination": "/build-decentralized-apps/token-bridging/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/token-bridge/token-bridge-overview/?)",
-            "destination": "/build-decentralized-apps/token-bridging/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/nodeinterface/?)",
-            "destination": "/build-decentralized-apps/nodeinterface/reference",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/nodeinterface/?)",
-            "destination": "/build-decentralized-apps/nodeinterface/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/precompiles/?)",
-            "destination": "/build-decentralized-apps/precompiles/reference",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/precompiles/?)",
-            "destination": "/build-decentralized-apps/precompiles/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/dev-tools-and-resources/oracles/?)",
-            "destination": "/build-decentralized-apps/oracles/reference",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/how-to-use-oracles/?)",
-            "destination": "/build-decentralized-apps/oracles/how-to-use-oracles",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/oracles/?)",
-            "destination": "/build-decentralized-apps/oracles/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support/?)",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods/?)",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time/?)",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/overview/?)",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/cross-chain-messsaging/?)",
-            "destination": "/build-decentralized-apps/cross-chain-messaging",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/concepts/public-chains/?)",
-            "destination": "/build-decentralized-apps/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/(devs-how-tos/how-to-estimate-gas/?)",
-            "destination": "/build-decentralized-apps/how-to-estimate-gas",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/quickstart-solidity-hardhat/?)",
-            "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
-            "permanent": false
-        },
-        {
-            "source": "/(node-running/reference/software-releases/?)",
-            "destination": "/run-arbitrum-node/arbos-releases/overview",
-            "permanent": false
-        },
-        {
-            "source": "/(intro/?)",
-            "destination": "/welcome/arbitrum-gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/(for-devs/gentle-introduction-dapps/?)",
-            "destination": "/welcome/arbitrum-gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/",
-            "destination": "/welcome/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/(arb-specific-things/?)",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/(stylus/?)",
-            "destination": "/stylus/stylus-gentle-introduction",
-            "permanent": false
-        },
-        {
-            "source": "/stylus/(rust-sdk-guide/?)",
-            "destination": "/stylus/reference/rust-sdk-guide",
-            "permanent": false
-        },
-        {
-            "source": "/docs/(mainnet/?)",
-            "destination": "/build-decentralized-apps/reference/mainnet-risks",
-            "permanent": false
-        },
-        {
-            "source": "/docs/(mainnet-beta/?)",
-            "destination": "/build-decentralized-apps/reference/mainnet-risks",
-            "permanent": false
-        },
-        {
-            "source": "/migration/dapp-migration",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/migration/dapp_migration",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/migration/state-migration",
-            "destination": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
-            "permanent": false
-        },
-        {
-            "source": "/docs/public_chains",
-            "destination": "/for-devs/concepts/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/docs/inside_arbitrum",
-            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-            "permanent": false
-        },
-        {
-            "source": "/docs/l1_l2_messages",
-            "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
-            "permanent": false
-        },
-        {
-            "source": "/docs/bridging_assets",
-            "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
-            "permanent": false
-        },
-        {
-            "source": "/asset-bridging",
-            "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
-            "permanent": false
-        },
-        {
-            "source": "/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic",
-            "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
-            "permanent": false
-        },
-        {
-            "source": "/docs/glossary",
-            "destination": "/intro/glossary",
-            "permanent": false
-        },
-        {
-            "source": "/docs/anytrust",
-            "destination": "/how-arbitrum-works/inside-anytrust",
-            "permanent": false
-        },
-        {
-            "source": "/docs/node_providers",
-            "destination": "/build-decentralized-apps/reference/node-providers",
-            "permanent": false
-        },
-        {
-            "source": "/docs/useful_addresses",
-            "destination": "/build-decentralized-apps/reference/useful-addresses",
-            "permanent": false
-        },
-        {
-            "source": "/docs/running_node",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/docs/running_nitro_node",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/docs/running_goerli_nitro_node",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/docs/running_rinkeby_nitro_node",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/docs/public_testnet",
-            "destination": "/for-devs/concepts/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/docs/public_nitro_testnet",
-            "destination": "/for-devs/concepts/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/docs/public_nitro_devnet",
-            "destination": "/for-devs/concepts/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/docs/developer_quickstart",
-            "destination": "/welcome/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/docs/installation",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/docs/rollup_basics",
-            "destination": "/intro",
-            "permanent": false
-        },
-        {
-            "source": "/docs/tutorials",
-            "destination": "/for-devs/quickstart-solidity-hardhat",
-            "permanent": false
-        },
-        {
-            "source": "/docs/security_considerations",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/docs/frontend_integration",
-            "destination": "/for-devs/quickstart-solidity-hardhat",
-            "permanent": false
-        },
-        {
-            "source": "/docs/contract_deployment",
-            "destination": "/for-devs/quickstart-solidity-hardhat",
-            "permanent": false
-        },
-        {
-            "source": "/getting-started-devs",
-            "destination": "/for-devs/quickstart-solidity-hardhat",
-            "permanent": false
-        },
-        {
-            "source": "/docs/arbsys",
-            "destination": "/build-decentralized-apps/precompiles/reference#arbsys",
-            "permanent": false
-        },
-        {
-            "source": "/arbos/precompiles",
-            "destination": "/build-decentralized-apps/precompiles/reference",
-            "permanent": false
-        },
-        {
-            "source": "/arbos/common-precompiles",
-            "destination": "/build-decentralized-apps/precompiles/reference",
-            "permanent": false
-        },
-        {
-            "source": "/docs/finality",
-            "destination": "/how-arbitrum-works/tx-lifecycle",
-            "permanent": false
-        },
-        {
-            "source": "/docs/withdrawals",
-            "destination": "/how-arbitrum-works/tx-lifecycle",
-            "permanent": false
-        },
-        {
-            "source": "/docs/differences_overview",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/docs/special_features",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/docs/solidity_support",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
-            "permanent": false
-        },
-        {
-            "source": "/docs/time_in_arbitrum",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
-            "permanent": false
-        },
-        {
-            "source": "/arbitrum-ethereum-differences",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
-            "permanent": false
-        },
-        {
-            "source": "/solidity-support",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
-            "permanent": false
-        },
-        {
-            "source": "/time",
-            "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
-            "permanent": false
-        },
-        {
-            "source": "/docs/censorship_resistance",
-            "destination": "/how-arbitrum-works/sequencer",
-            "permanent": false
-        },
-        {
-            "source": "/docs/arbgas",
-            "destination": "/how-arbitrum-works/gas-fees",
-            "permanent": false
-        },
-        {
-            "source": "/docs/arbos",
-            "destination": "/how-arbitrum-works/arbos/introduction",
-            "permanent": false
-        },
-        {
-            "source": "/docs/tx_lifecycle",
-            "destination": "/how-arbitrum-works/tx-lifecycle",
-            "permanent": false
-        },
-        {
-            "source": "/docs/rollup_protocol",
-            "destination": "/how-arbitrum-works/assertion-tree",
-            "permanent": false
-        },
-        {
-            "source": "/docs/avm_design",
-            "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
-            "permanent": false
-        },
-        {
-            "source": "/docs/dispute_resolution",
-            "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
-            "permanent": false
-        },
-        {
-            "source": "/docs/arbos_formats",
-            "destination": "/how-arbitrum-works/arbos/introduction",
-            "permanent": false
-        },
-        {
-            "source": "/docs/avm_specification",
-            "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/anytrust-vs-rollup",
-            "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/how-fees",
-            "destination": "/faqs/gas-faqs",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/what-if-dispute",
-            "destination": "/faqs/protocol-faqs#q-dispute-reorg",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/seq-or-val",
-            "destination": "/faqs/protocol-faqs#q-seq-vs-val",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/beta-status",
-            "destination": "/build-decentralized-apps/reference/mainnet-risks",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/the-merge",
-            "destination": "/welcome/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/faqs-index",
-            "destination": "/learn-more/faq",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/gas-faqs",
-            "destination": "/learn-more/faq",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/nodes-faqs",
-            "destination": "/node-running/faq",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/x-chain-faqs",
-            "destination": "/learn-more/faq",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/protocol-faqs",
-            "destination": "/learn-more/faq",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/tooling-faqs",
-            "destination": "/for-devs/troubleshooting-building",
-            "permanent": false
-        },
-        {
-            "source": "/faqs/misc-faqs",
-            "destination": "/learn-more/faq",
-            "permanent": false
-        },
-        {
-            "source": "/public-chains",
-            "destination": "/for-devs/concepts/public-chains",
-            "permanent": false
-        },
-        {
-            "source": "/useful-addresses",
-            "destination": "/build-decentralized-apps/reference/useful-addresses",
-            "permanent": false
-        },
-        {
-            "source": "/for-devs/dev-tools-and-resources/overview",
-            "destination": "/build-decentralized-apps/reference/node-providers",
-            "permanent": false
-        },
-        {
-            "source": "/for-devs/dev-tools-and-resources/overview",
-            "destination": "/build-decentralized-apps/reference/node-providers",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/running-a-classic-node",
-            "destination": "/run-arbitrum-node/more-types/run-classic-node",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/running-an-archive-node",
-            "destination": "/run-arbitrum-node/more-types/run-archive-node",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/local-dev-node",
-            "destination": "/run-arbitrum-node/run-local-dev-node",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/running-a-feed-relay",
-            "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/running-a-validator",
-            "destination": "/run-arbitrum-node/more-types/run-validator-node",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/read-sequencer-feed",
-            "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/build-nitro-locally",
-            "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/running-a-node",
-            "destination": "/run-arbitrum-node/run-full-node",
-            "permanent": false
-        },
-        {
-            "source": "/das/daserver-instructions",
-            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/node-running/how-tos/running-a-daserver",
-            "destination": "/run-arbitrum-node/data-availability-committees/get-started",
-            "permanent": false
-        },
-        {
-            "source": "/(launch-orbit-chain/reference/command-line-options/?)",
-            "destination": "/node-running/how-tos/running-an-orbit-node",
-            "permanent": false
-        },
-        {
-            "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
-            "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
-            "permanent": false
-        },
-        {
-            "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
-            "destination": "/run-arbitrum-node/run-local-dev-node",
-            "permanent": false
-        },
-        {
-            "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
-            "destination": "/run-arbitrum-node/arbos-releases/arbos32",
-            "permanent": false
-        }
-    ]
+  "redirects": [
+    {
+      "source": "/(bold/bold-gentle-introduction/?)",
+      "destination": "/how-arbitrum-works/bold/gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(bold/concepts/public-preview-expectations/?)",
+      "destination": "/how-arbitrum-works/bold/public-preview-expectations",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/challenge-manager/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/osp-assumptions/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/wasm-to-wavm/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/wasm-wavm",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/wavm-custom-opcodes/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/wavm-floats/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/wavm-floats",
+      "permanent": false
+    },
+    {
+      "source": "/(proving/wavm-modules/?)",
+      "destination": "/how-arbitrum-works/fraud-proofs/wavm-modules",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/geth/?)",
+      "destination": "/how-arbitrum-works/arbos/geth",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/?)",
+      "destination": "/how-arbitrum-works/arbos/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l2-to-l1-messaging/?)",
+      "destination": "/how-arbitrum-works/arbos/l2-l1-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l1-to-l2-messaging/?)",
+      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(assertion-tree/?)",
+      "destination": "/how-arbitrum-works/assertion-tree",
+      "permanent": false
+    },
+    {
+      "source": "/(inside-arbitrum-nitro/?)",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l1-pricing/?)",
+      "destination": "/how-arbitrum-works/l1-gas-pricing",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/gas/?)",
+      "destination": "/how-arbitrum-works/gas-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(inside-anytrust/?)",
+      "destination": "/how-arbitrum-works/inside-anytrust",
+      "permanent": false
+    },
+    {
+      "source": "/(why-nitro/?)",
+      "destination": "/how-arbitrum-works/why-nitro",
+      "permanent": false
+    },
+    {
+      "source": "/(tx-lifecycle/?)",
+      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/troubleshooting-running-nodes/?)",
+      "destination": "/run-arbitrum-node/troubleshooting",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/migrate-state-and-history-from-classic/?)",
+      "destination": "/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/build-nitro-locally/?)",
+      "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-a-sequencer-coordinator-manager/?)",
+      "destination": "/run-arbitrum-node/sequencer/run-sequencer-coordination-manager",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/read-sequencer-feed/?)",
+      "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-a-feed-relay/?)",
+      "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/configure-the-dac-in-your-chain/?)",
+      "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/deploy-a-mirror-das/?)",
+      "destination": "/run-arbitrum-node/data-availability-committees/deploy-mirror-das",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/deploy-a-das/?)",
+      "destination": "/run-arbitrum-node/data-availability-committees/deploy-das",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/data-availability-committee/introduction/?)",
+      "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-a-classic-node/?)",
+      "destination": "/run-arbitrum-node/more-types/run-classic-node",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-a-validator/?)",
+      "destination": "/run-arbitrum-node/more-types/run-validator-node",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-an-archive-node/?)",
+      "destination": "/run-arbitrum-node/more-types/run-archive-node",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/reference/arbos-software-releases/arbos20/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos20",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/reference/arbos-software-releases/arbos11/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos11",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/reference/arbos-software-releases/overview/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/reference/ethereum-beacon-rpc-providers/?)",
+      "destination": "/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/local-dev-node/?)",
+      "destination": "/run-arbitrum-node/run-local-dev-node",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/how-tos/running-a-full-node/?)",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/quickstart-running-a-node/?)",
+      "destination": "/run-arbitrum-node/quickstart",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/gentle-introduction-run-node/?)",
+      "destination": "/run-arbitrum-node/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(bridge-tokens/concepts/usdc-concept/?)",
+      "destination": "/arbitrum-bridge/usdc-arbitrum-one",
+      "permanent": false
+    },
+    {
+      "source": "/(for-users/troubleshooting-users/?)",
+      "destination": "/arbitrum-bridge/troubleshooting",
+      "permanent": false
+    },
+    {
+      "source": "/(getting-started-users/?)",
+      "destination": "/arbitrum-bridge/quickstart",
+      "permanent": false
+    },
+    {
+      "source": "/(mainnet-risks/?)",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/debugging-tools/?)",
+      "destination": "/build-decentralized-apps/reference/debugging-tools",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/monitoring-tools-block-explorers/?)",
+      "destination": "/build-decentralized-apps/reference/monitoring-tools-block-explorers",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/web3-libraries-tools/?)",
+      "destination": "/build-decentralized-apps/reference/web3-libraries-tools",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/development-frameworks/?)",
+      "destination": "/build-decentralized-apps/reference/development-frameworks",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/chain-params/?)",
+      "destination": "/build-decentralized-apps/reference/chain-params",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/useful-addresses/?)",
+      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/node-providers/?)",
+      "destination": "/build-decentralized-apps/reference/node-providers",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/token-bridge/token-bridge-erc20/?)",
+      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/token-bridge/token-bridge-ether/?)",
+      "destination": "/build-decentralized-apps/token-bridging/token-bridge-ether",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard/?)",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/token-bridge/token-bridge-overview/?)",
+      "destination": "/build-decentralized-apps/token-bridging/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/nodeinterface/?)",
+      "destination": "/build-decentralized-apps/nodeinterface/reference",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/nodeinterface/?)",
+      "destination": "/build-decentralized-apps/nodeinterface/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/precompiles/?)",
+      "destination": "/build-decentralized-apps/precompiles/reference",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/precompiles/?)",
+      "destination": "/build-decentralized-apps/precompiles/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/dev-tools-and-resources/oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/reference",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/how-to-use-oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/how-to-use-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/solidity-support/?)",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/rpc-methods/?)",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/rpc-methods",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/block-numbers-and-time/?)",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/differences-between-arbitrum-ethereum/overview/?)",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/cross-chain-messsaging/?)",
+      "destination": "/build-decentralized-apps/cross-chain-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/public-chains/?)",
+      "destination": "/build-decentralized-apps/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/how-to-estimate-gas/?)",
+      "destination": "/build-decentralized-apps/how-to-estimate-gas",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/quickstart-solidity-hardhat/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
+      "permanent": false
+    },
+    {
+      "source": "/(node-running/reference/software-releases/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(intro/?)",
+      "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/gentle-introduction-dapps/?)",
+      "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "destination": "/welcome/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(arb-specific-things/?)",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/?)",
+      "destination": "/stylus/gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/(rust-sdk-guide/?)",
+      "destination": "/stylus/reference/rust-sdk-guide",
+      "permanent": false
+    },
+    {
+      "source": "/docs/(mainnet/?)",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/docs/(mainnet-beta/?)",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/migration/dapp-migration",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/migration/dapp_migration",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/migration/state-migration",
+      "destination": "/run-arbitrum-node/nitro/migrate-state-and-history-from-classic",
+      "permanent": false
+    },
+    {
+      "source": "/docs/public_chains",
+      "destination": "/for-devs/concepts/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/docs/inside_arbitrum",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
+      "source": "/docs/l1_l2_messages",
+      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/docs/bridging_assets",
+      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "permanent": false
+    },
+    {
+      "source": "/asset-bridging",
+      "destination": "/build-decentralized-apps/token-bridging/token-bridge-erc20",
+      "permanent": false
+    },
+    {
+      "source": "/devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-generic",
+      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "permanent": false
+    },
+    {
+      "source": "/docs/glossary",
+      "destination": "/intro/glossary",
+      "permanent": false
+    },
+    {
+      "source": "/docs/anytrust",
+      "destination": "/how-arbitrum-works/inside-anytrust",
+      "permanent": false
+    },
+    {
+      "source": "/docs/node_providers",
+      "destination": "/build-decentralized-apps/reference/node-providers",
+      "permanent": false
+    },
+    {
+      "source": "/docs/useful_addresses",
+      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/docs/running_node",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/docs/running_nitro_node",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/docs/running_goerli_nitro_node",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/docs/running_rinkeby_nitro_node",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/docs/public_testnet",
+      "destination": "/for-devs/concepts/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/docs/public_nitro_testnet",
+      "destination": "/for-devs/concepts/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/docs/public_nitro_devnet",
+      "destination": "/for-devs/concepts/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/docs/developer_quickstart",
+      "destination": "/welcome/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/docs/installation",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/docs/rollup_basics",
+      "destination": "/intro",
+      "permanent": false
+    },
+    {
+      "source": "/docs/tutorials",
+      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "permanent": false
+    },
+    {
+      "source": "/docs/security_considerations",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/docs/frontend_integration",
+      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "permanent": false
+    },
+    {
+      "source": "/docs/contract_deployment",
+      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "permanent": false
+    },
+    {
+      "source": "/getting-started-devs",
+      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "permanent": false
+    },
+    {
+      "source": "/docs/arbsys",
+      "destination": "/build-decentralized-apps/precompiles/reference#arbsys",
+      "permanent": false
+    },
+    {
+      "source": "/arbos/precompiles",
+      "destination": "/build-decentralized-apps/precompiles/reference",
+      "permanent": false
+    },
+    {
+      "source": "/arbos/common-precompiles",
+      "destination": "/build-decentralized-apps/precompiles/reference",
+      "permanent": false
+    },
+    {
+      "source": "/docs/finality",
+      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "permanent": false
+    },
+    {
+      "source": "/docs/withdrawals",
+      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "permanent": false
+    },
+    {
+      "source": "/docs/differences_overview",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/docs/special_features",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/docs/solidity_support",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
+      "permanent": false
+    },
+    {
+      "source": "/docs/time_in_arbitrum",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
+      "permanent": false
+    },
+    {
+      "source": "/arbitrum-ethereum-differences",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/comparison-overview",
+      "permanent": false
+    },
+    {
+      "source": "/solidity-support",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/solidity-support",
+      "permanent": false
+    },
+    {
+      "source": "/time",
+      "destination": "/build-decentralized-apps/arbitrum-vs-ethereum/block-numbers-and-time",
+      "permanent": false
+    },
+    {
+      "source": "/docs/censorship_resistance",
+      "destination": "/how-arbitrum-works/sequencer",
+      "permanent": false
+    },
+    {
+      "source": "/docs/arbgas",
+      "destination": "/how-arbitrum-works/gas-fees",
+      "permanent": false
+    },
+    {
+      "source": "/docs/arbos",
+      "destination": "/how-arbitrum-works/arbos/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/docs/tx_lifecycle",
+      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "permanent": false
+    },
+    {
+      "source": "/docs/rollup_protocol",
+      "destination": "/how-arbitrum-works/assertion-tree",
+      "permanent": false
+    },
+    {
+      "source": "/docs/avm_design",
+      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "permanent": false
+    },
+    {
+      "source": "/docs/dispute_resolution",
+      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "permanent": false
+    },
+    {
+      "source": "/docs/arbos_formats",
+      "destination": "/how-arbitrum-works/arbos/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/docs/avm_specification",
+      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/anytrust-vs-rollup",
+      "destination": "/faqs/protocol-faqs#q-rollup-vs-anytrust",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/how-fees",
+      "destination": "/faqs/gas-faqs",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/what-if-dispute",
+      "destination": "/faqs/protocol-faqs#q-dispute-reorg",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/seq-or-val",
+      "destination": "/faqs/protocol-faqs#q-seq-vs-val",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/beta-status",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/the-merge",
+      "destination": "/welcome/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/faqs-index",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/gas-faqs",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/nodes-faqs",
+      "destination": "/node-running/faq",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/x-chain-faqs",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/protocol-faqs",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/tooling-faqs",
+      "destination": "/for-devs/troubleshooting-building",
+      "permanent": false
+    },
+    {
+      "source": "/faqs/misc-faqs",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/public-chains",
+      "destination": "/for-devs/concepts/public-chains",
+      "permanent": false
+    },
+    {
+      "source": "/useful-addresses",
+      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/for-devs/dev-tools-and-resources/overview",
+      "destination": "/build-decentralized-apps/reference/node-providers",
+      "permanent": false
+    },
+    {
+      "source": "/for-devs/dev-tools-and-resources/overview",
+      "destination": "/build-decentralized-apps/reference/node-providers",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/running-a-classic-node",
+      "destination": "/run-arbitrum-node/more-types/run-classic-node",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/running-an-archive-node",
+      "destination": "/run-arbitrum-node/more-types/run-archive-node",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/local-dev-node",
+      "destination": "/run-arbitrum-node/run-local-dev-node",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/running-a-feed-relay",
+      "destination": "/run-arbitrum-node/sequencer/run-feed-relay",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/running-a-validator",
+      "destination": "/run-arbitrum-node/more-types/run-validator-node",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/read-sequencer-feed",
+      "destination": "/run-arbitrum-node/sequencer/read-sequencer-feed",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/build-nitro-locally",
+      "destination": "/run-arbitrum-node/nitro/build-nitro-locally",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/running-a-node",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
+      "source": "/das/daserver-instructions",
+      "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/node-running/how-tos/running-a-daserver",
+      "destination": "/run-arbitrum-node/data-availability-committees/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/reference/command-line-options/?)",
+      "destination": "/node-running/how-tos/running-an-orbit-node",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
+      "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+      "destination": "/run-arbitrum-node/run-local-dev-node",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+      "permanent": false
+    }
+  ]
 }

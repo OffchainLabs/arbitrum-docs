@@ -54,7 +54,6 @@ AnyTrust protocol offers native support data availability. If you are turning on
 - Chainbase 
 - Kiln 
 
-
 ## Indexers
 
 Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
