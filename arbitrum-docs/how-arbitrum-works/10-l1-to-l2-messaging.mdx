@@ -7,6 +7,10 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
+import { MermaidWithHtml, Nodes, Node, Connection, NodeDescriptions, NodeDescription, } from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+
 In the [Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx) section, we covered how users interact with L2 contracts. They submit transactions by putting messages into the chain’s inbox or having a full node Sequencer or aggregator do so on their behalf.
 
 L1 and L2 chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same transaction as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. Consequently, a cross-chain contract-to-contract call can never produce a result available to the calling contract (except for acknowledgment of a successful call submitted for later execution).
