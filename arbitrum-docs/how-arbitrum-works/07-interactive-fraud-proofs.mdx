@@ -1,5 +1,5 @@
 ---
-title: Challenges: Interactive Fraud Proofs
+title: Challenges/:/ Interactive Fraud Proofs
 description: 'Learn the fundamentals of Arbitrum Transaction Lifecycle.'
 author: pete-vielhaber
 sme: TucksonDev
@@ -65,7 +65,7 @@ The challenge protocol is designed so that the dispute can be resolved with a mi
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
-import ChallengeManagerDiagram from '../../diagrams/_challenge-manager.mdx';
+import ChallengeManagerDiagram from '../diagrams/_challenge-manager.mdx';
 
 ## ChallengeManager
 
@@ -211,7 +211,7 @@ which is limited by EIP-170 to about 24KB.
 Not all WASM instructions are 1:1 with WAVM opcodes.
 This document lists those which are not, and explains how they're expressed in WAVM.
 Many of the WAVM representations use opcodes not in WASM,
-which are documented in [`wavm-custom-opcodes.mdx`](/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes.mdx).
+which are documented in [`wavm-custom-opcodes`](#wavm-custom-opcodes-not-in-wasm).
 
 ### `block` and `loop`
 
@@ -281,7 +281,7 @@ which are not part of WASM nor any WASM proposal.
 Many of these opcodes have implicit invariants about what's on the stack,
 e.g. "Pops an i32 from the stack" assumes that the top of the stack has an i32.
 If these conditions are not satisfied, execution is generally not possible.
-These invariants are maintained by WASM validation and Arbitrator codegen. (See [One Step Proof Assumptions](/how-arbitrum-works/fraud-proofs/osp-assumptions.mdx).)
+These invariants are maintained by WASM validation and Arbitrator codegen. (See [One Step Proof Assumptions](#one-step-proof-assumptions).)
 
 ### Codegen internal
 

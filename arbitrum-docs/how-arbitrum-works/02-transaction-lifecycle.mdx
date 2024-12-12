@@ -29,7 +29,7 @@ We'll now go step-by-step over the phases an Arbitrum transaction goes through, 
 
 We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
 
-This section will focus on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
+This section will focus on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
 
 For clarity on any terminology that may be unfamiliar, see our [glossary](/intro/glossary.mdx).
 
@@ -47,8 +47,8 @@ Alternatively, a client can send a message to the Sequencer by signing and publi
 
 **See**:
 
-- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.mdx)
-- [The Sequencer](/how-arbitrum-works/sequencer.mdx)
+- [Retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)
+- [The Sequencer](/how-arbitrum-works/03-sequencer.mdx)
 - [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 
 ### 2. Sequencer orders transaction (off-chain)
@@ -61,9 +61,9 @@ Upon receiving a transaction, the Sequencer will:
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
-- [Geth](/how-arbitrum-works/arbos/geth.mdx)
-- [L1 pricing](/how-arbitrum-works/l1-gas-pricing.mdx) / [L2 Gas](/how-arbitrum-works/gas-fees.mdx)
+- [ArbOS](/how-arbitrum-works/04-geth-at-the-core#arbos.mdx)
+- [Geth](/how-arbitrum-works/04-geth-at-the-core#geth.mdx)
+- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
 
 #### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
 
@@ -91,7 +91,7 @@ The Sequencer is forced to include messages from the delayed Inbox in the queued
 
 **See:**
 
-- ["The Sequencer / Censorship Resistance."](/how-arbitrum-works/sequencer.mdx)
+- ["The Sequencer / Censorship Resistance."](/how-arbitrum-works/03-sequencer.mdx)
 
 #### ~ ~ ~ FINALITY CHECK: Ethereum-Equivalent Finality! ~ ~ ~
 
@@ -110,9 +110,9 @@ A staked, active validator will then run the Arbitrum VM over the inputs in the 
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
-- [Geth](/how-arbitrum-works/arbos/geth.mdx)
-- [L1 pricing](/how-arbitrum-works/l1-gas-pricing.mdx) / [L2 Gas](/how-arbitrum-works/gas-fees.mdx)
+- [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos)
+- [Geth](/how-arbitrum-works/04-geth-at-the-core.mdx#geth)
+- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
 
 :::note
 
@@ -122,7 +122,7 @@ RBlock assertions include claims about the state of the Outbox; if our transacti
 
 **See**:
 
-- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.mdx)
+- [The Outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)
 
 #### 4a. RBlock is valid / goes unchallenged
 
@@ -136,8 +136,8 @@ A dispute consists of two staked validators dissecting their disagreement down t
 
 **See:**
 
-- [Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx)
-- [Wasm/WAVM](/how-arbitrum-works/fraud-proofs/wasm-wavm.mdx)
+- [Challenges](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#challenge-manager)
+- [Wasm/WAVM](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#wasm-wavm)
 
 L1 contracts also keep track of the tree of all assertions; i.e., how many stakers are in disagreement, who is currently disputing with whom, etc. We refer to this level of Arbitrum's design architecture as its "assertion tree protocol."
 

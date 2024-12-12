@@ -21,7 +21,7 @@ Because the top and bottom layers rely heavily on code from geth, this structure
 
 The State Transition Function consists of the bottom Geth layer, and a portion of the middle ArbOS layer. In particular, the STF is a designated function in the source code, and implicitly includes all of the code called by that function. The STF takes as input the bytes of a transaction received in the inbox, and has access to a modifiable copy of the Ethereum state tree. Executing the STF may modify the state, and at the end will emit the header of a new block (in Ethereum's block header format) which will be appended to the Nitro chain.
 
-The rest of this section will be a deep dive into Geth and ArbOS. If deep technical knowledge does not suit you, skip to the next section [Separating Execution from Proving](/how-arbitrum-works/separating-execution-from-proving.mdx).
+The rest of this section will be a deep dive into Geth and ArbOS. If deep technical knowledge does not suit you, skip to the next section [Separating Execution from Proving](/how-arbitrum-works/05-separating-execution-from-proving.mdx).
 
 ## Geth
 
@@ -197,11 +197,11 @@ Represents a user deposit from L1 to L2. This increases the user's balance by th
 
 #### [`ArbitrumSubmitRetryableTx`][arbitrumsubmitretryabletx_link]{#ArbitrumSubmitRetryableTx}
 
-Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#retryable-tickets) for more info.
+Represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#ArbitrumRetryTx) if provided enough gas. Please see the [retryables documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets) for more info.
 
 #### [`ArbitrumRetryTx`][arbitrumretrytx_link]{#ArbitrumRetryTx}
 
-These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#retryable-tickets) for more info.
+These are scheduled by calls to the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Please see the [retryables documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets) for more info.
 
 #### [`ArbitrumInternalTx`][arbitruminternaltx_link]{#ArbitrumInternalTx}
 
@@ -249,7 +249,7 @@ Nitro's Geth may be configured with the following [l2-specific chain parameters]
 
 #### `EnableArbos`
 
-Introduces [ArbOS](/how-arbitrum-works/arbos/introduction.mdx), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
+Introduces [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos), converting what would otherwise be a vanilla L1 chain into an L2 Arbitrum rollup.
 
 #### `AllowDebugPrecompiles`
 
@@ -277,7 +277,7 @@ To aid with [outbox proof construction][proof_link], the root hash and leaf coun
 
 #### Retryable Support
 
-Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/arbos/introduction.mdx#retryables). Some modifications were required in Geth to support them.
+Retryables are mostly implemented in [ArbOS](/how-arbitrum-works/10-l1-to-l2-messaging.mdx). Some modifications were required in Geth to support them.
 
 - Added ScheduledTxes field to ExecutionResult. This lists transactions scheduled during the execution. To enable using this field, we also pass the ExecutionResult to callers of ApplyTransaction.
 - Added gasEstimation param to DoCall. When enabled, DoCall will also also executing any retryable activated by the original call. This allows estimating gas to enable retryables.
@@ -352,7 +352,7 @@ An [`L1IncomingMessage`][l1incomingmessage_link] represents an incoming sequence
 
 ### Retryables
 
-A Retryable is a special message type for creating atomic L1 to L2 messages; for details, see [L1 To L2 Messaging](/how-arbitrum-works/arbos/l1-l2-messaging.mdx).
+A Retryable is a special message type for creating atomic L1 to L2 messages; for details, see [L1 To L2 Messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
 ### ArbOS State
 

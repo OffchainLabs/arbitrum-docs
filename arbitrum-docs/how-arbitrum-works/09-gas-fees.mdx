@@ -18,7 +18,7 @@ The L1 component is the product of the transaction's estimated contribution to i
 
 The L2 component consists of the traditional fees Geth would pay to stakers in a vanilla L1 chain, such as the computation and storage charges applying the state transition function entails. ArbOS charges additional fees for executing its L2-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
 
-The following sections will detail how to calculate L1 and L2 fees. If you do not need precise calculations or a technical understanding, skip to the next section, [L1 to L2 messaging](/how-arbitrum-works/l1-to-l2-messaging.mdx).
+The following sections will detail how to calculate L1 and L2 fees. If you do not need precise calculations or a technical understanding, skip to the next section, [L1 to L2 messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
 ## L1 gas pricing
 
@@ -132,108 +132,3 @@ After allocating funds and paying what is owed, the L1 Pricer adjusts the L1 Gas
 The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the L1 Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
 
 A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
-
-<!-- REMOVE and incorporate all below to the above sections where applicable
-
-### The Speed Limit
-
-The security of Nitro chains depends on the assumption that when one validator creates an RBlock, other validators will check it, and respond with a correct RBlock and a challenge if it is wrong. This requires that the other validators have the time and resources to check each RBlock quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for RBlocks.
-
-This sets an effective speed limit on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If RBlocks are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit, enforced by the rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new RBlocks to be slowed down, thereby enforcing the effective speed limit.
-
-Being able to set the speed limit accurately depends on being able to estimate the time required to validate an RBlock, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower, to be safe. And we do not want to set the speed limit lower, so we try to enable accurate estimation.
-
-### Fees
-
-User transactions pay fees, to cover the cost of operating the chain. These fees are assessed and collected by ArbOS at L2. They are denominated in ETH.
-
-Fees are charged for two resources that a transaction can use:
-
-- _L2 gas_: an Ethereum-equivalent amount of gas, as required to execute the transaction on the Nitro chain,
-
-* _L1 calldata_: a fee per unit of L1 calldata attributable to the transaction, which is charged only if the transaction came in via the Sequencer, and is paid to the Sequencer to cover its costs,
-
-#### L2 gas fees
-
-L2 gas fees work very similarly to gas on Ethereum. A transaction uses some amount of gas, and this is multiplied by the current basefee to get the L2 gas fee charged to the transaction.
-
-The L2 basefee is set by a version of the "exponential mechanism" which has been widely discussed in the Ethereum community, and which has been shown equivalent to Ethereum's EIP-1559 gas pricing mechanism.
-
-The algorithm compares gas usage against a parameter called the "speed limit" which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the speed limit on Arbitrum One is @arbOneGasSpeedLimitGasPerSec@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
-
-Intuitively, if the backlog grows, the algorithm should increase the gas price, to slow gas usage, because usage is above the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the below the sustainable limit so more gas usage can be welcomed.
-
-To make this more precise, the basefee is an exponential function of the backlog, _F = exp(-a(B-b))_, where a and b are suitably chosen constants: _a_ controls how rapidly the price escalates with backlog, and _b_ allows a small backlog before the basefee escalation begins.
-
-#### L1 calldata fees
-
-L1 calldata fees exist because the Sequencer, or the batch poster which posts the Sequencer's transaction batches on Ethereum, incurs costs in L1 gas to post transactions on Ethereum as calldata. Funds collected in L1 calldata fees are credited to the batch poster to cover its costs.
-
-Every transaction that comes in through the Sequencer will pay an L1 calldata fee. Transactions that come in through the delayed inbox do not pay this fee because they don't add to batch posting costs--but these transactions pay gas fees to Ethereum when they are put into the delayed inbox.
-
-The L1 pricing algorithm assigns an L1 calldata fee to each Sequencer transaction. First, it computes the transaction's size, which is an estimate of how many bytes the transaction will add to the compressed batch it is in; the formula for this includes an estimate of how compressible the transaction is. Second, it multiplies the computed size estimate by the current price per estimated byte, to determine the transaction's L1 calldata wei, in wei. Finally, it divides this cost by the current L2 basefee to translate the fee into L2 gas units. The result is reported as the "poster fee" for the transaction.
-
-The price per estimated byte is set by a dynamic algorithm that compares the total L1 calldata fees collected to the total fees actually paid by batch posters, and tries to bring the two as close to equality as possible. If the batch posters' costs have been less than fee receipts, the price will increase, and if batch poster costs have exceeded fee receipts, the price will decrease.
-
-#### Total fee and gas estimation
-
-The total fee charged to a transaction is the L2 basefee, multiplied by the sum of the L2 gas used plus the L1 calldata charge. As on Ethereum, a transaction will fail if it fails to supply enough gas, or if it specifies a basefee limit that is below the current basefee. Ethereum also allows a "tip" but Nitro ignores this field and never collects any tips.
-
-
-
-## L1 gas pricing
-
-ArbOS dynamically prices L1 gas, with the price adjusting to ensure that the amount collected in L1 gas fees is as close as possible to the costs that must be covered, over time.
-
-### L1 fee collection
-
-A transaction is charged for L1 gas if and only if it arrived as part of a sequencer batch. This means that someone would have paid for L1 gas to post the transaction on the L1 chain.
-
-The estimated cost of posting a transaction on L1 is the product of the transaction's estimated size, and the current L1 Gas Basefee. This estimated cost is divided by the current L2 gas basefee to obtain the amount of L2 gas that corresponds to the L1 operation (more information about this can be found in [this article][two_dimensional_fees_medium_article_link]).
-
-The estimated size is measured in L1 gas and is calculated as follows: first, compress the transaction's data using the brotli-zero algorithm, then multiply the size of the result by 16. (16 is because L1 charges 16 gas per byte. L1 charges less for bytes that are zero, but that doesn't make sense here.) Brotli-zero is used in order to reward users for posting transactions that are compressible. Ideally we would like to reward for posting transactions that contribute to the compressibility (using the brotli compressor) of the entire batch, but that is a difficult notion to define and in any case would be too expensive to compute at L2. Brotli-zero is an approximation that is cheap enough to compute.
-
-L1 gas fee funds that are collected from transactions are transferred to a special [`L1PricerFundsPool`][l1pricerfundspool_link] account, so that account's balance represents the amount of funds that have been collected and are available to pay for costs.
-
-The L1 pricer also records the total number of "data units" (the sum of the estimated sizes, after multiplying by 16) that have been received.
-
-[l1pricerfundspool_link]: https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46
-[two_dimensional_fees_medium_article_link]: https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9
-
-### L1 costs
-
-There are two types of L1 costs: batch posting costs, and rewards.
-
-Batch posting costs reflect the actual cost a batch poster pays to post batch data on L1. Whenever a batch is posted, the L1 contract that records the batch will send a special "batch posting report" message to L2 ArbOS, reporting who paid for the batch and what the L1 basefee was at the time. This message is placed in the chain's delayed inbox, so it will be delivered to L2 ArbOS after some delay.
-
-When a batch posting report message arrives at L2, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state, and computes the L1 gas that the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The resulting cost is recorded by the pricer as funds due to the party who is reported to have submitted the batch.
-
-The second type of L1 cost is an optional (per chain) per-unit reward for handling transaction calldata. In general the reward might be paid to the sequencer, or to members of the Data Availability Committee in an AnyTrust chain, or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
-
-The L1 pricer keeps track of the funds due to the reward address, based on the number of data units handled so far. This amount is updated whenever a batch posting report arrives at L2.
-
-### Allocating funds and paying what is owed
-
-When a batch posting report is processed at L2, the pricer allocates some of the collected funds to pay for costs incurred. To allocate funds, the pricer considers three timestamps:
-
-- `currentTime` is the current time, when the batch posting report message arrives at L2
-- `updateTime` is the time at which the reported batch was submitted (which will typically be around 20 minutes before currentTime)
-- `lastUpdateTime` is the time at which the previous reported batch was submitted
-
-The pricer computes an allocation fraction `F = (updateTime-lastUpdateTime) / (currentTime-lastUpdateTime)` and allocates a fraction `F` of funds in the `L1PricerFundsPool` to the current report. The intuition is that the pricer knows how many funds have been collected between `lastUpdateTime` and `currentTime`, and we want to figure out how many of those funds to allocate to the interval between `lastUpdateTime` and `updateTime`. The given formula is the correct allocation, if we assume that funds arrived at a uniform rate during the interval between `lastUpdateTime` and `currentTime`. The pricer similarly allocates a portion of the total data units to the current report.
-
-Now the pricer pays out the allocated funds to cover the rewards due and the amounts due to batch posters, reducing the balance due to each party as a result. If the allocated funds aren't sufficient to cover everything that is due, some amount due will remain. If all of the amount due can be covered with the allocated funds, any remaining allocated funds are returned to the `L1PricerFundsPool`.
-
-### Adjusting the L1 gas basefee
-
-After allocating funds and paying what is owed, the L1 Pricer adjusts the L1 Gas Basefee. The goal of this process is to find a value that will cause the amount collected to equal the amount owed over time.
-
-The algorithm first computes the surplus (funds in the `L1PricerFundsPool`, minus total funds due), which might be negative. If the surplus is positive, the L1 Gas Basefee is reduced, so that the amount collected over a fixed future interval will be reduced by exactly the surplus. If the surplus is negative, the Basefee is increased so that the shortfall will be eliminated over the same fixed future interval.
-
-A second term is added to the L1 Gas Basefee, based on the derivative of the surplus (surplus at present, minus the surplus after the previous batch posting report was processed). This term, which is multiplied by a smoothing factor to reduce fluctuations, will reduce the Basefee if the surplus is increasing, and increase the Basefee if the surplus is shrinking.
-
-### Getting L1 fee info
-
-The L1 gas basefee can be queried via [`ArbGasInfo.getL1BaseFeeEstimate`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo). To estimate the L1 fee a transaction will use, the [NodeInterface.gasEstimateComponents()](/build-decentralized-apps/nodeinterface/02-reference.mdx) or [NodeInterface.gasEstimateL1Component()](/build-decentralized-apps/nodeinterface/02-reference.mdx) method can be used.
-
-Arbitrum transaction receipts include a `gasUsedForL1` field, showing the amount of gas used on L1 in units of L2 gas. -->
