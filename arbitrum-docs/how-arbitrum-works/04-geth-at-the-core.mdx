@@ -51,7 +51,7 @@ Below is [`ApplyTransaction`][applytransaction_link]'s callgraph, with additiona
     - [`StartTxHook`](#StartTxHook)
     - `core.transitionDbImpl`
       - if `IsArbitrum()` remove tip
-      - [`GasChargingHook`](#GasChargingHook)
+      - [`GasChargingHook`](/how-arbitrum-works/geth-at-the-core#gascharginghook)
       - `evm.Call`
         - `core.vm.EVMInterpreter.Run`
           - [`PushCaller`](#PushCaller)
@@ -78,7 +78,7 @@ If the transaction is an `ArbitrumSubmitRetryableTx`, ArbOS creates a retryable 
 
 The hook returns `true` for both of these transaction types, signifying that the state transition is complete.
 
-#### [`GasChargingHook`][gascharginghook_link]{#GasChargingHook}
+#### [`GasChargingHook`][gascharginghook_link]
 
 This fallible hook ensures the user has enough funds to pay their poster's L1 calldata costs. If not, the transaction is reverted and the [`EVM`][evm_link] does not start. In the common case that the user can pay, the amount paid for calldata is set aside for later reimbursement of the poster. All other fees go to the network account, as they represent the transaction's burden on validators and nodes more generally.
 
@@ -99,7 +99,7 @@ In Arbitrum, the BlockHash and Number operations return data that relies on unde
 
 #### [`ForceRefundGas`][forcerefundgas_link]{#ForceRefundGas}
 
-This hook allows ArbOS to add additional refunds to the user's tx. This is currently only used to refund any compute gas purchased in excess of ArbOS's per-block gas limit during the [`GasChargingHook`](#GasChargingHook).
+This hook allows ArbOS to add additional refunds to the user's tx. This is currently only used to refund any compute gas purchased in excess of ArbOS's per-block gas limit during the [`GasChargingHook`](/how-arbitrum-works/geth-at-the-core#gascharginghook).
 
 #### [`NonrefundableGas`][nonrefundablegas_link]{#NonrefundableGas}
 
@@ -399,9 +399,9 @@ Based on this information, ArbOS maintains an L1 data fee, also tracked as part 
 
 The L2 pricing state tracks L2 resource usage to determine a reasonable L2 gas price. This process considers a variety of factors, including user demand, the state of Geth, and the computational speed limit. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as L2-specific resources are consumed and filled as time passes. L1-specific resources like L1 `calldata` are not tracked by the pools, as they have little bearing on the actual work done by the network actors that the speed limit is meant to keep stable and synced.
 
-While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompiles, most changes are automatic and happen during [block production][block_production_link] and [the transaction hooks](geth#Hooks). Each of an incoming message's transactions removes from the pool the L2 component of the gas it uses, and afterward the message's timestamp [informs the pricing mechanism][notify_pricer_link] of the time that's passed as ArbOS [finalizes the block][finalizeblock_link].
+While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompiles, most changes are automatic and happen during [block production][block_production_link] and [the transaction hooks](#hooks). Each of an incoming message's transactions removes from the pool the L2 component of the gas it uses, and afterward the message's timestamp [informs the pricing mechanism][notify_pricer_link] of the time that's passed as ArbOS [finalizes the block][finalizeblock_link].
 
-ArbOS's larger gas pool [determines][maintain_limit_link] the per-block gas limit, setting a dynamic [upper limit][per_block_limit_link] on the amount of compute gas an L2 block may have. This limit is always enforced, though for the [first transaction][first_transaction_link] it's done in the [GasChargingHook](geth#GasChargingHook) to avoid sharp decreases in the L1 gas price from over-inflating the compute component purchased to above the gas limit. This improves UX by allowing the first transaction to succeed rather than requiring a resubmission. Because the first transaction lowers the amount of space left in the block, subsequent transactions do not employ this strategy and may fail from such compute-component inflation. This is acceptable because such transactions are only present in cases where the system is under heavy load and the result is that the user's transaction is dropped without charges since the state transition fails early. Those trusting the sequencer can rely on the transaction being automatically resubmitted in such a scenario.
+ArbOS's larger gas pool [determines][maintain_limit_link] the per-block gas limit, setting a dynamic [upper limit][per_block_limit_link] on the amount of compute gas an L2 block may have. This limit is always enforced, though for the [first transaction][first_transaction_link] it's done in the [GasChargingHook](/how-arbitrum-works/geth-at-the-core#gascharginghook) to avoid sharp decreases in the L1 gas price from over-inflating the compute component purchased to above the gas limit. This improves UX by allowing the first transaction to succeed rather than requiring a resubmission. Because the first transaction lowers the amount of space left in the block, subsequent transactions do not employ this strategy and may fail from such compute-component inflation. This is acceptable because such transactions are only present in cases where the system is under heavy load and the result is that the user's transaction is dropped without charges since the state transition fails early. Those trusting the sequencer can rely on the transaction being automatically resubmitted in such a scenario.
 
 The reason we need a per-block gas limit is that Arbitrator WAVM execution is much slower than native transaction execution. This means that there can only be so much gas -- which roughly translates to wall-clock time -- in an L2 block. It also provides an opportunity for ArbOS to limit the size of blocks should demand continue to surge even as the price rises.
 
