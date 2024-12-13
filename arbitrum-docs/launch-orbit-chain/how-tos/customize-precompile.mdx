@@ -6,10 +6,7 @@ sidebar_position: 5
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
 import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 <CustomizeCautionBannerPartial />
 
@@ -59,7 +56,7 @@ Next, follow the steps in [How to customize your Orbit chain's behavior](./custo
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.md) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -134,7 +131,7 @@ Next, follow the steps in [How to customize your Orbit chain's behavior](./custo
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.md) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -221,7 +218,7 @@ Our function now emits an event, which means that when calling it, the state wil
 function sayHi() external returns(string memory);
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.md). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -231,7 +228,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.md) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -305,7 +302,7 @@ func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error)
 
 To register this new precompile method, refer to Option 1 above.
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.md). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -315,7 +312,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.md) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -396,7 +393,7 @@ Result 2:
 
 Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
-To learn more about the gas cost model, see [how to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.md).
+To learn more about the gas cost model, see [how to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
 
 ## Option 5: Call and modify state
 

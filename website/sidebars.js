@@ -1,7 +1,8 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
-const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
+const stylusByExampleDocsSidebarSDK = require('../arbitrum-docs/stylus-by-example/basic_examples/sidebar.js');
+const stylusByExampleDocsSidebarExamples = require('../arbitrum-docs/stylus-by-example/applications/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -80,26 +81,9 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
+          type: 'doc',
           label: 'Oracles',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'build-decentralized-apps/oracles/overview',
-            },
-            {
-              type: 'doc',
-              label: 'Use oracles in your app',
-              id: 'build-decentralized-apps/oracles/how-to-use-oracles',
-            },
-            {
-              type: 'doc',
-              label: 'Reference',
-              id: 'build-decentralized-apps/oracles/reference',
-            },
-          ],
+          id: 'build-decentralized-apps/oracles/overview-oracles',
         },
         {
           type: 'category',
@@ -263,6 +247,28 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/aep-license',
+          label: 'Orbit licensing',
+        },
+        {
+          type: 'category',
+          label: 'Guidance for Orbit chain operators',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              label: `Manage gas state growth`,
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              label: `Manage gas speed limit`,
+            },
+          ],
+        },
+        {
           type: 'category',
           label: 'Production Orbit chain setup',
           collapsed: true,
@@ -318,16 +324,6 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/reference/additional-configuration-parameters',
               label: `Additional configuration parameters`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
-              label: `Manage state growth`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
-              label: `Manage gas speed limit`,
             },
             {
               type: 'doc',
@@ -473,6 +469,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
+          label: 'BoLD for Orbit chains',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
@@ -490,7 +491,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Write Stylus contracts',
+      label: 'Write Stylus Contracts',
       collapsed: true,
       link: {
         type: 'doc',
@@ -499,27 +500,17 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
-          label: 'Quickstart (Rust)',
-        },
-        {
-          type: 'doc',
-          id: 'for-devs/dev-tools-and-resources/chain-info',
-          label: 'Chain info',
-        },
-        {
-          type: 'doc',
-          label: 'Arbiscan contract verification',
-          id: 'stylus/how-tos/verifying-contracts-arbiscan',
+          id: 'stylus/quickstart',
+          label: 'Quickstart',
         },
         {
           type: 'category',
-          label: 'Stylus Rust SDK',
+          label: 'Rust SDK',
           collapsed: true,
           items: [
             {
@@ -527,120 +518,127 @@ const sidebars = {
               id: 'stylus/reference/overview',
               label: 'Overview',
             },
-            ...stylusByExampleDocsSidebar,
-            {
-              type: 'doc',
-              id: 'stylus/recommended-libraries',
-              label: 'Recommended libraries',
-            },
+            ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Advanced features',
             },
-            {
-              type: 'link',
-              label: 'Rust crate docs',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
-            },
-            {
-              type: 'link',
-              label: 'Stylus by example',
-              href: 'https://stylus-by-example.org/',
-            },
           ],
         },
         {
           type: 'category',
-          label: 'Gas, ink and caching',
+          label: 'Rust CLI',
           collapsed: true,
           items: [
             {
               type: 'doc',
+              id: 'stylus/using-cli',
               label: 'Overview',
-              id: 'stylus/concepts/stylus-gas',
             },
             {
               type: 'doc',
-              id: 'stylus/reference/opcode-hostio-pricing',
-              label: 'Gas and ink costs',
+              id: 'stylus/how-tos/debugging-tx',
+              label: 'Debug transactions',
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
-              label: 'Caching strategy',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'CLI tools (cargo-stylus)',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              label: 'Overview',
-              id: 'stylus/cli-tools-overview',
-            },
-            {
-              type: 'doc',
-              label: 'Optimize WASM binaries',
-              id: 'stylus/how-tos/optimizing-binaries',
-            },
-            {
-              type: 'doc',
-              label: 'Debug Stylus transactions',
-              id: 'stylus/how-tos/debugging-stylus-tx',
-            },
-            {
-              type: 'doc',
-              label: 'Verify Stylus contracts',
               id: 'stylus/how-tos/verifying-contracts',
+              label: 'Verify contracts',
             },
             {
-              type: 'link',
-              label: 'cargo-stylus repository',
-              href: 'https://github.com/OffchainLabs/cargo-stylus',
+              type: 'doc',
+              id: 'stylus/how-tos/caching-contracts',
+              label: 'Cache contracts',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Verify on Arbiscan',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
             },
           ],
         },
         {
           type: 'html',
           value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus dev node<span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?/node-running/how-tos/running-an-stylus-node
-          // a: see note at end of file
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
         },
         {
           type: 'category',
-          label: 'Other supported languages',
+          label: 'Concepts',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'stylus/reference/other-language-frameworks',
-          },
           items: [
             {
               type: 'doc',
-              label: 'Add a new smart contract language',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
+              id: 'stylus/concepts/how-it-works',
+              label: 'Architecture overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/gas-metering',
+              label: 'Gas metering',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Examples',
+          collapsed: true,
+          items: [
+            ...stylusByExampleDocsSidebarExamples,
+            {
+              type: 'link',
+              label: 'Awesome Stylus',
+              href: 'https://github.com/OffchainLabs/awesome-stylus',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Reference',
+          collapsed: true,
+          items: [
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/opcode-hostio-pricing',
+              label: 'Gas & Ink Pricing',
+            },
+            {
+              type: 'link',
+              label: 'Cargo Stylus CLI GitHub',
+              href: 'https://github.com/OffchainLabs/cargo-stylus',
+            },
+            {
+              type: 'link',
+              label: 'Rust SDK Crate',
+              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+            },
+            {
+              type: 'link',
+              label: 'Source Code Repository',
+              href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
         },
         {
           type: 'doc',
-          label: 'Troubleshooting',
-          id: 'stylus/troubleshooting-building-stylus',
-        },
-        {
-          type: 'link',
-          label: 'Source code repository',
-          href: 'https://github.com/OffchainLabs/stylus',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+          label: 'Using other languages',
         },
         {
           type: 'doc',
-          label: 'Public preview',
-          id: 'stylus/concepts/public-preview-expectations',
+          id: 'stylus/troubleshooting-building-stylus',
+          label: 'Troubleshooting',
         },
       ],
     },
@@ -765,26 +763,19 @@ const sidebars = {
           ],
         },
         {
-          type: 'category',
-          label: 'Nitro',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/build-nitro-locally',
-              label: 'Build Nitro locally',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
-              label: 'Migrate to Nitro from Classic',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
-              label: 'Nitro database snapshots',
-            },
-          ],
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/build-nitro-locally',
+          label: 'Build Nitro locally',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/migrate-state-and-history-from-classic',
+          label: 'Migrate to Nitro from Classic',
+        },
+        {
+          type: 'doc',
+          id: 'run-arbitrum-node/nitro/nitro-database-snapshots',
+          label: 'Database snapshots',
         },
         {
           type: 'doc',
@@ -1031,8 +1022,51 @@ const sidebars = {
       collapsed: true,
       items: [
         {
+          type: 'category',
+          label: 'Oracles',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'for-devs/oracles/oracles-content-map',
+          },
+          items: [
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/api3/api3',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chainlink/chainlink',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/chronicle/chronicle',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/ora/ora',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-price-feed',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/supra/supras-vrf',
+            },
+            {
+              type: 'doc',
+              id: 'for-devs/oracles/trellor/trellor',
+            },
+          ],
+        },
+        {
           type: 'autogenerated',
           dirName: 'for-devs/third-party-docs',
+        },
+        {
+          type: 'doc',
+          id: 'for-devs/contribute',
         },
       ],
     },
