@@ -32,7 +32,7 @@ It is possible for an Orbit Rollup to adopt fast withdrawals. However, it would 
 
 ### Minimum validator and DAC nodes
 
-We recommend that any Fast Withdrawals-enabled chain have at least three DAC members and three validators acting in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 7-day challenge period (15 minutes for L2s and 15 seconds for L3s), it becomes even more important to have additional parties involved in validation to further reduce trust assumptions. This requirement can be be met with three total operators, who each run a single DAS node and a single validator.
+We recommend that any Fast Withdrawals-enabled chain have at least three DAC members and three validators acting in the fast withdrawals committee. Given that fast withdrawals will enable confirmation of new Rollup state much faster than the usual 6.4-day challenge period (15 minutes for L2s and 15 seconds for L3s), it becomes even more important to have additional parties involved in validation to further reduce trust assumptions. This requirement can be be met with three total operators, who each run a single DAS node and a single validator.
 
 ## Technical lower bound for fast withdrawals
 
@@ -195,6 +195,8 @@ The following parameters need to be configured in those nodes.
 | `--node.staker.enable-fast-confirmation=true`   | Enables fast withdrawals in the validator node                                                                                                                                                                                                           |
 | `--node.staker.make-assertion-interval=0h15m0s` | Since assertions need to be created for them to be confirmed, the minimum interval to create these assertions should be set to an amount close to the `minimumAssertionPeriod` defined in the Rollup contract. Modify `0h15m0s` to the configured value. |
 
-**Please Note**
+:::note
 
 Immediately after configuring fast withdrawals - your chain may not be operating fully at speed yet. This is because the validators have to work through the backlog of assertions which were not yet confirmed. You will see a series of NodeCreated and NodeConfirmed events. Once the backlog has been processed, your chain should operate fully at speed.
+
+:::
