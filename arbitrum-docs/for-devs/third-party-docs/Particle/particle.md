@@ -1,9 +1,9 @@
 ---
-title: "How to implement Particle Connect for AA-enabled social logins"
+title: 'How to implement Particle Connect for AA-enabled social logins'
 description: "Guide covering the process of leveraging Particle Network's flagship SDK to onboard a user into a smart account through social logins."
 author: Ethan Francis
 sme: TABASCOatw
-sidebar_label: 'Particle Network' 
+sidebar_label: 'Particle Network'
 ---
 
 :::info Community member contribution
@@ -14,7 +14,7 @@ Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the fo
 
 [Particle Network](https://particle.network) enables one-click onboarding into smart accounts through its Wallet Abstraction stack, providing social logins and wallet connection kits compatible with Arbitrum.
 
-By integrating customizable Externally Owned Account (EOA) and Account Abstraction (AA) modules, Particle enables fast 2-click onboarding via social login options like Google, email, and phone, along with traditional Web3 options. 
+By integrating customizable Externally Owned Account (EOA) and Account Abstraction (AA) modules, Particle enables fast 2-click onboarding via social login options like Google, email, and phone, along with traditional Web3 options.
 
 This approach lets developers implement embedded wallets, bypassing the need for conventional wallet management and provides users with a seamless and tailored Web3 interaction experience, very akin to that of Web2.
 
@@ -53,7 +53,7 @@ With the Particle Connect SDK, wallet creation, user login, and blockchain inter
 
 You'll need only a few dependencies to integrate Particle Connect into your Arbitrum application. Particle Connect offers built-in Account Abstraction (AA) support; however, in this example, we'll install the Particle AA SDK to use an EIP-1193 providers, such as ethers.
 
-```bash
+```shell
 yarn add @particle-network/connectkit viem@^2 @particle-network/aa ethers
 ```
 
@@ -84,15 +84,15 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID='WALLETCONNECT_PROJECT_ID'
 To get started, we'll configure and initialize Particle Connect. Create a new `ConnectKit.tsx` file in your `src` directory. Here, we'll set up the `ParticleConnectKit` component, a wrapper for the configured `ConnectKitProvider` instance, which will serve as the central interface for configuration.
 
 ```typescript
-"use client";
+'use client';
 
-import React from "react";
-import { ConnectKitProvider, createConfig } from "@particle-network/connectkit";
-import { authWalletConnectors } from "@particle-network/connectkit/auth";
-import { evmWalletConnectors } from "@particle-network/connectkit/evm";
-import { arbitrumSepolia } from "@particle-network/connectkit/chains";
-import { wallet, EntryPosition } from "@particle-network/connectkit/wallet";
-import { aa } from "@particle-network/connectkit/aa";
+import React from 'react';
+import { ConnectKitProvider, createConfig } from '@particle-network/connectkit';
+import { authWalletConnectors } from '@particle-network/connectkit/auth';
+import { evmWalletConnectors } from '@particle-network/connectkit/evm';
+import { arbitrumSepolia } from '@particle-network/connectkit/chains';
+import { wallet, EntryPosition } from '@particle-network/connectkit/wallet';
+import { aa } from '@particle-network/connectkit/aa';
 
 const config = createConfig({
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
@@ -114,8 +114,8 @@ const config = createConfig({
       visible: true, // Determines if the wallet modal is displayed
     }),
     aa({
-      name: "SIMPLE",
-      version: "2.0.0",
+      name: 'SIMPLE',
+      version: '2.0.0',
     }),
   ],
   chains: [arbitrumSepolia],
@@ -128,21 +128,21 @@ export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
 
 This code sets up Particle Connect with a configuration for wallet authentication and blockchain interactions on Arbitrum Sepolia. It includes social logins and traditional Web3 options through WalletConnect and enables Account Abstraction (AA) with a `SimpleAccount` instance version 2.0.0. The configured `ConnectKitProvider` component then wraps the app’s content, making this configuration available.
 
-## Integrate Particle Connect in Your App
+## Integrate Particle Connect in your app
 
 Once configured, wrap your application with the `ParticleConnectKit` component to make the Particle Connect SDK accessible throughout the app. Update the `layout.tsx` file in the `src` directory as shown below:
 
 ```tsx
-import { ParticleConnectkit } from "@/components/Connectkit";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { ParticleConnectkit } from '@/components/Connectkit';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "Particle Connectkit App",
-  description: "Generated by create next app",
+  title: 'Particle Connectkit App',
+  description: 'Generated by create next app',
 };
 
 export default function RootLayout({
@@ -160,19 +160,19 @@ export default function RootLayout({
 }
 ```
 
-## Building the Application
+## Building the application
 
 With your project set up, dependencies installed, and Particle Connect configured, you can start building in the `page.tsx` file.
 
 In `page.tsx`, you’ll define the core features: login flow, data visualization, transaction handling, and the UI.
 
-### Connecting the Wallet
+### Connecting the wallet
 
 With `layout.tsx` configured, the next step is to add a primary **Connect Wallet** button to facilitate user login. Import `ConnectButton` from `@particle-network/connectkit` and add it to the interface. After the user logs in, the `ConnectButton` component will throw a unified login modal upon clicking, an example of this modal is viewable [here](https://demo.particle.network).
 
 ```tsx
-"use client";
-import { ConnectButton, useAccount } from "@particle-network/connectkit";
+'use client';
+import { ConnectButton, useAccount } from '@particle-network/connectkit';
 
 const HomePage = () => {
   const { address, isConnected, chainId } = useAccount();
@@ -194,65 +194,62 @@ const HomePage = () => {
 
 export default HomePage;
 ```
-### Sending Transactions with an EIP-1193 Provider
+
+### Sending transactions with an EIP-1193 provider
 
 Particle Connect includes AA features out of the box, but using it with the Particle AA SDK allows you to work with EIP-1193 providers, like `ethers`. This approach is especially helpful if you're already familiar with these providers or are integrating Particle Connect into an existing app.
 
 To implement this, wrap the smart account provided by Particle Connect in an instance of `ethers` to create a `customProvider`. With this setup, you can use `ethers` as usual, with the smart account handling the signing of transactions in the background.
 
 ```tsx
-import {useSmartAccount } from "@particle-network/connectkit";
-import { AAWrapProvider, SendTransactionMode } from "@particle-network/aa";
+import { useSmartAccount } from '@particle-network/connectkit';
+import { AAWrapProvider, SendTransactionMode } from '@particle-network/aa';
 
 const smartAccount = useSmartAccount();
 
 // Init custom provider with gasless transaction mode
 const customProvider = smartAccount
-? new ethers.BrowserProvider(
-    new AAWrapProvider(
-        smartAccount,
-        SendTransactionMode.Gasless
-    ) as Eip1193Provider,
-    "any"
+  ? new ethers.BrowserProvider(
+      new AAWrapProvider(smartAccount, SendTransactionMode.Gasless) as Eip1193Provider,
+      'any',
     )
-: null;
+  : null;
 
 /**
  * Sends a transaction using the ethers.js library.
  * This transaction is gasless since the customProvider is initialized as gasless
-*/
+ */
 const executeTxEthers = async () => {
-    if (!customProvider) return;
-  
-    const signer = await customProvider.getSigner();
-    const tx = {
-      to: recipientAddress,
-      value: parseEther("0.01").toString(),
-    };
-  
-    const txResponse = await signer.sendTransaction(tx);
-    const txReceipt = await txResponse.wait();
-    console.log(txReceipt?.hash)
-  };
-```
+  if (!customProvider) return;
 
+  const signer = await customProvider.getSigner();
+  const tx = {
+    to: recipientAddress,
+    value: parseEther('0.01').toString(),
+  };
+
+  const txResponse = await signer.sendTransaction(tx);
+  const txReceipt = await txResponse.wait();
+  console.log(txReceipt?.hash);
+};
+```
 
 This transaction will be gasless because it meets two key conditions:
 
-1. **Gasless Mode Configuration**: By setting `SendTransactionMode.Gasless` within `AAWrapProvider`, we've specified that the transaction should be gasless and sponsored.
-   
-2. **Funding Requirements**: On a Testnet like Arbitrum Sepolia, all transactions are automatically sponsored, meaning you don't need to deposit USDT to cover transaction fees. However, on mainnets like Arbitrum One or Arbitrum Nova, the Paymaster (configurable in the [Particle dashboard](https://dashboard.particle.network)) would need sufficient funds to sponsor these transactions. 
+1. **Gasless mode configuration**: By setting `SendTransactionMode.Gasless` within `AAWrapProvider`, we've specified that the transaction should be gasless and sponsored.
+2. **Funding requirements**: On a Testnet like Arbitrum Sepolia, all transactions are automatically sponsored, meaning you don't need to deposit USDT to cover transaction fees. However, on mainnets like Arbitrum One or Arbitrum Nova, the Paymaster (configurable in the [Particle dashboard](https://dashboard.particle.network)) would need sufficient funds to sponsor these transactions.
 
 This example demonstrates how to use an existing EIP-1193 provider, but you can also construct a `userOp` directly with Particle Connect. For an example, refer to the [starter repository](https://github.com/Particle-Network/connectkit-aa-usage/blob/2017262daf297624362d51f3d50cccd3b4606ef9/app/page.tsx#L117).
 
 ## Full app example
+
 With the setup complete, Particle Connect can now be leveraged, as demonstrated in the example application below.
 
 In this example, the application creates a smart account on Arbitrum Sepolia using a social login or a Web3 login and sends a gasless transaction of 0.01 ETH via the `ethers` provider.
 
 ```tsx
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';
+import React, { useEffect, useState } from 'react';
 
 // Particle imports
 import {
@@ -260,31 +257,28 @@ import {
   useAccount,
   usePublicClient,
   useSmartAccount,
-} from "@particle-network/connectkit";
+} from '@particle-network/connectkit';
 
 // Eip1193 and AA Provider
-import { AAWrapProvider, SendTransactionMode } from "@particle-network/aa"; // Only needed with Eip1193 provider
-import { ethers, type Eip1193Provider } from "ethers";
-import { formatEther, parseEther } from "viem";
+import { AAWrapProvider, SendTransactionMode } from '@particle-network/aa'; // Only needed with Eip1193 provider
+import { ethers, type Eip1193Provider } from 'ethers';
+import { formatEther, parseEther } from 'viem';
 
 export default function Home() {
   const { isConnected, chain } = useAccount();
   const publicClient = usePublicClient();
   const smartAccount = useSmartAccount();
 
-  const [userAddress, setUserAddress] = useState<string>("");
+  const [userAddress, setUserAddress] = useState<string>('');
   const [balance, setBalance] = useState<string | null>(null);
-  const [recipientAddress, setRecipientAddress] = useState<string>("");
+  const [recipientAddress, setRecipientAddress] = useState<string>('');
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
 
   // Init custom provider with gasless transaction mode
   const customProvider = smartAccount
     ? new ethers.BrowserProvider(
-        new AAWrapProvider(
-          smartAccount,
-          SendTransactionMode.Gasless
-        ) as Eip1193Provider,
-        "any"
+        new AAWrapProvider(smartAccount, SendTransactionMode.Gasless) as Eip1193Provider,
+        'any',
       )
     : null;
 
@@ -301,11 +295,11 @@ export default function Home() {
         const balanceInEther = formatEther(balanceResponse).toString();
         setBalance(balanceInEther);
       } else {
-        setBalance("0.0");
+        setBalance('0.0');
       }
     } catch (error) {
-      console.error("Error fetching balance:", error);
-      setBalance("0.0");
+      console.error('Error fetching balance:', error);
+      setBalance('0.0');
     }
   };
 
@@ -320,7 +314,7 @@ export default function Home() {
           setUserAddress(address);
           await fetchBalance(address);
         } catch (error) {
-          console.error("Error loading account data:", error);
+          console.error('Error loading account data:', error);
         }
       }
     };
@@ -338,7 +332,7 @@ export default function Home() {
     try {
       const tx = {
         to: recipientAddress,
-        value: parseEther("0.01").toString(),
+        value: parseEther('0.01').toString(),
       };
 
       const txResponse = await signer.sendTransaction(tx);
@@ -346,7 +340,7 @@ export default function Home() {
 
       setTransactionHash(txReceipt?.hash || null);
     } catch (error) {
-      console.error("Failed to send transaction using ethers.js:", error);
+      console.error('Failed to send transaction using ethers.js:', error);
     }
   };
 
@@ -359,10 +353,10 @@ export default function Home() {
         <>
           <div className="border border-purple-500 p-6 rounded-lg w-full">
             <h2 className="text-lg font-semibold mb-2 text-white">
-              Address: <code>{userAddress || "Loading..."}</code>
+              Address: <code>{userAddress || 'Loading...'}</code>
             </h2>
             <h2 className="text-lg font-semibold mb-2 text-white">
-              Balance: {balance || "Loading..."} {chain?.nativeCurrency.symbol}
+              Balance: {balance || 'Loading...'} {chain?.nativeCurrency.symbol}
             </h2>
             <input
               type="text"
@@ -379,9 +373,7 @@ export default function Home() {
               Send 0.001 {chain?.nativeCurrency.name}
             </button>
             {transactionHash && (
-              <p className="text-green-500 mt-4">
-                Transaction Hash: {transactionHash}
-              </p>
+              <p className="text-green-500 mt-4">Transaction Hash: {transactionHash}</p>
             )}
           </div>
         </>
