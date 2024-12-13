@@ -7,6 +7,16 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
+import {
+  MermaidWithHtml,
+  Nodes,
+  Node,
+  Connection,
+  NodeDescriptions,
+  NodeDescription,
+} from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
 Gas is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
 
 There are two parties a user pays when submitting a tx:
