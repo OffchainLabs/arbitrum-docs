@@ -8,7 +8,7 @@ export const HeaderBadges = () => {
         <div className="header-badges">
           <a
             className="header-badge"
-            href={`https://github.com/OffchainLabs/arbitrum-docs/issues/new?title=Docs update request: ${
+            href={`https://github.com/anegg0/arb-docs/issues/new?title=Docs update request: ${
               new URL(window.location.href).pathname
             }&body=Source: ${
               window.location.href
