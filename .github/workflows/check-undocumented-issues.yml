@@ -21,7 +21,7 @@ jobs:
             const body = issue.body || '';
             const title = issue.title || '';
 
-            // Check if this is a docs update request (based on HeaderBadges component)
+            // Check if this is a docs update request
             const isDocsRequest = title.startsWith('Docs update request:');
 
             if (!isDocsRequest) {
@@ -32,10 +32,11 @@ jobs:
             const bodyLines = body.split('\n').filter(line => line.trim());
 
             // Check if only contains the template content
-            // Template has 2 lines: Source: URL and Request: (how can we help?)
-            const hasOnlyTemplate = bodyLines.length <= 2 &&
-                                  bodyLines[0]?.startsWith('Source:') &&
-                                  bodyLines[1]?.startsWith('Request: (how can we help?)');
+            const hasOnlyTemplate =
+              bodyLines.length <= 3 && // Updated to match 3 lines
+              bodyLines[0]?.startsWith('Source:') &&
+              bodyLines[1]?.startsWith('Request: (how can we help?)') &&
+              bodyLines[2]?.includes('Psst, this issue will be closed'); // Added check for the warning message
 
             if (hasOnlyTemplate) {
               // Close the issue with a comment
