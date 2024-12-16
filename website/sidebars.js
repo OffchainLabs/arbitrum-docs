@@ -248,8 +248,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/AEPLicense',
-          label: 'AEP License',
+          id: 'launch-orbit-chain/aep-license',
+          label: 'Orbit licensing',
         },
         {
           type: 'category',
@@ -500,12 +500,12 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
+          id: 'stylus/quickstart',
           label: 'Quickstart',
         },
         {
@@ -533,12 +533,12 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/using-stylus-cli',
+              id: 'stylus/using-cli',
               label: 'Overview',
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/debugging-stylus-tx',
+              id: 'stylus/how-tos/debugging-tx',
               label: 'Debug transactions',
             },
             {
@@ -548,7 +548,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
+              id: 'stylus/how-tos/caching-contracts',
               label: 'Cache contracts',
             },
             {
@@ -580,7 +580,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-gas',
+              id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
             },
           ],
