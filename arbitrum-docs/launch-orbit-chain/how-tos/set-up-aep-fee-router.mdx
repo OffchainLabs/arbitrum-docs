@@ -14,11 +14,11 @@ content_type: how-to
 
 ### Canonical contracts
 
-| Network       | Contract             | Address                                                                                                                   | Configured for  |
-| ------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| Ethereum      | `Parent2ChildRouter` | [0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999](https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999)     | `ETH`, `ERC-20` |
-| Arbitrum Nova | `Child2ParentRouter` | [0x36D0170D92F66e8949eB276C3AC4FEA64f83704d](https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d) | `ETH`           |
-| Base          | `Child2ParentRouter` | [0x1015c1ae166c4c39d18a1151b7029bac1530c9aa](https://basescan.org/address/0x1015c1ae166c4c39d18a1151b7029bac1530c9aa)     | `ETH`           |
+| Network       | Contract                                | Address                                                                                                                   | Configured for  |
+| ------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| Ethereum      | `Arbitrum Foundation's multisig wallet` | [0x1Afa41C006dA1605846271E7bdae942F2787f941](https://etherscan.io/address/0x1Afa41C006dA1605846271E7bdae942F2787f941)     | `ETH`, `ERC-20` |
+| Arbitrum Nova | `Child2ParentRouter`                    | [0x36D0170D92F66e8949eB276C3AC4FEA64f83704d](https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d) | `ETH`           |
+| Base          | `Child2ParentRouter`                    | [0x1015c1ae166c4c39d18a1151b7029bac1530c9aa](https://basescan.org/address/0x1015c1ae166c4c39d18a1151b7029bac1530c9aa)     | `ETH`           |
 
 ## The AEP fee router contract system
 
@@ -28,32 +28,28 @@ This section describes the different fee distribution and router contracts that 
 
 The **AEP fee router** system relies on configuring an escrow contract as the intended reward address for protocol fee components. This intermediary contract is known as the `RewardDistributor.`
 
-The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. The `RewardDistributor` can be permissionlessly called to perform a withdrawal which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a routing contract on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
+The `RewardDistributor` is configured to separate the AEP portion of the fees from fees intended for the chain owner. The `RewardDistributor` can be permissionlessly called to perform a withdrawal which simultaneously transfers 90% of accrued fees to the chain’s fee collector and 10% of accrued fees to a target address on the parent chain. From here, the chain owner has complete control over their earned fees, and the routing contracts can direct AEP fees to a collecting address for the Arbitrum DAO.
 
 ### ChildToParentRouter
 
 AEP fees from the `RewardDistributor` must first be sent to Ethereum before they can be deposited to the DAO-controlled address on Arbitrum One. To facilitate this transfer to Ethereum, AEP fees are sent through a series of contracts known as `ChildToParentRouters.`
 
-The `ChildToParentRouter` is configured to withdraw a single token (immutable and specified at deployment) from the child chain to a specific target address on the parent chain: either another `ChildToParentRouter` or the `ParentToChildRouter` on Ethereum.
-
-### ParentToChildRouter
-
-All AEP fees from the network of Orbit chains will arrive at the `ParentToChildRouter` on Ethereum. This contract can send ETH and arbitrary ERC-20 tokens to a DAO-controlled address on Arbitrum One.
+The `ChildToParentRouter` is configured to withdraw a single token (immutable and specified at deployment) from the child chain to a specific target address on the parent chain: either another `ChildToParentRouter` or a multisig wallet owned by the Arbitrum Foundation on Ethereum.
 
 ## Deploying your AEP fee router contracts
 
-An Orbit chain is responsible for deploying all `ChildToParentRouters` necessary for their AEP funds to arrive at the `ParentToChildRouter` on Ethereum.
+An Orbit chain is responsible for deploying all `ChildToParentRouters` necessary for their AEP funds to arrive at the multisig wallet owned by the Arbitrum Foundation on Ethereum.
 
 This includes:
 
 - Deploying a `ChildToParentRouter` on their Orbit chain configured for their gas token and configured to send funds to either:
-  - The `ParentToChildRouter` on Ethereum (assuming the network is a Layer-2)
+  - The multisig wallet owned by the Arbitrum Foundation on Ethereum (assuming the network is a Layer-2)
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the `ParentToChildRouter` on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to `ParentToChildRouter` is established.
+In the event that a `ChildToParentRouter` does not connect to the multisig wallet owned by the Arbitrum Foundation on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to such wallet is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks, and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
 
-And optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/how-tos/calculate-aep-fees#assertion-costs) section:
+Optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/how-tos/calculate-aep-fees#assertion-costs) section:
 
 <aside>
 🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Orbit chains with L2-based tokens to distribute fees using the routing system.
@@ -69,7 +65,7 @@ The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/a
 ::::info Note for L3 chains with custom gas tokens
 
 The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
-L2 chains are expectd to route funds to the [ParentToChildRouter contract](#canonical-contracts) living on Ethereum.
+L2 chains are expected to route funds to the [multisig wallet owned by the Arbitrum Foundation](#canonical-contracts) living on Ethereum.
 L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses ETH as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
 
 ::::
