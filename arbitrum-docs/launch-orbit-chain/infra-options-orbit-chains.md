@@ -72,7 +72,6 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [Traceye](https://traceye.io/)
 - [Sequence](https://sequence.xyz/indexer)
 
-
 ## Oracles
 
 The following Oracle providers can be used to integrate off-chain data with your Orbit chain's smart contracts:
