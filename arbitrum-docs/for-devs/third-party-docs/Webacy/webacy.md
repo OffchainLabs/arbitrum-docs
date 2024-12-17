@@ -11,7 +11,7 @@ third_party_content_owner: cvince
 
 Wallets, protocols, & applications use Webacy throughout their user experience:
 
-**Address trust and safety**
+### Address trust and safety
 
 - Assess the safety of interacting with a given address (any address: EOA, smart contract, token, etc.). Screen for blacklists, sanctioned addresses, malicious behavior, and other potential flags
 
@@ -19,7 +19,7 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 
 - Filter spam and sybil addresses
 
-**Connected wallets**
+### Connected wallets
 
 - Block sanctioned addresses and wallets involved in malicious behavior
 
@@ -29,7 +29,7 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 
 - Display open approvals and the risk associated
 
-**Before a transaction**
+### Before a transaction
 
 - Block harmful dapps and links
 
@@ -37,7 +37,7 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 
 - Protect users from interacting with malicious smart contracts
 
-**Monitoring and Notifications**
+### Monitoring and Notifications
 
 - Monitor all on-chain activity associated with your protocol or smart contracts
 
@@ -46,7 +46,7 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 - Proactively notify users (or be notified) of any potentially risk activity involved with a given address
 
 
-## **Get started with Webacy**
+## Get started with Webacy
 
 Start building in minutes:
 
@@ -55,7 +55,7 @@ Start building in minutes:
 - Check out the[ Quick Start Integration Guide](https://docs.webacy.com/api-embedded-safety/quick-start-integration-guide)
 
 
-## **APIs**
+## APIs
 
 [Webacy’s APIs](https://www.webacy.com/safetyscore) are REST based APIs that expose your platform to Webacy's Risk Engine and our Wallet Watch Notifications Platform.
 
@@ -65,7 +65,7 @@ For detailed technical documentation, and to begin testing the APIs directly, vi
 
 Available APIs and corresponding use cases include:
 
-**Threat Risks API**
+### Threat risks API
 
 This API indicates if a given address is a risk or a threat to others.
 
@@ -83,13 +83,13 @@ Some common use cases for this endpoint include:
 
 - Much more!
 
-**Approval Risks API**
+### Approval risks API
 
 This API returns a list of approvals for a given address, and the associated risk of the spender of that approval. Approvals are commonplace in crypto - now you know which ones put you at risk. Check out your own open approvals[ here](https://dapp.webacy.com/?mode=approvals).
 
 If you're a wallet interested in native revoke and approval risk scoring,[ reach out to us](https://docs.webacy.com/other/contact-us).
 
-**Transaction Risks API**
+### Transaction risks API
 
 This API returns risk data for a given transaction. Pass in any transaction hash, and the API will return a risk score result that incorporates counterparty EOA risk profiles, address risk, involved asset smart contract risk, and more.
 
@@ -105,7 +105,7 @@ Some common use cases for this endpoint include:
 
 - And more!
 
-**Exposure Risk API**
+### Exposure risk API
 
 The original Webacy Safety Score, this API returns a 'risk profile' or 'exposure risk' of a given address.
 
@@ -129,7 +129,7 @@ Some common use cases for this endpoint include:
 
 Check out your own risk exposure[ here](https://dapp.webacy.com/risk-score).
 
-**Contract Risk API**
+### Contract risk API
 
 This API returns a contract risk analysis for a given contract address.
 
@@ -147,7 +147,7 @@ Some common use cases for this endpoint include:
 
 - Assessing your contracts before submitting for a formal audit process
 
-**URL Risk**
+### URL risk
 
 Given a URL, this endpoint analyzes the safety of it. It helps you determine if a given link is a phishing scam, sending you to a dangerous place, or is otherwise malicious.
 
@@ -159,7 +159,7 @@ Some common use cases for this endpoint include:
 
 - Blocking websites
 
-**Wallet Watch API**
+### Wallet watch API
 
 These APIs enable you to register users to Webacy's real-time notification infrastructure.
 
