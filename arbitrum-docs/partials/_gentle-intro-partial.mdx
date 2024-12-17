@@ -37,7 +37,7 @@ Additionally, as long as there’s even just one honest validator, the chain wil
 
 #### Q: And how exactly is “fraud” “proven”? Sounds complicated.
 
-Oh, it’s not so bad. In essence: if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game, in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1, and will, by necessity, prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/07-interactive-fraud-proofs.mdx).
+Oh, it’s not so bad. In essence, if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1 and will necessarily prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/07-interactive-fraud-proofs.mdx).
 
 #### Q: This dispute game obviously takes some time; does this impose any sort of delay on Arbitrum users' transactions?
 
