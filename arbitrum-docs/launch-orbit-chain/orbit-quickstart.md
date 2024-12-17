@@ -1,34 +1,38 @@
 ---
 title: 'Quickstart: Launch an Orbit chain'
-description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, Goerli, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
+description: "Launch your own Orbit chain with the Arbitrum Nitro codebase's new license. Settle to Arbitrum's L2 chains via bridge contracts on the underlying L2 chain (Sepolia, One or Nova). No need for permission from the Arbitrum DAO or Offchain Labs to create your Orbit chain. Modify the Nitro codebase freely for your chain."
 sidebar_position: 2
+author: greatsoshiant
+sme: greatsoshiant
+editor: symbolpunk
 target_audience: developers who want to create their own self-managed AnyTrust or One chain
-sidebar_label: 'Quickstart'
 ---
 
 This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/).
 
-By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Goerli or Sepolia testnets**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
+:::caution Not for Mainnet Production
 
-If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](./orbit-gentle-introduction.md).
+This quickstart is intended for development purposes only and is not suitable for deploying production-grade mainnet chains.
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
+:::
 
-<PublicPreviewBannerPartial />
+By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Sepolia testnet**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
+
+If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.md).
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
 - A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
-- At least 1 testnet ETH (for custom gas token chains, 0.6 ETH and 0.4 native tokens)
+- At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
 
-You'll need at least 1 testnet $ETH for regular Orbit chains or 0.6 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Goerli or Sepolia). Sepolia is our recommendation as Goerli will be deprecated in the near future.
+You'll need at least 1.2 testnet $ETH for regular Orbit chains or 0.8 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
 
-At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Goerli or Sepolia network to Arbitrum's corresponding L2 testnet:
+At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Sepolia network to Arbitrum Sepolia L2 testnet:
 
-1. Use an L1 testnet $ETH faucet like [goerlifaucet.com](https://goerlifaucet.com/) or [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet $ETH on an L1 testnet.
+1. Use an L1 testnet $ETH faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet $ETH on an L1 testnet.
 2. Bridge your L1 testnet $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
 ## Step 2: Choose your chain type: AnyTrust or Rollup
@@ -52,7 +56,7 @@ We generally recommend using Rollup chains for use-cases that demand the highest
 
 <!-- https://orbit-deployment-ui.vercel.app/ -->
 
-Visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/). You'll be prompted to connect your wallet. You may be prompted to add the **Arbitrum Goerli** or **Arbitrum Sepolia** network to your wallet and/or to switch your wallet to this network; approve this.
+Visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/). You'll be prompted to connect your wallet. You may be prompted to add the **Arbitrum Sepolia** network to your wallet and/or to switch your wallet to this network; approve this.
 
 The deployment portal will then display a form that looks like this:
 
@@ -68,7 +72,7 @@ The below table provides a brief description of each of these configuration para
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Chain ID**                  | A unique integer identifier that represents your chain's network. Your `Chain ID` can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.                                                                                                                                                                                                                      |
 | **Chain name**                | A human-readable way to distinguish your Orbit chain from other Orbit chains. Users, developers and the wider community will refer to your chain by your `Chain name` and/or your `Chain ID`.                                                                                                                                                                                                                                                                                    |
-| **Challenge period (blocks)** | The amount of time that your Orbit chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) on the underlying L2 chain (Arbitrum Goerli or Sepolia). Note that this refers to the number of blocks on the underlying L1 chain (Ethereum's Goerli or Sepolia chain).                                                                                                                                                         |
+| **Challenge period (blocks)** | The amount of time that your Orbit chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) on the underlying L2 chain (e.g. Arbitrum Sepolia). Note that this refers to the number of blocks on the underlying L1 chain (e.g. Ethereum's Sepolia chain).                                                                                                                                                                   |
 | **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                                                                                                                                                                    |
 | **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                             |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later.                                                                                                                                        |
@@ -116,7 +120,7 @@ Once your batch poster address is configured, click `Next` to proceed to the nex
 
 ## Step 6: Review & Deploy your Orbit chain
 
-Deploy your chain's base contracts to Arbitrum Goerli or Sepolia
+Deploy your chain's base contracts to Arbitrum Sepolia
 
 <!-- todo: label-casing alignment - could sentence-case in UI -->
 
@@ -167,7 +171,7 @@ You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Confi
 
 Run Docker, then run `docker-compose up -d` from the root of the `orbit-setup-script` repository.
 
-A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost:4000/](http://localhost:4000/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
+A Nitro node and BlockScout explorer instance will be started. Visit [http://localhost/](http://localhost/) to access your BlockScout explorer instance - this will allow you to view your chain's transactions and blocks, which can be useful for debugging.
 
 ## Step 11: Finish setting up your chain
 
@@ -179,12 +183,6 @@ We've provided a Hardhat script that handles the following tasks:
 4. Configure parameters on the chain.
 
 To run this script, issue the following command from the root of the `orbit-setup-script` repository, replacing `OxYourPrivateKey` with the private key of the `Owner` account you used to deploy your chain's contracts, and replacing `http://localhost:8449` with the RPC URL of your chain's node.
-
-Using Arbitrum Goerli:
-
-```shell
-PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" yarn run setup
-```
 
 Using Arbitrum Sepolia:
 
@@ -209,12 +207,6 @@ docker-compose logs -f nitro
 ### Appendix B: Depositing ETH/native token
 
 If you need to deposit more ETH (or native tokens) into your Orbit chain account, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the originating account, and `<AMOUNT>` with the amount to send:
-
-Using Arbitrum Goerli:
-
-```shell
-PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://goerli-rollup.arbitrum.io/rpc" L3_RPC_URL="http://localhost:8449" AMOUNT="<AMOUNT>" yarn run deposit
-```
 
 Using Arbitrum Sepolia:
 

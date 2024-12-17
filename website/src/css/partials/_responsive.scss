@@ -10,3 +10,9 @@
     margin-bottom: 10px;
   }
 }
+
+@media (max-width: 996px) {
+  .navbar__inner a.navbar__brand {
+    display: none;
+  }
+}

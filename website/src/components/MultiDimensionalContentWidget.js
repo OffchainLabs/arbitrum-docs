@@ -52,7 +52,6 @@ export const MultiDimensionalContentWidget = () => {
 
       // Network tab selection
       if (isSelectedByText('Localhost')) selectedNetwork = 'Localhost';
-      else if (isSelectedByText('Arbitrum Goerli')) selectedNetwork = 'Arbitrum Goerli';
       else if (isSelectedByText('Arbitrum One (Classic)'))
         selectedNetwork = 'Arbitrum One (Classic)';
       else if (isSelectedByText('Arbitrum One (Nitro)')) selectedNetwork = 'Arbitrum One (Nitro)';

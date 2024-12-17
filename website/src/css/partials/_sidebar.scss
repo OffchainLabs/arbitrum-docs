@@ -6,51 +6,87 @@ $fira-font-family: 'Fira Code', monospace;
   font-family: $fira-font-family;
 }
 
+$root-sidebar-item-font-size: 16px;
+$child-sidebar-item-font-size: 14px;
+
 .theme-doc-sidebar-container {
   .theme-doc-sidebar-menu {
-    font-weight: 500;
-    font-size: 13px;
+    padding-top: 20px;
+    font-weight: 400;
 
+    // make the carets less obtrusive
     .menu__link--sublist-caret:after {
       height: 1rem !important;
       width: 1rem !important;
       background: var(--ifm-menu-link-sublist-icon) 50% / 1.2rem 1.2rem;
       opacity: 0.5;
     }
-  }
 
-  > div > div {
-    > nav > ul {
-      // the wrapper around all root sidebar items
+    // style the root level items
+    > li.theme-doc-sidebar-item-link-level-1,
+    > li.theme-doc-sidebar-item-category-level-1 {
+      margin-top: 14px;
 
-      > .theme-doc-sidebar-item-category {
-        margin-top: 20px;
-        margin-bottom: 50px;
+      > div.menu__list-item-collapsible > a.menu__link,
+      > a.menu__link {
+        font-size: $root-sidebar-item-font-size;
+      }
+    }
 
-        > div {
-          border-bottom: 1px solid rgba(150, 150, 150, 0.1);
-          border-bottom-left-radius: 0;
-          border-bottom-right-radius: 0;
+    // style all sidebar items
+    .theme-doc-sidebar-item-link,
+    .theme-doc-sidebar-item-category {
+      a.menu__link {
+        opacity: 0.9;
 
-          > a {
-            @include apply-fira-font;
-            font-weight: 700;
-            font-size: 11.5px !important;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            color: #777;
-            text-transform: uppercase;
-            vertical-align: middle;
-          }
+        &:hover,
+        &.menu__link--active {
+          opacity: 1;
         }
 
-        > ul {
-          padding-left: 0 !important;
+        &.menu__link--active {
+          font-weight: 600;
+        }
+
+        .other-section-icon {
+          margin-left: auto;
+          margin-right: 5px;
+          margin-top: -2px;
+          opacity: 0.6;
+          font-size: 17px;
+          max-height: 18px;
+          overflow: visible;
+        }
+      }
+    }
+
+    > .theme-doc-sidebar-item-category {
+      > div {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+
+        > a {
+          font-weight: 400;
+          font-size: $root-sidebar-item-font-size;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+          // opacity: 0.9;
+          //text-transform: uppercase;
+          vertical-align: middle;
         }
       }
 
-      .menu__link {
-        font-size: 12px;
+      > ul {
+        padding-left: 20px !important;
+      }
+    }
+
+    .menu__link {
+      font-size: $child-sidebar-item-font-size;
+      font-weight: 400;
+
+      &.menu__list-item {
+        margin-top: 0.25rem;
       }
     }
   }

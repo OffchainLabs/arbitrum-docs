@@ -1,22 +1,17 @@
 ---
 title: 'Public preview: What to expect'
-sidebar_label: 'Public preview'
-description: 'Stylus is currently tagged as an `alpha` release supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
+description: 'Stylus is currently tagged as a `release-candidate` supported by *public preview* documentation. This concept document explains what this means, and what to expect.'
 author: symbolpunk
 sidebar_position: 10
 ---
 
-Stylus is currently tagged as an `alpha` release supported by _public preview_ documentation. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
+Stylus is currently tagged as a `release-candidate` supported by _public preview_ documentation. This concept document explains what "public preview" means, what to expect from public preview capabilities, and how to engage with our team as you tinker.
 
 ### How products are developed at Offchain Labs
 
 Offchain Labs builds products in a way that aligns loosely with the spirit of "building in public". We like to release things **early and often** so that we can capture feedback and iterate in service of your needs, as empirically as possible.
 
 To do this, some of our product offerings are documented with **public preview** disclaimers that look like this:
-
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 This banner's purpose is to set expectations while inviting readers like you to express your needs so that we can incorporate them into the way that we iterate on product.
 

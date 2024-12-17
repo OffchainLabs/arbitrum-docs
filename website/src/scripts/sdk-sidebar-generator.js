@@ -56,7 +56,7 @@ const sdkSidebarGenerator = async ({
     sidebar.push({
       type: 'category',
       label: categoryName,
-      collapsed: false,
+      collapsed: true,
       items: categoryItems,
     });
   }

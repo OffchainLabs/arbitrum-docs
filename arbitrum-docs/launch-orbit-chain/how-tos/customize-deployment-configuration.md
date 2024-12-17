@@ -1,18 +1,9 @@
 ---
-title: "How (and when) to customize your Orbit chain's deployment configuration"
-sidebar_label: "Customize your chain's deployment config"
-description: "Learn how (and when) to customize your Orbit chain's deployment configuration in the Orbit chain deployment portal."
+title: "How to customize your Orbit chain's deployment configuration"
+description: "Learn how to customize your Orbit chain's deployment configuration in the Orbit chain deployment portal."
 author: symbolpunk
 sidebar_position: 1
 ---
-
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
-import UnderConstructionPartial from '../../partials/_under-construction-banner-partial.md';
-
-<UnderConstructionPartial />
 
 When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
 
@@ -26,7 +17,7 @@ Let's briefly review each of the deployment configuration parameters, the ration
 
 ### Chain ID
 
-Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
+Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 ### Chain name
 
@@ -34,15 +25,15 @@ This name provides a way for people to distinguish your Orbit chain from other O
 
 ### Challenge period (blocks)
 
-The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the current state of the chain posted to your Orbit chain's base chain on L2 (Arbitrum Goerli or Sepolia for now; settlement to One and Nova mainnet chains isn't supported yet).
+The `Challenge period (blocks)` parameter determines the amount of time your chain's validators have to dispute - or "challenge" - the current state of the chain posted to your Orbit chain's base chain on L2.
 
 A longer challenge period means that your chain's nodes will have more time to dispute fraudulent states, but it also means that your chain's users will have to wait longer to withdraw their assets from your chain. This is one of the many tradeoffs that Orbit allows you to make when configuring your chain.
 
-Note that the challenge period is measured in blocks on the underlying L1 chain, not the base (L2) chain. For example, if your Orbit chain settles to Arbitrum Goerli, the challenge period window would be the number of `Challenge period (blocks)` multiplied by the L1 Goerli block time (~12 seconds).
+Note that the challenge period is measured in blocks on the underlying L1 chain, not the base (L2) chain. For example, if your Orbit chain settles to Arbitrum Sepolia, the challenge period window would be the number of `Challenge period (blocks)` multiplied by the L1 Sepolia block time (~12 seconds).
 
 <!-- todo: revisit and discuss defaults -->
 
-### Gas Token
+### Gas token
 
 The `Gas Token` parameter specifies the token (ETH or an ERC-20 token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the gas token is ETH. Orbit chains that are configured as AnyTrust chains can specify a different gas token as long as it falls within certain requirements.
 
@@ -62,7 +53,7 @@ It is worth reiterating that currently this feature is only supported on **Orbit
 
 Your Orbit chain will be supported by at least one validator node. In order for your chain's validators to post assertions of the state of the chain on the base chain (L2), they're required to stake some value as a way to incentivize honest participation.
 
-This `Stake token` parameter specifies the token that your chain's validators must deposit into this contract when they stake. This is specified using the token's contract address on the L2 chain that your chain is settling to - Arbitrum Goerli or Arbitrum Sepolia - or `0x0000000000000000000000000000000000000000` if you want to use ETH as the stake token.
+This `Stake token` parameter specifies the token that your chain's validators must deposit into this contract when they stake. This is specified using the token's contract address on the L2 chain that your chain is settling to, or `0x0000000000000000000000000000000000000000` if you want to use ETH as the stake token.
 
 ### Base stake
 
@@ -87,3 +78,7 @@ In production scenarios, this is a high-stakes address that's often controlled b
 Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
 
 When deploying your Orbit chain, this address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
+
+## Additional configuration parameters
+
+There are a number of [additional parameters](/launch-orbit-chain/reference/additional-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.

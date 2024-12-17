@@ -1,9 +1,8 @@
 ---
 title: 'Public preview: What to expect'
-sidebar_label: 'Public preview'
 description: 'Orbit chains are currently a public preview capability. This concept document explains what this means, and what to expect from public preview capabilities.'
 author: symbolpunk
-sidebar_position: 1
+sidebar_position: 3
 ---
 
 Orbit chains are currently a **public preview** offering. This concept document explains what "public preview" means, what to expect from Orbit's public preview capabilities, and how to engage with our team as you tinker.
@@ -23,10 +22,6 @@ Refer to the [Orbit quickstart](/launch-orbit-chain/orbit-quickstart) for instru
 Offchain Labs builds products in a way that aligns loosely with the spirit of "building in public". We like to release things **early and often** so that we can capture feedback and iterate in service of your needs, as empirically as possible.
 
 To do this, some of our product offerings are documented with **public preview** disclaimers that look like this:
-
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 This banner's purpose is to set expectations while inviting readers like you to express your needs so that we can incorporate them into the way that we iterate on product.
 

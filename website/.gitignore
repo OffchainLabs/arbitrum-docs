@@ -9,7 +9,7 @@
 .cache-loader
 
 # Generated docs
-sdk-docs
+sdk
 
 # Misc
 .DS_Store
@@ -24,3 +24,5 @@ yarn-error.log*
 
 # yarn cache
 .yarn
+
+/i18n/*/docusaurus-plugin-content-docs/current/*

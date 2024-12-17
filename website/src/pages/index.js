@@ -18,8 +18,8 @@ function HomepageHeader(props) {
       {props.notFound ? <>page '{location.pathname}' not found 🤷‍♂️</> : null}
       <h1 className={styles.heroTitle}>{siteConfig.title}</h1>
       {/* <p className="hero__subtitle">{siteConfig.tagline}</p> */}
-      <Link to="/intro">
-        <button className={styles.button}>A Gentle Introduction to Arbitrum</button>
+      <Link to="/welcome/arbitrum-gentle-introduction">
+        <button className={styles.button}>A gentle introduction</button>
       </Link>
     </header>
   );

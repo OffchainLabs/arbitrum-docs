@@ -1,11 +1,12 @@
 ---
-title: 'Troubleshooting: Building with Stylus'
-sidebar_label: 'Troubleshooting'
+title: 'Troubleshooting Stylus'
 description: List of questions and answers frequently asked by developers building with Stylus
-reader_audience: developers who want to build on Ethereum/Arbitrum with Stylus
-content-type: faq
+user_story: As a developer, I want to understand how to troubleshoot common issues when building with Stylus.
+content_type: faq
 ---
 
-import FAQStructuredData from '@site/src/components/FAQStructuredData';
+import FAQStructuredDataJsonLd from '@site/src/components/FAQStructuredData';
+import FAQQuestions from '../partials/_troubleshooting-stylus-partial.mdx';
 
-<FAQStructuredData faqsId="building-stylus" />
+<FAQStructuredDataJsonLd faqsId="building-stylus" />
+<FAQQuestions />

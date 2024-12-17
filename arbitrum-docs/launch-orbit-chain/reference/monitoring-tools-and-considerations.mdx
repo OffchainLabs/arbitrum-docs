@@ -1,0 +1,44 @@
+---
+title: 'Monitoring tools and considerations'
+description: 'List of tools available to monitor an Orbit chain, and special considerations to take with regard to monitoring'
+author: jose-franco
+sme: jose-franco
+target_audience: 'Developers deploying and maintaining Orbit chains.'
+sidebar_position: 0
+---
+
+When deploying and maintaining an Orbit chain, there are several key elements that need to be monitored. This page lists tools that are available for chain maintainers, as well as other considerations to keep in mind when monitoring an Orbit chain.
+
+## Orbit verification script
+
+The [Orbit verification script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/feat-add-verification-scripts/examples/verify-rollup) retrieves information from an Orbit chain and its parent chain to verify that all parameters are configured correctly. After gathering the data, it generates a comprehensive report and issues warnings for any discrepancies detected. This tool is particularly useful after deploying and configuring an Orbit chain, to make sure that the on-chain information has been correctly set.
+
+:::info The Orbit verification script is a Work-in-progress (WIP)
+
+The Orbit Verification Script is currently under active development and is considered a work-in-progress (WIP). Consequently, its findings should be approached with caution, as there is a potential for false positives.
+
+:::
+
+## Orbit retryables tracker
+
+[Retryable tickets](/how-arbitrum-works/arbos/l1-l2-messaging.mdx) are messages sent from a parent chain and executed on the Orbit chain. Due to their asynchronous nature (they are executed several minutes after being created), if insufficient funds are provided at the time of creation, they might not automatically redeem (execute) upon arrival at the Orbit chain. When this occurs, a manual redemption of the ticket is required. The [Orbit retryables tracker](https://github.com/OffchainLabs/Orbit-retryable-tracker) is designed to assist in identifying and displaying the status of retryable tickets sent from a parent chain to the Orbit chain, and it reports any tickets that have not been automatically redeemed.
+
+## Data Availability Server (DAS) health checks
+
+If you've deployed an AnyTrust chain with a Data Availability Committee, it is recommended to actively monitor the endpoints of the different configured DA servers. The [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#testing-the-das) guide contains a section for testing both the RPC and REST endpoints of any given DAS, by using the `datool` available in <a data-quicklook-from="arbitrum-nitro">Nitro</a>.
+
+## Further monitoring considerations
+
+Following is a non-comprehensive list of other elements of the network that should be monitored.
+
+- **Sequencer's transaction backlog size**: This can be considered as a sign of the network health. In some edge cases, a large and growing backlog might cause the sequencer to experience issues when posting batches on the parent chain.
+
+- **Batches posted in the SequencerInbox contract on the parent chain**: The sequencer regularly posts batches on the parent chain, as long as it receives transactions on the Orbit chain. If batches are not being posted in the SequencerInbox for any reason, further analysis should be conducted to understand why.
+
+- **RBlocks (nodes) created in the Rollup contract on the parent chain**: RBlocks are created by validators and contain assertions of the current state of the chain (viewed by the validators). If RBlocks are not being created or confirmed on the parent chain, further analysis should be conducted to understand why.
+
+- **High periods of inactivity**: As an extension of the previous point, if no RBlocks (nodes) are created for a certain period of time (due to having no activity in the chain, or any other reason), the validator whitelist mechanism of the Rollup contract can be [permissionlessly disabled](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupUserLogic.sol#L62). That period of time is determined by `confirmPeriodBlocks` + the constant `45818` since the last RBlock (node) created. In this case, time is measured in L1 blocks (around 7 days + the `confirmPeriodBlocks` period) for Orbit chains settling to Ethereum or an Arbitrum chain, or measured in the parent chain's block time when settling to other chains.
+
+- **Batch poster balance**: The batch poster account needs to be well funded to be able to post batches. There's no automatic mechanism to keep it funded, so its balance should be monitored and actions should be taken whenever it passes a certain threshold. The recommendation is to keep the account overfunded.
+
+- **Validators' balance**: Validators are in charge of posting and confirming assertions of the state of the Orbit chain on the parent chain. Their balance should be monitored to make sure they are able to perform those actions.

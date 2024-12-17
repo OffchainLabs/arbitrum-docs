@@ -1,5 +1,9 @@
 @use './_mixins.scss' as *;
 
+main > .container {
+  padding-top: 70px !important;
+}
+
 article {
   .markdown {
     h1:first-child {
@@ -33,9 +37,24 @@ article {
     }
 
     a {
-      font-weight: 600;
+      &:link {
+        color: #5b7bb6; /* Change the link color */
+        text-decoration: none !important;
+        font-weight: 600;
+      }
 
       &:hover {
+        color: #86b8da; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:visited {
+        color: #7c93cf; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:active {
+        color: #86b8da; /* Change the link color */
         cursor: pointer;
         opacity: 0.9;
       }
@@ -43,6 +62,19 @@ article {
 
     strong {
       font-weight: 600;
+    }
+
+    img[alt='200px-img'] {
+      width: 200px;
+    }
+    img[alt='400px-img'] {
+      width: 400px;
+    }
+    img[alt='600px-img'] {
+      width: 600px;
+    }
+    img[alt='900px-img'] {
+      width: 900px;
     }
 
     .theme-admonition {
@@ -85,9 +117,10 @@ article {
 
     .small-table {
       @include small-table; // target tables
-      table {
-        @include small-table; // target section wrappers around tables
-      }
+    }
+
+    table {
+      @include small-table; // target section wrappers around tables
     }
 
     p > code {

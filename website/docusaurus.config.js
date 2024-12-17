@@ -3,6 +3,7 @@
 
 const variableInjector = require('./src/remark/variable-injector');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
+const sdkCodebasePath = '../arbitrum-sdk';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -21,22 +22,21 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'OffchainLabs', // Usually your GitHub org/user name.
   projectName: 'docusaurus', // Usually your repo name.
-
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
+    // locales: ['en', 'ja', 'zh'],
     locales: ['en'],
   },
-
   presets: [
     [
       '@docusaurus/preset-classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          path: '../arbitrum-docs/',
+          path: '../arbitrum-docs',
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
@@ -65,14 +65,58 @@ const config = {
     ],
   ],
   plugins: [
-    // See below hack - this gets modified if you're running locally on windows
     [
-      '@docusaurus/plugin-content-docs',
+      'docusaurus-plugin-typedoc',
       {
         id: 'arbitrum-sdk',
-        path: './sdk-docs',
-        routeBasePath: 'sdk',
-        sidebarItemsGenerator: sdkSidebarGenerator,
+        tsconfig: `${sdkCodebasePath}/tsconfig.json`,
+        entryPoints: [`${sdkCodebasePath}/src/lib`],
+        entryPointStrategy: 'expand',
+        exclude: [`abi`, `node_modules`, `tests`, `scripts`],
+        excludeNotDocumented: true,
+        excludeInternal: true,
+        excludeExternals: true,
+        readme: 'none',
+
+        // Output options
+        out: '../arbitrum-docs/sdk/reference',
+        hideGenerator: true,
+        validation: {
+          notExported: false,
+          invalidLink: true,
+          notDocumented: true,
+        },
+        logLevel: 'Verbose',
+        sidebar: {
+          autoConfiguration: false,
+        },
+
+        plugin: [
+          'typedoc-plugin-markdown',
+          `typedoc-plugin-frontmatter`,
+          './src/scripts/sdkDocsHandler.ts',
+          './src/scripts/stylusByExampleDocsHandler.ts',
+        ],
+
+        // typedoc-plugin-markdown options
+        // Reference: https://github.com/tgreyuk/typedoc-plugin-markdown/blob/next/packages/typedoc-plugin-markdown/docs/usage/options.md
+        outputFileStrategy: 'modules',
+        excludeGroups: false,
+        hidePageHeader: true,
+        hidePageTitle: true,
+        hideBreadcrumbs: true,
+        useCodeBlocks: true,
+        expandParameters: true,
+        parametersFormat: 'table',
+        propertiesFormat: 'table',
+        enumMembersFormat: 'table',
+        typeDeclarationFormat: 'table',
+        sanitizeComments: true,
+        frontmatterGlobals: {
+          layout: 'docs',
+          sidebar: true,
+          toc_max_heading_level: 5,
+        },
       },
     ],
     [
@@ -100,35 +144,18 @@ const config = {
         logo: {
           alt: 'My Site Logo',
           src: 'img/logo.svg',
+          href: '/welcome/arbitrum-gentle-introduction',
         },
         items: [
-          {
-            type: 'doc',
-            docId: 'for-devs/quickstart-solidity-hardhat',
-            position: 'left',
-            label: 'Developers',
-          },
-          {
-            type: 'doc',
-            docId: 'getting-started-users',
-            position: 'left',
-            label: 'Users (Bridge)',
-          },
-          {
-            type: 'doc',
-            docId: 'node-running/quickstart-running-a-node',
-            label: 'Node runners',
-            position: 'left',
-          },
-          {
-            type: 'doc',
-            docId: 'intro/intro',
-            position: 'left',
-            label: 'How it works',
-          },
+          // note:  we can uncomment this when we want to display the locale dropdown in the top navbar
+          //        if we enable this now, the dropdown will appear above every document; if `ja` is selected for a document that isn't yet translated, it will 404
+          //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
+          // {
+          //   type: 'localeDropdown',
+          //   position: 'right',
+          // }
         ],
       },
-      // todo: descriptive footer
       footer: {
         style: 'dark',
         links: [
@@ -221,7 +248,7 @@ const config = {
               },
               {
                 label: 'Privacy Policy',
-                to: 'https://www.iubenda.com/privacy-policy/76750372',
+                to: 'https://arbitrum.io/privacy',
               },
               {
                 label: 'Terms of Service',
@@ -233,12 +260,7 @@ const config = {
         copyright: `© ${new Date().getFullYear()} Offchain Labs`,
       },
       prism: {
-        additionalLanguages: ['solidity', 'rust'],
-      },
-      announcementBar: {
-        id: 'support_us',
-        content: `Arbitrum Orbit is mainnet-ready! Start building a customized chain by visiting the <a href='/launch-orbit-chain/orbit-quickstart'>Orbit docs</a>.`,
-        isCloseable: false,
+        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
       },
       liveCodeBlock: {
         /**
@@ -253,6 +275,11 @@ const config = {
           flowchart: {
             curve: 'basis',
           },
+        },
+      },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
         },
       },
     }),
@@ -274,7 +301,7 @@ if (isRunningLocally && isRunningOnWindows) {
 } else {
   // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
   config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/dracula');
+  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
 }
 
 module.exports = config;

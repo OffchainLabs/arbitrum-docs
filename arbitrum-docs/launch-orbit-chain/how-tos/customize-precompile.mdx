@@ -1,30 +1,30 @@
 ---
 title: "How to customize your Orbit chain's precompiles"
-sidebar_label: "Customize your chain's precompiles"
 description: "Learn how (and when) to customize your Orbit chain's precompiles"
 author: jasonwan
-sidebar_position: 4
-content-type: how-to
+sidebar_position: 5
+content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
+import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
 
-<PublicPreviewBannerPartial />
+<CustomizeCautionBannerPartial />
 
 :::caution
 
-The guidance in this document will work only if you use `eth_call` to call the new precompiles. If you're calling from other contracts or adding non-view/pure methods, this approach will break block validation.
+The guidance in this document will only work if you use `eth_call` to call the new precompiles. If you call them from other contracts or add non-view/pure methods, this approach will break the block validation.
 
 To support these additional use-cases, follow the instructions described in [How to customize your Orbit chain's behavior](/launch-orbit-chain/how-tos/customize-stf.mdx).
 
 :::
 
-There are four primary ways to customize your chain's precompiles:
+There are five primary ways to customize your chain's precompiles:
 
 1.  Add new methods to an existing [precompile][precompile_impl_dir_link].
 2.  Create a new precompile.
 3.  Define a new event.
-4.  Customize gas usage for a specific method
+4.  Customize gas usage for a specific method.
+5.  Call and modify state.
 
 ### Prerequisites
 
@@ -56,7 +56,7 @@ Next, follow the steps in [How to customize your Orbit chain's behavior](./custo
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options.md) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -65,7 +65,7 @@ Once your node is running, you can call `ArbSys.sol` either directly using `curl
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547\
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x0000000000000000000000000000000000000064","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
@@ -98,7 +98,7 @@ First, navigate to the [precompiles implementation][precompile_impl_dir_link] di
 ```go
 package precompiles
 
-// ArbGasInfo provides insight into the cost of using the rollup.
+// ArbHi provides a friendly greeting to anyone who calls it.
 type ArbHi struct {
 	Address addr // 0x11a, for example
 }
@@ -111,7 +111,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 Then, update [precompile.go][precompile_main_file_link] to register the new precompile under the `Precompiles()` method:
 
 ```go
-insert(MakePrecompile(templates.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
+insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
 ```
 
 Navigate to the [precompiles interface][precompile_interface_dir_link] directory, `/@nitroContractsPathToPrecompilesInterface@`, create `ArbHi.sol`, and add the required interface. Ensure that the method name on the interface matches the name of the function you introduced in the previous step, `camelCased`:
@@ -131,7 +131,7 @@ Next, follow the steps in [How to customize your Orbit chain's behavior](./custo
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node.mdx) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options.md) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -140,7 +140,7 @@ Once your node is running, you can call `ArbHi.sol` either directly using `curl`
 ### Call your function directly using `curl`
 
 ```shell
-curl Your_IP_Address:8547 \
+curl http://localhost:8449 \
 -X POST \
 -H "Content-Type: application/json" \
 --data '{"method":"eth_call","params":[{"from":null,"to":"0x000000000000000000000000000000000000011a","data":"0x0c49c36c"}, "latest"],"id":1,"jsonrpc":"2.0"}'
@@ -185,9 +185,9 @@ type ArbSys struct {
 	L2ToL1TransactionGasCost func(addr, addr, huge, huge, huge, huge, huge, huge, huge, []byte) (uint64, error)
 
 	// Add your customize event here:
-	Hi						func(ctx, mech, addr) error
+	Hi						       func(ctx, mech, addr) error
 	// This is needed and will tell you how much gas it will cost, the param is the same as your event but without the first two (ctx, mech), the return param is always (uint64, error)
-	HiGasCost				func(addr) (uint64, error)
+	HiGasCost				    func(addr) (uint64, error)
 }
 ```
 
@@ -218,7 +218,7 @@ Our function now emits an event, which means that when calling it, the state wil
 function sayHi() external returns(string memory);
 ```
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -228,7 +228,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -302,7 +302,7 @@ func (con ArbInfo) GetBalanceCustom(c ctx, evm mech, account addr) (huge, error)
 
 To register this new precompile method, refer to Option 1 above.
 
-Next, build Nitro by following the instructions in [How to build Nitro locally](/node-running/how-tos/build-nitro-locally). Note that if you've already built the Docker image, you still need run the last step to rebuild.
+Next, build Nitro by following the instructions in [How to build Nitro locally](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx). Note that if you've already built the Docker image, you still need run the last step to rebuild.
 
 Run Nitro with the following command:
 
@@ -312,7 +312,7 @@ docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0
 
 :::info
 
-Note that the instructions provided in [How to run a full node](/node-running/how-tos/running-a-full-node) **will not** work with your Orbit node. See [Command-line options (Orbit)](/launch-orbit-chain/reference/command-line-options) for Orbit-specific CLI flags.
+Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
 
 :::
 
@@ -393,7 +393,145 @@ Result 2:
 
 Here we can see that the gas cost incurred by the execution of the first transaction is `gasUsed - gasUsedForL1 = 22938`. Similarly, the gas cost incurred by the execution of the second transaction is `22538`. If you subtract the two, the result is `400`, as expected.
 
-To learn more about the gas cost model, see [how to estimate gas](/devs-how-tos/how-to-estimate-gas).
+To learn more about the gas cost model, see [how to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx).
+
+## Option 5: Call and modify state
+
+In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's [ArbOS state][arbosstate_link].
+
+First, open the [arbosstate.go][arbosstate_file_link] file and locate the [ArbosState][arbosstate_link] structure. This is where ArbOS state is defined.
+
+Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go][storage_link]:
+
+```
+type ArbosState struct {
+	// Other states
+	infraFeeAccount        storage.StorageBackedAddress
+	brotliCompressionLevel storage.StorageBackedUint64 // brotli compression level used for pricing
+	backingStorage         *storage.Storage
+	Burner                 burn.Burner
+	myNumber               storage.StorageBackedUint64 // this is what we added
+}
+```
+
+Next, define the offset of your newly added state (tip: add it to the end so it won't affect other states):
+
+```
+const (
+	versionOffset Offset = iota
+	upgradeVersionOffset
+	upgradeTimestampOffset
+	networkFeeAccountOffset
+	chainIdOffset
+	genesisBlockNumOffset
+	infraFeeAccountOffset
+	brotliCompressionLevelOffset
+	myNumberOffset // define the offset of your new state here
+)
+```
+
+Then, initialize the state under the [OpenArbosState][arbosstate_openstate] and [InitializeArbosState][arbosstate_initializeArbosState] methods:
+
+OpenArbosState:
+
+```
+return &ArbosState{
+		// other states
+		backingStorage.OpenStorageBackedAddress(uint64(infraFeeAccountOffset)),
+		backingStorage.OpenStorageBackedUint64(uint64(brotliCompressionLevelOffset)),
+		backingStorage,
+		burner,
+		backingStorage.OpenStorageBackedUint64(uint64(myNumberOffset)), // define your new state here
+	}, nil
+```
+
+InitializeArbosState:
+
+```
+	_ = sto.SetUint64ByUint64(uint64(versionOffset), 1) // initialize to version 1; upgrade at end of this func if needed
+	_ = sto.SetUint64ByUint64(uint64(upgradeVersionOffset), 0)
+	_ = sto.SetUint64ByUint64(uint64(upgradeTimestampOffset), 0)
+	_ = sto.SetUint64ByUint64(uint64(myNumberOffset), 0) // initialize your new state around here
+```
+
+Next, define your getter and setter::
+
+```
+func (state *ArbosState) SetNewMyNumber(
+	newNumber uint64,
+) error {
+	return state.myNumber.Set(newNumber)
+}
+
+func (state *ArbosState) GetMyNumber() (uint64, error) {
+	return state.myNumber.Get()
+}
+```
+
+Next, head back to the [precompiles directory][precompile_impl_dir_link] and create a new `ArbHi.go` (introduced in Option 2).
+This time, we'll add two new methods to read and write the ArbOS state:
+
+```
+package precompiles
+
+// ArbHi provides a friendly greeting to anyone who calls it.
+type ArbHi struct {
+	Address addr // 0x11a, for example
+}
+
+func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
+	return "hi", nil
+}
+
+func (con *ArbHi) GetNumber(c ctx, evm mech) (uint64, error) {
+	return c.State.GetMyNumber()
+}
+
+func (con *ArbHi) SetNumber(c ctx, evm mech, newNumber uint64) error {
+	return c.State.SetNewMyNumber(newNumber)
+}
+```
+
+Follow the procedure detailed in Option 2 in order to add this new precompile contract, and then run your node.
+
+Your smart contract interface should look like this:
+
+```
+pragma solidity >=0.4.21 <0.9.0;
+
+/// @title Say hi.
+/// @notice just for test
+/// This custom contract will set on 0x000000000000000000000000000000000000011a since we set it in precompile.go.
+interface ArbHi {
+    function sayHi() external view returns(string memory);
+    function getNumber() external view returns(uint64);
+    function setNumber(uint64) external;
+}
+```
+
+### Send the transaction and get the transaction receipt
+
+To send a transaction to `ArbSys`, we need to include a gas cost, because the function is no longer a view/pure function:
+
+```
+cast send 0x000000000000000000000000000000000000011a "setNumber()" "2"
+```
+
+### Get results from foundry cast
+
+```
+cast call 0x000000000000000000000000000000000000011a "getNumber()(uint64)”
+```
+
+You should see something like this:
+
+```
+2
+```
+
+## Incorporate your changes to precompile into the ArbOS upgrade
+
+If you do not customize the precompile before launching your Orbit network, please continue to follow [customize arbos] to perform an ArbOS version control to avoid blockchain reorg.
 
 <!-- For clarity in the code, we add here all links to github, using "link references" (First the interfaces, and below the implementations) -->
 <!--
@@ -406,3 +544,8 @@ We can use the @nitroContractsRepositorySlug@ and @nitroContractsPathToPrecompil
 [precompile_impl_dir_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/
 [precompile_interface_dir_link]: https://github.com/OffchainLabs/@nitroContractsRepositorySlug@/blob/@nitroContractsCommit@/@nitroContractsPathToPrecompilesInterface@/
 [precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
+[arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbosState@/arbosstate.go
+[arbosstate_link]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38
+[storage_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToStorage@/storage.go
+[arbosstate_openstate]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89
+[arbosstate_initializeArbosState]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212

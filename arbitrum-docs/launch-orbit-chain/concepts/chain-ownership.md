@@ -1,6 +1,5 @@
 ---
 title: 'Orbit chain ownership'
-sidebar_label: 'Chain ownership'
 description: 'Overview of the technical architecture of chain ownership affordances on Orbit chains.'
 author: dzgoldman
 sme: dzgoldman
@@ -13,10 +12,6 @@ A **chain owner** of an <a data-quicklook-from='arbitrum-orbit'>Orbit</a> chain 
 An Orbit chain's initial chain owner is set by the chain's creator when the chain is deployed.
 
 The chain-ownership architecture is designed to give Orbit chain creators flexibility in deciding how upgrades to their chain occur.
-
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 ### Architecture
 

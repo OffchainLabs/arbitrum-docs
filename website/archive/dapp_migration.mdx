@@ -34,7 +34,7 @@ For starters, here's a sampling of exciting perks dapps get with the Nitro upgra
 
 - **No more storage gas**: there is no more concept of a separate pool of storage gas, and opcodes are priced identically to the L1 EVM.
 
-- **New L2 to L1 event signature**: The function signature for the L2 to L1 event emitted by [ArbSys](/for-devs/dev-tools-and-resources/precompiles.mdx#arbsys) has now changed.
+- **New L2 to L1 event signature**: The function signature for the L2 to L1 event emitted by [ArbSys](/build-decentralized-apps/precompiles/02-reference.md#arbsys) has now changed.
 
 - **Lower contract code size limit**: Contracts of up to 48KB were deployable, but now only up to 24KB are deployable (as specified in [EIP 170](https://eips.ethereum.org/EIPS/eip-170)). Previously deployed contracts above the limit will be maintained (but contracts deployed by these legacy contracts are capped by the new size).
 
@@ -42,7 +42,7 @@ For starters, here's a sampling of exciting perks dapps get with the Nitro upgra
   - The submission cost is now enforced in the L1 inbox and checked against the L1 transaction's `msg.value`; contracts shouldn't rely on funds pooled in the L2 destination to cover this cost.
   - The current submission price is now not available in the L2 ArbRetryableTx precompile, instead it can be queried in the L1 Delayed Inbox [`calculateRetryableSubmissionFee(uint256 dataLength, uint256 baseFee)`](https://github.com/OffchainLabs/nitro/blob/01412b3cd0fca28bf9931407ca1ccfeb8714d478/contracts/src/bridge/Inbox.sol#L262)
   - For the redemption of retryable tickets, the calculation of the L2 transaction ID changed and differs between different redeem attempts (i.e. after failed attempts). See [arbitrum-sdk](https://github.com/offchainlabs/arbitrum-sdk/tree/c-nitro-stable) for a reference implementation on the new client-side flow.
-  - A retryable ticket now isn't redeemed in the same transaction as when the `redeem` function was called. The user's transaction causes the retryable to be scheduled to be executed after the current transaction is complete. More information on this available in [here](/arbos/arbos.mdx#redeeming-a-retryable).
+  - A retryable ticket now isn't redeemed in the same transaction as when the `redeem` function was called. The user's transaction causes the retryable to be scheduled to be executed after the current transaction is complete. More information on this available in [here](/how-arbitrum-works/arbos/introduction.md#redeeming-a-retryable).
   - Auto-redeem will not be created if the user does not have enough balance to pay for `gasFeeCap * gasLimit` (meaning you can no longer set a max gas fee cap).
   - Deposited gas will be refunded to `excessFeeRefundAddress` if it cannot create an auto-redeem.
   - The user will be refunded the submission cost of their retryable if it is auto-redeemed.
@@ -62,7 +62,7 @@ For starters, here's a sampling of exciting perks dapps get with the Nitro upgra
     - bridge.sol contract will be redeployed and not the whole Bridge.
     - The [bridge contract address](https://etherscan.io/address/0x011B6E24FfB0B5f5fCc564cf4183C5BBBc96D515) was be changed.
 
-For addresses of protocol contracts, see [Smart contract addresses](/for-devs/useful-addresses.mdx).
+For addresses of protocol contracts, see [Smart contract addresses](/build-decentralized-apps/reference/02-useful-addresses.md).
 
 Also, worth mentioning that the address of the Delayed Inbox contract and Token Bridge contracts (Router and Gateways) weren't changed after the migration.
 
@@ -76,6 +76,6 @@ Also, worth mentioning that the address of the Delayed Inbox contract and Token 
 
 - **Gas Info in Transaction Receipts**: Arbitrum transaction receipts return data about gas in a new format; receipts will have `gasUsed` (total) and `gasUsedForL1` fields (instead of the `feeStats` field in Arbitrum classic).
 
-- **Batch Info In Receipts**: Arbitrum transaction receipts no longer include the `l1SequenceNumber` field; the `findBatchContainingBlock` or `getL1Confirmations` methods in the [NodeInterface precompile](../arbos/gas#nodeinterfacesol) can be used to determine a transaction's inclusion in L1.
+- **Batch Info In Receipts**: Arbitrum transaction receipts no longer include the `l1SequenceNumber` field; the `findBatchContainingBlock` or `getL1Confirmations` methods in the [NodeInterface precompile](/how-arbitrum-works/gas-fees.md#nodeinterfacesol) can be used to determine a transaction's inclusion in L1.
 
 - **Estimate Retryable Ticket**: Use `eth_estimateGas` on `NodeInterface.estimateRetryableTicket` to estimate the gas limit of a retryable; the function itself no longer return the gas used and gas price. The gas price can be estimated using `eth_gasPrice`.

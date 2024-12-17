@@ -14,26 +14,26 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Stylus',
     Svg: require('@site/static/img/stylus-logo.svg').default,
-    href: '/stylus/stylus-quickstart',
+    href: '/stylus/quickstart',
     description: 'Use Stylus to write an EVM-compatible smart contract in Rust.',
   },
   {
     title: 'Quickstart: Build a dApp (Solidity)',
     Svg: require('@site/static/img/cupcake_icon.svg').default,
-    href: '/for-devs/quickstart-solidity-hardhat',
+    href: '/build-decentralized-apps/quickstart-solidity-hardhat',
     description:
-      'Deploy a cupcake vending machine contract locally, then to Arbitrum Goerli, then to Arbitrum Mainnet.',
+      'Deploy a cupcake vending machine contract locally, then to Arbitrum Sepolia, then to Arbitrum Mainnet.',
   },
   {
     title: 'Quickstart: Run a node',
     Svg: require('@site/static/img/node.svg').default,
-    href: '/node-running/quickstart-running-a-node',
+    href: '/run-arbitrum-node/quickstart',
     description: 'Learn how to run a node to interact with any Arbitrum network.',
   },
   {
     title: 'Quickstart: Bridge tokens',
     Svg: require('@site/static/img/bridge_token.svg').default,
-    href: '/getting-started-users',
+    href: '/arbitrum-bridge/quickstart',
     description:
       "Learn how to transfer tokens between Ethereum's L1 chain and Arbitrum's L2 chains using Arbitrum Bridge.",
   },
@@ -48,7 +48,7 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/quickstart.svg').default,
     href: '/launch-orbit-chain/orbit-quickstart',
     description:
-      'Learn how to launch a local Orbit chain that settles to the public Arbitrum Goerli testnet.',
+      'Learn how to launch a local Orbit chain that settles to the public Arbitrum Sepolia testnet.',
   },
 ];
 

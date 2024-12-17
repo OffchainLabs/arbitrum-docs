@@ -1,3 +1,5 @@
+// If you are making any changes to these docs, please ensure you run "yarn generate_precompiles_ref_tables"!
+
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
 const arbOneDisputeWindowBlocks = 45818;
@@ -12,7 +14,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v2.1.3-e815395',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.2.1-d81324d',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -29,17 +31,21 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v2.1.3',
+  nitroVersionTag: 'v3.2.1',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: 'b16bf0b737468382854dac28346fec8b65b55989',
+  nitroContractsCommit: '7396313311ab17cb30e2eef27cccf96f0a9e8f7f',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
-  goEthereumCommit: '4a5108752c2b34fc83cb0d0c8447cded82921e59',
+  goEthereumCommit: '17cd00167543a5a2b0b083e32820051100154c2f',
+
+  nitroPathToArbos: 'arbos',
+  nitroPathToArbosState: 'arbos/arbosState',
+  nitroPathToStorage: 'arbos/storage',
 
   // gas floor
-  arbOneGasFloorGwei: '0.1',
+  arbOneGasFloorGwei: '0.01',
   novaGasFloorGwei: '0.01',
   goerliGasFloorGwei: '0.1',
   sepoliaGasFloorGwei: '0.1',
@@ -84,6 +90,10 @@ const globalVars = {
   novaBlockGasLimit: '32,000,000',
   goerliBlockGasLimit: '20,000,000',
   sepoliaBlockGasLimit: '32,000,000',
+
+  // portal application form
+  portalApplicationForm:
+    'https://docs.google.com/forms/d/e/1FAIpQLSc_v8j7sc4ffE6U-lJJyLMdBoIubf7OIhGtCqvK3cGPGoLr7w/viewform',
 };
 
 function blocksToMinutes(blocks) {
