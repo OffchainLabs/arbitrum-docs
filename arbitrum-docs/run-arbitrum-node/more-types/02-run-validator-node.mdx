@@ -125,18 +125,6 @@ The wallet file will be created under the mounted directory inside the `<chain-n
 
 Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 
-### Enable the BoLD API
-
-When activating BoLD on a chain, the amount of logs produced by a validator in case a challenge occurs can be overwhelming, and it might be hard to follow the progress of a challenge. To allow for better visualization of ongoing challenges, as well as querying specific information, Nitro includes an API to capture information about assertions and challenges that the validator observes. You can enable this API by using the following parameters:
-
-| Parameter              | Value | Description                             |
-| ---------------------- | ----- | --------------------------------------- |
-| `--node.bold.api`      | true  | Enables the API                         |
-| `--node.bold.api-host` | IP    | IP to listen on (defaults to 127.0.0.1) |
-| `--node.bold.api-port` | Port  | Port to listen on (defaults to 9393)    |
-
-You can find specific documentation about the methods available on this API in [BoLD validator API](/run-arbitrum-node/more-types/04-bold-validator-api.mdx).
-
 ### How to add new validators to the allowlist (Orbit chains)
 
 On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.
