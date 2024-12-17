@@ -401,6 +401,36 @@
       "permanent": false
     },
     {
+      "source": "/stylus/concepts/stylus-gas",
+      "destination": "/stylus/concepts/gas-metering",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/concepts/stylus-cache-manager",
+      "destination": "/stylus/how-tos/cache-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/how-tos/debugging-stylus-tx",
+      "destination": "/stylus/how-tos/debugging-tx",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/stylus-quickstart",
+      "destination": "/stylus/quickstart",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/how-tos/using-stylus-cli",
+      "destination": "/stylus/using-cli",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/stylus-gentle-introduction",
+      "destination": "/stylus/gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/docs/(mainnet/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
