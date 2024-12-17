@@ -10,7 +10,7 @@ content_type: how-to
 
 This document will help you calculate your Orbit chain’s _Protocol Net Revenue_ and AEP license fees.
 
-Before we define “Protocol Net Revenue,” let's explain how fees work in a standard Orbit chain. From there, we can connect how each fee equates to a revenue or a cost.
+Before we define “Protocol Net Revenue”, let's explain how fees work in a standard Orbit chain. From there, we can connect how each fee equates to a revenue or a cost.
 
 ### Sequencing revenue
 
@@ -21,11 +21,11 @@ In a vanilla Orbit chain (a chain without customizations, transaction ordering p
 - `l1BaseFee`: fees paid to cover the cost of an Orbit chain posting its settlement transaction to the parent chain.
 - `l1SurplusFee`: an additional surplus fee that can be configured to award extra fees to the batch poster.
 
-Based on the above, we interpret that an Orbit chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, `l1BaseFee`, and `l1SurplusFee`. However, one of these fee components is also a cost: `l1BaseFee`, as it is used to pay for parent chain settlement.
+Based on the above, we interpret that an Orbit chain’s revenue sources include all fee components: `l2BaseFee`, `l2SurplusFee`, `l1BaseFee`, and `l1SurplusFee`. However, one of these fee components is also a cost, `l1BaseFee`, as it is used to pay for parent chain settlement.
 
 ### Assertion costs
 
-The above fee system applies to an Orbit chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [\*\*validators](https://docs.arbitrum.io/how-arbitrum-works/inside-arbitrum-nitro#validators).\*\*
+The above fee system applies to an Orbit chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/inside-arbitrum-nitro.mdx#validators).
 
 Validators are responsible for posting assertions on the parent chain, which are disputable claims about the new state of the Rollup. Posting an assertion is what progressed chain state on the parent chain. Validators are also responsible for securing the chain by creating disputes on false assertions.
 
@@ -41,7 +41,7 @@ As the Orbit license allows chain owners to customize their Rollup, the AEP lice
 - Revenue earned through fees on top of the bridge.
 - Broadly, any revenue earned in connection with your use of Arbitrum Nitro.
 
-You can read the relevant legal terminology in Section 2 of the [AEP Terms](https://docs.arbitrum.foundation/assets/files/Arbitrum%20Expansion%20Program%20Jan182024-4f08b0c2cb476a55dc153380fa3e64b0.pdf).
+You can read the relevant legal terminology in Section 2 of the [AEP Terms](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
 ## Calculating AEP fees
 
@@ -81,7 +81,7 @@ If a team elects to deduct their assertion posting costs from eligible validator
 
 - Communicate to the Arbitrum Foundation that they intend to deduct on-chain assertion costs
   - Align on a cadence of disbursal and accounting these costs with the Arbitrum Foundation (e.g., quarterly, annually)
-  - At this cadence, Provide on-chain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
+  - At this cadence, provide on-chain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
 
 To implement the deduction, the team should do the following:
 
@@ -94,15 +94,15 @@ To implement the deduction, the team should do the following:
 
 Certain Orbit configurations and customizations require special handling of AEP fees. The following is a non-exhaustive list of applicable scenarios and how to ensure AEP compliance. If any of the following cases apply, the recommended approach for fee handling will require manual handling of a portion of or all AEP Fees.
 
-### L2-Based Custom Gas Tokens
+### L2-based custom gas tokens
 
-If you are an L3 or higher chain with a custom gas token, your custom gas token contract might be deployed on L2. If this L2 is not Arbitrum One, then the L2 token can be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in ETH by manually sending fees to an ETH-configured routing system.
+If you are an L3 or higher chain with a custom gas token, your custom gas token contract might be deployed on L2. If this L2 is not an Arbitrum chain, then the L2 token can't be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in ETH by manually sending fees to an ETH-configured routing system.
 
 ### Non-Ethereum L1
 
 If your Orbit chain is deployed on a non-Ethereum L1 (e.g., Solana, BNB Chain), your fees must be manually transferred to a Foundation-controlled address.
 
-### Novel Fee-Earning Customizations
+### Novel fee-earning customizations
 
 As discussed above in Additional revenue sources, if you have customized your Orbit chain to earn revenue through any enshrined component, this revenue must be calculated as part of the AEP fees. In such cases, we recommend engaging with the AF to agree on a revenue model and reporting cadence and then manually send additional fees into the routing system as required.
 

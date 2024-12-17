@@ -12,16 +12,17 @@ content_type: how-to
 
 - You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
 
-### Canonical Contracts
+### Canonical contracts
 
-| Network       | Contract             | Address                                                                                                                                                    | Configured For  |
-| ------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
-| Ethereum      | `Parent2ChildRouter` | [https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999](https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999)         | `ETH`, `ERC-20` |
-| Arbitrum Nova | `Child2ParentRouter` | [https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d](https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d) | `ETH`           |
+| Network       | Contract             | Address                                                                                                                   | Configured for  |
+| ------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| Ethereum      | `Parent2ChildRouter` | [0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999](https://etherscan.io/address/0x40Cd7D713D7ae463f95cE5d342Ea6E7F5cF7C999)     | `ETH`, `ERC-20` |
+| Arbitrum Nova | `Child2ParentRouter` | [0x36D0170D92F66e8949eB276C3AC4FEA64f83704d](https://nova.arbiscan.io/address/0x36D0170D92F66e8949eB276C3AC4FEA64f83704d) | `ETH`           |
+| Base          | `Child2ParentRouter` | [0x1015c1ae166c4c39d18a1151b7029bac1530c9aa](https://basescan.org/address/0x1015c1ae166c4c39d18a1151b7029bac1530c9aa)     | `ETH`           |
 
 ## The AEP fee router contract system
 
-_Link to the [Router contracts' source code](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter)._
+This section describes the different fee distribution and router contracts that are available. You can find their source code [here](https://github.com/OffchainLabs/fund-distribution-contracts/tree/main/src/FeeRouter).
 
 ### RewardDistributor
 
@@ -65,34 +66,36 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 
 The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
-<aside>
-  ⚠️ The standard script deploys and sets up the AEP fee router contracts for L2 chains. For L3
-  chains (or further layers), a different target address on the parent chain will need to be
-  specified, depending on the native token of the chain. Please contact the Arbitrum Foundation to
-  confirm the target address to withdraw the AEP fees to.
-</aside>
+::::info Note for L3 chains with custom gas tokens
+
+The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
+L2 chains are expectd to route funds to the [ParentToChildRouter contract](#canonical-contracts) living on Ethereum.
+L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses ETH as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
+
+::::
 
 The script performs the following operations:
 
-1. Obtain the Rollup and inbox contract of the chain. These are needed to execute the next steps.
+1. Obtain the rollup and inbox contract of the chain. These are needed to execute the next steps.
 2. Obtain the current fee collectors of the chain: Orbit base fee collector, Orbit surplus fee collector, and Parent chain surplus fee collector.
-3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate Arbitrum DAO controlled address on the parent chain.
-4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector and 10% to the ChildToParentRouter contract deployed in the previous step.
+3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
+4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
 5. Set each of the fee collectors to the `RewardDistributor` contracts
 
-<aside>
-ℹ️ Note that if the same address collects all three fee types, only one `RewardDistributor` contract will be deployed, which will collect all those fees.
+::::info
 
-</aside>
+Note that if the same address collects all three fee types, only one `RewardDistributor` contract will be deployed, which will collect all those fees.
+
+::::
 
 To configure the script, you need to specify the following [environment variables](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/setup-aep-fee-router/.env.example):
 
-- `ROLLUP_ADDRESS`: address of the Rollup contract
+- `ROLLUP_ADDRESS`: address of the rollup contract
 - `CHAIN_OWNER_PRIVATE_KEY`: private key of the account with executor privileges in the `UpgradeExecutor` admin contract for the chain
-- `ORBIT_CHAIN_ID`: `chainId` of the Orbit chain
+- `ORBIT_CHAIN_ID`: chain id of the Orbit chain
 - `ORBIT_CHAIN_RPC`: RPC of the Orbit chain
-- `PARENT_CHAIN_ID`: `chainId` of the parent chain, which can neither be an Arbitrum chain nor Ethereum.
-- `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in the [canonical contracts](#canonical-contracts) section of this document. If the parent chain your chain settles to is not on that list, contact the Arbitrum Foundation to obtain a specific target address for your chain.
+- `PARENT_CHAIN_ID`: chain id of the parent chain, which shouldn't be an Arbitrum chain
+- `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in the [canonical contracts](#canonical-contracts) section of this document. If the parent chain is not on that list, or if your chain uses a gas token different than the one the router is configured for, contact the Arbitrum Foundation to obtain a specific target address for your chain.
 
 Finally, follow these steps to execute the script (from the `examples/setup-aep-fee-router` folder):
 
