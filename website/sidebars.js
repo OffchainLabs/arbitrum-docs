@@ -735,11 +735,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/more-types/bold-validator-api',
-              label: 'BoLD validator API',
-            },
-            {
-              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
