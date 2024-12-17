@@ -49,7 +49,7 @@ This includes:
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. <!-- Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks, and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts). -->
+In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. <!-- Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts). -->
 
 Optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/how-tos/calculate-aep-fees#assertion-costs) section:
 
