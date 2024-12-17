@@ -36,7 +36,7 @@ ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
 
 Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will later be made available on the Ethereum side.
 
-`ArbSys.withdrawEth` is actually a convenience function which is equivalent to calling `ArbSys.sendTxToL1` with empty calldataForL1. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on L1 after the dispute period elapses for the user to finalize claiming their funds on L1 (see ["L2 to L1 Messages"](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's Ether balance will be credited on L1.
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on L1 after the dispute period elapses for the user to finalize claiming their funds on L1 (see ["L2 to L1 Messages"](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's Ether balance will be credited on L1.
 
 The following diagram depicts the process that funds follow during a withdraw operation.
 
