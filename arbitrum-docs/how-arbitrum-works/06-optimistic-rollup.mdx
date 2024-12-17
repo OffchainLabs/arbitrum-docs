@@ -61,7 +61,7 @@ Before diving into the Rollup protocol, there are two things we need to cover.
 
 First, _if you’re an Arbitrum user or developer, you don’t need to understand the Rollup protocol_. You don’t ever need to think about it unless you want to. Your relationship with it can be like a train passenger’s relationship with the train’s engine: you know it exists, and you rely on it to keep working, but you don’t spend your time monitoring it or studying its internals.
 
-You’re welcome to study, observe, and even participate in the rollup protocol, but you don’t need to, and most people won’t. So if you’re a typical train passenger who just wants to read or talk to your neighbor, you can skip right to the [next section](#validators) of this document. If not, read on!
+You’re welcome to study, observe, and even participate in the Rollup protocol, but you don’t need to, and most people won’t. So if you’re a typical train passenger who just wants to read or talk to your neighbor, you can skip right to the [next section](#validators) of this document. If not, read on!
 
 The second thing to understand about the rollup protocol is that _the protocol doesn’t decide the results of transactions, it only confirms the results_. The results are uniquely determined by the sequence of messages in the chain’s inbox. So once your transaction message is in the chain’s inbox, its result is knowable--and Arbitrum nodes will report that your transaction is done. The role of the rollup protocol is to confirm transaction results that, as far as Arbitrum users are concerned, have already occurred. (This is why Arbitrum users can effectively ignore the rollup protocol.)
 
