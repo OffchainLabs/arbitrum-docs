@@ -71,7 +71,7 @@ With those preliminaries behind us, let’s jump into the details of the Rollup 
 
 The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
-The key security property of the rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire) can force your transactions to be processed correctly. And that is true no matter how many malicious people are trying to stop you.
+The key security property of the Rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that the execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire), can force your transactions to be processed correctly. And that is true, no matter how many malicious people are trying to stop you.
 
 ### The Rollup Chain
 
