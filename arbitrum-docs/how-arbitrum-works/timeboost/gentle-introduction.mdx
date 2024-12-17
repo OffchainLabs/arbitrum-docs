@@ -46,7 +46,6 @@ Timeboost retains most FCFS benefits while addressing FCFS limitations.
 - By introducing the ability to “purchase a time advantage” through the Timeboost auction, it is expected that rational, profit-seeking actors will spend on auctions _instead of_ investing in hardware or infrastructure to win latency races. This diversion of resources by these actors is expected to reduce FCFS MEV-driven spam on the network.
 
 ## What is Timeboost, and how does it work?
-
 Timeboost is a _transaction ordering policy_. It's a set of rules that the sequencer of an Arbitrum chain is trusted to follow when ordering transactions submitted by users. In the near future, multiple sequencers will be able to enforce those rules with decentralized Timeboost.
 
 For Arbitrum chains, the sequencer’s sole job is to take arriving, valid transactions from users, place them into an order dictated by the transaction ordering policy, and then publish the final sequence to a real-time feed and in compressed batches to the chain’s data availability layer. The current transaction ordering policy is FCFS, and Timeboost is a modified FCFS ordering policy.
@@ -61,29 +60,30 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
+![using the express lane](./images/centralized-timeboost-express-lane-workflow.jpg)
 The express lane is implemented using a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name, express lane. The sequencer will only accept valid transaction payloads to this endpoint if they are correctly signed by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>. Other transactions can still be submitted to the sequencer as normal, but these will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by 200 milliseconds. It is important to note that transactions from both the express and non-express lanes are eventually sequenced into a single, ordered stream of transactions for node operators to produce an assertion and later post the data to a data availability layer. The express lane controller does _not_:
-Have the right to re-order transactions.
-Have a guarantee that their transactions will always be first at the “top-of-the-block.”
-Guarantee a profit at all.
+* Have the right to re-order transactions.
+* Have a guarantee that their transactions will always be first at the “top-of-the-block.”
+* Guarantee a profit at all.
+
 The value of the express lane will be the sum of how much MEV the express lane controller predicts they can extract during the upcoming round (i.e., MEV opportunity estimates made before the auction closes) _plus_ the amount of MEV extracted by the express lane controller while they are in control (that they otherwise did not predict). Understanding how the value of the express lane is determined can be useful for chain owners when adjusting to the artificial delay and the time before the auction closes.
 
 ### The Timeboost auction
 
 Control of the express lane in each round (default: 60 seconds) is determined by a per-round auction, which is a sealed-bid, second-price auction. This auction is held to determine the express lane controller for the next round. In other words, the express lane controller was determined at any point in time in the previous auction round. Bids for the auction can be made with any ERC20 token, in any amount, and be collected by any address - at the full discretion of the chain owner.
 
-![Timeboost auction workflow](assets/timeboost-auction-workflow.png)
+![timeboost auction workflow](./images/centralized-timeboost-auction-workflow.jpg)
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
 
 ### Auction contract
+Before bidding in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds can be added to an existing deposit at any time. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token). These deposits are fully withdrawable, with some nominal delay (2 rounds, or 2 minutes by default), so as not to impact the outcome of an existing round.
 
-Before bidding in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds can be added to an existing deposit at any time. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token). These deposits are fully withdrawable, with some nominal delay, so as not to impact the outcome of an existing round.
+![timeboost transferring and withdrawing](./images/centralized-timeboost-transfering-and-withdrawing.jpg)
 
-Once the autonomous auctioneer determines an auction winner, the auction contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default.
+Once the autonomous auctioneer determines an auction winner, the auction contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default. The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
 
-The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
-
-The auction contract also has functions that enable the express lane controller to update the address they wish to use for the express lane, which allows unique express lane control reselling use cases.
+The auction contract also has functions that enable the express lane controller to update the address they wish to use for the express lane, which allows unique express lane control reselling use cases. 
 
 ### Default parameters
 
@@ -125,7 +125,7 @@ It is recommended that Arbitrum teams holistically assess the applicability and 
 
 ### Wen mainnet?
 
-Timeboost’s auction contract has completed a third-party audit and is rapidly approaching production readiness. Specifically for Arbitrum One and Arbitrum Nova, a [temperature check vote on Snapshot](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0xffe9bb38228fdaf3d121140856fd2d51c2ca7f8e0d1021c07e791cebb541129a) has already passed and the AIP will move towards an on-chain Tally vote next hopefully before the end of Q4 2024.
+Timeboost’s auction contract has completed a third-party audit and is rapidly approaching production readiness. Specifically for Arbitrum One and Arbitrum Nova, a [temperature check vote on Snapshot](https://snapshot.box/#/s:arbitrumfoundation.eth/proposal/0xffe9bb38228fdaf3d121140856fd2d51c2ca7f8e0d1021c07e791cebb541129a) has already passed and the AIP will move towards an on-chain Tally vote next hopefully before the end of Q1 2025.
 
 In the meantime, please read the following resources to learn more about Timeboost:
 
@@ -136,3 +136,4 @@ In the meantime, please read the following resources to learn more about Timeboo
 - [Engineering design of Timeboost with a centralized sequencer](https://github.com/OffchainLabs/timeboost-design/blob/main/implementation_design.md)
 - [Implementation of Timeboost with a centralized sequencer](https://github.com/OffchainLabs/nitro/pull/2561)
 - [Technical specification for Timeboost with a decentralized sequencer](https://github.com/OffchainLabs/decentralized-timeboost-spec)
+- [Audit report for Timeboost auction contracts](https://github.com/trailofbits/publications/blob/master/reviews/2024-08-offchainlabs-timeboost-auction-contracts-securityreview.pdf)
