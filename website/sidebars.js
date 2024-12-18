@@ -403,11 +403,11 @@ const sidebars = {
               id: 'launch-orbit-chain/maintain-your-chain/ownership-structure-access-control',
               label: `Ownership structure access control`,
             },
-              { 
-                type: 'category',
-                label: 'Guidance',
-                collapsed: true,
-                items: [
+            {
+              type: 'category',
+              label: 'Guidance',
+              collapsed: true,
+              items: [
                 {
                   type: 'doc',
                   id: 'launch-orbit-chain/maintain-your-chain/guidance/decentralization-security',
@@ -522,8 +522,6 @@ const sidebars = {
             },
           ],
         },
-
-
       ],
     },
     {
