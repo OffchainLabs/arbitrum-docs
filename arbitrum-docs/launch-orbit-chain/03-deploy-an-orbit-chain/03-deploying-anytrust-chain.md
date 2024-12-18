@@ -30,7 +30,7 @@ AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the 
 
 ### Deployment steps
 
-The deployment process of AnyTrust chains is very similar to that of [Rollup chains](orbit-sdk-deploying-rollup-chain.md#rollup-config-param), but with some differences that we'll discuss in this guide.
+The deployment process of AnyTrust chains is very similar to that of [Rollup chains](02-deploying-a-rollup-chain.md#rollup-config-param), but with some differences that we'll discuss in this guide.
 
 Here are the steps involved in the deployment process:
 

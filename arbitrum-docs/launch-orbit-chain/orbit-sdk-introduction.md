@@ -27,9 +27,9 @@ There are three types of Orbit chains. Review the following table to determine w
 
 After selecting a chain type, you need to deploy your Orbit chain. Visit the deployment guide for your selected chain type:
 
-- [Deploy a Rollup Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md)
-- [Deploy an AnyTrust Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md)
-- [Deploy a Custom Gas Token Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain.md)
+- [Deploy a Rollup Orbit chain](/launch-orbit-chain/deploy-an-orbit-chain/02-deploying-rollup-chain.md)
+- [Deploy an AnyTrust Orbit chain](/launch-orbit-chain/deploy-an-orbit-chain/03-deploying-anytrust-chain.md)
+- [Deploy a Custom Gas Token Orbit chain](/launch-orbit-chain/deploy-an-orbit-chain/04-deploying-custom-gas-token-chain.md)
 
 ## 3. Configure your Orbit chain's node
 
@@ -37,7 +37,7 @@ After selecting a chain type, you need to specify your Orbit chain's node config
 
 ## 4. Deploy your Orbit chain's token bridge
 
-Your Orbit chain's token bridge contracts allow ERC-20 tokens to move between your Orbit chain and its underlying parent chain. See [Deploy your Orbit chain's token bridge](/launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge.md), then proceed to the next step.
+Your Orbit chain's token bridge contracts allow ERC-20 tokens to move between your Orbit chain and its underlying parent chain. See [Deploy your Orbit chain's token bridge](/launch-orbit-chain/deploy-an-orbit-chain/05-deploying-token-bridge.md), then proceed to the next step.
 
 ## 5. Configure your Orbit chain
 
