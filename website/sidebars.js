@@ -248,8 +248,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/AEPLicense',
-          label: 'AEP License',
+          id: 'launch-orbit-chain/aep-license',
+          label: 'Orbit licensing',
         },
         {
           type: 'category',
@@ -500,12 +500,12 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
+          id: 'stylus/quickstart',
           label: 'Quickstart',
         },
         {
@@ -533,12 +533,12 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'stylus/using-stylus-cli',
+              id: 'stylus/using-cli',
               label: 'Overview',
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/debugging-stylus-tx',
+              id: 'stylus/how-tos/debugging-tx',
               label: 'Debug transactions',
             },
             {
@@ -548,7 +548,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
+              id: 'stylus/how-tos/caching-contracts',
               label: 'Cache contracts',
             },
             {
@@ -580,7 +580,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-gas',
+              id: 'stylus/concepts/gas-metering',
               label: 'Gas metering',
             },
           ],
@@ -949,51 +949,11 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'The BoLD dispute protocol',
+              label: 'Timeboost',
               items: [
                 {
                   type: 'doc',
-                  id: 'how-arbitrum-works/bold/gentle-introduction',
-                  label: 'A gentle introduction',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-                  label: 'Deploy a validator on testnet',
-                },
-                {
-                  type: 'link',
-                  href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BoLD Whitepaper',
-                },
-                {
-                  type: 'doc',
-                  id: 'bold/concepts/bold-technical-deep-dive',
-                  label: 'Technical deep dive',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
-                  label: 'Economics of disputes',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold',
-                  label: 'Specification on Github',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-                  label: 'Audit Report by Trail of Bits',
-                },
-                {
-                  type: 'link',
-                  href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-                  label: 'Audit Report by Code4rena',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/public-preview-expectations',
+                  id: 'how-arbitrum-works/timeboost/gentle-introduction',
                   label: 'Public preview',
                 },
               ],
