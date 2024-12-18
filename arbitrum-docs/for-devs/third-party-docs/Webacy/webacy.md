@@ -13,7 +13,7 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 
 ### Address trust and safety
 
-- Assess the safety of interacting with a given address (any address: EOA, smart contract, token, etc.). Screen for blacklists, sanctioned addresses, malicious behavior, and other potential flags
+- Assess the safety of interacting with a given address (any address: EOA, smart contract, token, etc.). Screen for blocklists, sanctioned addresses, malicious behavior, and other potential flags
 
 - Analyze smart contract code in real-time
 
@@ -27,11 +27,11 @@ Wallets, protocols, & applications use Webacy throughout their user experience:
 
 - Delight users by enabling additional features or providing additional value
 
-- Display open approvals and the risk associated
+- Display open approvals and the risks associated
 
 ### Before a transaction
 
-- Block harmful dapps and links
+- Block harmful dApps and links
 
 - Review address trust and safety prior to signature
 
@@ -57,11 +57,11 @@ Start building in minutes:
 
 ## APIs
 
-[Webacy’s APIs](https://www.webacy.com/safetyscore) are REST based APIs that expose your platform to Webacy's Risk Engine and our Wallet Watch Notifications Platform.
+[Webacy’s APIs](https://www.webacy.com/safetyscore) are REST-based APIs that expose your platform to Webacy's Risk Engine and our Wallet Watch Notifications Platform.
 
-With over 15+ data providers, along with our own data analytics and algorithms, we have the broadest risk coverage across the blockchain ecosystem. From compliance and regulatory data, to social engineering scams and crowdsourced reports, we process millions of monthly signals, updating our models with the latest and most up-to-date information.
+With over 15+ data providers, along with our own data analytics and algorithms, we have the broadest risk coverage across the blockchain ecosystem. From compliance and regulatory data to social engineering scams and crowdsourced reports, we process millions of monthly signals, updating our models with the latest and most up-to-date information.
 
-For detailed technical documentation, and to begin testing the APIs directly, visit our[ technical documentation](https://webacy.readme.io/reference/webacy-api-overview-pre-release).
+For detailed technical documentation and to begin testing the APIs directly, visit our[ technical documentation](https://webacy.readme.io/reference/webacy-api-overview-pre-release).
 
 Available APIs and corresponding use cases include:
 
@@ -69,23 +69,23 @@ Available APIs and corresponding use cases include:
 
 This API indicates if a given address is a risk or a threat to others.
 
-It returns risk data associated with the supplied address. It flags if the address appears in any sanctioned databases, has been historically flagged as malicious, associated with a scam smart contract, and so on. It also includes filtering for spam / sybil signals.
+It returns risk data associated with the supplied address. It flags if the address appears in any sanctioned databases, has been historically flagged as malicious, is associated with a scam smart contract, and so on. It also includes filtering for spam / sybil signals.
 
 Some common use cases for this endpoint include:
 
 - Filtering addresses for spam
 
-- Blocking high risk addresses from utilizing your service
+- Blocking high-risk addresses from utilizing your service
 
-- Presenting high risk addresses to others as potentially risky to interact with
+- Presenting high-risk addresses to others as potentially risky to interact with
 
-- Protecting your platform by restricting high risk addresses
+- Protecting your platform by restricting high-risk addresses
 
 - Much more!
 
 ### Approval risks API
 
-This API returns a list of approvals for a given address, and the associated risk of the spender of that approval. Approvals are commonplace in crypto - now you know which ones put you at risk. Check out your own open approvals[ here](https://dapp.webacy.com/?mode=approvals).
+This API returns a list of approvals for a given address and the associated risk of the spender for that approval. Approvals are commonplace in crypto - now you know which ones put you at risk. Check out your own open approvals[ here](https://dapp.webacy.com/?mode=approvals).
 
 If you're a wallet interested in native revoke and approval risk scoring,[ reach out to us](https://docs.webacy.com/other/contact-us).
 
@@ -95,13 +95,13 @@ This API returns risk data for a given transaction. Pass in any transaction hash
 
 Some common use cases for this endpoint include:
 
-- Understanding historical behavior of an address
+- Understanding the historical behavior of an address
 
 - Providing data to give recommendations about on-chain activity
 
-- Gaining insight on a particular transaction or action
+- Gaining insight into a particular transaction or action
 
-- Flagging previously unknown activity that was potentially risk
+- Flagging previously unknown activity that was potentially at risk
 
 - And more!
 
@@ -109,7 +109,7 @@ Some common use cases for this endpoint include:
 
 The original Webacy Safety Score, this API returns a 'risk profile' or 'exposure risk' of a given address.
 
-This indicates the exposure the address has to risky activity through historical transactions, behavior, and owned assets. This endpoint DOES NOT assess whether the supplied address is a risk to others (Threat Risk). It instead assesses whether the supplied address is AT RISK from others.
+This indicates the exposure the address has to risky activity through historical transactions, behavior, and owned assets. This endpoint DOES NOT assess whether the supplied address is a risk to others (Threat Risk). Instead, it assesses whether the supplied address is AT RISK from others.
 
 Some common use cases for this endpoint include:
 
@@ -121,7 +121,7 @@ Some common use cases for this endpoint include:
 
 - Determining types of users to better serve them
 
-- Triggering warnings to internal teams or external users based on change in risk profile based on ongoing activity
+- Triggering warnings to internal teams or external users based on changes in risk profile based on ongoing activity
 
 - Understanding the behavioral activity of a user base
 
@@ -133,7 +133,7 @@ Check out your own risk exposure[ here](https://dapp.webacy.com/risk-score).
 
 This API returns a contract risk analysis for a given contract address.
 
-The on-demand analysis leverages multiple techniques such as fuzzing, static analysis, and dynamic analysis for real-time smart contract scanning.
+The on-demand analysis leverages multiple techniques, such as fuzzing, static analysis, and dynamic analysis, for real-time smart contract scanning.
 
 Some common use cases for this endpoint include:
 
@@ -145,11 +145,11 @@ Some common use cases for this endpoint include:
 
 - Reviewing code as you build
 
-- Assessing your contracts before submitting for a formal audit process
+- Assessing your contracts before submitting them for a formal audit process
 
 ### URL risk
 
-Given a URL, this endpoint analyzes the safety of it. It helps you determine if a given link is a phishing scam, sending you to a dangerous place, or is otherwise malicious.
+Given a URL, this endpoint analyzes its safety. It helps you determine if a given link is a phishing scam, sending you to a dangerous place, or is otherwise malicious.
 
 Some common use cases for this endpoint include:
 
