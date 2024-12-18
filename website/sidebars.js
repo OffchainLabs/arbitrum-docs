@@ -55,6 +55,11 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
+          type: 'doc',
+          label: 'Using Timeboost',
+          id: 'build-decentralized-apps/how-to-use-timeboost',
+        },
+        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
