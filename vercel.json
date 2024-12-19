@@ -12,52 +12,52 @@
     },
     {
       "source": "/(proving/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wasm-wavm",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-floats",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-modules",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/arbos/geth",
+      "destination": "/how-arbitrum-works/04-geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "destination": "/how-arbitrum-works/04-geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/(arbos/l2-to-l1-messaging/?)",
-      "destination": "/how-arbitrum-works/arbos/l2-l1-messaging",
+      "destination": "/how-arbitrum-works/11-l2-to-l1-messaging",
       "permanent": false
     },
     {
       "source": "/(arbos/l1-to-l2-messaging/?)",
-      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "destination": "/how-arbitrum-works/10-l1-to-l2-messaging",
       "permanent": false
     },
     {
@@ -67,32 +67,32 @@
     },
     {
       "source": "/(inside-arbitrum-nitro/?)",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "destination": "/how-arbitrum-works/01-a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(arbos/l1-pricing/?)",
-      "destination": "/how-arbitrum-works/l1-gas-pricing",
+      "destination": "/how-arbitrum-works/09-gas-fees",
       "permanent": false
     },
     {
       "source": "/(arbos/gas/?)",
-      "destination": "/how-arbitrum-works/gas-fees",
+      "destination": "/how-arbitrum-works/09-gas-fees",
       "permanent": false
     },
     {
       "source": "/(inside-anytrust/?)",
-      "destination": "/how-arbitrum-works/inside-anytrust",
+      "destination": "/how-arbitrum-works/08-anytrust-protocol",
       "permanent": false
     },
     {
       "source": "/(why-nitro/?)",
-      "destination": "/how-arbitrum-works/why-nitro",
+      "destination": "/how-arbitrum-works/01-a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(tx-lifecycle/?)",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "destination": "/how-arbitrum-works/02-transaction-lifecycle",
       "permanent": false
     },
     {
@@ -462,12 +462,12 @@
     },
     {
       "source": "/docs/inside_arbitrum",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "destination": "/how-arbitrum-works/01-a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/docs/l1_l2_messages",
-      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "destination": "/how-arbitrum-works/10-l1-to-l2-messaging",
       "permanent": false
     },
     {
@@ -492,7 +492,7 @@
     },
     {
       "source": "/docs/anytrust",
-      "destination": "/how-arbitrum-works/inside-anytrust",
+      "destination": "/how-arbitrum-works/08-anytrust-protocol",
       "permanent": false
     },
     {
@@ -597,12 +597,12 @@
     },
     {
       "source": "/docs/finality",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "destination": "/how-arbitrum-works/02-transaction-lifecycle",
       "permanent": false
     },
     {
       "source": "/docs/withdrawals",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "destination": "/how-arbitrum-works/02-transaction-lifecycle",
       "permanent": false
     },
     {
@@ -642,22 +642,22 @@
     },
     {
       "source": "/docs/censorship_resistance",
-      "destination": "/how-arbitrum-works/sequencer",
+      "destination": "/how-arbitrum-works/03-sequencer",
       "permanent": false
     },
     {
       "source": "/docs/arbgas",
-      "destination": "/how-arbitrum-works/gas-fees",
+      "destination": "/how-arbitrum-works/09-gas-fees",
       "permanent": false
     },
     {
       "source": "/docs/arbos",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "destination": "/how-arbitrum-works/04-geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/docs/tx_lifecycle",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "destination": "/how-arbitrum-works/02-transaction-lifecycle",
       "permanent": false
     },
     {
@@ -667,22 +667,22 @@
     },
     {
       "source": "/docs/avm_design",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "destination": "/how-arbitrum-works/01-a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/docs/dispute_resolution",
-      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/docs/arbos_formats",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "destination": "/how-arbitrum-works/04-geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/docs/avm_specification",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "destination": "/how-arbitrum-works/07-interactive-fraud-proofs",
       "permanent": false
     },
     {

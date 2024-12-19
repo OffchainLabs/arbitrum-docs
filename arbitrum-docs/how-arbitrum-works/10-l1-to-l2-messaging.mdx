@@ -1,8 +1,10 @@
 ---
-title: 'L1 to L2 messaging'
-description: This concept page provides information about how arbitrary messages are passed from L1 to L2
-target_audience: developers who want to build on Arbitrum
-content_type: concept
+title: L1 to L2 messaging
+description: 'Learn the fundamentals of L1 to L2 messaging on Arbitrum.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between L1 and L2 within Arbitrum.
+content_type: get-started
 ---
 
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
@@ -14,6 +16,12 @@ import {
   NodeDescriptions,
   NodeDescription,
 } from '/src/components/MermaidWithHtml/MermaidWithHtml';
+
+In the [Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx) section, we covered how users interact with L2 contracts. They submit transactions by putting messages into the chain’s inbox or having a full node Sequencer or aggregator do so on their behalf.
+
+L1 and L2 chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same transaction as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. Consequently, a cross-chain contract-to-contract call can never produce a result available to the calling contract (except for acknowledgment of a successful call submitted for later execution).
+
+In this section, we will discuss how contracts interact between L1 and L2, how an L1 contract is called an L2 contract, and vice versa.
 
 ## Retryable Tickets
 
@@ -211,7 +219,7 @@ In principle, retryable tickets can alternatively be used to deposit Ether; this
 
 ## Transacting via the Delayed Inbox
 
-While retryables and Eth deposits _must_ be submitted through the delayed inbox, in principle, _any_ message can be included this way; this is a necessary recourse to ensure the Arbitrum chain preserves censorship resistance even if the Sequencer misbehaves (see [The Sequencer and Censorship Resistance](/how-arbitrum-works/sequencer.mdx)). However, under ordinary/happy circumstances, the expectation/recommendation is that clients use the delayed inbox only for Retryables and Eth deposits, and transact via the Sequencer for all other messages.
+While retryables and Eth deposits _must_ be submitted through the delayed inbox, in principle, _any_ message can be included this way; this is a necessary recourse to ensure the Arbitrum chain preserves censorship resistance even if the Sequencer misbehaves (see [The Sequencer and Censorship Resistance](/how-arbitrum-works/03-sequencer.mdx)). However, under ordinary/happy circumstances, the expectation/recommendation is that clients use the delayed inbox only for Retryables and Eth deposits, and transact via the Sequencer for all other messages.
 
 ### Address Aliasing
 
@@ -224,6 +232,7 @@ L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
 :::tip Try it out
 
 <AddressAliasHelper />
+
 :::
 
 The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.

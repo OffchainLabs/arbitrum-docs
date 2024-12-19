@@ -1,10 +1,35 @@
-# Overview: The Lifecycle of an Arbitrum Transaction
+---
+title: Sequencing, Followed by Deterministic Execution
+description: 'Learn the fundamentals of the Arbitrum Transaction Lifecycle, sequencing, and deterministic execution.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about the transaction lifecycle.
+content_type: get-started
+---
 
-As an introduction to the various components that compose the Arbitrum protocol, we'll go step-by-step over the phases an Arbitrum transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 1.
+This diagram summarizes how transactions are processed in Nitro.
+
+![seq-then-exec](../assets/seq-then-exec.png)
+
+Let's follow a user's transaction through this process.
+
+First, the user creates a transaction, uses their wallet to sign it, and sends it to the Nitro chain's Sequencer. The Sequencer's job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
+
+Once the transactions are sequenced, they are run through the _state transition function_, one by one, in order. The state transition function takes as input the current state of the chain (account balances, contract code, and so on), along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
+
+Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the state transition function will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions so the state transition function never sees them--and this reduces cost and therefore keeps transactions fees low--but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the feed are signed by their senders, so the Sequencer can't create forged transactions.)
+
+The state transition function is deterministic, which means that its behavior depends only on the current state and the contents of the next transaction--and nothing else. Because of this determinism, the result of a transaction T will depend only on the genesis state of the chain, the transactions before T in the sequence, and T itself.
+
+It follows that anyone who knows the transaction sequence can compute the state transition function for themselves--and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
+
+## Deep dive: The lifecycle of an Arbitrum transaction
+
+We'll now go step-by-step over the phases an Arbitrum transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 1.
 
 We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
 
-This overview will be focused on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
+This section will focus on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
 
 For clarity on any terminology that may be unfamiliar, see our [glossary](/intro/glossary.mdx).
 
@@ -22,8 +47,8 @@ Alternatively, a client can send a message to the Sequencer by signing and publi
 
 **See**:
 
-- [Retryables](/how-arbitrum-works/arbos/l1-l2-messaging.mdx)
-- [The Sequencer](/how-arbitrum-works/sequencer.mdx)
+- [Retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)
+- [The Sequencer](/how-arbitrum-works/03-sequencer.mdx)
 - [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 
 ### 2. Sequencer orders transaction (off-chain)
@@ -36,13 +61,13 @@ Upon receiving a transaction, the Sequencer will:
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
-- [Geth](/how-arbitrum-works/arbos/geth.mdx)
-- [L1 pricing](/how-arbitrum-works/l1-gas-pricing.mdx) / [L2 Gas](/how-arbitrum-works/gas-fees.mdx)
+- [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos)
+- [Geth](/how-arbitrum-works/04-geth-at-the-core.mdx#geth)
+- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
 
 #### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
 
-At this phase, the client's acceptance of finality relies on trusting the Sequencer. I.e., a malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch (see phase 3).
+At this phase, the client's acceptance of finality relies on trusting the Sequencer, i.e., a malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch (see phase 3).
 
 :::note
 
@@ -66,7 +91,7 @@ The Sequencer is forced to include messages from the delayed Inbox in the queued
 
 **See:**
 
-- ["The Sequencer / Censorship Resistance."](/how-arbitrum-works/sequencer.mdx)
+- ["The Sequencer / Censorship Resistance."](/how-arbitrum-works/03-sequencer.mdx)
 
 #### ~ ~ ~ FINALITY CHECK: Ethereum-Equivalent Finality! ~ ~ ~
 
@@ -85,9 +110,9 @@ A staked, active validator will then run the Arbitrum VM over the inputs in the 
 
 **See**:
 
-- [ArbOS](/how-arbitrum-works/arbos/introduction.mdx)
-- [Geth](/how-arbitrum-works/arbos/geth.mdx)
-- [L1 pricing](/how-arbitrum-works/l1-gas-pricing.mdx) / [L2 Gas](/how-arbitrum-works/gas-fees.mdx)
+- [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos)
+- [Geth](/how-arbitrum-works/04-geth-at-the-core.mdx#geth)
+- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
 
 :::note
 
@@ -97,7 +122,7 @@ RBlock assertions include claims about the state of the Outbox; if our transacti
 
 **See**:
 
-- [The Outbox](/how-arbitrum-works/arbos/l2-l1-messaging.mdx)
+- [The Outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)
 
 #### 4a. RBlock is valid / goes unchallenged
 
@@ -111,8 +136,8 @@ A dispute consists of two staked validators dissecting their disagreement down t
 
 **See:**
 
-- [Challenges](/how-arbitrum-works/fraud-proofs/challenge-manager.mdx)
-- [Wasm/WAVM](/how-arbitrum-works/fraud-proofs/wasm-wavm.mdx)
+- [Challenges](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#challengemanager)
+- [Wasm/WAVM](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#wasm-to-wavm)
 
 L1 contracts also keep track of the tree of all assertions; i.e., how many stakers are in disagreement, who is currently disputing with whom, etc. We refer to this level of Arbitrum's design architecture as its "assertion tree protocol."
 
