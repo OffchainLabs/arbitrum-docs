@@ -374,7 +374,7 @@ From that moment, the previous express lane controller will not be able to send 
 
 ### Setting a transferor account
 
-A `transferor` is an address that has the right to transfer express lane controller rights on behalf an express lane controller. The reason to include this function (setTransferor) is so the express lane controller has a way to nominate an address that can transfer rights to anyone they see fit, in order to improve the reselling rights user experience.
+A `transferor` is an address that has the right to transfer express lane controller rights on behalf of the express lane controller. This function (`setTransferor`) was added to ensure that the express lane controller has a way of nominating an address that can transfer rights to anyone they see fit, in order to improve the user experience of reselling/transferring the control of the express lane.
 
 We can set a transferor for our account using the auction contract. Additionally, we can choose to fix that transferor account until a specific round, to guarantee to other parties that we will not change the transferor until the specified round finishes.
 
