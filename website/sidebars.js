@@ -735,11 +735,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'run-arbitrum-node/more-types/bold-validator-api',
-              label: 'BoLD validator API',
-            },
-            {
-              type: 'doc',
               id: 'run-arbitrum-node/more-types/run-classic-node',
               label: 'Run a Classic node',
             },
@@ -927,9 +922,15 @@ const sidebars = {
               label: 'Audit Report by Code4rena',
             },
             {
-              type: 'doc',
-              id: 'how-arbitrum-works/bold/public-preview-expectations',
-              label: 'Public preview',
+              type: 'category',
+              label: 'Timeboost',
+              items: [
+                {
+                  type: 'doc',
+                  id: 'how-arbitrum-works/timeboost/gentle-introduction',
+                  label: 'Public preview',
+                },
+              ],
             },
           ],
         },
