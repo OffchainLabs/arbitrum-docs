@@ -72,6 +72,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 - [Traceye](https://traceye.io/)
 - [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
 - [Sequence](https://sequence.xyz/indexer)
+- [Tracehawk ](https://tracehawk.io/)
 
 ## Oracles
 
