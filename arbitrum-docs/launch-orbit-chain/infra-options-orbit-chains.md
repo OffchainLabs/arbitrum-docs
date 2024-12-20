@@ -64,12 +64,14 @@ If you are enabling Fast Withdrawals, you will set up a Data Availability Commit
 
 Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
 
-- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
 - [Alchemy](https://www.alchemy.com/)
-- [The Graph](https://thegraph.com/)
+- [Chainstack](https://chainstack.com/)
 - [Goldsky](https://goldsky.com/)
 - [Ormi](https://www.ormilabs.xyz/)
+- [The Graph](https://thegraph.com/)
 - [Traceye](https://traceye.io/)
+- [QuickNode](https://www.quicknode.com/streams?utm_source=arb-docs)
+- [Sequence](https://sequence.xyz/indexer)
 
 ## Oracles
 
@@ -91,6 +93,7 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Ankr](https://www.ankr.com/)
 - [Chainstack](https://chainstack.com/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
+- [Sequence](https://sequence.xyz/node-gateway)
 
 ## Alternative Data availability
 
