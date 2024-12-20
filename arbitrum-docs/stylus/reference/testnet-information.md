@@ -11,9 +11,7 @@ import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-pa
 
 import StylusFaucets from './partials/_stylus-faucets.mdx';
 
-
-import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx'
-
+import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx';
 
 <PublicPreviewBannerPartial />
 

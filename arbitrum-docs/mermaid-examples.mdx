@@ -11,7 +11,7 @@ This is a WIP page to test Mermaid in OCL docs. It will be updated with more exa
 
 import { ClickableDiagram } from '@site/src/components/ClickableDiagram';
 
- My Clickable SVG Diagram
+My Clickable SVG Diagram
 
 Here is my clickable diagram:
 
@@ -19,16 +19,13 @@ Here is my clickable diagram:
 
 ## Example 1
 
-
-``` mermaid
+```mermaid
 flowchart LR
     A:::someclass --> B
     classDef someclass fill:#f96
 ```
 
-
-
-``` mermaid
+```mermaid
 graph TD
           L3A("Orbit L3")
           L3B("Orbit L3")
@@ -46,24 +43,24 @@ graph TD
     L2A --> L1
     L2B --> L1
     L2C --> L1
-    L2D --> L1 
+    L2D --> L1
     classDef EthereumL1 padding: 400;
 ```
 
 ## Example 2
 
-``` mermaid
+```mermaid
 block-beta
   columns 6
   block:L3SettlingOnEthereumL2s:2
     1("Orbit L3"):1
-    2("Orbit L3"):1 
+    2("Orbit L3"):1
     end
   block:L3SettlingOnArbitrumL2s:4
-    3("Orbit L3"):1 
-    4("Orbit L3"):1 
-    5("Orbit L3"):1 
-    6("Orbit L3"):1 
+    3("Orbit L3"):1
+    4("Orbit L3"):1
+    5("Orbit L3"):1
+    6("Orbit L3"):1
     end
   block:L2s:6
   ETHL2("Ethereum L2"):2
@@ -82,7 +79,7 @@ block-beta
   OrbitL2-->EthereumL1
 ```
 
-``` mermaid
+```mermaid
 %%{
   init: {
     'theme': 'base',
@@ -121,4 +118,3 @@ import Mermaid from '@theme/Mermaid';
     B-->D;
     C-->D;`}
 />
-
