@@ -23,7 +23,7 @@ If you're looking for a conceptual introduction to Orbit chains, see the [Gentle
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
-- A browser-based Ethereum wallet (e.g., [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) or [OKX Wallet](https://www.okx.com/web3)
+- A browser-based Ethereum wallet (e.g., [MetaMask](https://metamask.io/) and click View MetaMask web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 - At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
