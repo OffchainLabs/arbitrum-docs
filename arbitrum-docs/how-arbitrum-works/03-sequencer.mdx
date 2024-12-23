@@ -17,7 +17,16 @@ Clients interact with the Sequencer in exactly the same way they would interact 
 
 ## The Core Inbox
 
-When we talk about “submitting a transaction into an Arbitrum chain,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `Bridge`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “[Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx)”). The Sequencer’s role (or lack thereof) concerns strictly what happens prior; i.e., how a transaction makes its way into the core Inbox. We’ll break down the possible routes a transaction can take into two scenarios: a well-behaved Sequencer, and a faulty Sequencer.
+When we talk about “submitting a transaction into an Arbitrum chain,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `Bridge`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “[Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx)”).
+
+When we add a Sequencer, the operation of the inbox changes.
+
+- Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
+- Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "delayed inbox" queue, which is managed by an L1 Ethereum contract.
+  - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
+  - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
+
+The Sequencer’s role (or lack thereof) concerns strictly what happens prior; i.e., how a transaction makes its way into the core Inbox. We’ll break down the possible routes a transaction can take into two scenarios: a well-behaved Sequencer, and a faulty Sequencer.
 
 ## Happy/Common Case: Sequencer Is Live and Well-behaved
 
@@ -25,6 +34,16 @@ Here, we start by assuming that the Sequencer is fully operational, and is runni
 
 If a user is posting a “standard” Arbitrum transaction (i.e., interacting with an L2 native dapp), the user will submit the signed transaction directly to the Sequencer, much like how a user submits a transaction to an Ethereum node when interacting with L1. Upon receiving it, the Sequencer will execute it and nearly instantaneously deliver the user a receipt. Some short time later — [usually no more than a few minutes](https://arbiscan.io/batches) — the Sequencer will include the user’s transaction in a batch and post it on L1 by calling one of the `SequencerInbox`’s `addSequencerL2Batch` methods. Note that only the Sequencer has the authority to call these methods; this assurance that no other party can include a message directly is, in fact, the very thing that gives the Sequencer the unique ability to provide instant, "soft-confirmation" receipts.
 Once posted in a batch, the transactions have L1-level finality.
+
+Transactions that go through the delayed inbox will take longer to get finality. Their time to finality will roughly double, because they will have to wait one finality period for promotion, then another finality period for the Ethereum transaction that promoted them to achieve finality.
+
+This is the basic tradeoff of having a Sequencer: if your message uses the Sequencer, finality is C blocks faster; but if your message doesn't use the Sequencer, finality is C blocks slower. This is usually a good tradeoff, because most transactions will use the Sequencer; and because the practical difference between instant and 10-minute finality is bigger than the difference between 10-minute and 20-minute finality.
+
+So a Sequencer is generally a win, if the Sequencer is well behaved.
+
+### Cross chain communication
+
+As we mentioned, transactions can be received from L1 and L2. A cross chain message will eventually result in a transaction being executed on the destination chain.
 
 ### L1 contracts can submit L2 transactions
 
@@ -74,7 +93,13 @@ On top of the delay itself, the `forceInclusion` path has the downside of uncert
 
 While the slow, “unhappy” path isn’t optimal, and should rarely, if ever, be necessary, its availability as an option ensures Arbitrum Rollup always preserves its trustless security model, even if the permissioned parts of the system act faulty.
 
-### How the Sequencer Publishes the Sequence
+::: info
+
+On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to [decentralized, fair sequencing](#decentralized-fair-sequencing).
+
+:::
+
+## How the Sequencer Publishes the Sequence
 
 So how do nodes get the sequence? The Sequencer publishes it in two ways: a real-time feed, and batches posted on L1 Ethereum.
 
@@ -83,41 +108,6 @@ The real-time feed is published by the Sequencer so that anyone who subscribes t
 The Sequencer also publishes its sequence on the L1 Ethereum chain. Periodically--perhaps every few minutes in production--the Sequencer concatenates the next group of transactions in the feed, compresses them for efficiency, and posts the result as calldata on Ethereum. This is the final and official record of the transaction sequence. As soon as this Ethereum transaction has finality on Ethereum, the Layer 2 Nitro transactions it records will have finality. These transactions are final because their position in the sequence has finality, and the outcome of the transactions is deterministic and knowable to any party. This is "hard finality".
 
 The Sequencer's batches are compressed using a general-purpose data compression algorithm called "brotli", on its highest-compression setting.
-
-## Instant confirmation
-
-Without a Sequencer, a node can predict what the results of a client transaction will be, but the node can't be sure, because it can't know or control how the transactions it submits will be ordered in the inbox, relative to transactions submitted by other nodes.
-
-The Sequencer is given more control over ordering, so it has the power to assign its clients' transactions a position in the inbox queue, thereby ensuring that it can determine the results of client transactions immediately. The Sequencer's power to reorder has limits (see below for details) but it does have more power than anyone else to influence transaction ordering.
-
-## Inboxes, fast and slow
-
-When we add a Sequencer, the operation of the inbox changes.
-
-- Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
-- Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "delayed inbox" queue, which is managed by an L1 Ethereum contract.
-  - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
-  - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
-
-## If the Sequencer is well-behaved...
-
-A well-behaved Sequencer will accept transactions from all requesters and treat them fairly, giving each one a promised transaction result as quickly as it can.
-
-It will also minimize the delay it imposes on non-Sequencer transactions by releasing delayed messages promptly, consistent with the goal of providing strong promises of transaction results. Specifically, if the Sequencer believes that 40 confirmation blocks are needed to have good confidence of finality on Ethereum, then it will release delayed messages after 40 blocks. This is enough to ensure that the Sequencer knows exactly which transactions will precede its current transaction, because those preceding transactions have finality. There is no need for a benign Sequencer to delay non-Sequencer messages more than that, so it won't.
-
-This does mean that transactions that go through the delayed inbox will take longer to get finality. Their time to finality will roughly double, because they will have to wait one finality period for promotion, then another finality period for the Ethereum transaction that promoted them to achieve finality.
-
-This is the basic tradeoff of having a Sequencer: if your message uses the Sequencer, finality is C blocks faster; but if your message doesn't use the Sequencer, finality is C blocks slower. This is usually a good tradeoff, because most transactions will use the Sequencer; and because the practical difference between instant and 10-minute finality is bigger than the difference between 10-minute and 20-minute finality.
-
-So a Sequencer is generally a win, if the Sequencer is well behaved.
-
-## If the Sequencer is malicious...
-
-A malicious Sequencer, on the other hand, could cause some pain. If it refuses to handle your transactions, you're forced to go through the delayed inbox, with longer delay. And a malicious Sequencer has great power to front-run everyone's transactions, so it could profit greatly at users' expense.
-
-On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to decentralized, fair sequencing, as described below.
-
-Because the Sequencer will be run by a trusted party at first, and will be decentralized later, we haven't built in a mechanism to directly punish a misbehaving Sequencer. We're asking users to trust the centralized Sequencer at first, until we switch to decentralized fair sequencing later.
 
 ## Decentralized fair sequencing
 

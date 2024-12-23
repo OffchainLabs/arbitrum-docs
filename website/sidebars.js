@@ -824,12 +824,12 @@ const sidebars = {
         {
           type: 'doc',
           id: 'how-arbitrum-works/transaction-lifecycle',
-          label: 'Transaction Lifecycle',
+          label: 'Sequencing, Followed by Deterministic Execution',
         },
         {
           type: 'doc',
           id: 'how-arbitrum-works/sequencer',
-          label: 'Sequencer',
+          label: 'The Sequencer and Censorship Resistance',
         },
         {
           type: 'doc',
@@ -849,7 +849,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'how-arbitrum-works/interactive-fraud-proofs',
-          label: 'Interactive Fraud Proofs',
+          label: 'Challenges: Interactive Fraud Proofs',
         },
         {
           type: 'doc',
@@ -859,7 +859,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas/fees',
+          label: 'Gas and fees',
         },
         {
           type: 'doc',
