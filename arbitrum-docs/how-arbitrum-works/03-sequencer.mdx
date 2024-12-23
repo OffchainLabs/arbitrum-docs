@@ -7,21 +7,21 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-The Sequencer is a specially designated Arbitrum full node which, under normal conditions, is responsible for submitting users’ transactions onto L1. In principle, a chain’s Sequencer can take different forms; as [Arbitrum One currently stands](https://docs.arbitrum.foundation/state-of-progressive-decentralization), the Sequencer is a single, centralized entity; eventually, sequencing affordances could be given to a distributed committee of sequencers which come to consensus on ordering. However, regardless of its form, the Sequencer has a fundamental limitation that doesn’t apply to any other part of the system: it must operate under its own security assumptions; i.e., it can’t, in principle, derive security directly from layer 1. This brings up the question of how Arbitrum Rollup maintains its claim to censorship resistance when-and-if the Sequencer misbehaves.
+The <a data-quicklook-from="sequencer">Sequencer</a> is a specially designated <a data-quicklook-from="arbitrum">Arbitrum</a> full node which, under normal conditions, is responsible for submitting users’ transactions onto L1. In principle, a chain’s Sequencer can take different forms; as [<a data-quicklook-from="arbitrum-one">Arbitrum One</a> currently stands](https://docs.arbitrum.foundation/state-of-progressive-decentralization), the Sequencer is a single, centralized entity; eventually, sequencing affordances could be given to a distributed committee of sequencers which come to consensus on ordering. However, regardless of its form, the Sequencer has a fundamental limitation that doesn’t apply to any other part of the system: it must operate under its own security assumptions; i.e., it can’t, in principle, derive security directly from layer 1. This brings up the question of how Arbitrum Rollup maintains its claim to censorship resistance when-and-if the Sequencer misbehaves.
 
 Here we will describe the mechanics of how the Sequencer operates and how any user can bypass the Sequencer entirely to submit any Arbitrum transaction (including one that, say, initiates an L2 to L1 message to withdraw funds) directly from layer 1. Thus, the mechanism thereby preserves censorship resistance even if the Sequencer is completely unresponsive or even malicious.
 
 Clients interact with the Sequencer in exactly the same way they would interact with any full node, for example by giving their wallet software a network URL that happens to point to the Sequencer.
 
-[Currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization), on the Arbitrum One and Arbitrum Nova chains, the Sequencer is run by Offchain Labs.
+[Currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization), on the Arbitrum One and <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a> chains, the Sequencer is run by <a data-quicklook-from="offchain-labs">Offchain Labs</a>.
 
 ## The Core Inbox
 
-When we talk about “submitting a transaction into an Arbitrum chain,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `Bridge`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “[Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx)”).
+When we talk about “submitting a transaction into an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>,” we’re talking about getting it included into the chain’s core Inbox, represented by the `sequencerInboxAccs` byte array in `<a data-quicklook-from="bridge">Bridge</a>`. Once transactions are included in the core Inbox, their ordering is fixed, execution is fully deterministic, and we can trustlessly treat the resultant state as having L1-level finality (see “[<a data-quicklook-from="transaction">Transaction</a> Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx)”).
 
 When we add a Sequencer, the operation of the inbox changes.
 
-- Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (ArbOS ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
+- Only the Sequencer can put new messages directly into the inbox. The Sequencer tags the messages it is submitting with an Ethereum block number and timestamp. (<a data-quicklook-from="arbos">ArbOS</a> ensures that these are non-decreasing, adjusting them upward if necessary to avoid decreases.)
 - Anyone else can submit a message, but messages submitted by non-Sequencer nodes will be put into the "delayed inbox" queue, which is managed by an L1 Ethereum contract.
   - Messages in the delayed inbox queue will wait there until the Sequencer chooses to "release" them into the main inbox, where they will be added to the end of the inbox. A well-behaved Sequencer will typically release delayed messages after about ten minutes, for reasons explained below.
   - Alternatively, if a message has been in the delayed inbox queue for longer than a maximum delay interval (currently @arbOneForceIncludePeriodHours@ hours on Arbitrum One) then anyone can force it to be promoted into the main inbox. (This ensures that the Sequencer can only delay messages but can't censor them.)
@@ -93,7 +93,7 @@ On top of the delay itself, the `forceInclusion` path has the downside of uncert
 
 While the slow, “unhappy” path isn’t optimal, and should rarely, if ever, be necessary, its availability as an option ensures Arbitrum Rollup always preserves its trustless security model, even if the permissioned parts of the system act faulty.
 
-::: info
+:::info
 
 On Arbitrum One, Offchain Labs [currently](https://docs.arbitrum.foundation/state-of-progressive-decentralization) runs a Sequencer which is well-behaved--we promise!. This will be useful but it's not decentralized. Over time, we'll switch to [decentralized, fair sequencing](#decentralized-fair-sequencing).
 
