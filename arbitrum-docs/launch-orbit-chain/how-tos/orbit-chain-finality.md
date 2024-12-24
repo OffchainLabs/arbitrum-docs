@@ -9,11 +9,11 @@ content_type: how-to
 
 ## Child chain transactions
 
-Generally, transactions executed through the sequencer on Orbit chains [achieve finality](/how-arbitrum-works/tx-lifecycle.mdx) equivalent to their parent chain once the relevant transaction data has been [posted in a batch](/how-arbitrum-works/sequencer.mdx). This means that transactions on Orbit chains are considered final in minutes.
+Generally, transactions executed through the sequencer on Orbit chains [achieve finality](/how-arbitrum-works/02-transaction-lifecycle.mdx) equivalent to their parent chain once the relevant transaction data has been [posted in a batch](/how-arbitrum-works/06-optimistic-rollup.mdx). This means that transactions on Orbit chains are considered final in minutes.
 
 ## Parent chain → child chain transactions
 
-Messages being sent through the delayed inbox of a parent chain as [retryable tickets](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#retryable-tickets), including deposits through token bridges, are released by the [sequencer](/how-arbitrum-works/inside-arbitrum-nitro.mdx#if-the-sequencer-is-well-behaved) once it has reasonable confidence of finality on the parent chain. For example, on an L2 chain settling to Ethereum, the sequencer will release delayed messages to the inbox after 40 blocks. Following this, the transaction must complete another finality period for the Ethereum transaction that promoted it to achieve finality.
+Messages being sent through the delayed inbox of a parent chain as [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets), including deposits through token bridges, are released by the [sequencer](/how-arbitrum-works/03-sequencer.mdx) once it has reasonable confidence of finality on the parent chain. For example, on an L2 chain settling to Ethereum, the sequencer will release delayed messages to the inbox after 40 blocks. Following this, the transaction must complete another finality period for the Ethereum transaction that prompted it to achieve finality.
 
 Orbit L3s may configure the finality of transactions executed through the delayed inbox to depend on different layers of finality. By default, Orbit chains will rely on the number of L1 block confirmations, effectively finalizing an L3 deposit as soon as L1 finalizes the batch posted by <a data-quicklook-from="arbitrum-one">Arbitrum One</a> or when a <a data-quicklook-from="data-availability-certificate">DACert</a> is posted by <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>. This would be on the order of tens of minutes.
 
@@ -33,4 +33,4 @@ Note, however, that if you choose to enable fast bridging, a re-org of un-finali
 
 ## Child chain → parent chain transactions
 
-Normally, [outgoing transactions](/how-arbitrum-works/arbos/l2-l1-messaging.mdx) must wait until the assertion that includes their L2 message is confirmed (~one week) before a client can execute the message on L1. However, in the near future [Anytrust](/how-arbitrum-works/inside-anytrust.mdx) chains will be able to leverage their DAC to enable fast confirmations of withdrawals through the native token bridge. By immediately confirming assertions that have been signed by the DAC, finality can be reduced to ~fifteen minutes.
+Normally, [outgoing transactions](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) must wait until the assertion that includes their L2 message is confirmed (~one week) before a client can execute the message on L1. However, in the near future [Anytrust](/how-arbitrum-works/08-anytrust-protocol.mdx) chains will be able to leverage their DAC to enable fast confirmations of withdrawals through the native token bridge. By immediately confirming assertions that have been signed by the DAC, finality can be reduced to ~fifteen minutes.
