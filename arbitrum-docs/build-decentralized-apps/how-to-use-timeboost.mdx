@@ -7,9 +7,9 @@ content_type: how-to
 
 Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the sequencer for faster transaction inclusion.
 
-In this how-to, you'll learn how to bid for the right to use the express lane, how to submit transactions through the express lane, and how to transfer that express lane rights to someone else. To learn more about Timeboost, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+In this how-to, you'll learn how to bid for the right to use the express lane, submit transactions through the express lane, and transfer express lane rights to someone else. To learn more about Timeboost, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
-This how-to assumes that you're familiar with:
+This how-to assumes that you're familiar with the following:
 
 - [How Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx)
 - [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
@@ -20,11 +20,11 @@ To use the express lane for faster transaction inclusion, you must win an auctio
 
 ::::info
 
-Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters, respectively.
+Remember that, by default, each round lasts 60 seconds, and the auction for a specific round closes 15 seconds before the round starts. These default values can be configured on a chain using the `roundDurationSeconds` and `auctionClosingSeconds` parameters.
 
 ::::
 
-Auctions are held in an auction contract, and bids are submitted to an autonomous auctioneer, that also communicates with the contract. Let's take a look at the process of submitting bids and finding out the winner of an auction.
+Auctions are in an auction contract, and bids get submitted to an autonomous auctioneer who communicates with the contract. Let's look at the process of submitting bids and finding out the winner of an auction.
 
 ### Step 0: gather required information
 
@@ -35,7 +35,7 @@ Before we begin, make sure you have:
 
 ### Step 1: deposit funds into the auction contract
 
-Before bidding on an auction, we need to deposit funds in the auction contract. These funds are deposited in the form of the ERC-20 token used to bid, also known as, the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
+Before bidding on an auction, we need to deposit funds in the auction contract. These deposited funds are the ERC-20 token used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
 
 To see the amount of tokens we have deposited in the auction contract, we can call the function `balanceOf` in the auction contract:
 
@@ -62,7 +62,7 @@ console.log(`biddingToken: ${biddingTokenContractAddress}`);
 
 <aside>On Arbitrum One and Arbitrum Nova, the bidding token is WETH.</aside>
 
-Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract, after having it approved as spender of the amount we want to deposit:
+Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
 ```tsx
 // Approving spending tokens
@@ -88,7 +88,7 @@ console.log(`Deposit transaction sent: ${depositHash}`);
 
 ### Step 2: submit bids
 
-Once we have deposited funds into the auction contract, we can start submitting bids for the current auction round.
+Once we have deposited funds into the auction contract, we can submit bids for the current auction round.
 
 We can obtain the current round by calling the function `currentRound` in the auction contract:
 
@@ -101,7 +101,7 @@ const currentRound = await publicClient.readContract({
 console.log(`Current round: ${currentRound}`);
 ```
 
-This is the current round that's running. And, at the same time, the auction for the next round might be open. For example, if `currentRound` is 10, that means that the auction for round 11 is happening right now. To check whether or not that auction is open, we can call the function `isAuctionRoundClosed` of the auction contract:
+The above shows the current round that's running. At the same time, the auction for the next round might be open. For example, if the `currentRound` is 10, the auction for round 11 is happening right now. To check whether or not that auction is open, we can call the function `isAuctionRoundClosed` of the auction contract:
 
 ```tsx
 let currentAuctionRoundIsClosed = await publicClient.readContract({
@@ -112,9 +112,8 @@ let currentAuctionRoundIsClosed = await publicClient.readContract({
 ```
 
 <aside>
-  Remember that, by default, auctions for a given round open 60 seconds before that round starts,
-  and close 15 seconds before the round starts, so there might be no auctions opened at certain
-  times.
+  Remember that, by default, auctions for a given round open 60 seconds before that round starts and
+  close 15 seconds before the round starts, so there might be no auctions opened at certain times.
 </aside>
 
 Once we know what is the current round we can bid for (`currentRound + 1`) and we have verified that the auction is still open (`!currentAuctionRoundIsClosed`), we can submit a bid.
@@ -205,7 +204,7 @@ You can also call the function `getBidHash` in the auction contract to obtain th
 
 ::::
 
-When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if it received the request correctly. If the result returned contains an error message, it'll mean that something went wrong. Following are some of the error messages that can help us understand what's happening:
+When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, it means that something went wrong. Following are some of the error messages that can help us understand what's happening:
 
 | Error                   | Description                                                                                                 |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -219,7 +218,7 @@ When sending the request, the autonomous auctioneer will return an empty result 
 
 ### Step 3: find out the winner of the auction
 
-After the auction closes, and before the round starts, the autonomous auctioneer will call the auction contract with the two highest bids received, so the contract can declare the winner and subtract the second-highest bid from the winner's deposited funds. After this, the contract will emit an event with the new express lane controller address.
+After the auction closes, and before the round starts the autonomous auctioneer will call the auction contract with the two highest bids received so the contract can declare the winner and subtract the second-highest bid from the winner's deposited funds. After this, the contract will emit an event with the new express lane controller address.
 
 We can use this event to determine whether or not we've won the auction. The event signature is:
 
@@ -248,11 +247,11 @@ const newExpressLaneController = logs[0].args.newExpressLaneController;
 console.log(`New express lane controller: ${newExpressLaneController}`);
 ```
 
-If you won the auction, congratulations! You are the express lane controller for the next round, which, by default, will start 15 seconds after the auction closed. The following section explains how we can submit a transaction to the express lane.
+If you won the auction, congratulations! You are the express lane controller for the next round, which, by default, will start 15 seconds after the auction closes. The following section explains how we can submit a transaction to the express lane.
 
 ## How to submit transactions to the express lane
 
-Transactions that are sent to the express lane are immediately sequenced by the sequencer, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction to be the express lane controller for a given round.
+The sequencer immediately sequences transactions sent to the express lane, while regular transactions are delayed 200ms by default. However, only the express lane controller can send transactions to the express lane. The previous section explained how to participate in the auction as the express lane controller for a given round.
 
 The express lane is handled by the sequencer, so transactions are sent to the sequencer endpoint. We need to send a `timeboost_sendExpressLaneTransaction` request with the following information:
 
@@ -266,7 +265,7 @@ The express lane is handled by the sequencer, so transactions are sent to the se
 
 ::::info Timeboost-ing third party transactions
 
-Notice that, while the express lane controller needs to sign the `timeboost_sendExpressLaneTransaction` request, the actual transaction to be executed can be signed by any party. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
+Notice that while the express lane controller must sign the `timeboost_sendExpressLaneTransaction` request, the actual transaction to be executed can be signed by any party. In other words, the express lane controller can receive transactions signed by other parties and sign them to apply the time advantage offered by the express lane to those transactions.
 
 ::::
 
@@ -336,7 +335,7 @@ const signature = await account.signMessage({
 });
 ```
 
-When sending the request, the sequencer will return an empty result with an HTTP status `200` if it received the request correctly. If the result returned contains an error message, it'll mean that something went wrong. Following are some of the error messages that can help us understand what's happening:
+When sending the request, the sequencer will return an empty result with an HTTP status `200` if it received it correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
 | Error                         | Description                                                           |
 | ----------------------------- | --------------------------------------------------------------------- |
@@ -374,9 +373,9 @@ From that moment, the previous express lane controller will not be able to send 
 
 ### Setting a transferor account
 
-A `transferor` is an address that has the right to transfer express lane controller rights on behalf of the express lane controller. This function (`setTransferor`) was added to ensure that the express lane controller has a way of nominating an address that can transfer rights to anyone they see fit, in order to improve the user experience of reselling/transferring the control of the express lane.
+A `transferor` is an address with the right to transfer express lane controller rights on behalf of the express lane controller. This function (`setTransferor`) ensures that the express lane controller has a way of nominating an address that can transfer rights to anyone they see fit to improve the user experience of reselling/transferring the control of the express lane.
 
-We can set a transferor for our account using the auction contract. Additionally, we can choose to fix that transferor account until a specific round, to guarantee to other parties that we will not change the transferor until the specified round finishes.
+We can set a transferor for our account using the auction contract. Additionally, we can fix that transferor account until a specific round to guarantee other parties that we will not change the transferor until the specified round finishes.
 
 To set a transferor, we can call the function `setTransferor` in the auction contract:
 
@@ -403,7 +402,7 @@ From that moment on (until the transferor is changed or disabled), the transfero
 
 ## How to withdraw funds deposited in the auction contract
 
-Funds are deposited in the auction contract to have the right the bid in auctions. These funds can be withdrawn through a two-step process: initiate withdrawal, wait for two rounds, finalize withdrawal.
+Funds are deposited in the auction contract to have the right to bid in auctions. Withdrawing funds is possible through two steps: initiate withdrawal, wait for two rounds, and finalize withdrawal.
 
 To initiate a withdrawal, we can call the function `initiateWithdrawal` in the auction contract:
 
@@ -443,7 +442,7 @@ console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransacti
 
 ## How to identify timeboosted transactions
 
-Transactions that have been sent to the express lane by the express lane controller, and that have been executed (regardless of them being successful or having reverted), can be identified by looking at their receipts, or the message broadcasted by the sequencer feed.
+Transactions sent to the express lane by the express lane controller and that have been executed (regardless of them being successful or having reverted) can be identified by looking at their receipts or the message broadcasted by the sequencer feed.
 
 Transaction receipts include now a new field `timeboosted`, which will be `true` for timeboosted transactions, and `false` for regular non-timeboosted transactions. For example:
 
