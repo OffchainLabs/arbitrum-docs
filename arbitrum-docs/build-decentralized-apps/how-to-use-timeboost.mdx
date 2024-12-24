@@ -35,7 +35,7 @@ Before we begin, make sure you have:
 
 ### Step 1: deposit funds into the auction contract
 
-Before bidding on an auction, we need to deposit funds in the auction contract. These deposited funds are the ERC-20 token used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
+Before bidding on an auction, we need to deposit funds in the auction contract. These funds are deposited in the form of the ERC-20 token used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
 
 To see the amount of tokens we have deposited in the auction contract, we can call the function `balanceOf` in the auction contract:
 
@@ -60,7 +60,11 @@ const biddingTokenContractAddress = await publicClient.readContract({
 console.log(`biddingToken: ${biddingTokenContractAddress}`);
 ```
 
-<aside>On Arbitrum One and Arbitrum Nova, the bidding token is WETH.</aside>
+::::info Bidding token in Arbitrum chains
+
+On Arbitrum One and Arbitrum Nova, the bidding token is WETH.
+
+::::
 
 Once we know what the bidding token is, we can deposit funds to the auction contract by calling the function `deposit` of the contract after having it approved as spender of the amount we want to deposit:
 
@@ -218,7 +222,7 @@ When sending the request, the autonomous auctioneer will return an empty result 
 
 ### Step 3: find out the winner of the auction
 
-After the auction closes, and before the round starts the autonomous auctioneer will call the auction contract with the two highest bids received so the contract can declare the winner and subtract the second-highest bid from the winner's deposited funds. After this, the contract will emit an event with the new express lane controller address.
+After the auction closes and before the round starts, the autonomous auctioneer will call the auction contract with the two highest bids received so the contract can declare the winner and subtract the second-highest bid from the winner's deposited funds. After this, the contract will emit an event with the new express lane controller address.
 
 We can use this event to determine whether or not we've won the auction. The event signature is:
 
