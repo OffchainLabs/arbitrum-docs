@@ -11,13 +11,12 @@ The Sequencer is a pivotal component of the Arbitrum network and is responsible 
 
 In this section, we will explore the operation of the Sequencer in detail. The topics covered include:
 
-- **Sequencing and Broadcasting (Sequencer Feed)**: An overview of the real-time transaction feed provided by the Sequencer, which allows nodes to receive instant updates on the transaction sequence.
-- **Batch-Posting**: How the Sequencer groups transactions into batches, compresses them to reduce data size and sends them to the Sequencer Inbox Contract on the parent chain. This section also delves into the L1 pricing model and how it affects transaction costs.
-  - **Batching**
-  - **Compression**
-  - **Submitting to Sequencer Inbox Contract**
-  - **L1 Pricing Model**
-- **Finality**: Understanding how transaction finality is achieved in Arbitrum through both soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably. (not as a sequencer task)
+- [Sequencing and Broadcasting (Sequencer Feed)](#sequencing-and-broadcasting): An overview of the real-time transaction feed provided by the Sequencer, which allows nodes to receive instant updates on the transaction sequence.
+- [Batch-Posting](#batch-posting): How the Sequencer groups transactions into batches, compresses them to reduce data size and sends them to the Sequencer Inbox Contract on the parent chain. This section also delves into the L1 pricing model and how it affects transaction costs.
+  - [Batching](#batching-and-compression)
+  - [Compression](#compression)
+  - [Submitting to the Sequencer Inbox Contract](#submitting-to-the-sequencer-inbox-contract)
+- [Finality](#finality): Understanding how transaction finality is achieved in Arbitrum through both soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably. (not as a sequencer task)
 
 By examining these aspects, you will understand the Sequencer's role within the Arbitrum ecosystem, including how it enhances transaction throughput, reduces latency, and maintains a fair and decentralized network.
 
@@ -87,11 +86,10 @@ In this section, we will explore the Batch-Posting process in detail, covering t
 - **Batching**: How the Sequencer groups incoming transactions into batches for efficient processing and posting.
 - **Compression**: The methods used to compress transaction data, minimizing the amount of data that needs to be posted on parent chain and thereby reducing costs.
 - **Sending to Sequencer Inbox Contract**: The procedure for submitting compressed batches to the Sequencer Inbox Contract on parent chain, ensuring secure and reliable recording of transactions.
-- **L1 Pricing Model**: An overview of the pricing challenges associated with posting data to parent chain and the adaptive algorithms used to determine fair costs per transaction.
 
 Understanding Batch-Posting is essential for grasping how Arbitrum achieves scalability and cost-efficiency without compromising security. By delving into these subtopics, you'll gain insight into the Sequencer's role in optimizing transaction throughput and minimizing fees, as well as the innovative solutions implemented to address the challenges of Layer 1 data pricing.
 
-## Batching & Compression
+## Batching and compression
 
 The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
 
@@ -135,7 +133,7 @@ This tradeoff prioritizes speed over compression efficiency, enabling faster pro
 
 Now that transactions are batched and compressed, they can be passed to batch-poster to be sent to the parent chain.
 
-## Submitting transactions to the Sequencer Inbox
+## Submitting to the Sequencer Inbox Contract
 
 After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **Batch Poster**, an Externally Owned Account (EOA) controlled by the Sequencer. The Batch Poster is responsible for submitting the compressed transaction batches to the **Sequencer Inbox Contract** on parent chain.
 
@@ -162,7 +160,9 @@ There are two primary methods the Sequencer uses to send batches to the parent c
   - **Cost Evaluation**: The Sequencer dynamically assesses whether using calldata is more cost-effective than blobs based on current gas prices and blob fees.
   - **Compatibility**: If the parent chain does not support EIP-4844, this method is the default and only option for batch posting.
 
-**Note**: The Sequencer continuously monitors network conditions to choose the most economical method for batch posting, ensuring optimal operation under varying circumstances.
+:::note
+The Sequencer continuously monitors network conditions to choose the most economical method for batch posting, ensuring optimal operation under varying circumstances.
+:::
 
 ### Authority and Finality
 
