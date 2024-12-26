@@ -2,163 +2,51 @@
 title: Sequencing, Followed by Deterministic Execution
 description: 'Learn the fundamentals of the Arbitrum Transaction Lifecycle, sequencing, and deterministic execution.'
 author: pete-vielhaber
-sme: TucksonDev
+sme: gmehta2
 user_story: As a current or prospective Arbitrum user, I need to learn more about the transaction lifecycle.
 content_type: get-started
 ---
 
-This diagram summarizes how transactions are processed in Nitro.
+This section explores the various methods users can employ to submit transactions for inclusion on the Arbitrum chain. We discuss the different pathways available—sending transactions to the sequencer or bypassing it by submitting transactions through the delayed inbox contract on the parent chain. By outlining these options, we aim to clarify how users can interact with the network, detail the processes involved in each method, and identify the modules responsible for handling these transactions. This overview will enhance your understanding of the initial steps in Arbitrum ecosystem's transaction lifecycle and prepare you for a detailed exploration of transaction inclusion mechanisms in the subsequent sections.
 
-![seq-then-exec](../assets/seq-then-exec.png)
+The first subsection, **Submitting Transactions to the Sequencer**, presents four different methods users can utilize to send their transactions to the sequencer: via Public RPC, Third-Party RPC, Arbitrum Nodes, and the Sequencer Endpoint. Transactions sent through the first three pathways will route through our Load Balancer before reaching the sequencer. In contrast, the Sequencer Endpoint allows transactions to bypass the Load Balancer and be sent directly to the sequencer.
 
-Let's follow a user's transaction through this process.
+The second subsection, **Bypassing the Sequencer**, describes an alternative method where users can include their transactions on the Arbitrum chain without relying on the sequencer. By sending transactions directly to the delayed inbox contract on the parent chain (Layer 1), users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
 
-First, the user creates a transaction, uses their wallet to sign it, and sends it to the Nitro chain's Sequencer. The Sequencer's job, as its name implies, is to take the arriving transactions, put them into an ordered sequence, and publish that sequence.
+This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the delayed inbox contract on the parent chain.
 
-Once the transactions are sequenced, they are run through the _state transition function_, one by one, in order. The state transition function takes as input the current state of the chain (account balances, contract code, and so on), along with the next transaction. It updates the state and sometimes emits a new Layer 2 block on the Nitro chain.
+## Submitting a transaction to the Sequencer
+This section outlines the different methods for users to submit transactions to the sequencer on the Arbitrum chain. There are four primary ways to do this: Public RPC, Third-Party RPCs, Arbitrum Nodes, and the Sequencer Endpoint. We will explore these methods in detail, explaining when to choose one over the other and how to use each to  effectively submit transactions to the Arbitrum sequencer.
 
-Because the protocol doesn't trust the Sequencer not to put garbage into its sequence, the state transition function will detect and discard any invalid (e.g., improperly formed) transactions in the sequence. A well-behaved Sequencer will filter out invalid transactions so the state transition function never sees them--and this reduces cost and therefore keeps transactions fees low--but Nitro will still work correctly no matter what the Sequencer puts into its feed. (Transactions in the feed are signed by their senders, so the Sequencer can't create forged transactions.)
+### 1. Public RPC
 
-The state transition function is deterministic, which means that its behavior depends only on the current state and the contents of the next transaction--and nothing else. Because of this determinism, the result of a transaction T will depend only on the genesis state of the chain, the transactions before T in the sequence, and T itself.
+Arbitrum provides public RPCs for its main chains: Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia.  Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
 
-It follows that anyone who knows the transaction sequence can compute the state transition function for themselves--and all honest parties who do this are guaranteed to get identical results. This is the normal way that Nitro nodes operate: get the transaction sequence, and run the state transition function locally. No consensus mechanism is needed for this.
+For more details on the specific RPC endpoints for each chain, please see [this section](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#arbitrum-public-rpc-endpoints) of the documentation.
 
-## Deep dive: The lifecycle of an Arbitrum transaction
+### 2. Third-Party RPC
 
-We'll now go step-by-step over the phases an Arbitrum transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 1.
+Users also have the option to interact with Arbitrum's public chains using third-party node providers. These providers are often the same popular ones used for Ethereum, making them reliable choices for resource-intensive operations. We recommend using these third-party providers when performance and scalability are critical.
 
-We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
+You can find a list of supported third-party providers [here](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#third-party-rpc-providers).
 
-This section will focus on the Arbitrum Rollup protocol; see [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) for differences in the Arbitrum AnyTrust protocol. Also, for convenience/simplicity, we'll be describing the security properties of the core system itself; see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization) for current decentralization status.
+### 3. Arbitrum Nodes
 
-For clarity on any terminology that may be unfamiliar, see our [glossary](/intro/glossary.mdx).
+Another approach for sending transactions to the sequencer is through self-hosted Arbitrum nodes. Running a node gives you direct control over your transactions, which go to the sequencer via the sequencer feed.
 
-### 1. Sequencer receives transaction
+. Please see the [Arbitrum Node](https://docs.arbitrum.io/run-arbitrum-node/overview) documentation to learn more about setting up and running a node.
 
-Typically, a transaction's lifecycle starts with the Sequencer, the entity designated with transaction ordering, receiving a transaction from a client. The Sequencer can receive a transaction one of two ways:
+### 4. Sequencer Endpoint
 
-##### 1a. Directly / Offchain
+The Sequencer Endpoint is the most direct method for users looking to minimize delays in their transactions reaching the sequencer. Unlike standard RPC URLs, the Sequencer Endpoint supports only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls, bypassing the load balancer entirely. This endpoint makes it an optimal choice for users who require the quickest transaction processing time.
 
-For typical transacting within the L2 environment (i.e., using an L2 native dapp), a client will connect their wallet to an L2 node and directly deliver a signed transaction.
+## Bypassing the Sequencer
+This section delves into an alternative method for submitting transactions to the Arbitrum chain, bypassing the sequencer. This page focuses on how users can send their transactions directly to the delayed inbox contract on the parent chain rather than through the sequencer. This method offers two distinct paths a transaction can take, with each route interacting with the network differently to achieve transaction inclusion. This approach provides users with greater flexibility and ensures that transactions can still be processed if the sequencer is unavailable or if users choose not to depend on it. This section highlights these alternative submission mechanisms and underscores the  robustness and decentralization features inherent in the Arbitrum network.
 
-##### 1b. ... or from L1 (via the Delayed Inbox).
+In **Diagram 3**, we demonstrate how users can submit their transactions using the delayed inbox contract to bypass the sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction is submitted to the delayed inbox, the sequencer may automatically pick it up, include it as an ordered transaction, and send it to the sequencer feed. However, if the sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the sequencer inbox contract. This action ensures that the sequencer to picks up the transaction and includes it in the ordered transaction list, providing users with a sense of security about their transactions.
 
-Alternatively, a client can send a message to the Sequencer by signing and publishing an L1 transaction in the Arbitrum chain's Delayed Inbox. This functionality is most commonly used for depositing ETH or tokens via a bridge.
+To send a transaction to the delayed inbox instead of submitting it to the sequencer, users can construct their transaction and then call the [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150) function, passing the data of the serialized signed transaction as an argument. This function allows users to send a generic L2 message to the chain, suitable for any message that does not require L1 validation.
 
-**See**:
+If the sequencer is not back online within 24 hours or decides to censor the transaction, users can invoke the [`forceInclusion`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/SequencerInbox.sol#L284) function on the SequencerInbox contract. This action ensures their transaction is included on the chain, bypassing the sequencer's role.
 
-- [Retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)
-- [The Sequencer](/how-arbitrum-works/03-sequencer.mdx)
-- [Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
-
-### 2. Sequencer orders transaction (off-chain)
-
-Upon receiving a transaction, the Sequencer will:
-
-- Order it in its off-chain Inbox
-- Locally execute it using the Arbitrum Nitro VM (including collecting/allocating L1 and L2 fees, etc.)
-- "Instantly" give a transaction receipt to the client ("instant" in that it doesn't require any additional on-chain confirmations, and typically takes less than a second - with the average user experiencing ~260ms).
-
-**See**:
-
-- [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos)
-- [Geth](/how-arbitrum-works/04-geth-at-the-core.mdx#geth)
-- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
-
-#### ~ ~ ~ FINALITY CHECK: Trusted / Soft Confirmation ~ ~ ~
-
-At this phase, the client's acceptance of finality relies on trusting the Sequencer, i.e., a malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch (see phase 3).
-
-:::note
-
-Even a malicious/faulty Sequencer can only, at worst, reorder or temporarily delay transactions; it cannot, e.g., forge a client's transaction or propose an invalid state update. Given the degree of trust in the Sequencer at phase 2, we sometimes refer to the "instant" receipt that the Sequencer provides as a "soft confirmation."
-
-:::
-
-### 3. Sequencer posts transaction in a batch (on-chain)
-
-The Sequencer will eventually post a batch of L2 transactions which includes our client's transaction onto the underlying L1 (as calldata); under normal conditions, the Sequencer will post batches [every few minutes](https://arbiscan.io/batches).
-
-##### 3a. What if the Sequencer never includes our transaction?
-
-Even if the Sequencer never includes our transaction in a batch, the client can include it in the L2 by posting in the delayed inbox and then "force including" it after some delay period (currently ~ @arbOneForceIncludePeriodHours@ hours on Arbitrum One).
-
-:::note
-
-The Sequencer is forced to include messages from the delayed Inbox in the queued order that they appear on chain, i.e. it processes messages using the "first in, first out" method. Thus, it can't selectively delay particular messages while including others; i.e., delaying the message at the front of the queue means delaying all messages behind it as well.
-
-:::
-
-**See:**
-
-- ["The Sequencer / Censorship Resistance."](/how-arbitrum-works/03-sequencer.mdx)
-
-#### ~ ~ ~ FINALITY CHECK: Ethereum-Equivalent Finality! ~ ~ ~
-
-At this stage, assuming that a client believes there to be at least one well behaved active Arbitrum validator. Currently, the process of validation on the Arbitrum protocol is permissioned, but it's important to be aware that our latest dispute protocol, [BoLD (Bounded Liquidity Delay)](https://medium.com/offchainlabs/bold-permissionless-validation-for-arbitrum-chains-9934eb5328cc), has the potential to allow validation on Arbitrum chains without requiring permission, thereby potentially eliminating the necessity for restricted validation. The client can treat their transaction's finality as equivalent to an ordinary Ethereum transaction. In other words, their L2 transaction has the same finality as the L1 transaction that recorded it in a batch. This means the client should use whatever finality heuristic they use for regular Ethereum transactions (i.e., waiting on L1 block confirmations, etc.), applied to the L1 batch-posting transaction. This also means that a client uncomfortable with the trust model of the Sequencer's soft confirmations (phase 2) can simply wait for the Sequencer to post their transaction in a batch (phase 3).
-
-How are we able to make such bold a claim? A few (related) things:
-
-- Once the Sequencer posts a batch, its transactions' ordering is entirely determined by the L1; the Sequencer effectively has no more say in our transaction's lifecycle at all.
-- The Inbox contract on L1 ensures that when the Sequencer posts a batch, it posts data sufficient for any Arbitrum Node to reconstruct and validate the state of the L2 chain; i.e., the availability of this "input" data is guaranteed by Ethereum itself.
-- Execution on Arbitrum is fully deterministic; i.e., a current chain state along with new input data is sufficient to compute the new chain state; thus, the moment this input data is available (i.e., when the Sequencer posts a batch), the L2 chain's state can be computed.
-- Arbitrum's fault-proof system is sound; i.e., if any validator (later) tries to deviate from the valid L2 state, an honest validator will ultimately be able to challenge this and win. Since we already know that valid state will ultimately win out, we can treat our transaction as L1-finalized now.
-
-### 4. Validator asserts RBlock that includes transaction
-
-A staked, active validator will then run the Arbitrum VM over the inputs in the Inbox (just like the Sequencer did earlier, except now only over transactions posted on L1) and make an on-chain assertion about the chain's latest state, i.e., a rollup block or "RBlock." RBlocks typically get asserted every 30-60 minutes.
-
-**See**:
-
-- [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos)
-- [Geth](/how-arbitrum-works/04-geth-at-the-core.mdx#geth)
-- [L1 pricing](/how-arbitrum-works/09-gas-fees.mdx) / [L2 Gas](/how-arbitrum-works/09-gas-fees.mdx)
-
-:::note
-
-RBlock assertions include claims about the state of the Outbox; if our transaction triggered any L2 to L1 messages, a RBlock will include an update to the Outbox to reflect its inclusion.
-
-:::
-
-**See**:
-
-- [The Outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)
-
-#### 4a. RBlock is valid / goes unchallenged
-
-In the happy / common case, the validator asserted a valid RBlock, and over the course of the dispute window — 1 week on Arbitrum One — no other validators challenge it.
-
-#### 4b. Assertion is challenged!
-
-If two validators assert different RBlocks, only (at most) one of them can be valid, so they are put into a dispute.
-
-A dispute consists of two staked validators dissecting their disagreement down to a single L2 block, and then dissecting the sequence of VM instructions within this block down to a single OPCODE, then finally, executing this single operation. The underlying VM the Arbitrum uses is [WebAssembly (Wasm)](https://webassembly.org), or, more precisely, "WAVM." This is all refereed by contracts on L1.
-
-**See:**
-
-- [Challenges](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#challengemanager)
-- [Wasm/WAVM](/how-arbitrum-works/07-interactive-fraud-proofs.mdx#wasm-to-wavm)
-
-L1 contracts also keep track of the tree of all assertions; i.e., how many stakers are in disagreement, who is currently disputing with whom, etc. We refer to this level of Arbitrum's design architecture as its "assertion tree protocol."
-
-**See:**
-
-- [Assertion Tree Protocol](/how-arbitrum-works/06-optimistic-rollup.mdx)
-
-#### ~ ~ ~ FINALITY CHECK: STILL THE SAME Ethereum-Equivalent Finality! ~ ~ ~
-
-Remember in phase 3 when said that once the L1 has committed to inputs, we can guarantee the L2 output? We meant it! Even during a dispute, Arbitrum nodes continue to execute and active validators continue to make assertions on the valid leaf in the state-tree; nothing that can happen in phase 4 has any effect on the L1-level finality we've already locked in at phase 3.
-
-### 5. RBlock is confirmed on L1
-
-Once any and all disputes have been resolved and sufficient time has passed, our RBlock can be confirmed on L1 (any Ethereum account on L1 can confirm it). Upon confirmation, the Outbox root on L1 gets updated.
-
-#### ~ ~ ~ FINALITY CHECK: L2-to-L1 Messages Executable on L1 ~ ~ ~
-
-If our client's transaction didn't include any L2-to-L1 messages (e.g., withdrawals), phase 5 has no material effect on their transaction. If it did include an L2-to-L1 transaction, it is only after confirmation that the message can be executed in the Outbox on L1.
-
-:::note
-
-Even before phase 5, the client has L1 finality on the _result_ of their L2-to-L1 message, they just can't execute it yet; i.e., they have a guarantee that they'll eventually be able to, e.g., finalize their withdrawal, they just can't claim their funds on L1 until the RBlock is confirmed.
-
-:::
+Additionally, the Arbitrum SDK provides the [`InboxTools`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L64C14-L64C24) class, which simplifies the process of submitting transactions to the delayed inbox. Users can utilize the [`sendChildSignedTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L401C16-L401C33) method to send the transaction and the [`forceInclude`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L367) method to ensure its inclusion. The SDK also offers helper methods like [`signChildTx`](https://github.com/OffchainLabs/arbitrum-sdk/blob/792a7ee3ccf09842653bc49b771671706894cbb4/src/lib/inbox/inbox.ts#L429) to assist with signing the transaction during the creation of the serialized signed transaction hex string, streamlining the entire process.
