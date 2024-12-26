@@ -16,11 +16,12 @@ The second subsection, **Bypassing the Sequencer**, describes an alternative met
 This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the delayed inbox contract on the parent chain.
 
 ## Submitting a transaction to the Sequencer
-This section outlines the different methods for users to submit transactions to the sequencer on the Arbitrum chain. There are four primary ways to do this: Public RPC, Third-Party RPCs, Arbitrum Nodes, and the Sequencer Endpoint. We will explore these methods in detail, explaining when to choose one over the other and how to use each to  effectively submit transactions to the Arbitrum sequencer.
+
+This section outlines the different methods for users to submit transactions to the sequencer on the Arbitrum chain. There are four primary ways to do this: Public RPC, Third-Party RPCs, Arbitrum Nodes, and the Sequencer Endpoint. We will explore these methods in detail, explaining when to choose one over the other and how to use each to effectively submit transactions to the Arbitrum sequencer.
 
 ### 1. Public RPC
 
-Arbitrum provides public RPCs for its main chains: Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia.  Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
+Arbitrum provides public RPCs for its main chains: Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia. Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
 
 For more details on the specific RPC endpoints for each chain, please see [this section](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#arbitrum-public-rpc-endpoints) of the documentation.
 
@@ -41,7 +42,8 @@ Another approach for sending transactions to the sequencer is through self-hoste
 The Sequencer Endpoint is the most direct method for users looking to minimize delays in their transactions reaching the sequencer. Unlike standard RPC URLs, the Sequencer Endpoint supports only `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls, bypassing the load balancer entirely. This endpoint makes it an optimal choice for users who require the quickest transaction processing time.
 
 ## Bypassing the Sequencer
-This section delves into an alternative method for submitting transactions to the Arbitrum chain, bypassing the sequencer. This page focuses on how users can send their transactions directly to the delayed inbox contract on the parent chain rather than through the sequencer. This method offers two distinct paths a transaction can take, with each route interacting with the network differently to achieve transaction inclusion. This approach provides users with greater flexibility and ensures that transactions can still be processed if the sequencer is unavailable or if users choose not to depend on it. This section highlights these alternative submission mechanisms and underscores the  robustness and decentralization features inherent in the Arbitrum network.
+
+This section delves into an alternative method for submitting transactions to the Arbitrum chain, bypassing the sequencer. This page focuses on how users can send their transactions directly to the delayed inbox contract on the parent chain rather than through the sequencer. This method offers two distinct paths a transaction can take, with each route interacting with the network differently to achieve transaction inclusion. This approach provides users with greater flexibility and ensures that transactions can still be processed if the sequencer is unavailable or if users choose not to depend on it. This section highlights these alternative submission mechanisms and underscores the robustness and decentralization features inherent in the Arbitrum network.
 
 In **Diagram 3**, we demonstrate how users can submit their transactions using the delayed inbox contract to bypass the sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction is submitted to the delayed inbox, the sequencer may automatically pick it up, include it as an ordered transaction, and send it to the sequencer feed. However, if the sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the sequencer inbox contract. This action ensures that the sequencer to picks up the transaction and includes it in the ordered transaction list, providing users with a sense of security about their transactions.
 
