@@ -22,7 +22,7 @@ For more information related to configuring a DAC, refer to the _[Introduction](
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?
@@ -392,7 +392,7 @@ After you decode a batch poster transaction and get its `data` within the functi
 
 The first part (1 byte) is the `header flag`, which is used to specify which type of batch it is. Here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
 
-The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/inside-anytrust#keysets).
+The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/08-anytrust-protocol.mdx#keysets).
 
 The third part (32 bytes) is the data hash, and this is what we need to retrieve data. When you get this hash, you can retrieve data directly by following what we demonstrate in Step 4.
 
