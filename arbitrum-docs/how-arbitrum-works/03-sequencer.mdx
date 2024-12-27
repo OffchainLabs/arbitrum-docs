@@ -9,6 +9,8 @@ content_type: get-started
 
 The Sequencer is a pivotal component of the Arbitrum network and is responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast transaction confirmations while maintaining the security and integrity of the blockchain. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to parent chain, optimizing costs and performance.
 
+![sequencer-operations](../assets/sequencer-operations.png)
+
 In this section, we will explore the operation of the Sequencer in detail. The topics covered include:
 
 - [Sequencing and Broadcasting (Sequencer Feed)](#sequencing-and-broadcasting): An overview of the real-time transaction feed provided by the Sequencer, which allows nodes to receive instant updates on the transaction sequence.
@@ -29,7 +31,9 @@ The **Sequencer Feed** is a critical component of the Arbitrum network's Nitro a
 The Sequencer communicates the transaction sequence through two primary channels:
 
 1. **Real-Time Sequencer Feed**: A live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, allowing them to process transactions without delay.
-2. **Batches Posted on the Parent Chain**: At regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. (Refer to the Batch-Posting section for detailed information on this process)
+2. **Batches Posted on the Parent Chain**: At regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. (Refer to the Batch-Posting section for detailed information on this process.)
+
+![sequencer-feed](../assets/sequencer-feed.png)
 
 ### Real-Time Sequencer Feed
 
@@ -93,6 +97,8 @@ Understanding Batch-Posting is essential for grasping how Arbitrum achieves scal
 
 The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
 
+![batching](../assets/batching.png)
+
 **Transaction Collection and Ordering:**
 
 - **Continuous Reception:** The Sequencer continuously receives transactions submitted by users.
@@ -116,6 +122,8 @@ This batching mechanism allows the Sequencer to efficiently manage transactions 
 
 The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
 
+![compression](../assets/compression.png)
+
 ### Compression level in the Brotli algorithm
 
 Brotli’s compression algorithm includes a parameter: **compression level**, which ranges from **0 to 11**. This parameter allows you to balance two key factors:
@@ -138,6 +146,8 @@ Now that transactions are batched and compressed, they can be passed to batch-po
 After batching and compressing transactions, the Sequencer posts these batches to the parent chain to ensure security and finality. This process involves the **Batch Poster**, an Externally Owned Account (EOA) controlled by the Sequencer. The Batch Poster is responsible for submitting the compressed transaction batches to the **Sequencer Inbox Contract** on parent chain.
 
 There are two primary methods the Sequencer uses to send batches to the parent chain, depending on whether the chain supports EIP-4844 (Proto-Danksharding) and the current network conditions:
+
+![submit-to-sequencer-inbox](../assets/submit-to-sequencer-inbox.png)
 
 ### 1. Using Blobs with `addSequencerL2BatchFromBlobs`
 
