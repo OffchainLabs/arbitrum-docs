@@ -7,11 +7,11 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-This section explores the various methods users can employ to submit transactions for inclusion on the Arbitrum chain. We discuss the different pathways available—sending transactions to the sequencer or bypassing it by submitting transactions through the delayed inbox contract on the parent chain. By outlining these options, we aim to clarify how users can interact with the network, detail the processes involved in each method, and identify the modules responsible for handling these transactions. This overview will enhance your understanding of the initial steps in Arbitrum ecosystem's transaction lifecycle and prepare you for a detailed exploration of transaction inclusion mechanisms in the subsequent sections.
+This section explores the various methods users can employ to submit transactions for inclusion on the <a data-quicklook-from="arbitrum">Arbitrum</a> chain. We discuss the different pathways available—sending transactions to the <a data-quicklook-from="sequencer">Sequencer</a> or bypassing it by submitting transactions through the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract on the <a data-quicklook-from="parent-chain">Parent chain</a>. By outlining these options, we aim to clarify how users can interact with the network, detail the processes involved in each method, and identify the modules responsible for handling these transactions. This overview will enhance your understanding of the initial steps in Arbitrum ecosystem's <a data-quicklook-from="transaction">Transaction</a> lifecycle and prepare you for a detailed exploration of transaction inclusion mechanisms in the subsequent sections.
 
 The first subsection, [Submitting Transactions to the Sequencer](#submitting-transactions-to-the-sequencer), presents four different methods users can utilize to send their transactions to the sequencer: via Public RPC, Third-Party RPC, Arbitrum Nodes, and the Sequencer Endpoint. Transactions sent through the first three pathways will route through our Load Balancer before reaching the sequencer. In contrast, the Sequencer Endpoint allows transactions to bypass the Load Balancer and be sent directly to the sequencer.
 
-The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), describes an alternative method where users can include their transactions on the Arbitrum chain without relying on the sequencer. By sending transactions directly to the delayed inbox contract on the parent chain (Layer 1), users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
+The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), describes an alternative method where users can include their transactions on the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> without relying on the sequencer. By sending transactions directly to the delayed inbox contract on the parent chain (Layer 1), users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
 
 This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the delayed inbox contract on the parent chain.
 
@@ -21,7 +21,7 @@ This section outlines the different methods for users to submit transactions to 
 
 ### 1. Public RPC
 
-Arbitrum provides public RPCs for its main chains: Arbitrum One, Arbitrum Nova, and Arbitrum Sepolia. Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
+Arbitrum provides public RPCs for its main chains: <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia. Due to their rate-limited nature, these RPC endpoints are suitable for less resource-intensive operations. Public RPCs can be an accessible option for general use cases and light interactions with the network.
 
 For more details on the specific RPC endpoints for each chain, please see [this section](https://docs.arbitrum.io/build-decentralized-apps/reference/node-providers#arbitrum-public-rpc-endpoints) of the documentation.
 
@@ -33,7 +33,7 @@ You can find a list of supported third-party providers [here](https://docs.arbit
 
 ### 3. Arbitrum Nodes
 
-Another approach for sending transactions to the sequencer is through self-hosted Arbitrum nodes. Running a node gives you direct control over your transactions, which go to the sequencer via the sequencer feed.
+Another approach for sending transactions to the sequencer is through self-hosted Arbitrum nodes. Running a node gives you direct control over your transactions, which go to the sequencer via the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>.
 
 Please see the [Arbitrum Node](https://docs.arbitrum.io/run-arbitrum-node/overview) documentation to learn more about setting up and running a node.
 

@@ -7,16 +7,16 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-Gas is used by Arbitrum to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
+Gas is used by <a data-quicklook-from="arbitrum">Arbitrum</a> to track the cost of execution on a Nitro chain. It works the same as Ethereum gas, in the sense that every EVM instruction costs the same amount of gas that it would on Ethereum.
 
 There are two parties a user pays when submitting a tx:
 
 - the poster, if reimbursable, for L1 resources such as the L1 calldata needed to post the tx
 - the network fee account for L2 resources, which include the computation, storage, and other burdens L2 nodes must bear to service the tx
 
-The L1 component is the product of the transaction's estimated contribution to its batch's size — computed using Brotli on the transaction by itself — and the L2's view of the L1 data price, a value which dynamically adjusts over time to ensure the batch-poster is ultimately fairly compensated.
+The L1 component is the product of the <a data-quicklook-from="transaction">Transaction</a>'s estimated contribution to its <a data-quicklook-from="batch">Batch</a>'s size — computed using Brotli on the transaction by itself — and the L2's view of the L1 data price, a value which dynamically adjusts over time to ensure the batch-poster is ultimately fairly compensated.
 
-The L2 component consists of the traditional fees Geth would pay to stakers in a vanilla L1 chain, such as the computation and storage charges applying the state transition function entails. ArbOS charges additional fees for executing its L2-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
+The L2 component consists of the traditional fees <a data-quicklook-from="geth">Geth</a> would pay to stakers in a vanilla L1 chain, such as the computation and storage charges applying the <a data-quicklook-from="state-transition-function">State Transition Function</a> entails. <a data-quicklook-from="arbos">ArbOS</a> charges additional fees for executing its L2-specific [precompiles](/build-decentralized-apps/precompiles/01-overview.mdx), whose fees are dynamically priced according to the specific resources used while executing the call.
 
 The following sections will detail how to calculate L1 and L2 fees. If you do not need precise calculations or a technical understanding, skip to the next section, [L1 to L2 messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
@@ -28,11 +28,11 @@ ArbOS dynamically prices L1 gas, with the price adjusting to ensure that the amo
 
 There are two types of L1 costs: batch posting costs, and rewards.
 
-Batch posting costs reflect the actual cost a batch poster pays to post batch data on L1. Whenever a batch is posted, the L1 contract that records the batch will send a special "batch posting report" message to L2 ArbOS, reporting who paid for the batch and what the L1 basefee was at the time. This message is placed in the chain's delayed inbox, so it will be delivered to L2 ArbOS after some delay.
+Batch posting costs reflect the actual cost a batch poster pays to post batch data on L1. Whenever a batch is posted, the L1 contract that records the batch will send a special "batch posting report" message to L2 ArbOS, reporting who paid for the batch and what the L1 basefee was at the time. This message is placed in the chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, so it will be delivered to L2 ArbOS after some delay.
 
 When a batch posting report message arrives at L2, ArbOS computes the cost of the referenced batch by multiplying the reported basefee by the batch's data cost. (ArbOS retrieves the batch's data from its inbox state, and computes the L1 gas that the batch would have used by counting the number of zero bytes and non-zero bytes in the batch.) The resulting cost is recorded by the pricer as funds due to the party who is reported to have submitted the batch.
 
-The second type of L1 cost is an optional (per chain) per-unit reward for handling transaction calldata. In general the reward might be paid to the sequencer, or to members of the Data Availability Committee in an AnyTrust chain, or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
+The second type of L1 cost is an optional (per chain) per-unit reward for handling transaction calldata. In general the reward might be paid to the <a data-quicklook-from="sequencer">Sequencer</a>, or to members of the Data Availability Committee in an AnyTrust chain, or to anyone else who incurs per-calldata-byte costs on behalf of the chain. The reward is a fixed number of wei per data unit, and is paid to a single address.
 
 The L1 pricer keeps track of the funds due to the reward address, based on the number of data units handled so far. This amount is updated whenever a batch posting report arrives at L2.
 
@@ -63,7 +63,7 @@ The L1 pricer also records the total number of "data units" (the sum of the esti
 
 ## L2 gas pricing
 
-The L2 gas price on a given Arbitrum chain has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @arbOneGasFloorGwei@ gwei on Arbitrum One and @novaGasFloorGwei@ gwei on Nova).
+The L2 gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @arbOneGasFloorGwei@ gwei on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and @novaGasFloorGwei@ gwei on Nova).
 
 ### Estimating L2 Gas
 
@@ -75,7 +75,7 @@ L2 gas fees work very similarly to gas on Ethereum. A transaction uses some amou
 
 The L2 basefee is set by a version of the "exponential mechanism" which has been widely discussed in the Ethereum community, and which has been shown equivalent to Ethereum's EIP-1559 gas pricing mechanism.
 
-The algorithm compares gas usage against a parameter called the [speed limit](#the-speed-limit) which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the speed limit on Arbitrum One is @arbOneGasSpeedLimitGasPerSec@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
+The algorithm compares gas usage against a parameter called the [speed limit](#the-speed-limit) which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the <a data-quicklook-from="speed-limit">Speed Limit</a> on Arbitrum One is @arbOneGasSpeedLimitGasPerSec@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
 
 Intuitively, if the backlog grows, the algorithm should increase the gas price, to slow gas usage, because usage is above the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the below the sustainable limit so more gas usage can be welcomed.
 
@@ -97,7 +97,7 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 ### The Speed Limit
 
-The security of Nitro chains depends on the assumption that when one validator creates an RBlock, other validators will check it, and respond with a correct RBlock and a challenge if it is wrong. This requires that the other validators have the time and resources to check each RBlock quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for RBlocks.
+The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">Validator</a> creates an <a data-quicklook-from="rblock">RBlock</a>, other validators will check it, and respond with a correct RBlock and a <a data-quicklook-from="challenge">Challenge</a> if it is wrong. This requires that the other validators have the time and resources to check each RBlock quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for RBlocks.
 
 This sets an effective speed limit on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If RBlocks are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit, enforced by the rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new RBlocks to be slowed down, thereby enforcing the effective speed limit.
 

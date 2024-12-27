@@ -7,17 +7,17 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-Arbitrum is an optimistic rollup. Let’s unpack that term.
+<a data-quicklook-from="arbitrum">Arbitrum</a> is an optimistic rollup. Let’s unpack that term.
 
 _Rollup_
 
 Arbitrum is a Rollup, which means that the inputs to the chain -- the messages that are put into the inbox -- are all recorded on the Ethereum chain as calldata. Because of this, everyone has the information they would need to determine the current correct state of the chain -- they have the full history of the inbox, and the results are uniquely determined by the inbox history, so they can reconstruct the state of the chain based only on public information, if needed.
 
-This also allows anyone to be a full participant in the Arbitrum protocol, to run an Arbitrum node or participate as a validator. Nothing about the history or state of the chain is a secret.
+This also allows anyone to be a full participant in the Arbitrum protocol, to run an Arbitrum node or participate as a <a data-quicklook-from="validator">Validator</a>. Nothing about the history or state of the chain is a secret.
 
 _Optimistic_
 
-Arbitrum is optimistic, which means that Arbitrum advances the state of its chain by letting any party (a “validator”) post on Layer 1 a rollup block that that party claims is correct, and then giving everyone else a chance to challenge that claim. If the challenge period (6.4 days) passes and nobody has challenged the claimed rollup block, Arbitrum confirms the rollup block as correct. If someone challenges the claim during the challenge period, then Arbitrum uses an efficient dispute resolution protocol (detailed below) to identify which party is lying. The liar will forfeit a deposit, and the truth-teller will take part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if there's some collusion going on).
+Arbitrum is optimistic, which means that Arbitrum advances the state of its chain by letting any party (a “validator”) post on Layer 1 a rollup block that that party claims is correct, and then giving everyone else a chance to <a data-quicklook-from="challenge">Challenge</a> that claim. If the <a data-quicklook-from="challenge-period">Challenge Period</a> (6.4 days) passes and nobody has challenged the claimed rollup block, Arbitrum confirms the rollup block as correct. If someone challenges the claim during the challenge period, then Arbitrum uses an efficient dispute resolution protocol (detailed below) to identify which party is lying. The liar will forfeit a deposit, and the truth-teller will take part of that deposit as a reward for their efforts (some of the deposit is burned, guaranteeing that the liar is punished even if there's some collusion going on).
 
 Because a party who tries to cheat will lose a deposit, attempts to cheat should be very rare, and the normal case will be a single party posting a correct rollup block, and nobody challenging it.
 
@@ -31,13 +31,13 @@ There are basically two choices: interactive proving, or re-executing transactio
 
 The idea of interactive proving is that Alice and Bob will engage in a back-and-forth protocol, refereed by an L1 contract, to resolve their dispute with minimal work required from any L1 contract.
 
-Arbitrum's approach is based on dissection of the dispute. If Alice's claim covers N steps of execution, she posts two claims of size N/2 which combine to yield her initial N-step claim, then Bob picks one of Alice's N/2-step claims to challenge. Now the size of the dispute has been cut in half. This process continues, cutting the dispute in half at each stage, until they are disagreeing about a single step of execution. Note that so far the L1 referee hasn't had to think about execution "on the merits". It is only once the dispute is narrowed down to a single step that the L1 referee needs to resolve the dispute by looking at what the instruction actually does and whether Alice's claim about it is correct.
+Arbitrum's approach is based on <a data-quicklook-from="dissection">Dissection</a> of the dispute. If Alice's claim covers N steps of execution, she posts two claims of size N/2 which combine to yield her initial N-step claim, then Bob picks one of Alice's N/2-step claims to challenge. Now the size of the dispute has been cut in half. This process continues, cutting the dispute in half at each stage, until they are disagreeing about a single step of execution. Note that so far the L1 referee hasn't had to think about execution "on the merits". It is only once the dispute is narrowed down to a single step that the L1 referee needs to resolve the dispute by looking at what the instruction actually does and whether Alice's claim about it is correct.
 
 The key principle behind interactive proving is that if Alice and Bob are in a dispute, Alice and Bob should do as much off-chain work as possible needed to resolve their dispute, rather than putting that work onto an L1 contract.
 
 ### Re-executing transactions
 
-The alternative to interactive proving would be to have a rollup block contain a claimed machine state hash after every individual transaction. Then in case of a dispute, the L1 referee would emulate the execution of an entire transaction, to see whether the outcome matches Alice's claim.
+The alternative to interactive proving would be to have a rollup block contain a claimed machine state hash after every individual <a data-quicklook-from="transaction">Transaction</a>. Then in case of a dispute, the L1 referee would emulate the execution of an entire transaction, to see whether the outcome matches Alice's claim.
 
 ### Why interactive proving is better
 
@@ -47,7 +47,7 @@ We believe strongly that interactive proving is the superior approach, for the f
 
 **More efficient in the pessimistic case**: In case of a dispute, interactive proving requires the L1 referee contract only to check that Alice and Bob's actions "have the right shape", for example, that Alice has divided her N-step claim into two claims half as large. (The referee doesn't need to evaluate the correctness of Alice's claims--Bob does that, off-chain.) Only one instruction needs to be reexecuted. By contrast, reexecution requires the L1 referee to emulate the execution of an entire transaction.
 
-**Higher per-tx gas limit:** Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive fraud proof with slightly more steps (and only if indeed it is fraudulent). By contrast, reexecution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
+**Higher per-tx gas limit:** Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive <a data-quicklook-from="fraud-proof">Fraud proof</a> with slightly more steps (and only if indeed it is fraudulent). By contrast, reexecution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
 
 **More implementation flexibility:** Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on Ethereum. By contrast, reexecution approaches are tethered to limitations of the EVM.
 
@@ -65,23 +65,23 @@ You’re welcome to study, observe, and even participate in the Rollup protocol,
 
 The second thing to understand about the Rollup protocol is that _the protocol doesn’t decide the results of transactions, it only confirms the results_. The results are uniquely determined by the sequence of messages in the chain’s inbox. So once your transaction message is in the chain’s inbox, its result is knowable, and Arbitrum nodes will report that your transaction has been completed. The role of the Rollup protocol is to confirm transaction results that, as far as Arbitrum users are concerned, have already occurred. (This is why Arbitrum users can effectively ignore the Rollup protocol.)
 
-You might wonder why we need the Rollup protocol. If everyone knows the results of transactions already, why bother confirming them? The Rollup protocol exists for two reasons. First, somebody might lie about a result, and we need a definitive, trustless way to tell who is lying. Second, Ethereum doesn’t know the results. The whole point of a Layer 2 scaling system is to run transactions without Ethereum needing to do all of the work--and indeed, Arbitrum can go fast enough that Ethereum couldn’t hope to monitor every Arbitrum transaction. However, once the result is confirmed, Ethereum knows about it and can rely on it, enabling operations on Ethereum, such as processing withdrawals of funds from Nitro back to L1.
+You might wonder why we need the Rollup protocol. If everyone knows the results of transactions already, why bother confirming them? The Rollup protocol exists for two reasons. First, somebody might lie about a result, and we need a definitive, <a data-quicklook-from="trustless">Trustless</a> way to tell who is lying. Second, Ethereum doesn’t know the results. The whole point of a Layer 2 scaling system is to run transactions without Ethereum needing to do all of the work--and indeed, Arbitrum can go fast enough that Ethereum couldn’t hope to monitor every Arbitrum transaction. However, once the result is confirmed, Ethereum knows about it and can rely on it, enabling operations on Ethereum, such as processing withdrawals of funds from Nitro back to L1.
 
 With those preliminaries behind us, let’s jump into the details of the Rollup protocol.
 
-The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on Arbitrum One, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
+The parties who participate in the protocol are called _validators_. Some validators will choose to be bonders--they will place an ETH deposit which they’ll be able to recover if they’re not caught cheating. In the common case, it's expected that only one validator will be bonded, since as long as it's bonded on the current outcome, and there are no conflicting claims, there's no need for other parties to bond/take any action. The protocol allows for these roles to be permissionless in principle; currently on <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, validators/bonders are allowlisted (see ["State of Progressive Decentralization"](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). "Watchtower validators," who monitor the chain but don't take any on-chain actions, can be run permissionlessly (see ["validators"](#validators) below).
 
-The key security property of the Rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that the execution of an Arbitrum chain is as trustless as Ethereum. You, and you alone (or someone you hire), can force your transactions to be processed correctly. And that is true, no matter how many malicious people are trying to stop you.
+The key security property of the Rollup protocol is that any one honest validator can force the correct execution of the chain to be confirmed. This means that the execution of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> is as trustless as Ethereum. You, and you alone (or someone you hire), can force your transactions to be processed correctly. And that is true, no matter how many malicious people are trying to stop you.
 
 ### The Rollup Chain
 
-The Rollup protocol tracks a chain of Rollup blocks---we'll call these "RBlocks" for clarity. They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 Nitro blocks. You can think of the RBlocks as forming a separate chain, which the Arbitrum rollup protocol manages and oversees.
+The Rollup protocol tracks a chain of Rollup blocks---we'll call these "RBlocks" for clarity. They're not the same as Layer 1 Ethereum blocks, and also not the same as Layer 2 Nitro blocks. You can think of the RBlocks as forming a separate chain, which the <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup Protocol</a> manages and oversees.
 
-Validators can propose RBlocks. New RBlocks will be _unresolved_ at first. Eventually, every RBlock will be _resolved_, by being either _confirmed_ or _rejected_. The confirmed RBlocks make up the confirmed history of the chain.
+Validators can propose RBlocks. New RBlocks will be _unresolved_ at first. Eventually, every <a data-quicklook-from="rblock">RBlock</a> will be _resolved_, by being either _confirmed_ or _rejected_. The confirmed RBlocks make up the confirmed history of the chain.
 
 :::note
 
-Validators and proposers serve different roles. Validators validate transactions to the State Transition Function (STF) and chain state, whereas proposers can also assert and challenge the chain state.
+Validators and proposers serve different roles. Validators validate transactions to the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) and <a data-quicklook-from="chain-state">Chain state</a>, whereas proposers can also assert and challenge the chain state.
 
 :::
 
@@ -237,7 +237,7 @@ A consequence of these rules is that once the first unresolved RBlock's deadline
 
 ## Delays
 
-Even if the Assertion Tree has multiple conflicting RBlocks and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid RBlock (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
+Even if the <a data-quicklook-from="assertion">Assertion</a> Tree has multiple conflicting RBlocks and, say, multiple disputes are in progress, validators can continue making assertions; honest validators will simply build on the one valid RBlock (intuitively: an assertion is also an implicit claim of the validity of all of its parent-assertions.) Likewise, users can continue transacting on L2, since transactions continue to be posted in the chain's inbox.
 
 The only delay that users experience during a dispute is of their [L2 to L1 messages](/how-arbitrum-works/11-l2-to-l1-messaging.mdx) (i.e., "their withdrawals"). Note that a "delay attacker" who seeks to grief the system by deliberately causing such delays will find this attack quite costly, since each bit of delay-time gained requires the attacker lose another stake.
 
@@ -249,11 +249,12 @@ Some Arbitrum nodes will choose to act as _validators_. This means that they wat
 
 Not all nodes will choose to do this. Because the Rollup protocol doesn’t decide what the chain will do but merely confirms the correct behavior that is fully determined by the inbox messages, a node can ignore the rollup protocol and simply compute for itself the correct behavior.
 
-Offchain Labs provides open source validator software, including a pre-built Docker image.
+<a data-quicklook-from="offchain-labs">Offchain Labs</a> provides open source validator software, including
+a pre-built Docker image.
 
 Every validator can choose their own approach, but we expect validators to follow three common strategies:
 
-- The _active validator_ strategy tries to advance the state of the chain by proposing new RBlocks. An active validator is always bonded, because creating an RBlock requires being bonded. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
+- The _active validator_ strategy tries to advance the state of the chain by proposing new RBlocks. An <a data-quicklook-from="active-validator">Active Validator</a> is always bonded, because creating an RBlock requires being bonded. A chain really only needs one honest active validator; any more is an inefficient use of resources. For the Arbitrum One chain, Offchain Labs runs an active validator.
 - The _defensive validator_ strategy watches the rollup protocol operate. If only correct RBlocks are proposed, this strategy doesn't bond. But if an incorrect RBlock is proposed, this strategy intervenes by posting a correct RBlock or staking on a correct RBlock that another party has posted. This strategy avoids staking when things are going well, but if someone is dishonest it bonds in order to defend the correct outcome.
 - The _watchtower validator_ strategy never bonds. It simply watches the Rollup protocol, and if an incorrect RBlock is proposed, it raises the alarm (by whatever means it chooses) so that others can intervene. This strategy assumes that other parties who are willing to bond will be willing to intervene in order to take some of the dishonest proposer’s bond and that that can happen before the dishonest RBlock’s deadline expires. (In practice, this will allow several days for a response.)
 
@@ -264,5 +265,5 @@ The underlying protocol supports permissionless validation, i.e.,--anyone can do
 Who will be validators? Anyone will be able to do it, but most people will choose not to. In practice we expect people to validate a chain for several reasons.
 
 - Validators could be paid for their work, by the party that created the chain or someone else. A chain could be configured such that a portion of the funds from user transaction fees are paid directly to validators.
-- Parties who have significant assets at bond on a chain, such as dapp developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
+- Parties who have significant assets at bond on a chain, such as <a data-quicklook-from="dapp">dApp</a> developers, exchanges, power-users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who chooses to validate can do so. Some users will probably choose to validate in order to protect their own interests or just to be good citizens. But ordinary users don’t need to validate, and we expect that the vast majority of users won’t.
