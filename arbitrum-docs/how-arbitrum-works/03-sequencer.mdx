@@ -1,6 +1,6 @@
 ---
 title: The Sequencer and Censorship Resistance
-description: "Learn the fundamentals of the Arbitrum Sequencer."
+description: 'Learn the fundamentals of the Arbitrum Sequencer.'
 author: pete-vielhaber
 sme: gmehta2
 user_story: As a current or prospective Arbitrum user, I need to learn more about the Sequencer.
@@ -279,6 +279,7 @@ The Censorship Timeout feature mitigates this by implementing a time threshold t
 Under reasonable parameterization, the sequencer could be offline or censoring for 24 hours twice, referred to as the `delay buffer`, before the force inclusion window is effectively dropped from 24 hours to a minimum inclusion period or `threshold` of 30 minutes. The force inclusion window gradually (over weeks) replenishes to its original value over time as long as the sequencer is on “good behavior” at some rate known as the `replenish rate`. An example of “good behavior” could be the default and normal sequencing of messages without unexpected delays.
 
 Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Arbitrum Nova:
+
 - `delay buffer` = 14400 L1 Ethereum blocks (2 days)
 - `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 L1 Ethereum blocks (1 hour) for Arbitrum Nova
 - `replenish rate` = 5% (meaning 1 day is replenished every 20 days, or roughly a 95% uptime)
