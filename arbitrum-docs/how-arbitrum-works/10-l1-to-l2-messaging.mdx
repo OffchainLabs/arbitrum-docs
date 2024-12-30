@@ -33,7 +33,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 ### Submission
 
-1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract][inbox_link]. A ticket is guaranteed to be created if this call succeeds. Here, we describe parameters that need to be carefully set. Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
+1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract](https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol). A ticket is guaranteed to be created if this call succeeds. Here, we describe parameters that need to be carefully set. Note that, this function forces the sender to provide a _reasonable_ amount of funds (at least enough to submitting, and _attempting_ to executing the ticket), but that doesn't guarantee a successful auto-redemption.
 
 | Parameter                                   | Description                                                                                                                                                                                                                                                                                                                                              |
 | :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -51,7 +51,6 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
 
-[inbox_link]: https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/<a data-quicklook-from="bridge">Bridge</a>/Inbox.sol
 
 <MermaidWithHtml>
   <Nodes title="Ticket Submission">
