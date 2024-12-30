@@ -1,7 +1,7 @@
 ---
 id: recommended-libraries
 title: Recommended Libraries
-sidebar_label: Recommended libraries
+sidebar_label: Use Rust Crates
 ---
 
 # Recommended libraries

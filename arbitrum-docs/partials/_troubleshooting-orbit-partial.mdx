@@ -20,11 +20,19 @@ Check our <a href="https://docs.arbitrum.io/launch-orbit-chain/orbit-quickstart"
 
 ### Do I need permission/license to launch an Orbit chain?
 <p>
-You can permissionlessly launch an L3 Orbit chain that settles to one of Arbitrum's Layer 2 (L2) chains. There is an emerging licensing structure will soon make it possible to permissionlessly launch an L2 Orbit chain that settles directly to Ethereum. Please get in touch with the Arbitrum Foundation or Offchain Labs for more information.
+You can launch any Orbit chain permissionlessly. 
 </p>
 
 <p>
-Note that launching a testnet doesn't require any license.
+Nitro is licensed under a <a href="https://github.com/OffchainLabs/nitro?tab=License-1-ov-file">Business Source license</a>, similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova. 
+</p>
+
+<p>
+However, Orbit chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the <a href="https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf">AEP</a>.
+</p>
+
+<p>
+
 </p>
 
 <p>
@@ -54,14 +62,13 @@ Yes, you can make any changes you require to the underlying Nitro code base.
 
 ### What Data Availability (DA) solutions are currently available for Orbit chains?
 <p>
-Arbitrum Orbit currently supports 4 different DA solutions:
+Arbitrum Orbit currently supports 3 different DA solutions:
 </p>
 
 <ul>
 <li>Rollup, posting data to the parent chain which ultimately posts the data to Ethereum.</li>
 <li>AnyTrust, posting data to a Data Availability Committee, selected by the chain owner.</li>
 <li>Celestia, posting data to <a href="https://blog.celestia.org/celestia-is-first-modular-data-availability-network-to-integrate-with-arbitrum-orbit/">Celestia network</a>.</li>
-<li>AvailDA, posting data to <a href="https://blog.availproject.org/avail-ecosystem-series-arbitrum-orbit-chains/">AvailDA</a>.</li>
 </ul>
 <p>
 Note that using AnyTrust gives the chain owner the most flexibility and cheapest fees.

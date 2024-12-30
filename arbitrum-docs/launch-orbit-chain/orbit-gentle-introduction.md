@@ -11,17 +11,13 @@ This document is for developers and decision-makers who want to learn more about
 
 If you'd prefer to learn by doing, see the [Orbit quickstart](./orbit-quickstart) for step-by-step instructions that walk you through the process of configuring and launching your own Orbit chain.
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 ### In a nutshell:
 
 - Arbitrum Orbit is the **permissionless path** for launching customizable dedicated chains using Arbitrum technology.
 - Orbit Chains can be a <a data-quicklook-from='layer-2-l2'>Layer 2 (L2)</a> chain which settles directly to Ethereum, or a Layer 3 (L3) chain which can settle to any Ethereum L2, such as <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>.
 - Configure numerous components of the chain such as throughput, privacy, gas token, governance, precompiles, data availability layers and more, **the possibilities are endless**.
 - **You own your Orbit chain** and can decentralize its ownership, validation, and other dependencies.
-- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/stylus-gentle-introduction), and continuous improvements.
+- Leverage <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro</a>, the tech stack powering interactive fraud proofs, advanced compression, [EVM+ compatibility via Stylus](https://docs.arbitrum.io/stylus/gentle-introduction), and continuous improvements.
 
 ### What's Orbit?
 
@@ -130,7 +126,7 @@ It depends on your definition of "app chain". Orbit chains can be used as applic
 
 The AnyTrust and Rollup data availability models reflect prioritization choices within the blockchain trilemma (scalability vs. security vs. decentralization), so the best option depends on what features matter most for your use case.
 
-Here's a short list to help you pick the model that meets your chain's requirements: 
+Here's a short list to help you pick the model that meets your chain's requirements:
 
 #### I need my chain to be cost-efficient
 
@@ -160,7 +156,7 @@ Orbit's product roadmap is firmly aligned with Ethereum's vision of a decentrali
 
 ### What should I know about Orbit's licensing?
 
-L3 Orbit chains that settle to DAO-governed chains like Arbitrum One and Nova can be permissionlessly deployed without restrictions. For Orbit chains that are settling to any other Ethereum chain, the [Arbitrum Orbit Expansion program](https://forum.arbitrum.foundation/t/the-arbitrum-expansion-program-and-developer-guild/20722) creates a self-service path to launching. Via the permissionless revenue-sharing model of the program, Orbit chains are granted the rights to build customized L2s or L3s (or L4s and beyond) that settle to Ethereum directly or other Ethereum chains, such as optimistic rollups, zk-rollups, optimiums, and validiums.
+You can launch any Orbit chain permissionlessly. Nitro is licensed under a Business Source license, similar to DeFi protocols like Uniswap and Aave, among others. This license contains an Additional Use Grant that permits the permissionless deployment of Nitro software on blockchains that settle to Arbitrum One or Nova. However, Orbit chains that settle to a parent chain other than Arbitrum One or Nova are subject to additional licensing guidelines under the [AEP](https://docs.arbitrum.foundation/aep/ArbitrumExpansionProgramTerms.pdf).
 
 ### I'd love to tinker with Orbit! What should I do next?
 
