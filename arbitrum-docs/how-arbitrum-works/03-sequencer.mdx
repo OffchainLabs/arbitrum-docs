@@ -1,6 +1,6 @@
 ---
 title: The Sequencer and Censorship Resistance
-description: 'Learn the fundamentals of the Arbitrum Sequencer.'
+description: "Learn the fundamentals of the Arbitrum Sequencer."
 author: pete-vielhaber
 sme: gmehta2
 user_story: As a current or prospective Arbitrum user, I need to learn more about the Sequencer.
@@ -19,6 +19,7 @@ In this section, we will explore the operation of the Sequencer in detail. The t
   - [Compression](#compression)
   - [Submitting to the Sequencer Inbox Contract](#submitting-to-the-sequencer-inbox-contract)
 - [Finality](#finality): Understanding how transaction finality is achieved in Arbitrum through both soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably. (not as a sequencer task)
+- [Censorship Timeout](#censorship-timeout): A brief introduction to a special feature that aims to limit the negative effects of prolonged sequencer censorship and/or unexpected sequencer outages.
 
 By examining these aspects, you will understand the Sequencer's role within the Arbitrum ecosystem, including how it enhances transaction throughput, reduces latency, and maintains a fair and decentralized network.
 
@@ -259,3 +260,27 @@ Developers and users should consider the appropriate level of finality based on 
 ### Decentralized Fair Sequencing
 
 Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority consensus, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with the broader blockchain principles of enhanced security, transparency, and decentralization.
+
+## Censorship Timeout
+
+As mentioned in the original [Arbitrum BoLD Forum Post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum BoLD](../how-arbitrum-works/bold/gentle-introduction.mdx) will come with a feature called ”Censorship Timeout” (originally called “Delay Buffer”). For Arbitrum One and Arbitrum Nova, it is proposed that this feature be enabled by default alongside BoLD’s upgrade.
+
+Censorship Timeout aims to limit the negative effects of:
+
+- Prolonged sequencer censorship, and/or,
+- Unexpected sequencer outages.
+
+### How the Censorship Timeout feature works
+
+To explain how this feature improves the security of chains settling to Arbitrum One and Arbitrum Nova, consider the scenario where an L3’s parent chain sequencer (the L2 sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before they could bypass the L2 sequencer (using the SequencerInbox’s forceInclusion method described here). In this scenario, challenge resolution would be delayed by a time `t` where `t = (24 hours) * number of moves for a challenge`. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+
+The Censorship Timeout feature mitigates this by implementing a time threshold that is decremented when unexpected delays in assertion posting occur due to one (or all) of the above mentioned cases of censorship or sequencer outage. Once that time threshold is met, the force inclusion window is lowered - effectively enabling entities to make moves without the 24 hour delay-per-move.
+
+Under reasonable parameterization, the sequencer could be offline or censoring for 24 hours twice, referred to as the `delay buffer`, before the force inclusion window is effectively dropped from 24 hours to a minimum inclusion period or `threshold` of 30 minutes. The force inclusion window gradually (over weeks) replenishes to its original value over time as long as the sequencer is on “good behavior” at some rate known as the `replenish rate`. An example of “good behavior” could be the default and normal sequencing of messages without unexpected delays.
+
+Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Arbitrum Nova:
+- `delay buffer` = 14400 L1 Ethereum blocks (2 days)
+- `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 L1 Ethereum blocks (1 hour) for Arbitrum Nova
+- `replenish rate` = 5% (meaning 1 day is replenished every 20 days, or roughly a 95% uptime)
+
+We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains - especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
