@@ -516,11 +516,6 @@
       "permanent": false
     },
     {
-      "source": "/(how-arbitrum-works/sequencer/?)",
-      "destination": "/how-arbitrum-works/sequencer",
-      "permanent": false
-    },
-    {
       "source": "/(docs/l1_l2_messages/?)",
       "destination": "/how-arbitrum-works/l1-to-l2-messaging",
       "permanent": false
