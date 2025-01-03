@@ -6,6 +6,23 @@ user_story: As a web2 developer, I want to onboard into Arbitrum by building and
 content_type: quickstart
 ---
 
+
+
+## Article paths
+
+- Get to https://remix.ethereum.org 
+- Create a blank workspace 
+- Upload `VendingMachine.sol`
+- Deploy the contract to Remix's Remix VM
+- Add Metamask to your browser
+- Add Arbitrum Sepolia testnet to Metamask
+- Add Metamask to Remix provider
+- Swap your coins with https://bridge.arbitrum.io 
+- Deploy the contract to Arbitrum Sepolia testnet
+- Copy the contract address
+- Paste the contract address in the `VendingMachine` widget
+- 
+
 :::info Want to use Rust instead?
 
 Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Rust instead of Solidity.
@@ -26,7 +43,7 @@ To use it, enter a name in the form below and press the 'Cupcake please!' button
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
-<VendingMachine id="dumb-cupcakes" type="web2" />
+  <VendingMachine id="dumb-cupcakes" type="web2" />
 
 Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
 
