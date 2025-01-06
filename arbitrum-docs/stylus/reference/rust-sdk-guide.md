@@ -115,7 +115,7 @@ impl Contract {
     }
 
     /// Unlike other storage type, stringStorage needs to
-    /// use `.set_str` and `.get_string()` to set and get.
+    /// use `.set_str()` and `.get_string()` to set and get.
     pub fn set_base_uri(&mut self, base_uri: String) {
         self.base_uri.set_str(base_uri);
     }
