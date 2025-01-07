@@ -113,6 +113,16 @@ impl Contract {
             self.owner.set(new_owner);
         }
     }
+
+    /// Unlike other storage type, stringStorage needs to
+    /// use `.set_str()` and `.get_string()` to set and get.
+    pub fn set_base_uri(&mut self, base_uri: String) {
+        self.base_uri.set_str(base_uri);
+    }
+
+    pub fn get_base_uri(&self) -> String {
+        self.base_uri.get_string()
+    }
 }
 ```
 
