@@ -55,11 +55,6 @@ const sidebars = {
           id: 'build-decentralized-apps/cross-chain-messaging',
         },
         {
-          type: 'doc',
-          label: 'Using Timeboost',
-          id: 'build-decentralized-apps/how-to-use-timeboost',
-        },
-        {
           type: 'category',
           label: 'Arbitrum vs Ethereum',
           items: [
@@ -681,6 +676,11 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
+        },
+        {
+          type: 'doc',
+          label: 'Using Timeboost',
+          id: 'run-arbitrum-node/how-to-use-timeboost',
         },
         {
           type: 'html',
