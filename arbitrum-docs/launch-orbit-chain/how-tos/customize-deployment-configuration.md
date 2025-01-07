@@ -5,10 +5,6 @@ author: symbolpunk
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 When you visit the [Orbit chain deployment portal](https://orbit.arbitrum.io/) to launch your Orbit chain, you'll be prompted to complete a form that looks like this:
 
 import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm';
@@ -21,7 +17,7 @@ Let's briefly review each of the deployment configuration parameters, the ration
 
 ### Chain ID
 
-Don't worry about this; it's inconsequential for devnets. In production scenarios (which aren't yet supported), you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
+Don't worry about this; it's inconsequential for devnets. In production scenarios, you'll want to use a unique integer identifier that represents your chain's network on chain indexes like [Chainlist.org](http://chainlist.org).
 
 ### Chain name
 

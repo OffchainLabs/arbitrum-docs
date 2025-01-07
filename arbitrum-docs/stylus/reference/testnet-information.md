@@ -7,13 +7,9 @@ target_audience: Developers building on the Stylus testnet
 sidebar_position: 9
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.md';
-
 import StylusFaucets from './partials/_stylus-faucets.mdx';
 
-import StylusSmartContractsAddresses from './partials/_stylus-smart-contract-addresses.mdx';
-
-<PublicPreviewBannerPartial />
+import ArbitrumContractAddresses from '../../partials/_reference-arbitrum-contract-addresses-partial.mdx';
 
 ## Arbitrum public RPC endpoints
 
@@ -21,12 +17,12 @@ import StylusSmartContractsAddresses from './partials/_stylus-smart-contract-add
 
 - Unlike the RPC Urls, the Sequencer endpoints only support `eth_sendRawTransaction` and `eth_sendRawTransactionConditional` calls.
 - Arbitrum public RPCs do not provide Websocket support.
-- Stylus testnets v1 and v2 have been spun down and are not accesible anymore.
-- Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia) or [Alchemy's Arbitrum sepolia faucet](https://www.alchemy.com/faucets/arbitrum-sepolia) for testnet Sepolia tokens on L2.
+- Stylus testnets v1 and v2 have been spun down and are not accessible anymore.
+- Visit [Quicknode's Arbitrum Sepolia faucet](https://faucet.quicknode.com/arbitrum/sepolia), [Alchemy's Arbitrum sepolia faucet](https://www.alchemy.com/faucets/arbitrum-sepolia), or [Getblock's Arbitrum Sepolia faucet](https://getblock.io/faucet/arb-sepolia) for testnet Sepolia tokens on L2.
 
 :::
 
-This section provides an overview of the available public RPC endpoints for different Arbitrum chains that have Stylus enabled, and necessary details to interact with them.
+This section provides an overview of the available public RPC endpoints for different Arbitrum chains that have Stylus enabled, and the necessary details to interact with them.
 
 | Name                       | RPC Url(s)                             | Chain ID | Block explorer              | Underlying chain | Tech stack     | Sequencer feed URL                    | Sequencer endpoint<sup>⚠️</sup>                  |
 | -------------------------- | -------------------------------------- | -------- | --------------------------- | ---------------- | -------------- | ------------------------------------- | ------------------------------------------------ |
@@ -34,4 +30,4 @@ This section provides an overview of the available public RPC endpoints for diff
 
 <StylusFaucets />
 
-<StylusSmartContractsAddresses />
+<ArbitrumContractAddresses />
