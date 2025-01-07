@@ -111,76 +111,7 @@ The `VendingMachine` class uses _state variables_ and _functions_ to implement _
 
 Let's decentralize our vending machine's business logic and data by porting the above Javascript implementation into a Solidity smart contract.
 
-### Configure your project directory
-
-Create a `decentralized-cupcakes` directory for your project and install [hardhat](https://hardhat.org/hardhat-runner/docs/getting-started#overview) using VS Code's integrated terminal:
-
-```
-mkdir decentralized-cupcakes
-cd decentralized-cupcakes
-yarn init -y
-yarn add hardhat @nomicfoundation/hardhat-toolbox -D
-```
-
-This installs two packages: `hardhat` lets us write, test and deploy our smart contracts, and `hardhat-toolbox` is a bundle of popular Hardhat plugins that we'll use later.
-
-Next, run `yarn hardhat init` to configure Hardhat. Select `Create a JavaScript project` when prompted. Make sure you specify your `decentralized-cupcakes` directory as the project root when asked.
-
-At this point, you should see the following items (among others) in your `decentralized-cupcakes` project directory:
-
-| Item                | Description                                                                                               |
-| ------------------- | --------------------------------------------------------------------------------------------------------- |
-| `contracts/`        | Contains your smart contracts. You should see the `Lock.sol` contract here.                               |
-| `scripts/`          | Contains scripts that you can use to interact with your smart contracts. You should see `deploy.js` here. |
-| `hardhat.config.js` | Contains the configuration settings for Hardhat.                                                          |
-
-Replace the contents of `hardhat.config.js` with the following:
-
-```javascript title="hardhat.config.js"
-require('@nomicfoundation/hardhat-toolbox');
-
-// NEVER record important private keys in your code - this is for demo purposes
-const SEPOLIA_TESTNET_PRIVATE_KEY = '';
-const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = '';
-
-/** @type import('hardhat/config').HardhatUserConfig */
-module.exports = {
-  solidity: '0.8.18',
-  networks: {
-    hardhat: {
-      chainId: 1337,
-    },
-    arbitrumSepolia: {
-      url: 'https://sepolia-rollup.arbitrum.io/rpc',
-      chainId: 421614,
-      //accounts: [Sepolia_TESTNET_PRIVATE_KEY]
-    },
-    arbitrumOne: {
-      url: 'https://arb1.arbitrum.io/rpc',
-      //accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY]
-    },
-  },
-};
-```
-
-Before compiling the default `contracts`, you will need to install additional dependencies. Run `yarn hardhat compile` and expect it to fail for the first time — follow those instructions, then run `yarn hardhat compile` again until it runs successfully. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/` directory. This directory contains the compiled smart contract.
-
-Open `scripts/deploy.js` and replace its contents with the following:
-
-```javascript title="scripts/deploy.js"
-const hre = require('hardhat');
-
-async function main() {
-  const vendingMachine = await hre.ethers.deployContract('VendingMachine');
-  await vendingMachine.waitForDeployment();
-  console.log(`Cupcake vending machine deployed to ${vendingMachine.target}`);
-}
-
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
-```
+### Configure your Remix project
 
 We'll use this to deploy our smart contract in a moment. Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our Javascript implementation:
 
@@ -222,38 +153,6 @@ contract VendingMachine {
 Note that this smart contract is written in Solidity, a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
 Run `yarn hardhat compile` again. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/contracts/VendingMachine.sol` directory.
-
-### Deploy the smart contract locally
-
-To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet:
-
-<!-- we do it in this order because we want to be able to say "here's your contract address; paste it here" instead of "here's your contract address, save it for later" -->
-<!-- not confident that this is a good reason -->
-
-1. We'll use the first terminal window to run Hardhat's built-in local Ethereum node
-2. We'll then configure a wallet so we can interact with our smart contract after it's deployed to (1)
-3. We'll then use the second terminal window to deploy our smart contract to (1)'s node
-
-#### Run a local Ethereum network and node
-
-Run `yarn hardhat node` from your `decentralized-cupcakes` directory to begin running a local Ethereum network powered by a single node. This will mimic Ethereum's behavior on your local machine by using Hardhat's built-in [Hardhat Network](https://hardhat.org/hardhat-network/docs/overview).
-
-You should see something along the lines of `Started HTTP and WebSocket JSON-RPC server at http://127.0.0.1:8545/` in your terminal. You should also see a number of test accounts automatically generated for you:
-
-```
-...
-Account #0: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000 ETH)
-Private Key: 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-...
-```
-
-:::caution Never share your private keys
-
-Your Ethereum Mainnet wallet's private key is the password to all of your money. Never share it with anyone; avoid copying it to your clipboard.
-
-:::
-
-Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key[^5].
 
 #### Configure Metamask
 
