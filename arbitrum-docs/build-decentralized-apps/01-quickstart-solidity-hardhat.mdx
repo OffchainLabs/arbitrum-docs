@@ -128,48 +128,70 @@ The `VendingMachine` class uses _state variables_ and _functions_ to implement _
 
 Let's decentralize our vending machine's business logic and data by porting the above Javascript implementation into a Solidity smart contract.
 
-### Configure your Remix project
+### The Solidity version of the vending machine
 
-Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat) but Remix doesn't require any local environment setup, that's why we'll choose it for this tutorial.
-
-We'll use Remix to deploy our smart contract, it's a smarter alternative to our Javascript implementation:
+Here is a Solidity implementation of our vending machine.
+Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
 ```solidity title="VendingMachine.sol"
+// Specify the Solidity compiler version - this contract requires version 0.8.9 or higher
 pragma solidity ^0.8.9;
 
-// Rule 2: The vending machine's rules can't be changed by anyone.
+// Define a smart contract named VendingMachine
+// Unlike regular classes, once deployed, this contract's code cannot be modified
+// This ensures that the vending machine's rules remain constant and trustworthy
 contract VendingMachine {
-    // state variables = internal memory of the vending machine
-    mapping(address => uint) private _cupcakeBalances;
-    mapping(address => uint) private _cupcakeDistributionTimes;
+    // State variables are permanently stored in blockchain storage
+    // These mappings associate Ethereum addresses with unsigned integers
+    // The 'private' keyword means these variables can only be accessed from within this contract
+    mapping(address => uint) private _cupcakeBalances;     // Tracks how many cupcakes each address owns
+    mapping(address => uint) private _cupcakeDistributionTimes;  // Tracks when each address last received a cupcake
 
+    // Function to give a cupcake to a specified address
+    // 'public' means this function can be called by anyone
+    // 'returns (bool)' specifies that the function returns a boolean value
     function giveCupcakeTo(address userAddress) public returns (bool) {
-        // this code is unnecessary, but we're keeping it here so you can compare it to the JS implementation
+        // Initialize first-time users
+        // In Solidity, uninitialized values default to 0, so this check isn't strictly necessary
+        // but is included to mirror the JavaScript implementation
         if (_cupcakeDistributionTimes[userAddress] == 0) {
             _cupcakeBalances[userAddress] = 0;
             _cupcakeDistributionTimes[userAddress] = 0;
         }
 
-        // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
+        // Calculate when the user is eligible for their next cupcake
+        // 'seconds' is a built-in time unit in Solidity
+        // 'block.timestamp' gives us the current time in seconds since Unix epoch
         uint fiveSecondsFromLastDistribution = _cupcakeDistributionTimes[userAddress] + 5 seconds;
         bool userCanReceiveCupcake = fiveSecondsFromLastDistribution <= block.timestamp;
+
         if (userCanReceiveCupcake) {
+            // If enough time has passed, give them a cupcake and update their last distribution time
             _cupcakeBalances[userAddress]++;
             _cupcakeDistributionTimes[userAddress] = block.timestamp;
             return true;
         } else {
+            // If not enough time has passed, revert the transaction with an error message
+            // 'revert' cancels the transaction and returns the error message to the user
             revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
         }
     }
 
-    // Getter function for the cupcake balance of a user
+    // Function to check how many cupcakes an address owns
+    // 'public' means anyone can call this function
+    // 'view' means this function only reads data and doesn't modify state
+    // This makes it free to call (no gas cost) when called externally
     function getCupcakeBalanceFor(address userAddress) public view returns (uint) {
         return _cupcakeBalances[userAddress];
     }
 }
 ```
+#### Configure your Remix project
 
-Note that this smart contract is written in Solidity, a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
+Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat) but Remix doesn't require any local environment setup, that's why we'll choose it for this tutorial.
+
+We'll use Remix to deploy our smart contract, it's a smarter alternative to our Javascript implementation:
+
 
 
 #### Configure Metamask
