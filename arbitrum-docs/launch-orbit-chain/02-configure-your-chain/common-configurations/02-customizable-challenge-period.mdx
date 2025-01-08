@@ -6,7 +6,7 @@ sme: 'mahsamoosavi'
 content_type: how-to
 ---
 
-The challenge period defines the time frame during which state updates (assertions) submitted to a child chain remain open for scrutiny and potential challenges before they are finalized. This mechanism ensures that participants in the system—whether on a rollup or an AnyTrust Orbit chain—have the opportunity to verify the validity of state updates and raise challenges if necessary. 
+The challenge period defines the time frame during which state updates (assertions) submitted to a child chain remain open for scrutiny and potential challenges before they are finalized. This mechanism ensures that participants in the system—whether on a rollup or an AnyTrust Orbit chain—have the opportunity to verify the validity of state updates and raise challenges if necessary.
 
 The length of the challenge period is measured in parent chain blocks, allowing for a predictable and flexible configuration regardless of the use case.
 
@@ -14,7 +14,7 @@ In addition to the main challenge period, an **extra challenge period** provides
 
 ### Default challenge period and extra challenge period
 
-By default, the challenge period lasts approximately one week, corresponding to 45,818 blocks on the parent chain. This default is designed to provide sufficient time for validators to detect and challenge fraudulent assertions. 
+By default, the challenge period lasts approximately one week, corresponding to 45,818 blocks on the parent chain. This default is designed to provide sufficient time for validators to detect and challenge fraudulent assertions.
 
 The extra challenge period, on the other hand, adds a buffer of 200 parent chain blocks (approximately 40 minutes). This ensures that any last-minute challenges or ongoing dispute resolution processes can be completed before the rollup finalizes its state.
 
@@ -31,17 +31,17 @@ The main challenge period is configured using the `confirmPeriodBlocks` paramete
 
 For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challenge period to approximately 4.5 days. This might be suitable for applications prioritizing faster finality, while increasing the value would extend the challenge period, enhancing security.
 
-
 #### Extra challenge period blocks
 
 The extra challenge period is governed by the `extraChallengeTimeBlocks` parameter, which defines the additional buffer duration after the main challenge period. This parameter ensures that any pending challenges are processed before the rollup state is finalized. Like the main challenge period, it can be customized in two ways:
 
 1. **During deployment**: The value can be set in the `extraChallengeTimeBlocks` field of the RollupCreator configuration.
 2. **Post-deployment**: The rollup admin can dynamically adjust the parameter using the `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` function. For example:
-   
+
    ```solidity
    RollupAdminLogic.setExtraChallengeTimeBlocks(300);
    ```
+
    This would set the extra challenge period to 300 parent chain blocks.
 
 The default value of 200 blocks provides a short but sufficient buffer for most networks. However, developers may increase this value for applications that require additional time for dispute resolution or operate in environments with higher latency between the parent and child chain.
