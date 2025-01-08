@@ -24,9 +24,9 @@ See the ["create a rollup custom fee token" example](https://github.com/Offchain
 
 This guide will help you configure and deploy a custom gas token Orbit chain.
 
-Custom gas token orbit chains let participants pay transaction fees in `ERC-20` token instead of `ETH`, which is ideal for use cases requiring this feature and low transaction fees. You can learn more on our page covering [custom gas token requirements and configuration](./launch-orbit-chain/configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx).
+Custom gas token orbit chains let participants pay transaction fees in `ERC-20` token instead of `ETH`, which is ideal for use cases requiring this feature and low transaction fees. You can learn more on our page covering [custom gas token requirements and configuration](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx).
 
-Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orbit chain but with additional steps. To take advantage of all the chains configurations supported by Orbit, we recommend reading our short guides about [Rollup](orbit-sdk-deploying-rollup-chain.md) and [AnyTrust](orbit-sdk-deploying-anytrust-chain.md) configuration.
+Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orbit chain but with additional steps. To take advantage of all the chains configurations supported by Orbit, we recommend reading our short guides about [Rollup](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md) and [AnyTrust](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md) configuration.
 
 :::note
 
@@ -41,7 +41,7 @@ The difference between custom gas token chains and other Orbit chains is the use
 
 ## 2. Chain configuration
 
-Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain.md#1-setting-up-the-chain-parameters).
+Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md#1-setting-up-the-chain-parameters).
 
 ## 3. Token approval before deployment process
 
@@ -93,7 +93,7 @@ const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransac
 
 ## 4. Deployment process
 
-The overall deployment process, including the use of APIs like `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](orbit-sdk-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
+The overall deployment process, including the use of APIs like `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](./03-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
 
 :::note
 
@@ -116,4 +116,4 @@ const txRequest = await createRollupPrepareTransactionRequest({
 });
 ```
 
-All other parts would be the same as explained in the [Rollup Orbit chain deployment page](orbit-sdk-deploying-rollup-chain.md).
+All other parts would be the same as explained in the [Rollup Orbit chain deployment page](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md).

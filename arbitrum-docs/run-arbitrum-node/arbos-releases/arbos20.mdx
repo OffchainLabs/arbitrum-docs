@@ -44,10 +44,10 @@ Below is a non-comprehensive list of explorers that support querying and viewing
 
 ### Additional requirement for Arbitrum Orbit L2 chain operators: enabling blob batch posting
 
-This section maps to [Step 4 in the guide on _How to upgrade ArbOS on your Arbitrum Orbit L2 chain_](/launch-orbit-chain/how-tos/arbos-upgrade.md#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) and contains additional instructions for Arbitrum Orbit L2 chain operators for ArbOS 20 Atlas. Specifically, the details below are meant to help Arbitrum Orbit L2 chain operators enable blob batch posting to L1 Ethereum following their successful upgrade to the ArbOS 20 Atlas release.
+This section maps to [Step 4 in the guide on _How to upgrade ArbOS on your Arbitrum Orbit L2 chain_](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) and contains additional instructions for Arbitrum Orbit L2 chain operators for ArbOS 20 Atlas. Specifically, the details below are meant to help Arbitrum Orbit L2 chain operators enable blob batch posting to L1 Ethereum following their successful upgrade to the ArbOS 20 Atlas release.
 
 :::caution
-Before proceeding, make sure you have successfully completed Steps 1 through 3 of the guide on [How to upgrade ArbOS on your Orbit chain](/launch-orbit-chain/how-tos/arbos-upgrade.md).
+Before proceeding, make sure you have successfully completed Steps 1 through 3 of the guide on [How to upgrade ArbOS on your Orbit chain](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md).
 :::
 
 To enable the posting of transaction data in Blobs to L1 Ethereum, you must set `node.batch-poster.post-4844-blobs=true` on the batch poster.
