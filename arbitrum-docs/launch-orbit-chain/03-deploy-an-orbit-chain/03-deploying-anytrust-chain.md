@@ -30,7 +30,8 @@ AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the 
 
 ### Deployment steps
 
-The deployment process of AnyTrust chains is very similar to that of [Rollup chains](02-deploying-a-rollup-chain.md#rollup-config-param), but with some differences that we'll discuss in this guide.
+
+The deployment process of AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md#rollup-configuration-parameters), but with some differences that we'll discuss in this guide.
 
 Here are the steps involved in the deployment process:
 
@@ -116,7 +117,7 @@ In this example, `txReceipt` refers to the transaction receipt you received afte
 
 ### 4. Setting valid keyset on parent chain
 
-The final step is to set up a valid keyset for your Data Availability Committee (DAC) on the parent chain. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.md) for instructions.
+The final step is to set up a valid keyset for your Data Availability Committee (DAC) on the parent chain. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx) for instructions.
 
 Once created, your keyset needs to be established on your Orbit chain's `SequencerInbox` contract on the parent chain.
 To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [step three](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the owner's account.

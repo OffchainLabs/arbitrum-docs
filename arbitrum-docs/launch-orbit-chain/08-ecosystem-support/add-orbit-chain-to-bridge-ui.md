@@ -10,7 +10,7 @@ This how-to will walk you through the process of adding your Orbit chain to the 
 
 ## Request adding a mainnet Orbit chain to the Arbitrum bridge
 
-Mainnet Orbit chains can be added to the Arbitrum Bridge by filling out [this form](https://forms.gle/LrVskEd3DTtXSPwx7).
+Mainnet Orbit chains can be added to the Arbitrum Bridge by filling out [this form](https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
 
 Once receiving your request, our team will review and apply internal criteria to include your chain in the bridge. Here are some of the criteria that a chain must follow to be added to the bridge:
 
@@ -25,7 +25,7 @@ Currently, adding a testnet Orbit chain to the Arbitrum bridge must be done loca
 ### Prerequisites
 
 - A local testnet Orbit chain's configuration. See the [Orbit quickstart](/launch-orbit-chain/orbit-quickstart.md) to deploy a local Orbit chain, or use an existing JSON configuration.
-- A browser-based Ethereum wallet (like [MetaMask](https://metamask.io/))
+- A browser-based Ethereum wallet (i.e., [MetaMask](https://metamask.io/) or [OKX Wallet](https://www.okx.com/web3))
 
 ### Procedure
 

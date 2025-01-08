@@ -7,7 +7,7 @@ target_audience: 'Developers deploying smart contracts using Stylus.'
 sidebar_position: 3
 ---
 
-This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/stylus-gas).
+This reference provides the latest gas and ink costs for specific WASM opcodes and host I/Os when using Stylus. For a conceptual introduction to Stylus gas and ink, see [Gas and ink (Stylus)](/stylus/concepts/gas-metering).
 
 ## Opcode costs
 
@@ -161,4 +161,4 @@ Note that the values in this table were determined via a conservative statistica
 
 ### See also
 
-- [Gas and ink (Stylus)](/stylus/concepts/stylus-gas): A conceptual introduction to the "gas" and "ink" primitives
+- [Gas and ink (Stylus)](/stylus/concepts/gas-metering): A conceptual introduction to the "gas" and "ink" primitives
