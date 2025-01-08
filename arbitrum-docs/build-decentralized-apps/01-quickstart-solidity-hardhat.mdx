@@ -73,7 +73,7 @@ We'll address remaining dependencies as we go.
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
   - You can use smart contracts to build decentralized apps (dApps) that use Ethereum's network to process transactions and store data.
   - DApps let users carry their data and identity between applications without having to trust centralized service providers.
-  - People who run Ethereum validator nodes[^3] can earn $ETH for processing and validating transactions on behalf of users and dApps.
+  - People who run Ethereum validator nodes[^3] can earn `$ETH` for processing and validating transactions on behalf of users and dApps.
   - These transactions can be expensive when the network is under heavy load.
 - **Arbitrum**
   - Arbitrum is a suite of L2 scaling solutions for dApp developers.
@@ -81,7 +81,7 @@ We'll address remaining dependencies as we go.
     <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>.
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
 
-Let's review our vending machine's Javascript implementation, then convert it into a Solidity smart contract, then deploy it to Arbitrum One.
+Let's review our vending machine's Javascript implementation, convert it into a Solidity smart contract, then deploy it to Arbitrum One.
 
 We'll ask your smart contract for cupcakes using the vending machines on this page.
 
@@ -130,7 +130,9 @@ Let's decentralize our vending machine's business logic and data by porting the 
 
 ### Configure your Remix project
 
-We'll use this to deploy our smart contract in a moment. Next, delete `contracts/Lock.sol` and replace it with `contracts/VendingMachine.sol`, the smarter alternative to our Javascript implementation:
+Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat) but Remix doesn't require any local environment setup, that's why we'll choose it for this tutorial.
+
+We'll use Remix to deploy our smart contract, it's a smarter alternative to our Javascript implementation:
 
 ```solidity title="VendingMachine.sol"
 pragma solidity ^0.8.9;
@@ -169,7 +171,6 @@ contract VendingMachine {
 
 Note that this smart contract is written in Solidity, a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
-Run `yarn hardhat compile` again. You should see `Compiled 1 Solidity file successfully` in the terminal output. You should also see a new `decentralized-cupcakes/artifacts/contracts/VendingMachine.sol` directory.
 
 #### Configure Metamask
 
