@@ -16,12 +16,12 @@ This quickstart is for web developers who want to start building **decentralized
 
 ### What we're building
 
-We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. Our vending machine will follow two rules:
+We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. This vending machine will follow two rules:
 
 1. The vending machine will distribute a cupcake to anyone who hasn't recently received one.
 2. The vending machine's rules can't be changed by anyone.
 
-Here's our vending machine implemented with Javascript.
+Here's the vending machine implemented with Javascript.
 To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
 
 import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
@@ -85,9 +85,9 @@ Let's review our vending machine's Javascript implementation, convert it into a 
 
 We'll ask your smart contract for cupcakes using the vending machines on this page.
 
-### Review our Javascript vending machine
+### Review the Javascript vending machine
 
-Here's our vending machine implemented as a Javascript class:
+Here's the vending machine implemented as a Javascript class:
 
 ```js title="VendingMachine.js"
 class VendingMachine {
@@ -128,12 +128,13 @@ The `VendingMachine` class uses _state variables_ and _functions_ to implement _
 
 Let's decentralize our vending machine's business logic and data by porting the above Javascript implementation into a Solidity smart contract.
 
-### The Solidity version of the vending machine
+### Review the Solidity vending machine
 
-Here is a Solidity implementation of our vending machine.
+Here is a Solidity implementation of the vending machine.
 Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
 ```solidity title="VendingMachine.sol"
+// SPDX-License-Identifier: MIT
 // Specify the Solidity compiler version - this contract requires version 0.8.9 or higher
 pragma solidity ^0.8.9;
 
@@ -187,23 +188,17 @@ contract VendingMachine {
 }
 ```
 
-#### Deploy your smart contract with Remix
+### Compile your smart contract with Remix
 
-Putting a smart contract in production is called _deploying a contract_. When we deploy a contract, we send a deployment transaction to a node. The transaction has our contract's code as payload. Once that transaction is confirmed, our contract is available on the chain it's been deployed to, on a unique contract address. 
-A contract's address is the equivalent of a server's IP address.
+Smart contracts need to be compiled to bytecode in order to be stored and executed on-chain by the EVM, we'll be using Remix to do that.
 
-Let's start by deploying our contract to a virtual chain, that will be a way to start without taking any risk, or losing tokens.
-
-We'll be using remix to do that.
 Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat) but Remix doesn't require any local environment setup, that's why we'll choose it for this tutorial.
 
-We'll use Remix to deploy our smart contract:
+Let's first add our smart contract to Remix following these steps:
 
-##### Set Remix up
+1. Load Remix: https://remix.ethereum.org
 
-###### Load Remix: https://remix.ethereum.org
-
-###### Set Remix up
+2. Create a blank workspace in Remix:
 
 <details>
 <summary>File explorer > Workspaces > Create blank</summary>
@@ -212,9 +207,25 @@ We'll use Remix to deploy our smart contract:
 
 </details>
 
-###### Set Remix up
+3. Copy your vending machine contract
 
-###### Set Remix up
+4. Paste your contract in Remix
+
+<details>
+<summary>File explorer > New file</summary>
+
+![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
+
+</details>
+
+5. Compile your contract in Remix
+
+<details>
+<summary>Select contract > Click "compile" menu > Hit "compile" icon</summary>
+
+![](./images/remix-compile-contract-2025-01-07.gif)
+
+</details>
 
 #### Configure Metamask
 
@@ -237,7 +248,7 @@ Next, click Metamask's network selector dropdown, and then click the `Add Networ
 - Chain ID: `421614`
 - Currency Symbol: `ASPL`
 
-As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
+As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
 #### Deploy the smart contract to your local testnet
 
@@ -245,9 +256,9 @@ From another terminal instance, run `yarn add --dev @nomicfoundation/hardhat-eth
 
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
 
-Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+<!-- Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake. -->
 
-<VendingMachine id="smart-local-cupcakes" type="web3-localhost" />
+<!-- <VendingMachine id="smart-local-cupcakes" type="web3-localhost" /> -->
 
 ### What's going on here?
 
