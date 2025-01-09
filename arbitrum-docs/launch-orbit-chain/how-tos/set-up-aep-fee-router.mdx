@@ -132,12 +132,12 @@ cp .env.sample .env
 
 ::::info
 
-If the `ChildToParentRouter` is routing its chain's native token, this step can be skipped.
+If the `ChildToParentRouter` is routing its chain's native token, this step should be skipped.
 
 ::::
 
 ```shell
-TODO, we don't have a script for this yet
+cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
 ```
 
 3. Periodically redeem withdrawals on the parent chain
