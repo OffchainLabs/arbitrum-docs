@@ -137,7 +137,7 @@ cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --p
 git clone https://github.com/OffchainLabs/fund-distribution-contracts
 cd fund-distribution-contracts && yarn
 
-# set private keys in .env
+# set PARENT_CHAIN_PK in .env
 cp .env.sample .env
 
 # add --opStack if the router is on an OP stack chain
