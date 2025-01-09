@@ -112,3 +112,37 @@ cp .env.example .env
 ```shell
 yarn dev
 ```
+
+## Triggering Movement of Funds
+
+Any `ChildToParentRouter` contracts deployed by an Orbit chain must be periodically called to move funds. 
+
+The [router contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts) contains scripts for calling the routers.
+
+1. Clone and install dependencies
+```shell
+git clone https://github.com/OffchainLabs/fund-distribution-contracts
+cd fund-distribution-contracts && yarn
+```
+
+2. Trigger withdrawals to the parent chain
+
+::::info
+
+If the `ChildToParentRouter` is configured to send the native token, this step can be skipped.
+
+::::
+
+Run this command periodically to trigger withdrawals from the router to its parent chain.
+
+```shell
+TODO, we don't have a script for this yet
+```
+
+3. Redeem withdrawals on the parent chain
+
+Run this command periodically to redeem withdrawals from a `ChildToParentRouter`.
+
+```shell
+TODO
+```
