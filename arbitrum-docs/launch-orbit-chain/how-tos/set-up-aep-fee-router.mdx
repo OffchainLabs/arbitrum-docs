@@ -128,7 +128,7 @@ If the `ChildToParentRouter` is routing its chain's native token, this step shou
 ::::
 
 ```shell
-cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
+cast send $C2P_ROUTER_ADDRESS "routeToken()" --rpc-url $CHILD_CHAIN_RPC --private_key $CHILD_CHAIN_PK
 ```
 
 2. Periodically redeem withdrawals on the parent chain
@@ -142,8 +142,8 @@ cp .env.sample .env
 
 # add --opStack if the router is on an OP stack chain
 yarn redeem-child-to-parent \
-  --parentRPCUrl <parent_rpc_url> \
-  --childRPCUrl <child_rpc_url> \
-  --childToParentRewardRouterAddr <router_on_child_address> \
+  --parentRPCUrl $PARENT_CHAIN_RPC \
+  --childRPCUrl $CHILD_CHAIN_RPC \
+  --childToParentRewardRouterAddr $C2P_ROUTER_ADDRESS \
   --oneOff
 ```
