@@ -23,7 +23,7 @@ See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum
 
 :::
 
-- Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](orbit-sdk-deploying-rollup-chain) section of the rollup deployment guide.
+- Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md) section of the rollup deployment guide.
 
 Once you have successfully deployed and initialized the Orbit core contracts, the next step is configuring and running your Orbit chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
 
@@ -124,15 +124,15 @@ const nodeConfig = prepareNodeConfig({
 
 Here are some details about the parameters used in the example above:
 
-| Parameters                | Description                                                                                                                                                                                                                           |
-| :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `chainName`               | The name you have chosen for your Orbit chain.                                                                                                                                                                                        |
-| `chainConfig`             | Configuration used for [chain deployment](orbit-sdk-deploying-rollup-chain#4-chainconfig), returned from the [createRollupPrepareTransactionReceipt](orbit-sdk-deploying-rollup-chain#createrolluppreparetransactionrequest-api) API. |
-| `coreContracts`           | Addresses of your newly deployed Orbit chain's, also returned from the `createRollupPrepareTransactionReceipt` API.                                                                                                                   |
-| `batchPosterPrivateKey  ` | Private key of the batch-poster account, used for signing batch-posting transactions and related functions.                                                                                                                           |
-| `validatorPrivateKey`     | Private key of the validator(s), used for validating state, posting Rollup Blocks (`RBlocks`) to the parent chain, and initiating challenges if necessary.                                                                            |
-| `parentChainId`           | Chain ID of the parent chain where your Orbit chain is deployed.                                                                                                                                                                      |
-| `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                               |
+| Parameters                | Description                                                                                                                                                                                                                                                                                                             |
+| :------------------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainName`               | The name you have chosen for your Orbit chain.                                                                                                                                                                                                                                                                          |
+| `chainConfig`             | Configuration used for [chain deployment](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#4-chainconfig), returned from the [createRollupPrepareTransactionReceipt](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#createrolluppreparetransactionrequest-api) API. |
+| `coreContracts`           | Addresses of your newly deployed Orbit chain's, also returned from the `createRollupPrepareTransactionReceipt` API.                                                                                                                                                                                                     |
+| `batchPosterPrivateKey  ` | Private key of the batch-poster account, used for signing batch-posting transactions and related functions.                                                                                                                                                                                                             |
+| `validatorPrivateKey`     | Private key of the validator(s), used for validating state, posting Rollup Blocks (`RBlocks`) to the parent chain, and initiating challenges if necessary.                                                                                                                                                              |
+| `parentChainId`           | Chain ID of the parent chain where your Orbit chain is deployed.                                                                                                                                                                                                                                                        |
+| `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                                                                                                                 |
 
 If you don't have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.
 

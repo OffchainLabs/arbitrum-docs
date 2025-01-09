@@ -30,7 +30,7 @@ AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the 
 
 ### Deployment steps
 
-The deployment process of AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md#rollup-configuration-parameters), but with some differences that we'll discuss in this guide.
+The deployment process of AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#rollup-configuration-parameters), but with some differences that we'll discuss in this guide.
 
 Here are the steps involved in the deployment process:
 
@@ -64,7 +64,7 @@ struct Config {
 }
 ```
 
-You can create the `chainConfig` parameter within the `Config` using `prepareChainConfig`. You can find more details on that function [here](/launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain.md#41-preparechainconfig).
+You can create the `chainConfig` parameter within the `Config` using `prepareChainConfig`. You can find more details on that function [here](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#41-preparechainconfig).
 
 ```js
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';
