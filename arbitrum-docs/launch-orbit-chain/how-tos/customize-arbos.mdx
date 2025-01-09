@@ -6,16 +6,13 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
 import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
-
-<PublicPreviewBannerPartial />
 
 <CustomizeCautionBannerPartial />
 
 ## Cases where you may want to consider customizing your own ArbOS upgrade
 
-1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](./customize-stf.mdx#Preface)), and
+1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](./customize-stf.mdx#introduction)), and
 
 2. If your desired changes need to be made to a live and operational Orbit chain
 
@@ -29,7 +26,7 @@ Below, you will find 4 examples of ArbOS-related code changes and, generally, ho
 
 ### 1. Add a new method to exsiting precompile on a specific ArbOS version:
 
-After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-Add-new-methods-to-an-existing-precompile),
+After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-add-new-methods-to-an-existing-precompile),
 you need continue to modify [precompile.go][precompile_main_file_link].
 
 For example, the original code is:

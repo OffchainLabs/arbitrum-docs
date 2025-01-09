@@ -8,8 +8,6 @@ target_audience: 'Developers deploying and maintaining Orbit AnyTrust chains.'
 sidebar_position: 1
 ---
 
-import PublicPreviewBannerPartial from '../partials/_orbit-public-preview-banner-partial.md';
-
 **AnyTrust** chains rely on an external Data Availability Committee (DAC) to store data and provide it on demand, instead of using the parent chain as Data Availability (DA) layer.
 
 The DAC has _N_ members; the AnyTrust protocol assumes that a minimum of _H_ _DAC_ members maintain integrity. _H_ is the minimum number of trusted committee members on AnyTrust chains, configurable by the chain's owner via the `assumed-honest` parameter in the keyset. In scenarios where `K = (N + 1) - H` members of the DAC pledge to grant access to specific data, they must sign and attest they have the data for storage to be considered successful.
@@ -18,7 +16,7 @@ Each DAC member gets their own set of BLS public and private keys. It's importan
 
 The main blockchain (parent chain) needs to know the names and public keys of all DAC members in order to validate the integrity of data being batched and posted. A 'keyset' is a list of all DAC members' public keys. It also shows how many signatures are needed to approve a Data Availability Certificate. This design lets the chain owner modify the DAC's membership over time, and it lets DAC members change their keys if needed. See [Inside AnyTrust](/how-arbitrum-works/inside-arbitrum-nitro.md#inside-anytrust) for more information.
 
-<PublicPreviewBannerPartial />
+
 
 In the following section, we will provide a detailed guide on the generation of a Keyset corresponding to your individual set of keys, as well as instructions for its subsequent configuration within the chain.
 

@@ -1,5 +1,5 @@
 ---
-title: 'How to verify contracts for stylus programs'
+title: 'How to verify contracts for Stylus contracts'
 sidebar_label: 'Verify contracts'
 description: 'Learn how to verify stylus contracts'
 author: rauljordan
@@ -16,7 +16,7 @@ This page will walk you through how to verify your Stylus contracts locally. Sty
 
 ## Background
 
-Stylus programs written in Rust and deployed onchain can be verified against a local codebase by using the `cargo stylus` tool.
+Stylus contracts written in Rust and deployed onchain can be verified against a local codebase by using the `cargo stylus` tool.
 
 ## Goals
 
@@ -80,7 +80,7 @@ This command will run the verification pipeline through a Docker environment, re
 
 ## How it works
 
-On deployment, a `keccak256` hash is created from the contents of all Rust source files in the project, sorted by file path, along with a rust-toolchain.toml, Cargo.toml and Cargo.lock files by default. This hash is injected in as a custom section of the user wasm's code. This means all data in the source files will be used for reproducible verification of a Stylus program, including code comments.
+On deployment, a `keccak256` hash is created from the contents of all Rust source files in the project, sorted by file path, along with a rust-toolchain.toml, Cargo.toml and Cargo.lock files by default. This hash is injected in as a custom section of the user wasm's code. This means all data in the source files will be used for reproducible verification of a Stylus contract, including code comments.
 
 This means the `codehash` onchain of the program will change due to this deployment metadata hash.
 
@@ -98,7 +98,6 @@ RUN rustup default $VERSION-x86_64-unknown-linux-gnu
 RUN rustup target add wasm32-unknown-unknown
 RUN rustup target add wasm32-wasi
 RUN rustup target add x86_64-unknown-linux-gnu
-RUN cargo install cargo-stylus-check
 RUN cargo install cargo-stylus
 ```
 
@@ -108,4 +107,4 @@ For instance, **a future toolchain can be used** despite the base image being 1.
 
 **The build toolchain**
 
-All verifiable Stylus programs in Rust _must_ have a standard [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file) file which specifies the channel for their deployment. It **cannot** be `stable`, `nightly`, or `beta` by itself, as a specific version must be added. For instance, you can specify `nightly-YYYY-MM-DD` or `major.minor.patch` for your channel. This is so that deployments have a very specific version to prevent potential mismatches from being more generic.
+All verifiable Stylus contracts in Rust _must_ have a standard [rust-toolchain.toml](https://rust-lang.github.io/rustup/overrides.html#the-toolchain-file) file which specifies the channel for their deployment. It **cannot** be `stable`, `nightly`, or `beta` by itself, as a specific version must be added. For instance, you can specify `nightly-YYYY-MM-DD` or `major.minor.patch` for your channel. This is so that deployments have a very specific version to prevent potential mismatches from being more generic.

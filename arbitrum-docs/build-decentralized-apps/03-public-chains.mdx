@@ -1,0 +1,72 @@
+---
+title: 'Arbitrum chains overview'
+description: A high level description of the Arbitrum chains available
+user_story: As a developer, I want to understand the different Arbitrum chains and how they relate to each other.
+content_type: concept
+---
+
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
+Arbitrum chains are Layer 2 solutions built on top of the Ethereum blockchain, designed to increase scalability and reduce transaction costs. In this conceptual overview, we’ll learn about the different Arbitrum chains and how they relate to each other. We’ll describe the available Arbitrum production and testnet chains, their differences, and the technology stacks that these chains use.
+
+## What Arbitrum production chains are available?
+
+### Arbitrum One
+
+**Arbitrum One** is a Layer 2 (L2) optimistic Rollup chain that implements the Arbitrum Rollup protocol and settles to Ethereum's Layer 1 (L1) chain. It lets you build high-performance Ethereum dApps with low transaction costs and Ethereum-grade security guarantees, introducing no additional trust assumptions. This is made possible by the [Nitro](/how-arbitrum-works/04-geth-at-the-core.mdx) technology stack, a "Geth-at-the-core" architecture that gives Arbitrum One (and Nova) advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more.
+
+### Arbitrum Nova
+
+**Arbitrum Nova** is a high-performance alternative to Arbitrum One's chain. While Arbitrum One implements the purely trustless Rollup protocol, Arbitrum Nova implements the mostly trustless [AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) protocol. They key difference between Rollup and AnyTrust is that the AnyTrust protocol introduces an additional trust assumption in the form of a data availability committee (DAC). This committee (detailed below) is responsible for expediting the process of storing, batching, and posting L2 transaction data to Ethereum's L1. This lets you use Arbitrum in scenarios that demand performance and affordability, while Arbitrum One is optimal for scenarios that demand Ethereum's pure trustlessness.
+
+## What Arbitrum testnet chains are available?
+
+### Arbitrum Sepolia
+
+Arbitrum Sepolia serves as a testnet chain replicating the capabilities of Arbitrum One's main network. Linked to the Sepolia testnet, it offers developers a secure platform to experiment with and evaluate their smart contracts prior to actual deployment on the mainnet.
+
+### Arbitrum Goerli
+
+Arbitrum Goerli was a testnet chain that mirrored the functionality of the Arbitrum One mainnet and was connected to the Ethereum Goerli testnet. It was deprecated on November 18th 2023, and deactivated on March 18th, 2024.
+
+:::caution
+
+The old testnet RinkArby was deprecated on December 20th, 2022.
+
+:::
+
+### Stylus testnet
+
+Stylus uses the Nitro technology and allows for efficient smart contract creation using languages like Rust, C, and C++. Leveraging Arbitrum's EVM equivalence, Stylus contracts achieve remarkable speed and low gas fees. With full interoperability between Solidity and Stylus contracts, new horizons emerge, while significantly cheaper memory costs unlock novel blockchain use cases.
+
+:::caution
+
+Stylus testnet will be deprecated once Stylus comes out of beta and is enabled on the Sepolia testnet.
+
+:::
+
+## What differences there are between the available Arbitrum chains?
+
+The main differences between the Arbitrum chains lie in their purpose and the environment they operate in.
+
+Arbitrum One and Arbitrum Nova are production chains designed for real-world use. They're connected to the Ethereum mainnet and handle real, valuable transactions. They both use Arbitrum's Nitro technology stack under the hood, but Arbitrum One implements the Rollup protocol, while Nova implements the AnyTrust protocol. Arbitrum One is designed for general use, providing a scalable and cost-effective solution for running Ethereum-compatible smart contracts. On the other hand, Arbitrum Nova is designed for applications that require a higher transaction throughput and don’t require the full decentralization that rollups provide.
+
+Finally, Arbitrum Sepolia is a testnet chain. It's designed for testing purposes and is connected to the Sepolia testnet, which uses test Ether with no real-world value.
+
+## What technology stacks use the Arbitrum chains?
+
+### Nitro
+
+Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with AnyTrust configuration),and Arbitrum Sepolia. It's designed to offer high throughput and low cost, making it ideal for scaling Ethereum applications. Nitro is a major upgrade to the “Classic” stack, offering several improvements including advanced calldata compression, separate contexts for common execution and fault proving, Ethereum L1 gas compatibility, and more. You can find more information about Nitro in [Inside Arbitrum Nitro](/how-arbitrum-works/01-a-gentle-introduction.mdx).
+
+### AnyTrust (variant of Nitro)
+
+AnyTrust is a variant of the Nitro technology stack that lowers costs by accepting a mild trust assumption. The AnyTrust protocol relies on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has N members, of which AnyTrust assumes at least two are honest. Keeping the data off-chain in the happy/common case means the system can charge the user significantly lower fees. You can find more information about AnyTrust in [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx).
+
+### Classic (deprecated)
+
+The Classic technology stack is the original version of Arbitrum. It has been deprecated and replaced by the Nitro technology stack.
+
+## Conclusion
+
+Understanding the different Arbitrum chains and their technology stacks is crucial for developers working on blockchain and web3 applications. Each chain offers a unique set of features and benefits, making them suitable for different use cases. By choosing the right chain and technology stack, developers can ensure their applications are secure, scalable, and cost-effective.
