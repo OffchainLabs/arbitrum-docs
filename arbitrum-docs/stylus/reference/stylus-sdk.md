@@ -3,15 +3,11 @@ title: 'Stylus SDK repositories'
 description: A table with links and minimal information about the different SDKs
 author: rachel-bousfield
 sme: rachel-bousfield
-target_audience: Developers writing and deploying Stylus programs
+target_audience: Developers writing and deploying Stylus contracts
 sidebar_position: 2
 ---
 
-import PublicPreviewBannerPartial from '../partials/_stylus-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
-If you are looking to write and deploy Stylus programs, please see the following SDKs.
+If you are looking to write and deploy Stylus contracts, please see the following SDKs.
 
 | Repo                           | Use cases                   | License           |
 | :----------------------------- | :-------------------------- | :---------------- |

@@ -30,7 +30,7 @@ The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM 
 
 :::note
 
-[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.md#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
 
 :::
 
@@ -56,7 +56,15 @@ An example of `chain.info-json` is available in the next section.
 --chain.name=<My Arbitrum L3 Chain>
 ```
 
-#### 3. AnyTrust chains
+#### 3. `execution.forwarding-target`
+
+You need to set the --execution.forwarding-target flag if you are running a regular full node (Not sequencer).
+
+```shell
+--execution.forwarding-target=<Your Sequencer node endpoint url>
+```
+
+#### 4. AnyTrust chains
 
 For <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chains</a>, you need to to add the following flags to the command or configuration:
 
@@ -96,7 +104,7 @@ Or:
 - Example:
 
   ```shell wordWrap=true
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info>
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info> --execution.forwarding-targe=<Your Sequencer node endpoint url>
   ```
 
   - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
@@ -146,6 +154,6 @@ After that, your node can synchronize the latest state from the sequencer feed.
 
 We show here a list of the parameters that are most commonly used when running your Orbit node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
-import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.md';
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.mdx';
 
 <OptionalOrbitCompatibleCLIFlagsPartial />
