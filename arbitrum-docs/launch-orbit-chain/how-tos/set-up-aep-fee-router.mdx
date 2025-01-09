@@ -119,16 +119,7 @@ Any `ChildToParentRouter` contracts deployed by an Orbit chain must be periodica
 
 The [router contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts) contains scripts for calling the routers.
 
-1. Clone, install dependencies, set .env
-```shell
-git clone https://github.com/OffchainLabs/fund-distribution-contracts
-cd fund-distribution-contracts && yarn
-
-# set private keys in .env
-cp .env.sample .env
-```
-
-2. Periodically trigger withdrawals to the parent chain
+1. Periodically trigger withdrawals to the parent chain
 
 ::::info
 
@@ -140,9 +131,15 @@ If the `ChildToParentRouter` is routing its chain's native token, this step shou
 cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
 ```
 
-3. Periodically redeem withdrawals on the parent chain
+2. Periodically redeem withdrawals on the parent chain
 
 ```shell
+git clone https://github.com/OffchainLabs/fund-distribution-contracts
+cd fund-distribution-contracts && yarn
+
+# set private keys in .env
+cp .env.sample .env
+
 # add --opStack if the router is on an OP stack chain
 yarn redeem-child-to-parent \
   --parentRPCUrl <parent_rpc_url> \
