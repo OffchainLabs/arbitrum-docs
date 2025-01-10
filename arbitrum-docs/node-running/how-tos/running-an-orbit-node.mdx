@@ -30,7 +30,7 @@ The `parent-chain` argument needs to provide a standard RPC endpoint for an EVM 
 
 :::note
 
-[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.md#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
 
 :::
 
@@ -55,7 +55,6 @@ An example of `chain.info-json` is available in the next section.
 ```shell
 --chain.name=<My Arbitrum L3 Chain>
 ```
-
 
 #### 3. `execution.forwarding-target`
 
@@ -155,6 +154,6 @@ After that, your node can synchronize the latest state from the sequencer feed.
 
 We show here a list of the parameters that are most commonly used when running your Orbit node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
 
-import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.md';
+import OptionalOrbitCompatibleCLIFlagsPartial from '../../partials/_optional-orbit-compatible-cli-flags-partial.mdx';
 
 <OptionalOrbitCompatibleCLIFlagsPartial />

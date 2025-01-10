@@ -10,23 +10,25 @@ target_audience: developers who want to create their own self-managed AnyTrust o
 
 This quickstart is for developers who want to launch their own Arbitrum Orbit chain using the [Orbit chain deployment portal](https://orbit.arbitrum.io/).
 
+:::caution Not for Mainnet Production
+
+This quickstart is intended for development purposes only and is not suitable for deploying production-grade mainnet chains.
+
+:::
+
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Sepolia testnet**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
 
 If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.md).
 
-import PublicPreviewBannerPartial from './partials/_orbit-public-preview-banner-partial.md';
-
-<PublicPreviewBannerPartial />
-
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
-- A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
-- At least 1 testnet ETH (for custom gas token chains, 0.6 ETH and 0.4 native tokens)
+- A browser-based Ethereum wallet (e.g., [MetaMask](https://metamask.io/) and click View MetaMask web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+- At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
 
-You'll need at least 1 testnet $ETH for regular Orbit chains or 0.6 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
+You'll need at least 1.2 testnet $ETH for regular Orbit chains or 0.8 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
 
 At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Sepolia network to Arbitrum Sepolia L2 testnet:
 
