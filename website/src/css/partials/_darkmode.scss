@@ -64,6 +64,11 @@
       color: white;
     }
   }
+
+  // Invert images wrapped in divs with invert-on-dark class when in dark mode
+  .invert-on-dark img {
+    filter: invert(1);
+  }
 }
 
 [data-theme='light'] {

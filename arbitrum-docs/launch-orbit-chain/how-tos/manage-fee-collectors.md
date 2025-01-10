@@ -25,8 +25,8 @@ There are four fee types that are collected on every transaction of an Orbit cha
 
 You can find more detailed information about these fee types in these pages:
 
-- [L2 fees](/how-arbitrum-works/gas-fees.mdx) for the Orbit base fee and surplus fee
-- [L1 fees](/how-arbitrum-works/l1-gas-pricing.mdx) for the Parent chain base fee and surplus fee
+- [L2 fees](/how-arbitrum-works/09-gas-fees.mdx#l2-gas-pricing) for the Orbit base fee and surplus fee
+- [L1 fees](/how-arbitrum-works/09-gas-fees.mdx#l1-gas-pricing) for the Parent chain base fee and surplus fee
 
 ## How to configure the fee collector addresses?
 

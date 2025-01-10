@@ -14,14 +14,6 @@ $child-sidebar-item-font-size: 14px;
     padding-top: 20px;
     font-weight: 400;
 
-    // make the carets less obtrusive
-    .menu__link--sublist-caret:after {
-      height: 1rem !important;
-      width: 1rem !important;
-      background: var(--ifm-menu-link-sublist-icon) 50% / 1.2rem 1.2rem;
-      opacity: 0.5;
-    }
-
     // style the root level items
     > li.theme-doc-sidebar-item-link-level-1,
     > li.theme-doc-sidebar-item-category-level-1 {
