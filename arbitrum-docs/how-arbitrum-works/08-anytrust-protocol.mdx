@@ -1,20 +1,23 @@
 ---
-author: dzgoldman
+title: AnyTrust Protocol
+description: 'Learn the fundamentals of the Arbitrum AnyTrust protocol.'
+author: pete-vielhaber
+sme: TucksonDev
+user_story: As a current or prospective Arbitrum user, I need to learn more about AnyTrust.
+content_type: get-started
 ---
 
-# Inside AnyTrust
+AnyTrust is a variant of <a data-quicklook-from="arbitrum">Arbitrum</a> Nitro technology that lowers costs by accepting a mild trust assumption.
 
-AnyTrust is a variant of Arbitrum Nitro technology that lowers costs by accepting a mild trust assumption.
+The Arbitrum protocol requires that all Arbitrum nodes, including validators (nodes that verify correctness of the chain and are prepared to stake on correct results), have access to the data of every L2 <a data-quicklook-from="transaction">Transaction</a> in the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>'s inbox. An Arbitrum rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as calldata. The Ethereum gas to pay for this is the largest component of cost in Arbitrum.
 
-The Arbitrum protocol requires that all Arbitrum nodes, including validators (nodes that verify correctness of the chain and are prepared to stake on correct results), have access to the data of every L2 transaction in the Arbitrum chain's inbox. An Arbitrum rollup provides data access by posting the data (in batched, compressed form) on L1 Ethereum as calldata. The Ethereum gas to pay for this is the largest component of cost in Arbitrum.
-
-AnyTrust relies instead on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand. The Committee has N members, of which AnyTrust assumes at least two are honest. This means that if N - 1 Committee members promise to provide access to some data, at least one of the promising parties must be honest. Since there are two honest members, and only one failed to make the promise, it follows that at least one of the promisers must be honest — and that honest member will provide data when it is needed to ensure the chain can properly function.
+AnyTrust relies instead on an external Data Availability Committee (hereafter, "the Committee") to store data and provide it on demand. The Committee has `N` members, of which AnyTrust assumes at least two are honest. This means that if `N - 1` Committee members promise to provide access to some data, at least one of the promising parties must be honest. Since there are two honest members, and only one failed to make the promise, it follows that at least one of the promisers must be honest — and that honest member will provide data when it is needed to ensure the chain can properly function.
 
 ## Keysets
 
-A Keyset specifies the public keys of Committee members and the number of signatures required for a Data Availability Certificate to be valid. Keysets make Committee membership changes possible and provide Committee members the ability to change their keys.
+A Keyset specifies the BLS public keys of Committee members and the number of signatures required for a <a data-quicklook-from="data-availability-certificate">Data Availability Certificate</a> to be valid. Keysets make Committee membership changes possible and provide Committee members the ability to change their keys.
 
-A Keyset contains
+A Keyset contains:
 
 - the number of Committee members, and
 - for each Committee member, a BLS public key, and
@@ -37,9 +40,9 @@ A central concept in AnyTrust is the Data Availability Certificate (hereafter, a
   - a bitmap saying which Committee members signed, and
   - a BLS aggregated signature (over the BLS12-381 curve) proving that those parties signed.
 
-Because of the 2-of-N trust assumption, a DACert constitutes proof that the block's data (i.e., the preimage of the hash in the DACert) will be available from at least one honest Committee member, at least until the expiration time.
+Because of the `2-of-N` trust assumption, a DACert constitutes proof that the block's data (i.e., the preimage of the hash in the DACert) will be available from at least one honest Committee member, at least until the expiration time.
 
-In ordinary (non-AnyTrust) Nitro, the Arbitrum sequencer posts data blocks on the L1 chain as calldata. The hashes of the data blocks are committed by the L1 Inbox contract, allowing the data to be reliably read by L2 code.
+In ordinary (non-AnyTrust) Nitro, the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> posts data blocks on the L1 chain as calldata. The hashes of the data blocks are committed by the L1 Inbox contract, allowing the data to be reliably read by L2 code.
 
 AnyTrust gives the sequencer two ways to post a data block on L1: it can post the full data as above, or it can post a DACert proving availability of the data. The L1 inbox contract will reject any DACert that uses an invalid Keyset; the other aspects of DACert validity are checked by L2 code.
 
@@ -64,7 +67,7 @@ The DAS software, based on configuration options, can store its data in local fi
 
 ## Sequencer-Committee Interaction
 
-When the Arbitrum sequencer produces a data batch that it wants to post using the Committee, it sends the batch's data, along with an expiration time (normally three weeks in the future) via RPC to all Committee members in parallel. Each Committee member stores the data in its backing store, indexed by the data's hash. Then the member signs the (hash, expiration time) pair using its BLS key, and returns the signature with a success indicator to the sequencer.
+When the Arbitrum sequencer produces a data <a data-quicklook-from="batch">Batch</a> that it wants to post using the Committee, it sends the batch's data, along with an expiration time (normally three weeks in the future) via RPC to all Committee members in parallel. Each Committee member stores the data in its backing store, indexed by the data's hash. Then the member signs the (hash, expiration time) pair using its BLS key, and returns the signature with a success indicator to the sequencer.
 
 Once the Sequencer has collected enough signatures, it can aggregate the signatures and create a valid DACert for the (hash, expiration time) pair. The Sequencer then posts that DACert to the L1 inbox contract, making it available to the AnyTrust chain software at L2.
 
