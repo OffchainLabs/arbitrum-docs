@@ -397,24 +397,20 @@ As we interact with the cupcake vending machine, we'll use Metamask's network se
 
 <!-- add how to connect remix to injected account -->
 
-<!-- todo: partialize this - duplicated in Orbit quickstart -->
 
-Next, let's deposit some $ASPL into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia $ETH from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
+Next, let's deposit some `$ASPL` into  the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
-1. Use an L1 Sepolia $ETH faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet $ETH on L1 Sepolia.
-2. Bridge your L1 Sepolia $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
+1. Use an L1 Sepolia `$ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `$ETH` on L1 Sepolia.
+2. Bridge your L1 Sepolia `$ETH` into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-Once you've acquired some $ASPL, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
+Once you've acquired some `$ASPL`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-```bash
-yarn hardhat run scripts/deploy.js --network arbitrumSepolia
-```
 
-This tells hardhat to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in `hardhat.config.js`. You should see the following output:
+<!-- add how to deploy on Sepolia with remix -->
 
-```bash
-Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
-```
+
+This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
+
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
@@ -426,9 +422,9 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 
 ### Deploy the smart contract to Arbitrum One Mainnet
 
-Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real $ETH instead of $ASPL.
+Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real `$ETH` instead of $ASPL.
 
-Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/how-arbitrum-works/09-gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
+Expect to see inconsistent `$ETH` gas fees in this step - the [Gas and fees section](/how-arbitrum-works/09-gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
 
 <!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 
@@ -448,7 +444,7 @@ Note that we're adding a private key to a config file. This is **not** a best pr
 
 :::
 
-Next, deposit some $ETH into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum One Mainnet by issuing the following command:
+Next, deposit some `$ETH` into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum One Mainnet by issuing the following command:
 
 ```bash
 yarn hardhat run scripts/deploy.js --network arbitrumOne
