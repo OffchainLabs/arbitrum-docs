@@ -345,17 +345,18 @@ Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sep
 ### Deploy the smart contract to the Arbitrum Sepolia testnet
 
 We were able to deploy to a testnet for free because we were using Remix' built-in network, but now we'll deploy our contract to Arbitrum's Sepolia testnet.
-Sepolia is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract. 
+Sepolia is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract.
 
 To be able to pay the transaction fee, we will:
+
 - Use our MetaMask crypto wallet
 - Obtain some Arbitrum Sepolia testnet's token called `$ASPL`.
 
 #### Configure your crypto wallet
 
-To interact with a blockchain, you need a crypto address aka wallet. On Ethereum, a wallet is used to identify and pay in crypto. 
+To interact with a blockchain, you need a crypto address aka wallet. On Ethereum, a wallet is used to identify and pay in crypto.
 
- Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
+Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
 ![Connect Metamask to Localhost 8545](./images/quickstart-localhost-metamask.png)
 
@@ -386,20 +387,16 @@ As we interact with the cupcake vending machine, we'll use Metamask's network se
 
 <!-- add how to connect remix to injected account -->
 
-
-Next, let's deposit some `$ASPL` into  the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
+Next, let's deposit some `$ASPL` into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
 1. Use an L1 Sepolia `$ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `$ETH` on L1 Sepolia.
 2. Bridge your L1 Sepolia `$ETH` into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
 Once you've acquired some `$ASPL`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-
 <!-- add how to deploy on Sepolia with remix -->
 
-
 This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
-
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
