@@ -3,15 +3,19 @@
   --docusaurus-details-transition: transform 300ms ease;
   --docusaurus-details-decoration-color: var(--ifm-color-primary);
   margin: 1rem 0;
-  padding: 1rem;
+  padding: 0.1rem 1rem;
   --ifm-alert-background-color: transparent;
+}
+
+.details[open] {
+  padding: 1rem;
 }
 
 .details > summary {
   position: relative;
   cursor: pointer;
   list-style: none;
-  padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+  padding: 0.25rem 0.25rem 0.25rem 1.5rem;
   margin: 0;
 }
 
@@ -38,9 +42,9 @@
 }
 
 .details > div > .collapsibleContent {
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
   border-top: 1px solid var(--docusaurus-details-decoration-color);
-  padding: 1rem !important;
+  padding: 0.1rem !important;
   background: none !important;
   background-color: unset !important;
   --ifm-alert-background-color: unset !important;
