@@ -14,6 +14,8 @@ Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Ru
 
 This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and `yarn` is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
+import CustomDetails from '@site/src/components/CustomDetails';
+
 ### What we're building
 
 We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. This vending machine will follow two rules:
@@ -41,26 +43,21 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 
 ### Prerequisites
 
-<details>
-<summary>VS Code</summary>
+<CustomDetails summary="VS Code">
+  VS Code is the IDE we'll use to build our vending machine. See
+  [code.visualstudio.com](https://code.visualstudio.com/) to install.
+</CustomDetails>
 
-VS Code is the IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.
+<CustomDetails summary="Web3 wallet">
+  The <a data-quicklook-from="ethereum-wallet">wallet</a> we'll use to interact with our vending
+  machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX
+  Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+</CustomDetails>
 
-</details>
-
-<details>
-<summary>Web3 wallet</summary>
-
-The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
-
-</details>
-
-<details>
-<summary>Yarn</summary>
-
-Yarn is the package manager we'll use to install our dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.
-
-</details>
+<CustomDetails summary="Yarn">
+  Yarn is the package manager we'll use to install our dependencies. See
+  [yarnpkg.com](https://yarnpkg.com/) to install.
+</CustomDetails>
 
 We'll address remaining dependencies as we go.
 
@@ -80,10 +77,11 @@ We'll address remaining dependencies as we go.
   - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the
     <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>.
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high security standards[^4].
-  
+
  <!-- Note: add simple diagrams representing mainnet and arbitrum  -->
 
 In this tutorial we will:
+
 1. vending machine's JavaScript implementation
 2. Convert it into a Solidity smart contract
 3. Compile our smart contract.
@@ -207,32 +205,23 @@ Let's first add our smart contract to Remix following these steps:
 
 2. Create a blank workspace in Remix:
 
-<details>
-<summary>File explorer > Workspaces > Create blank</summary>
-
-![](./images/remix-create-blank-project-2025-01-07.gif)
-
-</details>
+<CustomDetails summary="File explorer > Workspaces > Create blank">
+  ![](./images/remix-create-blank-project-2025-01-07.gif)
+</CustomDetails>
 
 3. Copy your vending machine contract
 
 4. Paste your contract in Remix
 
-<details>
-<summary>File explorer > New file</summary>
-
+<CustomDetails summary="File explorer > New file">
 ![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
-
-</details>
+</CustomDetails>
 
 5. Compile your contract in Remix
 
-<details>
-<summary>Select contract > Click "compile" menu > Hit "compile" icon</summary>
-
+<CustomDetails summary="Select contract > Click compile menu > Hit compile icon">
 ![](./images/remix-compile-contract-2025-01-07.gif)
-
-</details>
+</CustomDetails>
 
 #### Deploy the smart contract to your local testnet
 
