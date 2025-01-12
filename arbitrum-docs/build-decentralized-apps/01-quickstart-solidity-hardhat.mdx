@@ -214,13 +214,13 @@ Let's first add our smart contract to Remix following these steps:
 4. Paste your contract in Remix
 
 <CustomDetails summary="File explorer > New file">
-![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
+  ![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
 </CustomDetails>
 
 5. Compile your contract in Remix
 
 <CustomDetails summary="Select contract > Click compile menu > Hit compile icon">
-![](./images/remix-compile-contract-2025-01-07.gif)
+  ![](./images/remix-compile-contract-2025-01-07.gif)
 </CustomDetails>
 
 #### Deploy the smart contract to your local testnet
@@ -245,12 +245,12 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
-|                          | `WEB2`<br/>(the first one) | `WEB3-LOCALHOST`<br/>(the latest one) | `WEB3-ARB-SEPOLIA`<br/>(the next one) | `WEB3-ARB-MAINNET`<br/>(the final one) |
-|--------------------------|----------------------------|---------------------------------------|---------------------------------------|----------------------------------------|
-| **Data** (cupcakes)      | Stored only in your **browser**. (Usually, stored by centralized infrastructure.) | Stored on your **device** in an **emulated Ethereum network** (via smart contract). | Stored on Ethereum's **decentralized test network** (via smart contract). | Stored on Ethereum's **decentralized mainnet network** (via smart contract). |
-| **Logic** (vending)      | Served from **Offchain's servers**. Executed by your **browser**. | Stored and executed by your **locally emulated Ethereum network** (via smart contract). | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
-| **Presentation** (UI)    | Served from **Offchain's servers**. Rendered and executed by your **browser**. | ← same | ← same | ← same |
-| **Money**                | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators. | ← same, but instead of testnet $ETH, they use **mainnet $ETH**. |
+|                       | `WEB2`<br/>(the first one)                                                              | `WEB3-LOCALHOST`<br/>(the latest one)                                                     | `WEB3-ARB-SEPOLIA`<br/>(the next one)                                                  | `WEB3-ARB-MAINNET`<br/>(the final one)                                                    |
+| --------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
+| **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
+| **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
+| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators.                 | ← same, but instead of testnet $ETH, they use **mainnet $ETH**.                           |
 
 Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sepolia testnet.
 
@@ -278,7 +278,7 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 
 ![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
-You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
+You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again in a moment.
 
 Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
