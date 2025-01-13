@@ -44,7 +44,7 @@ The Sequencer Endpoint is the most direct method for users looking to minimize d
 The diagram below shows different ways to submit transactions to the sequencer:
 
 <div class="invert-on-dark">
-  ![submit-transaction-to-sequencer](../assets/submit-tx-to-sequencer.png)
+  ![submit-transaction-to-sequencer](../assets/submit-tx-to-sequencer.svg)
 </div>
 
 ## Bypassing the Sequencer
@@ -53,7 +53,7 @@ This section delves into an alternative method for submitting transactions to th
 
 In **Diagram 3**, we demonstrate how users can submit their transactions using the delayed inbox contract to bypass the sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction is submitted to the delayed inbox, the sequencer may automatically pick it up, include it as an ordered transaction, and send it to the sequencer feed. However, if the sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the sequencer inbox contract. This action ensures that the sequencer to picks up the transaction and includes it in the ordered transaction list, providing users with a sense of security about their transactions.
 
-<div class="invert-on-dark">![bypassing-the-sequencer](../assets/bypassing-the-sequencer.png)</div>
+<div class="invert-on-dark">![bypassing-the-sequencer](../assets/bypassing-the-sequencer.svg)</div>
 
 To send a transaction to the delayed inbox instead of submitting it to the sequencer, users can construct their transaction and then call the [`sendL2Message`](https://github.com/OffchainLabs/nitro-contracts/blob/fbbcef09c95f69decabaced3da683f987902f3e2/src/bridge/AbsInbox.sol#L150) function, passing the data of the serialized signed transaction as an argument. This function allows users to send a generic L2 message to the chain, suitable for any message that does not require L1 validation.
 
