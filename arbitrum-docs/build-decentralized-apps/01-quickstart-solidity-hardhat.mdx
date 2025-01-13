@@ -226,7 +226,6 @@ Let's first add our smart contract to Remix following these steps:
 ### Deploy the smart contract to a local testnet
 
 To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet:
-
 <!-- we do it in this order because we want to be able to say "here's your contract address; paste it here" instead of "here's your contract address, save it for later" -->
 <!-- not confident that this is a good reason -->
 
@@ -238,12 +237,13 @@ To deploy our `VendingMachine` smart contract locally, we'll use two terminal wi
 
 Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
 
-```shell
+``` shell
 curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
-You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
 
+
+You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
 <CustomDetails summary="click for a preview">
 ```shell
                             (_) | |
@@ -255,7 +255,8 @@ You should see a prompt showing what test accounts automatically were generated 
     0.2.0 (7f0f5b4 2024-08-08T00:19:07.020431000Z)
     https://github.com/foundry-rs/foundry
 
-# Available Accounts
+Available Accounts
+==================
 
 (0) 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000.000000000000000000 ETH)
 (1) 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (10000.000000000000000000 ETH)
@@ -268,7 +269,8 @@ You should see a prompt showing what test accounts automatically were generated 
 (8) 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f (10000.000000000000000000 ETH)
 (9) 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720 (10000.000000000000000000 ETH)
 
-# Private Keys
+Private Keys
+==================
 
 (0) 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 (1) 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
@@ -281,15 +283,16 @@ You should see a prompt showing what test accounts automatically were generated 
 (8) 0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97
 (9) 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6
 
-# Wallet
+Wallet
+==================
+Mnemonic:          test test test test test test test test test test test junk
+Derivation path:   m/44'/60'/0'/0/
 
-Mnemonic: test test test test test test test test test test test junk
-Derivation path: m/44'/60'/0'/0/
 
-# Chain ID
+Chain ID
+==================
 
 31337.
-
 ```
 </CustomDetails>
 
@@ -329,7 +332,7 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 #### Deploy the smart contract to your local testnet
 
 <CustomDetails summary="File explorer > Workspaces > Create blank">
-![](./images/remix-metamask-deploy-to-anvil-2025-01-13.gif)
+![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
 </CustomDetails>
 
 
@@ -464,4 +467,3 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
-```
