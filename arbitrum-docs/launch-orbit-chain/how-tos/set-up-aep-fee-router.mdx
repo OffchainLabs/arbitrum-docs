@@ -112,3 +112,39 @@ cp .env.example .env
 ```shell
 yarn dev
 ```
+
+## Triggering movement of funds
+
+Any `ChildToParentRouter` contract deployed by an Orbit chain must be periodically called to move funds.
+The following commands should be set up to execute at the same interval as the router's minimum distribution interval (`minDistributionIntervalSeconds`).
+
+The [router contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts) contains scripts for calling the routers.
+
+1. Periodically trigger withdrawals to the parent chain
+
+::::info
+
+If the `ChildToParentRouter` is routing its chain's native token, this step should be skipped.
+
+::::
+
+```shell
+cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
+```
+
+2. Periodically redeem withdrawals on the parent chain
+
+```shell
+git clone https://github.com/OffchainLabs/fund-distribution-contracts
+cd fund-distribution-contracts && yarn
+
+# set PARENT_CHAIN_PK in .env
+cp .env.sample .env
+
+# add --opStack if the router is on an OP stack chain
+yarn redeem-child-to-parent \
+  --parentRPCUrl <parent_rpc_url> \
+  --childRPCUrl <child_rpc_url> \
+  --childToParentRewardRouterAddr <router_on_child_address> \
+  --oneOff
+```
