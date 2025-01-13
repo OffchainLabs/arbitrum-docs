@@ -223,9 +223,13 @@ Let's first add our smart contract to Remix following these steps:
   ![](./images/remix-compile-contract-2025-01-07.gif)
 </CustomDetails>
 
-#### Deploy the smart contract to your local testnet
+### Deploy the smart contract to Remix's VM
 
-From another terminal instance, run `yarn add --dev @nomicfoundation/hardhat-ethers ethers hardhat-deploy hardhat-deploy-ethers` to install additional dependencies needed for contract deployment. Then run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
+Now that you have compiled your smart contract, it's ready to deploy
+
+<CustomDetails summary="Deploy > Remix VM > Deploy > Copy Deployed contract's address">
+![](./images/remix-metamask-deploy-to-vm-2025-01-12.gif)
+</CustomDetails>
 
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
 
@@ -246,7 +250,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2`<br/>(the first one)                                                              | `WEB3-LOCALHOST`<br/>(the latest one)                                                     | `WEB3-ARB-SEPOLIA`<br/>(the next one)                                                  | `WEB3-ARB-MAINNET`<br/>(the final one)                                                    |
-| --------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+|-----------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
@@ -266,13 +270,14 @@ To be able to pay the transaction fee, we will:
 
 #### Configure your crypto wallet
 
-To interact with a blockchain, you need a crypto address aka wallet. On Ethereum, a wallet is used to identify and pay in crypto.
+To interact with a smart contract, we will need a wallet, MetaMask, in this case:
 
-Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
+Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to Remix's blockchain emulator, enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
-![Connect Metamask to Localhost 8545](./images/quickstart-localhost-metamask.png)
+<CustomDetails summary="File explorer > Workspaces > Create blank">
+  ![](./images/metamask-connect-to-arb-selpolia-2025-01-12.gif)
+</CustomDetails>
 
-<!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
@@ -318,50 +323,6 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 
 <VendingMachine id="smart-sepolia-cupcakes" type="web3-arb-sepolia" />
 
-### Deploy the smart contract to Arbitrum One Mainnet
-
-Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real `$ETH` instead of $ASPL.
-
-Expect to see inconsistent `$ETH` gas fees in this step - the [Gas and fees section](/how-arbitrum-works/09-gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
-
-<!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
-
-First, update the `hardhat.config.js` file to specify the private key of the **one-time-use deployment account** that you'll use to deploy your smart contract (and pay the transaction fee):
-
-```javascript title="hardhat.config.js"
-// ...
-const ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY = ''; // <- this should **not** begin with "0x"
-// ...
-accounts: [ARBITRUM_MAINNET_TEMPORARY_PRIVATE_KEY]; // <- uncomment this line
-// ...
-```
-
-:::caution
-
-Note that we're adding a private key to a config file. This is **not** a best practice. Consider using environment variables instead.
-
-:::
-
-Next, deposit some `$ETH` into the wallet corresponding to the private key we added to `hardhat.config.js`. You'll then be able to deploy your smart contract to Arbitrum One Mainnet by issuing the following command:
-
-```bash
-yarn hardhat run scripts/deploy.js --network arbitrumOne
-```
-
-You should see the following output:
-
-```bash
-Cupcake vending machine deployed to 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
-```
-
-Congratulations! You've just deployed **business logic and data** to Ethereum's decentralized network of nodes by way of Arbitrum One[^2].
-
-To view your smart contract in a blockchain explorer, visit `https://arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
-
-Select `Arbitrum One` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you an immutable cupcake.
-
-<VendingMachine id="smart-mainnet-cupcakes" type="web3-arb-one" />
-
 ### Summary
 
 In this quickstart, we:
@@ -374,12 +335,22 @@ In this quickstart, we:
 
 If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
 
-### Next steps
+### Learning resources
 
-<!--todo: figure out what next steps they're actually looking for by performing content tests -->
+| Resource | Description |
+| --- | --- |
+| [Official Solidity documentation](https://soliditylang.org) | Official documentation for Solidity programming language |
+| [Upgrading Ethereum (e-book)](https://eth2book.info/altair) | Guide on upgrading Ethereum |
+| [Ethernaut](https://ethernaut.openzeppelin.com) | Interactive smart contract hacking game |
+| [RareSkills](https://www.rareskills.io/rust-bootcamp) | Rust programming course for blockchain development |
+| [CryptoZombies](https://cryptozombies.io/en/course/) | Free online smart contract courses and tutorials |
+| [LearnWeb3](https://learnweb3.io) | Web3 education platform with interactive lessons and projects |
+| [HackQuest](https://www.hackquest.io/en) | Web3 hackathon and project-based learning platform |
+| [Rise In](https://www.risein.com/bootcamps/solidity-bootcamp) | Solidity bootcamp for beginners |
+| [Encode Club](https://www.encode.club) | Community-driven coding club with a focus on web3 development |
+| [Metana](https://metana.io) | Metana is not mentioned in the resources, please provide more information about this resource. |
+| [Alchemy University](https://www.alchemy.com/university) | Online education platform for blockchain and web3 development courses |
 
-- Visit [How to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
-- Visit [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of public chains that you can deploy your smart contracts to.
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to Ethereum L1, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
@@ -387,59 +358,3 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
-
-<!-- TODOs
-
-#### FAQs
-
- - Why do I need to sign a transaction to get a cupcake?
- - What's the difference between L1 and L2?
- - Will my wallet carry balances between networks? Layers?
- - How do wallets work?
- - How do I upgrade my smart contract?
- - What are people building on Arbitrum?
- - What if I didn't use an L2 scaling solution like Arbitrum?
- - Can I use uniswap to convert ETH into $AGOR?
- - How do people normally stage deployments of smart contracts?
- - What are some best practices for smart contract development?
- - Can I deploy to Mainnet first and then deploy to Arbitrum?
- - What's the difference between a smart contract and a dapp?
- - What's the difference between Arbitrum One and Arbitrum Nova?
- - Are these cupcakes "NFTs"? (no)
- - figure out where to store the samples
-
-#### Code
-
- - live editor
-
-#### Footnote drafts
-
-[^5]: (footnote to elaborate on infeasibility vs impossibility, upgradeability).
-[^6]: See https://hardhat.org/hardhat-network/docs/metamask-issue
-[^6]: (windows-specific callouts)
-[^7]: ABI explainer
-[^6]: If you're using Windows,.
-[^7]: ABI stands for "Application Binary Interface". It's a JSON file that describes the functions and events of a smart contract. It's used by frontend applications to interact with smart contracts. See [this article](https://ethereum.org/en/developers/docs/abi/) for a beginner-friendly introduction to ABI.
-
-#### Optimizations
-
- - example Arbitrum goerli contract: 0xff825139321bd8fB8b720BfFC5b9EfDB7d6e9AB3
- - example Arbitrum One contract:
- - example Arbitrum Nova contract:
- - next docs to do / upgrade:
-   - public chains and addresses
- - concept doc for this -> visualize the components, layers, data structures, information flows, procedure
- - consider using Docusaurus' live code editor to let users play with the code in the browser
- - Testing
- - Samples
- - Blockchain exploring
- - Architecting
- - Patterns
- - Tutorials
- - Differences between Ethereum and Arbitrum - op codes etc
- - Upgrading contracts
- - Oracles
- - One vs Nova
- - https://yos.io/2019/11/10/smart-contract-development-best-practices/
- - https://github.com/smartcontractkit/full-blockchain-solidity-course-js/discussions/4733
--->
