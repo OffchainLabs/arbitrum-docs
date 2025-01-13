@@ -1,6 +1,6 @@
 ---
 title: 'Quickstart: Build a decentralized app (Solidity)'
-description: This quickstart walks you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Hardhat network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
+description: This quickstart walks you through the process of converting a Javascript vending machine's business logic into a Solidity smart contract. We'll then deploy the smart contract to a local Anvil/Foundry network, then Arbitrum Sepolia testnet, and finally Arbitrum One mainnet.
 author: symbolpunk
 user_story: As a web2 developer, I want to onboard into Arbitrum by building and deploying my first smart contract, and knowing how to build a web widget interacting with it.
 content_type: quickstart
@@ -12,11 +12,19 @@ Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Ru
 
 :::
 
-This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and `yarn` is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 import CustomDetails from '@site/src/components/CustomDetails';
+import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
-### What we're building
+### What we'll learn
+
+In this tutorial we will learn:
+
+1. The basics of Ethereum vs. client/server architecture
+2. What is a Solidity smart contract
+3. How to compile and deploy a smart contract
+4. How to use an Ethereum wallet
 
 We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. This vending machine will follow two rules:
 
@@ -26,16 +34,15 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 Here's the vending machine implemented with Javascript.
 To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
 
-import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
-
 <VendingMachine id="dumb-cupcakes" type="web2" />
 
-Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
+We can assume that this vending machine operates as we expect, but it's largely up to the **centralized service provider** that hosts it.
+In the case of a compromised cloud host:
 
 1. Our centralized service provider can deny access to particular users.
 2. A malicious actor can change the rules of the vending machine at any time, for example, to give their friends extra cupcakes.
 
-Centralized third-party intermediaries represent a **single point of failure** that malicious actors may become incentivized to exploit. To mitigate this type of risk, we can decentralize our vending machine's **business logic and data**, rendering this type of exploitation infeasible.
+Centralized third-party intermediaries represent a **single point of failure** that malicious actors can exploit. With a blockchain infrastructure such as Ethereum, we decentralize our vending machine's **business logic and data**, making this type of exploits nearly impossible.
 
 This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, decentralized network of nodes[^2] **while keeping costs low for you and your users**.
 
@@ -55,16 +62,20 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 </CustomDetails>
 
 <CustomDetails summary="Yarn">
-  Yarn is the package manager we'll use to install our dependencies. See
-  [yarnpkg.com](https://yarnpkg.com/) to install.
+  The <a data-quicklook-from="ethereum-wallet">wallet</a> we'll use to interact with our vending
+  machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX
+  Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 </CustomDetails>
 
-We'll address remaining dependencies as we go.
+<CustomDetails summary="Foundry">
+  Foundry is the toolchain we'll use to compile and deploy our smart contract. See
+  [getfoundry.sh](https://getfoundry.sh) to install.
+</CustomDetails>
 
 ### Ethereum and Arbitrum in a nutshell
 
 - **Ethereum**
-  - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
+  - Ethereum is a decentralized network of [nodes](https://docs.prylabs.network/docs/concepts/nodes-networks) that use Ethereum's client software (like [Offchain's Prysm](https://docs.prylabs.network/docs/getting-started) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
   - The data within Ethereum's blockchain data structure changes one transaction at a time.
   - <a data-quicklook-from="smart-contract">Smart contracts</a> are small programs that execute transactions
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
@@ -80,32 +91,25 @@ We'll address remaining dependencies as we go.
 
  <!-- Note: add simple diagrams representing mainnet and arbitrum  -->
 
-In this tutorial we will:
-
-1. vending machine's JavaScript implementation
-2. Convert it into a Solidity smart contract
-3. Compile our smart contract.
-4. Deploy it to Arbitrum One.
-5. Use a React widget to interact with that contract (that's the part where you get cupcakes)
-
  <!-- Note: add simple diagrams representing smart contracts development cycle  -\-> -->
 
 ### Review the Javascript vending machine
 
 Here's the vending machine implemented as a Javascript class:
 
-```js title="VendingMachine.js"
+<CustomDetails summary="VendingMachine.js">
+```js
 class VendingMachine {
   // state variables = internal memory of the vending machine
   cupcakeBalances = {};
   cupcakeDistributionTimes = {};
 
-  // Vend a cupcake to the caller
-  giveCupcakeTo(userId) {
-    if (this.cupcakeDistributionTimes[userId] === undefined) {
-      this.cupcakeBalances[userId] = 0;
-      this.cupcakeDistributionTimes[userId] = 0;
-    }
+// Vend a cupcake to the caller
+giveCupcakeTo(userId) {
+if (this.cupcakeDistributionTimes[userId] === undefined) {
+this.cupcakeBalances[userId] = 0;
+this.cupcakeDistributionTimes[userId] = 0;
+}
 
     // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
     const fiveSeconds = 5000;
@@ -121,13 +125,15 @@ class VendingMachine {
       );
       return false;
     }
-  }
 
-  getCupcakeBalanceFor(userId) {
-    return this.cupcakeBalances[userId];
-  }
 }
-```
+
+getCupcakeBalanceFor(userId) {
+return this.cupcakeBalances[userId];
+}
+}
+ ```
+</CustomDetails>
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
 
@@ -138,7 +144,8 @@ Let's decentralize our vending machine's business logic and data by porting the 
 Here is a Solidity implementation of the vending machine.
 Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it can be deployed to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
-```solidity title="VendingMachine.sol"
+<CustomDetails summary="VendingMachine.sol">
+```solidity
 // SPDX-License-Identifier: MIT
 // Specify the Solidity compiler version - this contract requires version 0.8.9 or higher
 pragma solidity ^0.8.9;
@@ -191,7 +198,9 @@ contract VendingMachine {
         return _cupcakeBalances[userAddress];
     }
 }
-```
+````
+
+</CustomDetails>
 
 ### Compile your smart contract with Remix
 
@@ -201,50 +210,47 @@ Remix is a browser-based IDE for EVM development. There are other IDEs to choose
 
 Let's first add our smart contract to Remix following these steps:
 
-1. Load Remix: https://remix.ethereum.org
+#### 1. Load Remix: https://remix.ethereum.org
 
-2. Create a blank workspace in Remix:
+#### 2. Create a blank workspace in Remix:
 
-<CustomDetails summary="File explorer > Workspaces > Create blank">
-  ![](./images/remix-create-blank-project-2025-01-07.gif)
-</CustomDetails>
+  <CustomDetails summary="File explorer > Workspaces > Create blank">
+    ![](./images/remix-create-blank-project-2025-01-07.gif)
+  </CustomDetails>
 
-3. Copy your vending machine contract
+#### 3. Copy your vending machine contract
 
-4. Paste your contract in Remix
+#### 4. Paste your contract in Remix
 
 <CustomDetails summary="File explorer > New file">
   ![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
 </CustomDetails>
 
-5. Compile your contract in Remix
+#### 5. Compile your contract in Remix
 
-<CustomDetails summary="Select contract > Click compile menu > Hit compile icon">
+<CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
   ![](./images/remix-compile-contract-2025-01-07.gif)
 </CustomDetails>
 
-### Deploy the smart contract to a local testnet
+### Deploy the smart contract to a local Ethereum chain
 
-To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet:
-<!-- we do it in this order because we want to be able to say "here's your contract address; paste it here" instead of "here's your contract address, save it for later" -->
-<!-- not confident that this is a good reason -->
+Once a smart contract has been compiled, it can be deployed to a blockchain. The safest way to do this is to deploy it to a locally hosted chain, where you can test and debug your contract before deploying it to a public chain.
 
-1. We'll use a terminal window to run Foundry's local Ethereum node
-2. We'll then configure a wallet so we can interact with our smart contract after it's deployed to (1)
-3. We'll then use the second terminal window to deploy our smart contract to (1)'s node
+To deploy our `VendingMachine` smart contract locally, we will:
 
-#### Run a local Ethereum network and node
+1. Run Foundry's local Ethereum node in a terminal window
+2. Configure a wallet so we can interact with our smart contract after it's deployed to (1)
+3. deploy our smart contract to (1)'s node using Remix
+
+#### Run a local chain
 
 Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
 
-``` shell
+```shell
 curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
-
-
-You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
-<CustomDetails summary="click for a preview">
+<CustomDetails summary="Once you've run the above commands, you should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
 ```shell
                             (_) | |
       __ _   _ __   __   __  _  | |
@@ -255,8 +261,7 @@ You should see a prompt showing what test accounts automatically were generated 
     0.2.0 (7f0f5b4 2024-08-08T00:19:07.020431000Z)
     https://github.com/foundry-rs/foundry
 
-Available Accounts
-==================
+# Available Accounts
 
 (0) 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000.000000000000000000 ETH)
 (1) 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (10000.000000000000000000 ETH)
@@ -269,8 +274,7 @@ Available Accounts
 (8) 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f (10000.000000000000000000 ETH)
 (9) 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720 (10000.000000000000000000 ETH)
 
-Private Keys
-==================
+# Private Keys
 
 (0) 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 (1) 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
@@ -283,20 +287,38 @@ Private Keys
 (8) 0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97
 (9) 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6
 
-Wallet
-==================
-Mnemonic:          test test test test test test test test test test test junk
-Derivation path:   m/44'/60'/0'/0/
+# Wallet
 
+Mnemonic: test test test test test test test test test test test junk
+Derivation path: m/44'/60'/0'/0/
 
-Chain ID
-==================
+# Chain ID
 
 31337.
+
 ```
 </CustomDetails>
 
+#### Configure Metamask
 
+Next, open Metamask and create or import a wallet by following the displayed instructions.
+
+By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks`.
+
+Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
+
+- Network Name: `localhost`
+- New RPC URL: `https://127.0.0.1:8545`
+- Chain ID: `31337`
+- Currency Symbol: `ETH`
+
+<CustomDetails summary="Add Localhost 8545 to Metamask">
+![](./images/metamask-add-localhost-2025-01-13.png)
+</CustomDetails>
+
+Your wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 testnet `$ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
+
+![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
 :::caution Never share your private keys
 
@@ -306,48 +328,37 @@ Your Ethereum Mainnet wallet's private key is the password to all of your money.
 
 Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key[^5].
 
-#### Configure Metamask
 
-Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
-
-![Connect Metamask to Localhost 8545](./images/quickstart-localhost-metamask.png)
-
-<!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
-
-Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
-
-![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
-
-You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
-
-Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
-
-- Network Name: `Arbitrum Sepolia`
-- New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
-- Chain ID: `421614`
-- Currency Symbol: `ASPL`
+You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again in a moment.
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
-#### Deploy the smart contract to your local testnet
+#### Connect Remix to Metamask
 
-<CustomDetails summary="File explorer > Workspaces > Create blank">
-![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
+Last step, we'll connect Remix to Metamask, so we can deploy our smart contract to the local chain using Remix.
+
+<CustomDetails summary="Connect remix to Metamask">
+![](./images/remix-connect-metamask-2025-01-13.gif)
+</CustomDetails>
+
+At this point, we're ready to deploy our smart contract to any chain we want.
+
+#### Deploy the smart contract to your local chain
+- In MetaMask
+Ensure that the `Localhost` network is selected within Metamask.
+- In Remix
+Deploy the `VendingMachine` contract to the `Localhost` network, then go to the "Deploy & Run Transactions" tab, and click "Deploy".
+
+<CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
+![](./images/remix-deploy-to-local-chain-2025-01-14.gif)
 </CustomDetails>
 
 
-From another terminal instance, run `yarn add --dev @nomicfoundation/hardhat-ethers ethers hardhat-deploy hardhat-deploy-ethers` to install additional dependencies needed for contract deployment. Then run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
-
-<!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
-
-Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
-<!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
-
-<!-- Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake. -->
+Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 
 <VendingMachine id="smart-local-cupcakes" type="web3-localhost" />
 
-### What's going on here?
+### What's going on, here?
 
 Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional n-tier web application architecture:
 
@@ -376,53 +387,27 @@ Sepolia is powered by a real network of real nodes, so we'll need to pay a small
 To be able to pay the transaction fee, we will:
 
 - Use our MetaMask crypto wallet
-- Obtain some Arbitrum Sepolia testnet's token called `$ASPL`.
+- Obtain some Arbitrum Sepolia testnet's token called `$ETH`.
 
-#### Configure your crypto wallet
 
-To interact with a smart contract, we will need a wallet, MetaMask, in this case:
-
-Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to Remix's blockchain emulator, enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
-
-<CustomDetails summary="File explorer > Workspaces > Create blank">
-  ![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
-</CustomDetails>
-
-Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
-
-![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
-
-You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again in a moment.
-
-Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
+Click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
 - Chain ID: `421614`
-- Currency Symbol: `ASPL`
+- Currency Symbol: `$ETH`
 
-As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
+As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to.
 
-<!-- todo: partialize this - duplicated in Orbit quickstart -->
-
-:::info `$ASPL` IS SHORTHAND
-
-`$ASPL` isn't a canonical term. It's just shorthand for "Arbitrum Sepolia testnet `$ETH`" that we use for convenience.
-
-:::
-
-<!-- add how to connect remix to injected account -->
-
-Next, let's deposit some `$ASPL` into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
+Next, let's deposit some `$ETH` into the wallet corresponding to the private key we added to Remix. At the time of this quickstart's writing, the easiest way to acquire `$ETH` is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
 1. Use an L1 Sepolia `$ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `$ETH` on L1 Sepolia.
 2. Bridge your L1 Sepolia `$ETH` into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-Once you've acquired some `$ASPL`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
+Once you've acquired some `$ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-<!-- add how to deploy on Sepolia with remix -->
 
-This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
+This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `Arbitrum Sepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
@@ -460,10 +445,10 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 | [Encode Club](https://www.encode.club)                        | Community-driven coding club with a focus on web3 development                                  |
 | [Metana](https://metana.io)                                   | Metana is not mentioned in the resources, please provide more information about this resource. |
 | [Alchemy University](https://www.alchemy.com/university)      | Online education platform for blockchain and web3 development courses                          |
-
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to Ethereum L1, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
-[^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
+[^3]: There are multiple types of Ethereum nodes. The ones that earn `$ETH` for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
+```

@@ -57,3 +57,9 @@
 .details > summary > p:last-child {
   margin: 0;
 }
+
+.details > div > .collapsibleContent img {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+}
