@@ -219,7 +219,7 @@ Let's first add our smart contract to Remix following these steps:
 
 5. Compile your contract in Remix
 
-<CustomDetails summary="Select contract > Click compile menu > Hit compile icon">
+<CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
   ![](./images/remix-compile-contract-2025-01-07.gif)
 </CustomDetails>
 
@@ -308,24 +308,25 @@ Note that in the context of this quickstart, "account" refers to a public wallet
 
 #### Configure Metamask
 
-Next, open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
+Next, open Metamask and create or import a wallet by  ollowing the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to our local "testnet", enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
 
-![Connect Metamask to Localhost 8545](./images/quickstart-localhost-metamask.png)
+Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
-<!-- Note that if you'd like to host your local testnet on a different port, you can do so by running `yarn hardhat node --port 8546` instead. You'll then need to configure a `Localhost 8546` network in Metamask. -->
+- Network Name: `Anvil`
+- New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
+- Chain ID: `421614`
+- Currency Symbol: `ASPL`
+
+<CustomDetails summary="Connect Metamask to Localhost 8545 ">
+![](./images/metamask-add-local-testnet-2025-01-13.png)
+</CustomDetails>
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
 ![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
-You should see a balance of 10,000 ETH. Keep your private key handy; we'll use it again in a moment.
+You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again in a moment.
 
-Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
-
-- Network Name: `Arbitrum Sepolia`
-- New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
-- Chain ID: `421614`
-- Currency Symbol: `ASPL`
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
@@ -335,10 +336,6 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 ![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
 </CustomDetails>
 
-
-From another terminal instance, run `yarn add --dev @nomicfoundation/hardhat-ethers ethers hardhat-deploy hardhat-deploy-ethers` to install additional dependencies needed for contract deployment. Then run `yarn hardhat run scripts/deploy.js --network localhost`. This command will deploy your smart contract to the local testnet's node. You should see something like `Cupcake vending machine deployed to 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512` in your terminal. `0xe7...512` is the address of your smart contract in your local testnet.
-
-<!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
 
 Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
@@ -382,9 +379,12 @@ To be able to pay the transaction fee, we will:
 
 To interact with a smart contract, we will need a wallet, MetaMask, in this case:
 
-Open Metamask and create or import a wallet by following the displayed instructions. By default, Metamask will connect to Ethereum mainnet. To connect to Remix's blockchain emulator, enable test networks for Metamask by clicking `Show/hide test networks` from the network selector dropdown. Then select the `Localhost 8545` network:
+- Network Name: `Arbitrum Sepolia`
+- New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
+- Chain ID: `421614`
+- Currency Symbol: `ASPL`
 
-<CustomDetails summary="File explorer > Workspaces > Create blank">
+<CustomDetails summary=" > Workspaces > Create blank">
   ![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
 </CustomDetails>
 
