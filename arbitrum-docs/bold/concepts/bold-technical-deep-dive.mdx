@@ -201,7 +201,8 @@ for opening challenges. The mechanism of how challenge bond economics are decide
 [Economics of Disputes](../../how-arbitrum-works/bold/bold-economics-of-disputes.mdx), which also explains
 the cost profile and spam prevention in BoLD. In short, the actual cost of a bond encompasses many costs
 associated with participating in the dispute game. More information on the bond sizes and how they were
-calculated can be found in the [Economics of Disputes](../../how-arbitrum-works/bold/bold-economics-of-disputes.mdx) document mentioned above.
+calculated can be found in the [Economics of Disputes](../../how-arbitrum-works/bold/bold-economics-of-disputes.mdx)
+document mentioned above.
 
 Each subchallenge that is created requires depositing a challenge bond. For Arbitrum One, the first unrivaled edge’s bond is kept in the challenge manager contract on Ethereum, while any subsequent rival bonds are kept in an excess bond receiver address. Once a challenge is complete, all bonds for an honest party are automatically refunded in-protocol while all confiscated bonds are sent to the ArbitrumDAO treasury. It is important to not offer the majority of the bonds confiscated from dishonest parties to honest parties to avoid perverse incentives, such as grieving attacks in self-challenges or to discourage needless competition between honest parties.
 
