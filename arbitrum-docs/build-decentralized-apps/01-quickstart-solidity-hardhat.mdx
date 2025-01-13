@@ -228,7 +228,7 @@ Let's first add our smart contract to Remix following these steps:
 Now that you have compiled your smart contract, it's ready to deploy
 
 <CustomDetails summary="Deploy > Remix VM > Deploy > Copy Deployed contract's address">
-![](./images/remix-metamask-deploy-to-vm-2025-01-12.gif)
+  ![](./images/remix-metamask-deploy-to-vm-2025-01-12.gif)
 </CustomDetails>
 
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
@@ -250,7 +250,7 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2`<br/>(the first one)                                                              | `WEB3-LOCALHOST`<br/>(the latest one)                                                     | `WEB3-ARB-SEPOLIA`<br/>(the next one)                                                  | `WEB3-ARB-MAINNET`<br/>(the final one)                                                    |
-|-----------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| --------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
@@ -277,7 +277,6 @@ Open Metamask and create or import a wallet by following the displayed instructi
 <CustomDetails summary="File explorer > Workspaces > Create blank">
   ![](./images/metamask-connect-to-arb-selpolia-2025-01-12.gif)
 </CustomDetails>
-
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
@@ -337,20 +336,19 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 ### Learning resources
 
-| Resource | Description |
-| --- | --- |
-| [Official Solidity documentation](https://soliditylang.org) | Official documentation for Solidity programming language |
-| [Upgrading Ethereum (e-book)](https://eth2book.info/altair) | Guide on upgrading Ethereum |
-| [Ethernaut](https://ethernaut.openzeppelin.com) | Interactive smart contract hacking game |
-| [RareSkills](https://www.rareskills.io/rust-bootcamp) | Rust programming course for blockchain development |
-| [CryptoZombies](https://cryptozombies.io/en/course/) | Free online smart contract courses and tutorials |
-| [LearnWeb3](https://learnweb3.io) | Web3 education platform with interactive lessons and projects |
-| [HackQuest](https://www.hackquest.io/en) | Web3 hackathon and project-based learning platform |
-| [Rise In](https://www.risein.com/bootcamps/solidity-bootcamp) | Solidity bootcamp for beginners |
-| [Encode Club](https://www.encode.club) | Community-driven coding club with a focus on web3 development |
-| [Metana](https://metana.io) | Metana is not mentioned in the resources, please provide more information about this resource. |
-| [Alchemy University](https://www.alchemy.com/university) | Online education platform for blockchain and web3 development courses |
-
+| Resource                                                      | Description                                                                                    |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [Official Solidity documentation](https://soliditylang.org)   | Official documentation for Solidity programming language                                       |
+| [Upgrading Ethereum (e-book)](https://eth2book.info/altair)   | Guide on upgrading Ethereum                                                                    |
+| [Ethernaut](https://ethernaut.openzeppelin.com)               | Interactive smart contract hacking game                                                        |
+| [RareSkills](https://www.rareskills.io/rust-bootcamp)         | Rust programming course for blockchain development                                             |
+| [CryptoZombies](https://cryptozombies.io/en/course/)          | Free online smart contract courses and tutorials                                               |
+| [LearnWeb3](https://learnweb3.io)                             | Web3 education platform with interactive lessons and projects                                  |
+| [HackQuest](https://www.hackquest.io/en)                      | Web3 hackathon and project-based learning platform                                             |
+| [Rise In](https://www.risein.com/bootcamps/solidity-bootcamp) | Solidity bootcamp for beginners                                                                |
+| [Encode Club](https://www.encode.club)                        | Community-driven coding club with a focus on web3 development                                  |
+| [Metana](https://metana.io)                                   | Metana is not mentioned in the resources, please provide more information about this resource. |
+| [Alchemy University](https://www.alchemy.com/university)      | Online education platform for blockchain and web3 development courses                          |
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to Ethereum L1, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
