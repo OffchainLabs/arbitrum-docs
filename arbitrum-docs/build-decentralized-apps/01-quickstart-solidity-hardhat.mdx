@@ -107,12 +107,12 @@ class VendingMachine {
   cupcakeBalances = {};
   cupcakeDistributionTimes = {};
 
-  // Vend a cupcake to the caller
-  giveCupcakeTo(userId) {
-    if (this.cupcakeDistributionTimes[userId] === undefined) {
-      this.cupcakeBalances[userId] = 0;
-      this.cupcakeDistributionTimes[userId] = 0;
-    }
+// Vend a cupcake to the caller
+giveCupcakeTo(userId) {
+if (this.cupcakeDistributionTimes[userId] === undefined) {
+this.cupcakeBalances[userId] = 0;
+this.cupcakeDistributionTimes[userId] = 0;
+}
 
     // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
     const fiveSeconds = 5000;
@@ -128,13 +128,15 @@ class VendingMachine {
       );
       return false;
     }
-  }
 
-  getCupcakeBalanceFor(userId) {
-    return this.cupcakeBalances[userId];
-  }
 }
-```
+
+getCupcakeBalanceFor(userId) {
+return this.cupcakeBalances[userId];
+}
+}
+
+````
 </CustomDetails>
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
@@ -200,9 +202,9 @@ contract VendingMachine {
         return _cupcakeBalances[userAddress];
     }
 }
-```
-</CustomDetails>
+````
 
+</CustomDetails>
 
 ### Compile your smart contract with Remix
 
@@ -253,9 +255,7 @@ Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a 
 curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
-You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
-
-<CustomDetails summary="click for a preview">
+<CustomDetails summary="You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
 ```shell
                             (_) | |
       __ _   _ __   __   __  _  | |
@@ -320,13 +320,13 @@ Next, open Metamask and create or import a wallet by  ollowing the displayed ins
 
 Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
-- Network Name: `local chain`
+- Network Name: `localhost`
 - New RPC URL: `https://127.0.0.1:8545`
 - Chain ID: `31337`
 - Currency Symbol: `ETH`
 
 <CustomDetails summary="Add Localhost 8545 to Metamask">
-![](./images/metamask-add-local-chain-2025-01-13.png)
+![](./images/metamask-add-localhost-2025-01-13.png)
 </CustomDetails>
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake `$ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
@@ -334,7 +334,7 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 ![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
 <CustomDetails summary="Connect remix to Metamask">
-  ![](./images/remix-connect-metamask-2025-01-13.gif)
+![](./images/remix-connect-metamask-2025-01-13.gif)
 </CustomDetails>
 
 You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again in a moment.
@@ -343,11 +343,6 @@ You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll us
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
 #### Deploy the smart contract to your local chain
-
-<CustomDetails summary="File explorer > Workspaces > Create blank">
-![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
-</CustomDetails>
-
 
 Ensure that the `Localhost` network is selected within Metamask. Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
 <!-- // footnote about how addresses live in the "global state" of the network, which is mirrored across all nodes -->
@@ -385,7 +380,7 @@ Sepolia is powered by a real network of real nodes, so we'll need to pay a small
 To be able to pay the transaction fee, we will:
 
 - Use our MetaMask crypto wallet
-- Obtain some Arbitrum Sepolia testnet's token called `$ASPL`.
+- Obtain some Arbitrum Sepolia testnet's token called `$ETH`.
 
 #### Configure your crypto wallet
 
@@ -394,11 +389,7 @@ To interact with a smart contract, we will need a wallet, MetaMask, in this case
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
 - Chain ID: `421614`
-- Currency Symbol: `ASPL`
-
-<CustomDetails summary=" > Workspaces > Create blank">
-  ![](./images/metamask-connect-to-arb-sepolia-2025-01-12.gif)
-</CustomDetails>
+- Currency Symbol: `$ETH`
 
 Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
@@ -411,26 +402,20 @@ Next, click Metamask's network selector dropdown, and then click the `Add Networ
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
 - Chain ID: `421614`
-- Currency Symbol: `ASPL`
+- Currency Symbol: `$ETH`
 
 As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
 
 <!-- todo: partialize this - duplicated in Orbit quickstart -->
 
-:::info `$ASPL` IS SHORTHAND
-
-`$ASPL` isn't a canonical term. It's just shorthand for "Arbitrum Sepolia testnet `$ETH`" that we use for convenience.
-
-:::
-
 <!-- add how to connect remix to injected account -->
 
-Next, let's deposit some `$ASPL` into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ASPL is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
+Next, let's deposit some `$ETH` into the wallet corresponding to the private key we added to `hardhat.config.js`. At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
 1. Use an L1 Sepolia `$ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `$ETH` on L1 Sepolia.
 2. Bridge your L1 Sepolia `$ETH` into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
-Once you've acquired some `$ASPL`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
+Once you've acquired some `$ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
 <!-- add how to deploy on Sepolia with remix -->
 
