@@ -54,6 +54,13 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
   Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 </CustomDetails>
 
+
+<CustomDetails summary="Web3 wallet">
+  The <a data-quicklook-from="ethereum-wallet">wallet</a> we'll use to interact with our vending
+  machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX
+  Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+</CustomDetails>
+
 <CustomDetails summary="Yarn">
   Yarn is the package manager we'll use to install our dependencies. See
   [yarnpkg.com](https://yarnpkg.com/) to install.
@@ -226,7 +233,6 @@ Let's first add our smart contract to Remix following these steps:
 ### Deploy the smart contract to a local testnet
 
 To deploy our `VendingMachine` smart contract locally, we'll use two terminal windows and a wallet:
-
 <!-- we do it in this order because we want to be able to say "here's your contract address; paste it here" instead of "here's your contract address, save it for later" -->
 <!-- not confident that this is a good reason -->
 
@@ -238,12 +244,13 @@ To deploy our `VendingMachine` smart contract locally, we'll use two terminal wi
 
 Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
 
-```shell
+``` shell
 curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
-You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
 
+
+You should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.
 <CustomDetails summary="click for a preview">
 ```shell
                             (_) | |
@@ -255,7 +262,8 @@ You should see a prompt showing what test accounts automatically were generated 
     0.2.0 (7f0f5b4 2024-08-08T00:19:07.020431000Z)
     https://github.com/foundry-rs/foundry
 
-# Available Accounts
+Available Accounts
+==================
 
 (0) 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 (10000.000000000000000000 ETH)
 (1) 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (10000.000000000000000000 ETH)
@@ -268,7 +276,8 @@ You should see a prompt showing what test accounts automatically were generated 
 (8) 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f (10000.000000000000000000 ETH)
 (9) 0xa0Ee7A142d267C1f36714E4a8F75612F20a79720 (10000.000000000000000000 ETH)
 
-# Private Keys
+Private Keys
+==================
 
 (0) 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 (1) 0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
@@ -281,15 +290,16 @@ You should see a prompt showing what test accounts automatically were generated 
 (8) 0xdbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97
 (9) 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6
 
-# Wallet
+Wallet
+==================
+Mnemonic:          test test test test test test test test test test test junk
+Derivation path:   m/44'/60'/0'/0/
 
-Mnemonic: test test test test test test test test test test test junk
-Derivation path: m/44'/60'/0'/0/
 
-# Chain ID
+Chain ID
+==================
 
 31337.
-
 ```
 </CustomDetails>
 
@@ -315,14 +325,18 @@ Next, click Metamask's network selector dropdown, and then click the `Add Networ
 - Currency Symbol: `ASPL`
 
 <CustomDetails summary="Connect Metamask to Localhost 8545 ">
-![](./images/metamask-add-local-testnet-2025-01-13.png)
+![](./images/remix-connect-metamask-2025-01-13.gif)
 </CustomDetails>
 
-Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
+Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake `$ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
 
 ![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
-You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again in a moment.
+<CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
+  ![](./images/remix-connect-metamask-2025-01-13.gif)
+</CustomDetails>
+
+You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again in a moment.
 
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
@@ -389,7 +403,7 @@ Your mainnet wallet won't have a balance on your local testnet's node, but we ca
 
 ![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
 
-You should see a balance of 10,000 `ETH`. Keep your private key handy; we'll use it again in a moment.
+You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again in a moment.
 
 Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
@@ -460,8 +474,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to Ethereum L1, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.
-[^3]: There are multiple types of Ethereum nodes. The ones that earn ETH for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
+[^3]: There are multiple types of Ethereum nodes. The ones that earn `$ETH` for processing and validating transactions are called _validators_. See [Nodes and Networks](https://docs.prylabs.network/docs/concepts/nodes-networks) for a beginner-friendly introduction to Ethereum's node types.
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
-```
