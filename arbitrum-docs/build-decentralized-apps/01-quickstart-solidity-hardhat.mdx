@@ -354,10 +354,8 @@ Ensure that the `Localhost` network is selected within Metamask.
 Deploy the `VendingMachine` contract to the `Localhost` network, then go to the "Deploy & Run Transactions" tab, and click "Deploy".
 
 <CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
-![](./images/remix-deploy-vending-machine-2025-01-13.gif)
+![](./images/remix-deploy-to-local-chain-2025-01-14.gif)
 </CustomDetails>
-
-
 
 
 Then copy and paste your **contract address** below and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
@@ -395,24 +393,15 @@ To be able to pay the transaction fee, we will:
 - Use our MetaMask crypto wallet
 - Obtain some Arbitrum Sepolia testnet's token called `$ETH`.
 
-#### Configure your crypto wallet
 
-To interact with a smart contract, we will need a wallet, MetaMask, in this case:
-
-Your mainnet wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to gain access to 10,000 fake ETH. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g. `0xac0..f80` or `ac0..f80`) and import it into Metamask:
-
-![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
-
-You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again in a moment.
-
-Next, click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
+Click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
 - Chain ID: `421614`
 - Currency Symbol: `$ETH`
 
-As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to. For now, we'll leave the network set to `Localhost 8545`.
+As we interact with the cupcake vending machine, we'll use Metamask's network selector dropdown to determine which network our cupcake transactions are sent to.
 
 Next, let's deposit some `$ETH` into the wallet corresponding to the private key we added to Remix. At the time of this quickstart's writing, the easiest way to acquire `$ETH` is to bridge Sepolia `$ETH` from Ethereum's L1 Sepolia network to Arbitrum's L2 Sepolia network:
 
@@ -421,9 +410,8 @@ Next, let's deposit some `$ETH` into the wallet corresponding to the private key
 
 Once you've acquired some `$ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-<!-- add how to deploy on Sepolia with remix -->
 
-This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `arbitrumSepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
+This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `Arbitrum Sepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
