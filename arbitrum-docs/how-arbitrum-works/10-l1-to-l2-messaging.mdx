@@ -71,37 +71,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
-<MermaidWithHtml>
-  <Nodes title="Automatic Redemption of the Ticket">
-    <Node id="1">Auto-redeem succeeds?</Node>
-    <Node id="2">Ticket is executed</Node>
-    <Node id="3">Ticket is deleted</Node>
-    <Node id="4">callValueRefundAddress gets refunded</Node>
-    <Connection from="1" to="2" label="yes" />
-    <Connection from="2" to="3" />
-    <Connection from="1" to="4" label="no" />
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for="1">
-      <code>Does the auto-redeem succeed?</code> Logic that determines if the user's L2 Balance is
-      greater than (or equal to) <code>maxFeePerGas * gasLimit</code> && <code>maxFeePerGas</code>{' '}
-      is greater than (or equal to) the <code>l2Basefee</code>
-    </NodeDescription>
-    <NodeDescription for="2">
-      <code>Ticket is executed</code> Ticket is executed, the actual <code>submissionFee</code> is
-      refunded to the <code>excessFeeRefundAddress</code> since the ticket was not kept in the
-      buffer on L2
-    </NodeDescription>
-    <NodeDescription for="3">
-      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer
-    </NodeDescription>
-    <NodeDescription for="4">
-      <code>callValueRefundAddress gets refunded</code> <code>callValueRefundAddress</code> gets
-      refunded with <code>(maxGas - gasUsed) * gasPrice</code>. Note that this amount is capped by{' '}
-      <code>l1CallValue</code> in the auto-redeem
-    </NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
+![Automatic Redemption of the Ticket](../assets/automatic-redemption-of-the-ticket.png)
 
 ### Manual Redemption
 
@@ -114,37 +84,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
 
-<MermaidWithHtml>
-  <Nodes title="Manual Redemption of the Ticket">
-    <Node id="1">Ticket manually cancelled or not redeemed in 7 days?</Node>
-    <Node id="2">callValueRefundAddress gets refunded</Node>
-    <Node id="3">Ticket is deleted</Node>
-    <Node id="4">Ticket manually redeemed?</Node>
-    <Connection from="1" to="2" label="yes" />
-    <Connection from="2" to="3" />
-    <Connection from="1" to="4" label="no" />
-    <Connection from="4" to="3" label="yes" />
-    <Connection from="4" to="1" label="no" />
-  </Nodes>
-  <NodeDescriptions>
-    <NodeDescription for="1">
-      <code>Is the ticket manually cancelled or not redeemed within 7 days?</code> Logic that
-      determines if the ticket is manually cancelled or not redeemed within 7 days (i.e., is
-      expired)
-    </NodeDescription>
-    <NodeDescription for="2">
-      <code>callValueRefundAddress gets refunded</code> callValueRefundAddress is refunded with the{' '}
-      <code>l2CallValue</code>
-    </NodeDescription>
-    <NodeDescription for="3">
-      <code>Ticket is deleted</code> Ticket gets deleted from the L2 retryable buffer
-    </NodeDescription>
-    <NodeDescription for="4">
-      <code>Is the ticket manually redeemed</code> Logic that determines if the ticket is manually
-      redeemed
-    </NodeDescription>
-  </NodeDescriptions>
-</MermaidWithHtml>
+![Manual Redemption of the Ticket](../assets/manual-redemption-of-the-ticket.png)
 
 :::caution Avoid Losing Funds!
 
