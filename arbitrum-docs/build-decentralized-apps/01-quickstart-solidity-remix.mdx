@@ -216,6 +216,7 @@ Let's first add our smart contract to Remix following these steps:
 #### 2. Create a blank workspace in Remix:
 
 {' '}
+
 <CustomDetails summary="File explorer > Workspaces > Create blank">
   ![](./images/remix-create-blank-project-2025-01-07.gif)
 </CustomDetails>
@@ -249,7 +250,7 @@ To deploy our `VendingMachine` smart contract locally, we will:
 Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
 
 ```shell
-curl -L https://foundry.paradigm.xyz | bash && anvil
+anvil
 ```
 
 <CustomDetails summary="Once you've run the above commands, you should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
