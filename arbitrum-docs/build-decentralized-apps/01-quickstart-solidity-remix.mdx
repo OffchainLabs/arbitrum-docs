@@ -12,11 +12,19 @@ Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Ru
 
 :::
 
-This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and `yarn` is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
+This quickstart is for web developers who want to start building **decentralized applications** (dApps) using <a data-quicklook-from='arbitrum'>Arbitrum</a>. It makes no assumptions about your prior experience with Ethereum, Arbitrum, or Solidity. Familiarity with Javascript and yarn is expected. If you're new to Ethereum, consider studying the [Ethereum documentation](https://ethereum.org/en/developers/docs/) before proceeding.
 
 import CustomDetails from '@site/src/components/CustomDetails';
+import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
 
-### What we're building
+### What we'll learn
+
+In this tutorial we will learn:
+
+1. The basics of Ethereum vs. client/server architecture
+2. What is a Solidity smart contract
+3. How to compile and deploy a smart contract
+4. How to use an Ethereum wallet
 
 We're going to build a digital cupcake vending machine using Solidity smart contracts[^1]. This vending machine will follow two rules:
 
@@ -26,16 +34,15 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 Here's the vending machine implemented with Javascript.
 To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
 
-import { VendingMachine } from '@site/src/components/VendingMachine/VendingMachine';
-
 <VendingMachine id="dumb-cupcakes" type="web2" />
 
-Note that although this vending machine appears to follow the rules, it doesn't follow them as much as we'd like. The vending machine's business logic and data are hosted by a **centralized service provider**. We're trusting that this service provider isn't malicious, but:
+We can assume that this vending machine operates as we expect, but it's largely up to the **centralized service provider** that hosts it.
+In the case of a compromised cloud host:
 
 1. Our centralized service provider can deny access to particular users.
 2. A malicious actor can change the rules of the vending machine at any time, for example, to give their friends extra cupcakes.
 
-Centralized third-party intermediaries represent a **single point of failure** that malicious actors may become incentivized to exploit. To mitigate this type of risk, we can decentralize our vending machine's **business logic and data**, rendering this type of exploitation infeasible.
+Centralized third-party intermediaries represent a **single point of failure** that malicious actors can exploit. With a blockchain infrastructure such as Ethereum, we decentralize our vending machine's **business logic and data**, making this type of exploits nearly impossible.
 
 This is Arbitrum's core value proposition to you, dear developer. Arbitrum makes it easy for you to deploy your vending machines to Ethereum's permissionless, <a data-quicklook-from='trustless'>trustless</a>, decentralized network of nodes[^2] **while keeping costs low for you and your users**.
 
@@ -55,8 +62,14 @@ Let's implement the "Web3" version of the above vending machine using Arbitrum.
 </CustomDetails>
 
 <CustomDetails summary="Yarn">
-  Yarn is the package manager we'll use to install our dependencies. See
-  [yarnpkg.com](https://yarnpkg.com/) to install.
+  The <a data-quicklook-from="ethereum-wallet">wallet</a> we'll use to interact with our vending
+  machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX
+  Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
+</CustomDetails>
+
+<CustomDetails summary="Foundry">
+  Foundry is the toolchain we'll use to compile and deploy our smart contract. See
+  [getfoundry.sh](https://getfoundry.sh) to install.
 </CustomDetails>
 
 We'll address any remaining dependencies as we go.
@@ -64,7 +77,7 @@ We'll address any remaining dependencies as we go.
 ### Ethereum and Arbitrum in a nutshell
 
 - **Ethereum**
-  - Ethereum is a decentralized network of <a href='https://docs.prylabs.network/docs/concepts/nodes-networks'>nodes</a> that use Ethereum's client software (like Offchain's <a href='https://docs.prylabs.network/docs/getting-started'>Prysm</a>) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
+  - Ethereum is a decentralized network of [nodes](https://docs.prylabs.network/docs/concepts/nodes-networks) that use Ethereum's client software (like [Offchain's Prysm](https://docs.prylabs.network/docs/getting-started) to maintain a public <a data-quicklook-from='blockchain'>blockchain</a> data structure.
   - The data within Ethereum's blockchain data structure changes one transaction at a time.
   - <a data-quicklook-from="smart-contract">Smart contracts</a> are small programs that execute transactions
     according to predefined rules. Ethereum's nodes host and execute smart contracts.
@@ -77,16 +90,6 @@ We'll address any remaining dependencies as we go.
   - <a data-quicklook-from="arbitrum-one">Arbitrum One</a> is an L2 chain that implements the
     <a data-quicklook-from="arbitrum-rollup-protocol">Arbitrum Rollup protocol</a>.
   - You can use Arbitrum One to build user-friendly dApps with high throughput, low latency, and low transaction costs while inheriting Ethereum's high-security standards[^4].
-
- <!-- Note: add simple diagrams representing mainnet and arbitrum  -->
-
-In this tutorial we will:
-
-1. Decentralize the JavaScript Vending machine implementation
-2. Convert it into a Solidity smart contract
-3. Compile our smart contract
-4. Deploy it to Arbitrum One
-5. Use a React widget to interact with that contract (that's the part where you get cupcakes)
 
  <!-- Note: add simple diagrams representing smart contracts development cycle  -\-> -->
 
@@ -152,51 +155,53 @@ pragma solidity ^0.8.9;
 // Unlike regular classes, once deployed, this contract's code cannot be modified
 // This ensures that the vending machine's rules remain constant and trustworthy
 contract VendingMachine {
-    // State variables are permanently stored in blockchain storage
-    // These mappings associate Ethereum addresses with unsigned integers
-    // The 'private' keyword means these variables can only be accessed from within this contract
-    mapping(address => uint) private _cupcakeBalances;     // Tracks how many cupcakes each address owns
-    mapping(address => uint) private _cupcakeDistributionTimes;  // Tracks when each address last received a cupcake
+   // State variables are permanently stored in blockchain storage
+   // These mappings associate Ethereum addresses with unsigned integers
+   // The 'private' keyword means these variables can only be accessed from within this contract
+   mapping(address => uint) private _cupcakeBalances;     // Tracks how many cupcakes each address owns
+   mapping(address => uint) private _cupcakeDistributionTimes;  // Tracks when each address last received a cupcake
 
-    // Function to give a cupcake to a specified address
-    // 'public' means this function can be called by anyone
-    // 'returns (bool)' specifies that the function returns a boolean value
-    function giveCupcakeTo(address userAddress) public returns (bool) {
-        // Initialize first-time users
-        // In Solidity, uninitialized values default to 0, so this check isn't strictly necessary
-        // but is included to mirror the JavaScript implementation
-        if (_cupcakeDistributionTimes[userAddress] == 0) {
-            _cupcakeBalances[userAddress] = 0;
-            _cupcakeDistributionTimes[userAddress] = 0;
-        }
+   // Function to give a cupcake to a specified address
+   // 'public' means this function can be called by anyone
+   // 'returns (bool)' specifies that the function returns a boolean value
+   function giveCupcakeTo(address userAddress) public returns (bool) {
+       // Initialize first-time users
+       // In Solidity, uninitialized values default to 0, so this check isn't strictly necessary
+       // but is included to mirror the JavaScript implementation
+       if (_cupcakeDistributionTimes[userAddress] == 0) {
+           _cupcakeBalances[userAddress] = 0;
+           _cupcakeDistributionTimes[userAddress] = 0;
+       }
 
-        // Calculate when the user is eligible for their next cupcake
-        // 'seconds' is a built-in time unit in Solidity
-        // 'block.timestamp' gives us the current time in seconds since Unix epoch
-        uint fiveSecondsFromLastDistribution = _cupcakeDistributionTimes[userAddress] + 5 seconds;
-        bool userCanReceiveCupcake = fiveSecondsFromLastDistribution <= block.timestamp;
+       // Calculate when the user is eligible for their next cupcake
+       // 'seconds' is a built-in time unit in Solidity
+       // 'block.timestamp' gives us the current time in seconds since Unix epoch
+       uint fiveSecondsFromLastDistribution = _cupcakeDistributionTimes[userAddress] + 5 seconds;
+       bool userCanReceiveCupcake = fiveSecondsFromLastDistribution <= block.timestamp;
 
-        if (userCanReceiveCupcake) {
-            // If enough time has passed, give them a cupcake and update their last distribution time
-            _cupcakeBalances[userAddress]++;
-            _cupcakeDistributionTimes[userAddress] = block.timestamp;
-            return true;
-        } else {
-            // If not enough time has passed, revert the transaction with an error message
-            // 'revert' cancels the transaction and returns the error message to the user
-            revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
-        }
-    }
+       if (userCanReceiveCupcake) {
+           // If enough time has passed, give them a cupcake and update their last distribution time
+           _cupcakeBalances[userAddress]++;
+           _cupcakeDistributionTimes[userAddress] = block.timestamp;
+           return true;
+       } else {
+           // If not enough time has passed, revert the transaction with an error message
+           // 'revert' cancels the transaction and returns the error message to the user
+           revert("HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)");
+       }
+   }
 
-    // Function to check how many cupcakes an address owns
-    // 'public' means anyone can call this function
-    // 'view' means this function only reads data and doesn't modify state
-    // This makes it free to call (no gas cost) when called externally
-    function getCupcakeBalanceFor(address userAddress) public view returns (uint) {
-        return _cupcakeBalances[userAddress];
-    }
+   // Function to check how many cupcakes an address owns
+   // 'public' means anyone can call this function
+   // 'view' means this function only reads data and doesn't modify state
+   // This makes it free to call (no gas cost) when called externally
+   function getCupcakeBalanceFor(address userAddress) public view returns (uint) {
+       return _cupcakeBalances[userAddress];
+   }
 }
 ````
+
+</CustomDetails>
 
 </CustomDetails>
 
@@ -208,23 +213,25 @@ Remix is a browser-based IDE for EVM development. There are other IDEs to choose
 
 Let's first add our smart contract to Remix following these steps:
 
-1. Load Remix: https://remix.ethereum.org
+#### 1. Load Remix: https://remix.ethereum.org
 
-2. Create a blank workspace in Remix:
+#### 2. Create a blank workspace in Remix:
+
+{' '}
 
 <CustomDetails summary="File explorer > Workspaces > Create blank">
   ![](./images/remix-create-blank-project-2025-01-07.gif)
 </CustomDetails>
 
-3. Copy your vending machine contract
+#### 3. Copy your vending machine contract
 
-4. Paste your contract in Remix
+#### 4. Paste your contract in Remix
 
 <CustomDetails summary="File explorer > New file">
   ![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
 </CustomDetails>
 
-5. Compile your contract in Remix
+#### 5. Compile your contract in Remix
 
 <CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
   ![](./images/remix-compile-contract-2025-01-07.gif)
@@ -354,31 +361,34 @@ Then copy and paste your **contract address** below and click `Get cupcake!`. A 
 
 <VendingMachine id="smart-local-cupcakes" type="web3-localhost" />
 
-### What's going on here?
+### What's going on, here?
 
-Our first `VendingMachine` is labeled `WEB2` because it demonstrates traditional n-tier web application architecture:
+Our first `VendingMachine` is labeled `Web2` because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
 
 ![Architecture diagram](./images/quickstart-vending-machine-architecture.png)
 
-The `WEB3-LOCALHOST` architecture is similar to the `WEB2` architecture, with one key difference: with the `WEB3` version, **the business logic and data live in an (emulated for now) decentralized network of nodes** instead of a centralized network of servers.
+The `Web3` architecture is similar to the `Web2` architecture, with one key difference: with the `Web3` version, business logic and data are hosted by decentralized network of nodes**
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2`<br/>(the first one)                                                              | `WEB3-LOCALHOST`<br/>(the latest one)                                                     | `WEB3-ARB-SEPOLIA`<br/>(the next one)                                                  | `WEB3-ARB-MAINNET`<br/>(the final one)                                                    |
-| --------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+|-----------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
 | **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators.                 | ← same, but instead of testnet $ETH, they use **mainnet $ETH**.                           |
+
+
+So far, we've deployed our `Web3` app to an emulated blockchain (Anvil), which is a normal step in EVM development.
 
 Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sepolia testnet.
 
 ### Deploy the smart contract to the Arbitrum Sepolia testnet
 
 We were able to deploy to a testnet for free because we were using Remix' built-in network, but now we'll deploy our contract to Arbitrum's Sepolia testnet.
-Sepolia is powered by a real network of real nodes, so we'll need to pay a small transaction fee to deploy our smart contract.
+Sepolia is powered by a network of nodes ran across the world by various participants, we'll need to compensate them with a small transaction fee in order to deploy our smart contract.
 
 To be able to pay the transaction fee, we will:
 
@@ -413,15 +423,22 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 
 <VendingMachine id="smart-sepolia-cupcakes" type="web3-arb-sepolia" />
 
+The final step is deploying our Cupcake machine to a production network, such as Ethereum, Arbitrum One, or Arbitrum Nitro.
+    The good news is: deploying a smart contract in production is exactly the same as for Sepolia Testnet.
+    The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time 12 seconds on average.
+    Arbitrum, a Layer2, reduces these costs about 10X and a confirmation time in the same order while maintaining a similar level of security and decentralization. 
+
 ### Summary
 
 In this quickstart, we:
 
-- Identified **two business rules**: 1) fair and permissionless cupcake distribution, 2) immutable business logic and data.
+- Identified **two business rules**:
+        1) fair and permissionless cupcake distribution
+        2) immutable business logic and data.
 - Identified a **challenge**: These rules are difficult to follow in a centralized application.
-- Identified a **solution**: Arbitrum makes it easy for developers to decentralize business logic and data (using Ethereum mainnet as a settlement layer).
+- Identified a **solution**: Using Arbitrum, we can decentralize business logic and data.
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
-- **Deployed our smart contract** to Hardhat's local development network, and then Arbitrum's Sepolia testnet, and then Arbitrum One Mainnet.
+- **Deployed our smart contract** to a local development network, and then Arbitrum's Sepolia testnet.
 
 If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
 
