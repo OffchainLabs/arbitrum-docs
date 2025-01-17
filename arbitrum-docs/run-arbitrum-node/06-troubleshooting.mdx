@@ -291,7 +291,7 @@ You can check logs by different log types: info, warn, and error.
             <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
           </td>
           <td>
-            This usually because corrupted database caused by an ungraceful shutdown, try re-start
+            This is  usually because an ungraceful shutdown causes a corrupted database; try restarting 
              the node without a prune flag, and after your node goes back to normal, then graceful shutdown 
             it and restart to prune it.
           </td>
