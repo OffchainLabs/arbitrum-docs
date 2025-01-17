@@ -422,15 +422,19 @@ Finally, as explained in the previous section, if you're also running a mirror D
 By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the sequencer inbox contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a wallet file is used the account must be named "l1-batch-poster".
 
 The batch poster would need to have the configuration for the external signer
+
 ```
 --node.batch-poster.data-poster.external-signer...
 ```
+
 and the configuration for the key which is only used for signing DA Committee requests.
+
 ```
 --node.batch-poster.parent-chain-wallet...
 ```
 
 The Committee servers would need to additionaly specify the public key to accept signed messages from.
+
 ```
 --data-availability.extra-signature-checking-public-key
 ```
