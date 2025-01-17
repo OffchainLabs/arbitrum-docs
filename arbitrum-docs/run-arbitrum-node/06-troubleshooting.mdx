@@ -180,17 +180,17 @@ You can check logs by different log types: info, warn, and error.
             You see <code>Head state missing, repairing</code>.
           </td>
           <td>
-            This is usually because your node shuts down ungracefully. In most cases, it will recover
-            in few minutes, but if it not, you may have to re-sync your node. Remember to shut down
-            your node gracefully with the following command:{' '}
+            This is usually because your node shuts down ungracefully. In most cases, it will
+            recover in few minutes, but if it not, you may have to re-sync your node. Remember to
+            shut down your node gracefully with the following command:{' '}
             <code>docker stop —time=300 $(docker ps -aq)</code>.
           </td>
         </tr>
         <tr className="scenario">
           <td>Your local machine is running out of memory</td>
           <td>
-            Nitro (and Geth) can consume a lot of memory depending on the request load. It's possible
-            that your machine may run out of memory when receiving tons of requests.
+            Nitro (and Geth) can consume a lot of memory depending on the request load. It's
+            possible that your machine may run out of memory when receiving tons of requests.
           </td>
         </tr>
         <tr className="scenario">
@@ -235,8 +235,8 @@ You can check logs by different log types: info, warn, and error.
             You see <code>"Post "xxx_url": context deadline exceeded"</code>
           </td>
           <td>
-            Please check your parent chain endpoint because there is something going wrong
-            on that endpoint; you can check it.
+            Please check your parent chain endpoint because there is something going wrong on that
+            endpoint; you can check it.
           </td>
         </tr>
         <tr className="scenario">
@@ -244,9 +244,9 @@ You can check logs by different log types: info, warn, and error.
             You see <code>Resuming state snapshot generation</code>
           </td>
           <td>
-            This is a normal behavior while the node is catching up to the tip of the chain; once a node has 
-            been fully synced, "Resuming state snapshot generation" shouldn't be logged unless it 
-            falls behind again.
+            This is a normal behavior while the node is catching up to the tip of the chain; once a
+            node has been fully synced, "Resuming state snapshot generation" shouldn't be logged
+            unless it falls behind again.
           </td>
         </tr>
       </tbody>
@@ -267,8 +267,8 @@ You can check logs by different log types: info, warn, and error.
             </code>
           </td>
           <td>
-            This is because you get two discontinuous batches; this might be because of your parent chain
-            endpoint issues. You can change to another endpoint and set nitro `
+            This is because you get two discontinuous batches; this might be because of your parent
+            chain endpoint issues. You can change to another endpoint and set nitro `
             --init.reorg-to-batch A`
           </td>
         </tr>
@@ -291,16 +291,17 @@ You can check logs by different log types: info, warn, and error.
             <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
           </td>
           <td>
-            This is  usually because an ungraceful shutdown causes a corrupted database; try restarting 
-             the node without a prune flag, and after your node goes back to normal, then graceful shutdown 
-            it and restart to prune it.
+            This is usually because an ungraceful shutdown causes a corrupted database; try
+            restarting the node without a prune flag, and after your node goes back to normal, then
+            graceful shutdown it and restart to prune it.
           </td>
         </tr>
         <tr className="scenario">
           <td>
             You see{' '}
             <code>
-              failed to get blobs: expected at least six blobs for slot `[slot_number]` but only got 0
+              failed to get blobs: expected at least six blobs for slot `[slot_number]` but only got
+              0
             </code>
           </td>
           <td>
@@ -347,9 +348,9 @@ You can check logs by different log types: info, warn, and error.
             </code>
           </td>
           <td>
-            Once it catches up, the node will check the state against the latest confirmed assertion staked on chain;
-             if it doesn’t match, it will log this error. Usually, this is 
-            because of db corruption, so you might need to re-sync the blockchain; using a snapshot might 
+            Once it catches up, the node will check the state against the latest confirmed assertion
+            staked on chain; if it doesn’t match, it will log this error. Usually, this is because
+            of db corruption, so you might need to re-sync the blockchain; using a snapshot might
             help: https://snapshot-explorer.arbitrum.io/
           </td>
         </tr>
@@ -379,8 +380,8 @@ You can check logs by different log types: info, warn, and error.
             </code>
           </td>
           <td>
-            Usually, because you are running on an old node version, try to upgrade your node. Also, you 
-             modify your node’s code; please refer to the continue set.
+            Usually, because you are running on an old node version, try to upgrade your node. Also,
+            you modify your node’s code; please refer to the continue set.
           </td>
         </tr>
         <tr className="scenario">
