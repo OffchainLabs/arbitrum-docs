@@ -97,18 +97,19 @@ We'll address any remaining dependencies as we go.
 Here's the vending machine implemented as a Javascript class:
 
 <CustomDetails summary="VendingMachine.js">
+
 ```js
 class VendingMachine {
   // state variables = internal memory of the vending machine
   cupcakeBalances = {};
   cupcakeDistributionTimes = {};
 
-// Vend a cupcake to the caller
-giveCupcakeTo(userId) {
-if (this.cupcakeDistributionTimes[userId] === undefined) {
-this.cupcakeBalances[userId] = 0;
-this.cupcakeDistributionTimes[userId] = 0;
-}
+  // Vend a cupcake to the caller
+  giveCupcakeTo(userId) {
+    if (this.cupcakeDistributionTimes[userId] === undefined) {
+      this.cupcakeBalances[userId] = 0;
+      this.cupcakeDistributionTimes[userId] = 0;
+    }
 
     // Rule 1: The vending machine will distribute a cupcake to anyone who hasn't recently received one.
     const fiveSeconds = 5000;
@@ -124,15 +125,14 @@ this.cupcakeDistributionTimes[userId] = 0;
       );
       return false;
     }
+  }
 
+  getCupcakeBalanceFor(userId) {
+    return this.cupcakeBalances[userId];
+  }
 }
+```
 
-getCupcakeBalanceFor(userId) {
-return this.cupcakeBalances[userId];
-}
-}
-
-````
 </CustomDetails>
 
 The `VendingMachine` class uses _state variables_ and _functions_ to implement _predefined rules_. This implementation is useful because it automates cupcake distribution, but there's a problem: it's hosted by a centralized server controlled by a third-party service provider.
@@ -145,6 +145,7 @@ Here is a Solidity implementation of the vending machine.
 Solidity is a language that compiles to [EVM bytecode](https://blog.chain.link/what-are-abi-and-bytecode-in-solidity/). This means that it is deployable to any Ethereum-compatible blockchain, including Ethereum mainnet, <a data-quicklook-from='arbitrum-one'>Arbitrum One</a>, and <a data-quicklook-from='arbitrum-nova'>Arbitrum Nova</a>.
 
 <CustomDetails summary="VendingMachine.sol">
+
 ```solidity
 // SPDX-License-Identifier: MIT
 // Specify the Solidity compiler version - this contract requires version 0.8.9 or higher
@@ -198,7 +199,7 @@ contract VendingMachine {
        return _cupcakeBalances[userAddress];
    }
 }
-````
+```
 
 </CustomDetails>
 
@@ -253,6 +254,7 @@ curl -L https://foundry.paradigm.xyz | bash && anvil
 ```
 
 <CustomDetails summary="Once you've run the above commands, you should see a prompt showing what test accounts automatically were generated for you and other infos about your local Anvil testnet.">
+
 ```shell
                             (_) | |
       __ _   _ __   __   __  _  | |
@@ -297,8 +299,8 @@ Derivation path: m/44'/60'/0'/0/
 # Chain ID
 
 31337.
-
 ```
+
 </CustomDetails>
 
 #### Configure Metamask
@@ -315,7 +317,7 @@ Next, click Metamask's network selector dropdown and click the `Add Network` but
 - Currency Symbol: `ETH`
 
 <CustomDetails summary="Add Localhost 8545 to Metamask">
-![](./images/metamask-add-localhost-2025-01-13.png)
+  ![](./images/metamask-add-localhost-2025-01-13.png)
 </CustomDetails>
 
 Your wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to access to 10,000 testnet `$ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0..f80` or `ac0..f80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
@@ -330,7 +332,6 @@ Your Ethereum Mainnet wallet's private key is the password to all of your money.
 
 Note that in the context of this quickstart, "account" refers to a public wallet address and its associated private key[^5].
 
-
 You should see a balance of 10,000 `$ETH`. Keep your private key handy; we'll use it again shortly.
 
 As we interact with our cupcake vending machine, we'll use Metamask's network selector dropdown to choose which network our cupcake transactions get sent to. We'll leave the network set to `Localhost 8545` for now.
@@ -340,19 +341,19 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 In the last step, we'll connect Remix to Metamask so we can deploy our smart contract to the local chain using Remix.
 
 <CustomDetails summary="Connect remix to Metamask">
-![](./images/remix-connect-metamask-2025-01-13.gif)
+  ![](./images/remix-connect-metamask-2025-01-13.gif)
 </CustomDetails>
 
 At this point, we're ready to deploy our smart contract to any chain we want.
 
 #### Deploy the smart contract to your local chain
+
 - In MetaMask, ensure that the `Localhost` network is selected.
 - In Remix, deploy the `VendingMachine` contract to the `Localhost` network, then go to the "Deploy & Run Transactions" tab and click "Deploy."
 
 <CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
-![](./images/remix-deploy-to-local-chain-2025-01-14.gif)
+  ![](./images/remix-deploy-to-local-chain-2025-01-14.gif)
 </CustomDetails>
-
 
 Then copy and paste your **contract address** below and click `Get cupcake!`. A prompt should ask you to sign a transaction that gives you a cupcake.
 
@@ -364,19 +365,18 @@ Our first `VendingMachine` is labeled `Web2` because it demonstrates traditional
 
 ![Architecture diagram](./images/quickstart-vending-machine-architecture.png)
 
-The `Web3` architecture is similar to the `Web2` architecture, with one key difference: with the `Web3` version, business logic and data are hosted by decentralized network of nodes**
+The `Web3` architecture is similar to the `Web2` architecture, with one key difference: with the `Web3` version, business logic and data are hosted by decentralized network of nodes\*\*
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
 <!-- todo: enhance precision RE where things are stored / executed / hashed-and-stored / etc -->
 
 |                       | `WEB2`<br/>(the first one)                                                              | `WEB3-LOCALHOST`<br/>(the latest one)                                                     | `WEB3-ARB-SEPOLIA`<br/>(the next one)                                                  | `WEB3-ARB-MAINNET`<br/>(the final one)                                                    |
-|-----------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| --------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
 | **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators.                 | ← same, but instead of testnet $ETH, they use **mainnet $ETH**.                           |
-
 
 So far, we've deployed our `Web3` app to an emulated blockchain (Anvil), which is a normal step in EVM development.
 
@@ -391,7 +391,6 @@ To be able to pay the transaction fee, we will:
 
 - Use our MetaMask crypto wallet
 - Obtain some Arbitrum Sepolia testnet's token called `$ETH`.
-
 
 Click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
 
@@ -409,7 +408,6 @@ Next, let's deposit some `$ETH` into the wallet corresponding to the private key
 
 Once you've acquired some `$ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-
 This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `Arbitrum Sepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's L1 Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
@@ -421,17 +419,15 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 <VendingMachine id="smart-sepolia-cupcakes" type="web3-arb-sepolia" />
 
 The final step is deploying our Cupcake machine to a production network, such as Ethereum, Arbitrum One, or Arbitrum Nitro.
-    The good news is: deploying a smart contract in production is exactly the same as for Sepolia Testnet.
-    The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time 12 seconds on average.
-    Arbitrum, a Layer2, reduces these costs about 10X and a confirmation time in the same order while maintaining a similar level of security and decentralization.
+The good news is: deploying a smart contract in production is exactly the same as for Sepolia Testnet.
+The harder news: it will cost real money, this time. If you deploy on Ethereum, the fees can be significant and the transaction confirmation time 12 seconds on average.
+Arbitrum, a Layer2, reduces these costs about 10X and a confirmation time in the same order while maintaining a similar level of security and decentralization.
 
 ### Summary
 
 In this quickstart, we:
 
-- Identified **two business rules**:
-        1) fair and permissionless cupcake distribution
-        2) immutable business logic and data.
+- Identified **two business rules**: 1) fair and permissionless cupcake distribution 2) immutable business logic and data.
 - Identified a **challenge**: These rules are difficult to follow in a centralized application.
 - Identified a **solution**: Using Arbitrum, we can decentralize business logic and data.
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
@@ -462,4 +458,3 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 [^4]: When our `VendingMachine` contract is deployed to Ethereum, it'll be hosted by Ethereum's decentralized network of nodes. Generally speaking, we won't be able to modify the contract's code after it's deployed.
 [^5]: To learn more about how Ethereum wallets work, see [Ethereum.org's introduction to Ethereum wallets](https://ethereum.org/en/wallets/).
 [^6]: Visit the [Gentle Introduction to Arbitrum](../intro/intro.mdx) for a beginner-friendly introduction to Arbitrum's rollup protocol.
-```
