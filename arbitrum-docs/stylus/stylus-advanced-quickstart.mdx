@@ -17,17 +17,15 @@ We'll start with a simple `Counter` contract example, and then We'll use a more 
 
 ### Prerequisites
 
-<details>
-<summary>Rust toolchain</summary>
+<CustomDetails summary="Rust toolchain">
+  Follow the instructions on [Rust Lang's installation
+  page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or
+  older, v1.82 is currently not supported) on your system. After installation, ensure you can access
+  the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+</CustomDetails>
 
-Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or older, v1.82 is currently not supported) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
-
-</details>
-
-<details>
-<summary>VS Code</summary>
-
-We recommend [VSCode](https://code.visualstudio.com/) as the IDE of choice for its excellent Rust support, but feel free to use another text editor or IDE if you're comfortable with those.
+<CustomDetails summary="VS Code">
+we recommend [vscode](https://code.visualstudio.com/) as the ide of choice for its excellent rust support, but feel free to use another text editor or ide if you're comfortable with those.
 
 Some helpful VS Code extensions for Rust development:
 
@@ -35,44 +33,25 @@ Some helpful VS Code extensions for Rust development:
 - [Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens): Immediately highlights errors and warnings in your code
 - [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml): Improves syntax highlighting and other features for TOML files, often used in Rust projects
 - [Dependi](https://marketplace.visualstudio.com/items?itemName=fill-labs.dependi): Helps manage Rust crate versions directly from the editor
+</CustomDetails>
 
- </details>
-
-<details>
-<summary>Docker</summary>
-
+<CustomDetails summary="Docker">
 The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
 
 You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
 
-</details>
+</CustomDetails>
 
-<details>
-<summary>Foundry's Cast</summary>
+<CustomDetails summary="Foundry's Cast">
+  [Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to
+  interact with your EVM contracts.
+</CustomDetails>
 
-[Foundry's Cast](https://book.getfoundry.sh/cast/) is a command-line tool that allows you to interact with your EVM contracts.
+<CustomDetails summary="Nitro Dev Node">
+  ````shell title="Launch your devnode" ./run-dev-node.sh ````
+</CustomDetails>
 
-</details>
-
-<details>
-<summary>Nitro devnode</summary>
-
-Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
-
-```shell title="Install your devnode"
-git clone https://github.com/OffchainLabs/nitro-devnode.git
-cd nitro-devnode
-```
-
-```shell title="Launch your devnode"
-./run-dev-node.sh
-```
-
-</details>
-
-<details>
-<summary>cargo stylus</summary>
-
+<CustomDetails summary="Cargo Stylus">
 In your terminal, run:
 
 ```shell
@@ -112,7 +91,7 @@ Options:
   -V, --version  Print version
 ```
 
-</details>
+</CustomDetails>
 
 ## The vending machine contract
 
