@@ -8,7 +8,7 @@ content_type: quickstart
 
 :::info Want to use Rust instead?
 
-Head over to [the Stylus quickstart](/stylus/stylus-quickstart) if you'd like to use Rust instead of Solidity.
+Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Rust instead of Solidity.
 
 :::
 
@@ -42,7 +42,7 @@ Let's implement the "web3" version of the above vending machine using Arbitrum.
 ### Prerequisites
 
 - **VS Code**: The IDE we'll use to build our vending machine. See [code.visualstudio.com](https://code.visualstudio.com/) to install.
-- **Metamask**: The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) to install.
+- **Web3 wallet**: The <a data-quicklook-from='ethereum-wallet'>wallet</a> we'll use to interact with our vending machine. See [metamask.io](https://metamask.io/) and click View MetaMask Web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 - **Yarn**: The package manager we'll use to install our dependencies. See [yarnpkg.com](https://yarnpkg.com/) to install.
 
 We'll address remaining dependencies as we go.
@@ -456,7 +456,7 @@ Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address 
 
 Now that we've verified that our smart contract works on Arbitrum's Sepolia testnet, we're ready to deploy it to Arbitrum One Mainnet. This is the same process as deploying to Arbitrum's Sepolia testnet, except that we'll need to pay a transaction fee in real $ETH instead of $ASPL.
 
-Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/how-arbitrum-works/gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
+Expect to see inconsistent $ETH gas fees in this step - the [Gas and fees section](/how-arbitrum-works/09-gas-fees.mdx) contains more information about how gas fees are determined for Arbitrum transactions.
 
 <!-- not sure if this is the best way to work through this step - optimized for quick, assumed user knows how to create a deployment account; or otherwise will be ok with having to ask chatgpt -->
 
@@ -513,7 +513,7 @@ If you have any questions or feedback, reach out to us on [Discord](https://disc
 <!--todo: figure out what next steps they're actually looking for by performing content tests -->
 
 - Visit [How to estimate gas](/build-decentralized-apps/02-how-to-estimate-gas.mdx) to learn how to estimate the gas cost of your smart contract transactions.
-- Visit [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx#rpc-endpoints) for a list of public chains that you can deploy your smart contracts to.
+- Visit [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of public chains that you can deploy your smart contracts to.
 
 [^1]: The vending machine example was inspired by [Ethereum.org's "Introduction to Smart Contracts"](https://ethereum.org/en/developers/docs/smart-contracts/), which was inspired by [Nick Szabo's "From vending machines to smart contracts"](http://unenumerated.blogspot.com/2006/12/from-vending-machines-to-smart.html).
 [^2]: Although application front-ends are usually hosted by centralized services, smart contracts allow the underlying logic and data to be partially or fully decentralized. These smart contracts are hosted and executed by Ethereum's public, decentralized network of nodes. Arbitrum has its own network of nodes that use advanced cryptography techniques to "batch process" Ethereum transactions and then submit them to Ethereum L1, which significantly reduces the cost of using Ethereum. All without requiring developers to compromise on security or decentralization.

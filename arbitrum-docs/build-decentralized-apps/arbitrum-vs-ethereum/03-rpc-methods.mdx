@@ -21,7 +21,7 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/arbos/geth.mdx#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/04-geth-at-the-core.mdx#transaction-types).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
@@ -30,8 +30,8 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 | `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from L1 to L2 via the Arbitrum bridge                                                                                                       |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call an L2 contract from L1, originated by a user through the Arbitrum bridge                                                                           |
 | `102`                 | `ArbitrumContractTxType`        | Used to call an L2 contract from L1, originated by a contract through the Arbitrum bridge                                                                       |
-| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx) on L2 that failed to execute automatically (usually due to low gas) |
-| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#submission) via the Arbitrum bridge on L1                                     |
+| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on L2 that failed to execute automatically (usually due to low gas) |
+| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on L1                                     |
 | `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the L1 base fee and the block number                                          |
 
 ### Additional fields
@@ -48,7 +48,7 @@ On RPC calls that return transactions, the following fields will have a differen
 
 | Field name | Description                                                                                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `from`     | On L1 to L2 transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#address-aliasing) of the L1's `msg.sender` |
+| `from`     | On L1 to L2 transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#address-aliasing) of the L1's `msg.sender` |
 
 ## Transaction receipts
 
@@ -61,7 +61,7 @@ On RPC calls that return transaction receipts, the following fields are added to
 | Field name      | Description                                                                                                                                                                                 |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `l1BlockNumber` | The L1 block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/gas-fees.mdx)                                                                 |
+| `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                              |
 
 ## Blocks
 
@@ -134,14 +134,14 @@ Note that if the sync process encounters an error while trying to collect the da
 
 ### `debug_traceTransaction`
 
-The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
-HostIOs are calls the WasmVM makes to read and write data in the EVM.
-With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
+- [ ] The Nitro node provides a native tracer for debugging Stylus contracts called `stylusTracer`, which returns a JSON array with objects containing the metadata for each executed HostIO.
+      HostIOs are calls the WasmVM makes to read and write data in the EVM.
+      With the result of this tracer and the code for the Stylus contract, you have all the data to understand what happened in a Stylus transaction.
 
 :::info
 
 The `cargo-stylus` command-line tool uses the `stylusTracer` to replay transactions locally inside a debugger.
-More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-stylus-tx).
+More information can be found on [How to debug Stylus transactions using Cargo Stylus Replay](/stylus/how-tos/debugging-tx).
 
 :::
 

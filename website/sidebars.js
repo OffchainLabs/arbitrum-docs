@@ -1,7 +1,8 @@
 // @ts-check
 
 const sdkDocsSidebar = require('../arbitrum-docs/sdk/sidebar.js');
-const stylusByExampleDocsSidebar = require('../arbitrum-docs/stylus-by-example/sidebar.js');
+const stylusByExampleDocsSidebarSDK = require('../arbitrum-docs/stylus-by-example/basic_examples/sidebar.js');
+const stylusByExampleDocsSidebarExamples = require('../arbitrum-docs/stylus-by-example/applications/sidebar.js');
 
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
@@ -246,6 +247,11 @@ const sidebars = {
           label: 'Quickstart',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/aep-license',
+          label: 'Orbit licensing',
+        },
+        {
           type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,
@@ -463,6 +469,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
+          label: 'BoLD for Orbit chains',
+        },
+        {
+          type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
@@ -489,12 +500,12 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'stylus/stylus-gentle-introduction',
+          id: 'stylus/gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'stylus/stylus-quickstart',
+          id: 'stylus/quickstart',
           label: 'Quickstart',
         },
         {
@@ -504,7 +515,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Stylus Rust SDK',
+          label: 'Rust SDK',
           collapsed: true,
           items: [
             {
@@ -512,7 +523,7 @@ const sidebars = {
               id: 'stylus/reference/overview',
               label: 'Overview',
             },
-            ...stylusByExampleDocsSidebar,
+            ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
               id: 'stylus/reference/rust-sdk-guide',
@@ -522,45 +533,18 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Concepts',
+          label: 'Rust CLI',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'stylus/concepts/how-it-works',
-              label: 'How Stylus works',
+              id: 'stylus/using-cli',
+              label: 'Overview',
             },
             {
               type: 'doc',
-              id: 'stylus/concepts/stylus-gas',
-              label: 'How Stylus uses gas',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Tutorials',
-          collapsed: true,
-          items: [
-            {
-              type: 'html',
-              value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a Stylus Dev Node<span class="other-section-icon">↑</span></a>',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/debugging-stylus-tx',
+              id: 'stylus/how-tos/debugging-tx',
               label: 'Debug transactions',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/concepts/stylus-cache-manager',
-              label: 'Cache contracts',
-            },
-            {
-              type: 'doc',
-              id: 'stylus/how-tos/optimizing-binaries',
-              label: 'Optimize WASM binaries',
             },
             {
               type: 'doc',
@@ -569,13 +553,40 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/verifying-contracts-arbiscan',
-              label: 'Arbiscan verification',
+              id: 'stylus/how-tos/caching-contracts',
+              label: 'Cache contracts',
             },
             {
               type: 'doc',
-              id: 'stylus/how-tos/adding-support-for-new-languages',
-              label: 'Using other languages',
+              id: 'stylus/how-tos/verifying-contracts-arbiscan',
+              label: 'Verify on Arbiscan',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/how-tos/optimizing-binaries',
+              label: 'Optimize WASM binaries',
+            },
+          ],
+        },
+        {
+          type: 'html',
+          value:
+            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-nitro-dev-node">Run a local dev node<span class="other-section-icon">↑</span></a>',
+        },
+        {
+          type: 'category',
+          label: 'Concepts',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'stylus/concepts/how-it-works',
+              label: 'Architecture overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/concepts/gas-metering',
+              label: 'Gas metering',
             },
           ],
         },
@@ -584,30 +595,11 @@ const sidebars = {
           label: 'Examples',
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'stylus-by-example/vending_machine',
-              label: 'Vending machine',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc20',
-              label: 'ERC-20',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/erc721',
-              label: 'ERC-721',
-            },
-            {
-              type: 'doc',
-              id: 'stylus-by-example/multi_call',
-              label: 'Multi-Call',
-            },
+            ...stylusByExampleDocsSidebarExamples,
             {
               type: 'link',
               label: 'Awesome Stylus',
-              href: 'https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html',
+              href: 'https://github.com/OffchainLabs/awesome-stylus',
             },
           ],
         },
@@ -617,9 +609,9 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'for-devs/dev-tools-and-resources/chain-info',
-              label: 'Chain Info',
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/for-devs/dev-tools-and-resources/chain-info">Chain Info<span class="other-section-icon">↑</span></a>',
             },
             {
               type: 'doc',
@@ -642,6 +634,11 @@ const sidebars = {
               href: 'https://github.com/OffchainLabs/stylus',
             },
           ],
+        },
+        {
+          type: 'doc',
+          id: 'stylus/how-tos/adding-support-for-new-languages',
+          label: 'Using other languages',
         },
         {
           type: 'doc',
@@ -825,186 +822,120 @@ const sidebars = {
       collapsed: true,
       items: [
         {
+          type: 'doc',
+          id: 'how-arbitrum-works/a-gentle-introduction',
+          label: 'A gentle introduction',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/transaction-lifecycle',
+          label: 'Sequencing, Followed by Deterministic Execution',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/sequencer',
+          label: 'The Sequencer and Censorship Resistance',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/geth-at-the-core',
+          label: 'Geth at the Core',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/separating-execution-from-proving',
+          label: 'Separating Execution from Proving',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/optimistic-rollup',
+          label: 'Optimistic Rollup',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/interactive-fraud-proofs',
+          label: 'Challenges: Interactive Fraud Proofs',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/anytrust-protocol',
+          label: 'AnyTrust protocol',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/gas-fees',
+          label: 'Gas and fees',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/l1-to-l2-messaging',
+          label: 'L1 to L2 messaging',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/l2-to-l1-messaging',
+          label: 'L2 to L1 messaging',
+        },
+        {
+          type: 'link',
+          href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+          label: 'Nitro whitepaper',
+        },
+
+        {
           type: 'category',
-          label: 'Introductory concepts',
-          collapsed: true,
+          label: 'The BoLD dispute protocol',
           items: [
             {
               type: 'doc',
-              id: 'how-arbitrum-works/tx-lifecycle',
-              label: 'Transaction lifecycle',
+              id: 'how-arbitrum-works/bold/gentle-introduction',
+              label: 'A gentle introduction',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
+              label: 'Deploy a validator on testnet',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2404.10491',
+              label: 'BoLD Whitepaper',
             },
             {
               type: 'doc',
-              id: 'how-arbitrum-works/sequencer',
-              label: 'Sequencer',
+              id: 'bold/concepts/bold-technical-deep-dive',
+              label: 'Technical deep dive',
             },
             {
               type: 'doc',
-              id: 'how-arbitrum-works/inside-anytrust',
-              label: 'AnyTrust protocol',
+              id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
+              label: 'Economics of disputes',
             },
             {
-              type: 'category',
-              label: 'Gas / fees',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/gas-fees',
-                  label: 'L2 gas and fees',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/l1-gas-pricing',
-                  label: 'L1 pricing',
-                },
-              ],
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/bold',
+              label: 'Specification on Github',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
+              label: 'Audit Report by Trail of Bits',
+            },
+            {
+              type: 'link',
+              href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
+              label: 'Audit Report by Code4rena',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Advanced concepts',
-          collapsed: true,
+          label: 'Timeboost',
           items: [
             {
               type: 'doc',
-              id: 'how-arbitrum-works/inside-arbitrum-nitro',
-              label: 'Deep dive: Inside Arbitrum',
-            },
-            {
-              type: 'link',
-              href: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
-              label: 'Deeper dive: Whitepaper',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/assertion-tree',
-              label: 'Assertion tree',
-            },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/why-nitro',
-              label: 'Nitro vs. Classic',
-            },
-            {
-              type: 'category',
-              label: 'Cross-chain messaging',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/l1-l2-messaging',
-                  label: 'L1-to-L2 messaging',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/l2-l1-messaging',
-                  label: 'L2-to-L1 messaging',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'ArbOS',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/introduction',
-                  label: 'ArbOS',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/arbos/geth',
-                  label: 'Geth',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Fraud proofs',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/challenge-manager',
-                  label: 'Interactive challenges',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/osp-assumptions',
-                  label: 'One step proof assumptions',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wasm-wavm',
-                  label: 'Wasm To WAVM',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-custom-opcodes',
-                  label: 'Custom WAVM opcodes',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-floats',
-                  label: 'WAVM floats',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/fraud-proofs/wavm-modules',
-                  label: 'WAVM modules',
-                },
-              ],
-            },
-            {
-              type: 'category',
-              label: 'The BoLD dispute protocol',
-              items: [
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/gentle-introduction',
-                  label: 'A gentle introduction',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/offchainlabs/bold-validator-starter-kit',
-                  label: 'Deploy a validator on testnet',
-                },
-                {
-                  type: 'link',
-                  href: 'https://arxiv.org/abs/2404.10491',
-                  label: 'BoLD Whitepaper',
-                },
-                {
-                  type: 'doc',
-                  id: 'bold/concepts/bold-technical-deep-dive',
-                  label: 'Technical deep dive',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/bold-economics-of-disputes',
-                  label: 'Economics of disputes',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/OffchainLabs/bold',
-                  label: 'Specification on Github',
-                },
-                {
-                  type: 'link',
-                  href: 'https://github.com/trailofbits/publications/blob/master/reviews/2024-04-offchainbold-securityreview.pdf',
-                  label: 'Audit Report by Trail of Bits',
-                },
-                {
-                  type: 'link',
-                  href: 'https://code4rena.com/reports/2024-05-arbitrum-foundation',
-                  label: 'Audit Report by Code4rena',
-                },
-                {
-                  type: 'doc',
-                  id: 'how-arbitrum-works/bold/public-preview-expectations',
-                  label: 'Public preview',
-                },
-              ],
+              id: 'how-arbitrum-works/timeboost/gentle-introduction',
+              label: 'Public preview',
             },
           ],
         },
