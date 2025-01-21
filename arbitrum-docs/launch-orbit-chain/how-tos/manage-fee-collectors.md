@@ -1,15 +1,27 @@
 ---
-title: 'How to manage the fee collector addresses of your Orbit chain'
-description: 'Learn how to manage the fee collector addresses of your Orbit chain'
+title: 'How to manage the fee parameters of your Orbit chain'
+description: 'Learn how to manage the fee parameters of your Orbit chain'
 author: jose-franco
 sme: jose-franco
 sidebar_position: 6
 content_type: how-to
 ---
 
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition';
+
 As part of the activity of an Orbit chain, different fees are collected with every transaction. These fees are collected as a single amount (the transaction fees) but are internally split into different components depending on their purpose. Each component can also be transferred to a different fee collector address that can be configured on your chain.
 
-This guide describes the different fees that are collected, and explains how to specify the fee collector address on your chain for each fee type.
+This guide describes the different fees that are collected on your chain, how to configure them, and how to specify the fee collector address for each fee type.
+
+<VanillaAdmonition type="info" title="Custom Title">
+  This is an info message
+</VanillaAdmonition>
+
+:::info Example scripts available in the Orbit SDK
+
+This section will explain the process of deploying and configuring a distribution contract manually, but the Orbit SDK includes an [example to perform this process through a script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fee-distributor-contract).
+
+:::
 
 ## What fees are collected on an Orbit chain?
 
@@ -28,21 +40,201 @@ You can find more detailed information about these fee types in these pages:
 - [L2 fees](/how-arbitrum-works/09-gas-fees.mdx#l2-gas-pricing) for the Orbit base fee and surplus fee
 - [L1 fees](/how-arbitrum-works/09-gas-fees.mdx#l1-gas-pricing) for the Parent chain base fee and surplus fee
 
+## How to configure the fees collected?
+
+Let's see in what ways we can configure each fee type.
+
+### Orbit (minimum) base fee
+
+Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getMinimumGasPrice() (uint256)"
+```
+
+Alternatively, you can use the Orbit SDK to retrieve the minimum Orbit base fee configured:
+
+```typescript
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbGasInfoPublicActions);
+
+const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
+    functionName: 'getMinimumGasPrice',
+});
+```
+
+_Note: This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information._
+
+To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in wei. For example:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256) ()" $NEW_MINIMUM_BASE_FEE_IN_WEI
+```
+
+Or using the Orbit SDK:
+
+```typescript
+const owner = privateKeyToAccount(<OwnerPrivateKey>);
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbOwnerPublicActions);
+
+const transactionRequest = await orbitChainClient.arbOwnerPrepareTransactionRequest({
+    functionName: 'setMinimumL2BaseFee',
+    args: [<NewMinimumBaseFeeInWei>],
+    upgradeExecutor: false,
+    account: owner.address,
+});
+
+await orbitChainClient.sendRawTransaction({
+    serializedTransaction: await owner.signTransaction(transactionRequest),
+});
+```
+
+### Orbit surplus fee
+
+In periods of congestion, the actual base fee of your Orbit chain might be higher than the configured minimum. You can see the current base fee of your chain by calling the method `getPricesInWei()(uint256,uint256,uint256,uint256,uint256,uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile, and check the last result of the returned tuple.
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getPricesInWei() (uint256,uint256,uint256,uint256,uint256,uint256)"
+```
+
+You can then calculate the current Orbit surplus fees as `currentBaseFee - minimumBaseFee`.
+
+_Note: `getPricesInWei()` also returns the correspondent fees due to congestion in the second-to-last result of the returned tuple._
+
+::::info Orbit surplus fees are automatically adjusted
+
+Orbit chains automatically adjust the Orbit surplus fee based on the traffic of the chain. If the gas consumed goes over the speed limit, the chain's base fee will start increasing. Likewise, the base fee will gradually go down if demand of gas returns to below the configured speed limit, until it reaches the minimum base fee configured.
+
+::::
+
+### Parent chain base fee
+
+To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1BaseFeeEstimate() (uint256)"
+```
+
+Alternatively, you can use the Orbit SDK to retrieve the current parent chain base fee:
+
+```typescript
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbGasInfoPublicActions);
+
+const parentChainBaseFee = await orbitChainClient.arbGasInfoReadContract({
+    functionName: 'getL1BaseFeeEstimate',
+});
+```
+
+You can modify the current estimate of the parent chain base fee by calling the method `setL1PricePerUnit(uint256)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricePerUnit(uint256) ()" $NEW_PARENT_CHAIN_BASE_FEE
+```
+
+Or using the Orbit SDK:
+
+```typescript
+const owner = privateKeyToAccount(<OwnerPrivateKey>);
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbOwnerPublicActions);
+
+const transactionRequest = await orbitChainClient.arbOwnerPrepareTransactionRequest({
+    functionName: 'setL1PricePerUnit',
+    args: [<NewParentChainBaseFee>],
+    upgradeExecutor: false,
+    account: owner.address,
+});
+
+await orbitChainClient.sendRawTransaction({
+    serializedTransaction: await owner.signTransaction(transactionRequest),
+});
+```
+
+::::info Parent chain base fees are automatically adjusted
+
+Orbit chains are configured to automatically adjust the current parent chain base fee estimation based on the batch poster reports sent from the parent chain. That means that even though you can set a new parent chain base fee, the chain will automatically adjust it based on the reports received afterwards.
+
+::::
+
+::::info Parent chain base fee configuration for chains using a custom gas token
+
+Orbit chains that use a custom gas token should have their parent chain base fees disabled (set to 0), to avoid charging users for a non-existent parent chain's base fee, as explained in [How to use a custom gas token](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx#configuration-of-the-orbit-chain-when-using-a-custom-gas-token).
+
+::::
+
+### Parent chain surplus fee
+
+The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of wei per gas unit paid to the appropriate fee collector. For example:
+
+```shell
+cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
+```
+
+Alternatively, you can obtain this information using the Orbit SDK:
+
+```typescript
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbGasInfoPublicActions);
+
+const parentChainRewardRate = await orbitChainClient.arbGasInfoReadContract({
+    functionName: 'getL1RewardRate',
+});
+```
+
+To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of wei per gas unit to reward. For example:
+
+```shell
+cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
+```
+
+Or using the Orbit SDK:
+
+```typescript
+const owner = privateKeyToAccount(<OwnerPrivateKey>);
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbOwnerPublicActions);
+
+const transactionRequest = await orbitChainClient.arbOwnerPrepareTransactionRequest({
+    functionName: 'setL1PricingRewardRate',
+    args: [<NewRewardRate>],
+    upgradeExecutor: false,
+    account: owner.address,
+});
+
+await orbitChainClient.sendRawTransaction({
+    serializedTransaction: await owner.signTransaction(transactionRequest),
+});
+```
+
 ## How to configure the fee collector addresses?
 
 Let's now look at how to configure the collector addresses for each fee type.
 
 ### Orbit base fee
 
-Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()(address)` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
 ```
 
-_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()` method that can be used, but only by the owner of the chain._
+_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain._
 
-Alternatively, you can use the Orbit SDK to retrieve the current address configured as `infraFeeAccount`, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile:
+Alternatively, you can use the Orbit SDK to retrieve the current address configured as `infraFeeAccount`:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -84,15 +276,15 @@ await orbitChainClient.sendRawTransaction({
 
 ### Orbit surplus fee
 
-Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()(address)` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getNetworkFeeAccount() (address)"
 ```
 
-_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()` method that can be used, but only by the owner of the chain._
+_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain._
 
-Alternatively, you can use the Orbit SDK to retrieve the current address configured as `networkFeeAccount`, by calling the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile:
+Alternatively, you can use the Orbit SDK to retrieve the current address configured as `networkFeeAccount`:
 
 ```typescript
 const orbitChainClient = createPublicClient({
@@ -134,13 +326,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Parent chain base fee
 
-:::info ArbAggregator currently not supported in the Orbit SDK
-
-Reading information from the `ArgAggregator` precompile or using it to set new information is currently not supported by the Orbit SDK but will be added soon. So, for now, this subsection will only show examples using `cast call` and `cast send`.
-
-:::
-
-Parent chain base fees are paid to the fee collector of the active batch poster configured in your chain. The current configured batch posters can be obtained by calling the method `getBatchPosters()` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile. For example:
+Parent chain base fees are paid to the fee collector of the active batch poster configured in your chain. The current configured batch posters can be obtained by calling the method `getBatchPosters()(address[])` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
@@ -152,10 +338,38 @@ This list has to also be verified against the `SequencerInbox` contract living o
 cast call --rpc-url $PARENT_CHAIN_RPC $SEQUENCER_INBOX_ADDRESS "isBatchPoster(address) (bool)" $BATCH_POSTER_ADDRESS
 ```
 
-Once you have the current batch poster, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and passing the address of the batch poster.
+Alternatively, you can use the Orbit SDK to retrieve the current configured batch posters. This method will not use the ArbAggregator precompile, but instead will rely on events emitted when configuring a new batch poster in the SequencerInbox contract.
+
+```typescript
+const parentChainClient = createPublicClient({
+    chain: <ParentChainDefinition>,
+    transport: http(),
+});
+
+const batchPosters = await getBatchPosters(parentChainClient, {
+    rollup: rollupAddress,
+    sequencerInbox: sequencerInboxAddress,
+});
+```
+
+Once you have the current batch poster, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and passing the address of the batch poster.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
+```
+
+You can also use the Orbit SDK to retrieve the current fee collector configured for a specific batch poster:
+
+```typescript
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbAggregatorActions);
+
+const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
+    functionName: 'getFeeCollector',
+    args: [<BatchPosterAddress>],
+});
 ```
 
 To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the batch poster and the address of the new fee collector.
@@ -164,7 +378,28 @@ To set a new fee collector for a specific batch poster, use the method `setFeeCo
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
 ```
 
-Finally, if you want to set a new batch poster, you can call the method `addBatchPoster(address)` of the of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the new batch poster, and later call the method `setIsBatchPoster(address,bool)` of the SequencerInbox contract on the parent chain.
+Or using the Orbit SDK:
+
+```typescript
+const owner = privateKeyToAccount(<OwnerPrivateKey>);
+const orbitChainClient = createPublicClient({
+    chain: <OrbitChainDefinition>,
+    transport: http(),
+}).extend(arbAggregatorReadContract);
+
+const transactionRequest = await orbitChainClient.arbAggregatorPrepareTransactionRequest({
+    functionName: 'setFeeCollector',
+    args: [<BatchPosterAddress>, <NewFeeCollectorAddress>],
+    upgradeExecutor: false,
+    account: owner.address,
+});
+
+await orbitChainClient.sendRawTransaction({
+    serializedTransaction: await owner.signTransaction(transactionRequest),
+});
+```
+
+Finally, if you want to set a new batch poster, you can call the method `addBatchPoster(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the new batch poster, and later call the method `setIsBatchPoster(address,bool)` of the SequencerInbox contract on the parent chain.
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "addBatchPoster(address) ()" $NEW_BATCH_POSTER_ADDRESS
@@ -178,16 +413,10 @@ _Note: When setting a new batch poster, its fee collector will be configured to 
 
 ### Parent chain surplus fee
 
-Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. For example:
+Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRecipient() (address)"
-```
-
-To get the amount of rewards that are being paid to this fee collector, you can call the method `getL1RewardRate()` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of wei per gas unit paid to the `L1RewardRecipient` configured. For example:
-
-```shell
-cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
 ```
 
 Alternatively, you can obtain this information using the Orbit SDK:
@@ -200,10 +429,6 @@ const orbitChainClient = createPublicClient({
 
 const parentChainRewardRecipient = await orbitChainClient.arbGasInfoReadContract({
     functionName: 'getL1RewardRecipient',
-});
-
-const parentChainRewardRate = await orbitChainClient.arbGasInfoReadContract({
-    functionName: 'getL1RewardRate',
 });
 ```
 
@@ -234,42 +459,15 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of wei per gas unit to reward. For example:
-
-```shell
-cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
-```
-
-Or using the Orbit SDK:
-
-```typescript
-const owner = privateKeyToAccount(<OwnerPrivateKey>);
-const orbitChainClient = createPublicClient({
-    chain: <OrbitChainDefinition>,
-    transport: http(),
-}).extend(arbOwnerPublicActions);
-
-const transactionRequest = await orbitChainClient.arbOwnerPrepareTransactionRequest({
-    functionName: 'setL1PricingRewardRate',
-    args: [<NewRewardRate>],
-    upgradeExecutor: false,
-    account: owner.address,
-});
-
-await orbitChainClient.sendRawTransaction({
-    serializedTransaction: await owner.signTransaction(transactionRequest),
-});
-```
-
 ## How to use the fee distribution contracts?
 
-For now, we've described how to set the individual collector addresses for each fee type. Some chains may require multiple addresses to receive the collected fees of any of the available types. In those cases, there's the possibility of using a distributor contract that can gather all fees of a specific type and distribute those among multiple addresses.
+In the previous section we described how to set the individual collector addresses for each fee type. Some chains may require multiple addresses to receive the collected fees of any of the available types. In those cases, there's the possibility of using a distributor contract that can gather all fees of a specific type and distribute those among multiple addresses.
 
 This section shows how to configure a distributor contract to manage the fees of a specific type.
 
-:::info Distributor contracts currently not supported in the Orbit SDK
+:::info Example scripts available in the Orbit SDK
 
-Currently, the Orbit SDK doesn't support deploying and configuring distribution contracts, but it will soon be added. So, for now, this section will only show examples using `cast send`.
+This section will explain the process of deploying and configuring a distribution contract manually, but the Orbit SDK includes an [example to perform this process through a script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fee-distributor-contract).
 
 :::
 

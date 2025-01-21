@@ -14,6 +14,11 @@ const sidebars = {
       items: [
         {
           type: 'doc',
+          id: 'vanilla-admonition-test-page',
+          label: 'Vanilla admonition test page',
+        },
+        {
+          type: 'doc',
           id: 'welcome/arbitrum-gentle-introduction',
           label: 'A gentle introduction',
         },
@@ -348,7 +353,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
-              label: `Manage the fee collectors`,
+              label: `Manage the fee parameters`,
             },
             {
               type: 'doc',
