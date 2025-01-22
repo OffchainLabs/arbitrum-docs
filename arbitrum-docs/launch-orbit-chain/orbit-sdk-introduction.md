@@ -41,7 +41,7 @@ Your Orbit chain's token bridge contracts allow ERC-20 tokens to move between yo
 
 ## 5. Configure your Orbit chain
 
-With your node configuration specified and token bridge deployed, you'll be ready to configure your Orbit chain. Visit [Configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.md) to complete this final step.
+With your node configuration specified and token bridge deployed, you'll be ready to configure your Orbit chain. Visit [Configure your Orbit chain](/launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain.mdx) to complete this final step.
 
 ## See also
 
