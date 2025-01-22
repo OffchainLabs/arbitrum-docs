@@ -129,7 +129,7 @@ and make moves on challenges without sacrificing decentralization.
 
 ### Opening challenges
 
-To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on the parent chain. 
+To initiate a challenge, there must first be a fork in the assertion chain within the Arbitrum Rollup contracts. However, a challenge's actual start involves creating an edge claim and posting it to the `ChallengeManager` contract on the parent chain.
 
 If there is a fork in the assertion chain (a "top-level" dispute), anyone can begin a challenge by creating a challenge edge. No bond is needed: each branch of the fork has a unique assertion, with an attached bond, and that assertion contains enough information to uniquely determine its challenge edge; that is, there is no "wiggle room" that an adversary can use to create multiple challenge edges from a single assertion (if this were possible, it could lead to spam attacks on the protocol).
 

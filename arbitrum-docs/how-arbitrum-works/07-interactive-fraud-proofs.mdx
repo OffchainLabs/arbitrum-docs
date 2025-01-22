@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-This document attempts to give an account of BoLD, Arbitrum's new all-vs-all challenge protocol, in terms that might be familiar to people used to studying Arbitrum's previous, 1-vs-1 challenge protocol. For another explanation of BoLD's concepts, refer to [Gentle Introduction](/how-arbitrum-works/bold/gentle-introduction.mdx), [Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx), or the BoLD [Research whitepaper](https://arxiv.org/abs/2404.10491). 
+This document attempts to give an account of BoLD, Arbitrum's new all-vs-all challenge protocol, in terms that might be familiar to people used to studying Arbitrum's previous, 1-vs-1 challenge protocol. For another explanation of BoLD's concepts, refer to [Gentle Introduction](/how-arbitrum-works/bold/gentle-introduction.mdx), [Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx), or the BoLD [Research whitepaper](https://arxiv.org/abs/2404.10491).
 
 Suppose the rollup chain looks like this:
 
@@ -132,7 +132,7 @@ If a case is "unreachable", that is, the case is assumed to never arise in corre
 then the OSP can implement any instruction semantics in that case.
 
 - In a challenge between malicious assertions, that start from an unreachable machine state, any case
-  can   arise. The challenge protocol must do 
+  can arise. The challenge protocol must do
   something safe in every case. But the instruction semantics can be weird in such cases because
   no honest party ever needs to try to refute an assertion that starts from an unreachable state. All assertions engaging in a dispute starting from an unreachable state must be malicious, and the protocol doesn't need to care which one of them wins.
 - In a challenge with one honest party, the honest party will never need to one-step prove an
