@@ -103,35 +103,7 @@ The RBlock is assigned a deadline, which says how long other validators have to 
 
 In the normal case, the rollup chain will look like this:
 
-```mermaid
-graph RL
-  f["First unresolved block"]
-  l["Latest confirmed block"]
-
-  98-->97-->96-->95
-  f-.-95
-
-  95-->94
-  l-.-94
-
-  94-->93-->92-->91-->90-->x[...]
-
-  subgraph Legend
-    direction RL
-    Confirmed
-    Unconfirmed
-  end
-
-  classDef confirmed fill:#47b860,stroke:#37914c,stroke-width:2px,color:#fff
-  class 94,93,92,91,90,x,Confirmed confirmed
-
-
-  classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
-  class 98,97,96,95,Unconfirmed unconfirmed
-
-  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
-  class l,f note
-```
+![500px-img](../assets/normal-rollup.svg)
 
 On the left, representing an earlier part of the chain’s history, we have confirmed RBlocks. These have been fully accepted and recorded by the Layer 1 contracts that manage the chain. The newest of the confirmed RBlocks, RBlock 94, is called the “latest confirmed RBlock.” On the right, we see a set of newer proposed RBlocks. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest RBlock whose fate has yet to be determined, RBlock 95, is called the “first unresolved RBlock.”
 
@@ -139,41 +111,7 @@ Notice that a proposed RBlock can build on an earlier proposed RBlock. This allo
 
 Here’s another example of what the chain state might look like, if several validators are being malicious. It’s a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
 
-```mermaid
-graph RL
- subgraph Legend
-    direction RL
-    Confirmed
-    Rejected
-    Unconfirmed
-  end
-
-  f["First unresolved block"]
-  l["Latest confirmed block"]
-
-
-  l-.-103
-  f-.-106
-
-  108-->107-->106-->103
-  111-->104
-  101-->100
-  105-->104-->103
-  110-->109-->103-->102-->100-->x[...]
-
-  classDef confirmed fill:#47b860,stroke:#37914c,stroke-width:2px,color:#fff
-  class 100,102,103,x,Confirmed confirmed
-
-  classDef rejected fill:#fdaa07,stroke:#fd8607,stroke-width:2px,color:#fff
-  class 101,104,105,Rejected rejected
-
-  classDef unconfirmed fill:#2aa1f0,stroke:#1c86ca,stroke-width:2px,color:#fff
-  class 106,107,108,109,110,111,Unconfirmed unconfirmed
-
-  classDef note fill:#F1F5F6,stroke:#dbdede,stroke-width:1px,color:#000
-  class l,f note
-
-```
+![Rollup with Malicious Validator](../assets/rollup-malicious-validator.svg)
 
 There’s a lot going on here, so let’s unpack it.
 
