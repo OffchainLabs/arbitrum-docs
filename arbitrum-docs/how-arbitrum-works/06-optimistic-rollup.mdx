@@ -103,7 +103,7 @@ The RBlock is assigned a deadline, which says how long other validators have to 
 
 In the normal case, the rollup chain will look like this:
 
-![500px-img](../assets/normal-rollup.svg)
+![400px-img](../assets/normal-rollup.svg)
 
 On the left, representing an earlier part of the chain’s history, we have confirmed RBlocks. These have been fully accepted and recorded by the Layer 1 contracts that manage the chain. The newest of the confirmed RBlocks, RBlock 94, is called the “latest confirmed RBlock.” On the right, we see a set of newer proposed RBlocks. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest RBlock whose fate has yet to be determined, RBlock 95, is called the “first unresolved RBlock.”
 
@@ -111,7 +111,7 @@ Notice that a proposed RBlock can build on an earlier proposed RBlock. This allo
 
 Here’s another example of what the chain state might look like, if several validators are being malicious. It’s a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
 
-![Rollup with Malicious Validator](../assets/rollup-malicious-validator.svg)
+![600px-img](../assets/rollup-malicious-validator.svg)
 
 There’s a lot going on here, so let’s unpack it.
 
