@@ -58,6 +58,14 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 
 </aside>
 
+Here are a few flows to help visualize the deployment:
+
+2. Scenario 1: You are an L2 Orbit Chain that settles on Ethereum.
+
+3. Scenario 2: You are an L3 Orbit Chain that settles to another L2. The custom gas token you are using exists on L1.
+
+4. Scenario 3: You are an L3 Orbit Chain that settles to another L2. The custom gas token doesn't exist on L1.
+
 ## Deployment scripts
 
 The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
@@ -111,4 +119,40 @@ cp .env.example .env
 
 ```shell
 yarn dev
+```
+
+## Triggering movement of funds
+
+Any `ChildToParentRouter` contract deployed by an Orbit chain must be periodically called to move funds.
+The following commands should be set up to execute at the same interval as the router's minimum distribution interval (`minDistributionIntervalSeconds`).
+
+The [router contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts) contains scripts for calling the routers.
+
+1. Periodically trigger withdrawals to the parent chain
+
+::::info
+
+If the `ChildToParentRouter` is routing its chain's native token, this step should be skipped.
+
+::::
+
+```shell
+cast send <router_on_child_address> "routeToken()" --rpc-url <child_rpc_url> --private_key <private_key>
+```
+
+2. Periodically redeem withdrawals on the parent chain
+
+```shell
+git clone https://github.com/OffchainLabs/fund-distribution-contracts
+cd fund-distribution-contracts && yarn
+
+# set PARENT_CHAIN_PK in .env
+cp .env.sample .env
+
+# add --opStack if the router is on an OP stack chain
+yarn redeem-child-to-parent \
+  --parentRPCUrl <parent_rpc_url> \
+  --childRPCUrl <child_rpc_url> \
+  --childToParentRewardRouterAddr <router_on_child_address> \
+  --oneOff
 ```
