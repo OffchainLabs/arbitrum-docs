@@ -217,8 +217,8 @@ To do that, you'll need to first extract the replay binary from the `nitro-node-
 docker run --rm --name replay-binary-extractor --entrypoint sleep custom-nitro-node-dev infinity
 docker cp replay-binary-extractor:/home/user/target/machines/latest extracted-replay-binary
 docker stop replay-binary-extractor
-cat extracted-replay-binary/module.root
-mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module.root)"
+cat extracted-replay-binary/module-root.txt
+mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module-root.txt)"
 ```
 
 These commands will output the new WASM module root, and create the directory `target/machines/<wasm module root>`.
