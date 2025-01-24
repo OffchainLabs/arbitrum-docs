@@ -281,7 +281,7 @@ You can check logs by different log types: info, warn, and error.
             </code>
           </td>
           <td>
-            This is because your node db got crashed and lost some message, you can try set
+            This is because your node db crashed and lost some messages. You can try to set
             `--init.reorg-to-message-batch x-1`
           </td>
         </tr>
@@ -291,9 +291,9 @@ You can check logs by different log types: info, warn, and error.
             <code>`Failed to load snapshot` err="head doesn't match snapshot: have a, want b”</code>
           </td>
           <td>
-            This is usually because an ungraceful shutdown causes a corrupted database; try
+            This is usually because an ungraceful shutdown caused a corrupted database; try
             restarting the node without a prune flag, and after your node goes back to normal, then
-            graceful shutdown it and restart to prune it.
+            graceful shut it down and restart to prune it.
           </td>
         </tr>
         <tr className="scenario">
@@ -306,7 +306,7 @@ You can check logs by different log types: info, warn, and error.
           </td>
           <td>
             This often happens when you connect to a beacon chain endpoint while the blob you are
-            querying is expired. To resolve this error, connect to a beacon endpoint which supports
+            querying is expired. To resolve this error, connect to a beacon endpoint that supports
             historical blob data (see{' '}
             <a href="/run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers#list-of-ethereum-beacon-chain-rpc-providers">
               List of Ethereum beacon chain RPC providers
@@ -349,7 +349,7 @@ You can check logs by different log types: info, warn, and error.
           </td>
           <td>
             Once it catches up, the node will check the state against the latest confirmed assertion
-            staked on chain; if it doesn’t match, it will log this error. Usually, this is because
+            staked onchain; if it doesn’t match, it will log this error. Usually, this is because
             of db corruption, so you might need to re-sync the blockchain; using a snapshot might
             help: https://snapshot-explorer.arbitrum.io/
           </td>
