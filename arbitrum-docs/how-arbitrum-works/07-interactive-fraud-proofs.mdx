@@ -9,7 +9,7 @@ content_type: get-started
 
 Suppose the rollup chain looks like this:
 
-![img](https://lh4.googleusercontent.com/kAZY9H73dqcHvboFDby9nrtbYZrbsHCYtE5X9NIZQsvcz58vV0WUWUq1xsYKzYWQSc1nPZ8W86LLX0lD3y-ctEaG2ISa2Wpz2pYxTzW09P1UvqSDuoqkHlGDYLLMTzLqX4rlP8Ca)
+![600px-img](../assets/interactive-fraud-proof.svg)
 
 RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is bonded on 93 and Bob is bonded on 95.
 
@@ -65,13 +65,11 @@ The challenge protocol is designed so that the dispute can be resolved with a mi
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
-import ChallengeManagerDiagram from '../diagrams/_challenge-manager.mdx';
-
 ## ChallengeManager
 
 This section is a technical deep dive into the `ChallengeManager` and will walk through the arbitration of a challenge game in great detail. The `ChallengeManager` plays the role of the arbiter of challenge games. Here's a diagram of the challenge state machine:
 
-<ChallengeManagerDiagram />
+![600px-img](../assets/challenge-manager.svg)
 
 ### Block challenge
 
