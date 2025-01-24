@@ -89,7 +89,7 @@ Once you have the JSON structure, save it into a file, for example, `keyset-info
 Finally, we'll use Nitro's `datool dumpkeyset` utility inside Docker to generate the keyset and keyset hash.
 
 ```shell
-docker run -v $(pwd):/data/keyset --entrypoint datool @latestNitroNodeImage@ dumpkeyset --conf.file /data/keyset/keyset-info.json
+docker run -v $(pwd):/data/keyset --entrypoint datool @latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@ dumpkeyset --conf.file /data/keyset/keyset-info.json
 ```
 
 This command will output two results: `Keyset` and `KeysetHash`. Save them to use in the next steps.
@@ -121,7 +121,7 @@ The JSON file is:
 And when running the command we obtain:
 
 ```shell
-$ docker run -v $(pwd):/data/keyset --entrypoint datool @latestNitroNodeImage@ dumpkeyset --conf.file /data/keyset/keyset-info.json
+$ docker run -v $(pwd):/data/keyset --entrypoint datool @latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@ dumpkeyset --conf.file /data/keyset/keyset-info.json
 Keyset: 0x0000000000000002000000000000000201216006dcb5e56764bb72e6a45e6deb301ca85d8c4315c1da2efa29927f2ac8fb25571ce31d2d603735fe03196f6d56bcbf9a1999a89a74d5369822c4445d676c15ed52e5008daa775dc9a839c99ff963a19946ac740579874dac4f639907ae1bc69f0c6694955b524d718ca445831c5375393773401f33725a79661379dddabd5fff28619dc070befd9ed73d699e5c236c1a163be58ba81002b6130709bc064af5d7ba947130b72056bf17263800f1a3ab2269c6a510ef8e7412fd56d1ef1b916a1306e3b1d9c82c099371bd9861582acaada3a16e9dfee5d0ebce61096598a82f112d0a935e8cab5c48d82e3104b0c7ba79157dad1a019a3e7f6ad077b8e6308b116fec0f58239622463c3631fa01e2b4272409215b8009422c16715dbede5909060121600835f995f2478f24892d050daa289f8b6b9c1b185bcd28532f88d610c2642a2dc6f3509740236d33c3e2d9136aab17f819c8c671293bba277717762e8d1c1f7bac9e17dd28d2939a959bb38e500f9c11c38cebbc426e2dea97c40175a655d17400ae6c75ff49e884c79469249e70953258854b64fa8445c585ad45dc6dc6975501c6af7cff7074202c687f8a7bf1a3ac192689755f232275b4c8421b1a5669e9b904c29a292cdf961b783a7c0b4ce736900de4d8c63c5f85a65cb44af34bef840acef84ab75f44c4c9137610b68107aff3bbdcc19119c7a927c115b7b9bfb27d85c500ee77d13ec5a97a3ae6bf51d3b70a5502e8416de7b5eb8e9feee376411ca35c8a7f3f597c7606578cf96a4715ce5a35cf48e39c0a1faa2dee22d74e6819
 KeysetHash: 0xfdca3e4e2de25f0a56d0ced68fd1cc64f91b20cde67c964c55105477c02f49be
 ```
@@ -130,7 +130,7 @@ KeysetHash: 0xfdca3e4e2de25f0a56d0ced68fd1cc64f91b20cde67c964c55105477c02f49be
 
 Once we have the keyset and its hash, we can configure the SequencerInbox contract so it accepts DACerts signed by the DAC members.
 
-The SequencerInbox can be configured with the new keyset by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/@nitroContractsCommit@/src/bridge/SequencerInbox.sol#L751) method. Note that only the chain owner can call this method.
+The SequencerInbox can be configured with the new keyset by invoking the [setValidKeyset](https://github.com/OffchainLabs/nitro-contracts/blob/@nitroContractsCommit=763bd77906b7677da691eaa31c6e195d455197a4@/src/bridge/SequencerInbox.sol#L751) method. Note that only the chain owner can call this method.
 
 Here's an example of how to use Foundry to configure the SequencerInbox with the keyset generated in the previous step:
 

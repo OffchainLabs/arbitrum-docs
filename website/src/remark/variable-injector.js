@@ -42,17 +42,9 @@ const plugin = (options) => {
           break;
       }
 
-      // This matches text between two '@'.
-      // It can include spaces between each '@' character and the text
-      // It allows upper and lowercase characters, numbers and the symbols _ and -
-      // Examples =>
-      //    @var@
-      //    @ var @
-      //    @my-var @
-      //    @ my-4th_var@
-      value = value.replace(/\@\s*([a-zA-Z0-9_-]+)\s*\@/g, (match, varName) => {
-        return options.replacements[varName] || match;
-      });
+      // Format: @variableName=value@
+      // This extracts just the value part from the variable reference
+      value = value.replace(/\@\s*[a-zA-Z0-9_-]+=([^@]+)\s*\@/g, (match, value) => value.trim());
 
       switch (node.type) {
         case 'code':
