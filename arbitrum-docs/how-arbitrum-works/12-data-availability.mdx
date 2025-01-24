@@ -73,7 +73,9 @@ Arbitrum full nodes decode data received from the parent chain (Ethereum) to upd
       3. **Brotli Message Type:** No extra steps are needed here; continue to the next step.
    2. **Data Decompression:** If the raw data is Brotli-compressed, the node decompresses it. It's worth noting that the raw data we get from above i and ii might also be Brotli-compressed data.
 5. Message Processing:
+
    1. After decoding and decompressing the data, the node obtains a series of messages.
+
       1. Message Types:
 
          | BatchSegmentKindL2Message            | This message will contain raw data on a series of transactions. Usually, this is a single block. |
@@ -82,6 +84,7 @@ Arbitrum full nodes decode data received from the parent chain (Ethereum) to upd
          | BatchSegmentKindDelayedMessages      | This message contains a new delayed message read from the parent chain delayed inbox.            |
          | BatchSegmentKindAdvanceTimestamp     | This message will notify STF to advance a second of the timestamp state.                         |
          | BatchSegmentKindAdvanceL1BlockNumber | This message will notify STF to advance a new parent chain block number.                         |
+
    2. **State Transition:** Finally, the State Transition Function (STF) processes these messages, and the STF will follow the rules to execute and update the Arbitrum node's local state.
 
 **Conclusion:**
