@@ -349,9 +349,9 @@ You can check logs by different log types: info, warn, and error.
           </td>
           <td>
             Once it catches up, the node will check the state against the latest confirmed assertion
-            staked onchain; if it doesn’t match, it will log this error. Usually, this is because
-            of db corruption, so you might need to re-sync the blockchain; using a snapshot might
-            help: https://snapshot-explorer.arbitrum.io/
+            staked onchain; if it doesn’t match, it will log this error. Usually, this is because of
+            db corruption, so you might need to re-sync the blockchain; using a snapshot might help:
+            https://snapshot-explorer.arbitrum.io/
           </td>
         </tr>
         <tr className="scenario">
@@ -367,9 +367,10 @@ You can check logs by different log types: info, warn, and error.
             occur if your batch poster didn't post a batch for an extended period. Common reasons
             include the node being shut down inadvertently or the batch poster running out of funds,
             leading to no new blocks being produced or posted by the batch poster. <br />
-            To resolve this, If re-org doesn’t matter, you can just start the batch poster with `--node.batch-poster.reorg-resistance-margin=0`,
-            If it does, you'd want to modify the time bounds on the sequencer inbox to allow the sequencer
-            to post a batch containing the transactions with the old timestamp
+            To resolve this, If re-org doesn’t matter, you can just start the batch poster with `--node.batch-poster.reorg-resistance-margin=0`
+            and `node.batch-poster.l1-block-bound` to ignore, If it does, you'd want to modify the time
+            bounds on the sequencer inbox to allow the sequencer to post a batch containing the transactions
+            with the old timestamp
           </td>
         </tr>
         <tr className="scenario">
