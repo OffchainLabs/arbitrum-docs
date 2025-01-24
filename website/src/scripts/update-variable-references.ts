@@ -6,13 +6,14 @@ import globalVars from '../resources/globalVars.js';
 
 // Find all .md and .mdx files recursively
 function findDocFiles(dir: string): string[] {
-  return fs.readdirSync(dir, { withFileTypes: true })
-    .flatMap(entry => {
-      const fullPath = path.join(dir, entry.name);
-      return entry.isDirectory() 
-        ? findDocFiles(fullPath)
-        : entry.isFile() && /\.(md|mdx)$/.test(entry.name) ? [fullPath] : [];
-    });
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name);
+    return entry.isDirectory()
+      ? findDocFiles(fullPath)
+      : entry.isFile() && /\.(md|mdx)$/.test(entry.name)
+      ? [fullPath]
+      : [];
+  });
 }
 
 // Process a single file and return stats about changes
@@ -28,15 +29,17 @@ function processFile(filePath: string, docsPath: string) {
       if (varName in globalVars) {
         found.add(varName);
         const newValue = String(globalVars[varName]);
-        
+
         // Always update if it's old format (@var@) or if value changed
         if (!currentValue || currentValue.trim() !== newValue) {
           updated.add(varName);
-          return `@${varName}=${newValue}@`;
+          // Escape any @ in the value to prevent regex issues
+          const escapedValue = newValue.replace(/@/g, '\\@');
+          return `@${varName}=${escapedValue}@`;
         }
       }
       return match;
-    }
+    },
   );
 
   // Only write if we made changes
@@ -51,16 +54,19 @@ function processFile(filePath: string, docsPath: string) {
 // Main function
 function main() {
   console.log('Scanning for variable references...');
-  
+
   const docsPath = path.resolve(__dirname, '../../../arbitrum-docs');
   const stats = findDocFiles(docsPath)
-    .map(file => processFile(file, docsPath))
-    .reduce((acc, curr) => ({
-      filesWithVars: acc.filesWithVars + (curr.found > 0 ? 1 : 0),
-      filesUpdated: acc.filesUpdated + (curr.updated > 0 ? 1 : 0),
-      varsFound: acc.varsFound + curr.found,
-      varsUpdated: acc.varsUpdated + curr.updated
-    }), { filesWithVars: 0, filesUpdated: 0, varsFound: 0, varsUpdated: 0 });
+    .map((file) => processFile(file, docsPath))
+    .reduce(
+      (acc, curr) => ({
+        filesWithVars: acc.filesWithVars + (curr.found > 0 ? 1 : 0),
+        filesUpdated: acc.filesUpdated + (curr.updated > 0 ? 1 : 0),
+        varsFound: acc.varsFound + curr.found,
+        varsUpdated: acc.varsUpdated + curr.updated,
+      }),
+      { filesWithVars: 0, filesUpdated: 0, varsFound: 0, varsUpdated: 0 },
+    );
 
   console.log('\nSummary:');
   console.log(`Found ${stats.varsFound} variable references in ${stats.filesWithVars} files`);
@@ -71,4 +77,4 @@ function main() {
   }
 }
 
-main(); 
+main();
