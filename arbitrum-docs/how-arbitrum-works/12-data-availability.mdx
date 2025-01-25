@@ -64,7 +64,7 @@ Arbitrum full nodes decode data received from the parent chain (and, in the case
       5. `AfterDelayedCount` (8 bytes)
       6. `payload` (variable length)
          1. The `payload` field further contains the following:
-            1. **Type:** Indicates the type of payload (e.g., DACert, blob message).
+            1. **Type:** Indicates the header of payload (e.g., DACert, blob message).
             2. **Content:** The actual data associated with the payload header (e.g., DACert, BlobHashes, brotli compressed data).
 4. Data decoding and retrieval:
    1. Based on the `payload` header:
