@@ -68,7 +68,7 @@ Arbitrum full nodes decode data received from the parent chain (and, in the case
             2. **Content:** The actual data associated with the payload type (e.g., DACert, BlobHashes, brotli compressed data).
 4. Data decoding and retrieval:
    1. Based on the `payload` header:
-      1. **DAS Message header:** The node queries the Data Availability Service (DAS) to retrieve the raw data.
+      1. **DAS Message header:** The node queries the Data Availability Servers (DAS) to retrieve the raw data.
       2. **Blob message header:** The node decodes the blob message to obtain the raw data.
       3. **Brotli Message header:** No extra steps are needed here; continue to the next step.
    2. Data decompression: If the raw data is Brotli-compressed, the node decompresses it. It's worth noting that the raw data we get from above i and ii might also be Brotli-compressed data.
