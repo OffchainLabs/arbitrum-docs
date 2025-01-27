@@ -527,7 +527,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'stylus/recommended-libraries',
-              label: 'Using Rust Crates',
+              label: 'Recommended Rust Crates',
             },
           ],
         },
