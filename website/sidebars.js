@@ -524,6 +524,11 @@ const sidebars = {
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Advanced features',
             },
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended Rust Crates',
+            },
           ],
         },
         {
@@ -612,6 +617,11 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/opcode-hostio-pricing',
               label: 'Gas & Ink Pricing',
+            },
+            {
+              type: 'link',
+              label: 'Stylus by Example',
+              href: 'https://stylus-by-example.org/',
             },
             {
               type: 'link',
