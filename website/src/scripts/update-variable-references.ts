@@ -22,20 +22,16 @@ function processFile(filePath: string, docsPath: string) {
   const found = new Set<string>();
   const updated = new Set<string>();
 
-  // Replace @var@ or @var=oldvalue@ with @var=newvalue@
+  // Update values for existing @@ variables
   const newContent = content.replace(
-    /\@\s*([a-zA-Z0-9_-]+)(?:=([^@]+))?\s*\@/g,
+    /@@\s*([a-zA-Z0-9_-]+)=([^@]+)@@/g,
     (match, varName, currentValue) => {
       if (varName in globalVars) {
         found.add(varName);
         const newValue = String(globalVars[varName]);
-
-        // Always update if it's old format (@var@) or if value changed
-        if (!currentValue || currentValue.trim() !== newValue) {
+        if (currentValue.trim() !== newValue) {
           updated.add(varName);
-          // Escape any @ in the value to prevent regex issues
-          const escapedValue = newValue.replace(/@/g, '\\@');
-          return `@${varName}=${escapedValue}@`;
+          return `@@${varName}=${newValue}@@`;
         }
       }
       return match;

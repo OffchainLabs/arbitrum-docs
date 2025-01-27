@@ -63,7 +63,7 @@ The L1 pricer also records the total number of "data units" (the sum of the esti
 
 ## L2 gas pricing
 
-The L2 gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @arbOneGasFloorGwei=0.01@ gwei on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and @novaGasFloorGwei=0.01@ gwei on Nova).
+The L2 gas price on a given <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> has a set floor, which can be queried via [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently @@arbOneGasFloorGwei=0.01@@ gwei on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and @@novaGasFloorGwei=0.01@@ gwei on Nova).
 
 ### Estimating L2 Gas
 
@@ -75,7 +75,7 @@ L2 gas fees work very similarly to gas on Ethereum. A transaction uses some amou
 
 The L2 basefee is set by a version of the "exponential mechanism" which has been widely discussed in the Ethereum community, and which has been shown equivalent to Ethereum's EIP-1559 gas pricing mechanism.
 
-The algorithm compares gas usage against a parameter called the [speed limit](#the-speed-limit) which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the <a data-quicklook-from="speed-limit">Speed Limit</a> on Arbitrum One is @arbOneGasSpeedLimitGasPerSec=7,000,000@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
+The algorithm compares gas usage against a parameter called the [speed limit](#the-speed-limit) which is the target amount of gas per second that the chain can handle sustainably over time. (Currently the <a data-quicklook-from="speed-limit">Speed Limit</a> on Arbitrum One is @@arbOneGasSpeedLimitGasPerSec=7,000,000@@ gas per second.) The algorithm tracks a gas backlog. Whenever a transaction consumes gas, that gas is added to the backlog. Whenever the clock ticks one second, the speed limit is subtracted from the backlog; but the backlog can never go below zero.
 
 Intuitively, if the backlog grows, the algorithm should increase the gas price, to slow gas usage, because usage is above the sustainable level. If the backlog shrinks, the price should decrease again because usage has been below the below the sustainable limit so more gas usage can be welcomed.
 
