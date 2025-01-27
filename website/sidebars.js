@@ -348,7 +348,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
-              label: `Manage the fee collectors`,
+              label: `Manage the fee parameters`,
             },
             {
               type: 'doc',
