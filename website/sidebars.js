@@ -36,7 +36,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'build-decentralized-apps/quickstart-solidity-hardhat',
+          id: 'build-decentralized-apps/quickstart-solidity-remix',
           label: 'Quickstart (Solidity)',
         },
         {
