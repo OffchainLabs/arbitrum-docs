@@ -12,67 +12,107 @@
     },
     {
       "source": "/(proving/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/challenge-manager/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/osp-assumptions",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/osp-assumptions/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wasm-wavm",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/wasm-wavm/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/wavm-custom-opcodes/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-floats",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/wavm-floats/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-modules",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(fraud-proofs/wavm-modules/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/arbos/geth",
+      "destination": "/how-arbitrum-works/geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "destination": "/how-arbitrum-works/geth-at-the-core",
       "permanent": false
     },
     {
       "source": "/(arbos/l2-to-l1-messaging/?)",
-      "destination": "/how-arbitrum-works/arbos/l2-l1-messaging",
+      "destination": "/how-arbitrum-works/l2-to-l1-messaging",
       "permanent": false
     },
     {
       "source": "/(arbos/l1-to-l2-messaging/?)",
-      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
       "permanent": false
     },
     {
       "source": "/(assertion-tree/?)",
-      "destination": "/how-arbitrum-works/assertion-tree",
+      "destination": "/how-arbitrum-works/optimistic-rollup",
       "permanent": false
     },
     {
       "source": "/(inside-arbitrum-nitro/?)",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "destination": "/how-arbitrum-works/a-gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/inside-arbitrum-nitro/?)",
+      "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(arbos/l1-pricing/?)",
-      "destination": "/how-arbitrum-works/l1-gas-pricing",
+      "destination": "/how-arbitrum-works/gas-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l1-gas-pricing/?)",
+      "destination": "/how-arbitrum-works/gas-fees",
       "permanent": false
     },
     {
@@ -82,17 +122,27 @@
     },
     {
       "source": "/(inside-anytrust/?)",
-      "destination": "/how-arbitrum-works/inside-anytrust",
+      "destination": "/how-arbitrum-works/anytrust-protocol",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l1-l2-messaging/?)",
+      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(arbos/l2-l1-messaging/?)",
+      "destination": "/how-arbitrum-works/l2-to-l1-messaging",
       "permanent": false
     },
     {
       "source": "/(why-nitro/?)",
-      "destination": "/how-arbitrum-works/why-nitro",
+      "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(tx-lifecycle/?)",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
     },
     {
@@ -361,8 +411,8 @@
       "permanent": false
     },
     {
-      "source": "/(for-devs/quickstart-solidity-hardhat/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
+      "source": "/(for-devs/quickstart-solidity-remix/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -461,13 +511,13 @@
       "permanent": false
     },
     {
-      "source": "/docs/inside_arbitrum",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "source": "/(docs/inside_arbitrum/?)",
+      "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
     },
     {
-      "source": "/docs/l1_l2_messages",
-      "destination": "/how-arbitrum-works/arbos/l1-l2-messaging",
+      "source": "/(docs/l1_l2_messages/?)",
+      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
       "permanent": false
     },
     {
@@ -491,8 +541,8 @@
       "permanent": false
     },
     {
-      "source": "/docs/anytrust",
-      "destination": "/how-arbitrum-works/inside-anytrust",
+      "source": "/(docs/anytrust/?)",
+      "destination": "/how-arbitrum-works/08-anytrust-protocol",
       "permanent": false
     },
     {
@@ -557,7 +607,7 @@
     },
     {
       "source": "/docs/tutorials",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -567,17 +617,17 @@
     },
     {
       "source": "/docs/frontend_integration",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/docs/contract_deployment",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/getting-started-devs",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -596,13 +646,18 @@
       "permanent": false
     },
     {
-      "source": "/docs/finality",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "source": "/(docs/finality/?)",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
     },
     {
-      "source": "/docs/withdrawals",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "source": "/arbos/introduction",
+      "destination": "/how-arbitrum-works/geth-at-the-core",
+      "permanent": false
+    },
+    {
+      "source": "/(docs/withdrawals/?)",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
     },
     {
@@ -641,48 +696,48 @@
       "permanent": false
     },
     {
-      "source": "/docs/censorship_resistance",
+      "source": "/(docs/censorship_resistance/?)",
       "destination": "/how-arbitrum-works/sequencer",
       "permanent": false
     },
     {
-      "source": "/docs/arbgas",
+      "source": "/(docs/arbgas/?)",
       "destination": "/how-arbitrum-works/gas-fees",
       "permanent": false
     },
     {
-      "source": "/docs/arbos",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "source": "/(docs/arbos/?)",
+      "destination": "/how-arbitrum-works/geth-at-the-core",
       "permanent": false
     },
     {
-      "source": "/docs/tx_lifecycle",
-      "destination": "/how-arbitrum-works/tx-lifecycle",
+      "source": "/(docs/tx_lifecycle/?)",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
       "permanent": false
     },
     {
-      "source": "/docs/rollup_protocol",
-      "destination": "/how-arbitrum-works/assertion-tree",
+      "source": "/(docs/rollup_protocol/?)",
+      "destination": "/how-arbitrum-works/optimistic-rollup",
       "permanent": false
     },
     {
-      "source": "/docs/avm_design",
-      "destination": "/how-arbitrum-works/inside-arbitrum-nitro",
+      "source": "/(docs/avm_design/?)",
+      "destination": "/how-arbitrum-works/a-gentle-introduction",
       "permanent": false
     },
     {
-      "source": "/docs/dispute_resolution",
-      "destination": "/how-arbitrum-works/fraud-proofs/challenge-manager",
+      "source": "/(docs/dispute_resolution/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
-      "source": "/docs/arbos_formats",
-      "destination": "/how-arbitrum-works/arbos/introduction",
+      "source": "/(docs/arbos_formats/?)",
+      "destination": "/how-arbitrum-works/geth-at-the-core",
       "permanent": false
     },
     {
-      "source": "/docs/avm_specification",
-      "destination": "/how-arbitrum-works/fraud-proofs/wavm-custom-opcodes",
+      "source": "/(docs/avm_specification/?)",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
