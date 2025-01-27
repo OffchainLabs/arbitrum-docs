@@ -22,7 +22,7 @@ For more information related to configuring a DAC, refer to the _[Introduction](
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/inside-anytrust.mdx)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx)_ for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?
@@ -392,7 +392,7 @@ After you decode a batch poster transaction and get its `data` within the functi
 
 The first part (1 byte) is the `header flag`, which is used to specify which type of batch it is. Here we need to check if it has bit `0x80` (For example, `0x88` and `0x80` are both valid, but `0x55` is wrong).
 
-The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/inside-anytrust#keysets).
+The second part (32 bytes) is the keyset hash. You can learn more about what keyset is [here](/how-arbitrum-works/08-anytrust-protocol.mdx#keysets).
 
 The third part (32 bytes) is the data hash, and this is what we need to retrieve data. When you get this hash, you can retrieve data directly by following what we demonstrate in Step 4.
 
@@ -416,6 +416,28 @@ A DAS should strive not to miss any batch of information sent by the sequencer. 
 Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
+
+## External signer support
+
+By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the sequencer inbox contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a wallet file is used the account must be named "l1-batch-poster".
+
+The batch poster would need to have the configuration for the external signer
+
+```
+--node.batch-poster.data-poster.external-signer...
+```
+
+and the configuration for the key which is only used for signing DA Committee requests.
+
+```
+--node.batch-poster.parent-chain-wallet...
+```
+
+The Committee servers would need to additionaly specify the public key to accept signed messages from.
+
+```
+--data-availability.extra-signature-checking-public-key
+```
 
 ## Other considerations
 

@@ -16,7 +16,7 @@ Since transactions are processed in the order that the Sequencer receives them, 
 
 ### How can I see the balance of ETH and other tokens in my wallet on Arbitrum?
 <p>
-Most wallets are "connected" to one given network at a time. To view your ETH or token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.
+Most wallets are "connected" to one given network at a time. To view your ETH or token balances, ensure that you are connected to the appropriate Arbitrum chain. In MetaMask and OKX Wallet, you can switch networks via the "networks" dropdown. In this dropdown, select your desired network (either Arbitrum One or Arbitrum Nova for our mainnet networks). If your desired network hasn't been added to your wallet yet, you can add it at <a href="https://bridge.arbitrum.io/">https://bridge.arbitrum.io/</a>.
 </p>
 
 <p>
@@ -46,7 +46,7 @@ The Arbitrum Sequencer orders transactions on a first come, first served basis; 
 
 ### What's the difference between Arbitrum Rollup and Arbitrum AnyTrust?
 <p>
-Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety. For more information, see <a href="https://docs.arbitrum.io/inside-arbitrum-nitro/">Inside Arbitrum Nitro</a>.
+Arbitrum Rollup is an Optimistic Rollup protocol; it is trustless and permissionless. Part of how these properties are achieved is by requiring all chain data to be posted on layer 1. This means the availability of this data follows directly from the security properties of Ethereum itself, and, in turn, that any party can participate in validating the chain and ensuring its safety. For more information, see <a href="https://docs.arbitrum.io/how-arbitrum-works/a-gentle-introduction">How Arbitrum works</a>.
 </p>
 
 <p>
@@ -70,7 +70,7 @@ Variants of the AnyTrust model in which the new trust assumption is minimized ar
 </p>
 
 <p>
-For more, see <a href="https://developer.arbitrum.io/inside-anytrust">Inside AnyTrust</a>.
+For more, see <a href="https://docs.arbitrum.io/how-arbitrum-works/anytrust-protocol">AnyTrust protocol</a>.
 </p>
 
 <p>
@@ -102,7 +102,7 @@ If you cross-chain message was initiated from <a href="https://bridge.arbitrum.i
 
 ### If there is a dispute, can my L2 transaction get reorged / thrown out / "yeeted"?
 <p>
-Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See <a href="https://developer.arbitrum.io/tx-lifecycle">Transaction Lifecycle</a>)
+Nope; once an Arbitrum transaction is included on L1, there is no way it can be reorged (unless the L1 itself reorgs, of course). A "dispute" involves Validators disagreeing over execution, i.e., the outputted state of a chain. The inputs, however, can't be disputed; they are determined by the Inbox on L1. (See <a href="https://docs.arbitrum.io/how-arbitrum-works/transaction-lifecycle">Transaction Lifecycle</a>)
 </p>
 
 <p>
@@ -112,7 +112,7 @@ Nope; once an Arbitrum transaction is included on L1, there is no way it can be 
 
 ### ...okay but if there's a dispute, will my transaction get delayed?
 <p>
-The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed <em>even during a dispute</em> via trustless fast "liquidity exit" applications. See <a href="https://developer.arbitrum.io/arbos/l2-to-l1-messaging">L2-to-L1 Messages</a>).
+The only thing that a dispute can add delay to is the confirmation of L2-to-L1 messages. All other transactions continue to be processed, even while a dispute is still undergoing. (Additionally: in practice, most L2-to-L1 messages represent withdrawals of fungible assets; these can be trustlessly completed <em>even during a dispute</em> via trustless fast "liquidity exit" applications. See <a href="https://docs.arbitrum.io/how-arbitrum-works/l2-to-l1-messaging">L2-to-L1 Messages</a>).
 </p>
 
 <p>
@@ -300,7 +300,7 @@ On the other hand, an RBlock is a distinctive block that is transmitted back to 
 </p>
 
 <p>
-These RBlocks are also generated by validators, but they are appended to the L1 chain. Other validators can <a href="https://docs.arbitrum.io/inside-arbitrum-nitro/#resolving-disputes-using-interactive-fraud-proofs">challenge them</a> during a specific time frame of approximately one week if they discover that the current state hash of the chain varies from the one that was initially claimed. Once the challenge period elapses, the RBlock is confirmed on L1.
+These RBlocks are also generated by validators, but they are appended to the L1 chain. Other validators can <a href="https://docs.arbitrum.io/how-arbitrum-works/interactive-fraud-proofs">challenge them</a> during a specific time frame of approximately one week if they discover that the current state hash of the chain varies from the one that was initially claimed. Once the challenge period elapses, the RBlock is confirmed on L1.
 </p>
 
 <p>

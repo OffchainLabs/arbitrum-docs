@@ -23,7 +23,7 @@ If you're looking for a conceptual introduction to Orbit chains, see the [Gentle
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/)
-- A browser-based Ethereum wallet (like [MetaMask](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn))
+- A browser-based Ethereum wallet (e.g., [MetaMask](https://metamask.io/) and click View MetaMask web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
 - At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
 
 ## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
@@ -64,7 +64,7 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 
 <PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner" />
 
-The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](./how-tos/customize-deployment-configuration.md):
+The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](./how-tos/customize-deployment-configuration.mdx):
 
 <!-- todo: determine whether or not we want to align the UI with docs section-casing and param-casing patterns; align docs to UI if needed -->
 

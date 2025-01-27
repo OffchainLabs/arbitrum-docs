@@ -164,6 +164,6 @@ Visit the [Orbit Quickstart](./orbit-quickstart.md), start tinkering, and let us
 
 ### How can I launch an Orbit chain on mainnet?
 
-While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/), [Conduit](https://conduit.xyz/), [AltLayer](https://altlayer.io/), and [Gelato](https://www.gelato.network/raas) that are enabling developers to quickly launch their own rollups.
+While launching a chain on your own is possible, there are multiple infrastructure providers such as [Caldera](https://caldera.xyz/), [Conduit](https://conduit.xyz/), [AltLayer](https://altlayer.io/), [Zeeve](https://www.zeeve.io/), and [Gelato](https://www.gelato.network/raas) that are enabling developers to quickly launch their own rollups.
 
 [^1]: Although your Orbit chain will be able to exchange information with other Orbit chains (and the L2 chain that it settles to) by default, you're free to modify your Orbit chain's code as much as you'd like. You can even intentionally make your Orbit chain _incompatible_ with other Orbit chains and L2s.
