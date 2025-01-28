@@ -59,6 +59,9 @@
     "typedoc-plugin-markdown": "4.0.1",
     "typescript": "^5.1"
   },
+  "resolutions": {
+    "image-size": "~1.0.2"
+  },
   "browserslist": {
     "production": [
       ">0.5%",
