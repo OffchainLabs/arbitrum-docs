@@ -50,7 +50,14 @@ A DAS can be configured to use one or more of four storage backends:
 
 - [AWS S3](https://aws.amazon.com/s3/) bucket
 - Files on local disk
+- (**EXPERIMENTAL**) [Google Cloud Storage](https://cloud.google.com/storage) bucket
 - (**DEPRECATED**) [Badger](https://dgraph.io/docs/badger/) database on local disk
+
+::::warning Google Cloud Storage is experimental
+
+The Google Cloud Storage option (set with `google-cloud-storage`) is experimental and hasn't been tested thoroughly. It is recommended to not rely solely on this storage option and to use it alongside other storage options.
+
+::::
 
 ::::warning Local Badger database deprecated
 
@@ -152,6 +159,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
 import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import GoogleCloudStorageParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_gcs-parameters.mdx';
 import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
 
 <div className="dynamic-content-tabs">
@@ -161,6 +169,9 @@ import LocalBadgerDBParameters from '../../node-running/how-tos/data-availabilit
     </TabItem>
     <TabItem value="local-files" label="Local files">
       <LocalFilesParameters />
+    </TabItem>
+    <TabItem value="gcs-bucket" label="(Experimental) Google Cloud Storage">
+      <GoogleCloudStorageParameters />
     </TabItem>
     <TabItem value="badger-db" label="(Deprecated) Local Badger database">
       <LocalBadgerDBParameters />
