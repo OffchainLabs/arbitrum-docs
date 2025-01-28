@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+cd website
+
+# Check if globalVars.js has staged changes
+if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
+  echo "🔄 globalVars.js changed, running precompiles reference table generator..."
+  yarn generate_precompiles_ref_tables
+fi
+
+echo "\n✅ Pre-commit tasks completed\n💡 Note: To bypass hooks, use git commit --no-verify"
