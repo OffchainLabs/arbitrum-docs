@@ -1,7 +1,19 @@
 import fs from 'fs';
 import path from 'path';
 
-// Load the global variables
+/**
+ * Updates all @@ variable references in docs to match values from globalVars.js.
+ *
+ * This script scans all MD/MDX files and ensures their @@ variable values
+ * match the current values in globalVars.js by modifying the files directly.
+ *
+ * WHEN TO RUN:
+ * - After updating values in globalVars.js
+ * - Before committing changes that modify global variables
+ *
+ * Run with: `yarn update_variable_refs`
+ */
+
 import globalVars from '../resources/globalVars.js';
 
 // Find all .md and .mdx files recursively
@@ -47,7 +59,6 @@ function processFile(filePath: string, docsPath: string) {
   return { found: found.size, updated: updated.size };
 }
 
-// Main function
 function main() {
   console.log('Scanning for variable references...');
 
