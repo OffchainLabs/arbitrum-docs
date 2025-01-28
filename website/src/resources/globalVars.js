@@ -31,7 +31,7 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.4.0',
+  nitroVersionTag: 'v3.3.0',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
