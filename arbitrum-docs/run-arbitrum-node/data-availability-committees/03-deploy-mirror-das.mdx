@@ -119,6 +119,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
 import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import GoogleCloudStorageParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_gcs-parameters.mdx';
 import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
 
 <div className="dynamic-content-tabs">
@@ -128,6 +129,9 @@ import LocalBadgerDBParameters from '../../node-running/how-tos/data-availabilit
     </TabItem>
     <TabItem value="local-files" label="Local files">
       <LocalFilesParameters />
+    </TabItem>
+    <TabItem value="gcs-bucket" label="(Experimental) Google Cloud Storage">
+      <GoogleCloudStorageParameters />
     </TabItem>
     <TabItem value="badger-db" label="(Deprecated) Local Badger database">
       <LocalBadgerDBParameters />
