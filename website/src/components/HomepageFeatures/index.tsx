@@ -20,7 +20,7 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Build a dApp (Solidity)',
     Svg: require('@site/static/img/cupcake_icon.svg').default,
-    href: '/build-decentralized-apps/quickstart-solidity-hardhat',
+    href: '/build-decentralized-apps/quickstart-solidity-remix',
     description:
       'Deploy a cupcake vending machine contract locally, then to Arbitrum Sepolia, then to Arbitrum Mainnet.',
   },
