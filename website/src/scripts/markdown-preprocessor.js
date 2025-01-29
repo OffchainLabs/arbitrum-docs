@@ -18,7 +18,7 @@ function preprocessContent({ filePath, fileContent }) {
 
   return fileContent.replace(
     /@@\s*([a-zA-Z0-9_-]+)=[^@]+@@/g,
-    (match, varName) => `@@${varName}=${globalVars[varName] || ''}@@`
+    (match, varName) => `@@${varName}=${globalVars[varName] || ''}@@`,
   );
 }
 

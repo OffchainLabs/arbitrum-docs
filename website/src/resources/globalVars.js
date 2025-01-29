@@ -2,7 +2,7 @@
  * ⚠️ IMPORTANT: After modifying any values in this file:
  * 1. Run `yarn update_variable_refs` to update all references in the docs
  * 2. Run `yarn generate_precompiles_ref_tables` if you modified any precompile-related values
- * 
+ *
  * Without running update_variable_refs, your changes won't be reflected in the docs
  * due to Vercel's caching behavior.
  */
