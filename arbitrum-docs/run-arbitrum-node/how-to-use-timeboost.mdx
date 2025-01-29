@@ -7,7 +7,7 @@ content_type: how-to
 
 Timeboost is a new transaction ordering policy for Arbitrum chains. With Timeboost, anyone can bid for the right to access an express lane on the sequencer for faster transaction inclusion.
 
-In this how-to, you'll learn how to bid for the right to use the express lane, submit transactions through the express lane, and transfer express lane rights to someone else. To learn more about Timeboost, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
+In this how-to, you'll learn how to bid for the right to use the express lane and submit transactions through the express lane. To learn more about Timeboost and the key terms used on this page, refer to the [gentle introduction](/how-arbitrum-works/timeboost/gentle-introduction.mdx).
 
 This how-to assumes that you're familiar with the following:
 
@@ -24,7 +24,7 @@ Remember that, by default, each round lasts 60 seconds, and the auction for a sp
 
 ::::
 
-Auctions are held in an auction contract, and bids get submitted to an autonomous auctioneer who communicates with the contract. Let's look at the process of submitting bids and finding out the winner of an auction.
+Auctions are facilitated by an auction contract, and bids get submitted to an autonomous auctioneer that interact with the contract. Let's look at the process of submitting bids and finding out the winner of an auction.
 
 ### Step 0: gather required information
 
@@ -62,7 +62,7 @@ console.log(`biddingToken: ${biddingTokenContractAddress}`);
 
 ::::info Bidding token in Arbitrum chains
 
-On Arbitrum One and Arbitrum Nova, the bidding token is WETH.
+On Arbitrum One and Arbitrum Nova, the default bidding token is WETH.
 
 ::::
 
@@ -356,6 +356,8 @@ If you are not the express lane controller and you try to submit a transaction t
 
 ::::
 
+<!--
+
 ## How to transfer the right to use the express lane to someone else
 
 If you are the express lane controller, you also have the right to transfer the right to use the express lane to someone else.
@@ -403,6 +405,8 @@ console.log(`Set transferor transaction hash: ${setTransferorTransaction}`);
 ```
 
 From that moment on (until the transferor is changed or disabled), the transferor will be able to call `transferExpressLaneController` while the express lane controller is `currentELCAccount` to transfer the rights to use the express lane to a different account.
+
+-->
 
 ## How to withdraw funds deposited in the auction contract
 
