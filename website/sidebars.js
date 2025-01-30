@@ -14,11 +14,6 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'vanilla-admonition-test-page',
-          label: 'Vanilla Admonition test page',
-        },
-        {
-          type: 'doc',
           id: 'welcome/arbitrum-gentle-introduction',
           label: 'A gentle introduction',
         },
