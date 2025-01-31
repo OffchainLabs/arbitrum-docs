@@ -16,7 +16,9 @@ This how-to assumes that you're familiar with the following:
 
 ::::info Note about transferring express lane rights
 
-Please note that in the initial release of Timeboost, transferring of express lane control via the either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software in the initial launch and may be implemented at a future date via a regular node upgrade. A round's express lane controller, at their choice, can still send transactions signed by others on a per-transaction basis, as explained later in this guide.
+Please note that in the initial release of Timeboost, transferring of express lane control via the either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software in the initial launch and may be implemented at a future date via a regular node upgrade. Calls made to these two functions on the auction contract will be successful, but actual transfer of the rights will not be recognized by the node software (including the sequencer).
+
+A round's express lane controller, at their choice, can still send transactions signed by others on a per-transaction basis, as explained later in this guide.
 
 ::::
 
