@@ -12,7 +12,7 @@ The length of the challenge period is measured based on the parent chain's notio
 
 In addition to the main challenge period, ** an extra challenge period ** provides a buffer to resolve any pending challenges after the main period ends. Together, these parameters help balance security and the confirmation of the chain's state.
 
-### Default challenge period and extra challenge period
+## Default challenge period and extra challenge period
 
 By default, the challenge period lasts approximately one week, corresponding to the parent chain’s notion of block progression. For chains settling to Ethereum, this equates to roughly 45,818 L1 blocks. This default duration is designed to provide sufficient time for validators to detect and challenge fraudulent assertions.
 
@@ -20,7 +20,7 @@ The extra challenge period, on the other hand, adds a buffer of 200 blocks based
 
 These default values are carefully chosen to balance security and performance for most rollup use cases. However, developers and Orbit chain owners may wish to customize these parameters to suit their specific requirements.
 
-### Customizing the challenge period
+## Customizing the challenge period
 
 #### Challenge period blocks
 
@@ -46,7 +46,7 @@ The extra challenge period is governed by the `extraChallengeTimeBlocks` paramet
 
 The default value of 200 blocks provides a short but sufficient buffer for most networks. However, developers may increase this value for applications that require additional time for dispute resolution or operate in environments with higher latency between the parent and child chain.
 
-### Recommended values and best practices
+## Recommended values and best practices
 
 For Orbit chains aligned with Arbitrum One's configuration, the recommended settings are:
 
