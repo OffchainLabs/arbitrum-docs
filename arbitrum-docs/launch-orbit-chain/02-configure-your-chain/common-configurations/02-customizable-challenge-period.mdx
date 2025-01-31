@@ -36,7 +36,7 @@ For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challeng
 The extra challenge period is governed by the `extraChallengeTimeBlocks` parameter, which defines the additional buffer duration after the main challenge period. This parameter ensures that any pending challenges are processed before the rollup state is finalized. Like the main challenge period, it can be customized in two ways:
 
 1. **During deployment**: The value can be set in the `extraChallengeTimeBlocks` field of the RollupCreator configuration.
-2. **Post-deployment**: The rollup admin can dynamically adjust the parameter using the `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` function. For example:
+2. **Post-deployment**: The chain owner can dynamically adjust the parameter using the `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` function. For example:
 
    ```solidity
    RollupAdminLogic.setExtraChallengeTimeBlocks(300);
