@@ -1,7 +1,7 @@
 // @ts-nocheck
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const variableInjector = require('./src/remark/variable-injector');
+const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
 
@@ -16,6 +16,7 @@ const config = {
   favicon: 'img/logo.svg',
   markdown: {
     mermaid: true,
+    preprocessor: markdownPreprocessor,
   },
   themes: ['@docusaurus/theme-mermaid', '@docusaurus/theme-live-codeblock'],
   // GitHub pages deployment config.
@@ -49,14 +50,6 @@ const config = {
             );
           },
           showLastUpdateTime: true,
-          remarkPlugins: [
-            [
-              variableInjector,
-              {
-                replacements: require('./src/resources/globalVars.js'),
-              },
-            ],
-          ],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),

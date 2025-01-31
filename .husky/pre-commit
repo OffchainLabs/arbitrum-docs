@@ -4,6 +4,9 @@ cd website
 
 # Check if globalVars.js has staged changes
 if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
+  echo "🔄 Updating variable references..."
+  yarn update_variable_refs
+
   echo "🔄 globalVars.js changed, running precompiles reference table generator..."
   yarn generate_precompiles_ref_tables
 

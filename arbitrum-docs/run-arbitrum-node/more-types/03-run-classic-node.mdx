@@ -22,8 +22,8 @@ When querying archive blocks, the following commands can only be handled by Arbi
 
 ### Required artifacts
 
-- Latest Docker Image: <code>@latestClassicNodeImage@</code>
-- Latest classic snapshot for Arbitrum One: [@arbOneClassicArchiveSnapshot@](@arbOneClassicArchiveSnapshot@)
+- Latest Docker Image: <code>@@latestClassicNodeImage=offchainlabs/arb-node:v1.4.5-e97c1a4@@</code>
+- Latest classic snapshot for Arbitrum One: [@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@](@@arbOneClassicArchiveSnapshot=https://snapshot.arbitrum.foundation/arb1/classic-archive.tar@@)
 
 ### Required parameters
 
@@ -43,7 +43,7 @@ When querying archive blocks, the following commands can only be handled by Arbi
 - Here is an example of how to run a classic archive node for Arbitrum One (only needed for archive requests on pre-Nitro blocks, so you'll probably want to enable the archive mode in your nitro node as well):
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestClassicNodeImage@ --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
+docker run --rm -it  -v /some/local/dir/arbitrum-mainnet/:/home/user/.arbitrum/mainnet -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestClassicNodeImage=offchainlabs/arb-node:v1.4.5-e97c1a4@@ --l1.url=https://l1-node:8545 --node.chain-id=42161 --l2.disable-upstream
 ```
 
 ### Note on permissions
