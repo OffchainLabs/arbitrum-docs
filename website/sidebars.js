@@ -689,7 +689,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Using Timeboost',
+          label: 'Use Timeboost',
           id: 'run-arbitrum-node/how-to-use-timeboost',
         },
         {

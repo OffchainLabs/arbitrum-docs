@@ -14,8 +14,12 @@ This how-to assumes that you're familiar with the following:
 - [How Timeboost works](/how-arbitrum-works/timeboost/gentle-introduction.mdx)
 - [viem](https://viem.sh/), since the snippets of code present in the how-to use this library
 
-::::caution
-Please note that in the initial release of Timeboost, transferring of express lane control via the either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software in the initial launch and may be implemented at a future date via a regular node upgrade. A round's express lane controller, at their choice, can still sign transactions on behalf of others on a per-transaction basis, as explained later in this guide.
+::::info Note about transferring express lane rights
+
+Please note that in the initial release of Timeboost, transferring of express lane control via the either the `setTransferor` or the `transferExpressLaneController` will not be supported by the Arbitrum Nitro node software in the initial launch and may be implemented at a future date via a regular node upgrade. Calls made to these two functions on the auction contract will be successful, but actual transfer of the rights will not be recognized by the node software (including the sequencer).
+
+A round's express lane controller, at their choice, can still send transactions signed by others on a per-transaction basis, as explained later in this guide.
+
 ::::
 
 ## How to submit bids for the right to be the express lane controller
