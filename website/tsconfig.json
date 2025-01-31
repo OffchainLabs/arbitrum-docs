@@ -3,8 +3,10 @@
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "esModuleInterop": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "types": ["node"]
   }
 }
