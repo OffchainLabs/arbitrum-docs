@@ -688,6 +688,11 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
+          type: 'doc',
+          label: 'Use Timeboost',
+          id: 'run-arbitrum-node/how-to-use-timeboost',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
