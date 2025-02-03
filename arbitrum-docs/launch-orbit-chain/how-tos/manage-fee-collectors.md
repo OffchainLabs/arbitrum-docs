@@ -54,7 +54,9 @@ const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-_Note: This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information._
+::: note
+This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information.
+:::
 
 To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in wei. For example:
 
