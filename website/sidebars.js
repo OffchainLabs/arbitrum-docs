@@ -36,7 +36,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'build-decentralized-apps/quickstart-solidity-hardhat',
+          id: 'build-decentralized-apps/quickstart-solidity-remix',
           label: 'Quickstart (Solidity)',
         },
         {
@@ -524,6 +524,11 @@ const sidebars = {
               id: 'stylus/reference/rust-sdk-guide',
               label: 'Advanced features',
             },
+            {
+              type: 'doc',
+              id: 'stylus/recommended-libraries',
+              label: 'Recommended Rust Crates',
+            },
           ],
         },
         {
@@ -615,6 +620,11 @@ const sidebars = {
             },
             {
               type: 'link',
+              label: 'Stylus by Example',
+              href: 'https://stylus-by-example.org/',
+            },
+            {
+              type: 'link',
               label: 'Cargo Stylus CLI GitHub',
               href: 'https://github.com/OffchainLabs/cargo-stylus',
             },
@@ -676,6 +686,11 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
+        },
+        {
+          type: 'doc',
+          label: 'Use Timeboost',
+          id: 'run-arbitrum-node/how-to-use-timeboost',
         },
         {
           type: 'html',
