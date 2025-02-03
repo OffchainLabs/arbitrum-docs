@@ -85,7 +85,7 @@ Once narrowed down to an individual block, the actual machine execution can be b
 
 ### "Small-Step" Execution challenge
 
-After reaching a "chunk" of 2^26 instructions, we begin a new challenge level, bisecting this chunk until we reach a dispute over a single instruction. Once the execution has been bisected down to an individual step, `oneStepProveExecution` can be called by any player to resolve the one-step dispute. That player must provide proof data to execute a step of the machine. This proof is checked on L1. If it is correct, the one-step edge to which the one-step proof applied is considered confirmed.
+After reaching a "chunk" of 2^26 instructions, we begin a new challenge level, bisecting this chunk until we reach a dispute over a single instruction. Once the execution has been bisected down to an individual step, `oneStepProveExecution` can be called by any player to resolve the one-step dispute. That player must provide proof data to execute a step of the machine. This proof is checked on L1. If it is correct, the one-step edge to which the one-step proof is applied and considered confirmed.
 
 ### Winning the challenge
 
