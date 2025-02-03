@@ -139,7 +139,7 @@ It is clear that if we can multiply the cost to the malicious party by some mult
 
 Let's explore the limitations of making the cost to malicious parties higher than the honest parties'.
 
-If we aim to have a constant resource ratio > 1, we have to do the following: if the adversary makes N stakes at any level, they can force the honest party to make N stakes at the next level down, where the adversary can choose not to place any stakes at all. Regarding resource ratio, to make the adversary always pay 10x in staking, we need to make the bond amount at one level 10x more than the next (as we go "upward" from subchallenges towards the assertion-level challenge). As there are multiple levels, the equations for the bond size include an exponential factor on the desired constant resource ratio > 1.
+If we aim to have a constant resource ratio > 1, we have to do the following: if the adversary makes `N` stakes at any level, they can force the honest party to make `N` stakes at the next level down, where the adversary can choose not to place any stakes at all. Regarding resource ratio, to make the adversary always pay 10x in staking, we need to make the bond amount at one level 10x more than the next (as we go "upward" from subchallenges towards the assertion-level challenge). As there are multiple levels, the equations for the bond size include an exponential factor on the desired constant resource ratio > 1.
 
 Below, we plot the bond size vs. the resource ratio of malicious to honest costs. The source for these equations can be found in the research paper and is [represented in this calculator](https://www.desmos.com/calculator/digjlq4vly).
 
