@@ -29,7 +29,7 @@ The main challenge period configuration uses the `confirmPeriodBlocks` parameter
 1. **During deployment**: Developers can specify the desired value in the `confirmPeriodBlocks` field of the RollupCreator configuration when deploying the rollup.
 2. **Post-deployment**: The chain owner can update this value dynamically by calling the `Rollup.setConfirmPeriodBlocks(newValue)` function.
 
-For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challenge period to approximately 4.5 days. This might be suitable for applications prioritizing faster state confirmation, while increasing the value would extend the challenge period, improving security.
+For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challenge period to approximately 4.5 days. This configuration might be suitable for applications prioritizing faster state confirmation, while increasing the value would extend the challenge period, improving security.
 
 #### Extra challenge period blocks
 
