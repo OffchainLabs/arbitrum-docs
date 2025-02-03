@@ -35,7 +35,7 @@ For example, setting `confirmPeriodBlocks` to 30,000 blocks reduces the challeng
 
 The extra challenge period is governable using the `extraChallengeTimeBlocks` parameter, which defines the additional buffer duration after the main challenge period. This period ensures that pending challenges are processed before the rollup state gets finalized.
 
-By default, the extra challenge period is set to **200 blocks**, providing a short but sufficient buffer for most networks. However, developers can increase this value for applications that require additional time for dispute resolution or operate in environments with higher latency between the parent and child chain.
+By default, the extra challenge period is set to **200 blocks**, providing a short but sufficient buffer for most networks. However, developers can increase this value for applications requiring additional dispute resolution time or operate in environments with higher latency between the parent and child chain.
 
 Like the main challenge period, this parameter can be customized in two ways:
 
