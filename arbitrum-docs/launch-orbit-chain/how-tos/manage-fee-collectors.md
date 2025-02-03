@@ -9,7 +9,8 @@ content_type: how-to
 
 Different fees get collected for every transaction as part of an Orbit chain activity. These fees are collected as a single amount (the transaction fees) but split internally into different components depending on their purpose. Each component is transferrable to a different fee collector address that is configurable on your chain.
 
-This guide describes the different fees that are collected on your chain, how to configure them, and how to specify the fee collector address for each fee type.
+This guide describes the different collected fees and explains how to specify the fee collector address on your chain for each fee type.
+This guide describes the different fees collected on your chain, how to configure them, and how to specify the fee collector address for each type.
 
 ## What fees are collected on an Orbit chain?
 
