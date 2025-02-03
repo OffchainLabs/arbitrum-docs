@@ -31,7 +31,7 @@ You can find more detailed information about these fee types in these pages:
 
 ## How to configure the fees collected?
 
-Let's see in what ways we can configure each fee type.
+Let's see in what ways we can configure each fee type:
 
 ### Orbit (minimum) base fee
 
