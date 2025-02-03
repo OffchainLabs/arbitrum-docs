@@ -73,7 +73,7 @@ All actors in the protocol have a local state from which they can produce valid 
 
 ### On-chain components
 
-- **Rollup contract:** This is a smart contract living on Ethereum and allows validators to bond on state assertions about Arbitrum. This contract, known as `RollupCore.sol`, is in use by Arbitrum chains to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a `ChallengeManager`, new in BoLD.
+- **Rollup contract:** This smart contract living on Ethereum allows validators to bond on state assertions about Arbitrum. It's known as `RollupCore.sol`, and Arbitrum chains use it to post assertions. BoLD requires several changes to how assertions work in this contract, and it now contains a reference to another contract called a `ChallengeManager`, which is new in BoLD.
 - **ChallengeManager:** This is a contract that allows for initiating challenges on assertions and provides methods for anyone to participate in challenges in a permissionless fashion. BoLD will require a new `ChallengeManager` written in Solidity and deployed to Ethereum. The challenge manager contains entry points for making challenge moves, opening leaves, creating subchallenges, and confirming challenges.
 
 - **OneStepProver:** A set of existing contracts that implement a miniature `WASM` VM capable of executing one-step-proofs of computation of the L2 state transition function. This is implemented in Solidity and exists on Ethereum. No changes to the `OSP` contracts are needed for BoLD.
