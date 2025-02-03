@@ -257,10 +257,6 @@ Developers and users should consider the appropriate level of finality based on 
   - **Regulatory Compliance**: Situations requiring strict adherence to security standards and auditable records.
   - **Centralized Exchanges (CeXs)**: For deposit and withdrawal operations where certainty of transaction finality is mandatory.
 
-### Decentralized Fair Sequencing
-
-Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority consensus, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with the broader blockchain principles of enhanced security, transparency, and decentralization.
-
 ## Censorship Timeout
 
 As mentioned in the original [Arbitrum BoLD Forum Post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum BoLD](../how-arbitrum-works/bold/gentle-introduction.mdx) will come with a feature called ”Censorship Timeout” (originally called “Delay Buffer”). For Arbitrum One and Arbitrum Nova, it is proposed that this feature be enabled by default alongside BoLD’s upgrade.
@@ -285,3 +281,7 @@ Below are the initial, proposed parameter values for the Censorship Timeout feat
 - `replenish rate` = 5% (meaning 1 day is replenished every 20 days or roughly a 95% uptime)
 
 We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains - especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
+
+### Decentralized Fair Sequencing
+
+Arbitrum’s long-term vision includes transitioning from a centralized Sequencer to a decentralized, fair sequencing model. In this framework, a committee of servers (or validators) collectively determines transaction ordering, ensuring fairness, reducing the influence of any single party, and making it more resistant to manipulation. By requiring a supermajority consensus, this approach distributes sequencing power among multiple honest participants, mitigates the risks of front-running or censorship, and aligns with the broader blockchain principles of enhanced security, transparency, and decentralization.
