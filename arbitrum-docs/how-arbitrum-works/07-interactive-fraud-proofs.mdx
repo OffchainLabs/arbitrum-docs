@@ -29,7 +29,7 @@ We’ll describe the bisection part of the protocol twice. First, we’ll give a
 
 Alice (or one of her allies - for the sake of brevity we'll refer to this party as Alice) is defending the claim that starting with the state in the predecessor RBlock, the state of the Virtual Machine can advance to the state specified in RBlock A. Once a challenge starts, Alice has to provide a commitment to the entire history of the computation: that is, to the state after each step of execution.
 
-Alice’s first move requires her to bisect her claims about intermediate states between the beginning (0 instructions executed) and the end (N instructions executed). So we require Alice to divide her claim in half, and post the state at the half-way point, after N/2 instructions have been executed.
+Alice’s first move requires her to bisect her claims about intermediate states between the beginning (0 instructions executed) and the end (`N` instructions executed). So we require Alice to divide her claim in half, and post the state at the half-way point, after `N/2` instructions have been executed.
 
 Now Alice has effectively bisected her N-step <a data-quicklook-from="assertion">Assertion</a> into two (N/2)-step assertions. Bob (or one of his allies; for brevity, Bob) needs to do the same for his assertion, also deriving two new (N/2)-step assertions. At most one of these will be a "rival" of one of Alice's assertion. Two assertions are "rivals" if they agree on a prefix of the state history to which they commit but disagree on the rest; this is very similar to the concept of "siblings" for RBlocks. Whichever of the two of Alice's assertions now has a rival, Alice will proceed to defend it.
 
