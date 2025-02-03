@@ -37,7 +37,7 @@ The extra challenge period is governed by the `extraChallengeTimeBlocks` paramet
 
 By default, the extra challenge period is set to **200 blocks**, providing a short but sufficient buffer for most networks. However, developers can increase this value for applications that require additional time for dispute resolution or operate in environments with higher latency between the parent and child chain.
 
-Like the main challenge period, this parameter can be customized in two ways:
+Like the main challenge period, this parameter is customizable in two ways:
 
 1. **During deployment**: The value can be set in the `extraChallengeTimeBlocks` field of the RollupCreator configuration.
 2. **Post-deployment**: The chain owner can dynamically adjust the parameter using the `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` function. For example:
