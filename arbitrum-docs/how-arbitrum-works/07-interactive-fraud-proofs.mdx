@@ -104,7 +104,7 @@ then the OSP can implement any instruction semantics in that case.
 - In a challenge between malicious assertions, that start from an unreachable machine state, any case
   can arise. The challenge protocol must do
   something safe in every case. But the instruction semantics can be weird in such cases because
-  no honest party ever needs to try to refute an assertion that starts from an unreachable state. All assertions engaging in a dispute starting from an unreachable state must be malicious, and the protocol doesn't need to care which one of them wins. In particular, it is OK for the onchain one-step proof contract to differ in its behavior from the node software's execution engine in this case (and _only_ in this case).
+  no honest party ever needs to try to refute an assertion that starts from an unreachable state. All assertions engaging in a dispute starting from an unreachable state must be malicious, and the protocol doesn't need to care which one wins. In particular, it is OK for the onchain one-step proof contract to differ in its behavior from the node software's execution engine in this case (and _only_ in this case).
 - In a challenge with one honest party, the honest party will never need to one-step prove an
   unreachable case. The honest party will only assert correct executions, so it will only have to
   prove reachable cases.
