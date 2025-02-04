@@ -12,9 +12,9 @@ sidebar_position: 5
 
 This page provides step-by-step instructions for setting up and running a local Nitro node in `--dev` mode. This mode is ideal for developers who want to quickly test contracts using a single node, as it offers a simpler and faster setup compared to more complex environments.
 
-While some teams use `nitro-testnode` for testing cross-layer messaging, which involves launching both Geth as L1 and Nitro as L2, this setup can be more complex and time-consuming. If your primary goal is to test contracts on a local node without needing cross-layer interactions, Nitro's `--dev` mode offers a lightweight and efficient alternative.
+While some teams use `nitro-testnode` for testing cross-layer messaging, which involves launching both Geth as parent chain and Nitro as child chain, this setup can be more complex and time-consuming. If your primary goal is to test contracts on a local node without needing cross-layer interactions, Nitro's `--dev` mode offers a lightweight and efficient alternative.
 
-However, if you need more advanced functionality—such as cross-layer messaging, working with both L1 and L2 chains, or testing interactions between different layers—`nitro-testnode` is the preferred option. The testnode setup allows you to simulate a full L1-L2 environment, which is critical for those scenarios. See here for instructions.
+However, if you need more advanced functionality—such as cross-layer messaging, working with both the parent and child chains, or testing interactions between different layers—`nitro-testnode` is the preferred option. The testnode setup allows you to simulate a full parent-child chain environment, which is critical for those scenarios. See here for instructions.
 
 Note that Nitro `--dev` mode is ideal for Stylus contract testing, as it is much lighter and faster to set up than the full nitro-testnode environment.
 
@@ -65,7 +65,7 @@ In Nitro `--dev` mode, the default chain owner is set to `0x00000000000000000000
 Chain ownership is important because it allows the owner to perform certain critical functions within the Arbitrum environment, such as:
 
 - Adding or removing other chain owners
-- Setting the L1 and L2 base fees directly
+- Setting the parent and child chain base fees directly
 - Adjusting the gas pricing inertia and backlog tolerance
 - Modifying the computational speed limit and transaction gas limits
 - Managing network and infrastructure fee accounts
