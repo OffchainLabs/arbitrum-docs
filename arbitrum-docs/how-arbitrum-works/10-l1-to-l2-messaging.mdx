@@ -43,7 +43,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
 
-![500px-img](../assets/ticket-submission.svg)
+![400px-img](../assets/ticket-submission.svg)
 
 ### Automatic Redemption
 
@@ -53,7 +53,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
-![Automatic Redemption of the Ticket](../assets/automatic-redemption-of-the-ticket.png)
+![400px-img](../assets/automatic-redemption-of-the-ticket.png)
 
 ### Manual Redemption
 
@@ -66,7 +66,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
 
-![Manual Redemption of the Ticket](../assets/manual-redemption-of-the-ticket.png)
+![400px-img](../assets/manual-redemption-of-the-ticket.png)
 
 :::caution Avoid Losing Funds!
 
