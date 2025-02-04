@@ -1,6 +1,6 @@
 ---
 title: The Sequencer and Censorship Resistance
-description: 'Learn the fundamentals of the Arbitrum Sequencer.'
+description: "Learn the fundamentals of the Arbitrum Sequencer."
 author: pete-vielhaber
 sme: gmehta2
 user_story: As a current or prospective Arbitrum user, I need to learn more about the Sequencer.
@@ -272,7 +272,7 @@ To explain how this feature improves the security of chains settling to Arbitrum
 
 The Censorship Timeout feature mitigates this by decreasing the force inclusion threshold when unexpected delays in delayed message inclusion occur due to one (or all) of the above mentioned cases of censorship or sequencer outage, enabling entities to make moves without the 24 hour delay-per-move.
 
-The force inclusion window is actually the lesser of either the `delayBuffer` and `delayBlocks`, where delayBlocks is a constant, currently set to 24 hours, and `delayBuffer` grows and shrinks between 30 minutes <= `delayBuffer` <= 48 hours.
+The force inclusion window is actually the lesser of either the `delayBuffer` and `delayBlocks`, where delayBlocks is a constant, currently set to 24 hours, and `delayBuffer` grows and shrinks between 30 minutes and 48 hours.
 
 The `delayBuffer` value "grows and shrinks" depending on how long the sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message's delay beyond the `threshold` and how long it has been delayed (i.e. when some delayed messages are delayed by more than the `threshold`, the difference between the messages' delay and the `threshold` is removed from the buffer). As an example, if the `threshold` is 30 minutes and a message was delayed by 32 minutes, then the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
