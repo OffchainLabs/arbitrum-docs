@@ -11,7 +11,7 @@ One of the challenges in designing a practical Rollup system is the tension betw
 
 When compiling the Nitro node software for _execution_, the ordinary Go compiler is used, producing native code for the target architecture, which of course will be different for different node deployments. (The node software is distributed in source code form and as a Docker image containing a compiled binary.)
 
-Separately, for _proving_, the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function</a> is compiled by the Go compiler to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which is a typed, portable machine code format. The wasm code then goes through a simple transformation into a format we call WAVM, which is detailed below. If there is a dispute about the correct result of computing the STF, it is resolved with reference to the WAVM code.
+Separately, for _proving_, the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function (STF)</a> is compiled by the Go compiler to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which is a typed, portable machine code format. The wasm code then goes through a simple transformation into a format we call WAVM, which is detailed below. If there is a dispute about the correct result of computing the STF, it is resolved with reference to the WAVM code.
 
 ## WAVM
 
@@ -27,10 +27,10 @@ Third, WAVM adds a few opcodes to enable interaction with the <a data-quicklook-
 
 The most interesting new instruction is `ReadPreImage` which takes as input a hash `H` and an offset `I`, and returns the word of data at offset `I` in the preimage of `H` (and the number of bytes written, which is zero if `I` is at or after the end of the preimage). Of course, it is not feasible in general to produce a preimage from an arbitrary hash. For safety, the `ReadPreImage` instruction can only be used in a context where the preimage is publicly known, and where the size of the preimage is known to be less than a fixed upper bound of about 110 kbytes.
 
-(In this context, "publicly known" information is information that can be derived or recovered efficiently by any honest party, assuming that the full history of the L1 Ethereum chain is available. For convenience, a hash preimage can also be supplied by a third party such as a public server, and the correctness of the supplied value is easily verified.)
+(In this context, "publicly known" information is information that can be derived or recovered efficiently by any honest party, assuming that the full history of the parent Ethereum chain is available. For convenience, a hash preimage can also be supplied by a third party such as a public server, and the correctness of the supplied value is easily verified.)
 
 As an example, the state of a Nitro chain is maintained in Ethereum's state tree format, which is organized as a Merkle tree. Nodes of the tree are stored in a database, indexed by the Merkle hash of the node. In Nitro, the state tree is kept outside of the State Transition Function's storage, with the STF only knowing the root hash of the tree. Given the hash of a tree node, the STF can recover the tree node's contents by using `ReadPreImage`, relying on the fact that the full contents of the tree are publicly known and that nodes in the Ethereum state tree will always be smaller than the upper bound on preimage size. In this manner, the STF is able to arbitrarily read and write to the state tree, despite only storing its root hash.
 
-The only other use of `ReadPreImage` is to fetch the contents of recent <a data-quicklook-from="l2-block">L2 Block</a> headers, given the header hash. This is safe because the block headers are publicly known and have bounded size.
+The only other use of `ReadPreImage` is to fetch the contents of recent <a data-quicklook-from="l2-block">child chain block</a> headers, given the header hash. This is safe because the block headers are publicly known and have bounded size.
 
 This "hash oracle trick" of storing the Merkle hash of a data structure, and relying on protocol participants to store the full structure and thereby support fetch-by-hash of the contents, goes back to the original <a data-quicklook-from="arbitrum">Arbitrum</a> design.
