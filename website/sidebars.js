@@ -252,6 +252,11 @@ const sidebars = {
           label: 'Orbit licensing',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period',
+          label: 'Customizable challenge period',
+        },
+        {
           type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,
