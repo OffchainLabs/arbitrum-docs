@@ -63,3 +63,9 @@ yarn serve
 ```shell
 git submodule update --remote arbitrum-sdk
 ```
+
+### Format content
+Sometimes, your pull request may need to be re-formatted to pass the checks. To be safe, make sure you run the following command (from the `website` directory) before you push your commit:
+```shell
+yarn && yarn format:docs
+```
