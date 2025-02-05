@@ -473,98 +473,99 @@ setLoading(false)
 }
 }
 return (
+
 <>
-{account && (
-<div className="fixed top-4 right-4 bg-card rounded-lg border shadow p-3">
-<span className="text-sm font-medium">USDC Balance: </span>
-<span className="font-mono">${usdcBalance}</span>
-</div>
-)}
-<div className="container max-w-2xl mx-auto p-4">
-<Card>
-<CardHeader>
-<CardTitle>Smart Wallet Interface</CardTitle>
-<CardDescription>Create and manage your smart account with Circle's USDC Paymaster</CardDescription>
-</CardHeader>
-<CardContent>
-<Tabs defaultValue="create" className="space-y-4">
-<TabsList>
-<TabsTrigger value="create">Create Account</TabsTrigger>
-<TabsTrigger value="transfer" disabled={!account}>Transfer</TabsTrigger>
-</TabsList>
-<TabsContent value="create" className="space-y-4">
-{!account ? (
-<Button
-                    onClick={createAccount}
-                    disabled={loading}
-                    className="w-full"
-                  >
-{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-Create Smart Account
-</Button>
-) : (
-<div className="space-y-4">
-<div className="space-y-2">
-<Label>Smart Wallet Address</Label>
-<Alert>
-<AlertDescription className="font-mono break-all">
-{account.address}
-</AlertDescription>
-</Alert>
-</div>
-<div className="space-y-2">
-<Label>Owner Address</Label>
-<Alert>
-<AlertDescription className="font-mono break-all">
-{account.owner}
-</AlertDescription>
-</Alert>
-</div>
-</div>
-)}
-</TabsContent>
-<TabsContent value="transfer" className="space-y-4">
-<div className="space-y-4">
-<div className="space-y-2">
-<Label htmlFor="recipient">Recipient Address</Label>
-<Input
-id="recipient"
-placeholder="0x..."
-value={recipientAddress}
-onChange={(e) => setRecipientAddress(e.target.value)}
-/>
-</div>
-<div className="space-y-2">
-<Label htmlFor="amount">Amount (USDC)</Label>
-<Input
-id="amount"
-type="number"
-placeholder="0.00"
-value={amount}
-onChange={(e) => setAmount(e.target.value)}
-/>
-</div>
-<Button
-onClick={transfer}
-disabled={loading || !recipientAddress || !amount}
-className="w-full" >
-{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-Transfer USDC
-</Button>
-</div>
-</TabsContent>
-</Tabs>
-{status && (
-<Alert className="mt-4">
-<AlertDescription>{status}</AlertDescription>
-</Alert>
-)}
-</CardContent>
-</Card>
-</div>
+  {account && (
+    <div className="fixed top-4 right-4 bg-card rounded-lg border shadow p-3">
+      <span className="text-sm font-medium">USDC Balance: </span>
+      <span className="font-mono">${usdcBalance}</span>
+    </div>
+  )}
+  <div className="container max-w-2xl mx-auto p-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>Smart Wallet Interface</CardTitle>
+        <CardDescription>
+          Create and manage your smart account with Circle's USDC Paymaster
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="create" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="create">Create Account</TabsTrigger>
+            <TabsTrigger value="transfer" disabled={!account}>
+              Transfer
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="create" className="space-y-4">
+            {!account ? (
+              <Button onClick={createAccount} disabled={loading} className="w-full">
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Create Smart Account
+              </Button>
+            ) : (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Smart Wallet Address</Label>
+                  <Alert>
+                    <AlertDescription className="font-mono break-all">
+                      {account.address}
+                    </AlertDescription>
+                  </Alert>
+                </div>
+                <div className="space-y-2">
+                  <Label>Owner Address</Label>
+                  <Alert>
+                    <AlertDescription className="font-mono break-all">
+                      {account.owner}
+                    </AlertDescription>
+                  </Alert>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+          <TabsContent value="transfer" className="space-y-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="recipient">Recipient Address</Label>
+                <Input
+                  id="recipient"
+                  placeholder="0x..."
+                  value={recipientAddress}
+                  onChange={(e) => setRecipientAddress(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="amount">Amount (USDC)</Label>
+                <Input
+                  id="amount"
+                  type="number"
+                  placeholder="0.00"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </div>
+              <Button
+                onClick={transfer}
+                disabled={loading || !recipientAddress || !amount}
+                className="w-full"
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Transfer USDC
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
+        {status && (
+          <Alert className="mt-4">
+            <AlertDescription>{status}</AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
+  </div>
 </>
-)
-}
+) }
 
 ````
 </CustomDetails>
@@ -638,16 +639,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 ({ className, variant, size, asChild = false, ...props }, ref) => {
 const Comp = asChild ? Slot : "button"
 return (
-<Comp
-className={cn(buttonVariants({ variant, size, className }))}
-ref={ref}
-{...props}
-/>
-)
-}
-)
-Button.displayName = "Button"
-export { Button, buttonVariants }
+
+<Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />) } ) Button.displayName
+= "Button" export {(Button, buttonVariants)}
 
 ````
 </CustomDetails>
@@ -735,20 +729,17 @@ import { cn } from "@/lib/utils"
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 ({ className, type, ...props }, ref) => {
 return (
+
 <input
-type={type}
-className={cn(
-"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-className
-)}
-ref={ref}
-{...props}
+  type={type}
+  className={cn(
+    'flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+    className,
+  )}
+  ref={ref}
+  {...props}
 />
-)
-}
-)
-Input.displayName = "Input"
-export { Input }
+) } ) Input.displayName = "Input" export {Input}
 
 ````
 </CustomDetails>
