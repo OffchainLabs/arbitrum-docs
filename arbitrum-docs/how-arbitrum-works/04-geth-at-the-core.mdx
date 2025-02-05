@@ -248,11 +248,11 @@ A message [derived from a transaction][asmessage_link] will carry that transacti
 
 ### Arbitrum Chain Parameters
 
-Nitro's Geth may be configured with the following [child chain-specific chain parameters][chain_params_link]. These allow the Rollup creator to customize their Rollup at genesis.
+Nitro's Geth may be configured with the following [child chain-specific chain parameters][chain_params_link]. These allow the rollup creator to customize their rollup at genesis.
 
 #### `EnableArbos`
 
-Introduces [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos), converting what would otherwise be a vanilla parent chain into an child chain Arbitrum Rollup.
+Introduces [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos), converting what would otherwise be a vanilla parent chain into an child chain Arbitrum rollup.
 
 #### `AllowDebugPrecompiles`
 
@@ -260,7 +260,7 @@ Allows access to debug precompiles. Not enabled for <a data-quicklook-from="arbi
 
 #### `DataAvailabilityCommittee`
 
-Currently does nothing besides indicate that the Rollup will access a data availability service for preimage resolution in the future. This is not enabled for Arbitrum One, which is a strict state-function of its parent chain inbox messages.
+Currently does nothing besides indicate that the rollup will access a data availability service for preimage resolution in the future. This is not enabled for Arbitrum One, which is a strict state-function of its parent chain inbox messages.
 
 [chain_params_link]: https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/params/config_arbitrum.go#L25
 
