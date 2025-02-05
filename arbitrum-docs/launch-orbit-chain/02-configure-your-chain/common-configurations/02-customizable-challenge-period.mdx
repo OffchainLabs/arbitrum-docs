@@ -14,6 +14,10 @@ In addition to the main challenge period, **an extra challenge period** provides
 
 ## Default challenge period and extra challenge period
 
+:::info How time is measured in challenges
+Chains settling to Ethereum or Arbitrum chains use `block.number` for all block calculations, which corespond to the chain's view of the parent chain block number.
+:::
+
 By default, the challenge period lasts approximately one week, corresponding to the parent chain’s notion of block progression. This equates to roughly 45,818 L1 blocks for chains that settle to Ethereum or an Arbitrum chain. The default duration design is to provide sufficient time for validators to detect and challenge fraudulent assertions.
 
 On the other hand, the extra challenge period adds a buffer of 200 blocks based on the parent chain’s notion of block progression. For chains settling to Ethereum or an Arbitrum chain, this corresponds to approximately 40 minutes. This time ensures that any last-minute challenges or ongoing dispute resolution processes can be completed before the rollup finalizes its state.
