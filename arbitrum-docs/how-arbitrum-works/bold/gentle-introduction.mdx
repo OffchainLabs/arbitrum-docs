@@ -8,7 +8,7 @@ author: leeederek
 sme: leeederek
 ---
 
-This introduction is for those who want to learn about BoLD: a new dispute protocol for Optimistic Rollups that can enable **permissionless validation for Arbitrum chains**. BoLD stands for Bounded Liquidity Delay and is currently deployed on a public testnet for anyone to join and test how challenges will work.
+This introduction is for those who want to learn about BoLD: a new dispute protocol for optimistic rollups that can enable **permissionless validation for Arbitrum chains**. BoLD stands for Bounded Liquidity Delay and is currently deployed on a public testnet for anyone to join and test how challenges will work.
 
 This next-generation dispute protocol technology will soon be available for any Arbitrum chain, and pending a governance vote, will eventually be made available on Arbitrum Sepolia, Arbitrum One, and Arbitrum Nova.
 
@@ -17,15 +17,10 @@ If the DAO proposal passes, BoLD will replace the permissioned fraud protocol in
 ## In a nutshell:
 
 - Validation for Arbitrum One and Arbitrum Nova is a privileged action currently limited to an [allow-listed set of parties, maintained by the Arbitrum DAO](https://docs.arbitrum.foundation/state-of-progressive-decentralization#allowlisted-validators) to reduce the risks of _[delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a)_. _Delay attacks_ are a class of attacks where malicious entities can open as many disputes as they are willing to forfeit bonds during the challenge period to delay confirmations of assertions (equal to the time needed to resolve those disputes one by one).
-- BoLD, an acronym for Bounded Liquidity Delay, is a new challenge resolution protocol for Arbitrum chains that enables permissionless validation by mitigating the risks of delay attacks against [optimistic rollups like Arbitrum](/how-arbitrum-works/06-optimistic-rollup.mdx). This is possible because BoLD's design ensures disputes will be resolved within a fixed time window, currently set to equal 1 challenge period (~6.4 days) for Arbitrum One and Arbitrum Nova. If there is a dispute, BoLD guarantees the maximum total time to be equal to 2 challenge periods (1 for raising disputes, 1 for resolving disputes), a 2 day grace period for the Security Council to intervene if necessary, and a small delta for computing challenges.
+- BoLD, an acronym for Bounded Liquidity Delay, is a new challenge resolution protocol for Arbitrum chains that enables permissionless validation by mitigating the risks of delay attacks against [Optimistic rollups like Arbitrum](/how-arbitrum-works/06-optimistic-rollup.mdx). This is possible because BoLD's design ensures disputes will be resolved within a fixed time window, currently set to equal one challenge period (~6.4 days) for Arbitrum One and Arbitrum Nova. If there is a dispute, BoLD guarantees the maximum total time to be equal to two challenge periods (one for raising disputes, one for resolving disputes), a two day grace period for the Security Council to intervene if necessary, and a small delta for computing challenges.
 - Enabling permissionless validation is key milestone on [Arbitrum’s journey to becoming a Stage 2 Rollup](https://docs.arbitrum.foundation/state-of-progressive-decentralization) - the most advanced and mature rollup technology categorization, according to [L2Beat](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe). With BoLD, **any honest party can validate and bond their funds to post a correct L2 state assertions to win disputes against malicious entities.**
 - BoLD is currently considered to be in `alpha` release and is deployed on a public testnet. [Follow this guide](https://github.com/OffchainLabs/BoLD-validator-starter-kit) to deploy a BoLD validator to test and explore, first hand, how BoLD works to secure Arbitrum chains. To learn more about BoLD, please check out the [BoLD whitepaper](https://arxiv.org/abs/2404.10491) and [BoLD's code and specifications on Github](https://github.com/OffchainLabs/BoLD).
 
-::: note
-
-BoLD will graduate from `alpha` in the near future.
-
-:::
 
 ## What _exactly_ is BoLD?
 
@@ -35,11 +30,11 @@ The current dispute protocol has working fraud proofs and is used in production 
 
 Under BoLD, a bonded validator’s responsibilities are to:
 
-- Post claims about an Arbitrum chain’s state to its parent chain (for Arbitrum One, the parent chain is L1 Ethereum),
+- Post claims about an Arbitrum chain’s state to its parent chain (for Arbitrum One, the parent chain is Ethereum),
 - Open challenges to dispute invalid claims made by other validators, and
 - Confirm valid claims by participating in and winning challenges.
 
-The goal of BoLD is to unlock permissionless validation by ensuring that disputes are resolved within a fixed period (currently equivalent to 2 challenge periods, plus a two-day grace period for the Security Council to intervene if necessary and a small delta for computation), effectively removing the risk of delay attacks and making withdrawals to a parent chain more secure. BoLD accomplishes this by introducing a new dispute system that lets any single entity defend Arbitrum against malicious parties - effectively allowing anyone to validate, propose, and defend an Arbitrum chain’s state without needing permission to do so.
+The goal of BoLD is to unlock permissionless validation by ensuring that disputes are resolved within a fixed period (currently equivalent to two challenge periods, plus a two-day grace period for the Security Council to intervene if necessary and a small delta for computation), effectively removing the risk of delay attacks and making withdrawals to a parent chain more secure. BoLD accomplishes this by introducing a new dispute system that lets any single entity defend Arbitrum against malicious parties - effectively allowing anyone to validate, propose, and defend an Arbitrum chain’s state without needing permission to do so.
 
 ## Why does Arbitrum need a new dispute protocol?
 
@@ -84,8 +79,8 @@ Let’s dive in to an overview of how BoLD actually works.
    c. **One-step challenge:** Within that range of 2^20 instructions, the back-and-forth bisecting continues until all parties arrive at a single step of instruction that they disagree on. At this point in time, parties agree on the initial state of Arbitrum before the step but disagree on the end state 1 step immediately after. Remember that since Arbitrum’s state is entirely deterministic, there is only one correct end state.
 4. **One-step proof:** Once a challenge is isolated down to a dispute about a single step, both parties run that step to produce, and then submit, a one-step proof to the OneStepProof smart contract on the parent chain (e.g. Ethereum). A one-step proof is a proof that a single step of computation results in a particular state. The smart contract on the parent chain will execute the disputed step to validate the correctness of a submitted proof from the two parties. It is at this point that the honest party's proof will be deemed valid and its tree of edges will be confirmable by time, while the dishonest party will have their edges rejected by timeout.
 5. **Confirmation:** Once the honest one-step edge is confirmed, the protocol will work on confirming or rejecting the parent edges until it reaches the level-zero edge of the honest party. With the honest party’s level-zero edge now confirmed, the honest party’s assertion bond can be withdrawn. Meanwhile, the dishonest party has their bonds taken away to ensure the dishonest party is always punished.
-   a. There is another way that a level-zero edge can get confirmed: time. At each of the mini-stages of the challenge (block challenge, big-step challenge, one-step challenge), a timer increments upwards towards some challenge period, _T_ defined by BoLD. This timer begins ticking for a party when they submit their bisected history commitment until their challenger submits their bisected history commitment in response. An edge is automatically confirmed if the timer reaches _T._
-6. Reimbursements for the honest party's L1 gas costs and mini-bonds made at the other challenge levels are handled by the Arbitrum Foundation. (This is the purpose of the multi-sig wallet discussed under Step 2.)
+    * There is another way that a level-zero edge can get confirmed: time. At each of the mini-stages of the challenge (block challenge, big-step challenge, one-step challenge), a timer increments upwards towards some challenge period, _T_ defined by BoLD. This timer begins ticking for a party when they submit their bisected history commitment until their challenger submits their bisected history commitment in response. An edge is automatically confirmed if the timer reaches _T._
+6. Reimbursements for the honest party's L1 gas costs and mini-bonds made at the other challenge levels are handled by the Arbitrum Foundation.
 
 That’s it! We’ve now walked through each of the steps that validators will take to dispute challenges with the BoLD protocol. One final note here is that each of the steps explained above can take place concurrently and this is one of the reasons why BoLD can guarantee that disputes are resolved within a fixed time frame.
 
@@ -101,31 +96,12 @@ If you’re intrigued by what BoLD can unlock for Arbitrum chains, we encourage 
 - Reviewing the [Economics of Disputes in Arbitrum BoLD](https://github.com/OffchainLabs/BoLD/blob/main/docs/research-specs/Economics.pdf) to learn about rationale behind the design and recommended bonding values.
 - Reading the formal specification and mathematical proofs behind BoLD in the [BoLD whitepaper](https://arxiv.org/abs/2404.10491).
 
-## Wen mainnet?
-
-:::caution Withdrawals leading up to a BoLD upgrade
-
-The confirmation timing on any withdrawal that is in-flight when the BoLD upgrade is activated will be delayed until the first BoLD assertion is confirmed. This means that for any Arbitrum chain that upgrades to use BoLD, including Arbitrum One and Arbitrum Nova, all pending withdrawals to L1 Ethereum that were initiated _before_ the upgrade will be delayed by 1 challenge period, plus the time between the withdrawal was initiated and the time that the BoLD upgrade takes place. This is because the upgrade effectively "resets" the challenge period for that are not yet finalized.
-
-For example, if the upgrade happened at time _t_, then a withdrawal initiated at a time _t-2_ days will need to wait an additional _6.4_ days for their withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time _t_ will be unaffected. In other words, the maximum delay an L2 to L1 message will experience leading to the upgrade is 12.8 days (two challenge periods).
-
-:::
-
-BoLD is in `alpha` (will not be for much longer), which means there are a lot of planned improvements on the roadmap. A few high-level next steps for BoLD's journey to being deployed to Arbitrum chains include:
-
-- A comprehensive, third-party audit of the [BoLD source code](https://github.com/OffchainLabs/bold) to ensure the effectiveness and safety of the design.
-- Tools and frameworks for the smooth migration of existing validators and a seamless onboarding for new validators to use BoLD for their respective Arbitrum chains.
-- Monitoring stack for people to use to see ongoing challenges on the testnet
-- A mechanism for the community to pool funds together to bond capital to an assertion made by validators
-- The launch of a public bounty program for white hat security auditors and security professionals to help test and secure the BOLD protocol design.
-- Proposing, to the Arbitrum DAO, that the BOLD protocol be adopted - first for Arbitrum Sepolia and then eventually for Arbitrum One and Arbitrum Nova.
-- Cutting a GA release of Nitro that enables BOLD validation.
 
 ## Frequently asked questions about BoLD (FAQ):
 
 #### Q: How does bonding work?
 
-The entities responsible for posting assertions about Arbitrum state to Ethereum are called validators. If posting assertions were free, anyone could create conflicting assertions to always delay withdrawals by 14 days instead of 7. As such, Arbitrum requires validators to put in a “security deposit”, known as a bond, to be allowed to post assertions. Validators can withdraw their bond as soon as their latest posted assertion has been confirmed, and end their responsibilities. These bonds can be any ERC20 token and should be set to a large enough value (e.g. 200 WETH) to make it economically infeasible for an adversary to attack an Arbitrum chain and to mitigate against spam (that would otherwise delay confirmations). Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing a whitelist of validators with instead a system that requires a lot of money to participate in. To address this, there is a [contract](https://github.com/OffchainLabs/BoLD/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a bonding pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum but who may not individually be able to put up the large upfront bond itself. The use of bonding pools, coupled with the fact that there can be any number of honest anonymous parties ready to defend Arbitrum, means that these high bond values do not harm decentralization.
+The entities responsible for posting assertions about Arbitrum state to Ethereum are called validators. If posting assertions were free, anyone could create conflicting assertions to always delay withdrawals by 14 days instead of 7. As such, Arbitrum requires validators to put in a “security deposit”, known as a bond, to be allowed to post assertions. Validators can withdraw their bond as soon as their latest posted assertion has been confirmed, and end their responsibilities. These bonds can be any ERC-20 token and should be set to a large enough value (e.g., 200 WETH) to make it economically infeasible for an adversary to attack an Arbitrum chain and to mitigate against spam (that would otherwise delay confirmations). Requiring a high bond to post assertions about Arbitrum seems centralizing, as we are replacing a whitelist of validators with instead a system that requires a lot of money to participate in. To address this, there is a [contract](https://github.com/OffchainLabs/BoLD/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) that anyone can use to deploy a bonding pool as a way of crowdsourcing funds from others who wish to help defend Arbitrum but who may not individually be able to put up the large upfront bond itself. The use of bonding pools, coupled with the fact that there can be any number of honest anonymous parties ready to defend Arbitrum, means that these high bond values do not harm decentralization.
 
 #### Q: Why are the bond sizes so high for Arbitrum One?
 
@@ -133,7 +109,7 @@ There are two types of “bonds” in BoLD: **assertion and challenge.** The bel
 
 **Assertion bond sizes**
 
-Assertion bond sizes can be thought of as a “security deposit” that an entity puts down to fulfill the role of a proposer (i.e. a validator who proposes state assertions to L1). The bond sizes are high because the role of a proposer is to ensure that the chain progresses and so whoever fulfills this role assumes a big responsibility. Accordingly, the bond is needed to deter delay attacks, where the attacker would sacrifice the bond in order to cause a week of delay in a group of withdrawals. If the bond is too small or free, there isn’t enough deterrence against this type of attack. Validators who choose to be proposers can withdraw their bond as soon as their most recent posted assertion has been confirmed by the protocol. We expect there to be very few proposers on Arbitrum One, and even one is sufficient for safety.
+Assertion bond sizes can be thought of as a “security deposit” that an entity puts down to fulfill the role of a proposer (i.e., a validator who proposes state assertions to L1). The bond sizes are high because the role of a proposer is to ensure that the chain progresses and so whoever fulfills this role assumes a big responsibility. Accordingly, the bond is needed to deter delay attacks, where the attacker would sacrifice the bond in order to cause a week of delay in a group of withdrawals. If the bond is too small or free, there isn’t enough deterrence against this type of attack. Validators who choose to be proposers can withdraw their bond as soon as their most recent posted assertion has been confirmed by the protocol. We expect there to be very few proposers on Arbitrum One, and even one is sufficient for safety.
 
 **Challenge bond sizes**
 
@@ -159,7 +135,7 @@ Bonds put up by honest parties will always be refunded while malicious actors al
 
 #### Q: In the event of a challenge, what happens to the confiscated funds from malicious actors for Arbitrum One?
 
-Recall that BoLD enables any validator to put up a bond to propose assertions about the L2 state. These assertions about the L2 state are deterministic and so an honest party who puts up a bond on the correct assertion will always win in disputes. In these scenarios, the honest party will eventually have their bonds reimbursed while the malicious actor will lose all of their funds.
+Recall that BoLD enables any validator to put up a bond to propose assertions about the child chain state. These assertions about the child chain state are deterministic and so an honest party who puts up a bond on the correct assertion will always win in disputes. In these scenarios, the honest party will eventually have their bonds reimbursed while the malicious actor will lose all of their funds.
 
 In BoLD, all costs spent by malicious actors are confiscated and sent to the Arbitrum DAO treasury. A small reward, called the Defender's Bounty, of 1% will be awarded to entities who put down challenge bonds in defense of Arbitrum One. For the remainder of the funds, the Arbitrum DAO will have full discretion over what to do with the funds confiscated from a malicious actor. This includes, but is not limited to:
 
@@ -187,7 +163,7 @@ Therefore, the BoLD AIP proposes that the honest parties be rewarded 1% of confi
 
 #### Q: Why is $ARB not the bonding token used in BoLD? on Arbitrum One?
 
-Although BoLD supports using an ERC20 token, Ethereum, specifically WETH, was chosen over $ARB for a few reasons:
+Although BoLD supports using an ERC-20 token, Ethereum, specifically WETH, was chosen over $ARB for a few reasons:
 
 1. **Arbitrum One & Arbitrum Nova both inherit their security from Ethereum already,** Arbitrum One and Nova rely on Ethereum for both data availability and as the referee for determining winners during fraud-proof disputes. It follows then that Ethereum continues to be used in BoLD, which is meant to permissionlessly secure Arbitrum even further. Ethereum’s value is also relatively independent of Arbitrum, especially when compared to $ARB.
 2. Adversaries might be able to exploit the potential instability of $ARB when trying to win challenges. Suppose an adversary stakes in `$ARB`, and can create an impression that they have a nontrivial chance of winning the challenge. This might drive down the value of $ARB, which would decrease the adversary's cost to create more stakes (i.e., more spam) during the challenge, which in turn could increase the adversary's chances of winning (which would drive $ARB lower, making the attack cheaper still for the adversary, etc.)
@@ -198,7 +174,7 @@ An Orbit chain owner may choose to use any token they wish for bonding, if they 
 
 #### Q: Can the required token for the validator be set to $ARB and can network $ETH revenues be distributed for validator incentives for Arbitrum One?
 
-Yes. The asset that a validator uses to become a proposer in BoLD can be set to any `ERC20` token, including `$ARB`. For Arbitrum One, `$ETH` is used for bonds for various reasons mentioned above. The Arbitrum DAO can change this asset type at any time via a governance proposal. Should such an economic incentive model exist, the source and denomination of funds used to incentivize validators will be at the discretion of the Arbitrum DAO. Again, though, we don't see `$ARB`-based bonding as a good idea at present; see the last question.
+Yes. The asset that a validator uses to become a proposer in BoLD can be set to any `ERC-20` token, including `$ARB`. For Arbitrum One, `$ETH` is used for bonds for various reasons mentioned above. The Arbitrum DAO can change this asset type at any time via a governance proposal. Should such an economic incentive model exist, the source and denomination of funds used to incentivize validators will be at the discretion of the Arbitrum DAO. Again, though, we don't see `$ARB`-based bonding as a good idea at present; see the last question.
 
 #### Q: How are honest parties reimbursed for bonding their capital to help secure Arbitrum One?
 
@@ -220,7 +196,7 @@ The fee is applied to the total amount bonded over the duration of time that a p
 
 Reimbursement will not be made for off-chain compute costs as we view these to be costs borne by all honest operators, alongside the maintenance and infra costs that regularly arise from running a node.
 
-Our testing has demonstrated that the cost of running a sub-challenge in BoLD, the most computationally-heavy step, on an AWS r5.4xlarge EC2 instance, costs around $2.50 USD (~$1/hour for 1 challenge with 2.5hour duration) using [on-demand prices for US East (N. Virginia)](https://instances.vantage.sh/aws/ec2/r5.4xlarge). Therefore, the additional costs from off-chain compute is assumed to be negligible relative to the regular infra costs of operating a node.
+Our testing has demonstrated that the cost of running a sub-challenge in BoLD, the most computationally-heavy step, on an AWS r5.4xlarge EC2 instance, costs around $2.50 USD (~$1/hour for one challenge with 2.5hour duration) using [on-demand prices for US East (N. Virginia)](https://instances.vantage.sh/aws/ec2/r5.4xlarge). Therefore, the additional costs from off-chain compute is assumed to be negligible relative to the regular infra costs of operating a node.
 
 #### Q: How will BoLD impact Arbitrum Nova?
 

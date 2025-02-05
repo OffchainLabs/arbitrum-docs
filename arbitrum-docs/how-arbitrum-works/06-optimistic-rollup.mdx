@@ -29,7 +29,7 @@ Among optimistic rollups, the most important design decision is how to resolve d
 
 There are basically two choices: interactive proving, or re-executing transactions. Arbitrum uses interactive proving, which we believe is more efficient and more flexible. Much of the design of Arbitrum follows from this fact.
 
-::: note
+:::note
 
 Zero-knowledge Rollups are able to avoid this situation entirely by using ZK proofs to prove directly to the parent chain that the posted result is correct.
 
@@ -41,7 +41,7 @@ The idea of interactive proving is that Alice (along with anyone who agrees with
 
 Arbitrum's approach is based on the bisection of the dispute. First, Alice posts a claim covering `N` steps of execution. If Bob disagrees with her claim, he proceeds by posting his own claim about the result of execution, which we say "rivals" Alice's. To defend her claim, Alice (or someone acting in support of her claim) posts two size `N/2` claims, which combine to yield her initial `N-step` claim. If Bob wants to continue the dispute, he (or an ally supporting his claim) must do the same. Bob (or an ally) will then pick one of Alice's `N/2`-step claims to challenge. Now, the size of the dispute has been cut in half. This process continues, cutting the dispute in half at each stage until they disagree about a single execution step. Note that so far, the L1 referee hasn't had to think about execution "on the merits". Only once the dispute is narrowed down to a single step does the L1 referee need to resolve it by looking at what the instruction does and whether Alice's claim about it is correct.
 
-::: note
+:::note
 
 Again, this is a very high-level overview. Please refer to the [Gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) and [Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx) under the **Bold dispute protocol** section in the documentation for more details.
 

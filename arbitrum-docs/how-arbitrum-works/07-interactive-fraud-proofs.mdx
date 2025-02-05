@@ -43,7 +43,7 @@ To prove (1), observe that if Alice’s initial claim is correct, she can offer 
 
 To prove (2), observe that if Alice’s initial claim is incorrect, this can only be because her claimed endpoint after `N` steps is incorrect. Now when Alice offers her midpoint state claim, that midpoint claim is either correct or incorrect. If it’s incorrect, then Bob can force Alice to defend her first-half claim, which will be incorrect. If Alice’s midpoint state claim is correct, then her second-half claim must be incorrect, and Bob can force her to defend that. So whatever Alice does, Bob will be able to challenge an incorrect half-size claim. At each stage of the protocol, Bob can identify an incorrect claim to challenge. At the end, Alice will have an incorrect one-step claim to prove, which she will be unable to do, so Bob can win the challenge.
 
-::: note
+:::note
 
 If you’re a stickler for mathematical precision, we invite you to read the [BoLD research whitepaper](https://arxiv.org/abs/2404.10491). Formalizing these and other arguments pertaining to BoLD is quite tricky and subtle!
 
