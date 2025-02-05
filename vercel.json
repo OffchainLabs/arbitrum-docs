@@ -411,8 +411,8 @@
       "permanent": false
     },
     {
-      "source": "/(for-devs/quickstart-solidity-hardhat/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
+      "source": "/(for-devs/quickstart-solidity-remix/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -607,7 +607,7 @@
     },
     {
       "source": "/docs/tutorials",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -617,17 +617,17 @@
     },
     {
       "source": "/docs/frontend_integration",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/docs/contract_deployment",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/getting-started-devs",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {

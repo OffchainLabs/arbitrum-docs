@@ -64,6 +64,18 @@ article {
       font-weight: 600;
     }
 
+    img[alt='20px-img'] {
+      width: 10px;
+    }
+    img[alt='20px-img'] {
+      width: 20px;
+    }
+    img[alt='50px-img'] {
+      width: 50px;
+    }
+    img[alt='100px-img'] {
+      width: 100px;
+    }
     img[alt='200px-img'] {
       width: 200px;
     }
@@ -102,11 +114,9 @@ article {
     }
 
     .footnotes {
-      border-top: 1px solid #ddd;
       margin-top: 50px;
 
       &:before {
-        content: 'Footnotes:';
         font-weight: 600;
         margin-top: 30px;
         display: inline-block;

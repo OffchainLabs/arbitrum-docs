@@ -1,4 +1,11 @@
-// If you are making any changes to these docs, please ensure you run "yarn generate_precompiles_ref_tables"!
+/**
+ * ⚠️ IMPORTANT: After modifying any values in this file:
+ * 1. Run `yarn update_variable_refs` to update all references in the docs
+ * 2. Run `yarn generate_precompiles_ref_tables` if you modified any precompile-related values
+ *
+ * Without running update_variable_refs, your changes won't be reflected in the docs
+ * due to Vercel's caching behavior.
+ */
 
 const L1_BLOCK_TIME_SECONDS = 12.1;
 
@@ -14,7 +21,7 @@ const sepoliaForceIncludePeriodBlocks = 5760;
 
 const globalVars = {
   // Node docker images
-  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.2.1-d81324d',
+  latestNitroNodeImage: 'offchainlabs/nitro-node:v3.4.0-d896e9c',
   latestClassicNodeImage: 'offchainlabs/arb-node:v1.4.5-e97c1a4',
 
   // Node snapshots (taken around April 20th, 2013)
@@ -31,14 +38,14 @@ const globalVars = {
 
   // Nitro Github references
   nitroRepositorySlug: 'nitro',
-  nitroVersionTag: 'v3.2.1',
+  nitroVersionTag: 'v3.4.0',
   nitroPathToPrecompiles: 'precompiles',
 
   nitroContractsRepositorySlug: 'nitro-contracts',
-  nitroContractsCommit: '7396313311ab17cb30e2eef27cccf96f0a9e8f7f',
+  nitroContractsCommit: '763bd77906b7677da691eaa31c6e195d455197a4',
   nitroContractsPathToPrecompilesInterface: 'src/precompiles',
 
-  goEthereumCommit: '17cd00167543a5a2b0b083e32820051100154c2f',
+  goEthereumCommit: '779b669ac0d0020099a67a1c39fbaf66b901c1a5',
 
   nitroPathToArbos: 'arbos',
   nitroPathToArbosState: 'arbos/arbosState',

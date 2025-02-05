@@ -1,6 +1,6 @@
 ---
 title: 'How to run a full node for an Orbit chain'
-description: 'Learn how to run an Arbitrum orbit node on your local machine'
+description: Learn how to run an Arbitrum orbit node on your local machine
 author: Mehdi Salehi
 sme: Mehdi Salehi
 content_type: how-to
@@ -10,7 +10,7 @@ This how-to provides step-by-step instructions for running an Orbit node on your
 
 ## Prerequisites
 
-Latest Docker Image: <code>@latestNitroNodeImage@</code>
+Latest Docker Image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@</code>
 
 | Minimum Hardware Configuration                                   |
 | :--------------------------------------------------------------- |
@@ -105,7 +105,7 @@ Or:
 - Example:
 
   ```shell wordWrap=true
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info> --execution.forwarding-targe=<Your Sequencer node endpoint url>
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ --parent-chain.connection.url=<Parent chain RPC URL> --chain.id=<OrbitChainId> --chain.name=<My Arbitrum Orbit Chain> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=* --chain.info-json=<Orbit Chain's chain info> --execution.forwarding-targe=<Your Sequencer node endpoint url>
   ```
 
   - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
