@@ -69,8 +69,7 @@ npm install @radix-ui/react-label @radix-ui/react-slot @radix-ui/react-tabs @tan
 
 ### Step 4: Configure blockchain interaction
 
-
-- **Setup a Smart Contract Interaction Service:**  
+- **Setup a Smart Contract Interaction Service:**
 
 <CustomDetails summary="lib/transfer-service.ts">
 ```javascript
@@ -81,135 +80,136 @@ npm install @radix-ui/react-label @radix-ui/react-slot @radix-ui/react-tabs @tan
    import { privateKeyToAccount } from 'viem/accounts'
    import { eip2612Permit, tokenAbi } from './permit-helpers'
 
-   const ARBITRUM_SEPOLIA_USDC = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d'
-   const ARBITRUM_SEPOLIA_PAYMASTER = '0x31BE08D380A21fc740883c0BC434FcFc88740b58'
-   const ARBITRUM_SEPOLIA_BUNDLER = `https://public.pimlico.io/v2/${arbitrumSepolia.id}/rpc`
+const ARBITRUM_SEPOLIA_USDC = '0x75faf114eafb1BDbe2F0316DF893fd58CE46AA4d'
+const ARBITRUM_SEPOLIA_PAYMASTER = '0x31BE08D380A21fc740883c0BC434FcFc88740b58'
+const ARBITRUM_SEPOLIA_BUNDLER = `https://public.pimlico.io/v2/${arbitrumSepolia.id}/rpc`
 
-   const MAX_GAS_USDC = 1000000n // 1 USDC
+const MAX_GAS_USDC = 1000000n // 1 USDC
 
-   export async function transferUSDC(
-     privateKey: `0x${string}`,
-     recipientAddress: string,
-     amount: bigint
-   ) {
-     // Create clients
-     const client = createPublicClient({
-       chain: arbitrumSepolia,
-       transport: http()
-     })
-     const bundlerClient = createBundlerClient({
-       client,
-       transport: http(ARBITRUM_SEPOLIA_BUNDLER)
-     })
-     // Create accounts
-     const owner = privateKeyToAccount(privateKey)
-     const account = await toEcdsaKernelSmartAccount({
-       client,
-       owners: [owner],
-       version: '0.3.1'
-     })
-     // Setup USDC contract
-     const usdc = getContract({
-       client,
-       address: ARBITRUM_SEPOLIA_USDC,
-       abi: tokenAbi,
-     })
-     // Verify USDC balance first
-     const balance = await usdc.read.balanceOf([account.address])
-     if (balance < amount) {
-       throw new Error(`Insufficient USDC balance. Have: ${formatUnits(balance, 6)}, Need: ${formatUnits(amount, 6)}`)
-     }
-     // Construct and sign permit
-     const permitData = await eip2612Permit({
-       token: usdc,
-       chain: arbitrumSepolia,
-       ownerAddress: account.address,
-       spenderAddress: ARBITRUM_SEPOLIA_PAYMASTER,
-       value: MAX_GAS_USDC
-     })
-     const signData = { ...permitData, primaryType: 'Permit' as const }
-     const wrappedPermitSignature = await account.signTypedData(signData)
-     const { signature: permitSignature } = parseErc6492Signature(wrappedPermitSignature)
-     // Prepare transfer call
-     const calls = [{
-       to: usdc.address,
-       abi: usdc.abi,
-       functionName: 'transfer',
-       args: [recipientAddress, amount]
-     }]
-     // Specify the USDC Token Paymaster
-     const paymaster = ARBITRUM_SEPOLIA_PAYMASTER
-     const paymasterData = encodePacked(
-       ['uint8', 'address', 'uint256', 'bytes'],
-       [
-         0, // Reserved for future use
-         usdc.address, // Token address
-         MAX_GAS_USDC, // Max spendable gas in USDC
-         permitSignature // EIP-2612 permit signature
-       ]
-     )
-     // Get additional gas charge from paymaster
-     const additionalGasCharge = hexToBigInt(
-       (
-         await client.call({
-           to: paymaster,
-           data: encodeFunctionData({
-             abi: parseAbi(['function additionalGasCharge() returns (uint256)']),
-             functionName: 'additionalGasCharge'
-           })
-         }) ?? { data: '0x0' }
-       ).data
-     )
-     // Get current gas prices
-     const { standard: fees } = await bundlerClient.request({
-       method: 'pimlico_getUserOperationGasPrice' as any
-     }) as { standard: { maxFeePerGas: `0x${string}`, maxPriorityFeePerGas: `0x${string}` } }
-     const maxFeePerGas = hexToBigInt(fees.maxFeePerGas)
-     const maxPriorityFeePerGas = hexToBigInt(fees.maxPriorityFeePerGas)
-     // Estimate gas limits
-     const {
-       callGasLimit,
-       preVerificationGas,
-       verificationGasLimit,
-       paymasterPostOpGasLimit,
-       paymasterVerificationGasLimit
-     } = await bundlerClient.estimateUserOperationGas({
-       account,
-       calls,
-       paymaster,
-       paymasterData,
-       paymasterPostOpGasLimit: additionalGasCharge,
-       maxFeePerGas: 1n,
-       maxPriorityFeePerGas: 1n
-     })
-     // Send user operation
-     const userOpHash = await bundlerClient.sendUserOperation({
-       account,
-       calls,
-       callGasLimit,
-       preVerificationGas,
-       verificationGasLimit,
-       paymaster,
-       paymasterData,
-       paymasterVerificationGasLimit,
-       paymasterPostOpGasLimit: BigInt(Math.max(
-         Number(paymasterPostOpGasLimit),
-         Number(additionalGasCharge)
-       )),
-       maxFeePerGas,
-       maxPriorityFeePerGas
-     })
-     // Wait for receipt
-     const userOpReceipt = await bundlerClient.waitForUserOperationReceipt({
-       hash: userOpHash
-     })
-     return userOpReceipt
-   }
-```
+export async function transferUSDC(
+privateKey: `0x${string}`,
+recipientAddress: string,
+amount: bigint
+) {
+// Create clients
+const client = createPublicClient({
+chain: arbitrumSepolia,
+transport: http()
+})
+const bundlerClient = createBundlerClient({
+client,
+transport: http(ARBITRUM_SEPOLIA_BUNDLER)
+})
+// Create accounts
+const owner = privateKeyToAccount(privateKey)
+const account = await toEcdsaKernelSmartAccount({
+client,
+owners: [owner],
+version: '0.3.1'
+})
+// Setup USDC contract
+const usdc = getContract({
+client,
+address: ARBITRUM_SEPOLIA_USDC,
+abi: tokenAbi,
+})
+// Verify USDC balance first
+const balance = await usdc.read.balanceOf([account.address])
+if (balance < amount) {
+throw new Error(`Insufficient USDC balance. Have: ${formatUnits(balance, 6)}, Need: ${formatUnits(amount, 6)}`)
+}
+// Construct and sign permit
+const permitData = await eip2612Permit({
+token: usdc,
+chain: arbitrumSepolia,
+ownerAddress: account.address,
+spenderAddress: ARBITRUM_SEPOLIA_PAYMASTER,
+value: MAX_GAS_USDC
+})
+const signData = { ...permitData, primaryType: 'Permit' as const }
+const wrappedPermitSignature = await account.signTypedData(signData)
+const { signature: permitSignature } = parseErc6492Signature(wrappedPermitSignature)
+// Prepare transfer call
+const calls = [{
+to: usdc.address,
+abi: usdc.abi,
+functionName: 'transfer',
+args: [recipientAddress, amount]
+}]
+// Specify the USDC Token Paymaster
+const paymaster = ARBITRUM_SEPOLIA_PAYMASTER
+const paymasterData = encodePacked(
+['uint8', 'address', 'uint256', 'bytes'],
+[
+0, // Reserved for future use
+usdc.address, // Token address
+MAX_GAS_USDC, // Max spendable gas in USDC
+permitSignature // EIP-2612 permit signature
+]
+)
+// Get additional gas charge from paymaster
+const additionalGasCharge = hexToBigInt(
+(
+await client.call({
+to: paymaster,
+data: encodeFunctionData({
+abi: parseAbi(['function additionalGasCharge() returns (uint256)']),
+functionName: 'additionalGasCharge'
+})
+}) ?? { data: '0x0' }
+).data
+)
+// Get current gas prices
+const { standard: fees } = await bundlerClient.request({
+method: 'pimlico_getUserOperationGasPrice' as any
+}) as { standard: { maxFeePerGas: `0x${string}`, maxPriorityFeePerGas: `0x${string}` } }
+const maxFeePerGas = hexToBigInt(fees.maxFeePerGas)
+const maxPriorityFeePerGas = hexToBigInt(fees.maxPriorityFeePerGas)
+// Estimate gas limits
+const {
+callGasLimit,
+preVerificationGas,
+verificationGasLimit,
+paymasterPostOpGasLimit,
+paymasterVerificationGasLimit
+} = await bundlerClient.estimateUserOperationGas({
+account,
+calls,
+paymaster,
+paymasterData,
+paymasterPostOpGasLimit: additionalGasCharge,
+maxFeePerGas: 1n,
+maxPriorityFeePerGas: 1n
+})
+// Send user operation
+const userOpHash = await bundlerClient.sendUserOperation({
+account,
+calls,
+callGasLimit,
+preVerificationGas,
+verificationGasLimit,
+paymaster,
+paymasterData,
+paymasterVerificationGasLimit,
+paymasterPostOpGasLimit: BigInt(Math.max(
+Number(paymasterPostOpGasLimit),
+Number(additionalGasCharge)
+)),
+maxFeePerGas,
+maxPriorityFeePerGas
+})
+// Wait for receipt
+const userOpReceipt = await bundlerClient.waitForUserOperationReceipt({
+hash: userOpHash
+})
+return userOpReceipt
+}
+
+````
 </CustomDetails>
 
-- **Setup Permit Helper for EIP-2612 Integration:**  
-                               
+- **Setup Permit Helper for EIP-2612 Integration:**
+
 <CustomDetails summary="lib/permit-helpers.ts">
 ```javascript
 import { Address, Chain, TypedDataDomain, getContract } from 'viem'
@@ -319,12 +319,13 @@ export async function eip2612Permit({
     message,
   }
 }
-```
+````
+
 </CustomDetails>
 
 ### Step 5: Build the frontend
 
-- **Update Main Component:**  
+- **Update Main Component:**
 
 <CustomDetails summary="app/page.tsx">
 ```javascript
@@ -380,194 +381,195 @@ export default function SmartWallet() {
     // Set up polling interval
     const interval = setInterval(fetchBalance, 10000) // Poll every 10 seconds
     return () => clearInterval(interval)
-  }, [account?.address])
-  const createAccount = async () => {
-    try {
-      setLoading(true)
-      setStatus('Creating smart account...')
-      // Create RPC client
-      const client = createPublicClient({
-        chain: arbitrumSepolia,
-        transport: http()
-      })
-      // Generate private key and create owner account
-      const privateKey = generatePrivateKey()
-      const owner = privateKeyToAccount(privateKey)
-      // Create smart account
-      const smartAccount = await toEcdsaKernelSmartAccount({
-        client,
-        owners: [owner],
-        version: '0.3.1'
-      })
-      setAccount({
-        address: smartAccount.address,
-        owner: owner.address,
-        privateKey: `0x${privateKey.slice(2)}`
-      })
-      setStatus('Smart account created successfully!')
-    } catch (error) {
-      setStatus('Error creating smart account: ' + (error as Error).message)
-    } finally {
-      setLoading(false)
-    }
-  }
-  const transfer = async () => {
-    try {
-      setLoading(true)
-      setStatus('Checking balance...')
-      // Create client for balance check
-      const client = createPublicClient({
-        chain: arbitrumSepolia,
-        transport: http()
-      })
-      // Check balance before transfer
-      const balance = await client.readContract({
-        address: ARBITRUM_SEPOLIA_USDC,
-        abi: tokenAbi,
-        functionName: 'balanceOf',
-        args: [account.address]
-      }) as bigint
-      // Convert input amount to USDC decimals (6 decimals)
-      const amountInWei = BigInt(Math.floor(parseFloat(amount) * 1_000_000))
-      // Required gas buffer (2 USDC to be safe)
-      const gasBuffer = BigInt(2_000_000) // 2 USDC in wei
-      const totalNeeded = amountInWei + gasBuffer
-      // Check if balance is sufficient including gas buffer
-      if (balance < totalNeeded) {
-        const currentBalance = Number(formatUnits(balance, 6))
-        const requestedAmount = Number(amount)
-        const availableForTransfer = Math.max(0, currentBalance - 2) // Leave 2 USDC for gas
-        throw new Error(
-          `Insufficient balance for this transfer. ` +
-          `\nCurrent balance: ${currentBalance} USDC` +
-          `\nRequested transfer: ${requestedAmount} USDC` +
-          `\nGas buffer needed: 2 USDC` +
-          `\nMaximum you can transfer: ${availableForTransfer.toFixed(2)} USDC` +
-          `\n\nPlease reduce your transfer amount or get more USDC from the faucet.`
-        )
-      }
-      setStatus('Initiating transfer...')
-      const receipt = await transferUSDC(
-        account.privateKey,
-        recipientAddress,
-        amountInWei
-      )
-      if (receipt.success) {
-        setStatus('Transfer completed successfully!')
-        setRecipientAddress('')
-        setAmount('')
-      } else {
-        setStatus('Transfer failed. Please try again.')
-      }
-    } catch (error: any) {
-      // Check for specific error signatures
-      if (error.message.includes('0x65c8fd4d')) {
-        setStatus('Error: Insufficient USDC balance for transfer and gas fees (need ~2 USDC for gas)')
-      } else {
-        setStatus(error.message)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-  return (
-    <>
-      {account && (
-        <div className="fixed top-4 right-4 bg-card rounded-lg border shadow p-3">
-          <span className="text-sm font-medium">USDC Balance: </span>
-          <span className="font-mono">${usdcBalance}</span>
-        </div>
-      )}
-      <div className="container max-w-2xl mx-auto p-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Smart Wallet Interface</CardTitle>
-            <CardDescription>Create and manage your smart account with Circle's USDC Paymaster</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="create" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="create">Create Account</TabsTrigger>
-                <TabsTrigger value="transfer" disabled={!account}>Transfer</TabsTrigger>
-              </TabsList>
-              <TabsContent value="create" className="space-y-4">
-                {!account ? (
-                  <Button
+
+}, [account?.address])
+const createAccount = async () => {
+try {
+setLoading(true)
+setStatus('Creating smart account...')
+// Create RPC client
+const client = createPublicClient({
+chain: arbitrumSepolia,
+transport: http()
+})
+// Generate private key and create owner account
+const privateKey = generatePrivateKey()
+const owner = privateKeyToAccount(privateKey)
+// Create smart account
+const smartAccount = await toEcdsaKernelSmartAccount({
+client,
+owners: [owner],
+version: '0.3.1'
+})
+setAccount({
+address: smartAccount.address,
+owner: owner.address,
+privateKey: `0x${privateKey.slice(2)}`
+})
+setStatus('Smart account created successfully!')
+} catch (error) {
+setStatus('Error creating smart account: ' + (error as Error).message)
+} finally {
+setLoading(false)
+}
+}
+const transfer = async () => {
+try {
+setLoading(true)
+setStatus('Checking balance...')
+// Create client for balance check
+const client = createPublicClient({
+chain: arbitrumSepolia,
+transport: http()
+})
+// Check balance before transfer
+const balance = await client.readContract({
+address: ARBITRUM_SEPOLIA_USDC,
+abi: tokenAbi,
+functionName: 'balanceOf',
+args: [account.address]
+}) as bigint
+// Convert input amount to USDC decimals (6 decimals)
+const amountInWei = BigInt(Math.floor(parseFloat(amount) \* 1_000_000))
+// Required gas buffer (2 USDC to be safe)
+const gasBuffer = BigInt(2_000_000) // 2 USDC in wei
+const totalNeeded = amountInWei + gasBuffer
+// Check if balance is sufficient including gas buffer
+if (balance < totalNeeded) {
+const currentBalance = Number(formatUnits(balance, 6))
+const requestedAmount = Number(amount)
+const availableForTransfer = Math.max(0, currentBalance - 2) // Leave 2 USDC for gas
+throw new Error(
+`Insufficient balance for this transfer. ` +
+`\nCurrent balance: ${currentBalance} USDC` +
+`\nRequested transfer: ${requestedAmount} USDC` +
+`\nGas buffer needed: 2 USDC` +
+`\nMaximum you can transfer: ${availableForTransfer.toFixed(2)} USDC` +
+`\n\nPlease reduce your transfer amount or get more USDC from the faucet.`
+)
+}
+setStatus('Initiating transfer...')
+const receipt = await transferUSDC(
+account.privateKey,
+recipientAddress,
+amountInWei
+)
+if (receipt.success) {
+setStatus('Transfer completed successfully!')
+setRecipientAddress('')
+setAmount('')
+} else {
+setStatus('Transfer failed. Please try again.')
+}
+} catch (error: any) {
+// Check for specific error signatures
+if (error.message.includes('0x65c8fd4d')) {
+setStatus('Error: Insufficient USDC balance for transfer and gas fees (need ~2 USDC for gas)')
+} else {
+setStatus(error.message)
+}
+} finally {
+setLoading(false)
+}
+}
+return (
+<>
+{account && (
+<div className="fixed top-4 right-4 bg-card rounded-lg border shadow p-3">
+<span className="text-sm font-medium">USDC Balance: </span>
+<span className="font-mono">${usdcBalance}</span>
+</div>
+)}
+<div className="container max-w-2xl mx-auto p-4">
+<Card>
+<CardHeader>
+<CardTitle>Smart Wallet Interface</CardTitle>
+<CardDescription>Create and manage your smart account with Circle's USDC Paymaster</CardDescription>
+</CardHeader>
+<CardContent>
+<Tabs defaultValue="create" className="space-y-4">
+<TabsList>
+<TabsTrigger value="create">Create Account</TabsTrigger>
+<TabsTrigger value="transfer" disabled={!account}>Transfer</TabsTrigger>
+</TabsList>
+<TabsContent value="create" className="space-y-4">
+{!account ? (
+<Button
                     onClick={createAccount}
                     disabled={loading}
                     className="w-full"
                   >
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Create Smart Account
-                  </Button>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Smart Wallet Address</Label>
-                      <Alert>
-                        <AlertDescription className="font-mono break-all">
-                          {account.address}
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Owner Address</Label>
-                      <Alert>
-                        <AlertDescription className="font-mono break-all">
-                          {account.owner}
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="transfer" className="space-y-4">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="recipient">Recipient Address</Label>
-                    <Input
-                      id="recipient"
-                      placeholder="0x..."
-                      value={recipientAddress}
-                      onChange={(e) => setRecipientAddress(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="amount">Amount (USDC)</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      placeholder="0.00"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                    />
-                  </div>
-                  <Button
-                    onClick={transfer}
-                    disabled={loading || !recipientAddress || !amount}
-                    className="w-full"
-                  >
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Transfer USDC
-                  </Button>
-                </div>
-              </TabsContent>
-            </Tabs>
-            {status && (
-              <Alert className="mt-4">
-                <AlertDescription>{status}</AlertDescription>
-              </Alert>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </>
-  )
+{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+Create Smart Account
+</Button>
+) : (
+<div className="space-y-4">
+<div className="space-y-2">
+<Label>Smart Wallet Address</Label>
+<Alert>
+<AlertDescription className="font-mono break-all">
+{account.address}
+</AlertDescription>
+</Alert>
+</div>
+<div className="space-y-2">
+<Label>Owner Address</Label>
+<Alert>
+<AlertDescription className="font-mono break-all">
+{account.owner}
+</AlertDescription>
+</Alert>
+</div>
+</div>
+)}
+</TabsContent>
+<TabsContent value="transfer" className="space-y-4">
+<div className="space-y-4">
+<div className="space-y-2">
+<Label htmlFor="recipient">Recipient Address</Label>
+<Input
+id="recipient"
+placeholder="0x..."
+value={recipientAddress}
+onChange={(e) => setRecipientAddress(e.target.value)}
+/>
+</div>
+<div className="space-y-2">
+<Label htmlFor="amount">Amount (USDC)</Label>
+<Input
+id="amount"
+type="number"
+placeholder="0.00"
+value={amount}
+onChange={(e) => setAmount(e.target.value)}
+/>
+</div>
+<Button
+onClick={transfer}
+disabled={loading || !recipientAddress || !amount}
+className="w-full" >
+{loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+Transfer USDC
+</Button>
+</div>
+</TabsContent>
+</Tabs>
+{status && (
+<Alert className="mt-4">
+<AlertDescription>{status}</AlertDescription>
+</Alert>
+)}
+</CardContent>
+</Card>
+</div>
+</>
+)
 }
-```
+
+````
 </CustomDetails>
 
-- **Update Root Layout for Application:**  
+- **Update Root Layout for Application:**
   **File:** `app/layout.tsx`
 
 ```javascript
@@ -582,7 +584,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 }
-```
+````
 
 - **Setup UI Components:**  
   Create reusable components in `components/ui/` (e.g., `button.tsx`, `card.tsx`, `input.tsx`).
@@ -590,6 +592,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```shell
 mkdir -p components/ui
 ```
+
 <CustomDetails summary="components/ui/button.tsx">
 ```javascript
 import * as React from "react"
@@ -598,54 +601,55 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
-  {
-    variants: {
-      variant: {
-        default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-8",
-        icon: "h-9 w-9",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
+"inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+{
+variants: {
+variant: {
+default:
+"bg-primary text-primary-foreground shadow hover:bg-primary/90",
+destructive:
+"bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+outline:
+"border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+secondary:
+"bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+ghost: "hover:bg-accent hover:text-accent-foreground",
+link: "text-primary underline-offset-4 hover:underline",
+},
+size: {
+default: "h-9 px-4 py-2",
+sm: "h-8 rounded-md px-3 text-xs",
+lg: "h-10 rounded-md px-8",
+icon: "h-9 w-9",
+},
+},
+defaultVariants: {
+variant: "default",
+size: "default",
+},
+}
 )
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+VariantProps<typeof buttonVariants> {
+asChild?: boolean
 }
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
+({ className, variant, size, asChild = false, ...props }, ref) => {
+const Comp = asChild ? Slot : "button"
+return (
+<Comp
+className={cn(buttonVariants({ variant, size, className }))}
+ref={ref}
+{...props}
+/>
+)
+}
 )
 Button.displayName = "Button"
 export { Button, buttonVariants }
-```
+
+````
 </CustomDetails>
 
 <CustomDetails summary="components/ui/card.tsx">
@@ -719,7 +723,8 @@ const CardFooter = React.forwardRef<
 ))
 CardFooter.displayName = "CardFooter"
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
-```
+````
+
 </CustomDetails>
 
 <CustomDetails summary="components/ui/input.tsx">
@@ -728,23 +733,24 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
-    return (
-      <input
-        type={type}
-        className={cn(
-          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
+({ className, type, ...props }, ref) => {
+return (
+<input
+type={type}
+className={cn(
+"flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+className
+)}
+ref={ref}
+{...props}
+/>
+)
+}
 )
 Input.displayName = "Input"
 export { Input }
-```
+
+````
 </CustomDetails>
 
 <CustomDetails summary="components/ui/label.tsx">
@@ -771,7 +777,8 @@ const Label = React.forwardRef<
 ))
 Label.displayName = LabelPrimitive.Root.displayName
 export { Label }
-```
+````
+
 </CustomDetails>
 
 <CustomDetails summary="components/ui/tabs.tsx">
@@ -783,9 +790,11 @@ import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root
 const TabsList = React.forwardRef<
-  React.ElementRef<typeof TabsPrimitive.List>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
+React.ElementRef<typeof TabsPrimitive.List>,
+React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+
+> (({ className, ...props }, ref) => (
+
   <TabsPrimitive.List
     ref={ref}
     className={cn(
@@ -835,24 +844,26 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
-  {
-    variants: {
-      variant: {
-        default: "bg-background text-foreground",
-        destructive:
-          "border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
+"relative w-full rounded-lg border px-4 py-3 text-sm [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7",
+{
+variants: {
+variant: {
+default: "bg-background text-foreground",
+destructive:
+"border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive",
+},
+},
+defaultVariants: {
+variant: "default",
+},
+}
 )
 const Alert = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
->(({ className, variant, ...props }, ref) => (
+HTMLDivElement,
+React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
+
+> (({ className, variant, ...props }, ref) => (
+
   <div
     ref={ref}
     role="alert"
