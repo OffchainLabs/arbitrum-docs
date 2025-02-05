@@ -14,13 +14,13 @@ const FeatureList: FeatureItem[] = [
   {
     title: 'Quickstart: Stylus',
     Svg: require('@site/static/img/stylus-logo.svg').default,
-    href: '/stylus/quickstart',
+    href: '/stylus/stylus-quickstart',
     description: 'Use Stylus to write an EVM-compatible smart contract in Rust.',
   },
   {
     title: 'Quickstart: Build a dApp (Solidity)',
     Svg: require('@site/static/img/cupcake_icon.svg').default,
-    href: '/build-decentralized-apps/quickstart-solidity-remix',
+    href: '/build-decentralized-apps/quickstart-solidity-hardhat',
     description:
       'Deploy a cupcake vending machine contract locally, then to Arbitrum Sepolia, then to Arbitrum Mainnet.',
   },
