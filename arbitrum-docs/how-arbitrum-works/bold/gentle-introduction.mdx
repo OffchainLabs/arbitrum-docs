@@ -83,18 +83,6 @@ Let’s dive in to an overview of how BoLD actually works.
 
 That’s it! We’ve now walked through each of the steps that validators will take to dispute challenges with the BoLD protocol. One final note here is that each of the steps explained above can take place concurrently and this is one of the reasons why BoLD can guarantee that disputes are resolved within a fixed time frame.
 
-## What can I do with BoLD today?
-
-Today, BoLD is deployed on a public testnet using Ethereum Sepolia as a base layer for anyone to experiment with and test on. The intent behind this testnet is purely to demonstrate, first-hand, how disputes can effectively resolved by a single party in a fixed challenge period on Arbitrum chains. Feedback gained from developers, users, and researchers will help improve and strengthen BoLD’s design.
-
-If you’re intrigued by what BoLD can unlock for Arbitrum chains, we encourage you to interact with BoLD by:
-
-- [Following this guide](https://github.com/OffchainLabs/BoLD-validator-starter-kit) to deploy a BoLD validator to test and explore, first hand, how BoLD works to secure Arbitrum chains. A [BoLD testnet block explorer](https://BoLD-explorer.arbitrum.io/) is also available for you to peruse!
-- Listen to the two governance calls on this proposal! Meeting recordings are here for [BoLD governance call #1](https://drive.google.com/file/d/1h5GroqCAt9YY4fgFleHAlOUtZeotoIdX/view) and [BoLD governance call #2](https://drive.google.com/file/d/1L20e38nY_Fm_wLJvb8_TIncM4mVIq2A-/view), in addition to a AMA recording on X.com [here](https://x.com/OffchainLabs/status/1780643417522901337).
-- Checking out this [BoLD Technical Deep Dive](https://github.com/OffchainLabs/BoLD/blob/main/docs/research-specs/TechnicalDeepDive.pdf) to learn about BoLD's implementation, alongside [the BoLD source code on Github](https://github.com/OffchainLabs/BoLD) to understand how BoLD works under the hood.
-- Reviewing the [Economics of Disputes in Arbitrum BoLD](https://github.com/OffchainLabs/BoLD/blob/main/docs/research-specs/Economics.pdf) to learn about rationale behind the design and recommended bonding values.
-- Reading the formal specification and mathematical proofs behind BoLD in the [BoLD whitepaper](https://arxiv.org/abs/2404.10491).
-
 ## Frequently asked questions about BoLD (FAQ):
 
 #### Q: How does bonding work?
@@ -123,7 +111,7 @@ BoLD ships with trust-less bonding pools that allow any group of participants to
 
 #### Q: Does the bond requirement only mean that whales can validate Arbitrum One?
 
-Validating Arbitrum One is **\*free and accessible**. All Arbitrum One nodes, by default, are watchtower validators meaning they can detect and report invalid assertions posted to Ethereum.
+Validating Arbitrum One is **free and accessible**. All Arbitrum One nodes, by default, are watchtower validators meaning they can detect and report invalid assertions posted to Ethereum.
 
 However, becoming an assertion proposer requires a bond, as without it, anyone could delay all Arbitrum bridged assets by one week. However, BoLD allows for anyone to propose assertions and also challenge invalid assertions via pool contracts, helping keep proposers accountable for their actions.
 
@@ -225,6 +213,10 @@ Under reasonable parameterization, the sequencer could be offline / censoring fo
 The methodology for calculating the parameters, specifically for L3 Orbit chains, will be made available at a later date for teams who wish to use BoLD.
 
 #### Q: What is the user flow for using the assertion bonding pool contract?
+
+:::warning
+The autopooling feature is not available on Arbitrum Nitro as of yet.
+:::
 
 Anyone can deploy an assertion bonding pool using [`AssertionStakingPoolCreator.sol`](https://github.com/OffchainLabs/BoLD/blob/main/contracts/src/assertionStakingPool/AssertionStakingPoolCreator.sol) as a means to crowdsource funds to put up a bond for an assertion. To defend Arbitrum using a bonding pool, an entity would first deploy this pool with the assertion they believe is correct and wish to put up a bond to challenge an adversary's assertion. Then, anyone can verify that the claimed assertion is correct by running the inputs through their node's State Transition Function (STF). If other parties agree that the assertion is correct, then they can deposit their funds into the contract. When enough funds have been deposited, anyone can permissionlessly trigger the creation of the assertion on-chain to start the challenge. Finally, once the honest parties' assertion is confirmed by the dispute protocol, all involved entities can get their funds reimbursed and can withdraw. The Arbitrum Nitro node validation software also comes with an optional feature called "auto pooling," where the entire workflow of assertion bonding pool deployment and depositing funds into the said pool are automated. If "auto pooling" is activated & the private key controlling the validator has funds, a pool will be trustlessly deployed alongside an assertion with the available funds. If a validator with the "auto pooling" feature enabled sees an assertion on-chain that it agrees with _and_ a bonding pool already exists for that assertion, then the validator will automatically deposit funds into the bonding pool to "join" the others who are backing that on-chain assertion in a trustless manner.
 
