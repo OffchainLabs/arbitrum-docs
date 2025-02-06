@@ -252,11 +252,11 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 **Ticket submission**
 
-- The user who initiates a parent to child message
+- The user who initiates a parent-to-child message
 - **Initiating a parent-child message**: a call to `inbox.createRetryableTicket` function that puts the message in the child chain inbox that can be re-executed for some fixed amount of time if it reverts.
 - **Check user's deposit**: logic that checks if the user has enough funds to create a ticket. This is done by checking if the `msg.value` provided by the user is greater than or equal to `maxSubmissionCost` + `l2CallValue` + `gasLimit` \* `maxFeePerGas`
 - **Ticket creation fails**: ticket creation fails and no funds are deducted from the user
-- **Ticket is created**: a ticket is created an added to the retryable buffer on the child chain and funds (`l2CallValue` + `submissionCost`) are deducted to cover the `callValue` from the user and placed into escrow (on the child chain) for later use in redeeming the ticket.
+- **Ticket is created**: a ticket is created and added to the retryable buffer on the child chain and funds (`l2CallValue` + `submissionCost`) are deducted to cover the `callValue` from the user and placed into escrow (on the child chain) for later use in redeeming the ticket.
 
 #### Automatic redemption
 
