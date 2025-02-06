@@ -396,10 +396,10 @@ Some examples of token features suitable for the generic-custom gateway:
 
 #### Setting up your token with a generic custom gateway
 
-Follow the following steps to get your token set up to use the generic-custom gateway. You can also find more detailed instructions in the page [How to bridge tokens via Arbitrum's genric-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
+Follow the following steps to set up your token for the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum's genric-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
 
 **Pre-requisites**
-Your token on a parent chain should conform to teh [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [TestCustomTokenL1](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
+Your token on a parent chain should conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [TestCustomTokenL1](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
 
 1. **Deploy your token on a child chain**
 
