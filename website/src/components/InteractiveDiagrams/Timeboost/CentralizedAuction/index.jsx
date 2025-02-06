@@ -4,12 +4,12 @@ export const FlowChart = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
-    width={1600}
-    height={930}
     style={{
       background: '#fff',
       backgroundColor: 'light-dark(#fff,var(--ge-dark-color, #121212))',
       colorScheme: 'light dark',
+      maxWidth: '100%',
+      height: 'auto'
     }}
     viewBox="-0.5 -0.5 1600 900"
     {...props}
