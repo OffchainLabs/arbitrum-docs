@@ -27,16 +27,16 @@ export function Modal({ cx = 1103, cy = 490 }) {
 
   return (
     <>
-      <g 
-        onClick={() => setIsOpen(true)} 
-        style={{ 
+      <g
+        onClick={() => setIsOpen(true)}
+        style={{
           cursor: 'pointer',
           pointerEvents: 'all',
           position: 'relative',
-          zIndex: 10 
+          zIndex: 10,
         }}
       >
-        <Circle cx={cx} cy={cy} r={10} fill="#569AFF" />
+        <Circle cx={cx} cy={cy} r={13} fill="#569AFF" />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
