@@ -28,7 +28,7 @@ These default values are selected to carefully balance security and performance 
 
 ### Challenge period blocks
 
-The main challenge period configuration uses the `confirmPeriodBlocks` parameter, which specifies the duration of the challenge window based on the parent chain’s notion of block progression. This parameter can is customizable in two ways:
+The main challenge period configuration uses the `confirmPeriodBlocks` parameter, which specifies the duration of the challenge window based on the parent chain’s notion of `block.number`. This parameter can is customizable in two ways:
 
 1. **During deployment**: Developers can specify the desired value in the `confirmPeriodBlocks` field of the RollupCreator configuration when deploying the rollup.
 2. **Post-deployment**: The chain owner can update this value dynamically by calling the `Rollup.setConfirmPeriodBlocks(newValue)` function.
