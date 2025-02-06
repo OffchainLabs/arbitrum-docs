@@ -36,7 +36,7 @@ export function Modal({ cx = 1103, cy = 490 }) {
           zIndex: 10,
         }}
       >
-        <Circle cx={cx} cy={cy} r={13} fill="#569AFF" />
+        <Circle cx={cx} cy={cy} r={13} fill="#FFFFFF" />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
