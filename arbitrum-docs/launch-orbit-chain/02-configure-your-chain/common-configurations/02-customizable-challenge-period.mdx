@@ -46,7 +46,7 @@ Like the main challenge period, this parameter is customizable in two ways:
 1. **During deployment**: The value can be set in the `extraChallengeTimeBlocks` field of the RollupCreator configuration.
 2. **Post-deployment**: The chain owner can dynamically adjust the parameter using the `Rollup.setExtraChallengeTimeBlocks(newExtraTimeBlocks)` function.
 
-For example, the following command can update the extra challenge period to 300 blocks based on the parent chain’s notion of block progression:
+For example, the following command can update the extra challenge period to 300 blocks based on the parent chain’s notion of `block.number`:
 
 ```shell
 cast send <ROLLUP_ADMIN_ADDRESS> "setExtraChallengeTimeBlocks(uint256)" 300 \
