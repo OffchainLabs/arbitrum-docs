@@ -225,7 +225,7 @@ Please refer to the [Address aliasing](#address-aliasing) discussion for more ba
 
 ## Retryable tickets
 
-Retryable tickets are Arbitrum's canonical method for creating parent to child chain messges, i.e., parent chain transactions that initiate a message to be executed on the child chain. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at the parent chain; its _submission_ on the parent chain is separable/asynchronous with its _execution_ on the child chain. Retryables provide atomicity between the cross chain operations; if the parent chain transaction request submission succeeds (i.e,. does not revert) then the execution of the retryable on the child chain has a strong guarantee to ultimately succeed as well.
+Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages, i.e., parent-chain transactions that initiate a message to be executed on the child chain. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at the parent chain; its _submission_ on the parent chain is separable/asynchronous with its _execution_ on the child chain. Retryables provide atomicity between the cross-chain operations; if the parent chain transaction request submission succeeds (i.e., does not revert) then the execution of the retryable on the child chain has a strong guarantee to ultimately succeed as well.
 
 ### Retryable tickets lifecycle
 
