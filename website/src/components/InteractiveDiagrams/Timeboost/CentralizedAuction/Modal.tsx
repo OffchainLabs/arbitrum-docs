@@ -5,7 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { Circle } from './Circle';
 
-export function Modal({ cx = 1170, cy = 490 }) {
+export function Modal({ cx = 1103, cy = 490 }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogChange = (isOpen: boolean) => setIsOpen(isOpen);
