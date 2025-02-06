@@ -42,7 +42,7 @@ Whether a chain uses ETH or a custom gas token, users can deposit that token fro
 
 ### Depositing ETH
 
-A special message type exists for simple ETH deposits from a parent to child chain. You can deposit ETH by calling the `Inbox` contract's `depositEth` method, for example:
+A special message type exists for simple ETH deposits from a parent-to-child chain. You can deposit ETH by calling the `Inbox` contract's `depositEth` method, for example:
 
 ```javascript
 function depositEth(address destAddr) external payable override returns (uint256)
