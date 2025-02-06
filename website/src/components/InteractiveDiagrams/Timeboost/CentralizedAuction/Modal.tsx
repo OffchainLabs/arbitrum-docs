@@ -94,7 +94,7 @@ const Content = styled(animated(Dialog.Content))`
   transform: translate(-50%, -50%);
   width: 30vw;
   height: 40vh;
-  background-color:rgb(135, 157, 187);
+  background-color: rgb(135, 157, 187);
   border-radius: 4px;
   padding: 24px 24px 32px;
   z-index: 10000;
