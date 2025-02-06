@@ -327,7 +327,7 @@ We now describe some core goals that motivated the design of our bridging system
 
 For many `ERC-20` tokens, "standard" bridging functionality is sufficient, which entails the following: a token contract on a parent chain (i.e., Ethereum) is associated with a "paired" token contract on the child chain (i.e., Arbitrum).
 
-Depositing a token entails escrowing some amount of the token in a parent chain bridge contract, and minting the same amount at the paired token contract on the child chain. On the child chain, the paired contract behaves much like a normal ERC-20 token contract. Withdrawing entails bruning some amount of the token in the child chain contract, which then can later be claimed from the parent chain bridge contract.
+Depositing a token entails escrowing some amount of the token in a parent chain bridge contract, and minting the same amount at the paired token contract on the child chain. On the child chain, the paired contract behaves much like a normal `ERC-20` token contract. Withdrawing entails bridging some of the tokens in the child chain contract, which can then later be claimed from the parent chain bridge contract.
 
 Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.,:
 
