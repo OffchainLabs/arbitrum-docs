@@ -32,6 +32,7 @@
     "@docusaurus/preset-classic": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.6.3",
     "@docusaurus/theme-mermaid": "^3.6.3",
+    "@react-spring/web": "^9.7.5",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-lunr-search": "^3.3.2",
