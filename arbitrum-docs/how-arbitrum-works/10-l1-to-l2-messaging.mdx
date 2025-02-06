@@ -370,7 +370,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 1. A user calls `L1GatewayRouter.outboundTransferCustomRefund` (with `SomeERC20Token`'s parent chain address as an argument).
    :::warning
-   Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `L1GatewayRouter.outboundTransfer`.
+   Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fall back to `outboundTransfer`. In those cases, please use function `L1GatewayRouter.outboundTransfer`.
    :::
 
 2. `L1GatewayRouter` looks up `SomeERC20Token`'s gateway, and finds that it's the standard ERC-20 gateway (the `L1ERC20Gateway` contract).
