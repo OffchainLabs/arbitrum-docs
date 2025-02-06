@@ -45,6 +45,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.66.1",
+    "styled-components": "^6.1.15",
     "tippy.js": "^6.3.7",
     "trim": "0.0.3"
   },
