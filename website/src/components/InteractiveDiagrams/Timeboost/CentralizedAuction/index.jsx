@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Modal } from './Modal';
 
 export const FlowChart = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" id="svg415" viewBox="0 0 1600 900" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" id="svg415" viewBox="0 0 1600 900" style={{ pointerEvents: 'none' }} {...props}>
     <defs id="defs3">
       <linearGradient
         id="linear-gradient"
