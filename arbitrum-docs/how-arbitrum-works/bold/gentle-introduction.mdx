@@ -149,7 +149,7 @@ Therefore, the BoLD AIP proposes that the honest parties be rewarded 1% of confi
 
 #### Q: Why is $ARB not the bonding token used in BoLD? on Arbitrum One?
 
-Although BoLD supports using an ERC-20 token, Ethereum, specifically WETH, was chosen over $ARB for a few reasons:
+Although BoLD supports using an `ERC-20` token, Ethereum, specifically `WETH`, was chosen over `$ARB` for a few reasons:
 
 1. **Arbitrum One & Arbitrum Nova both inherit their security from Ethereum already,** Arbitrum One and Nova rely on Ethereum for both data availability and as the referee for determining winners during fraud-proof disputes. It follows then that Ethereum continues to be used in BoLD, which is meant to permissionlessly secure Arbitrum even further. Ethereum’s value is also relatively independent of Arbitrum, especially when compared to $ARB.
 2. Adversaries might be able to exploit the potential instability of $ARB when trying to win challenges. Suppose an adversary stakes in `$ARB`, and can create an impression that they have a nontrivial chance of winning the challenge. This might drive down the value of $ARB, which would decrease the adversary's cost to create more stakes (i.e., more spam) during the challenge, which in turn could increase the adversary's chances of winning (which would drive $ARB lower, making the attack cheaper still for the adversary, etc.)
