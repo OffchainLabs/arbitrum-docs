@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal } from './Modal';
-import { Number5 } from './Number5';
+import { NumberComponent } from './NumberComponent';
 
 export const FlowChart = (props) => (
   <svg
@@ -1315,7 +1315,9 @@ export const FlowChart = (props) => (
           className="cls-7"
         />
       </g>
-      <Modal />
+      <Modal number={5} cx={1103} cy={490} title="How to call the sequencer" content={<div><p>Call the contract's function: bla bla bla</p><p>Additional details about calling the sequencer...</p></div>} />
+      <Modal number={3} cx={800} cy={300} title="Understanding the Flow" content={<div><p>This diagram shows the flow of transactions:</p><ul><li>First, transactions are submitted</li><li>Then, they are processed by the sequencer</li><li>Finally, they are included in a batch</li></ul></div>} />
+      <Modal number={1} cx={500} cy={600} title="Batch Processing" content={<div><p>Batches are processed in the following way:</p></div>} />
       <g id="g415">
         <rect
           id="rect167"
@@ -2617,7 +2619,7 @@ export const FlowChart = (props) => (
             className="cls-10"
           />
         </g>
-        <Number5 />
+        <NumberComponent number={5} cx={416.59} cy={412.69} />
       </g>
     </g>
     <Modal

@@ -3,18 +3,20 @@ import { useTransition, animated } from '@react-spring/web';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
-import { Number5 } from './Number5';
+import { NumberComponent } from './NumberComponent';
 
 interface ModalProps {
-  cx?: number;
-  cy?: number;
+  number: number;
+  cx: number;
+  cy: number;
   title?: string;
   content?: React.ReactNode;
 }
 
 export function Modal({
-  cx = 1103,
-  cy = 490,
+  number,
+  cx,
+  cy,
   title = 'How to call the sequencer',
   content = "Call the contract's function: bla bla bla",
 }: ModalProps) {
@@ -48,7 +50,7 @@ export function Modal({
           zIndex: 10,
         }}
       >
-        <Number5 cx={cx} cy={cy} />
+        <NumberComponent number={number} cx={cx} cy={cy} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
@@ -118,7 +120,7 @@ const DialogHeader = styled.header`
   margin-bottom: 16px;
 `;
 
-const DialogBody = styled.body`
+const DialogBody = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 6px;
