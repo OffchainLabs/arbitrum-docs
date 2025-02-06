@@ -194,11 +194,22 @@ Notably, since Arbitrum Nova's security already depends on at least one DAC memb
 
 #### Q: When it comes to viewing the upfront assertion bond (to be a proposer) as the security budget for Arbitrum One, is it possible for an attacker to go above the security budget and, if yes, what happens then?
 
-The upfront capital to post assertions is 3600 ETH, with subsequent sub challenge assertions requiring 555/79 ETH (per level) - this applies to honest proposers as well as malicious entities. A malicious entity can post multiple invalid top level assertions and/or open multiple challenges and the honest entity can
+The upfront capital to post assertions (onchain action) is 3600 ETH, with subsequent sub-challenge assertions requiring 555/79 ETH (per level) - this applies to honest proposers as well as malicious entities. A malicious entity can post multiple invalid top level assertions and/or open multiple challenges and the honest entity can
 
 It is critical to note that Arbitrum state transitions are entirely deterministic. An honest party bonded to the correct state assertion, the honest party will get all their costs refunded while a malicious entity stands to lose everything. Additionally, BoLD’s design ensures that any party bonded to the correct
 
 If a malicious entity wanted to attack Arbitrum, they would need to deposit 3600 ETH to propose an invalid state assertion.
+
+:::info Node Running Info
+
+- Anyone can run an Arbitrum node (today and post-BoLD)
+- The default mode is `watchtower`, which chills out and watches the chain in action. It will alert you if it sees something wrong on chain but no action is taken. It requires **no** funds and **doesn't** take any onchain action.
+- Other "modes" that nodes can run are: `stakeLatest`, `resolveNodes`, `makeNodes`, and `defensive`. All of these modes **require** funds and **will** take onchain action.
+  - Nodes running in this mode are considered validators because they validate what they see and take onchain action.
+- Running a `watchtower` node is **not** a validator.
+- Proposers are a special role, they strictly run in `makeNodes` mode. This means a proposer is someone running an Arbitrum node in `makeNodes` mode, also making them a validator.
+- For more information about see [Running a Node](/run-arbitrum-node/01-overview.mdx) and [Validation strategies](/run-arbitrum-node/more-types/02-run-validator-node.mdx#validation-strategies).
+  :::
 
 #### Q: How do BoLD-based L3s challenge periods operate, considering the worst-case scenario?
 
