@@ -73,7 +73,7 @@ Honest proposers can always withdraw their bond once their assertions are confir
 
 Given that participation in BoLD is permissionless, we recommend that the size of bonds required to participate be high enough to disincentivize malicious actors from attacking Arbitrum One and to mitigate against spam (that would otherwise delay confirmations up to 1 challenge period). High bonding values do not harm decentralization because (1) trustless bonding (or staking) pools can be deployed permissionlessly to open challenges and post assertions, and (2) any number of honest parties of unknown identities can emerge to bond their funds to the correct assertion and participate in the defense of Arbitrum at any time within a challenge. As with the current dispute resolution protocol, there are no protocol level incentives for parties who opt in to participate in validating Arbitrum One with BoLD.
 
-While both of these bonds can be any ERC-20 token and be set to any size, we recommend the use of the `WETH` ERC-20 token & the following bond sizes for Arbitrum One:
+While both of these bonds can be any `ERC-20` token and be set to any size, we recommend the use of the `WETH` `ERC-20` token & the following bond sizes for Arbitrum One:
 
 - Assertion bonds: 3600 `ETH` - required from validators to bond their funds to an assertion in the eventual hopes of having that assertion be confirmed by the rollup protocol. This is a one-time bond required to be able to start posting assertions. This bond can be withdrawn once a validator’s assertion is confirmed and can alternatively be put together via a trustless bonding pool.
 
