@@ -52,6 +52,7 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@offchainlabs/prettier-config": "0.2.1",
+    "@radix-ui/react-dialog": "^1.1.6",
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/node": "^22.10.10",
     "docusaurus-plugin-typedoc": "^1.0.1",
