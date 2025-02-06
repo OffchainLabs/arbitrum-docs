@@ -159,7 +159,7 @@ Validators have to fetch all blocks between batch 5 and batch 10 and create a Me
 
 The concept of a history commitment is at the core of challenges and BoLD itself.
 
-The validators above provide a Merkle proof of their commitment to some history. In this case, all the Arbitrum block hashes from batch 5 to batch 10. Using this tree, validators can narrow their disagreement to a single block using Merkle proofs by iteratively bisecting the merkle root and creating edges which have their own history commitments to each half of the tree.
+The validators above provide a Merkle proof of their commitment to some history. In this case, all the Arbitrum block hashes from batch 5 to batch 10. Using this tree, validators can narrow their disagreement to a single block using Merkle proofs by iteratively bisecting the Merkle root and creating edges that have their own history commitments to each half of the tree.
 
 ### Challenge resolution
 
