@@ -1,8 +1,15 @@
 import * as React from 'react';
 import { Modal } from './Modal';
+import { Number4 } from './Number4';
 
 export const FlowChart = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" id="svg415" viewBox="0 0 1600 900" style={{ pointerEvents: 'none' }} {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="svg415"
+    viewBox="0 0 1600 900"
+    style={{ pointerEvents: 'none' }}
+    {...props}
+  >
     <defs id="defs3">
       <linearGradient
         id="linear-gradient"
@@ -197,10 +204,6 @@ export const FlowChart = (props) => (
               <g id="g28">
                 <path id="line27" d="M0 324.95h125.55" className="cls-2" />
                 <circle id="circle27" cx={125.39} cy={324.95} r={3.22} className="cls-10" />
-              </g>
-              <g id="g29">
-                <path id="polyline28" d="M0 399.91h116.96l9.25 9.25h140.28" className="cls-2" />
-                <circle id="circle28" cx={266.33} cy={409.16} r={3.22} className="cls-10" />
               </g>
               <g id="g30">
                 <path id="polyline29" d="M0 389.35h86.05l17.43-11.48h101.07" className="cls-2" />
@@ -544,61 +547,13 @@ export const FlowChart = (props) => (
               </g>
               <g id="g73">
                 <path
-                  id="polyline72"
+                  id="polyline73"
                   d="M1420.84 360.12h98.31l22.63 15.47H1600"
                   className="cls-2"
                 />
                 <path
                   id="path72"
                   d="M1421.03 363.83c-2.04 0-3.7-1.66-3.7-3.7s1.66-3.7 3.7-3.7 3.7 1.66 3.7 3.7-1.66 3.7-3.7 3.7Z"
-                  className="cls-10"
-                />
-              </g>
-              <g id="g74">
-                <path
-                  id="polyline73"
-                  d="M1600 358.76h-58.22l-22.63-15.46h-101.83l-14.86-14.86h-51.08l-14.09 14.08h-50.84"
-                  className="cls-2"
-                />
-                <path
-                  id="path73"
-                  d="M1286.63 338.82c-2.04 0-3.7 1.66-3.7 3.7s1.66 3.7 3.7 3.7 3.7-1.66 3.7-3.7-1.66-3.7-3.7-3.7Z"
-                  className="cls-10"
-                />
-              </g>
-              <g id="g75">
-                <path id="line74" d="M1600 309.46h-137.88" className="cls-2" />
-                <path
-                  id="path74"
-                  d="M1462.28 306.24c-1.78 0-3.22 1.44-3.22 3.22s1.44 3.22 3.22 3.22 3.22-1.44 3.22-3.22-1.44-3.22-3.22-3.22Z"
-                  className="cls-10"
-                />
-              </g>
-              <g id="g76">
-                <path id="polyline75" d="M1382.62 428.12h98.3l22.63-15.46H1600" className="cls-2" />
-                <path
-                  id="path75"
-                  d="M1382.8 431.83c-2.04 0-3.7-1.66-3.7-3.7s1.66-3.7 3.7-3.7 3.7 1.66 3.7 3.7-1.66 3.7-3.7 3.7Z"
-                  className="cls-10"
-                />
-              </g>
-              <g id="g77">
-                <path
-                  id="polyline76"
-                  d="M1359.78 443.59h121.14l22.63-15.47H1600"
-                  className="cls-2"
-                />
-                <path
-                  id="path76"
-                  d="M1359.96 447.29c-2.04 0-3.7-1.66-3.7-3.7s1.66-3.7 3.7-3.7 3.7 1.66 3.7 3.7-1.66 3.7-3.7 3.7Z"
-                  className="cls-10"
-                />
-              </g>
-              <g id="g78">
-                <path id="path77" d="M1600 227.1h-163.21l-23.67 34.9" className="cls-2" />
-                <path
-                  id="path78"
-                  d="M1410.55 260.06a3.218 3.218 0 1 0 5.33 3.61 3.218 3.218 0 1 0-5.33-3.61Z"
                   className="cls-10"
                 />
               </g>
@@ -2662,19 +2617,12 @@ export const FlowChart = (props) => (
             className="cls-10"
           />
         </g>
-        <g id="g414">
-          <circle id="circle413" cx={1003.46} cy={253.19} r={20.95} className="cls-5" />
-          <path
-            id="path414"
-            d="M1003.53 257.43c1.01 0 1.7-.97 1.7-2.18s-.67-2.05-1.75-2.05c-.82 0-1.36.52-1.7 1.31l-4.27-.3.86-8.73h10.43v3.3h-4.42c-.78 0-1.75-.02-2.52-.11-.09.8-.15 1.96-.45 2.76h.17c.69-.78 1.77-1.16 3.12-1.16 2.93 0 5.08 2.11 5.08 4.96 0 3.21-2.46 5.34-6.23 5.34s-6.18-1.92-6.31-4.8h4.52c.06 1.01.73 1.66 1.75 1.66Z"
-            className="cls-10"
-          />
-        </g>
+        <Number4 />
       </g>
-    </g> 
-    <Modal 
-      cx={1103} 
-      cy={490} 
+    </g>
+    <Modal
+      cx={1103}
+      cy={490}
       title="How to call the sequencer"
       content={
         <div>
@@ -2683,9 +2631,9 @@ export const FlowChart = (props) => (
         </div>
       }
     />
-    <Modal 
-      cx={800} 
-      cy={300} 
+    <Modal
+      cx={800}
+      cy={300}
       title="Understanding the Flow"
       content={
         <div>
@@ -2698,9 +2646,9 @@ export const FlowChart = (props) => (
         </div>
       }
     />
-    <Modal 
-      cx={500} 
-      cy={600} 
+    <Modal
+      cx={500}
+      cy={600}
       title="Batch Processing"
       content={
         <div>
@@ -2715,5 +2663,3 @@ export const FlowChart = (props) => (
     />
   </svg>
 );
-    <Modal />
-  
