@@ -420,13 +420,13 @@ We are here to help. If you have questions about your custom token needs, feel f
 
 ### Other flavors of gateways
 
-Note that in the system described above, one pair of gateway contracts handles the bridging of many ERC-20s; i.e., many ERC-20s on the parent chain are each paired with their own ERC-20s on the child chain via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
+Note that in the system described above, one pair of gateway contracts handles the bridging of many ERC-20s; i.e., many `ERC-20`s on the parent chain are each paired with their own `ERC-20`s on the child chain via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
 
-Take our wrapped Ether implementation for example: here, a single WETH contract on the parent chain is connected to a single WETH contract on the child chain. When transferring WETH from one domain to another, the parent/child gateway architecture is used to unwrap the WETH on domain A, transfer the now unwrapped Ether, and then re-wrap it on domain B. This enures that WETH can behave on the child chain the way users are used to it behaving on the parent chain, while ensuring that all WETH tokens are always fully collateralized on the layer in which they reside.
+Take our wrapped Ether implementation for example: here, a single WETH contract on the parent chain is connected to a single WETH contract on the child chain. When transferring WETH from one domain to another, the parent/child gateway architecture is used to unwrap the `WETH` on domain A, transfer the now unwrapped Ether, and then re-wrap it on domain B. This enures that `WETH` can behave on the child chain the way users are used to it behaving on the parent chain, while ensuring that all `WETH` tokens are always fully collateralized on the layer in which they reside.
 
-No matter the complexity of a particular token's bridging needs, a gateway can in principle be created to accomodate it within our canonical bridging system.
+No matter the complexity of a particular token's bridging needs, a gateway can in principle be created to accommodate it within our canonical bridging system.
 
-You can find an example of an implementation of a custom gateway in the page [How to bridge tokens via a custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/04-how-to-bridge-tokens-custom-gateway.mdx).
+You can find an example of an implementation of a custom gateway on the page [How to bridge tokens via a custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/04-how-to-bridge-tokens-custom-gateway.mdx).
 
 ### Demos
 
