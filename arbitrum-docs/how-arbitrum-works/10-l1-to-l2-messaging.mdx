@@ -282,13 +282,13 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 #### Avoid losing funds!
 
-If a ticket expires after seven days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callValue`) it carries and could be lost without possibility of being recovered.
+If a ticket expires after seven days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callValue`) it carries and could be lost without the possibility of being recovered.
 
-On success, the `To` address receives the escrowed `callValue`, and any unused gas is returned to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee was paid during the scheduling tx, so no fees are charged and no refunds are made.
+On success, the `To` address receives the escrowed `callValue`, and any unused gas is returned to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee was paid during the scheduling tx, so no fees or refunds are charged.
 
-Note that during redemption of a ticket, attempts to cancel the same ticket, or to schedule another `redeem` of the same ticket, will revert. In this manner, retryable ticekts are not self-modifying.
+Note that during redemption of a ticket, attempts to cancel the same ticket, or to schedule another `redeem` of the same ticket, will revert. In this manner, retryable tickets are not self-modifying.
 
-If a ticket with a `callValue` is eventually discarded (canceled or expired), having never succesfully run, the escrowed `callValue` will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (Step 1).
+If a ticket with a `callValue` is eventually discarded (canceled or expired), having never successfully run, the escrowed `callValue` will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (Step 1).
 
 :::info Important Notes
 If a redeem is not done at submission or the submission's initial `redeem` fails, anyone can attempt to redeem the retryable again by calling `ArbRetryableTx`'s `redeem` precompile method, which donates the call's gas to the next attempt. ArbOS will [enqueue the redeem](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245), which is its own special [ArbitrumRetryTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) type, to its list of redeems that ArbOS [guarantees to exhaust](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L135) before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheudled to happen as soon as possible, and will always be in the same block as the transaction that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance the block's gas limit is reached before execution.
