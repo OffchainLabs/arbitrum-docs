@@ -351,7 +351,7 @@ Our architecture consists of three types of contracts:
 
 ![500px-img](../assets/canonical-bridge.svg)
 
-All parent to child token transfers are initiated via the router contract on the parent chain, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping parent chain token addresses to L1Gateway contracts, thus acting as a parent/child address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [Retryable tickets](#retryable-tickets)).
+All parent-to-child token transfers are initiated via the router contract on the parent chain, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping parent chain token addresses to L1Gateway contracts, thus acting as a parent/child address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [Retryable tickets](#retryable-tickets)).
 
 ![400px-img](../assets/token-gateway.svg)
 
