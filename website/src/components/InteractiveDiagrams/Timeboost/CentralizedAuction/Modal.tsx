@@ -5,7 +5,19 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { Circle } from './Circle';
 
-export function Modal({ cx = 1103, cy = 490 }) {
+interface ModalProps {
+  cx?: number;
+  cy?: number;
+  title?: string;
+  content?: React.ReactNode;
+}
+
+export function Modal({
+  cx = 1103,
+  cy = 490,
+  title = 'How to call the sequencer',
+  content = "Call the contract's function: bla bla bla",
+}: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDialogChange = (isOpen: boolean) => setIsOpen(isOpen);
@@ -63,8 +75,8 @@ export function Modal({ cx = 1103, cy = 490 }) {
                           </svg>
                         </CloseButton>
                       </DialogHeader>
-                      <Title>How to call the sequencer</Title>
-                      <DialogBody>Call the contract's function: bla bla bla</DialogBody>
+                      <Title>{title}</Title>
+                      <DialogBody>{content}</DialogBody>
                     </Content>
                   ) : null}
                 </>

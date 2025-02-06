@@ -459,39 +459,39 @@ export const FlowChart = (props) => (
                 />
               </g>
               <g id="g64">
-                <path id="polyline63" d="M0 503.37h44.46v-33.95h188.09" className="cls-2" />
-                <circle id="circle63" cx={232.39} cy={469.42} r={3.22} className="cls-10" />
+                <path id="polyline64" d="M0 503.37h44.46v-33.95h188.09" className="cls-2" />
+                <circle id="circle64" cx={232.39} cy={469.42} r={3.22} className="cls-10" />
               </g>
               <g id="g65">
-                <path id="polyline64" d="M0 482.44h29.13v-26.03h72.11" className="cls-2" />
+                <path id="polyline65" d="M0 482.44h29.13v-26.03h72.11" className="cls-2" />
                 <path
-                  id="path64"
+                  id="path65"
                   d="M101.08 459.63c1.78 0 3.22-1.44 3.22-3.22s-1.44-3.22-3.22-3.22-3.22 1.44-3.22 3.22 1.44 3.22 3.22 3.22Z"
                   className="cls-10"
                 />
               </g>
               <g id="g66">
                 <path
-                  id="polyline65"
+                  id="polyline66"
                   d="M261.33 482.44H122.47l21.62 21.61h85.62"
                   className="cls-2"
                 />
                 <path
-                  id="path65"
+                  id="path66"
                   d="M261.16 479.22c1.78 0 3.22 1.44 3.22 3.22s-1.44 3.22-3.22 3.22-3.22-1.44-3.22-3.22 1.44-3.22 3.22-3.22Z"
                   className="cls-10"
                 />
-                <circle id="circle65" cx={229.54} cy={504.05} r={3.22} className="cls-10" />
+                <circle id="circle66" cx={229.54} cy={504.05} r={3.22} className="cls-10" />
               </g>
               <g id="g67">
                 <path
-                  id="polyline66"
+                  id="polyline67"
                   d="M252.92 536.37H121.38l-35.33-35.33-23.9-1.1v-17.5h30.34l37.2 37.2h82.26"
                   className="cls-2"
                 />
-                <circle id="circle66" cx={252.75} cy={536.37} r={3.22} className="cls-10" />
+                <circle id="circle67" cx={252.75} cy={536.37} r={3.22} className="cls-10" />
                 <path
-                  id="path66"
+                  id="path67"
                   d="M211.79 522.86c1.78 0 3.22-1.44 3.22-3.22s-1.44-3.22-3.22-3.22-3.22 1.44-3.22 3.22 1.44 3.22 3.22 3.22Z"
                   className="cls-10"
                 />
@@ -922,7 +922,7 @@ export const FlowChart = (props) => (
               <g id="g110">
                 <path
                   id="polyline109"
-                  d="M1382.62 870.69h98.3l22.63-15.46H1600"
+                  d="M1382.62 870.69h98.3l22.63 15.46H1600"
                   className="cls-2"
                 />
                 <path
@@ -2671,6 +2671,49 @@ export const FlowChart = (props) => (
           />
         </g>
       </g>
-    </g>
+    </g> 
+    <Modal 
+      cx={1103} 
+      cy={490} 
+      title="How to call the sequencer"
+      content={
+        <div>
+          <p>Call the contract's function: bla bla bla</p>
+          <p>Additional details about calling the sequencer...</p>
+        </div>
+      }
+    />
+    <Modal 
+      cx={800} 
+      cy={300} 
+      title="Understanding the Flow"
+      content={
+        <div>
+          <p>This diagram shows the flow of transactions:</p>
+          <ul>
+            <li>First, transactions are submitted</li>
+            <li>Then, they are processed by the sequencer</li>
+            <li>Finally, they are included in a batch</li>
+          </ul>
+        </div>
+      }
+    />
+    <Modal 
+      cx={500} 
+      cy={600} 
+      title="Batch Processing"
+      content={
+        <div>
+          <p>Batches are processed in the following way:</p>
+          <ol>
+            <li>Transactions are collected</li>
+            <li>They are ordered and validated</li>
+            <li>The batch is sealed and submitted</li>
+          </ol>
+        </div>
+      }
+    />
   </svg>
 );
+    <Modal />
+  
