@@ -153,7 +153,7 @@ function sendL2MessageFromOrigin(
 
 Unsigned messages allow a Parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale.). The delayed inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
 
-1. **Unsigned from EOAs**: These methods incorporate a none for replay protection, similar to standard EOA-based transaction on Ethereum.
+1. **Unsigned from EOAs**: These methods incorporate a none-for replay protection, similar to standard EOA-based Ethereum transactions.
 
 - `sendL1FundedUnsignedTransaction`
   - Tranfers value from the parent to child chain along with the transaction
