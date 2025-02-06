@@ -77,7 +77,7 @@ Child_Alias = Parent_Contract_Address + 0x11110000000000000000000000000000000011
 
 #### Why aliasing?
 
-Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain simply by sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures the child chain contracts can distinguish between calls from parent chain contracts and calls from child chain native addresses.
+Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could simply impersonate a contract on a child chain by sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures the child chain contracts can distinguish between calls from parent chain contracts and calls from child chain native addresses.
 
 #### Computing the original parent chain address
 
