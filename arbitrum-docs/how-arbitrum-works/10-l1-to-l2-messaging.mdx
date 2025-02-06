@@ -384,7 +384,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 ### The Arbitrum generic-custom gateway
 
-Just because a token has requirements beyond what are offered via the standard ERC-20 gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
+Just because a token has requirements beyond what are offered via the standard `ERC-20` gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
 
 **If your custom token has the ability to increase its supply (i.e., mint) directly on the child chain, and you want the child chain-minted tokens be withdrawable back to the parent chain and recognized by the parent chain contract, it will probably require its own special gateway. Otherwise, the generic-custom gateway is likely the right solution for you!**
 
