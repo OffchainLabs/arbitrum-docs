@@ -8,6 +8,7 @@ user_story: As a current or prospective Arbitrum user, I want to understand how 
 content_type: gentle-introduction
 ---
 
+import { FlowChart } from '@site/src/components/InteractiveDiagrams/Timeboost/CentralizedAuction';
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
 
 This introduction will walk you through <a data-quicklook-from='timeboost'>Arbitrum Timeboost</a>: a novel <a data-quicklook-from='transaction-ordering-policy'>transaction ordering policy</a> for Arbitrum chains that allows chain owners to capture the Maximal Extractable Value (MEV) on their chain and reduce spam, all while preserving fast block times and protecting users from harmful types of MEV, such as sandwich attacks and front-running.
@@ -75,6 +76,8 @@ The value of the express lane will be the sum of how much MEV the express lane c
 Control of the express lane in each round (default: 60 seconds) is determined by a per-round auction, which is a sealed-bid, second-price auction. This auction is held to determine the express lane controller for the next round. In other words, the express lane controller was determined at any point in time in the previous auction round. Bids for the auction can be made with any ERC20 token, in any amount, and be collected by any address - at the full discretion of the chain owner.
 
 ![timeboost auction workflow](./images/centralized-timeboost-auction-workflow.jpg)
+
+<FlowChart />;
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
 
