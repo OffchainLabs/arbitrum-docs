@@ -6,6 +6,9 @@
     "docusaurus": "docusaurus",
     "install_sdk_dependencies": "cd ../arbitrum-sdk && yarn install && cd ../website",
     "generate_precompiles_ref_tables": "ts-node src/scripts/precompile-reference-generator.ts",
+    "update_variable_refs": "ts-node src/scripts/update-variable-references.ts",
+    "prepare": "husky",
+    "postinstall": "git config core.hooksPath .husky",
     "start": "yarn clear && yarn install_sdk_dependencies && docusaurus start",
     "build_translation": "yarn ts-node ./src/scripts/move-untranslated-files.ts",
     "build": "yarn install_sdk_dependencies && docusaurus build",
@@ -48,7 +51,9 @@
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@offchainlabs/prettier-config": "0.2.1",
     "@tsconfig/docusaurus": "^2.0.3",
+    "@types/node": "^22.10.10",
     "docusaurus-plugin-typedoc": "^1.0.1",
+    "husky": "^9.1.7",
     "markdown-link-extractor": "^3.1.0",
     "prettier": "^2.8.3",
     "ts-node": "^10.9.1",
@@ -56,6 +61,9 @@
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
     "typescript": "^5.1"
+  },
+  "resolutions": {
+    "image-size": "~1.0.2"
   },
   "browserslist": {
     "production": [

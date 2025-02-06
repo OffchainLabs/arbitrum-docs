@@ -50,7 +50,14 @@ A DAS can be configured to use one or more of four storage backends:
 
 - [AWS S3](https://aws.amazon.com/s3/) bucket
 - Files on local disk
+- (**EXPERIMENTAL**) [Google Cloud Storage](https://cloud.google.com/storage) bucket
 - (**DEPRECATED**) [Badger](https://dgraph.io/docs/badger/) database on local disk
+
+::::warning Google Cloud Storage is experimental
+
+The Google Cloud Storage option (set with `google-cloud-storage`) is experimental and hasn't been tested thoroughly. It is recommended to not rely solely on this storage option and to use it alongside other storage options.
+
+::::
 
 ::::warning Local Badger database deprecated
 
@@ -80,7 +87,7 @@ DA servers also have an optional REST aggregator which, when a data batch is not
 
 Gather the following information:
 
-- The latest Nitro docker image: `@latestNitroNodeImage@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
@@ -106,7 +113,7 @@ Here's an example of how to use the `datool keygen` utility inside Docker and st
 
 ```shell
 docker run -v $(pwd)/bls_keys:/data/keys --entrypoint datool \
-@latestNitroNodeImage@ keygen --dir /data/keys
+@@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ keygen --dir /data/keys
 ```
 
 ### Step 2: Deploy the DAS
@@ -152,6 +159,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import S3Parameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_s3-parameters.mdx';
 import LocalFilesParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-files-parameters.mdx';
+import GoogleCloudStorageParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_gcs-parameters.mdx';
 import LocalBadgerDBParameters from '../../node-running/how-tos/data-availability-committee/partials/parameters/_local-badger-db-parameters.mdx';
 
 <div className="dynamic-content-tabs">
@@ -161,6 +169,9 @@ import LocalBadgerDBParameters from '../../node-running/how-tos/data-availabilit
     </TabItem>
     <TabItem value="local-files" label="Local files">
       <LocalFilesParameters />
+    </TabItem>
+    <TabItem value="gcs-bucket" label="(Experimental) Google Cloud Storage">
+      <GoogleCloudStorageParameters />
     </TabItem>
     <TabItem value="badger-db" label="(Deprecated) Local Badger database">
       <LocalBadgerDBParameters />
@@ -228,7 +239,7 @@ template:
         - |
         mkdir -p /home/user/data/badgerdb
         /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --data-availability.key.key-dir /home/user/data/keys --enable-rpc --rpc-addr '0.0.0.0' --log-level 3 --enable-rest --rest-addr '0.0.0.0' --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.s3-storage.discard-after-timeout false --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
-        image: @latestNitroNodeImage@
+        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@
         imagePullPolicy: Always
         resources:
         limits:
@@ -315,7 +326,7 @@ datool keygen --dir /some/local/dir/keys --ecdsa
 You can also use the `docker run` command as follows:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @latestNitroNodeImage@ keygen --dir /home/user/data/keys --ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ keygen --dir /home/user/data/keys --ecdsa
 ```
 
 #### Step 2: Change the DAS configuration and restart the server
@@ -351,7 +362,7 @@ datool client rpc store  --url http://localhost:9876 --message "Hello world" --s
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @latestNitroNodeImage@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
+docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
 The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
@@ -367,7 +378,7 @@ datool client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 You can also use the `docker run` command:
 
 ```shell
-docker run --rm -it --network="host" --entrypoint datool @latestNitroNodeImage@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
+docker run --rm -it --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ client rest getbyhash --url http://localhost:9877 --data-hash 0xDataHash
 ```
 
 If we set `0xDataHash` to `0x052cca0e379137c975c966bcc69ac8237ac38dc1fcf21ac9a6524c87a2aab423` (from the previous step), then the result should be: `Message: Hello world`
@@ -416,6 +427,28 @@ A DAS should strive not to miss any batch of information sent by the sequencer. 
 Taking that into account, there's a risk of Denial of Service attacks on those servers if the endpoint for the RPC interface is publicly known. To mitigate this risk, ensure the RPC endpoint's URL is not easily discoverable. It should be known only to the sequencer. Share this information with the chain owner through a private channel to maintain security.
 
 Finally, as explained in the previous section, if you're also running a mirror DAS, there's no need to publicly expose the REST interface of your main DAS. Your mirrors can synchronize over your private network using the REST interface from your main DAS and other public mirrors.
+
+## External signer support
+
+By default the batch poster uses the same ECDSA key to sign `das_store` requests as it uses to sign the batch transactions sent to the sequencer inbox contract. Many installations use an external signer for securing the batch poster's key. While using an external signer is suported for signing batch transactions, it is not currently supported for signing the requests sent to the DA Committee. Currently, if you want to use an external signer for the batch transactions together with AnyTrust, you must generate a separate key for signing the requests sent to the DA Committee. If a wallet file is used the account must be named "l1-batch-poster".
+
+The batch poster would need to have the configuration for the external signer
+
+```
+--node.batch-poster.data-poster.external-signer...
+```
+
+and the configuration for the key which is only used for signing DA Committee requests.
+
+```
+--node.batch-poster.parent-chain-wallet...
+```
+
+The Committee servers would need to additionaly specify the public key to accept signed messages from.
+
+```
+--data-availability.extra-signature-checking-public-key
+```
 
 ## Other considerations
 

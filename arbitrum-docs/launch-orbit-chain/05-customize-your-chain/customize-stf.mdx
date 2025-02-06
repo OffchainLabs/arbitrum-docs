@@ -73,7 +73,7 @@ This guide covers how to build the node and enable fraud proofs by building a ne
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @nitroVersionTag@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.4.0@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -217,8 +217,8 @@ To do that, you'll need to first extract the replay binary from the `nitro-node-
 docker run --rm --name replay-binary-extractor --entrypoint sleep custom-nitro-node-dev infinity
 docker cp replay-binary-extractor:/home/user/target/machines/latest extracted-replay-binary
 docker stop replay-binary-extractor
-cat extracted-replay-binary/module.root
-mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module.root)"
+cat extracted-replay-binary/module-root.txt
+mv extracted-replay-binary "target/machines/$(cat extracted-replay-binary/module-root.txt)"
 ```
 
 These commands will output the new WASM module root, and create the directory `target/machines/<wasm module root>`.

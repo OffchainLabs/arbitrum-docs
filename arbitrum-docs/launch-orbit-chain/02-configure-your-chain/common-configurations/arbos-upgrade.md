@@ -8,7 +8,11 @@ target_audience: 'Developers maintaining Orbit chains.'
 sidebar_position: 3
 ---
 
+<<<<<<<< HEAD:arbitrum-docs/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md
 This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../../concepts/chain-ownership.md) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
+========
+This how-to provides step-by-step instructions for Orbit chain operators who want to upgrade ArbOS on their Orbit chain(s). Familiarity with ArbOS, Orbit, and [chain ownership](../concepts/chain-ownership.mdx) is expected. Note that Orbit chain owners have full discretion over when and whether to upgrade their ArbOS version.
+>>>>>>>> master:arbitrum-docs/launch-orbit-chain/how-tos/arbos-upgrade.mdx
 
 The specific upgrade requirements for each ArbOS release are located under each reference page for that specific [ArbOS release](/run-arbitrum-node/arbos-releases/01-overview.mdx#list-of-available-arbos-releases).
 

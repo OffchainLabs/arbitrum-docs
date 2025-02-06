@@ -9,7 +9,7 @@ content_type: get-started
 
 The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of the <a data-quicklook-from="arbitrum">Arbitrum</a> network and is responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast <a data-quicklook-from="transaction">Transaction</a> confirmations while maintaining the security and integrity of the <a data-quicklook-from="blockchain">Blockchain</a>. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to <a data-quicklook-from="parent-chain">Parent chain</a>, optimizing costs and performance.
 
-<div class="invert-on-dark">![sequencer-operations](../assets/sequencer-operations.png)</div>
+![600px-img](../assets/sequencer-operations.svg)
 
 In this section, we will explore the operation of the Sequencer in detail. The topics covered include:
 
@@ -19,6 +19,7 @@ In this section, we will explore the operation of the Sequencer in detail. The t
   - [Compression](#compression)
   - [Submitting to the Sequencer Inbox Contract](#submitting-to-the-sequencer-inbox-contract)
 - [Finality](#finality): Understanding how transaction finality is achieved in Arbitrum through both soft and hard finality mechanisms, ensuring that transactions are confirmed securely and reliably. (not as a sequencer task)
+- [Censorship Timeout](#censorship-timeout): A brief introduction to a special feature that aims to limit the negative effects of prolonged sequencer censorship and/or unexpected sequencer outages.
 
 By examining these aspects, you will understand the Sequencer's role within the Arbitrum ecosystem, including how it enhances transaction throughput, reduces latency, and maintains a fair and decentralized network.
 
@@ -33,7 +34,7 @@ The Sequencer communicates the transaction sequence through two primary channels
 1. **Real-Time Sequencer Feed**: A live broadcast that publishes transactions instantly as they are sequenced. Nodes and clients subscribed to this feed receive immediate notifications, allowing them to process transactions without delay.
 2. **Batches Posted on the Parent Chain**: At regular intervals, the Sequencer aggregates transactions and posts them to the parent chain for finality. (Refer to the <a data-quicklook-from="batch">Batch</a>-Posting section for detailed information on this process.)
 
-<div class="invert-on-dark">![sequencer-feed](../assets/sequencer-feed.png)</div>
+![500px-img](../assets/sequencer-feed.svg)
 
 ### Real-Time Sequencer Feed
 
@@ -97,7 +98,7 @@ Understanding Batch-Posting is essential for grasping how Arbitrum achieves scal
 
 The Sequencer in Arbitrum is critical in collecting and organizing child chain transactions before posting them to the parent chain. The batching process is designed to optimize for both cost efficiency and timely transaction inclusion.
 
-<div class="invert-on-dark">![batching](../assets/batching.png)</div>
+![400px-img](../assets/batching.svg)
 
 **Transaction Collection and Ordering:**
 
@@ -122,7 +123,7 @@ This batching mechanism allows the Sequencer to efficiently manage transactions 
 
 The Sequencer employs compression when forming transaction batches to optimize the data and cost of batches posted to the parent chain. Arbitrum uses the Brotli compression algorithm due to its high compression ratio and efficiency, crucial for reducing parent chain posting costs.
 
-<div class="invert-on-dark">![compression](../assets/compression.png)</div>
+![400px-img](../assets/compression.svg)
 
 ### Compression level in the Brotli algorithm
 
@@ -147,9 +148,7 @@ After batching and compressing transactions, the Sequencer posts these batches t
 
 There are two primary methods the Sequencer uses to send batches to the parent chain, depending on whether the chain supports EIP-4844 (Proto-Danksharding) and the current network conditions:
 
-<div class="invert-on-dark">
-  ![submit-to-sequencer-inbox](../assets/submit-to-sequencer-inbox.png)
-</div>
+![400px-img](../assets/submit-to-sequencer-inbox.svg)
 
 ### 1. Using Blobs with `addSequencerL2BatchFromBlobs`
 
@@ -257,6 +256,35 @@ Developers and users should consider the appropriate level of finality based on 
   - **High-Value Transactions**: Financial transfers, large trades, or any transaction where security is critical.
   - **Regulatory Compliance**: Situations requiring strict adherence to security standards and auditable records.
   - **Centralized Exchanges (CeXs)**: For deposit and withdrawal operations where certainty of transaction finality is mandatory.
+
+## Censorship Timeout
+
+As mentioned in the original [Arbitrum BoLD Forum Post](https://forum.arbitrum.foundation/t/aip-bold-permissionless-validation-for-arbitrum/23232/70?), the initial release of [Arbitrum BoLD](../how-arbitrum-works/bold/gentle-introduction.mdx) will come with a feature called ”Censorship Timeout” (originally called “Delay Buffer”). For Arbitrum One and Arbitrum Nova, it is proposed that this feature be enabled by default alongside BoLD’s upgrade.
+
+Censorship Timeout aims to limit the negative effects of:
+
+- Prolonged sequencer censorship, and/or,
+- Unexpected sequencer outages.
+
+### How the Censorship Timeout feature works
+
+To explain how this feature improves the security of chains settling to Arbitrum One and Arbitrum Nova, consider the scenario where an L3’s parent chain sequencer (the L2 sequencer) is censoring or offline. In such a case, every assertion and/or sub-challenge move would need to wait 24 hours before bypassing the L2 sequencer (using the SequencerInbox’s forceInclusion method described here). In this scenario, challenge resolution would be delayed by a time `t` where `t = (24 hours) * number of moves for a challenge`. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days.
+
+The Censorship Timeout feature mitigates this by decreasing the force inclusion threshold when unexpected delays in delayed message inclusion occur due to one (or all) of the above mentioned cases of censorship or sequencer outage, enabling entities to make moves without the 24 hour delay-per-move.
+
+The force inclusion window is actually the lesser of either the `delayBuffer` and `delayBlocks`, where delayBlocks is a constant, currently set to 24 hours, and `delayBuffer` grows and shrinks between 30 minutes and 48 hours.
+
+The `delayBuffer` value "grows and shrinks" depending on how long the sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message's delay beyond the `threshold` and how long it has been delayed (i.e. when some delayed messages are delayed by more than the `threshold`, the difference between the messages' delay and the `threshold` is removed from the buffer). As an example, if the `threshold` is 30 minutes and a message was delayed by 32 minutes, then the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+
+The `delayBuffer` replenishes at a linear rate when the sequencer is operating correctly at a nominal rate of 1 minute for every 20 minutes of time where no messages are delayed beyond the `threshold`.
+
+Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Arbitrum Nova:
+
+- `delay buffer` = 14400 L1 Ethereum blocks (2 days)
+- `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 L1 Ethereum blocks (1 hour) for Arbitrum Nova
+- `replenish rate` = 5% (meaning 1 day is replenished every 20 days or roughly a 95% uptime)
+
+We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains - especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
 
 ### Decentralized Fair Sequencing
 

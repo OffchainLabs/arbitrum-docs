@@ -1,6 +1,6 @@
 ---
 title: 'How to run a full node (Nitro)'
-description: Learn how to run an Arbitrum node on your local machine.
+description: Learn how to run an Arbitrum node on your local machine
 sidebar_position: 1
 content_type: how-to
 ---
@@ -36,13 +36,13 @@ The minimum storage requirements will change over time as the Nitro chain grows.
 
 ### Prerequisites
 
-:::caution Only use released versions
+:::caution
 
 Even though there are alpha and beta versions of the <a data-quicklook-from='arbitrum-nitro'>Arbitrum Nitro software</a>, only release versions should be used when running your node. Running alpha or beta versions is not supported and might lead to unexpected behaviors.
 
 :::
 
-- Latest Docker Image: <code>@latestNitroNodeImage@</code>
+- Latest Docker Image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@</code>
 - Database snapshot (required for Arbitrum One, optional for other chains)
   - Use the parameter `--init.latest <snapshot type>`, accepted values: "archive" | "pruned" | "genesis".
   - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it. (For how to manually download the snapshot parts, please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually))
@@ -83,7 +83,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @latestNitroNodeImage@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
   ```
 
   - Note that if you are running an L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
