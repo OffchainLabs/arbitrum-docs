@@ -3,7 +3,7 @@ import { useTransition, animated } from '@react-spring/web';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
-import { Number4 } from './Number4';
+import { Number5 } from './Number5';
 
 interface ModalProps {
   cx?: number;
@@ -48,7 +48,7 @@ export function Modal({
           zIndex: 10,
         }}
       >
-        <Number4 cx={cx} cy={cy} />
+        <Number5 cx={cx} cy={cy} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
