@@ -332,9 +332,9 @@ Depositing a token entails escrowing some amount of the token in a parent chain 
 Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.,:
 
 - Tokens which accrue interest to their holders need to ensure that the interest is dispersed properly across layers, and doesn't simply accrue to the bridge contracts
-- Our cross-domain WETH implementations require tokens be wrapped and unwrapped as they move across layers.
+- Our cross-domain `WETH` implementations require tokens to be wrapped and unwrapped as they move across layers.
 
-Thus, our bridge architecture must allow not only the standard deposit and withdraw functionalities, but for new, custom gateways to by dynamically added over time.
+Thus, our bridge architecture must allow not only the standard deposit and withdraw functionalities but also new, custom gateways to be dynamically added over time.
 
 #### Canonical child chain representation per parent chain token contract
 
