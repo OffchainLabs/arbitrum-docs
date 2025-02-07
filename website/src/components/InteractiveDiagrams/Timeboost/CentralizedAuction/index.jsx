@@ -235,14 +235,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g46">
-                <path id="polyline45" d="M0 643.8h206.12l17.02 25.87h59.37" className="cls-2" />
-                <circle id="circle45" cx={282.35} cy={669.67} r={3.22} className="cls-10" />
-              </g>
-              <g id="g47">
-                <path id="polyline46" d="M0 519.52h80.47l31.51 31.51h108.1" className="cls-2" />
-                <circle id="circle46" cx={219.92} cy={551.03} r={3.22} className="cls-10" />
-              </g>
               <g id="g48">
                 <path
                   id="polyline47"
@@ -254,18 +246,6 @@ export const FlowChart = (props) => (
                   d="M308.76 593.03c1.78 0 3.22-1.44 3.22-3.22s-1.44-3.22-3.22-3.22-3.22 1.44-3.22 3.22 1.44 3.22 3.22 3.22Z"
                   className="cls-10"
                 />
-              </g>
-              <g id="g49">
-                <path
-                  id="polyline48"
-                  d="M0 553.04h75.32l30.72 30.72h80.92l27.28 27.29 73.18-.52"
-                  className="cls-2"
-                />
-                <circle id="circle48" cx={287.26} cy={610.53} r={3.22} className="cls-10" />
-              </g>
-              <g id="g50">
-                <path id="line49" d="M0 568.4h65.86" className="cls-2" />
-                <circle id="circle49" cx={65.7} cy={568.4} r={3.22} className="cls-10" />
               </g>
               <g id="g51">
                 <path id="line50" d="M0 585.62h82.99" className="cls-2" />
@@ -291,14 +271,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g54">
-                <path id="polyline53" d="M250.65 687.3H216.1l-20.84-33.46" className="cls-2" />
-                <circle id="circle53" cx={250.49} cy={687.3} r={3.22} className="cls-10" />
-              </g>
-              <g id="g55">
-                <path id="polyline54" d="M0 631.9h85.83l18.29-18.28h79.78" className="cls-2" />
-                <circle id="circle54" cx={183.74} cy={613.62} r={3.22} className="cls-10" />
-              </g>
               <g id="g56">
                 <path id="polyline55" d="M0 617.44h71.61l19.37-19.37 35.77.8" className="cls-2" />
                 <path
@@ -306,18 +278,6 @@ export const FlowChart = (props) => (
                   d="M126.52 602.08c1.78.04 3.25-1.37 3.29-3.15.04-1.78-1.37-3.25-3.15-3.29s-3.25 1.37-3.29 3.15 1.37 3.25 3.15 3.29Z"
                   className="cls-10"
                 />
-              </g>
-              <g id="g57">
-                <path id="line56" d="M0 600.98h52.82" className="cls-2" />
-                <circle id="circle56" cx={52.66} cy={600.98} r={3.22} className="cls-10" />
-              </g>
-              <g id="g58">
-                <path id="line57" d="M0 782.43h52.82" className="cls-2" />
-                <circle id="circle57" cx={52.66} cy={782.43} r={3.22} className="cls-10" />
-              </g>
-              <g id="g59">
-                <path id="line58" d="M0 886.15h52.82" className="cls-2" />
-                <circle id="circle58" cx={52.66} cy={886.15} r={3.22} className="cls-10" />
               </g>
               <g id="g60">
                 <path id="line59" d="M134.85 836.06h32.81" className="cls-2" />
@@ -351,10 +311,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g64">
-                <path id="polyline64" d="M0 503.37h44.46v-33.95h188.09" className="cls-2" />
-                <circle id="circle64" cx={232.39} cy={469.42} r={3.22} className="cls-10" />
-              </g>
               <g id="g65">
                 <path id="polyline65" d="M0 482.44h29.13v-26.03h72.11" className="cls-2" />
                 <path
@@ -363,51 +319,10 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g66">
-                <path
-                  id="polyline66"
-                  d="M261.33 482.44H122.47l21.62 21.61h85.62"
-                  className="cls-2"
-                />
-                <path
-                  id="path66"
-                  d="M261.16 479.22c1.78 0 3.22 1.44 3.22 3.22s-1.44 3.22-3.22 3.22-3.22-1.44-3.22-3.22 1.44-3.22 3.22-3.22Z"
-                  className="cls-10"
-                />
-                <circle id="circle66" cx={229.54} cy={504.05} r={3.22} className="cls-10" />
-              </g>
-              <g id="g67">
-                <path
-                  id="polyline67"
-                  d="M252.92 536.37H121.38l-35.33-35.33-23.9-1.1v-17.5h30.34l37.2 37.2h82.26"
-                  className="cls-2"
-                />
-                <circle id="circle67" cx={252.75} cy={536.37} r={3.22} className="cls-10" />
-                <path
-                  id="path67"
-                  d="M211.79 522.86c1.78 0 3.22-1.44 3.22-3.22s-1.44-3.22-3.22-3.22-3.22 1.44-3.22 3.22 1.44 3.22 3.22 3.22Z"
-                  className="cls-10"
-                />
-              </g>
             </g>
           </g>
           <g id="g138">
             <g id="g103" className="cls-11">
-              <g id="g70">
-                <path
-                  id="polyline69"
-                  d="M1600 260.61h-94.31l-26.14-17.13h-37.72l-19.61 30.93h-107.79l-22.63-15.47h-64.07"
-                  className="cls-2"
-                />
-                <circle
-                  id="circle69"
-                  cx={1227.89}
-                  cy={258.94}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-58.28 1227.95 258.929)"
-                />
-              </g>
               <g id="g71">
                 <path
                   id="polyline70"
@@ -418,21 +333,6 @@ export const FlowChart = (props) => (
                   id="path70"
                   d="M1193.2 274.93c-1.78 0-3.22 1.44-3.22 3.22s1.44 3.22 3.22 3.22 3.22-1.44 3.22-3.22-1.44-3.22-3.22-3.22Z"
                   className="cls-10"
-                />
-              </g>
-              <g id="g72">
-                <path
-                  id="polyline71"
-                  d="M1600 299.31h-94.75l-26.58-17.45-33.75.32-20.37 30.92h-107.06"
-                  className="cls-2"
-                />
-                <circle
-                  id="circle71"
-                  cx={1317.65}
-                  cy={313.1}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-13.28 1317.906 313.143)"
                 />
               </g>
               <g id="g73">
