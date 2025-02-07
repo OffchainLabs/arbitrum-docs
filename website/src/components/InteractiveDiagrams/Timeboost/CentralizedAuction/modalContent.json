@@ -1,35 +1,79 @@
 {
   "1": {
-    "title": "Step 1: Transaction Submission",
+    "title": "Step 1: Bid Submission",
+    "content": {
+      "description": "Users submit their bids to the auction contract.",
+      "steps": ["Connect your wallet", "Specify bid amount", "Submit transaction"],
+      "codeBlocks": [
+        {
+          "language": "javascript",
+          "code": "const bid = {\n    amount: ethers.parseEther('1.0'),\n    user: wallet.address\n};\n\nawait auctionContract.submitBid(bid);"
+        }
+      ]
+    }
+  },
+  "2": {
+    "title": "Step 2: Bid Processing",
+    "content": {
+      "description": "The auction contract processes and validates bids.",
+      "steps": ["Bid is validated", "Funds are locked", "Event is emitted"],
+      "codeBlocks": [
+        {
+          "language": "solidity",
+          "code": "function submitBid() external payable {\n    require(msg.value > 0, \"Bid amount must be positive\");\n    bids[msg.sender] = msg.value;\n    emit BidSubmitted(msg.sender, msg.value);\n}"
+        }
+      ]
+    }
+  },
+  "3": {
+    "title": "Step 3: Transaction Submission",
     "content": {
       "description": "Transaction submission process:",
       "steps": [
         "Users submit their transactions",
         "Transactions are validated",
         "Valid transactions enter the pool"
+      ],
+      "codeBlocks": [
+        {
+          "language": "javascript",
+          "code": "const tx = {\n    from: wallet.address,\n    to: contractAddress,\n    data: encodedData,\n    value: ethers.parseEther('0.1')\n};\n\nconst receipt = await wallet.sendTransaction(tx);"
+        }
       ]
     }
   },
-  "2": {
-    "title": "Step 2: Sequencing",
+  "4": {
+    "title": "Step 4: Sequencing",
     "content": {
       "description": "Sequencing process:",
-      "steps": ["Transactions are ordered", "Sequencer processes them", "Order is finalized"]
+      "steps": ["Transactions are ordered", "Sequencer processes them", "Order is finalized"],
+      "codeBlocks": [
+        {
+          "language": "javascript",
+          "code": "const batch = await sequencer.createBatch([\n    tx1,\n    tx2,\n    tx3\n]);\n\nawait sequencer.processBatch(batch);"
+        }
+      ]
     }
   },
-  "3": {
-    "title": "Step 3: Batch Creation",
+  "5": {
+    "title": "Step 5: Batch Creation",
     "content": {
       "description": "Batch creation process:",
       "steps": [
         "Transactions are grouped",
         "Batch is validated",
         "Batch is prepared for submission"
+      ],
+      "codeBlocks": [
+        {
+          "language": "solidity",
+          "code": "function createBatch(Transaction[] memory txs) public {\n    require(txs.length > 0, \"Empty batch\");\n    bytes32 batchHash = keccak256(abi.encode(txs));\n    batches[batchHash] = BatchState.Pending;\n    emit BatchCreated(batchHash, txs.length);\n}"
+        }
       ]
     }
   },
-  "4": {
-    "title": "Step 4: Verification",
+  "6": {
+    "title": "Step 6: Verification",
     "content": {
       "description": "Verification process:",
       "steps": [
@@ -39,8 +83,8 @@
       ]
     }
   },
-  "5": {
-    "title": "Step 5: Finalization",
+  "7": {
+    "title": "Step 7: Finalization",
     "content": {
       "description": "Finalization process:",
       "steps": ["Batch is submitted to L1", "State is updated", "Process is completed"]

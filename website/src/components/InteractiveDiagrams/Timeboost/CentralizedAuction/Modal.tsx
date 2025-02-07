@@ -5,8 +5,21 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import modalContent from './modalContent.json';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
+
+// Register languages
+SyntaxHighlighter.registerLanguage('javascript', javascript);
+SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 type StepNumber = '1' | '2' | '3' | '4' | '5';
+
+interface CodeBlock {
+  language: string;
+  code: string;
+}
 
 interface ModalProps {
   number: number;
@@ -19,10 +32,11 @@ interface ModalContent {
   content: {
     description: string;
     steps: string[];
+    codeBlocks?: CodeBlock[];
   };
 }
 
-export function Modal({ number, cx, cy }: ModalProps) {
+export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const content: ModalContent = modalContent[number.toString() as StepNumber];
 
@@ -54,7 +68,7 @@ export function Modal({ number, cx, cy }: ModalProps) {
           zIndex: 10,
         }}
       >
-        <NumberComponent number={number} cx={cx} cy={cy} />
+        <NumberComponent number={number} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
@@ -91,6 +105,22 @@ export function Modal({ number, cx, cy }: ModalProps) {
                             ))}
                           </ul>
                         </div>
+                        {content.content.codeBlocks?.map((block, index) => (
+                          <div key={index} style={{ position: 'relative' }}>
+                            <SyntaxHighlighter
+                              language={block.language}
+                              style={oneDark}
+                              customStyle={{
+                                margin: 0,
+                                padding: '16px',
+                                borderRadius: '4px',
+                                backgroundColor: 'rgb(41, 45, 62)',
+                              }}
+                            >
+                              {block.code.trim()}
+                            </SyntaxHighlighter>
+                          </div>
+                        ))}
                       </DialogBody>
                     </Content>
                   ) : null}
@@ -135,8 +165,25 @@ const DialogHeader = styled.header`
 
 const DialogBody = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 6px;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
+  padding-right: 8px;
+
+  pre {
+    margin: 0 !important;
+    padding: 16px !important;
+    border-radius: 4px !important;
+    background-color: rgb(41, 45, 62) !important;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
 `;
 
 const CloseButton = styled(Dialog.Close)`
