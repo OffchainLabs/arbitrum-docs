@@ -105,14 +105,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g21">
-                <path id="polyline20" d="M250.65 244.73H216.1l-20.84-33.46" className="cls-2" />
-                <circle id="circle20" cx={250.49} cy={244.73} r={3.22} className="cls-10" />
-              </g>
-              <g id="g22">
-                <path id="polyline21" d="M0 189.34h85.83l18.29-18.29h79.78" className="cls-2" />
-                <circle id="circle21" cx={183.74} cy={171.05} r={3.22} className="cls-10" />
-              </g>
               <g id="g23">
                 <path id="polyline22" d="M0 174.87h71.61l19.37-19.37 35.77.8" className="cls-2" />
                 <path
@@ -120,18 +112,6 @@ export const FlowChart = (props) => (
                   d="M126.52 159.51c1.78.04 3.25-1.37 3.29-3.15a3.219 3.219 0 0 0-3.15-3.29c-1.78-.04-3.25 1.37-3.29 3.15s1.37 3.25 3.15 3.29Z"
                   className="cls-10"
                 />
-              </g>
-              <g id="g24">
-                <path id="line23" d="M0 158.41h52.82" className="cls-2" />
-                <circle id="circle23" cx={52.66} cy={158.41} r={3.22} className="cls-10" />
-              </g>
-              <g id="g25">
-                <path id="line24" d="M0 339.86h52.82" className="cls-2" />
-                <circle id="circle24" cx={52.66} cy={339.86} r={3.22} className="cls-10" />
-              </g>
-              <g id="g26">
-                <path id="line25" d="M0 443.59h52.82" className="cls-2" />
-                <circle id="circle25" cx={52.66} cy={443.59} r={3.22} className="cls-10" />
               </g>
               <g id="g27">
                 <path id="line26" d="M134.85 393.49h32.81" className="cls-2" />
@@ -141,10 +121,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g28">
-                <path id="line27" d="M0 324.95h125.55" className="cls-2" />
-                <circle id="circle27" cx={125.39} cy={324.95} r={3.22} className="cls-10" />
-              </g>
               <g id="g30">
                 <path id="polyline29" d="M0 389.35h86.05l17.43-11.48h101.07" className="cls-2" />
                 <path
@@ -153,10 +129,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g31">
-                <path id="polyline30" d="M0 60.8h44.46V26.86h188.09" className="cls-2" />
-                <circle id="circle30" cx={232.39} cy={26.86} r={3.22} className="cls-10" />
-              </g>
               <g id="g32">
                 <path id="polyline31" d="M0 39.87h29.13V13.85h72.11" className="cls-2" />
                 <path
@@ -164,28 +136,6 @@ export const FlowChart = (props) => (
                   d="M101.08 17.07c1.78 0 3.22-1.44 3.22-3.22s-1.44-3.22-3.22-3.22-3.22 1.44-3.22 3.22 1.44 3.22 3.22 3.22Z"
                   className="cls-10"
                 />
-              </g>
-              <g id="g33">
-                <path
-                  id="polyline32"
-                  d="M261.33 39.87H122.47l21.62 21.62h85.62"
-                  className="cls-2"
-                />
-                <path
-                  id="path32"
-                  d="M261.16 36.65c1.78 0 3.22 1.44 3.22 3.22s-1.44 3.22-3.22 3.22-3.22-1.44-3.22-3.22 1.44-3.22 3.22-3.22Z"
-                  className="cls-10"
-                />
-                <circle id="circle32" cx={229.54} cy={61.49} r={3.22} className="cls-10" />
-              </g>
-              <g id="g34">
-                <path
-                  id="polyline33"
-                  d="M252.92 93.8H121.38L86.05 58.47l-23.9-1.1v-17.5h30.34l37.2 37.2h82.26"
-                  className="cls-2"
-                />
-                <circle id="circle33" cx={252.75} cy={93.8} r={3.22} className="cls-10" />
-                <circle id="circle34" cx={211.79} cy={77.07} r={3.22} className="cls-10" />
               </g>
             </g>
             <g id="g68" className="cls-11">
