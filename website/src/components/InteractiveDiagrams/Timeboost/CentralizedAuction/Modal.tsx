@@ -10,6 +10,8 @@ type StepNumber = '1' | '2' | '3' | '4' | '5';
 
 interface ModalProps {
   number: number;
+  cx: number;
+  cy: number;
 }
 
 interface ModalContent {
@@ -20,7 +22,7 @@ interface ModalContent {
   };
 }
 
-export function Modal({ number }: ModalProps) {
+export function Modal({ number, cx, cy }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const content: ModalContent = modalContent[number.toString() as StepNumber];
 
@@ -52,7 +54,7 @@ export function Modal({ number }: ModalProps) {
           zIndex: 10,
         }}
       >
-        <NumberComponent number={number} />
+        <NumberComponent number={number} cx={cx} cy={cy} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
@@ -66,8 +68,8 @@ export function Modal({ number }: ModalProps) {
                       <DialogHeader>
                         <CloseButton>
                           <svg
-                            width="32"
-                            height="32"
+                            width="22"
+                            height="22"
                             viewBox="0 0 32 32"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -119,7 +121,7 @@ const Content = styled(animated(Dialog.Content))`
   transform: translate(-50%, -50%);
   width: 30vw;
   height: 40vh;
-  background-color: rgb(135, 157, 187);
+  background-color: rgb(33, 49, 71);
   border-radius: 4px;
   padding: 24px 24px 32px;
   z-index: 10000;
