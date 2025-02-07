@@ -1,13 +1,13 @@
 {
   "1": {
-    "title": "Step 1: Bid Submission",
+    "title": "Step 1: Deposit funds into the auction contract",
     "content": {
-      "description": "Users submit their bids to the auction contract.",
-      "steps": ["Connect your wallet", "Specify bid amount", "Submit transaction"],
+      "description": "",
+      "steps": [],
       "codeBlocks": [
         {
-          "language": "javascript",
-          "code": "const bid = {\n    amount: ethers.parseEther('1.0'),\n    user: wallet.address\n};\n\nawait auctionContract.submitBid(bid);"
+          "language": "solidity",
+          "code": "function auctioneer_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n - bidder address\n - round number\n - bit amount\n - signature"
         }
       ]
     }
@@ -20,7 +20,7 @@
       "codeBlocks": [
         {
           "language": "solidity",
-          "code": "function submitBid() external payable {\n    require(msg.value > 0, \"Bid amount must be positive\");\n    bids[msg.sender] = msg.value;\n    emit BidSubmitted(msg.sender, msg.value);\n}"
+          "code": "function auctioneer_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n -bidder address\n - round number\n - bit amount\n - signature"
         }
       ]
     }
