@@ -2310,6 +2310,18 @@ export const FlowChart = (props) => (
         <Modal
           number={1}
         />
+        <Modal
+          number={2}
+        />
+        <Modal
+          number={3}
+        />
+        <Modal
+          number={4}
+        />
+        <Modal
+          number={5}
+        />
         </g>
     </g>
   </svg>
