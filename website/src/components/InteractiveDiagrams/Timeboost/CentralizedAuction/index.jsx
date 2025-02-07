@@ -359,21 +359,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g80">
-                <path
-                  id="polyline79"
-                  d="M1600 201.24h-206.12l-17.02 25.86h-59.37"
-                  className="cls-2"
-                />
-                <circle
-                  id="circle79"
-                  cx={1317.65}
-                  cy={227.1}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-31.72 1317.55 227.107)"
-                />
-              </g>
               <g id="g81">
                 <path
                   id="polyline80"
@@ -432,17 +417,6 @@ export const FlowChart = (props) => (
                   id="path85"
                   d="M1517.17 238.33c-1.78 0-3.22 1.44-3.22 3.22s1.44 3.22 3.22 3.22 3.22-1.44 3.22-3.22-1.44-3.22-3.22-3.22Z"
                   className="cls-10"
-                />
-              </g>
-              <g id="g87">
-                <path id="line86" d="M1490.31 187.83h-135.87" className="cls-2" />
-                <circle
-                  id="circle86"
-                  cx={1354.6}
-                  cy={187.83}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-22.5 1354.597 187.838)"
                 />
               </g>
               <g id="g88">
@@ -515,21 +489,6 @@ export const FlowChart = (props) => (
                   id="path94"
                   d="M1474.61 321.73c-1.78 0-3.22 1.44-3.22 3.22s1.44 3.22 3.22 3.22 3.22-1.44 3.22-3.22-1.44-3.22-3.22-3.22Z"
                   className="cls-10"
-                />
-              </g>
-              <g id="g96">
-                <path
-                  id="polyline95"
-                  d="M1600 399.91h-116.96l-9.25 9.25h-140.28"
-                  className="cls-2"
-                />
-                <circle
-                  id="circle95"
-                  cx={1333.67}
-                  cy={409.16}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-13.28 1333.93 409.214)"
                 />
               </g>
               <g id="g97">
@@ -708,21 +667,6 @@ export const FlowChart = (props) => (
                   className="cls-10"
                 />
               </g>
-              <g id="g114">
-                <path
-                  id="polyline113"
-                  d="M1600 643.8h-206.12l-17.02 25.87h-59.37"
-                  className="cls-2"
-                />
-                <circle
-                  id="circle113"
-                  cx={1317.65}
-                  cy={669.67}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-9.22 1317.27 669.484)"
-                />
-              </g>
               <g id="g115">
                 <path
                   id="polyline114"
@@ -781,17 +725,6 @@ export const FlowChart = (props) => (
                   id="path119"
                   d="M1517.17 680.9c-1.78 0-3.22 1.44-3.22 3.22s1.44 3.22 3.22 3.22 3.22-1.44 3.22-3.22-1.44-3.22-3.22-3.22Z"
                   className="cls-10"
-                />
-              </g>
-              <g id="g121">
-                <path id="line120" d="M1490.31 630.4h-135.87" className="cls-2" />
-                <circle
-                  id="circle120"
-                  cx={1354.6}
-                  cy={630.4}
-                  r={3.22}
-                  className="cls-10"
-                  transform="rotate(-9.22 1354.196 630.271)"
                 />
               </g>
               <g id="g122">
@@ -1947,14 +1880,6 @@ export const FlowChart = (props) => (
             className="cls-8"
             rx={12.51}
             ry={12.38}
-          />
-        </g>
-        <g id="g325">
-          <circle id="circle324" cx={257.53} cy={646.68} r={12.51} className="cls-8" />
-          <path
-            id="path325"
-            d="m282.13 691.41-10.68-26.01c-.61-1.31-1.15-3.07-3.66-3.07h-18.95c-2.5 0-3.81 1.63-4.52 3.1l-11.09 25.81c-1.06 2.17-.17 4.79 1.97 5.85 2.14 1.06 4.74.17 5.8-2l.83-1.71s.26-.46.16.05c-.6 3.18-2.27 12.74-2.27 12.74-.4 1.99.92 3.62 2.95 3.62h4.83c.35 0 .28.26.28.26v19.22c0 3.22 2 4.91 4.48 4.91s4.48-1.69 4.48-4.91v-19.3s-.01-.19.19-.18h1.21c.17 0 .15.2.15.2v19.28c0 3.22 2.01 4.91 4.48 4.91s4.48-1.69 4.48-4.91V710.1s-.03-.31.34-.31h5.2c2.03 0 3.39-1.63 3.03-3.63 0 0-1.67-10.26-2.12-13.05-.13-.8 1.2 2.04 1.2 2.04 1.02 2.19 2.98 3.1 5.14 2.07 2.16-1.02 3.09-3.63 2.08-5.81Z"
-            className="cls-8"
           />
         </g>
         <g id="g328">
