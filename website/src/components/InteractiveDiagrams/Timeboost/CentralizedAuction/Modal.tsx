@@ -6,9 +6,11 @@ import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import modalContent from './modalContent.json';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
 import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { useColorMode } from '@docusaurus/theme-common';
 
 // Register languages
 SyntaxHighlighter.registerLanguage('javascript', javascript);
@@ -38,6 +40,7 @@ interface ModalContent {
 
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { isDarkTheme } = useColorMode();
   const content: ModalContent = modalContent[number.toString() as StepNumber];
 
   const handleDialogChange = (isOpen: boolean) => setIsOpen(isOpen);
@@ -78,9 +81,9 @@ export function Modal({ number }: { number: number }) {
                 <>
                   {isOpen ? <OverlayBackground style={{ opacity: style.opacity }} /> : null}
                   {isOpen ? (
-                    <Content forceMount style={style}>
+                    <Content $isDark={isDarkTheme} forceMount style={style}>
                       <DialogHeader>
-                        <CloseButton>
+                        <CloseButton $isDark={isDarkTheme}>
                           <svg
                             width="22"
                             height="22"
@@ -95,8 +98,8 @@ export function Modal({ number }: { number: number }) {
                           </svg>
                         </CloseButton>
                       </DialogHeader>
-                      <Title>{content.title}</Title>
-                      <DialogBody>
+                      <Title $isDark={isDarkTheme}>{content.title}</Title>
+                      <DialogBody $isDark={isDarkTheme}>
                         <div>
                           <p>{content.content.description}</p>
                           <ul>
@@ -109,12 +112,12 @@ export function Modal({ number }: { number: number }) {
                           <div key={index} style={{ position: 'relative' }}>
                             <SyntaxHighlighter
                               language={block.language}
-                              style={oneDark}
+                              style={isDarkTheme ? oneDark : oneLight}
                               customStyle={{
                                 margin: 0,
                                 padding: '16px',
                                 borderRadius: '4px',
-                                backgroundColor: 'rgb(41, 45, 62)',
+                                backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
                               }}
                             >
                               {block.code.trim()}
@@ -144,7 +147,7 @@ const OverlayBackground = styled(animated(Dialog.Overlay))`
   z-index: 9999;
 `;
 
-const Content = styled(animated(Dialog.Content))`
+const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
   position: fixed;
   top: 50%;
   left: 50%;
@@ -155,12 +158,14 @@ const Content = styled(animated(Dialog.Content))`
   min-height: 200px;
   max-height: 80vh;
   height: fit-content;
-  background-color: rgb(33, 49, 71);
+  background-color: ${props => props.$isDark ? 'rgb(33, 49, 71)' : 'rgb(255, 255, 255)'};
   border-radius: 4px;
   padding: 24px 24px 32px;
   z-index: 10000;
   display: flex;
   flex-direction: column;
+  color: ${props => props.$isDark ? '#fff' : '#000'};
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 `;
 
 const DialogHeader = styled.header`
@@ -170,7 +175,7 @@ const DialogHeader = styled.header`
   flex-shrink: 0;
 `;
 
-const DialogBody = styled.div`
+const DialogBody = styled.div<{ $isDark: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -183,7 +188,7 @@ const DialogBody = styled.div`
     margin: 0 !important;
     padding: 16px !important;
     border-radius: 4px !important;
-    background-color: rgb(41, 45, 62) !important;
+    background-color: ${props => props.$isDark ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)'} !important;
   }
 
   code {
@@ -193,18 +198,23 @@ const DialogBody = styled.div`
   }
 `;
 
-const CloseButton = styled(Dialog.Close)`
+const CloseButton = styled(Dialog.Close)<{ $isDark: boolean }>`
   background-color: transparent;
   border: none;
   position: absolute;
   top: 16px;
   right: 16px;
   cursor: pointer;
-  color: #9dcced;
+  color: ${props => props.$isDark ? '#9dcced' : '#666'};
+
+  &:hover {
+    color: ${props => props.$isDark ? '#fff' : '#000'};
+  }
 `;
 
-const Title = styled(Dialog.Title)`
+const Title = styled(Dialog.Title)<{ $isDark: boolean }>`
   font-size: 20px;
   margin-bottom: 16px;
   flex-shrink: 0;
+  color: ${props => props.$isDark ? '#fff' : '#000'};
 `;
