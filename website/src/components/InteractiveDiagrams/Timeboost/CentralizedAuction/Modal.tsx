@@ -149,18 +149,25 @@ const Content = styled(animated(Dialog.Content))`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30vw;
-  height: 40vh;
+  min-width: 400px;
+  max-width: 800px;
+  width: 50vw;
+  min-height: 200px;
+  max-height: 80vh;
+  height: fit-content;
   background-color: rgb(33, 49, 71);
   border-radius: 4px;
   padding: 24px 24px 32px;
   z-index: 10000;
+  display: flex;
+  flex-direction: column;
 `;
 
 const DialogHeader = styled.header`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
+  flex-shrink: 0;
 `;
 
 const DialogBody = styled.div`
@@ -168,9 +175,9 @@ const DialogBody = styled.div`
   flex-direction: column;
   gap: 16px;
   margin-bottom: 6px;
-  max-height: calc(100% - 100px);
   overflow-y: auto;
   padding-right: 8px;
+  flex: 1;
 
   pre {
     margin: 0 !important;
@@ -198,4 +205,6 @@ const CloseButton = styled(Dialog.Close)`
 
 const Title = styled(Dialog.Title)`
   font-size: 20px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
 `;
