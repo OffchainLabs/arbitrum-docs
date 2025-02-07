@@ -81,13 +81,9 @@ The auction for a round has a closing time that is `auctionClosingSeconds` (def
 
 ### Auction contract
 
-Before placing a bid in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds can be added to an existing deposit at any time. These deposits are fully withdrawable, with some nominal delay (2 rounds, or 2 minutes by default), so as not to impact the outcome of an existing round. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token) called the "minimum reserve price". The minimum reserve price is set by the chain owner and can be updated at any time up to 30 seconds (default) before the start of the next round to ensure the auction participants will always know the reserve price at least 30 seconds before they must submit their bids. A reserve price can also be set by the chain owner (or by an address designated by the chain owner) as a way to raise the minimum bid as the Auction Contract enforces that the reserve price is never less than the minimum reserve price.
-
-![timeboost transferring and withdrawing](./images/centralized-timeboost-transfering-and-withdrawing.jpg)
+Before placing a bid in the auction, a party must deposit funds into the Auction Contract. Deposits can be made, or funds can be added to an existing deposit at any time. These deposits are fully withdrawable, with some nominal delay (2 rounds or 2 minutes by default), so as not to impact the outcome of an existing round. There is no minimum deposit amount, but there is a starting minimum bid of 0.001 ETH (default amount and token) called the "minimum reserve price". The chain owner sets the minimum reserve price, which can be updated at any time up to 30 seconds (default) before the start of the next round to ensure the auction participants will always know the reserve price at least 30 seconds before they must submit their bids. A reserve price can also be set by the chain owner (or by an address designated by the chain owner) as a way to raise the minimum bid, as the Auction Contract enforces that the reserve price is never less than the minimum reserve price.
 
 Once the autonomous auctioneer determines an auction winner, the auction contract will deduct the second-highest bid amount from the account of the highest bidder and transfer those funds to a `beneficiary` account designated by the chain owner by default. The `expressLaneControllerAddress` specified in the highest bid will become the express lane controller for the round.
-
-The auction contract also has functions that enable the express lane controller to update the address they wish to use for the express lane, which allows unique express lane control reselling use cases.
 
 ### Default parameters
 
