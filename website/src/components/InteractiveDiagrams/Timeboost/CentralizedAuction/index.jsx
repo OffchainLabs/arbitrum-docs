@@ -1038,17 +1038,6 @@ export const FlowChart = (props) => (
           className="cls-7"
         />
       </g>
-      <Modal
-        number={5}
-        cx={500}
-        cy={600}
-        title="Batch Processing"
-        content={
-          <div>
-            <p>Batches are processed in the following way:</p>
-          </div>
-        }
-      />
       <g id="g415">
         <rect
           id="rect167"
