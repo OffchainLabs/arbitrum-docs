@@ -9,7 +9,16 @@ const numberPaths = {
   5: 'M1003.53 257.43c1.01 0 1.7-.97 1.7-2.18s-.67-2.05-1.75-2.05c-.82 0-1.36.52-1.7 1.31l-4.27-.3.86-8.73h10.43v3.3h-4.42c-.78 0-1.75-.02-2.52-.11-.09.8-.15 1.96-.45 2.76h.17c.69-.78 1.77-1.16 3.12-1.16 2.93 0 5.08 2.11 5.08 4.96 0 3.21-2.46 5.34-6.23 5.34s-6.18-1.92-6.31-4.8h4.52c.06 1.01.73 1.66 1.75 1.66Z'
 };
 
-export const NumberComponent = ({ number}) => {
+// Define the coordinates for each number
+const coordinates = {
+  1: { x: 416.59, y: 412.69 },
+  2: { x: 588.13, y: 631.51 },
+  3: { x: 586.23, y: 776.88 },
+  4: { x: 1055.6, y: 597.98 },
+  5: { x: 1003.53, y: 257.43 }
+};
+
+export const NumberComponent = ({ number }) => {
   const props = useSpring({
     from: { opacity: 0.1 },
     to: { opacity: 1 },
@@ -17,38 +26,29 @@ export const NumberComponent = ({ number}) => {
     loop: { reverse: true },
   });
 
-  // Calculate the offset based on the original position of the number's path
-  const getPathOffset = (number) => {
-    switch (number) {
-      case 1:
-        return { x: cx - 416.59, y: cy - 412.69 };  // from circle411 coordinates
-      case 2:
-        return { x: cx - 588.13, y: cy - 631.51 };  // from circle358 coordinates
-      case 3:
-        return { x: cx - 586.23, y: cy - 776.88 };  // from circle359 coordinates
-      case 4:
-        return { x: cx - 1055.6, y: cy - 597.98 };  // from circle412 coordinates
-      case 5:
-        return { x: cx - 1003.53, y: cy - 257.43 }; // from path414
-    }
-  };
+  const coords = coordinates[number];
+  if (!coords) {
+    console.warn(`No coordinates found for number ${number}`);
+    return null;
+  }
 
-  const offset = getPathOffset(number);
   const pathData = numberPaths[number];
-
   if (!pathData) {
     console.warn(`No path data found for number ${number}`);
     return null;
   }
 
+  // Calculate offset to center the number in the circle
+  const centerOffset = 10; // Adjust this value to center the number within the circle
+
   return (
     <animated.g id={`number${number}`} style={props}>
-      <circle id={`circle${number}`} cx={offset.x} cy={offset.x} r={20.95} className="cls-5" />
+      <circle id={`circle${number}`} cx={coords.x} cy={coords.y} r={20.95} className="cls-5" />
       <path
         id={`path${number}`}
         d={pathData}
         className="cls-10"
-        transform={`translate(${offset.x}, ${offset.y})`}
+        transform={`translate(${coords.x - centerOffset}, ${coords.y - centerOffset})`}
       />
     </animated.g>
   );

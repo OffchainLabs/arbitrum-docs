@@ -10,8 +10,6 @@ type StepNumber = '1' | '2' | '3' | '4' | '5';
 
 interface ModalProps {
   number: number;
-  cx: number;
-  cy: number;
 }
 
 interface ModalContent {
@@ -22,7 +20,7 @@ interface ModalContent {
   };
 }
 
-export function Modal({ number, cx, cy }: ModalProps) {
+export function Modal({ number }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const content: ModalContent = modalContent[number.toString() as StepNumber];
 
@@ -54,7 +52,7 @@ export function Modal({ number, cx, cy }: ModalProps) {
           zIndex: 10,
         }}
       >
-        <NumberComponent number={number} cx={cx} cy={cy} />
+        <NumberComponent number={number} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
