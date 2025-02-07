@@ -1,0 +1,49 @@
+{
+  "1": {
+    "title": "Step 1: Transaction Submission",
+    "content": {
+      "description": "Transaction submission process:",
+      "steps": [
+        "Users submit their transactions",
+        "Transactions are validated",
+        "Valid transactions enter the pool"
+      ]
+    }
+  },
+  "2": {
+    "title": "Step 2: Sequencing",
+    "content": {
+      "description": "Sequencing process:",
+      "steps": ["Transactions are ordered", "Sequencer processes them", "Order is finalized"]
+    }
+  },
+  "3": {
+    "title": "Step 3: Batch Creation",
+    "content": {
+      "description": "Batch creation process:",
+      "steps": [
+        "Transactions are grouped",
+        "Batch is validated",
+        "Batch is prepared for submission"
+      ]
+    }
+  },
+  "4": {
+    "title": "Step 4: Verification",
+    "content": {
+      "description": "Verification process:",
+      "steps": [
+        "Batch integrity is checked",
+        "State transitions are verified",
+        "Results are confirmed"
+      ]
+    }
+  },
+  "5": {
+    "title": "Step 5: Finalization",
+    "content": {
+      "description": "Finalization process:",
+      "steps": ["Batch is submitted to L1", "State is updated", "Process is completed"]
+    }
+  }
+}

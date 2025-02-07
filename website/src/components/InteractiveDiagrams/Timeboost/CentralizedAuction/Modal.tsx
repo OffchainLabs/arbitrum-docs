@@ -4,23 +4,27 @@ import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
+import modalContent from './modalContent.json';
+
+type StepNumber = '1' | '2' | '3' | '4' | '5';
 
 interface ModalProps {
   number: number;
   cx: number;
   cy: number;
-  title?: string;
-  content?: React.ReactNode;
 }
 
-export function Modal({
-  number,
-  cx,
-  cy,
-  title = 'How to call the sequencer',
-  content = "Call the contract's function: bla bla bla",
-}: ModalProps) {
+interface ModalContent {
+  title: string;
+  content: {
+    description: string;
+    steps: string[];
+  };
+}
+
+export function Modal({ number, cx, cy }: ModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const content: ModalContent = modalContent[number.toString() as StepNumber];
 
   const handleDialogChange = (isOpen: boolean) => setIsOpen(isOpen);
 
@@ -77,8 +81,17 @@ export function Modal({
                           </svg>
                         </CloseButton>
                       </DialogHeader>
-                      <Title>{title}</Title>
-                      <DialogBody>{content}</DialogBody>
+                      <Title>{content.title}</Title>
+                      <DialogBody>
+                        <div>
+                          <p>{content.content.description}</p>
+                          <ul>
+                            {content.content.steps.map((step, index) => (
+                              <li key={index}>{step}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </DialogBody>
                     </Content>
                   ) : null}
                 </>
