@@ -9,7 +9,7 @@ const numberPaths = {
   5: 'M1003.53 257.43c1.01 0 1.7-.97 1.7-2.18s-.67-2.05-1.75-2.05c-.82 0-1.36.52-1.7 1.31l-4.27-.3.86-8.73h10.43v3.3h-4.42c-.78 0-1.75-.02-2.52-.11-.09.8-.15 1.96-.45 2.76h.17c.69-.78 1.77-1.16 3.12-1.16 2.93 0 5.08 2.11 5.08 4.96 0 3.21-2.46 5.34-6.23 5.34s-6.18-1.92-6.31-4.8h4.52c.06 1.01.73 1.66 1.75 1.66Z'
 };
 
-export const NumberComponent = ({ number, cx = 1003.46, cy = 253.19 }) => {
+export const NumberComponent = ({ number}) => {
   const props = useSpring({
     from: { opacity: 0.1 },
     to: { opacity: 1 },
@@ -30,8 +30,6 @@ export const NumberComponent = ({ number, cx = 1003.46, cy = 253.19 }) => {
         return { x: cx - 1055.6, y: cy - 597.98 };  // from circle412 coordinates
       case 5:
         return { x: cx - 1003.53, y: cy - 257.43 }; // from path414
-      default:
-        return { x: 0, y: 0 };
     }
   };
 
@@ -45,7 +43,7 @@ export const NumberComponent = ({ number, cx = 1003.46, cy = 253.19 }) => {
 
   return (
     <animated.g id={`number${number}`} style={props}>
-      <circle id={`circle${number}`} cx={cx} cy={cy} r={20.95} className="cls-5" />
+      <circle id={`circle${number}`} cx={offset.x} cy={offset.x} r={20.95} className="cls-5" />
       <path
         id={`path${number}`}
         d={pathData}
