@@ -54,3 +54,35 @@
   overflow-x: auto;
   padding: 1rem;
 }
+
+.cls-5 {
+  fill: #e30663;
+}
+
+.cls-5-light {
+  fill: #e30663;
+}
+
+.cls-10 {
+  fill: #fff;
+}
+
+.cls-10-light {
+  fill: #000;
+}
+
+:global(.cls-5) {
+  fill: #e30663;
+}
+
+:global(.cls-5-light) {
+  fill: #e30663;
+}
+
+:global(.cls-10) {
+  fill: #fff;
+}
+
+:global(.cls-10-light) {
+  fill: #000;
+}

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useSpring, animated } from '@react-spring/web';
+import { useColorMode } from '@docusaurus/theme-common';
+import styles from './styles.module.css';
 
 const numberPaths = {
   1: 'M412.16 410.7v-3.06c2.5 0 3.66-.47 4.05-2.65h3.99v14.72h-4.35v-9.01h-3.68Z', // from path411
@@ -23,8 +25,9 @@ const coordinates = {
 };
 
 export const NumberComponent = ({ number }) => {
+  const { isDarkTheme } = useColorMode();
   const props = useSpring({
-    from: { opacity: 0.1 },
+    from: { opacity: 0.3 },
     to: { opacity: 1 },
     config: { duration: 800 },
     loop: { reverse: true },
@@ -53,12 +56,12 @@ export const NumberComponent = ({ number }) => {
         cx={coords.circle.x}
         cy={coords.circle.y}
         r={20.95}
-        className="cls-5"
+        className={styles[isDarkTheme ? 'cls-5' : 'cls-5-light']}
       />
       <path
         id={`path${number}`}
         d={pathData}
-        className="cls-10"
+        className={styles[isDarkTheme ? 'cls-10' : 'cls-10-light']}
         transform={`translate(${offsetX}, ${offsetY})`}
       />
     </animated.g>
