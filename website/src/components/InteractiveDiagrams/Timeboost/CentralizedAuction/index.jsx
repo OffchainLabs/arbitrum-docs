@@ -2309,8 +2309,6 @@ export const FlowChart = (props) => (
         />
         <Modal
           number={1}
-          cx={416.59}
-          cy={412.69}
         />
         </g>
     </g>
