@@ -27,9 +27,9 @@ const coordinates = {
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
   const props = useSpring({
-    from: { opacity: 0.3 },
+    from: { opacity: isDarkTheme ? 0.5 : 0.3 },
     to: { opacity: 1 },
-    config: { duration: 800 },
+    config: { duration: 1000 },
     loop: { reverse: true },
   });
 
@@ -50,20 +50,22 @@ export const NumberComponent = ({ number }) => {
   const offsetY = coords.circle.y - coords.path.y + (coords.offset?.y || 0);
 
   return (
-    <animated.g id={`number${number}`} style={props}>
-      <circle
+    <g id={`number${number}`}>
+      <animated.circle
         id={`circle${number}`}
         cx={coords.circle.x}
         cy={coords.circle.y}
         r={20.95}
         className={styles[isDarkTheme ? 'cls-5' : 'cls-5-light']}
+        style={props}
       />
-      <path
+      <animated.path
         id={`path${number}`}
         d={pathData}
         className={styles[isDarkTheme ? 'cls-10' : 'cls-10-light']}
         transform={`translate(${offsetX}, ${offsetY})`}
+        style={props}
       />
-    </animated.g>
+    </g>
   );
 };
