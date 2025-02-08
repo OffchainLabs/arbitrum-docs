@@ -145,11 +145,11 @@ const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 400px;
+  min-width: min(400px, 95vw);
   max-width: 800px;
-  width: 50vw;
+  width: 95vw;
   min-height: 200px;
-  max-height: 80vh;
+  max-height: 90vh;
   height: fit-content;
   background-color: ${(props) => (props.$isDark ? 'rgb(33, 49, 71)' : 'rgb(255, 255, 255)')};
   border-radius: 4px;
@@ -159,6 +159,14 @@ const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
   flex-direction: column;
   color: ${(props) => (props.$isDark ? '#fff' : '#000')};
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    width: 95vw;
+    min-width: unset;
+    max-height: 85vh;
+  }
 `;
 
 const DialogHeader = styled.header`
@@ -183,12 +191,28 @@ const DialogBody = styled.div<{ $isDark: boolean }>`
     border-radius: 4px !important;
     background-color: ${(props) =>
       props.$isDark ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)'} !important;
+    overflow-x: auto;
+    max-width: 100%;
   }
 
   code {
     font-family: 'Fira Code', monospace !important;
     font-size: 14px !important;
     line-height: 1.5 !important;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  @media (max-width: 768px) {
+    padding-right: 4px;
+    
+    pre {
+      padding: 12px !important;
+    }
+    
+    code {
+      font-size: 13px !important;
+    }
   }
 `;
 
