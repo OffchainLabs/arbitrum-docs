@@ -2309,18 +2309,23 @@ export const FlowChart = (props) => (
         />
         <Modal
           number={1}
+          position={{ x: 450, y: 300 }}
         />
         <Modal
           number={2}
+          position={{ x: 600, y: 450 }}
         />
         <Modal
           number={3}
+          position={{ x: 750, y: 600 }}
         />
         <Modal
           number={4}
+          position={{ x: 900, y: 450 }}
         />
         <Modal
           number={5}
+          position={{ x: 1050, y: 300 }}
         />
         </g>
     </g>
