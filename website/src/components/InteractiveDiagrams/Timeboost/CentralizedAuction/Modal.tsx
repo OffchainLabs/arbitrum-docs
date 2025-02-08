@@ -34,7 +34,7 @@ export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkTheme } = useColorMode();
   const content: ModalContent = modalContent[number.toString() as StepNumber];
-  
+
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
     enter: { opacity: 1, transform: 'scale(1)' },
@@ -81,54 +81,53 @@ export function Modal({ number }: { number: number }) {
         createPortal(
           <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Portal>
-              {overlayTransitions((styles, item) =>
-                item && (
-                  <OverlayBackground style={styles} />
-                )
-              )}
-              {transitions((styles, item) =>
-                item && (
-                  <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '20px',
-                    zIndex: 10000,
-                    pointerEvents: 'none',
-                  }}>
-                    <Content 
-                      $isDark={isDarkTheme} 
-                      forceMount 
+              {overlayTransitions((styles, item) => item && <OverlayBackground style={styles} />)}
+              {transitions(
+                (styles, item) =>
+                  item && (
+                    <div
                       style={{
-                        ...styles,
-                        pointerEvents: 'auto',
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '20px',
+                        zIndex: 10000,
+                        pointerEvents: 'none',
                       }}
                     >
-                      <DialogHeader>
-                        <CloseButton $isDark={isDarkTheme} onClick={() => setIsOpen(false)}>
-                          <CloseIcon />
-                        </CloseButton>
-                      </DialogHeader>
-                      <Title $isDark={isDarkTheme}>{content.title}</Title>
-                      <DialogBody $isDark={isDarkTheme}>
-                        <div>
-                          <p>{content.content.description}</p>
-                          <ul>
-                            {content.content.steps.map((step, index) => (
-                              <li key={index}>{step}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        {content.content.codeBlocks?.map(renderCodeBlock)}
-                      </DialogBody>
-                    </Content>
-                  </div>
-                )
+                      <Content
+                        $isDark={isDarkTheme}
+                        forceMount
+                        style={{
+                          ...styles,
+                          pointerEvents: 'auto',
+                        }}
+                      >
+                        <DialogHeader>
+                          <CloseButton $isDark={isDarkTheme} onClick={() => setIsOpen(false)}>
+                            <CloseIcon />
+                          </CloseButton>
+                        </DialogHeader>
+                        <Title $isDark={isDarkTheme}>{content.title}</Title>
+                        <DialogBody $isDark={isDarkTheme}>
+                          <div>
+                            <p>{content.content.description}</p>
+                            <ul>
+                              {content.content.steps.map((step, index) => (
+                                <li key={index}>{step}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          {content.content.codeBlocks?.map(renderCodeBlock)}
+                        </DialogBody>
+                      </Content>
+                    </div>
+                  ),
               )}
             </Dialog.Portal>
           </Dialog.Root>,
