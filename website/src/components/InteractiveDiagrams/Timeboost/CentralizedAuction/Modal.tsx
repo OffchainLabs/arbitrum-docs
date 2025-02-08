@@ -45,15 +45,7 @@ const ANIMATION_CONFIG = {
   },
 };
 
-interface ModalProps {
-  number: number;
-  position?: {
-    x: number;
-    y: number;
-  };
-}
-
-export function Modal({ number, position }: ModalProps) {
+export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkTheme } = useColorMode();
   const content: ModalContent = modalContent[number.toString() as StepNumber];
@@ -109,7 +101,7 @@ export function Modal({ number, position }: ModalProps) {
           zIndex: 10,
         }}
       >
-        <NumberComponent number={number} position={position} />
+        <NumberComponent number={number} />
       </g>
       {typeof document !== 'undefined' &&
         createPortal(

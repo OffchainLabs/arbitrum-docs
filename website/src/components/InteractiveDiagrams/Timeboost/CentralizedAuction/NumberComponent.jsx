@@ -14,34 +14,14 @@ const numberPaths = {
 };
 
 const coordinates = {
-  1: { 
-    circle: { x: 416.59, y: 412.69 }, 
-    path: { x: 412.16, y: 410.7 }, 
-    offset: { x: -4, y: -2 } 
-  },
-  2: { 
-    circle: { x: 588.13, y: 631.51 }, 
-    path: { x: 583.04, y: 633.46 }, 
-    offset: { x: -4, y: 1 } 
-  },
-  3: { 
-    circle: { x: 586.23, y: 776.88 }, 
-    path: { x: 586.28, y: 781.21 }, 
-    offset: { x: 1, y: 4 } 
-  },
-  4: { 
-    circle: { x: 1055.6, y: 597.98 }, 
-    path: { x: 1048.97, y: 602.13 }, 
-    offset: { x: -6, y: 3 } 
-  },
-  5: { 
-    circle: { x: 1003.53, y: 257.43 }, 
-    path: { x: 1003.53, y: 257.43 }, 
-    offset: { x: 1, y: 4 } 
-  },
+  1: { circle: { x: 416.59, y: 412.69 }, path: { x: 412.16, y: 410.7 }, offset: { x: -4, y: -2 } },
+  2: { circle: { x: 588.13, y: 631.51 }, path: { x: 583.04, y: 633.46 }, offset: { x: -4, y: 1 } },
+  3: { circle: { x: 586.23, y: 776.88 }, path: { x: 586.28, y: 781.21 }, offset: { x: 1, y: 4 } },
+  4: { circle: { x: 1055.6, y: 597.98 }, path: { x: 1048.97, y: 602.13 }, offset: { x: -6, y: 3 } },
+  5: { circle: { x: 1003.53, y: 257.43 }, path: { x: 1003.53, y: 257.43 }, offset: { x: 1, y: 4 } },
 };
 
-export const NumberComponent = ({ number, position }) => {
+export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
   const animationProps = useSpring({
@@ -60,10 +40,8 @@ export const NumberComponent = ({ number, position }) => {
     return null;
   }
 
-  const baseX = position?.x ?? coords.circle.x;
-  const baseY = position?.y ?? coords.circle.y;
-  const offsetX = (position?.x ? baseX - coords.path.x : coords.circle.x - coords.path.x) + (coords.offset?.x || 0);
-  const offsetY = (position?.y ? baseY - coords.path.y : coords.circle.y - coords.path.y) + (coords.offset?.y || 0);
+  const offsetX = coords.circle.x - coords.path.x + (coords.offset?.x || 0);
+  const offsetY = coords.circle.y - coords.path.y + (coords.offset?.y || 0);
 
   const circleClassName = isDarkTheme ? styles['cls-5'] : styles['cls-5-light'];
   const pathClassName = isDarkTheme ? styles['cls-10'] : styles['cls-10-light'];
@@ -72,8 +50,8 @@ export const NumberComponent = ({ number, position }) => {
     <g id={`number${number}`}>
       <animated.circle
         id={`circle${number}`}
-        cx={baseX}
-        cy={baseY}
+        cx={coords.circle.x}
+        cy={coords.circle.y}
         r={CIRCLE_RADIUS}
         className={circleClassName}
         style={animationProps}
