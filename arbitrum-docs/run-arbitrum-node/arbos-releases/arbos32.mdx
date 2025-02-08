@@ -46,11 +46,15 @@ Specific to Stylus and ArbOS 32 "Bianca", we have developed a caching strategy t
 
 In order to take advantage of this caching strategy, an additional step is required to deploy and enable it's use on your Orbit chain.
 
-After you have upgraded your Orbit chain to ArbOS 32 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/stylus/setCacheManager) in the `orbit-actions` repository to deploy the cache manager contract on your chain.
+### Additional requirement for Arbitrum Orbit chains who wish to enable Fast Withdrawals
+
+After you have upgraded your Orbit chain to ArbOS 32 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup, note that Fast Withdrawals is disabled by default unless explicitly set up and enabled by the Orbit chain owner/maintainer.
 
 ### Additional requirement for Arbitrum Orbit chains who wish to enable Fast Withdrawals
 
 After you have upgraded your Orbit chain to ArbOS 32 "Bianca" (i.e. you have fully completed [Step 3 in the "How to upgrade ArbOS on your Orbit chain" guide](../../launch-orbit-chain/how-tos/arbos-upgrade.mdx#step-3-schedule-the-arbos-version-upgrade) for your Orbit chain), please follow [these additional instructions](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/fast-confirm) in the `orbit-actions` repository to deploy the Safe contract for the fast confirmation committee and set the Safe contract to be both the validator and fast confirmer on your rollup, note that Fast Withdrawals is disabled by default unless explicitly set up and enabled by the Orbit chain owner/maintainer.
+
+> > > > > > > master
 
 ### Reference links for ArbOS 32 Bianca
 
