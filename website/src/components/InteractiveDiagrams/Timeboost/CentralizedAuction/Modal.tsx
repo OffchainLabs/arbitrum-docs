@@ -71,7 +71,7 @@ export function Modal({ number }: { number: number }) {
   const renderModalContent = (style: any) => (
     <Content $isDark={isDarkTheme} forceMount style={style}>
       <DialogHeader>
-        <CloseButton $isDark={isDarkTheme}>
+        <CloseButton $isDark={isDarkTheme} onClick={() => setIsOpen(false)}>
           <CloseIcon />
         </CloseButton>
       </DialogHeader>
@@ -97,8 +97,6 @@ export function Modal({ number }: { number: number }) {
         style={{
           cursor: 'pointer',
           pointerEvents: 'all',
-          position: 'relative',
-          zIndex: 10,
         }}
       >
         <NumberComponent number={number} />
@@ -106,13 +104,22 @@ export function Modal({ number }: { number: number }) {
       {typeof document !== 'undefined' &&
         createPortal(
           <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-            <Dialog.Portal forceMount>
-              {transition((style, isOpen) => (
-                <>
-                  {isOpen && <OverlayBackground style={{ opacity: style.opacity }} />}
-                  {isOpen && renderModalContent(style)}
-                </>
-              ))}
+            <Dialog.Portal>
+              <OverlayBackground />
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+                zIndex: 10000,
+              }}>
+                {renderModalContent({})}
+              </div>
             </Dialog.Portal>
           </Dialog.Root>,
           document.body,
@@ -134,38 +141,28 @@ const OverlayBackground = styled(animated(Dialog.Overlay))`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  pointer-events: all;
   position: fixed;
   inset: 0;
   z-index: 9999;
 `;
 
 const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: min(400px, 95vw);
+  position: relative;
+  width: 100%;
   max-width: 800px;
-  width: 95vw;
   min-height: 200px;
-  max-height: 90vh;
-  height: fit-content;
+  max-height: calc(100vh - 40px);
   background-color: ${(props) => (props.$isDark ? 'rgb(33, 49, 71)' : 'rgb(255, 255, 255)')};
   border-radius: 4px;
-  padding: 24px 24px 32px;
-  z-index: 10000;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   color: ${(props) => (props.$isDark ? '#fff' : '#000')};
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  overflow-y: auto;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     padding: 16px;
-    width: 95vw;
-    min-width: unset;
-    max-height: 85vh;
   }
 `;
 
@@ -180,10 +177,10 @@ const DialogBody = styled.div<{ $isDark: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 6px;
   overflow-y: auto;
   padding-right: 8px;
   flex: 1;
+  -webkit-overflow-scrolling: touch;
 
   pre {
     margin: 0 !important;
@@ -205,13 +202,20 @@ const DialogBody = styled.div<{ $isDark: boolean }>`
 
   @media (max-width: 768px) {
     padding-right: 4px;
-    
+
     pre {
       padding: 12px !important;
+      margin: 0 -12px !important;
+      border-radius: 0 !important;
     }
-    
+
     code {
       font-size: 13px !important;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 8px 0;
     }
   }
 `;
@@ -233,6 +237,12 @@ const CloseButton = styled(Dialog.Close)<{ $isDark: boolean }>`
 const Title = styled(Dialog.Title)<{ $isDark: boolean }>`
   font-size: 20px;
   margin-bottom: 16px;
+  padding-right: 24px;
   flex-shrink: 0;
   color: ${(props) => (props.$isDark ? '#fff' : '#000')};
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
 `;
