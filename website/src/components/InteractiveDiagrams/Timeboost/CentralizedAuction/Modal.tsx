@@ -30,26 +30,24 @@ interface ModalContent {
   };
 }
 
-const ANIMATION_CONFIG = {
-  from: {
-    scale: 0,
-    opacity: 0,
-  },
-  enter: {
-    scale: 1,
-    opacity: 1,
-  },
-  leave: {
-    scale: 0,
-    opacity: 0,
-  },
-};
-
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkTheme } = useColorMode();
   const content: ModalContent = modalContent[number.toString() as StepNumber];
-  const transition = useTransition(isOpen, ANIMATION_CONFIG);
+  
+  const transitions = useTransition(isOpen, {
+    from: { opacity: 0, transform: 'scale(0.95)' },
+    enter: { opacity: 1, transform: 'scale(1)' },
+    leave: { opacity: 0, transform: 'scale(0.95)' },
+    config: { tension: 300, friction: 20 },
+  });
+
+  const overlayTransitions = useTransition(isOpen, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+    config: { duration: 200 },
+  });
 
   const renderCodeBlock = (block: CodeBlock, index: number) => (
     <div key={index} style={{ position: 'relative' }}>
@@ -68,28 +66,6 @@ export function Modal({ number }: { number: number }) {
     </div>
   );
 
-  const renderModalContent = (style: any) => (
-    <Content $isDark={isDarkTheme} forceMount style={style}>
-      <DialogHeader>
-        <CloseButton $isDark={isDarkTheme} onClick={() => setIsOpen(false)}>
-          <CloseIcon />
-        </CloseButton>
-      </DialogHeader>
-      <Title $isDark={isDarkTheme}>{content.title}</Title>
-      <DialogBody $isDark={isDarkTheme}>
-        <div>
-          <p>{content.content.description}</p>
-          <ul>
-            {content.content.steps.map((step, index) => (
-              <li key={index}>{step}</li>
-            ))}
-          </ul>
-        </div>
-        {content.content.codeBlocks?.map(renderCodeBlock)}
-      </DialogBody>
-    </Content>
-  );
-
   return (
     <>
       <g
@@ -105,21 +81,55 @@ export function Modal({ number }: { number: number }) {
         createPortal(
           <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Portal>
-              <OverlayBackground />
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '20px',
-                zIndex: 10000,
-              }}>
-                {renderModalContent({})}
-              </div>
+              {overlayTransitions((styles, item) =>
+                item && (
+                  <OverlayBackground style={styles} />
+                )
+              )}
+              {transitions((styles, item) =>
+                item && (
+                  <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px',
+                    zIndex: 10000,
+                    pointerEvents: 'none',
+                  }}>
+                    <Content 
+                      $isDark={isDarkTheme} 
+                      forceMount 
+                      style={{
+                        ...styles,
+                        pointerEvents: 'auto',
+                      }}
+                    >
+                      <DialogHeader>
+                        <CloseButton $isDark={isDarkTheme} onClick={() => setIsOpen(false)}>
+                          <CloseIcon />
+                        </CloseButton>
+                      </DialogHeader>
+                      <Title $isDark={isDarkTheme}>{content.title}</Title>
+                      <DialogBody $isDark={isDarkTheme}>
+                        <div>
+                          <p>{content.content.description}</p>
+                          <ul>
+                            {content.content.steps.map((step, index) => (
+                              <li key={index}>{step}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        {content.content.codeBlocks?.map(renderCodeBlock)}
+                      </DialogBody>
+                    </Content>
+                  </div>
+                )
+              )}
             </Dialog.Portal>
           </Dialog.Root>,
           document.body,
@@ -160,6 +170,7 @@ const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
   color: ${(props) => (props.$isDark ? '#fff' : '#000')};
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   overflow: hidden;
+  will-change: transform, opacity;
 
   @media (max-width: 768px) {
     padding: 16px;
