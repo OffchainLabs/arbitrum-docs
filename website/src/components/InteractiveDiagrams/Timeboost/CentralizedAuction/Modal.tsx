@@ -151,13 +151,13 @@ const Content = styled(animated(Dialog.Content))<{ $isDark: boolean }>`
   min-height: 200px;
   max-height: 80vh;
   height: fit-content;
-  background-color: ${(props) => (props.$isDark ? 'rgb(33, 49, 71)' : 'rgb(255, 255, 255)')};
+  background-color: ${props => props.$isDark ? 'rgb(33, 49, 71)' : 'rgb(255, 255, 255)'};
   border-radius: 4px;
   padding: 24px 24px 32px;
   z-index: 10000;
   display: flex;
   flex-direction: column;
-  color: ${(props) => (props.$isDark ? '#fff' : '#000')};
+  color: ${props => props.$isDark ? '#fff' : '#000'};
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 `;
 
@@ -181,8 +181,7 @@ const DialogBody = styled.div<{ $isDark: boolean }>`
     margin: 0 !important;
     padding: 16px !important;
     border-radius: 4px !important;
-    background-color: ${(props) =>
-      props.$isDark ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)'} !important;
+    background-color: ${props => props.$isDark ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)'} !important;
   }
 
   code {
@@ -199,10 +198,10 @@ const CloseButton = styled(Dialog.Close)<{ $isDark: boolean }>`
   top: 16px;
   right: 16px;
   cursor: pointer;
-  color: ${(props) => (props.$isDark ? '#9dcced' : '#666')};
+  color: ${props => props.$isDark ? '#9dcced' : '#666'};
 
   &:hover {
-    color: ${(props) => (props.$isDark ? '#fff' : '#000')};
+    color: ${props => props.$isDark ? '#fff' : '#000'};
   }
 `;
 
@@ -210,5 +209,5 @@ const Title = styled(Dialog.Title)<{ $isDark: boolean }>`
   font-size: 20px;
   margin-bottom: 16px;
   flex-shrink: 0;
-  color: ${(props) => (props.$isDark ? '#fff' : '#000')};
+  color: ${props => props.$isDark ? '#fff' : '#000'};
 `;
