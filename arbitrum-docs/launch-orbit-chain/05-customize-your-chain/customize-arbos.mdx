@@ -145,13 +145,13 @@ Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-
 
 ## Schedule ArbOS upgrade
 
-After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the document [ArbOS upgrade](/launch-orbit-chain/how-tos/arbos-upgrade) to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
+After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the document [ArbOS upgrade](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md) to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current and target versions will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, all the features between v18 and v25 will be loaded.
 
-[precompile_main_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToPrecompiles@/precompile.go
-[arbosstate_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/@nitroPathToArbosState@/arbosstate.go
-[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/v3.1.0/arbos/@nitroPathToArbosState@/arbosstate.go#L253
-[block_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbos@/block_processor.go
-[internal_tx_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbos@/internal_tx.go
-[tx_processor_file_link]: https://github.com/OffchainLabs/@nitroRepositorySlug@/blob/@nitroVersionTag@/@nitroPathToArbos@/tx_processor.go
+[precompile_main_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.4.0@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go
+[arbosstate_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go
+[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/arbos/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go#L253
+[block_processor_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.4.0@@/@@nitroPathToArbos=arbos@@/block_processor.go
+[internal_tx_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.4.0@@/@@nitroPathToArbos=arbos@@/internal_tx.go
+[tx_processor_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.4.0@@/@@nitroPathToArbos=arbos@@/tx_processor.go

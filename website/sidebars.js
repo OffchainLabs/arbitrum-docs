@@ -238,7 +238,7 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-gentle-introduction',
+          id: 'launch-orbit-chain/a-gentle-introduction',
           label: 'A gentle introduction',
         },
         {
@@ -252,18 +252,23 @@ const sidebars = {
           label: 'Orbit licensing',
         },
         {
+          type: 'doc',
+          id: 'launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period',
+          label: 'Customizable challenge period',
+        },
+        {
           type: 'category',
           label: 'Guidance for Orbit chain operators',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-state-growth',
+              id: 'launch-orbit-chain/maintain-your-chain/guidance/state-growth',
               label: `Manage gas state growth`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit',
+              id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
               label: `Manage gas speed limit`,
             },
           ],
@@ -280,17 +285,17 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain',
               label: `Rollup Orbit Deployment`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain',
               label: `AnyTrust Orbit Deployment`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain',
               label: `Custom Gas Token Orbit Deployment`,
             },
             {
@@ -300,12 +305,12 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge',
               label: `Token bridge deployment`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain',
               label: `Orbit Chain Configuration`,
             },
           ],
@@ -327,17 +332,17 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/use-a-custom-gas-token',
+              id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
               label: `Use a custom gas token`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-precompile',
+              id: 'launch-orbit-chain/customize-your-chain/customize-precompile',
               label: `Customize your chain's precompiles`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-stf',
+              id: 'launch-orbit-chain/customize-your-chain/customize-stf',
               label: `Customize your chain's behavior`,
             },
             {
@@ -348,21 +353,21 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
-              label: `Manage the fee collectors`,
+              label: `Manage the fee parameters`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-arbos',
+              id: 'launch-orbit-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/usdc-standard-bridge',
+              id: 'launch-orbit-chain/third-party-integrations/bridged-usdc-standard',
               label: `Implement Circle bridged USDC`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/fast-withdrawals',
+              id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
               label: `Enable fast withdrawals`,
             },
             {
@@ -372,17 +377,17 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/aep-fee-router-introduction',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction',
                   label: `AEP fee router overview`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/set-up-aep-fee-router',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router',
                   label: `Set up AEP fee router`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/calculate-aep-fees',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees',
                   label: `Calculate AEP license fees`,
                 },
               ],
@@ -403,7 +408,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/arbos-upgrade',
+              id: 'launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade',
               label: `Upgrade ArbOS`,
             },
           ],
@@ -444,7 +449,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/reference/monitoring-tools-and-considerations',
+          id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
           label: 'Monitoring tools and considerations',
         },
         {
@@ -454,7 +459,7 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui',
+          id: 'launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
         {
@@ -479,12 +484,12 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/infra-options-orbit-chains',
+          id: 'launch-orbit-chain/third-party-integrations/third-party-providers',
           label: 'Third-party infrastructure providers',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/troubleshooting-building-orbit',
+          id: 'launch-orbit-chain/faq-troubleshooting/troubleshooting-building-orbit',
           label: 'FAQ',
         },
       ],
@@ -688,6 +693,11 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
+          type: 'doc',
+          label: 'Use Timeboost',
+          id: 'run-arbitrum-node/how-to-use-timeboost',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
@@ -880,6 +890,11 @@ const sidebars = {
           type: 'doc',
           id: 'how-arbitrum-works/l2-to-l1-messaging',
           label: 'L2 to L1 messaging',
+        },
+        {
+          type: 'doc',
+          id: 'how-arbitrum-works/data-availability',
+          label: 'Data Availability',
         },
         {
           type: 'link',
