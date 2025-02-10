@@ -11,7 +11,7 @@ content_type: get-started
 
 _Rollup_
 
-Arbitrum is a Rollup, which means that the inputs to the chain -- the messages that are put into the inbox -- are all recorded on a parent chain (for Arbitrum One, the Ethereum chain) as calldata. For the purposes of this article, we also refer to the parent chain as L1, and the Rollup chain as L2.
+Arbitrum is a Rollup, which means that the inputs to the chain -- the messages that are put into the inbox -- are all recorded on a parent chain (for Arbitrum One, the Ethereum chain) as calldata or blobs (or another format, depending on the configuration of the chain). For the purposes of this article, we also refer to the parent chain as L1, and the Rollup chain as L2.
 
 Because of this, everyone has the information they would need to determine the current correct state of the chain -- they have the full history of the inbox, and the results are uniquely determined by the inbox history, so they can reconstruct the state of the chain based only on public information, if needed.
 
