@@ -203,8 +203,6 @@ Please refer to the [Address aliasing](#address-aliasing) discussion for more ba
 
 :::
 
-
-
 ## Retryable tickets
 Retryable tickets are Arbitrum's canonical method for creating parent-to-child chain messages, i.e., parent chain transactions that initiate a message to be executed on a child chain. A retryable can be submitted for a fixed-cost (dependent only on its calldata size) paid at the parent chain; its *submission* on the parent chain is separable/asynchronous with its *execution* on the child chain. Retryables provide atomicity between the cross-chain operations; if the parent chain transaction to request submission succeeds (i.e., does not revert) then the execution of the retryable on the child chain has a strong guarantee to ultimately succeed as well.
 
@@ -375,11 +373,26 @@ Please keep in mind that some older custom gateways might not have `outboundTran
 Note that `arbSomeERC20Token` is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
 
 ### The Arbitrum generic-custom gateway
-Just because a token has requirements beyond what are offered via the standard `ERC-20` gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
+Just because a token has requirements beyond what are offered via the standard `ERC-20` gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs.
 
+:::Info As a general rule
 
+If your custom token has the ability to increase its supply (i.e., mint) directly on the child chain, and you want the child-chain-minted tokens be withdrawalable back to the parent chain and recognized by the parent chain contract, it will probably require its own special gateway. Otherwise, the generic-custom gateway is likely the solution for you!
+
+:::
+
+Some examples of token features suitable for the generic-custom gateway:
+* A child chain token contract upgradable via a proxy
+* A child chain token contract that includes address whitelisting/blacklisting
+* The deployer determines the address of the child chain token contract
 
 #### Setting up your token with the generic-custom gateway
+Follow the following steps to get your token set up to use the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum's generic-custom gateway](/build-decentralized-app/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
+
+**Pre-requisites**
+Your token on the parent chain should conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [`TestCustomTokenL1`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
+
+**1. Deploy yoru token on the child chain**
 
 ### Other flavors of gateways
 
