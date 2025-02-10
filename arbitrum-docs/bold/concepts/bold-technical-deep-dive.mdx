@@ -73,8 +73,6 @@ The current implementation of BoLD involves both on-chain and off-chain componen
 
 - **Validator software:** Software that has knowledge of the correct Arbitrum child chain state at any point. It tracks the on-chain rollup contracts for assertions posted and will automatically initiate challenges on malicious assertions if configured to do so by the user. It will participate in new and existing challenges and make moves as required by the protocol to win against any number of malicious entities. Its goals are to ensure only honest assertions about Arbitrum's state are confirmed on Ethereum, and that honest assertions always get confirmed on Ethereum in a timely manner (within at most two challenge periods). All Arbitrum full nodes are watchtower validators by default. This means they do not post claims or assertions unless configured to do so but will warn in case invalid assertions are detected on-chain.
 
-
-
 ### How BoLD uses Ethereum
 
 When it comes to implementing the protocol, BoLD needs to be deployed on a credibly-neutral, censorship-resistant backend to be fair to all participants. As such, Ethereum was chosen as the perfect candidate. Ethereum is currently the most decentralized, secure, smart contract blockchain to which the full protocol can be deployed, with challenge moves performed as transactions to the protocol’s smart contracts.
