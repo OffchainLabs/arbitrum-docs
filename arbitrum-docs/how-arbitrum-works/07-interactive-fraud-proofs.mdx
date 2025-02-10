@@ -17,7 +17,7 @@ RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is bond
 
 At this point we know that Alice and Bob disagree about the correctness of <a data-quicklook-from="rblock">RBlock</a> 93, with Alice committed to 93 being correct and Bob committed to 93 being incorrect. (Bob is bonded on 95, and 95 implicitly claims that 92 is the last correct RBlock before it, which implies that 93 must be incorrect.)
 
-Whenever two (or more) bonders are bonded on sibling RBlocks, a challenge begins between all of them. (There can only be one bonder per RBlock, but multiple RBlocks may participate in a challenge.) The Rollup protocol will record and referee the challenge, eventually declaring a winner and confiscating the losers' bonds. This will cause the losers to be removed as bonders.
+Whenever two (or more) proposers are bonded on sibling RBlocks, a challenge begins between all of them. (There can only be one bonder per RBlock, but multiple RBlocks may participate in a challenge.) The Rollup protocol will record and referee the challenge, eventually declaring a winner and confiscating the losers' bonds. This will cause the losers to be removed as proposers.
 
 The challenge is a game in which two or more parties make moves in an attempt to defend the correctness of RBlocks they (or their allies) have staked on, with an Ethereum contract as the referee. The goal of the system is to determine which RBlock corresponds to the correct execution.
 
