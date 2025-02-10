@@ -35,6 +35,7 @@ Whether a chain uses `ETH` or a custom gas token, users can deposit that token f
 
 ### Depositing ETH
 A special message type exists for simple `ETH` deposits from parent-to-child chains. You can deposit `ETH` by calling the `Inbox` contract's `depositEth` method, for example:
+
 ```javascript
 function depositEth(address destAddr) external payable override returns (uint256)
 ```
@@ -60,3 +61,146 @@ A diagram illustrating this deposit process can be found below:
 ![400px-img](/assets/aliasing.svg)
 
 ### Address aliasing
+All unsigned messages submitted through the delayed inbox have their sender addresses "aliased" when executed on the child chain. Instead of returning the parent chain sender's address as `msg.sender`, the child chain sees the "child alias" of that address. Formally, the child alias is calculated as:
+
+```solidity
+Child_Alias = Parent_Contract_Address + 0x1111000000000000000000000000000000001111
+```
+
+#### Why aliasing?
+Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child chain contracts can distinguish between calls from parent chain contracts and calls from child-chain-native addresses.
+
+#### Computing the original parent chain address
+If you need to recover the original parent chain address from an aliased child chain address onchain, you can use Arbitrum's `AddressAliasHelper` library. This allows you to translate between the aliased child address and the original parent address in your contract logic.
+
+```solidity
+modifier onlyFromMyL1Contract() override {
+    require(AddressAliasHelper.undoL1ToL2Alias(msg.sender) == myL1ContractAddress, "ONLY_COUNTERPART_CONTRACT");
+    _;
+}
+```
+
+## Transacting via the delayed inbox
+Arbitrum provides a *delayed inbox* contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
+1. **General cross-chain messaging**: Allows parent chain EOAs or parent chain contracts to send messages or transactions to a child chain. This is critical for bridging assets (other than the chain's native token) and performing cross-chain operations.
+2. **Censorship resistance**: It ensures the Arbitrum chain remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions, refer to [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) for more details.
+
+Users can send child chain transactions through the delayed inbox in two primary ways:
+1. [General child chain messaging](#general-child-chain-messaging)
+2. [Retryable tickets](#retryable-tickets)
+
+### General child chain messaging
+Any message sent via the delayed inbox can ultimately produce a transaction on the child chain. These messages may or may not include a signature.
+* **Signed messages**: Signed by an EOA on the parent chain. This signature proves the sender is an EOA rather than a contract, preventing certain cross-chain exploits and bypassing the need for aliasing.
+* **Unsigned messages**: These do not include a signature from an EOA. For security reasons, the sender's address on the child chain must be *aliased* when the message is executed, see the [Address aliasing](#address-aliasing) section for details.
+
+Below we describe the delayed inbox methods for each scenario.
+
+### Signed messages
+Signed messages let a parent chain EOA prove ownership of an address, ensuring the child chain transaction will execute with `msg.sender` equal to the *signer's* address on the child chain (rather than an alias). This mechanism is beneficial for bypassing the Sequencer if:
+* You want to force-include a transaction on a child chain in case of Sequencer downtime or censorship.
+* You need an operation on a child chain that explicitly requires EOA authorization (e.g., a withdrawal).
+
+#### How signed messages work
+When submitting through the delayed inbox, a child chain transaction signature gets included in the message's calldata. Because it matches the EOA's signature, the child chain can safely treat the signer's address as the sender.
+
+Example use case:
+[Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
+
+#### Delayed inbox methods for signed messages
+There are two primary methods for sending signed messages:
+1. `sendL2Message`
+  * It can be called by either an EOA or a contract
+  * The full signed transaction data is emitted in an event log so that nodes can reconstruct the transaction without replaying it
+  * More flexible
+
+```solidity
+function sendL2Message(
+    bytes calldata messageData
+) external whenNotPaused onlyAllowed returns (uint256)
+```
+
+2. `sendL2MessageFromOrigin`
+  * Only an EOA with no deployed code can call this ("codeless origin")
+  * The signed transaction is retrieved directly from calldata, so emitting a large event log is unnecessary
+  * Offers lower gas costs (cheaper)
+
+```solidity
+function sendL2MessageFromOrigin(
+    bytes calldata messageData
+) external whenNotPaused onlyAllowed returns (uint256);
+```
+
+### Unsigned messages
+Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The delayed inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
+
+1. **Unsigned from EOA's**: These methods incorporate a nonce for replay protection, similar to standard EOA-based transactions on Ethereum.
+  * `sendL1FundedUnsignedTransaction`
+    * Transfers value from a parent chain to a child chain along with the transaction
+    * Parameters: gas limit, fee, nonce, destination address, and calldata
+
+```solidity
+function sendL1FundedUnsignedTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    uint256 nonce,
+    address to,
+    bytes calldata data
+) external payable returns (uint256);
+```
+
+  * `sendUnsignedTransaction`
+    * No value transfers from the parent chain
+    * Transaction fees and value on a child chain come from the child chain balance
+
+```solidity
+function sendUnsignedTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    uint256 nonce,
+    address to,
+    uint256 value,
+    bytes calldata data
+) external whenNotPaused onlyAllowed returns (uint256);
+```
+
+2. **Unsigned from contracts**: Contracts that typically rely on standard Ethereum replay protection using their contract address.
+  * `sendContractTransaction`
+    * Sends a transaction from a parent chain with no new funds; uses the contract's existing child chain balance.
+
+```solidity
+function sendContractTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    address to,
+    uint256 value,
+    bytes calldata data
+) external whenNotPaused onlyAllowed returns (uint256);
+```
+
+  * `sendL1FundedContractTransaction`
+    * Sends the transaction *and* transfers additional funds from a parent to child chain
+
+```solidity
+function sendL1FundedContractTransaction(
+    uint256 gasLimit,
+    uint256 maxFeePerGas,
+    address to,
+    bytes calldata data
+) external payable returns (uint256);
+```
+
+In these methods, a "delayed message" is created and passed to the parent chain bridge contract, which then arranges its inclusion on a child chain.
+
+### Messages types
+Arbitrum Nitro defines various **message types** to distinguish between the categories described above (signed vs. unsigned, EOAs vs. contracts, etc.). These message types help the protocol route and process each incoming message securely. 
+
+You can find additional details on message types in the next section of this documentation.
+
+:::note
+
+Please refer to the [Address aliasing](#address-aliasing) discussion for more background on address aliasing. This mechanism ensures that a parent chain contract can't impersonate a child chain address unless it provides a vlaid signature as an EOA.
+
+:::
+
+## Retryable tickets
