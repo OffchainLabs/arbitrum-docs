@@ -61,7 +61,7 @@ We believe strongly that interactive proving is the superior approach, for the f
 
 **Higher per-txn gas limit:** Interactive proving can escape from Ethereum's tight per-transaction gas limit. The gas limit isn't infinite, for obvious reasons, but it can be larger than on Ethereum. As far as Ethereum is concerned, the only downside of a gas-heavy Arbitrum transaction is that it may require an interactive <a data-quicklook-from="fraud-proof">fraud proof</a> with slightly more steps (and only if a fraud proof is actually needed; i.e., in the event of a dispute). By contrast, re-execution must impose a _lower_ gas limit than Ethereum, because it must be possible to emulate execution of the transaction (which is more expensive than executing it directly) within a single Ethereum transaction.
 
-**More implementation flexibility:** Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on Ethereum. By contrast, rerexecution approaches are tethered to limitations of the EVM.
+**More implementation flexibility:** Interactive proving allows more flexibility in implementation. All that is necessary is the ability to verify a one-step proof on the parent chain, Ethereum. By contrast, re-execution approaches are tethered to limitations of the Ethereum Virtual Machine (EVM).
 
 ### Interactive proving drives the design of Arbitrum
 
