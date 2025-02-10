@@ -60,7 +60,7 @@ It should be clear that these changes don’t affect the basic correctness of th
 
 ## Efficiency
 
-The challenge protocol is designed to resolve the dispute with a minimum of work required by the protocol (via its Layer 1 Ethereum contracts) in its role as referee. The protocol needs to track information for the assertions created by parties in the challenge, including their history commitments and timers that can be used to calculate how long they have gone without a rival. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”. For more information on what the protocol needs to keep track of, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
+The challenge protocol is designed to resolve the dispute with a minimum of work required by the protocol (via its parent chain contracts) in its role as referee. The protocol needs to track information for the assertions created by parties in the challenge, including their history commitments and timers that can be used to calculate how long they have gone without a rival. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”. For more information on what the protocol needs to keep track of, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
 
@@ -81,7 +81,7 @@ but it uses that information to transition to the execution challenge phase.
 
 ### "Big-Step" execution challenge
 
-Once narrowed down to an individual block, the actual machine execution can be bisected. We begin by bisecting the machine execution until we reach a "chunk" of 2^26 WASM instructions. Once the disagreement has reached this granularity, we can proceed with a "small-step" execution challenge ([see below](#small-step-execution-challenge)). For more detail on why we use two levels of execution challenges ("big step" and "small-step"), see "[Challenge Resolution](/bold/concepts/bold-technical-deep-dive.mdx#challenge-resolution)" in the BoLD technical deep dive.
+Once narrowed down to an individual block, the actual machine execution can be bisected. We begin by bisecting the machine execution until we reach a "chunk" of 2^26 `WASM` instructions. Once the disagreement has reached this granularity, we can proceed with a "small-step" execution challenge ([see below](#small-step-execution-challenge)). For more detail on why we use two levels of execution challenges ("big step" and "small-step"), see "[Challenge Resolution](/bold/concepts/bold-technical-deep-dive.mdx#challenge-resolution)" in the BoLD technical deep dive.
 
 ### "Small-Step" Execution challenge
 
