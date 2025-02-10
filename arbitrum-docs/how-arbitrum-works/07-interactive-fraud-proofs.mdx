@@ -81,7 +81,7 @@ but it uses that information to transition to the execution challenge phase.
 
 ### "Big-Step" execution challenge
 
-Once narrowed down to an individual block, the actual machine execution can be bisected. We begin by bisecting the machine execution until we reach a "chunk" of 2^26 WASM instructions. Once the disagreement has reached this granularity, we can proceed with a "small-step" execution challenge ([see below](#small-step-execution-challenge)). For more detail on why we use two levels of execution challenges ("big step" and "small-step"), see "[Challenge Resolution](/bold/concepts/bold-technical-deep-dive.mdx#challenge-resolution)" in the BoLD technical deep dive.
+Once narrowed down to an individual block, the actual machine execution can be bisected. We begin by bisecting the machine execution until we reach a "chunk" of 2^26 `WASM` instructions. Once the disagreement has reached this granularity, we can proceed with a "small-step" execution challenge ([see below](#small-step-execution-challenge)). For more detail on why we use two levels of execution challenges ("big step" and "small-step"), see "[Challenge Resolution](/bold/concepts/bold-technical-deep-dive.mdx#challenge-resolution)" in the BoLD technical deep dive.
 
 ### "Small-Step" Execution challenge
 
