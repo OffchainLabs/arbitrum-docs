@@ -132,7 +132,7 @@ To initiate a challenge, there must first be a fork in the assertion chain withi
 
 If there is a fork in the assertion chain (a "top-level" dispute), anyone can begin a challenge by creating a challenge edge. No bond is needed: each branch of the fork has a unique assertion, with an attached bond, and that assertion contains enough information to uniquely determine its challenge edge; that is, there is no "wiggle room" that an adversary can use to create multiple challenge edges from a single assertion (if this were possible, it could lead to spam attacks on the protocol).
 
-Anyone can open a subchallenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a subchallenge bond and an edge claiming intent to start the challenge. This subchallenge bond is much lower than the one required to become an assertion proposer. Challenges are not tied to specific addresses or parties - instead, anyone can participate.
+Anyone can open a subchallenge on an assertion without needing to be a bonder in the Rollup contract, so long as they post a challenge bond and an edge claiming intent to start the challenge. This challenge bond is much lower than the one required to become an assertion proposer. Challenges are not tied to specific addresses or parties - instead, anyone can participate.
 
 Recall that a challenge is a fundamental disagreement about an assertion posted to the Arbitrum chain. At its core, validators essentially disagree about the blockhash at a certain block number, and the BoLD protocol allows them to interactively narrow down their disagreement via fraud proofs such that Ethereum can be the final referee and claim a winner.
 
