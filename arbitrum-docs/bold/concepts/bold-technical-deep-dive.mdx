@@ -45,7 +45,7 @@ The current implementation of BoLD involves both on-chain and off-chain componen
 
 - **Honest validator:** An entity that knows the correct state of the Arbitrum L2 chain and who may want to participate in creating assertions, confirming assertions, and/or challenging invalid assertions if they exist. More specifically, this entity must run an Arbitrum full node in `MakeNodes`, `Defensive`, or `ResolveNodes` mode as described in the [How to run a validator](https://docs.arbitrum.io/run-arbitrum-node/more-types/run-validator-node). Note that there must always be an active proposer (i.e., a validator who actively submits new assertions) to advance the chain and who will need to run a validator in `MakeNodes` mode.
 
-- **Challenge period:** Window of time ([~6.4 days on Arbitrum One](https://docs.arbitrum.io/build-decentralized-apps/reference/chain-params)) over which an assertion can be challenged, after which the assertion can be confirmed. This is configurable by the DAO.
+- **Challenge period:** Window of time ([~6.4 days on Arbitrum One](https://docs.arbitrum.io/build-decentralized-apps/reference/chain-params)) over which an assertion can be challenged, after which the assertion can be confirmed. This is configurable by the DAO for Arbitrum One and Arbitrum Nova.
 
 - **Edge:** Edges are a portion of a claim made by a validator about the history of the chain from some end state all the way back to some initial state. Edges are the fundamental unit in a challenge.
 
