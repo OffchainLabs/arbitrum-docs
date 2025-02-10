@@ -32,7 +32,7 @@ We generally categorize these parent-to-child chain messaging methods as follows
 
 In this section, we will explore each of these categories in detail and explain how they work. The diagram below illustrates the various paths available for parent-to-child chain communication and asset transfers.
 
-![400px-img](/assets/l1-to-l2.svg)
+![400px-img](../assets/l1-to-l2.svg)
 
 ## Native token bridging
 
@@ -69,7 +69,7 @@ A diagram illustrating this deposit process can be found below:
 - **If the parent chain caller is a contract**:
   - The `ETH` will be deposited to the contract's aliased address on the child chain. Aliasing is described below:
 
-![400px-img](/assets/aliasing.svg)
+![400px-img](../assets/aliasing.svg)
 
 ### Address aliasing
 
@@ -259,7 +259,7 @@ Here we walk through the different stages of the lifecycle of a retryable ticket
 
 2. The sender's deposit must be enough to make the parent chain submission succeed and for child chain execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to the retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
 
-3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on the child chain.
+3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on the child chain.
 
 **Ticket Submission**
 
@@ -309,7 +309,7 @@ If a `redeem` is not done at submission or the submission's initial `redeem` fai
 
 #### Manual redemption
 
-1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. ArbOS will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block its forming. In this manner, `redeem`'s are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance the block's gas limit is reached before execution.
+1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. ArbOS will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block its forming. In this manner, `redeem`'s are scheduled to happen as soon as possible, and will always be in the same block as the tx that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance the block's gas limit is reached before execution.
 
 2. If the fixed period (one week) elapses without a successful `redeem`, the ticket **expires** and will be [automatically discarded](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262), unless some party has paid a fee to [keep the ticket alive](https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41) for another full period. A ticket can live indefinitely as long as it is renewed each time before it expires.
 
@@ -340,7 +340,7 @@ If a ticket with a `callValue` is eventually discarded (canceled or expired) hav
 
 :::info Important notes
 
-If a `redeem` is not done at submission or the submission's initial `redeem` fails, anyone can attempt to redeem the retryable again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt.
+If a `redeem` is not done at submission or the submission's initial `redeem` fails, anyone can attempt to redeem the retryable again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt.
 
 - One can `redeem` live tickets using the [Arbitrum Retryables Transaction Panel](https://retryable-dashboard.arbitrum.io/tx)
 - The calldata of a ticket is saved on the child chain until it is redeemed or expired
@@ -365,7 +365,7 @@ We can build **customized feature messaging** (for example, token bridging) usin
 
 ### `ERC-20` token bridging
 
-The Arbitrum protocol itself technically has no native notion, of any token standards, and gives no built-in advantage or special recognition to any particualar token bridge. In this page, we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both parent and child chains that leverages Arbitrum's [cross-chain message passing system](/build-decentralied-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
+The Arbitrum protocol itself technically has no native notion, of any token standards, and gives no built-in advantage or special recognition to any particualar token bridge. In this page, we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both parent and child chains that leverages Arbitrum's [cross-chain message passing system](/build-decentralized-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
 
 ### Design rationale
 
@@ -400,11 +400,11 @@ Our architecture consists of three types of contracts:
 2. **Gateways**: Pairs of contracts (one on the parent and one on the child chain) that implements a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on parent, and one on child chain) that route each asset to its designated gateway.
 
-![500px-img](/assets/canonical-bridge.svg)
+![500px-img](../assets/canonical-bridge.svg)
 
 All parent-to-child token transfers are initiated via the router contract on the parent chain, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` contract (typcically/expectedly via [retryable tickets](#retryable-tickets)).
 
-![400px-img](/assets/token-gateway.svg)
+![400px-img](../assets/token-gateway.svg)
 
 For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter`), and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
@@ -412,7 +412,7 @@ For any given gateway pairing, we require that calls be initiated through the co
 
 By default, any `ERC-20` token on a parent chain that isn't registered to a gateway can be permissionlessly bridge through the `StandardERC20Gateway`.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-token-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
 
 #### Example: Standard `Arb-ERC20` deposit and withdraw
 
@@ -456,7 +456,7 @@ Some examples of token features suitable for the generic-custom gateway:
 
 #### Setting up your token with the generic-custom gateway
 
-Follow the following steps to get your token set up to use the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum's generic-custom gateway](/build-decentralized-app/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
+Follow the following steps to get your token set up to use the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum's generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
 
 **Pre-requisites**
 
