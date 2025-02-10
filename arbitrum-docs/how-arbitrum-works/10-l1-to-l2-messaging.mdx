@@ -40,7 +40,7 @@ A special message type exists for simple `ETH` deposits from parent-to-child cha
 function depositEth(address destAddr) external payable override returns (uint256)
 ```
 
-:::note
+:::warning
 
 Depositing `ETH` directly via `depositEth` to a contract on a child chain **will not** invoke that contract's fallback function.
 
@@ -356,7 +356,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 #### Deposits
 1. A user calls `L1GatewayRouter.outboundTransferCustomRefund` (with `SomeERC20Token`'s parent chain address as an argument).
 
-:::note
+:::warning
 
 Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use the function `L1GatewayRouter.outboundTransfer`.
 
@@ -390,11 +390,33 @@ Some examples of token features suitable for the generic-custom gateway:
 Follow the following steps to get your token set up to use the generic-custom gateway. You can also find more detailed instructions on the page [How to bridge tokens via Arbitrum's generic-custom gateway](/build-decentralized-app/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
 
 **Pre-requisites**
+
 Your token on the parent chain should conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [`TestCustomTokenL1`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
 
-**1. Deploy yoru token on the child chain**
+1. Deploy you token on the child chain
+  * Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface, i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
+  * Token compatibility with available tooling
+    * If you want your token to be compatible out of the box with all the tooling available (e.g., the [Arbitrum bridge]), we recommend that you keep the implementation of the IArbToken interface as close as possible to the [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol) implementation example.
+    * For example, if an allowance check is added to the `bridgeBurn()` function, the token will not be easily withdrawable through the Arbitrum bridge UI, as the UI does not prompt an approval transaction of tokens by default (it expects the tokens to follow the recommended `L2GatewayToken` implementation).
+2. Register your toekn on the parent chain to your token on the child chain via the `L1CustomGateway` contract
+  * Have your parent chain token's contract make an external call to `L1CustomGateway.registerTokenToL2`. This registration can alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
+3. Register your token on the parent chain to the `L1GatewayRouter`
+  * After your token's registration to the generic-custom gateway is complete, have your parent chain token's contract make an external call to `L1GatewayRouter.setGateway`; this registration can also alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
+
+:::info We are here to help
+
+If you have questions about your custom token needs, feel free to reach out on our [Discord](https://discord.gg/arbitrum) server.
+
+:::
 
 ### Other flavors of gateways
+Note that in the system described above, one pair of gateway contracts handles the bridging of many `ERC-20`'s; i.e., many `ERC-20`'s on parent chain's are each paired with their own `ERC-20`'s on child chain's via a single gateway contract pairing. Other gateways may well bear different relations with the contracts they bridge.
+
+Take our wrapped Ether implementation for example: here, a single `WETH` contract on a parent chain is connected to a single `WETH` contract on a child chain. When transferring `WETH` from one domain to another, the parent/child gateway architecture is used to unwrap the `WETH` on domain A, transfer the now-unwrapped Ether, and then re-wrap it on domain B. This ensures that `WETH` can behave on the child chain the way users are used to it behaving on the parent chain, while ensuring that all `WETH` tokens are always fully collateralized on the layer in which they reside.
+
+No matter the complexity of a particular token's bridging needs, a gateway can in principle be created to accomodate it within our canonical bridging system.
+
+You can find an example of implementation of a custom gateway on the page [How to bridge tokens via a custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/04-how-to-bridge-tokens-custom-gateway.mdx).
 
 ### Demos
 Our [How to bridge tokens](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx) section provides examples of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
