@@ -304,3 +304,87 @@ In the lifecycle of a retryable ticket, two types of child chain transaction rec
 #### Alternative "unsafe" retryable ticket creation
 The `Inbox.createRetryableTicket` convenience method includes anity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from a parent chain to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their [address alias](#address-aliasing) if either is a contract (determined by if the address has code during the call), providing a path for the parent chain contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they are doing.
 
+
+
+## Token bridging
+We can build **customized feature messaging** (for example, token bridging) using the messaging systems described in previous sections. In particular, **retryable tickets** power Arbitrum's **canonical token bridge**, which was developed by Offchain Labs. By leveraging retryable ticekts under the hood, this token bridge provides a seamless user experience for transferring assets from a parent-to-child chain. An overview of how this system works is provided below.
+
+### `ERC-20` token bridging
+The Arbitrum protocol itself technically has no native notion, of any token standards, and gives no built-in advantage or special recognition to any particualar token bridge. In this page, we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both parent and child chains that leverages Arbitrum's [cross-chain message passing system](/build-decentralied-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it! 
+
+### Design rationale
+In our token bridge design, we use the term "gateway" as per [this proposal](https://ethereum-magicians.org/t/outlining-a-standard-interface-for-cross-domain-erc20-transfers/6151); i.e., one of a pair of contracts on two different domains (i.e., Ethereum and an Arbitrum One chain), used to facilitate cross-domain asset transfers.
+
+We will now outline some core goals that motivated the design of our bridging system.
+
+#### Custom gateway functionality
+For many `ERC-20` tokens, "standard" bridging functionality is sufficient, which entails the following: a token contract on the parent chain (i.e., Ethereum) is associated with a "paired" token contract on the child chain (i.e., Arbitrum).
+
+Depositing a token entails escrowing some amount of the token in a parent chain bridge contract, and minting the same amount at the paired token contract on a child chain. On the child chain, the paired contract behaves much like a normal `ERC-20` token contract. Withdrawing entails burning some amount of the token in the child chain contract, which then can later be claimed from the parent chain bridge contract.
+
+Many tokens, however, require custom gateway systems, the possibilities which are hard to generalize, e.g.,:
+  * Tokens which accrue interest to their holders need to ensure that the interest is dispersed properly across layers, and doesn't simply accrue to the bridge contracts.
+  * Our cross-domain `WETH` implementations require tokens be wrapped an unwrapped as they move across layers.
+
+Thus, our bridge architecture must allow not just the standard deposit and withdraw functionalities, but for new, custom gateways to be dynamically added over time.
+
+#### Canonical child chain representation per parent chain token contract
+Having multiple custom gateways is well and good, but we also want to avoid a situation in which a single parent chain token that uses our bridging system can be represented at multiple addresses/contracts on the child chain as this adds significant friction and confusion for users and developers. Thus, we need a way to track which parent chain token uses which gateway, and in turn, to have a canonical address oracle that maps the token addresses across the parent and child chain domains.
+
+### Canonical token bridge implementation
+With this in mind, we provide an overview of our token bridging architecture.
+
+Our architecture consists of three types of contracts:
+1. **Asset contracts**: These are the token contracts themselves, i.e., an `ERC-20` on a parent chain and it's counterpart on the child chain.
+2. **Gateways**: Pairs of contracts (one on the parent and one on the child chain) that implements a particular type of cross-chain asset bridging.
+3. **Routers**: Exactly two contracts (one on parent, and one on child chain) that route each asset to its designated gateway.
+
+![500px-img](/assets/canonical-bridge.svg)
+
+All parent-to-child token transfers are initiated via the router contract on the parent chain, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` contract (typcically/expectedly via [retryable tickets](#retryable-tickets)).
+
+![400px-img](/assets/token-gateway.svg)
+
+For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter`), and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
+
+### The standard `ERC-20` gateway
+By default, any `ERC-20` token on a parent chain that isn't registered to a gateway can be permissionlessly bridge through the `StandardERC20Gateway`.
+
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-token-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
+
+#### Example: Standard `Arb-ERC20` deposit and withdraw
+To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard `ERC-20` gateway looks like. Here, we're assuming that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard `ERC-20` gateway.
+
+#### Deposits
+1. A user calls `L1GatewayRouter.outboundTransferCustomRefund` (with `SomeERC20Token`'s parent chain address as an argument).
+
+:::note
+
+Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use the function `L1GatewayRouter.outboundTransfer`.
+
+:::
+
+2. `L1GatewayRouter` looks up `SomeERC20Token`'s gateway, and finds that it's the standard `ERC-20` gateway (the `L1ERC20Gateway` contract).
+
+3. `L1GatewayRouter` calls `L1ERC20Gateway.outboundTransferCustomRefund`, forwarding the appropriate parameters.
+
+4. `L1ERC20Gateway` escrows the tokens sent and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on the child chain.
+
+5. `L2ERC20Gateway.finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on the child chain.
+
+Note that `arbSomeERC20Token` is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
+
+### The Arbitrum generic-custom gateway
+Just because a token has requirements beyond what are offered via the standard `ERC-20` gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
+
+
+
+#### Setting up your token with the generic-custom gateway
+
+### Other flavors of gateways
+
+### Demos
+Our [How to bridge tokens](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx) section provides examples of interacting with Arbitrum's token bridge via the [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk).
+
+### "I've got a bridge to sell you", a word of caution
+Cross-chain bridging is an exciting design space; alternative bridge designs can potentially offer faster withdrawals, interoperability with other chains, different trust assumptions with their own potentially valuable UX tradeoffs, etc. They can also potentially be completely insecure and/or outright scams. Users should treat other, non-canonical bridge applications the same way they treat any application running on Arbitrum, and exercise caution and do their due diligence before entrusting them with their value.
