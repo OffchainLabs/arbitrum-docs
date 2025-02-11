@@ -77,8 +77,7 @@ export function ImageZoom({ src, alt, className }: ImageZoomProps) {
       const srcString = src as string;
       if (srcString.startsWith('..')) {
         // For relative paths starting with .., maintain the full path
-        const basePath = '/arbitrum-docs';
-        const normalizedPath = srcString.replace(/^\.\./, basePath);
+        const normalizedPath = srcString.replace(/^\.\.\//, '/');
         setImageSrc(normalizedPath);
       } else {
         setImageSrc(srcString);
