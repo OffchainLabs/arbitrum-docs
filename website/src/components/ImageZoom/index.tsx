@@ -54,7 +54,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 
 interface ImageZoomProps {
-  src: string | File;
+  src: string | File | { default: string };
   alt?: string;
   className?: string;
 }
@@ -70,8 +70,10 @@ export function ImageZoom({ src, alt, className }: ImageZoomProps) {
         setImageSrc(e.target?.result as string);
       };
       reader.readAsDataURL(src);
+    } else if (typeof src === 'object' && src.default) {
+      setImageSrc(src.default);
     } else {
-      setImageSrc(src);
+      setImageSrc(src as string);
     }
   }, [src]);
 
