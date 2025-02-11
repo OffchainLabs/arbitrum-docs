@@ -36,6 +36,7 @@ Now Alice has effectively bisected her `N`-step <a data-quicklook-from="assertio
 At this point we’re effectively back in the original situation: Alice having made an assertion that Bob disagrees with. But we have cut the size of the assertion in half, from `N` to `N/2`. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to `N/4`. And we can continue bisecting, so that after a logarithmic number of rounds Alice and Bob will be disagreeing about a single step of execution. That’s where the bisection phase of the protocol ends, and Alice must make a one-step proof which will be checked by the EthBridge.
 
 ## Why Bisection Correctly Identifies a Cheater
+
 Before talking about the complexities of the real <a data-quicklook-from="challenge-protocol">Challenge protocol</a>, let’s stop to understand why the simplified version of the protocol is correct. Here correctness means two things: (1) if Alice’s initial claim is correct, Alice (or her ally) can always win the challenge, and (2) if Alice’s initial claim is incorrect, and there is at least one honest validator participating in the protocol, Alice and her allies never win the challenge.
 
 To prove (1), observe that if Alice’s initial claim is correct, she can offer a truthful midpoint claim, and both of the implied half-size claims will be correct. So whichever half Bob objects to, Alice will again be in the position of defending a correct claim. At each stage of the protocol, Alice will be defending a correct claim. At the end, Alice will have a correct one-step claim to prove, so that claim will be provable and Alice can win the challenge.
@@ -49,6 +50,7 @@ If you’re a stickler for mathematical precision, we invite you to read the [Bo
 :::
 
 ## The real bisection protocol
+
 The real bisection protocol is conceptually similar to the simplified one described above, but with several changes that improve efficiency or deal with necessary corner cases. Here is a list of the differences.
 
 **Bisection over L2 blocks, then over "big steps" of many instructions, then over single instructions: **Alice's assertion is over an RBlock, which asserts the result of creating some number of Layer 2 Nitro blocks. Bisection first occurs over these Layer 2 blocks, to narrow the dispute down to a dispute about a single Layer 2 Nitro block. Next, the dispute transforms into a dispute about executing a "big step" of 2^26 instructions (this intermediate level is needed to reduce the workload on the validator). At this point, the dispute transforms into a dispute about a single execution of the <a data-quicklook-from="state-transition-function">State Transition Function</a> or in other words about the execution of a sequence of WAVM instructions. The protocol then executes the recursive bisection sub-protocol again, this time over WAVM instructions, to narrow the dispute to a single instruction. For details about how these "subchallenges" work, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
@@ -57,6 +59,7 @@ The real bisection protocol is conceptually similar to the simplified one descri
 It should be clear that these changes don’t affect the basic correctness of the challenge protocol. They do, however, improve its efficiency and enable it to handle all of the cases that can come up in practice.
 
 ## Efficiency
+
 The challenge protocol is designed to resolve the dispute with a minimum of work required by the protocol (via its parent chain contracts) in its role as referee. The protocol needs to track information for the assertions created by parties in the challenge, including their history commitments and timers that can be used to calculate how long they have gone without a rival. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”. For more information on what the protocol needs to keep track of, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
