@@ -73,7 +73,12 @@ export function ImageZoom({ src, alt, className }: ImageZoomProps) {
     } else if (typeof src === 'object' && src.default) {
       setImageSrc(src.default);
     } else {
-      setImageSrc(src as string);
+      // Handle relative paths by ensuring they start with /
+      const srcString = src as string;
+      const normalizedSrc = srcString.startsWith('.') 
+        ? srcString.replace(/^\.\./, '') 
+        : srcString;
+      setImageSrc(normalizedSrc);
     }
   }, [src]);
 
