@@ -32,6 +32,9 @@
     "@docusaurus/preset-classic": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.6.3",
     "@docusaurus/theme-mermaid": "^3.6.3",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@react-spring/web": "^9.7.5",
+    "@types/styled-components": "^5.1.34",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-lunr-search": "^3.3.2",
@@ -44,6 +47,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.66.1",
+    "styled-components": "^6.1.15",
     "tippy.js": "^6.3.7",
     "trim": "0.0.3"
   },
