@@ -54,7 +54,9 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 
 interface ImageZoomProps {
-  src: any;
+  sources: {
+    [key: string]: any;
+  };
   alt?: string;
   className?: string;
 }
@@ -64,8 +66,10 @@ export function ImageZoom({ sources, alt, className }: ImageZoomProps) {
   const [imageSrc, setImageSrc] = useState<string>('');
 
   React.useEffect(() => {
-    setImageSrc(src);
-  }, [src]);
+    // Get the first value from the sources object
+    const firstSource = Object.values(sources)[0];
+    setImageSrc(firstSource);
+  }, [sources]);
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
