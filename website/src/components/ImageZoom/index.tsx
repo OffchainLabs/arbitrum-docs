@@ -1,4 +1,4 @@
-/**
+/** @browser-only
  * ImageZoom Component
  *
  * A React component that adds a click-to-zoom feature to images with smooth animations.
