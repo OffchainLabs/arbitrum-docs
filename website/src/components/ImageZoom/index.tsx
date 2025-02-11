@@ -54,19 +54,22 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 
 interface ImageZoomProps {
-  src: string;
+  sources: {
+    [key: string]: string;
+  };
   alt?: string;
   className?: string;
 }
 
-export function ImageZoom({ src, alt, className }: ImageZoomProps) {
+export function ImageZoom({ sources, alt, className }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string>('');
 
   React.useEffect(() => {
-    // For documentation site, we only need to handle string paths
-    setImageSrc(src as string);
-  }, [src]);
+    // Get the first value from the sources object
+    const firstSource = Object.values(sources)[0];
+    setImageSrc(firstSource);
+  }, [sources]);
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
