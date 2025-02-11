@@ -1,33 +1,33 @@
 /**
  * ImageZoom Component
- * 
+ *
  * A React component that adds a click-to-zoom feature to images with smooth animations.
- * 
+ *
  * Features:
  * - Smooth fade and scale animations
  * - Responsive sizing (max 90% of viewport)
  * - Dark overlay background
  * - Close on overlay click, escape key, or close button
  * - Mobile-friendly
- * 
+ *
  * Usage in MDX files:
  * ```mdx
  * import { ImageZoom } from '@site/src/components/ImageZoom';
- * 
- * <ImageZoom 
- *   src="path/to/your/image.png" 
- *   alt="Description of the image" 
+ *
+ * <ImageZoom
+ *   src="path/to/your/image.png"
+ *   alt="Description of the image"
  *   className="optional-custom-class"
  * />
  * ```
- * 
+ *
  * Usage in React components:
  * ```tsx
  * import { ImageZoom } from '@site/src/components/ImageZoom';
- * 
+ *
  * function YourComponent() {
  *   return (
- *     <ImageZoom 
+ *     <ImageZoom
  *       src="/images/example.png"
  *       alt="Example image"
  *       className="optional-styling"
@@ -35,12 +35,12 @@
  *   );
  * }
  * ```
- * 
+ *
  * Props:
  * @param {string} src - The source URL of the image
  * @param {string} [alt] - Optional alt text for the image
  * @param {string} [className] - Optional CSS class name for additional styling
- * 
+ *
  * Dependencies:
  * - @react-spring/web (for animations)
  * - styled-components (for styling)
