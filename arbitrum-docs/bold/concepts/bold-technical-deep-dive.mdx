@@ -103,7 +103,7 @@ The following assertion to be posted on-chain must consume the specified number 
 
 Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion on-chain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
 
-Validators must become proposers in the Rollup contract before being allowed to post assertions. For Arbitrum One and Arbitrum Nova, this involves placing a one-time bond of 3600 `WETH` that is locked in the contract until they choose to withdraw. Validators can only withdraw their bond if their latest posted assertion gets confirmed. Every assertion a validator posts will become their latest bonded assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” a validator’s bonds to their latest posted assertion.
+Validators must become proposers in the rollup contract before being allowed to post assertions. For Arbitrum One and Arbitrum Nova, this involves placing a one-time bond of 3600 `WETH` that is locked in the contract until they choose to withdraw. Validators can only withdraw their bond if their latest posted assertion gets confirmed. Every assertion a validator posts will become their latest bonded assertion. Subsequent bonds are not needed to post more assertions, instead, the protocol “moves” a validator’s bonds to their latest posted assertion.
 
 Assertions form a chain where there can be forks. For instance, a validator might disagree on the history commitment of block state hashes, which an assertion contains. All <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> nodes are configured to warn users if they observe an assertion they disagree with posted on-chain. However, suppose a node is configured as a validator and has deposited a bond to the [Rollup contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/RollupCore.sol). In that case, that validator can post the correct rival assertion to any invalid one it just observed. The validator will also be able to initiate a challenge by posting a challenge bond and other data to the `ChallengeManager`, signaling it is disputing an assertion.
 
@@ -164,7 +164,7 @@ The fundamental unit in a challenge is an edge data structure.
 
 #### Initiation
 
-The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove this challenge is about a specific fork in the assertion chain in the Rollup contract.
+The first validator to create an edge initiates a challenge. The smart contracts validate the Merkle inclusion proofs and hashes provided to prove this challenge is about a specific fork in the assertion chain in the rollup contract.
 
 #### Bisections
 
@@ -193,7 +193,6 @@ As a reminder, the bisection game is an iterative and interactive process. The f
 Once validators reach a single step of disagreement at the deepest subchallenge level, they need to provide something called a **one step proof**, or `OSP` for short. This is a proof of `WASM` execution showing that executing the Arbitrum state transition function at machine hash A leads to machine hash B. The parent chain, like Ethereum is for Arbitrum One, then actually runs a `WASM` emulator using a smart contract for this step and will declare a winner. An evil party cannot forge a one-step proof, and unless there is a critical bug in the smart contract, the honest party will always win. At this point, the honest party’s one-step proven edge will be confirmed, and the evil party has no more moves to make. Next, the honest party’s “branch” of edges all the way from the top to the one-step proven edge will have an ever-increasing timer until the top edge is confirmed by time.
 
 #### Timers
-
 Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in parent blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created on-chain.
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
@@ -228,9 +227,9 @@ The reimbursement of assertion bonds and challenge bonds for honest parties will
 
 ### Upgrade mechanism
 
-For BoLD to be deployed on an Arbitrum chain, an upgrade admin action needs to be taken using an `UpgradeExecutor` pattern. This is a smart contract that executes actions as the Rollup owner. At the upgrade, the `RollupCore.sol` contract will be updated to a new BoLD one, and additional contracts needed for BoLD challenges, such as an `EdgeChallengeManager.sol`, will also be deployed to the parent chain.
+For BoLD to be deployed on an Arbitrum chain, an upgrade admin action needs to be taken using an `UpgradeExecutor` pattern. This is a smart contract that executes actions as the rollup owner. At the upgrade, the `RollupCore.sol` contract will be updated to a new BoLD one, and additional contracts needed for BoLD challenges, such as an `EdgeChallengeManager.sol`, will also be deployed to the parent chain.
 
-Next, assertions will then be posted to the new Rollup contract. During the upgrade period, there could have been a very large number of blocks posted in Arbitrum batches. For this purpose, BoLD assertions support the concept of an **overflow**, allowing us to efficiently handle this situation.
+Next, assertions will then be posted to the new rollup contract. During the upgrade period, there could have been a very large number of blocks posted in Arbitrum batches. For this purpose, BoLD assertions support the concept of an **overflow**, allowing us to efficiently handle this situation.
 
 :::caution Withdrawals leading up to a BoLD upgrade
 
@@ -239,4 +238,4 @@ The confirmation timing on any withdrawal that is in-flight when the BoLD upgrad
 For example, if the upgrade happened at time _t_, then a withdrawal initiated at a time _t-2_ days will need to wait an additional _6.4_ days for their withdrawal to be finalized, totaling 8.4 days of maximum delay. Withdrawals that finalize before the upgrade takes place at time _t_ will be unaffected. In other words, the maximum delay a withdrawal will experience leading up to the upgrade is 12.8 days (two challenge periods).
 :::
 
-The upgrade pattern for an existing Arbitrum Rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [upgrade workflow on GitHub](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
+The upgrade pattern for an existing Arbitrum rollup to a BoLD-enabled one is tested extensively and run as part of each of our pull requests in the BoLD repository [upgrade workflow on GitHub](https://github.com/OffchainLabs/bold/blob/c4e068b568ff662f49ed191c5c3188ea7b6138b2/.github/workflows/go.yml#L209).
