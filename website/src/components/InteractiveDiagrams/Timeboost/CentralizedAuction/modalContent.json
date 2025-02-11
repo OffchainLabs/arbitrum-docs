@@ -13,10 +13,10 @@
     }
   },
   "2": {
-    "title": "Step 2: Bid Processing",
+    "title": "Step 2: Submit private bid",
     "content": {
-      "description": "The auction contract processes and validates bids.",
-      "steps": ["Bid is validated", "Funds are locked", "Event is emitted"],
+      "description": "",
+      "steps": [""],
       "codeBlocks": [
         {
           "language": "solidity",
