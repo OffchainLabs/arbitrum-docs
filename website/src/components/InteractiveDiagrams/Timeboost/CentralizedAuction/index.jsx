@@ -2319,7 +2319,7 @@ export const FlowChart = (props) => (
         <Modal
           number={4}
         />
-        <Modal
+        <NumberComponent
           number={5}
         />
         </g>
