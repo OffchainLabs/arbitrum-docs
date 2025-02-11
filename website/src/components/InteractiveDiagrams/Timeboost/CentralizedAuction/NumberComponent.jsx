@@ -24,7 +24,7 @@ const coordinates = {
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
-  const animationProps = number === 1 ? 
+  const animationProps = (number === 1 || number === 5) ? 
     { opacity: 1 } : 
     useSpring({
       from: { opacity: 0.3 },
