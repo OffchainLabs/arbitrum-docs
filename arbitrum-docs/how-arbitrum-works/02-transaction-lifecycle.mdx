@@ -18,7 +18,7 @@ The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), desc
 This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the delayed inbox contract on the parent chain.
 
 <ImageZoom
-  src={require('../assets/transaction-lifecycle.svg').default}
+  src={require('../bold/assets/transaction-lifecycle.svg').default}
   alt="Transaction lifecycle"
   className="200px-img"
 />
@@ -52,7 +52,7 @@ The Sequencer Endpoint is the most direct method for users looking to minimize d
 The diagram below shows different ways to submit transactions to the sequencer:
 
 <ImageZoom
-  src={require('./assets/submit-tx-to-sequencer.svg').default}
+  src={require('../assets/submit-tx-to-sequencer.svg').default}
   alt="Submit transaction to the Sequencer"
   className="200px-img"
 />
@@ -64,7 +64,7 @@ This section delves into an alternative method for submitting transactions to th
 In **Diagram 3**, we demonstrate how users can submit their transactions using the delayed inbox contract to bypass the sequencer. As illustrated in the diagram, there are two possible paths for transaction handling. When a transaction is submitted to the delayed inbox, the sequencer may automatically pick it up, include it as an ordered transaction, and send it to the sequencer feed. However, if the sequencer does not process the transaction within 24 hours, users have the reliable option to call the `forceInclude` function on the sequencer inbox contract. This action ensures that the sequencer to picks up the transaction and includes it in the ordered transaction list, providing users with a sense of security about their transactions.
 
 <ImageZoom
-  src={require('./assets/bypassing-the-sequencer.svg').default}
+  src={require('../assets/bypassing-the-sequencer.svg').default}
   alt="Bypassing the Sequencer"
   className="500px-img"
 />
