@@ -73,12 +73,16 @@ export function ImageZoom({ src, alt, className }: ImageZoomProps) {
     } else if (typeof src === 'object' && src.default) {
       setImageSrc(src.default);
     } else {
-      // Handle relative paths by ensuring they start with /
+      // Handle relative paths while preserving directory structure
       const srcString = src as string;
-      const normalizedSrc = srcString.startsWith('.') 
-        ? srcString.replace(/^\.\./, '') 
-        : srcString;
-      setImageSrc(normalizedSrc);
+      if (srcString.startsWith('..')) {
+        // For relative paths starting with .., maintain the full path
+        const basePath = '/arbitrum-docs';
+        const normalizedPath = srcString.replace(/^\.\./, basePath);
+        setImageSrc(normalizedPath);
+      } else {
+        setImageSrc(srcString);
+      }
     }
   }, [src]);
 
