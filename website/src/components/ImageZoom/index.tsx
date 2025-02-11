@@ -64,19 +64,8 @@ export function ImageZoom({ src, alt, className }: ImageZoomProps) {
   const [imageSrc, setImageSrc] = useState<string>('');
 
   React.useEffect(() => {
-    if (src instanceof File) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImageSrc(e.target?.result as string);
-      };
-      reader.readAsDataURL(src);
-    } else if (typeof src === 'object' && src.default) {
-      setImageSrc(src.default);
-    } else {
-      // Handle relative paths by using them as-is
-      const srcString = src as string;
-      setImageSrc(srcString);
-    }
+    // For documentation site, we only need to handle string paths
+    setImageSrc(src as string);
   }, [src]);
 
   const transitions = useTransition(isOpen, {
