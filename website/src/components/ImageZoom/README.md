@@ -25,6 +25,8 @@ yarn add styled-components react-dom
 
 ## Usage
 
+IMPORTANT: The component requires zoomed images to be stored in @site/static/img/ directory.
+
 ### In MDX files:
 
 ```mdx
