@@ -54,22 +54,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 
 interface ImageZoomProps {
-  sources: {
-    [key: string]: any;
-  };
+  src: string;
   alt?: string;
   className?: string;
 }
 
-export function ImageZoom({ sources, alt, className }: ImageZoomProps) {
+export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [imageSrc, setImageSrc] = useState<string>('');
-
-  React.useEffect(() => {
-    // Get the first value from the sources object
-    const firstSource = Object.values(sources)[0];
-    setImageSrc(firstSource);
-  }, [sources]);
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
@@ -87,14 +78,12 @@ export function ImageZoom({ sources, alt, className }: ImageZoomProps) {
 
   return (
     <>
-      {imageSrc && (
-        <img
-          src={imageSrc}
-          alt={alt || ''}
-          className={`cursor-zoom-in ${className || ''}`}
-          onClick={() => setIsOpen(true)}
-        />
-      )}
+      <img
+        src={src}
+        alt={alt || ''}
+        className={`cursor-zoom-in ${className || ''}`}
+        onClick={() => setIsOpen(true)}
+      />
       {typeof document !== 'undefined' &&
         createPortal(
           <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -131,7 +120,7 @@ export function ImageZoom({ sources, alt, className }: ImageZoomProps) {
                           <CloseIcon />
                         </CloseButton>
                         <ZoomedImage
-                          src={imageSrc}
+                          src={src}
                           alt={alt || ''}
                           onClick={(e) => e.stopPropagation()}
                         />
