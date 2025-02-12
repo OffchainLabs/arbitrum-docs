@@ -9,7 +9,11 @@
           "language": "solidity",
           "code": "function auctioneer_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n - bidder address\n - round number\n - bit amount\n - signature"
         }
-      ]
+      ],
+      "codeLink": {
+        "text": "View full contract code",
+        "url": "https://github.com/OffchainLabs/nitro/blob/master/contracts/src/bridge/Inbox.sol"
+      }
     }
   },
   "2": {

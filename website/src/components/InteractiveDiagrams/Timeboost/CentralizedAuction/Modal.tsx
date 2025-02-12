@@ -27,6 +27,10 @@ interface ModalContent {
     description: string;
     steps: string[];
     codeBlocks?: CodeBlock[];
+    codeLink?: {
+      text: string;
+      url: string;
+    };
   };
 }
 
@@ -124,6 +128,21 @@ export function Modal({ number }: { number: number }) {
                             </ul>
                           </div>
                           {content.content.codeBlocks?.map(renderCodeBlock)}
+                          {content.content.codeLink && (
+                            <a 
+                              href={content.content.codeLink.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: isDarkTheme ? '#9dcced' : '#0066cc',
+                                textDecoration: 'none',
+                                display: 'inline-block',
+                                marginTop: '8px'
+                              }}
+                            >
+                              {content.content.codeLink.text} ↗
+                            </a>
+                          )}
                         </DialogBody>
                       </Content>
                     </div>
