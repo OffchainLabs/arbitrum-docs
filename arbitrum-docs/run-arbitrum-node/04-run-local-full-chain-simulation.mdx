@@ -9,7 +9,7 @@ content_type: how-to
 
 ## Overview
 
-A local full-chain simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode Geth L1, and multiple instances with different roles.
+A local full-chain simulation allows you to deploy and test smart contracts in a fully controlled environment. This how-to walks you through the process of setting up and running a complete development environment on your local machine, including a Nitro node, a dev-mode Geth parent chain, and multiple instances with different roles.
 
 Note that the node is now Stylus-enabled by default, and the setup instructions remain the same as for running a Stylus dev node.
 
@@ -61,7 +61,7 @@ docker exec nitro-testnode-sequencer-1 ls /config
 
 ## Token bridge
 
-An L1-L2 token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running:
+An parent-child chain token bridge can be deployed by using the parameter `--tokenbridge`. The list of contracts can be found by running:
 
 ```bash
 docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
@@ -69,7 +69,7 @@ docker compose run --entrypoint sh tokenbridge -c "cat l1l2_network.json"
 
 ## Running an L3 chain
 
-An L3 chain can be deployed on top of the L2 chain, by using the parameter `--l3node`. Its chain configuration can be found by running:
+An L3 chain can be deployed on top of the child chain (L2), by using the parameter `--l3node`. Its chain configuration can be found by running:
 
 ```bash
 docker exec nitro-testnode-sequencer-1 cat /config/l3_chain_info.json
