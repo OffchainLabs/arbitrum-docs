@@ -64,7 +64,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - Use the parameter `--chain.id=<L2 chain ID>` to set the child chain (L2) chain from its chain id. See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and their respective child chain chain IDs.
   - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the child chain from its name (options are: `arb1`, `nova` and `sepolia-rollup`)
   - Note: this parameter was called --l2.chain-id and only accepted chain IDs in versions before `v2.1.0`
-- For Arbitrum One or Arbitrum Nova chains (or any chains that have BoLD enabled), we recommend setting `--node.bold.enable=true` to ensure your node monitors for L1 assertions and alerts properly when an invalid assertion is observed on-chain. Setting this flag is not required as your node will continue to operate properly, validating the Arbitrum One/Nova chain, and serving RPC requests as usual, regardless of this flag.
+- For Arbitrum One or Arbitrum Nova chains (or any chains that have BoLD enabled), we recommend setting `--node.bold.enable=true` to ensure your node monitors for L1 assertions and alerts properly when an invalid assertion is observed on-chain. Setting this flag is not required as your node will continue to operate properly, validate the Arbitrum One/Nova chain, and serve RPC requests as usual, regardless of this flag.
 
 ### Important ports
 
