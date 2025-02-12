@@ -12,6 +12,7 @@ A React component that adds a click-to-zoom feature to images with smooth animat
 - Loading state indicator
 - Error handling
 - Maintains image aspect ratio
+- Compatible with Docusaurus width presets
 
 ## Installation
 
@@ -27,7 +28,7 @@ yarn add styled-components react-dom
 
 IMPORTANT: The component requires zoomed images to be stored in @site/static/img/ directory.
 
-### In MDX files:
+### Basic Usage in MDX:
 
 ```mdx
 import { ImageZoom } from '@site/src/components/ImageZoom';
@@ -35,25 +36,32 @@ import { ImageZoom } from '@site/src/components/ImageZoom';
 <ImageZoom
   src="path/to/your/image.png"
   alt="Description of the image"
-  className="optional-custom-class"
 />
 ```
 
-### In React components:
+### Using Width Presets:
 
-```tsx
-import { ImageZoom } from '@site/src/components/ImageZoom';
+The component is compatible with Docusaurus width presets. Use the alt attribute for image descriptions and className for width:
 
-function YourComponent() {
-  return (
-    <ImageZoom
-      src="/images/example.png"
-      alt="Example image"
-      className="optional-styling"
-    />
-  );
-}
+```mdx
+<ImageZoom
+  src="/img/example.png"
+  alt="My diagram"
+  className="500px-img"
+/>
 ```
+
+Available width presets:
+- 20px-img
+- 50px-img
+- 100px-img
+- 200px-img
+- 400px-img
+- 500px-img
+- 600px-img
+- 900px-img
+
+The component will respect Docusaurus width classes while maintaining the zoom functionality.
 
 ## Props
 
@@ -61,12 +69,12 @@ function YourComponent() {
 |-----------|----------|----------|------------------------------------------------|
 | src       | string   | Yes      | The source URL of the image                   |
 | alt       | string   | No       | Alt text for accessibility                    |
-| className | string   | No       | Additional CSS class name for custom styling  |
+| className | string   | No       | Width preset class (e.g., "500px-img")       |
 
 ## Behavior
 
 1. Initial State:
-   - Image is displayed at normal size
+   - Image is displayed at specified width (via className)
    - Cursor changes to zoom-in on hover
 
 2. On Click:
@@ -82,8 +90,9 @@ function YourComponent() {
 
 ## Styling
 
-The component uses styled-components and includes:
-- Responsive image sizing
+The component uses:
+- styled-components for modal and zoom functionality
+- Docusaurus SCSS classes for width presets
 - Dark overlay (rgba(0, 0, 0, 0.8))
 - Proper z-indexing for modal layers
 - Hover effects on interactive elements
