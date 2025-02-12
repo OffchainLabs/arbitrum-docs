@@ -12,7 +12,8 @@ A React component that adds a click-to-zoom feature to images with smooth animat
 - Loading state indicator
 - Error handling
 - Maintains image aspect ratio
-- Compatible with Docusaurus width presets
+- Accessible by default
+- Supports width presets via CSS classes
 
 ## Installation
 
@@ -34,42 +35,48 @@ IMPORTANT: The component requires zoomed images to be stored in @site/static/img
 import { ImageZoom } from '@site/src/components/ImageZoom';
 
 <ImageZoom
-  src="path/to/your/image.png"
-  alt="Description of the image"
+  src="/img/example.png"
+  alt="A detailed diagram showing the system architecture"
 />
 ```
 
 ### Using Width Presets:
 
-The component is compatible with Docusaurus width presets. Use the alt attribute for image descriptions and className for width:
+The component supports predefined width classes. Use the `className` prop to specify the width while keeping the `alt` text for accessibility:
 
 ```mdx
 <ImageZoom
   src="/img/example.png"
-  alt="My diagram"
-  className="500px-img"
+  alt="A detailed diagram showing the system architecture"
+  className="img-500px"
 />
 ```
 
-Available width presets:
-- 20px-img
-- 50px-img
-- 100px-img
-- 200px-img
-- 400px-img
-- 500px-img
-- 600px-img
-- 900px-img
-
-The component will respect Docusaurus width classes while maintaining the zoom functionality.
+Available width classes:
+- `img-20px`
+- `img-50px`
+- `img-100px`
+- `img-200px`
+- `img-400px`
+- `img-500px`
+- `img-600px`
+- `img-900px`
 
 ## Props
 
 | Prop      | Type     | Required | Description                                    |
 |-----------|----------|----------|------------------------------------------------|
 | src       | string   | Yes      | The source URL of the image                   |
-| alt       | string   | No       | Alt text for accessibility                    |
-| className | string   | No       | Width preset class (e.g., "500px-img")       |
+| alt       | string   | Yes      | Descriptive text for accessibility            |
+| className | string   | No       | CSS class for width control (e.g., "img-500px") |
+
+## Accessibility
+
+The component follows accessibility best practices:
+- Requires descriptive alt text for screen readers
+- Maintains keyboard navigation support
+- Preserves semantic HTML structure
+- Separates styling from accessibility concerns
 
 ## Behavior
 
@@ -92,7 +99,7 @@ The component will respect Docusaurus width classes while maintaining the zoom f
 
 The component uses:
 - styled-components for modal and zoom functionality
-- Docusaurus SCSS classes for width presets
+- CSS classes for width presets
 - Dark overlay (rgba(0, 0, 0, 0.8))
 - Proper z-indexing for modal layers
 - Hover effects on interactive elements
