@@ -2,14 +2,14 @@
 
 /**
  * Content Structure Generator
- * 
+ *
  * This script generates a hierarchical tree visualization of the Arbitrum documentation's
  * sidebar structure, making it easier to understand and analyze the documentation organization.
- * 
+ *
  * Usage:
  * 1. Run the script directly:
  *    node website/src/scripts/contentStructureGenerator.js
- * 
+ *
  * Output:
  * - Creates 'contentStructure.txt' in the same directory as this script
  * - The output file shows the complete documentation hierarchy with:
@@ -17,14 +17,14 @@
  *   - Labels for all documentation pages
  *   - URLs for external links
  *   - Special handling for HTML elements and external content
- * 
+ *
  * Configuration:
  * The script accepts the following options (passed to generateSidebarTree):
  * - indentBase: Base number of dashes for indentation (default: 6)
  * - indentLevel: Additional dashes per nested level (default: 15)
  * - skipEmpty: Whether to skip items without labels (default: true)
  * - handleMissing: How to handle invalid/missing items (default: true)
- * 
+ *
  * Example output format:
  * |------ Section
  * |--------------------- Category
