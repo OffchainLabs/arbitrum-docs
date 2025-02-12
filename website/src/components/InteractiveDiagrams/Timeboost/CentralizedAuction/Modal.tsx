@@ -129,7 +129,7 @@ export function Modal({ number }: { number: number }) {
                           </div>
                           {content.content.codeBlocks?.map(renderCodeBlock)}
                           {content.content.codeLink && (
-                            <a 
+                            <a
                               href={content.content.codeLink.url}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -137,7 +137,7 @@ export function Modal({ number }: { number: number }) {
                                 color: isDarkTheme ? '#9dcced' : '#0066cc',
                                 textDecoration: 'none',
                                 display: 'inline-block',
-                                marginTop: '8px'
+                                marginTop: '8px',
                               }}
                             >
                               {content.content.codeLink.text} ↗
