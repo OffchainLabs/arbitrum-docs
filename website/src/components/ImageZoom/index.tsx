@@ -86,10 +86,7 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
     <Modal onClick={handleClose}>
       <ImageContainer onClick={(e) => e.stopPropagation()}>
         {imageLoaded ? (
-          <ZoomedImage
-            src={src}
-            alt={alt || ''}
-          />
+          <ZoomedImage src={src} alt={alt || ''} />
         ) : (
           <div style={{ color: 'white' }}>Loading...</div>
         )}
@@ -100,16 +97,16 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
 
   return (
     <>
-      <img
-        src={src}
-        alt={alt || ''}
-        className={className}
-        onClick={handleImageClick}
-        style={{ cursor: 'zoom-in' }}
-      />
-      {isOpen &&
-        typeof document !== 'undefined' &&
-        createPortal(renderModal(), document.body)}
+      <div className="markdown">
+        <img
+          src={src}
+          alt={alt || ''}
+          className={className}
+          onClick={handleImageClick}
+          style={{ cursor: 'zoom-in' }}
+        />
+      </div>
+      {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
   );
 }
