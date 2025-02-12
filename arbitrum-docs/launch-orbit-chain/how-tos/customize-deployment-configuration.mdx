@@ -61,7 +61,7 @@ The `Base stake` parameter specifies the amount of the stake token (ETH or an ER
 
 If your `Base stake` is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
-For example, an Orbit chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial validators that maliciously challenge every RBlock submitted to your Orbit chain's base chain.
+For example, an Orbit chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial validators that maliciously challenge every assertion submitted to your Orbit chain's base chain.
 
 The malicious challenges would result in slashed Orbit chain validators (one slashed validator per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
@@ -81,4 +81,4 @@ When deploying your Orbit chain, this address must be a standard Ethereum wallet
 
 ## Additional configuration parameters
 
-There are a number of [additional parameters](/launch-orbit-chain/reference/additional-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.
+There are a number of [additional parameters](/launch-orbit-chain/reference/orbit-configuration-parameters) that are not presented in the deployment UI, but are still configurable for more advanced chain deployers.
