@@ -122,7 +122,6 @@ const config = {
         disable_session_recording: true,
       },
     ],
-    'docusaurus-plugin-image-zoom',
     require.resolve('docusaurus-plugin-fathom'),
     require.resolve('docusaurus-lunr-search'),
     require.resolve('docusaurus-plugin-sass'),
@@ -130,16 +129,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      zoom: {
-        selector: '.markdown > img',
-        background: {
-          light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)',
-        },
-        config: {
-          // options you can specify via https://github.com/francoischalifour/medium-zoom#usage
-        },
-      },
       fathomAnalytics: {
         siteId: 'DOHOZGJO',
       },
