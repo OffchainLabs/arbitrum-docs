@@ -12,21 +12,25 @@
       ],
       "codeLink": {
         "text": "View full contract code",
-        "url": "https://github.com/OffchainLabs/nitro/blob/master/contracts/src/bridge/Inbox.sol"
+        "url": "https://github.com/OffchainLabs/timeboost-design-docs/blob/main/implementation_design.md#timeboost_submitbid"
       }
     }
   },
   "2": {
-    "title": "Step 2: Submit bid",
+    "title": "Step 2: Submit private bid",
     "content": {
-      "description": "",
-      "steps": [""],
+      "description": "Submit private bid to Auctioneer contract",
+      "steps": [],
       "codeBlocks": [
         {
-          "language": "solidity",
-          "code": "function auctioneer_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n -bidder address\n - round number\n - bit amount\n - signature"
+          "language": "shell",
+          "code": "function timeboost_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n -bidder address\n - round number\n - bit amount\n - signature"
         }
-      ]
+      ],
+      "codeLink": {
+        "text": "View API documentation",
+        "url": "https://github.com/OffchainLabs/timeboost-design-docs/blob/main/implementation_design.md#offchain-components"
+      }
     }
   },
   "3": {
