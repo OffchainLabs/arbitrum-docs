@@ -1,105 +1,22 @@
 {
   "1": {
     "title": "Step 1: Deposit funds into the auction contract",
-    "content": {
-      "description": "",
-      "steps": [],
-      "codeBlocks": [
-        {
-          "language": "solidity",
-          "code": "function auctioneer_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n - bidder address\n - round number\n - bit amount\n - signature"
-        }
-      ],
-      "codeLink": {
-        "text": "View full contract code",
-        "url": "https://github.com/OffchainLabs/timeboost-design-docs/blob/main/implementation_design.md#timeboost_submitbid"
-      }
-    }
+    "content": {}
   },
   "2": {
-    "title": "Step 2: Submit private bid",
-    "content": {
-      "description": "Submit private bid to the Timeboost contract",
-      "steps": [
-        "Bidder prepares bid parameters",
-        "Signs bid with private key",
-        "Submits bid through RPC endpoint"
-      ],
-      "codeBlocks": [
-        {
-          "language": "solidity",
-          "code": "function timeboost_submitBid(\n    uint256 chainId,\n    address bidder,\n    uint256 roundNumber,\n    uint256 bidAmount,\n    bytes memory signature\n) external {\n    // Verify bid signature\n    // Process bid\n    // Emit BidSubmitted event\n}"
-        }
-      ],
-      "codeLink": {
-        "text": "View API documentation",
-        "url": "https://github.com/OffchainLabs/timeboost-design-docs/blob/main/implementation_design.md#offchain-components"
-      }
-    }
+    "title": "Step 2: timeboost_submitBid()",
+    "content": {}
   },
   "3": {
-    "title": "Step 3: Transaction Submission",
-    "content": {
-      "description": "Transaction submission process:",
-      "steps": [
-        "Users submit their transactions",
-        "Transactions are validated",
-        "Valid transactions enter the pool"
-      ],
-      "codeBlocks": [
-        {
-          "language": "javascript",
-          "code": "const tx = {\n    from: wallet.address,\n    to: contractAddress,\n    data: encodedData,\n    value: ethers.parseEther('0.1')\n};\n\nconst receipt = await wallet.sendTransaction(tx);"
-        }
-      ]
-    }
+    "title": "Step 3: Auctioneer Response",
+    "content": {}
   },
   "4": {
-    "title": "Step 4: Sequencing",
-    "content": {
-      "description": "Sequencing process:",
-      "steps": ["Transactions are ordered", "Sequencer processes them", "Order is finalized"],
-      "codeBlocks": [
-        {
-          "language": "javascript",
-          "code": "const batch = await sequencer.createBatch([\n    tx1,\n    tx2,\n    tx3\n]);\n\nawait sequencer.processBatch(batch);"
-        }
-      ]
-    }
+    "title": "Step 4: auctioneer_submitBidAuctionTransaction",
+    "content": {}
   },
   "5": {
-    "title": "Step 5: Batch Creation",
-    "content": {
-      "description": "Batch creation process:",
-      "steps": [
-        "Transactions are grouped",
-        "Batch is validated",
-        "Batch is prepared for submission"
-      ],
-      "codeBlocks": [
-        {
-          "language": "solidity",
-          "code": "function createBatch(Transaction[] memory txs) public {\n    require(txs.length > 0, \"Empty batch\");\n    bytes32 batchHash = keccak256(abi.encode(txs));\n    batches[batchHash] = BatchState.Pending;\n    emit BatchCreated(batchHash, txs.length);\n}"
-        }
-      ]
-    }
-  },
-  "6": {
-    "title": "Step 6: Verification",
-    "content": {
-      "description": "Verification process:",
-      "steps": [
-        "Batch integrity is checked",
-        "State transitions are verified",
-        "Results are confirmed"
-      ]
-    }
-  },
-  "7": {
-    "title": "Step 7: Finalization",
-    "content": {
-      "description": "Finalization process:",
-      "steps": ["Batch is submitted to L1", "State is updated", "Process is completed"]
-    }
+    "title": "Step 5: Sequencer prioritizes the auction contract calls to ensure the auctions get resolved",
+    "content": {}
   }
 }
