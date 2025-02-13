@@ -7,6 +7,8 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 <a data-quicklook-from="arbitrum">Arbitrum</a> is an optimistic rollup. Let’s unpack that term.
 
 _Rollup_
@@ -117,7 +119,7 @@ The assertion is assigned a deadline, which says how long other validators have 
 
 In the normal case, the rollup chain will look like this:
 
-![400px-img](../assets/normal-rollup.svg)
+<ImageZoom src="/img/haw-normal-rollup.svg" alt="Normal Rollup" className="img-600px" />
 
 On the left, representing an earlier part of the chain’s history, we have confirmed assertions. These have been fully accepted and recorded by the parent chain contracts that manage the chain. The newest of the confirmed assertions, assertion 94, is called the “latest confirmed assertion.” On the right, we see a set of newer proposed assertions. The protocol can’t yet confirm or reject them, because their deadlines haven’t run out yet. The oldest assertion whose fate has yet to be determined, assertion 95, is called the “first unresolved assertion.”
 
@@ -125,7 +127,11 @@ Notice that a proposed assertion can build on an earlier proposed assertion. Thi
 
 Here’s another example of what the chain state might look like, if several validators are being malicious. It’s a contrived example, designed to illustrate a variety of cases that can come up in the protocol, all smashed into a single scenario.
 
-![600px-img](../assets/rollup-malicious-validator.svg)
+<ImageZoom
+  src="/img/haw-rollup-malicious-validator.svg"
+  alt="Rollup with malicious validator"
+  className="img-600px"
+/>
 
 There’s a lot going on here, so let’s unpack it.
 

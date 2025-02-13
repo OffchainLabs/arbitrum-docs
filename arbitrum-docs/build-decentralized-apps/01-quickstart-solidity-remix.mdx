@@ -6,6 +6,8 @@ user_story: As a web2 developer, I want to onboard into Arbitrum by building and
 content_type: quickstart
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 :::info Want to use Rust instead?
 
 Head over to [the Stylus quickstart](/stylus/quickstart) if you'd like to use Rust instead of Solidity.
@@ -218,7 +220,11 @@ Let's first add our smart contract to Remix following these steps:
 {' '}
 
 <CustomDetails summary="File explorer > Workspaces > Create blank">
-  ![](./images/remix-create-blank-project-2025-01-07.gif)
+  <ImageZoom
+    src="/img/dapps-remix-create-blank-project-2025-01-07.gif"
+    alt=""
+    className="img-600px"
+  />
 </CustomDetails>
 
 #### 3. Copy your vending machine contract
@@ -226,13 +232,13 @@ Let's first add our smart contract to Remix following these steps:
 #### 4. Paste your contract in Remix
 
 <CustomDetails summary="File explorer > New file">
-  ![](./images/remix-paste-vending-machine-contract-2025-01-07.gif)
+
 </CustomDetails>
 
 #### 5. Compile your contract in Remix
 
 <CustomDetails summary="Select vending machine contract > Click compile menu > Compile">
-  ![](./images/remix-compile-contract-2025-01-07.gif)
+  <ImageZoom src="/img/dapps-remix-compile-contract-2025-01-07.gif" alt="" className="img-600px" />
 </CustomDetails>
 
 ### Deploy the smart contract to a local Ethereum chain
@@ -317,12 +323,16 @@ Next, click Metamask's network selector dropdown and click the `Add Network` but
 - Currency Symbol: `ETH`
 
 <CustomDetails summary="Add Localhost 8545 to Metamask">
-  ![](./images/metamask-add-localhost-2025-01-13.png)
+  <ImageZoom src="/img/dapps-metamask-add-localhost-2025-01-13.png" alt="" className="img-600px" />
 </CustomDetails>
 
 Your wallet won't have a balance on your local testnet's node, but we can import one of the test accounts into Metamask to access to 10,000 testnet `$ETH`. Copy the private key of one of the test accounts (it works with or without the `0x` prefix, so e.g., `0xac0..f80` or `ac0..f80`) and import it into Metamask. Metamask will ask you if you want to connect this new account to Remix, to which you should answer "yes":
 
-![Connect Metamask to Localhost 8545](./images/quickstart-import-metamask.png)
+<ImageZoom
+  src="/img/dapps-quickstart-import-metamask.png"
+  alt="Connect Metamask to Localhost 8545"
+  className="img-600px"
+/>
 
 :::caution Never share your private keys
 
@@ -341,7 +351,7 @@ As we interact with our cupcake vending machine, we'll use Metamask's network se
 In the last step, we'll connect Remix to Metamask so we can deploy our smart contract to the local chain using Remix.
 
 <CustomDetails summary="Connect remix to Metamask">
-  ![](./images/remix-connect-metamask-2025-01-13.gif)
+  <ImageZoom src="/img/dapps-remix-connect-metamask-2025-01-13.gif" alt="" className="img-600px" />
 </CustomDetails>
 
 At this point, we're ready to deploy our smart contract to any chain we want.
@@ -352,7 +362,11 @@ At this point, we're ready to deploy our smart contract to any chain we want.
 - In Remix, deploy the `VendingMachine` contract to the `Localhost` network, then go to the "Deploy & Run Transactions" tab and click "Deploy."
 
 <CustomDetails summary="Deploy the VendingMachine contract to the Localhost network">
-  ![](./images/remix-deploy-to-local-chain-2025-01-14.gif)
+  <ImageZoom
+    src="/img/dapps-remix-deploy-to-local-chain-2025-01-14.gif"
+    alt=""
+    className="img-600px"
+  />
 </CustomDetails>
 
 Then copy and paste your **contract address** below and click `Get cupcake!`. A prompt should ask you to sign a transaction that gives you a cupcake.
@@ -363,7 +377,11 @@ Then copy and paste your **contract address** below and click `Get cupcake!`. A 
 
 Our first `VendingMachine` is labeled `Web2` because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
 
-![Architecture diagram](./images/quickstart-vending-machine-architecture.png)
+<ImageZoom
+  src="/img/dapps-quickstart-vending-machine-architecture.png"
+  alt="Architecture diagram"
+  className="img-600px"
+/>
 
 The `Web3` architecture is similar to the `Web2` architecture, with one key difference: with the `Web3` version, business logic and data are hosted by decentralized network of nodes\*\*
 
