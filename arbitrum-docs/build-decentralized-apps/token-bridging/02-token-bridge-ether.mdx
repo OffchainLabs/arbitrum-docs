@@ -21,11 +21,7 @@ function depositEth(address destAddr) external payable override returns (uint256
 
 The following diagram depicts the process that funds follow during a deposit operation.
 
-<ImageZoom
-  src="/img/dapps-depositing-ether.svg"
-  alt="Depositing Ether"
-  className="img-600px"
-/>
+<ImageZoom src="/img/dapps-depositing-ether.svg" alt="Depositing Ether" className="img-600px" />
 
 As far as the parent chain knows, all deposited funds are held by Arbitrum's Bridge contract.
 
@@ -43,8 +39,4 @@ Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will late
 
 The following diagram depicts the process that funds follow during a withdraw operation.
 
-<ImageZoom
-  src="/img/dapps-withdrawing-ether.svg"
-  alt="Withdrawing Ether"
-  className="img-600px"
-/>
+<ImageZoom src="/img/dapps-withdrawing-ether.svg" alt="Withdrawing Ether" className="img-600px" />
