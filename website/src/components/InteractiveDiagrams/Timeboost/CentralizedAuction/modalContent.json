@@ -19,12 +19,16 @@
   "2": {
     "title": "Step 2: Submit private bid",
     "content": {
-      "description": "Submit private bid to Auctioneer contract",
-      "steps": [],
+      "description": "Submit private bid to the Timeboost contract",
+      "steps": [
+        "Bidder prepares bid parameters",
+        "Signs bid with private key",
+        "Submits bid through RPC endpoint"
+      ],
       "codeBlocks": [
         {
-          "language": "shell",
-          "code": "function timeboost_submitBid()\n auctioneer endpoint(json rpc api)\n - chainId\n -bidder address\n - round number\n - bit amount\n - signature"
+          "language": "solidity",
+          "code": "function timeboost_submitBid(\n    uint256 chainId,\n    address bidder,\n    uint256 roundNumber,\n    uint256 bidAmount,\n    bytes memory signature\n) external {\n    // Verify bid signature\n    // Process bid\n    // Emit BidSubmitted event\n}"
         }
       ],
       "codeLink": {
