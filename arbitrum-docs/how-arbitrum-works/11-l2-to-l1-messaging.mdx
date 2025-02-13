@@ -16,7 +16,7 @@ with a few differences.
 
 ### Protocol Flow
 
-Part of the child chain state of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> — and consequently, part of what's asserted in every <a data-quicklook-from="rblock">RBlock</a> — is a Merkle root of all child chain-to-parent chain messages in the chain's history. Upon an asserted RBlock being confirmed (typically ~1 week after its asserted), this Merkle root is posted on parent chain in the `Outbox` contract. The Outbox contract then lets users execute their messages — validating Merkle proofs of inclusion, and tracking which child to parent chain messages have already been spent.
+Part of the child chain state of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> — and consequently, part of every assertion — is a Merkle root of all child chain-to-parent chain messages in the chain's history. Upon an assertion being confirmed (typically ~1 week after its asserted), this Merkle root is posted on parent chain in the `Outbox` contract. The Outbox contract then lets users execute their messages — validating Merkle proofs of inclusion, and tracking which child to parent chain messages have already been spent.
 
 ### Client Flow
 
@@ -24,7 +24,7 @@ From a <a data-quicklook-from="client">Client</a> perspective, a child to parent
 
 ### Protocol Design Details
 
-An important feature in the design of the Outbox system is that calls to `confirmNode` have constant overhead. Requiring that `confirmNode` only update the constant-sized outgoing message root hash, and that users themselves carry out the final step of execution, achieves this goal; i.e., no matter the number of outgoing messages in the root, or the gas cost of executing them on the parent chain, the cost of confirming nodes remains constant; this ensures that the RBlock <a data-quicklook-from="confirmation">Confirmation</a> processed can't be griefed.
+An important feature in the design of the Outbox system is that calls to `confirmNode` have constant overhead. Requiring that `confirmNode` only update the constant-sized outgoing message root hash, and that users themselves carry out the final step of execution, achieves this goal; i.e., no matter the number of outgoing messages in the root, or the gas cost of executing them on the parent chain, the cost of confirming nodes remains constant; this ensures that the assertion <a data-quicklook-from="confirmation">confirmation</a> processed can't be griefed.
 
 Unlike Retryables, which have an option to provide Ether for automatic child chain execution, outgoing messages can't provide in-protocol automatic parent chain execution, for the simple reason that Ethereum itself doesn't offer scheduled execution affordances. However, application-layer contracts that interact with the Outbox could in principle be built to provide somewhat-analogous "execution market" functionality for outsourcing the final parent chain execution step.
 

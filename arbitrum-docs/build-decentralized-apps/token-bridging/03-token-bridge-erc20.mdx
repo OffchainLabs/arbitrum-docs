@@ -7,6 +7,8 @@ content_type: concept
 sidebar_position: 3
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (the Layer 1, or L1) and Arbitrum (the Layer 2, or L2) that leverages Arbitrum's [cross-chain message passing system](/build-decentralized-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
 
 ## Design rationale
@@ -42,15 +44,15 @@ Our architecture consists of three types of contracts:
 2. **Gateways**: Pairs of contracts (one on L1, one on L2) that implement a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on L1, one on L2) that route each asset to its designated gateway.
 
-![img](./assets/gatewayUML.svg)
+<ImageZoom src="/img/dapps-gatewayUML.svg" alt="" className="img-600px" />
 
 All Ethereum to Arbitrum token transfers are initiated via the router contract on L1, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on L1, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping L1 token addresses to L1Gateway contracts, thus acting as an L1/L2 address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on L2, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
 
-![img](./assets/bridge_deposits.png)
+<ImageZoom src="/img/dapps-bridge_deposits.png" alt="" className="img-600px" />
 
 Similarly, Arbitrum to Ethereum transfers are initiated via the router contract on L2, the `L2GatewayRouter` contract, which calls the token's gateway contract on L2, the `L2ArbitrumGateway` contract, which in turn communicates to its corresponding gateway contract on L1, the `L1ArbitrumGateway` contract (typically/expectedly via [sending L2-to-L1 messages to the outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)).
 
-![img](./assets/bridge_withdrawals.png)
+<ImageZoom src="/img/dapps-bridge-withdrawals.png" alt="" className="img-600px" />
 
 For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
