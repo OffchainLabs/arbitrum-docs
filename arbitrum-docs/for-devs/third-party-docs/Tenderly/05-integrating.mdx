@@ -1,0 +1,67 @@
+---
+title: 'Integrating'
+description: "Tenderly provides full-stack Web3 infrastructure with high-performance Node RPC, mainnet-like development environments, intuitive development and simulation tools, and real-time monitoring for building and scaling secure blockchain applications"
+author: 'nenadvitt'
+third_party_content_owner: 'nenadvitt'
+sidebar_label: 'Integrating'
+---
+## Integration with your workflow
+
+Integrate Tenderly at any development or production stage to build and scale fast, secure, and reliable dapps and protocols.
+
+### Development
+
+Efficiently build and test smart contracts with tools that integrate seamlessly and improve your team's development workflows.
+
+- [**Hardhat & Foundry**](https://docs.tenderly.co/contract-verification?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Seamless integration for contract verification in private or public mode.
+- [**CI/CD pipelines**](https://docs.tenderly.co/virtual-testnets/develop/stage-contracts?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Incorporate Virtual TestNets and deploy contracts and off-chain components within your CI/CD pipelines for efficient development and testing.
+- [**Unlimited Faucet**](https://docs.tenderly.co/virtual-testnets/unlimited-faucet?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Enable backend, UI, and data engineers to easily access high volumes of native and ERC-20 tokens.
+- [**Viem/Ethers/Web3.js/Web3.py**](https://docs.tenderly.co/virtual-testnets/integrations#client-libraries?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Use your favorite client library for chain interactions.
+- [**React UI Libraries**](https://docs.tenderly.co/virtual-testnets/integrations#dapp-ui-libraries?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Connect React UI libraries and wallet providers seamlessly.
+- [**SDK**](https://docs.tenderly.co/tenderly-sdk/intro-to-tenderly-sdk?mtm_campaign=ext-docs&mtm_kwd=arbitrum) & [**CLI**](https://docs.tenderly.co/cli?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Login and integrate Tenderly features directly into your development workflow.
+
+### Transaction execution prediction
+
+Provide users with accurate predictions and insights to enhance user experience, prevent costly mistakes, and avoid potential security risks.
+
+- [**Simulation RPC**](http://docs.tenderly.co/simulations/single-simulations#simulate-via-rpc?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Integrate Simulation RPC to inform users about transaction outcomes before they sign and send them to the chain.
+- [**Token transfers**](http://docs.tenderly.co/simulations/asset-balance-changes?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Use simulation predictions with varying inputs and other strategies to optimize token transfers.
+- [**Gas Estimations**](http://docs.tenderly.co/simulations/gas-estimation?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Get 100% correct gas estimations for optimizing gas spending.
+- [**Bundle Simulations**](http://docs.tenderly.co/simulations/bundled-simulations?mtm_campaign=ext-docs&mtm_kwd=arbitrum) and [**Bundle Gas Predictions**](http://docs.tenderly.co/node/rpc-reference/ethereum-mainnet/tenderly_estimateGasBundle?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Predict the execution of interconnected, bundled simulations for further optimizations.
+
+### Staging
+
+Create a reliable staging environment that mirrors mainnet conditions for thorough testing and collaborative development.
+
+- [**Virtual TestNet API**](https://docs.tenderly.co/reference/api#/operations/createVnet?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Use the API to create and manage Virtual TestNets within your Continuous Integration setup.
+- [**Github Actions**](https://docs.tenderly.co/virtual-testnets/ci-cd/github-actions-foundry#ci-cd-integration?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Integrate with Github Actions workflows to use Virtual TestNets as contract deployment and staging infrastructure.
+- [**Public Block Explorer**](https://docs.tenderly.co/virtual-testnets/testnet-explorer?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Expose public explorer to testers while controlling the visibility of your contracts' interfaces and source code.
+- [**Assets for testing**](https://docs.tenderly.co/virtual-testnets/unlimited-faucet?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Provide any amount of assets for testing using an unlimited faucet for native and ERC-20 tokens, available via RPC methods on Virtual TestNets.
+
+### Protocol upgrading
+
+Bullet-proof upgrades by testing post-update behavior before deployment, whether it's a proxy upgrade, multisig transaction execution, or any other form of protocol upgrade.
+
+- [**Multisig transactions**](https://docs.tenderly.co/virtual-testnets/protocol-upgrades?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Dissect multisig transactions on a Virtual TestNet, by approving and executing queued transactions.
+- [**DAO proposals**](https://docs.tenderly.co/virtual-testnets/dao-proposals?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Validate DAO proposals in a realistic environment by staging on an isolated Virtual TestNet synced with mainnet data.
+- [**Protocol updates**](https://docs.tenderly.co/virtual-testnets/protocol-upgrades?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Validate protocol updates by staging them on a Virtual TestNet, using Simulator UI and Debugger to execute and analyze transactions in a safe environment.
+- [**Proxy upgrades**](https://docs.tenderly.co/virtual-testnets/proxy-upgrades?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Perform security checks of proxy contract upgrades using Virtual TestNets, Simulator UI, and Debugger.
+
+### Monitoring & security operations
+
+Monitor on-chain activities and respond to security threats in real time to safeguard your dapps and protocols.
+
+- [**Wallets**](https://docs.tenderly.co/alerts/wallet-monitoring?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Monitor a set of wallets to get alerts when funds are getting low or unexpected transfers are taking place.
+- [**Contract access**](https://docs.tenderly.co/alerts/contract-access-monitoring?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Monitor who accesses your contracts and functions to avoid tampering.
+- [**Protocol state changes**](https://docs.tenderly.co/alerts/protocol-state-changes?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Monitor the changes of specific storage slots or view function values.
+- [**Invariant monitoring**](https://docs.tenderly.co/alerts/invariant-monitoring?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Build runtime invariant checkers for your complete architecture.
+- [**Pausing protocols**](https://docs.tenderly.co/web3-actions/pausing-protocols?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Pause protocols when you detect suspicious activity using monitoring rules you set in place.
+
+### Chain operations
+
+Optimize your blockchain interactions and maintain smooth operations with reliable infrastructure and automated tasks.
+
+- [**Multi-region RPC access**](https://docs.tenderly.co/node?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Ensure low-latency access from any location using Node RPC.
+- [**Periodic tasks**](https://docs.tenderly.co/web3-actions/references/action-functions-events-and-triggers#periodic-event?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Build CRON-based Web3 Actions for maintenance tasks.
+- [**Custom RPC methods**](https://docs.tenderly.co/node/node-extensions?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Extend standard RPC functionality with custom methods to suit specific operational needs and enhance dapp performance.
+- [**Reliable usage monitoring**](https://docs.tenderly.co/node?mtm_campaign=ext-docs&mtm_kwd=arbitrum): Continuously monitor the usage and performance of your Node RPC.
