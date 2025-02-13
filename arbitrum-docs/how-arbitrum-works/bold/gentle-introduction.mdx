@@ -8,6 +8,8 @@ author: leeederek
 sme: leeederek
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 This introduction is for those who want to learn about <a data-quicklook-from="bold">BoLD</a>: a new dispute protocol for optimistic rollups that enables **permissionless validation for <a data-quicklook-from="arbitrum">Arbitrum</a> chains**. BoLD stands for Bounded Liquidity Delay and is currently deployed on a <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>, and Arbitrum Sepolia.
 
 This next-generation dispute protocol technology is now available for any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to upgrade to and is live in production on Arbitrum One, Nova, and Arbitrum Sepolia.
@@ -46,7 +48,11 @@ Inspired by [Vitalik’s proposed milestones](https://ethereum-magicians.org/t/p
 
 BoLD enables permissionless validation by allowing _anyone_ to challenge incorrect Arbitrum state assertions and therefore unlocks new avenues for participation in securing the network, fostering greater inclusivity and resilience. This is made possible because BoLD guarantees that a single, honest entity who has their capital bonded to the correct Arbitrum state assertion will always win against malicious adversaries. The research and work to bring BoLD to life underscores Arbitrum's commitment to scaling Ethereum without compromising on security.
 
-![pie-slice](./images/l2beat-pie-chart.png)
+<ImageZoom
+  src="/img/bold-l2beat-pie-chart.png"
+  alt="Pie slice"
+  className="img-600px"
+/>
 
 With BoLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BoLD contributes to a more permissionless, efficient, and robust rollup ecosystem. Additionally, BoLD will be available as an upgrade for all Orbit chains who wish to adopt it to reap the aforementioned benefits.
 
@@ -54,13 +60,21 @@ With BoLD at its core, Arbitrum charts a course towards being recognized as a St
 
 Today, there is a period of time, following a state assertion, called the “challenge period,” where any validator can open a dispute over the validity of a given the child chain state root. If there are no disputes during the challenge period, the protocol confirms the state root and considers it to be valid - this property is what makes Arbitrum an optimistic rollup. This challenge period is why you must wait ~1 week (6.4 days to be exact) to withdraw assets from Arbitrum One, for example. While this design is secured with working fraud proofs, it is susceptible to [delay attacks](https://medium.com/offchainlabs/solutions-to-delay-attacks-on-rollups-434f9d05a07a), where malicious actors continuously open disputes to extend that challenge period for as long as they’re willing to sacrifice bonds - effectively extending the challenge period indefinitely by an amount equal to the time it takes to resolve each dispute, one by one. This risk is not ideal nor safe, and is why validation for Arbitrum One and Nova is confined to a permissioned set of entities overseen by the Arbitrum DAO.
 
-![bold-safer-withdrawals](./images/safer-withdrawals-with-bold-2.png)
+<ImageZoom
+  src="/img/bold-safer-withdrawals-with-bold-2.png"
+  alt="BoLD safer withdrawals"
+  className="img-600px"
+/>
 
 BoLD addresses these challenges head-on by introducing a time limit on the existing rollup protocol for resolving disputes, effectively ensuring that challenges conclude within a 6.4-day window (this window can changed by the DAO for Arbitrum One and Nova). This is possible due to two reasons: (1) BoLD’s design allows for challenges between the honest party and any number of malicious adversaries to happen in parallel, and (2) the use of a time limit that will automatically confirm the honest party’s claims if the challenger fails to respond.
 
 To summarize with an analogy and the diagram below: Arbitrum’s current dispute protocol assumes that any assertion that gets challenged must be defended against each unique challenger sequentially, like in a _“1v1 tournament”_. BoLD, on the other hand, enables any single honest party to defend the correct state and be guaranteed to win, similar to an _“all-vs-all battle royale”_ where there must and will always be a single winner in the end.
 
-![before-and-after-with-BoLD](./images/before-vs-after-with-bold.png)
+<ImageZoom
+  src="/img/bold-before-vs-after-with-bold.png"
+  alt="Before and after with BoLD"
+  className="img-600px"
+/>
 
 :::note
 
