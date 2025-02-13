@@ -7,7 +7,6 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
 
 In the [Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx) section, we covered how users interact with child chain contracts. They submit transactions by putting messages into the chain’s inbox or having a full node <a data-quicklook-from="sequencer">Sequencer</a> or aggregator do so on their behalf.
@@ -44,7 +43,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on child chain.
 
-<ImageZoom src="/img/haw-ticket-submission.svg" alt="Ticket submission" className="img-600px" />
+![400px-img](../assets/ticket-submission.svg)
 
 ### Automatic Redemption
 
@@ -54,11 +53,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 
 - If a redeem is not done at submission or the submission's initial redeem fails (for example, because the child chain gas price has increased unexpectedly), the submission fee is collected on the child chain to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
-<ImageZoom
-  src="/img/haw-automatic-redemption-of-the-ticket.png"
-  alt="Automatic ticket redemption"
-  className="img-600px"
-/>
+![400px-img](../assets/automatic-redemption-of-the-ticket.png)
 
 ### Manual Redemption
 
@@ -71,11 +66,7 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
 
-<ImageZoom
-  src="/img/haw-manual-redemption-of-the-ticket.png"
-  alt="Manual ticket redemption"
-  className="img-600px"
-/>
+![400px-img](../assets/manual-redemption-of-the-ticket.png)
 
 :::caution Avoid Losing Funds!
 

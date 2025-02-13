@@ -24,7 +24,7 @@ Also, if you made changes to a live and operational chain and want to upgrade th
 
 Below, you will find 4 examples of ArbOS-related code changes and, generally, how to make them:
 
-### 1. Add a new method to existing precompile on a specific ArbOS version:
+### 1. Add a new method to exsiting precompile on a specific ArbOS version:
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-add-new-methods-to-an-existing-precompile),
 you need continue to modify [precompile.go][precompile_main_file_link].
@@ -104,7 +104,7 @@ It should be noted that when you initialize the state (initial code is in [custo
 :::
 
 Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS V21.
-To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos.mdx#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
+To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos.mdx#1-add-a-new-method-to-exsiting-precompile-on-a-specific-arbos-version) or
 [point 2](./customize-arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
 If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).
 

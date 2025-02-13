@@ -381,13 +381,13 @@ Make sure you have enough funds in your wallet, and the gas fields of the reques
 </p>
 
 
-### How can I verify that an L2 block has been processed as part of a specific assertion?
+### How can I verify that an L2 block has been processed as part of a specific RBlock?
 <p>
 If you want to verify that the latest confirmed (or created) assertion has processed a specific L2 block, you can follow these steps:
 </p>
 
 <ol>
-<li>From the rollup contract, obtain the latest confirmed (or created) assertion through the function <code>latestConfirmed</code> (or <code>latestNodeCreated</code>). In this context, we refer to assertions as "nodes".</li>
+<li>From the rollup contract, obtain the latest confirmed (or created) Rblock through the function <code>latestConfirmed</code> (or <code>latestNodeCreated</code>). In this context, we refer to RBlocks as "nodes".</li>
 <li>Obtain the node information through <code>getNode</code></li>
 <li>Find the <code>NodeCreated</code> event that was emitted when that node was created.</li>
 <li>In that NodeCreated event, there's an <code>assertion</code> property that contains the state of the chain before processing the specified blocks, and after processing them. Get the <code>afterState.globalState</code> property</li>
