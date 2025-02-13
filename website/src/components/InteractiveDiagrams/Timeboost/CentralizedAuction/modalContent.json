@@ -1,22 +1,88 @@
 {
   "1": {
     "title": "Step 1: Deposit funds into the auction contract",
-    "content": {}
+    "content": {
+      "description": "Users must first deposit ERC-20 tokens into the auction contract to participate in bidding.",
+      "steps": [
+        "Call submitDeposit() on the IExpressLaneAuction contract",
+        "The contract emits a DepositSubmitted event with the bidder's address and amount",
+        "Funds are now available for bidding in future auction rounds"
+      ],
+      "codeBlocks": [
+        {
+          "language": "solidity",
+          "code": "function submitDeposit(uint256 amount) external;"
+        }
+      ]
+    }
   },
   "2": {
     "title": "Step 2: timeboost_submitBid()",
-    "content": {}
+    "content": {
+      "description": "Users submit bids through the auctioneer's RPC API for the upcoming round.",
+      "steps": [
+        "Create a bid with chain ID, round number, and bid amount",
+        "Sign the bid data with your private key",
+        "Submit the bid via timeboost_submitBid RPC method"
+      ],
+      "codeBlocks": [
+        {
+          "language": "javascript",
+          "code": "{\n  chain_id: \"uint64\",\n  address: \"0x...\",\n  round: \"uint64\",\n  amount: \"uint256\",\n  signature: \"0x...\"\n}"
+        }
+      ]
+    }
   },
   "3": {
     "title": "Step 3: Auctioneer Response",
-    "content": {}
+    "content": {
+      "description": "The auctioneer validates the bid and responds with success or failure.",
+      "steps": [
+        "Auctioneer verifies chain ID, round number, and signature",
+        "Checks if sender is a depositor with sufficient balance",
+        "Returns status OK or an error code if validation fails"
+      ],
+      "codeBlocks": [
+        {
+          "language": "javascript",
+          "code": "{\n  status: \"OK\" | \"ERROR\",\n  error?: \"MALFORMED_DATA\" | \"NOT_DEPOSITOR\" | \"WRONG_CHAIN_ID\" | \"WRONG_SIGNATURE\" | \"BAD_ROUND_NUMBER\" | \"INSUFFICIENT_BALANCE\"\n}"
+        }
+      ]
+    }
   },
   "4": {
     "title": "Step 4: auctioneer_submitBidAuctionTransaction",
-    "content": {}
+    "content": {
+      "description": "The auctioneer submits the winning bids to resolve the auction.",
+      "steps": [
+        "Auctioneer collects and sorts all valid bids for the round",
+        "Identifies the two highest bids",
+        "Calls resolveAuction() with the winning bids"
+      ],
+      "codeBlocks": [
+        {
+          "language": "solidity",
+          "code": "function resolveAuction(Bid calldata bid1, Bid calldata bid2) external;"
+        }
+      ]
+    }
   },
   "5": {
     "title": "Step 5: Sequencer prioritizes the auction contract calls to ensure the auctions get resolved",
-    "content": {}
+    "content": {
+      "description": "The sequencer ensures timely processing of auction-related transactions.",
+      "steps": [
+        "Auction resolution transactions get priority processing",
+        "Winner is declared as express lane controller for the round",
+        "Second-highest bid amount is deducted from winner's balance",
+        "AuctionResolved event is emitted with the results"
+      ],
+      "codeBlocks": [
+        {
+          "language": "solidity",
+          "code": "event AuctionResolved(\n    uint256 winningBidAmount,\n    uint256 loserBidAmount,\n    address indexed winningBidder,\n    uint256 indexed winnerRound\n);"
+        }
+      ]
+    }
   }
 }
