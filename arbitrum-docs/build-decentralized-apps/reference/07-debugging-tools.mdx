@@ -13,7 +13,15 @@ The following tools will help you debug your decentralized apps (dApps):
 
 ### Tenderly
 
-[Tenderly](https://tenderly.co/) is an all-in-one Web3 development platform that empowers developers to build, test, monitor, and operate smart contracts from inception to mass adoption. Tenderly's debugging options focus on providing developers with efficient and user-friendly tools to identify and fix smart contract bugs and production issues. The Debugger enables developers to inspect smart contracts by analyzing precise lines of code in a human-readable format. With Tenderly's Simulator, developers can play out specific historical transactions and current transaction outcomes before sending them on-chain, allowing them to change relevant parameters and source code to test and debug contracts. The platform streamlines the debugging process, saving time and resources while improving smart contract reliability.
+Based on the provided Tenderly documentation, I can help expand the list with additional key features and capabilities. Here's how I would enhance the description:
+
+[Tenderly](https://tenderly.co) is a full-stack Web3 infrastructure platform that provides comprehensive debugging capabilities alongside development, monitoring, and infrastructure tools for Ethereum, Arbitrum, and other EVM chains. Key features include:
+
+* [Developer Explorer](https://docs.tenderly.co/explorer) provides enhanced transaction and contract insights with decoded transaction data.
+* [Debugger](https://docs.tenderly.co/debugger?mtm_campaign=ext-docs&mtm_kwd=arbitrumtrum) allows detailed transaction analysis with decoded stack traces, state changes, and event logs in a human-readable format.
+* [Simulator](https://docs.tenderly.co/simulator-ui?mtm_campaign=ext-docs&mtm_kwd=arbitrumtrum) for testing transaction outcomes before deployment, with capabilities to simulate bundled transactions and optimize token transfers using various strategies.
+* [Virtual TestNets](https://docs.tenderly.co/virtual-testnets?mtm_campaign=ext-docs&mtm_kwd=arbitrumtrum) for development, debugging, and staging. With Virtual TestNets, developers can provision isolated environments with access to correct mainnet data, test DAO proposals, validate protocol upgrades, and utilize unlimited faucet functionality for native and ERC-20 tokens.
+* [Alerts](https://docs.tenderly.co/alerts/intro-to-alerts?mtm_campaign=ext-docs&mtm_kwd=arbitrumtrum) and [Web3 Actions](https://docs.tenderly.co/web3-actions/intro-to-web3-actions?mtm_campaign=ext-docs&mtm_kwd=arbitrumtrum) let developers set up real-time monitoring to catch and debug issues in production, implement automated responses to on-chain events, and build runtime invariant checkers.
 
 Although Tenderly provides great debugging options, there are certain limitations when debugging parent-to-child chain messages (also known as Retryable Tickets), due to the utilization of custom Geth errors. For further information on this constraint, please refer to the following [resource](/for-devs/troubleshooting-building#i-tried-to-create-a-retryable-ticket-but-the-transaction-reverted-on-l1--how-can-i-debug-the-issue).
 
