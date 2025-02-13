@@ -7,11 +7,17 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 This document attempts to give an account of BoLD, Arbitrum's new all-vs-all challenge protocol, in terms that might be familiar to people used to studying Arbitrum's previous, 1-vs-1 challenge protocol. For another explanation of BoLD's concepts, refer to [Gentle Introduction](/how-arbitrum-works/bold/gentle-introduction.mdx), [Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx), or the BoLD [Research whitepaper](https://arxiv.org/abs/2404.10491).
 
 Suppose the Rollup chain looks like this:
 
-![600px-img](../assets/interactive-fraud-proof.svg)
+<ImageZoom
+  src="/img/haw-interactive-fraud-proof.svg"
+  alt="Interactive fraud proof"
+  className="img-600px"
+/>
 
 Assertions 93 and 95 are siblings (they both have 92 as predecessor). Alice is bonded on 93 and Bob is bonded on 95.
 
@@ -68,7 +74,11 @@ The only point where the protocol needs to evaluate a move “on the merits” i
 
 This section is a technical deep dive into the `ChallengeManager` and will walk through the arbitration of a challenge game in great detail. The `ChallengeManager` plays the role of the arbiter of challenge games. Here's a diagram of the challenge state machine:
 
-![600px-img](../assets/challenge-manager.svg)
+<ImageZoom
+  src="/img/haw-challenge-manager.svg"
+  alt="Challenge manager"
+  className="img-600px"
+/>
 
 ### Block challenge
 
