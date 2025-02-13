@@ -7,6 +7,8 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 In the [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">delayed inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
@@ -32,7 +34,7 @@ We generally categorize these parent-to-child chain messaging methods as follows
 
 This section will explore these categories in detail and explain how they work. The diagram below illustrates the various paths available for parent-to-child chain communication and asset transfers.
 
-![600px-img](../assets/l1-to-l2.svg)
+<ImageZoom src="/img/haw-l1-to-l2.svg" alt="Parent to child messaging" className="img-600px" />
 
 ## Native token bridging
 
@@ -69,7 +71,7 @@ A diagram illustrating this deposit process is below:
 - **If the parent chain caller is a contract**:
   - The `ETH` will be deposited to the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
 
-![600px-img](../assets/aliasing.svg)
+<ImageZoom src="/img/haw-aliasing.svg" alt="Address aliasing" className="img-600px" />
 
 ### Address aliasing
 
@@ -402,11 +404,11 @@ Our architecture consists of three types of contracts:
 2. **Gateways**: Pairs of contracts (one on the parent and one on the child chain) implementing a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on parent and one on child chain) route each asset to its designated gateway.
 
-![500px-img](../assets/canonical-bridge.svg)
+<ImageZoom src="/img/haw-canonical-bridge.svg" alt="Canonical bridge" className="img-600px" />
 
 All parent-to-child token transfers initiate via the router contract on the parent chain, the `L1GatewayRouter` contract. `L1GatewayRouter` forwards the token's deposit call to the appropriate gateway contract on the parent chain, the `L1ArbitrumGateway` contract. `L1GatewayRouter` is responsible for mapping the parent chain token addresses to L1Gateway contracts, thus acting as a parent/child address oracle and ensuring each token corresponds to only one gateway. The `L1ArbitrumGateway` then communicates to its counterpart gateway contract on the child chain, the `L2ArbitrumGateway` contract (typically/expectedly via [retryable tickets](#retryable-tickets)).
 
-![400px-img](../assets/token-gateway.svg)
+<ImageZoom src="/img/haw-token-gateway.svg" alt="Token gateway" className="img-600px" />
 
 For any given gateway pairing, we require that calls initiate through the corresponding router (`L1GatewayRouter`) and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
