@@ -6,6 +6,8 @@ user_story: As a user, I want to learn how to use Arbitrum's bridge to transfer 
 content_type: quickstart
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 This quickstart is for users who want to "deposit" ETH or any ERC-20 tokens from a parent chain to a child chain (for example, from Ethereum to Arbitrum One, or from Arbitrum One to a Layer 3 Orbit chain), or "withdraw" from a child chain to a parent chain, using [Arbitrum's bridge](https://bridge.arbitrum.io/).
 
 We will go through the whole process step by step with as much detail as possible. If you feel stuck in any of the steps, don't hesitate to contact us through our [Discord](https://discord.gg/arbitrum) and we will be happy to help you complete the process.
@@ -28,7 +30,11 @@ There are several ways to obtain the native currency:
 
 You'll also need to add the desired chain's RPC endpoint to your wallet. Here we provide an example for doing this using MetaMask/OKX Wallet, although the process should be similar for other wallets. You need to first click on the MetaMask/OKX Wallet extension on your browser, click the network selector dropdown on the top-left corner, and then click the `Add Network` button at the bottom. Click "Add a network manually" and then provide the information corresponding to the chain you want to send your assets to.
 
-![Add the desired destination network to your MetaMask/OKX wallet](images/getting_started_users_1.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_1.png"
+  alt="Add the desired destination network to your MetaMask/OKX wallet"
+  className="img-600px"
+/>
 
 Here we display the information of the most common Arbitrum chains, but you can find a more exhaustive list in our [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page.
 
@@ -50,11 +56,19 @@ Note that testnets like Arbitrum Sepolia only appear if you are connected to the
 
 :::
 
-![Add the desired network to your web3 wallet](images/getting_started_users_2.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_2.png"
+  alt="Add the desired network to your web3 wallet"
+  className="img-600px"
+/>
 
 Select the token you want to bridge in the token drop-down menu. You can also enable/disable the token lists by clicking `Manage token lists` button on the bottom right corner of the drop-down menu.
 
-![Select the token to bridge](images/getting_started_users_3.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_3.png"
+  alt="Select the token to bridge"
+  className="img-600px"
+/>
 
 Enter the amount of ETH or ERC-20 tokens you want to bridge over in the **From** box and then press `Move funds`. Follow the prompts on your web3 wallet.
 
@@ -64,7 +78,11 @@ Please make sure you leave enough ETH on your wallet to pay for the transaction,
 
 :::
 
-![Enter the amount of tokens to bridge](images/getting_started_users_4.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_4.png"
+  alt="Enter the amount of tokens to bridge"
+  className="img-600px"
+/>
 
 After you submit the transaction through your web3 wallet you can expect your funds to arrive on the destination chain within roughly 15-30 minutes (depending on the chain congestion).
 
@@ -86,7 +104,11 @@ Note that testnets like Ethereum Sepolia only appear if you are connected to the
 
 :::
 
-![Select the token to withdraw](images/getting_started_users_5.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_5.png"
+  alt="Select the token to withdraw"
+  className="img-600px"
+/>
 
 Select the token you want to bridge in the token drop-down menu. You can also enable/disable the token lists by clicking `Manage token lists` button on the bottom right corner of the drop-down menu. Enter the amount of ETH or ERC-20 tokens you want to bridge over in the **from** box and then press `Move funds`. Follow the prompts on your web3 wallet.
 
@@ -96,13 +118,21 @@ Please make sure you leave enough ETH on your wallet to pay for the transaction,
 
 :::
 
-![Enter the amount of token to withdraw](images/getting_started_users_6.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_6.png"
+  alt="Enter the amount of token to withdraw"
+  className="img-600px"
+/>
 
 A countdown will pop up stating that you’ll get your funds in 7-8 days.
 
 You can check the status of your withdrawal by clicking on your profile on the top right and opening the `Transactions` tab, and claim it there when it’s ready.
 
-![See the transaction history](images/getting_started_users_7.png)
+<ImageZoom
+  src="/img/arb-bridge-getting_started_users_7.png"
+  alt="See the transaction history"
+  className="img-600px"
+/>
 
 Once the countdown is done, switch to the destination network on your wallet and press the `Claim` button, that has now turned blue, to receive your funds!
 
