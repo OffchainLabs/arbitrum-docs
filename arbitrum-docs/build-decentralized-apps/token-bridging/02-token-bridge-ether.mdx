@@ -7,6 +7,8 @@ content_type: concept
 sidebar_position: 2
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
+
 Ether (ETH) is the native currency of Ethereum and all Arbitrum chains. It is used to pay the necessary fees to execute a transaction in those chains. Bridging ETH from Ethereum (parent chain) to an Arbitrum chain (child chain) follows, thus, a different process than the one followed when bridging other types of asset.
 
 ## Depositing ether
@@ -19,7 +21,11 @@ function depositEth(address destAddr) external payable override returns (uint256
 
 The following diagram depicts the process that funds follow during a deposit operation.
 
-![900px-img](../images/depositing-ether.svg)
+<ImageZoom
+  src="/img/dapps-depositing-ether.svg"
+  alt="Depositing Ether"
+  className="img-600px"
+/>
 
 As far as the parent chain knows, all deposited funds are held by Arbitrum's Bridge contract.
 
@@ -37,4 +43,8 @@ Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will late
 
 The following diagram depicts the process that funds follow during a withdraw operation.
 
-![900px-img](../images/withdrawing-ether.svg)
+<ImageZoom
+  src="/img/dapps-withdrawing-ether.svg"
+  alt="Withdrawing Ether"
+  className="img-600px"
+/>
