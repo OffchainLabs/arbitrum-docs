@@ -7,17 +7,18 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
+import ImageZoom from '@site/src/components/ImageZoom';
 import { AddressAliasHelper } from '@site/src/components/AddressAliasHelper';
 
-In the [Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx) section, we covered how users interact with L2 contracts. They submit transactions by putting messages into the chain’s inbox or having a full node <a data-quicklook-from="sequencer">Sequencer</a> or aggregator do so on their behalf.
+In the [Transaction Lifecycle](/how-arbitrum-works/02-transaction-lifecycle.mdx) section, we covered how users interact with child chain contracts. They submit transactions by putting messages into the chain’s inbox or having a full node <a data-quicklook-from="sequencer">Sequencer</a> or aggregator do so on their behalf.
 
-L1 and L2 chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same <a data-quicklook-from="transaction">Transaction</a> as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. Consequently, a cross-chain contract-to-contract call can never produce a result available to the calling contract (except for acknowledgment of a successful call submitted for later execution).
+Parent and child chain chains run asynchronously from each other, so it is not possible to make a cross-chain call that produces a result within the same <a data-quicklook-from="transaction">Transaction</a> as the caller. Instead, cross-chain calls must be asynchronous, meaning that the caller submits the call at some point in time, and the call runs later. Consequently, a cross-chain contract-to-contract call can never produce a result available to the calling contract (except for acknowledgment of a successful call submitted for later execution).
 
-In this section, we will discuss how contracts interact between L1 and L2, how an L1 contract is called an L2 contract, and vice versa.
+In this section, we will discuss how contracts interact between parent chain and child chain, how a parent chain contract is called a child chain contract, and vice versa.
 
 ## Retryable Tickets
 
-Retryable tickets are <a data-quicklook-from="arbitrum">Arbitrum</a>'s canonical method for creating L1 to L2 messages, i.e., L1 transactions that initiate a message to be executed on L2. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at L1; its _submission_ on L1 is separable / asynchronous with its _execution_ on L2. Retryables provide atomicity between the cross chain operations; if the L1 transaction to request submission succeeds (i.e. does not revert) then the execution of the Retryable on L2 has a strong guarantee to ultimately succeed as well.
+Retryable tickets are <a data-quicklook-from="arbitrum">Arbitrum</a>'s canonical method for creating parent to child chain messages, i.e., parent chain transactions that initiate a message to be executed on child chain. A retryable can be submitted for a fixed cost (dependent only on its calldata size) paid at the parent chain; its _submission_ on the parent chain is separable / asynchronous with its _execution_ on the child chain. Retryables provide atomicity between the cross chain operations; if the parent chain transaction to request submission succeeds (i.e., does not revert) then the execution of the Retryable on the child chain has a strong guarantee to ultimately succeed as well.
 
 ## Retryable Tickets Lifecycle
 
@@ -30,30 +31,34 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 | Parameter                                   | Description                                                                                                                                                                                                                                                                                                                                              |
 | :------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `l1CallValue (also referred to as deposit)` | Not a real function parameter, it is rather the callValue that is sent along with the transaction                                                                                                                                                                                                                                                        |
-| `address to`                                | The destination L2 address                                                                                                                                                                                                                                                                                                                               |
-| `uint256 l2CallValue`                       | The callvalue for retryable L2 message that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                                                                                 |
-| `uint256 maxSubmissionCost`                 | The maximum amount of ETH to be paid for submitting the ticket. This amount is (1) supplied within the deposit (l1CallValue) to be later deducted from sender's L2 balance and is (2) directly proportional to the size of the retryable’s data and L1 basefee                                                                                           |
+| `address to`                                | The destination child chain address                                                                                                                                                                                                                                                                                                                      |
+| `uint256 l2CallValue`                       | The callvalue for retryable child chain message that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                                                                        |
+| `uint256 maxSubmissionCost`                 | The maximum amount of ETH to be paid for submitting the ticket. This amount is (1) supplied within the deposit (l1CallValue) to be later deducted from sender's child chain balance and is (2) directly proportional to the size of the retryable’s data and the parent chain basefee                                                                    |
 | `address excessFeeRefundAddress`            | The unused gas cost and submssion cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (Note: excess deposit will transfer to the alias address of the <a data-quicklook-from="parent-chain">Parent chain</a> tx's `msg.sender` rather than this address) |
-| `address callValueRefundAddress`            | The L2 address to which the l2CallValue is credited if the ticket times out or gets cancelled (this is also called the `beneficiary`, who's got a critical permission to cancel the ticket)                                                                                                                                                              |
-| `uint256 gasLimit`                          | Maximum amount of gas used to cover L2 execution of the ticket                                                                                                                                                                                                                                                                                           |
-| `uint256 maxFeePerGas`                      | The gas price bid for L2 execution of the ticket that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                                                                       |
-| `bytes calldata data`                       | The calldata to the destination L2 address                                                                                                                                                                                                                                                                                                               |
+| `address callValueRefundAddress`            | The child chain address to which the l2CallValue is credited if the ticket times out or gets cancelled (this is also called the `beneficiary`, who's got a critical permission to cancel the ticket)                                                                                                                                                     |
+| `uint256 gasLimit`                          | Maximum amount of gas used to cover the child chain execution of the ticket                                                                                                                                                                                                                                                                              |
+| `uint256 maxFeePerGas`                      | The gas price bid for the child chain execution of the ticket that is supplied within the deposit (l1CallValue)                                                                                                                                                                                                                                          |
+| `bytes calldata data`                       | The calldata to the destination child chain address                                                                                                                                                                                                                                                                                                      |
 
-2. Sender's deposit must be enough to make the L1 submission succeed and for the L2 execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
+2. Sender's deposit must be enough to make the parent chain submission succeed and for the child chain execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into the escrow for later use in redeeming the ticket.
 
-3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on L2.
+3. Ticket creation causes the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile to emit a `TicketCreated` event containing the `TicketID` on child chain.
 
-![400px-img](../assets/ticket-submission.svg)
+<ImageZoom src="/img/haw-ticket-submission.svg" alt="Ticket submission" className="img-600px" />
 
 ### Automatic Redemption
 
-4. It is very important to note that the submission of a ticket on L1 is separable / asynchronous from its execution on L2, i.e., a successful L1 ticket creation does not guarantee a successful redemption. Once the ticket is successfully created, the two following conditions are checked: (1) if the user's L2 balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, ticket's submission is followed by an attempt to execute it on L2 (i.e., an **auto-redeem** using the supplied gas, as if the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
+4. It is very important to note that the submission of a ticket on the parent chain is separable / asynchronous from its execution on child chain, i.e., a successful parent chain ticket creation does not guarantee a successful redemption. Once the ticket is successfully created, the two following conditions are checked: (1) if the user's child chain balance is greater than (or equal to) `maxFeePerGas * gasLimit` **and** (2) if the `maxFeePerGas` (provided by the user in the ticket submission process) is greater than (or equal to) the `l2Basefee`. If these conditions are both met, ticket's submission is followed by an attempt to execute it on child chain (i.e., an **auto-redeem** using the supplied gas, as if the `redeem` method of the [ArbRetryableTx](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile had been called). Depending on how much gas the sender has provided in step 1, ticket's redemption can either (1) immediately succeed or (2) fail. We explain both situations here:
 
-- If the ticket is successfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user on L2 (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, one could use the Arbitrum SDK which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending L1-L2 messages.
+- If the ticket is successfully auto-redeemed, it will execute with the sender, destination, callvalue, and calldata of the original submission. The submission fee is refunded to the user on the child chain (`excessFeeRefundAddress`). Note that to ensure successful auto-redeem of the ticket, one could use the Arbitrum SDK which provides a [convenience function](https://github.com/OffchainLabs/arbitrum-sdk/blob/4cedb1fcf1c7302a4c3d0f8e75fb33d82bc8338d/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) that returns the desired gas parameters when sending L1-L2 messages.
 
-- If a redeem is not done at submission or the submission's initial redeem fails (for example, because the L2 gas price has increased unexpectedly), the submission fee is collected on L2 to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
+- If a redeem is not done at submission or the submission's initial redeem fails (for example, because the child chain gas price has increased unexpectedly), the submission fee is collected on the child chain to cover the resources required to temporarily keep the ticket in memory for a fixed period (one week), and only in this case, a manual redemption of the ticket is required (see next section).
 
-![400px-img](../assets/automatic-redemption-of-the-ticket.png)
+<ImageZoom
+  src="/img/haw-automatic-redemption-of-the-ticket.png"
+  alt="Automatic ticket redemption"
+  className="img-600px"
+/>
 
 ### Manual Redemption
 
@@ -66,11 +71,15 @@ Here we walk through the different stages of the lifecycle of a <a data-quickloo
 [discard_link]: https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262
 [renew_link]: https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41
 
-![400px-img](../assets/manual-redemption-of-the-ticket.png)
+<ImageZoom
+  src="/img/haw-manual-redemption-of-the-ticket.png"
+  alt="Manual ticket redemption"
+  className="img-600px"
+/>
 
 :::caution Avoid Losing Funds!
 
-If a ticket expires after 7 days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callvalue`) it carries could be lost without possibility of being recovered.
+If a ticket expires after seven days without being redeemed or re-scheduled to a future date, any message and value (other than the escrowed `callvalue`) it carries could be lost without possibility of being recovered.
 
 :::
 
@@ -78,14 +87,14 @@ On success, the `To` address receives the escrowed callvalue, and any unused gas
 
 Note that during redemption of a ticket, attempts to cancel the same ticket, or to schedule another redeem of the same ticket, will revert. In this manner retryable tickets are not self-modifying.
 
-If a ticket with a callvalue is eventually discarded (cancelled or expired), having never successfully run, the escrowed callvalue will be paid out to a `callValueRefundAddress` account that was specified in the initial submission (step 1).
+If a ticket with a callvalue is eventually discarded (cancelled or expired), having never successfully run, the escrowed callvalue will be paid out to a `callValueRefundAddress` account that was specified in the initial submission [Step 1](#submission).
 
 :::note Important Notes:
 
 If a redeem is not done at submission or the submission's initial redeem fails, anyone can attempt to redeem the retryable again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx)'s `redeem` precompile method, which donates the call's gas to the next attempt. ArbOS will [enqueue the redeem][enqueue_link], which is its own special `ArbitrumRetryTx` type, to its list of redeems that ArbOS [guarantees to exhaust][exhaust_link] before moving on to the next non-redeem transaction in the block its forming. In this manner redeems are scheduled to happen as soon as possible, and will always be in the same block as the transaction that scheduled it. Note that the redeem attempt's gas comes from the call to `redeem`, so there's no chance the block's gas limit is reached before execution.
 
 - One can redeem live tickets using the [Arbitrum Retryables Transaction Panel][retryable_dashboard_link]
-- The calldata of a ticket is saved on L2 until it is redeemed or expired
+- The calldata of a ticket is saved on the child chain until it is redeemed or expired
 - Redeeming cost of a ticket will not increase over time, it only depends on the current gas price and gas required for execution
 
 :::
@@ -94,22 +103,22 @@ If a redeem is not done at submission or the submission's initial redeem fails, 
 
 ### Receipts
 
-In the lifecycle of a retryable ticket, two types of L2 transaction receipts will be emitted:
+In the lifecycle of a retryable ticket, two types of child chain transaction receipts will be emitted:
 
-- **Ticket Creation Receipt**: This receipt indicates that a ticket was successfully created; any successful L1 call to the `Inbox`'s `createRetryableTicket` method is guaranteed to create a ticket. The ticket creation receipt includes a `TicketCreated` event (from `ArbRetryableTx`), which includes a `ticketId` field. This `ticketId` is computable via RLP encoding and hashing the transaction; see [calculateSubmitRetryableId](https://github.com/OffchainLabs/arbitrum-sdk/blob/6cc143a3bb019dc4c39c8bcc4aeac9f1a48acb01/src/lib/message/L1ToL2Message.ts#L109).
-- **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted L2 execution of a ticket, i.e, success / failure of that specific redeem attempt. It includes a `RedeemScheduled` event from `ArbRetryableTx`, with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided L2 gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
+- **Ticket Creation Receipt**: This receipt indicates that a ticket was successfully created; any successful parent chain call to the `Inbox`'s `createRetryableTicket` method is guaranteed to create a ticket. The ticket creation receipt includes a `TicketCreated` event (from `ArbRetryableTx`), which includes a `ticketId` field. This `ticketId` is computable via RLP encoding and hashing the transaction; see [calculateSubmitRetryableId](https://github.com/OffchainLabs/arbitrum-sdk/blob/6cc143a3bb019dc4c39c8bcc4aeac9f1a48acb01/src/lib/message/L1ToL2Message.ts#L109).
+- **Redeem Attempt**: A redeem attempt receipt represents the result of an attempted child chain execution of a ticket, i.e, success / failure of that specific redeem attempt. It includes a `RedeemScheduled` event from `ArbRetryableTx`, with a `ticketId` field. At most, one successful redeem attempt can ever exist for a given ticket; if, e.g., the auto-redeem upon initial creation succeeds, only the receipt from the auto-redeem will ever get emitted for that ticket. If the auto-redeem fails (or was never attempted — i.e., the provided child gas limit \* L2 gas price = 0), each initial attempt will emit a redeem attempt receipt until one succeeds.
 
 ### Alternative "unsafe" Retryable Ticket Creation
 
-The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from L1 to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their <a data-quicklook-from="address-alias">Address Alias</a> (see below) if either is a contract (determined by if the address has code during the call), providing a path for the L1 contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
+The `Inbox.createRetryableTicket` convenience method includes sanity checks to help minimize the risk of user error: the method will ensure that enough funds are provided directly from the parent chain to cover the current cost of ticket creation. It also will convert the provided `callValueRefundAddress` and `excessFeeRefundAddress` to their <a data-quicklook-from="address-alias">Address Alias</a> (see below) if either is a contract (determined by if the address has code during the call), providing a path for the parent chain contract to recover funds. A power-user may bypass these sanity-check measures via the `Inbox`'s `unsafeCreateRetryableTicket` method; as the method's name desperately attempts to warn you, it should only be accessed by a user who truly knows what they're doing.
 
 ## Eth deposits
 
-A special message type exists for simple Eth deposits; i.e., sending Eth from L1 to L2. Eth can be deposited via a call to the `Inbox`'s `depositEth` method. If the L1 caller is EOA, the Eth will be deposited to the same EOA address on L2; the L1 caller is a contract, the funds will deposited to the contract's aliased address (see below).
+A special message type exists for simple Eth deposits; i.e., sending Eth from the parent chain to child chain. Eth can be deposited via a call to the `Inbox`'s `depositEth` method. If the parent chain caller is EOA, the Eth will be deposited to the same EOA address on child chain; the parent chain caller is a contract, the funds will deposited to the contract's aliased address (see below).
 
-Note that depositing Eth via `depositEth` into a contract on L2 will _not_ trigger the contract's fallback function.
+Note that depositing Eth via `depositEth` into a contract on the child chain will _not_ trigger the contract's fallback function.
 
-In principle, retryable tickets can alternatively be used to deposit Ether; this could be preferable to the special eth-deposit message type if, e.g., more flexibility for the destination address is needed, or if one wants to trigger the fallback function on the L2 side.
+In principle, retryable tickets can alternatively be used to deposit Ether; this could be preferable to the special eth-deposit message type if, e.g., more flexibility for the destination address is needed, or if one wants to trigger the fallback function on the child chain side.
 
 ## Transacting via the Delayed Inbox
 
@@ -117,7 +126,7 @@ While retryables and Eth deposits _must_ be submitted through the <a data-quickl
 
 ### Address Aliasing
 
-Unsigned messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these messages are executed on L2, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the L1 address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111`:
+Unsigned messages submitted via the Delayed Inbox get their sender's addressed "aliased": when these messages are executed on the child chain, the sender's address —i.e., that which is returned by `msg.sender` — will _not_ simply be the parent chain address that sent the message; rather it will be the address's "L2 Alias." An address's L2 alias is its value increased by the hex value `0x1111000000000000000000000000000000001111`:
 
 ```sol
 L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
@@ -129,9 +138,9 @@ L2_Alias = L1_Contract_Address + 0x1111000000000000000000000000000000001111
 
 :::
 
-The Arbitrum protocol's usage of L2 Aliases for L1-to-L2 messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same L1 addresses as the L2 sender; i.e., tricking an L2 contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on L1.
+The Arbitrum protocol's usage of child chain (L2) Aliases for Parent chain-to-child chain messages prevents cross-chain exploits that would otherwise be possible if we simply reused the same parent chain (L1) addresses as the child chain (L2) sender; i.e., tricking a child chain contract that expects a call from a given contract address by sending retryable ticket from the expected contract address on the parent chain.
 
-If for some reason you need to compute the L1 address from an L2 alias on chain, you can use our `AddressAliasHelper` library:
+If for some reason you need to compute the parent chain address from an child chain alias on chain, you can use our `AddressAliasHelper` library:
 
 ```sol
 modifier onlyFromMyL1Contract() override {
@@ -142,6 +151,6 @@ modifier onlyFromMyL1Contract() override {
 
 ### Signed Messages
 
-The delayed inbox can also accept messages that include a signature. In this case, the message will execute with the `msg.sender` address equal to the address that produced the included signature (i.e., _not_ its alias). Intuitively, the signature proves that the sender address is not a contract, and thus is safe from cross-chain exploit concerns described above. Thus, it can safely execute from signer's address, similar to a transaction included in a Sequencer's <a data-quicklook-from="batch">Batch</a>. For these messages, the address of the L1 sender is effectively ignored at L2.
+The delayed inbox can also accept messages that include a signature. In this case, the message will execute with the `msg.sender` address equal to the address that produced the included signature (i.e., _not_ its alias). Intuitively, the signature proves that the sender address is not a contract, and thus is safe from cross-chain exploit concerns described above. Thus, it can safely execute from signer's address, similar to a transaction included in a Sequencer's <a data-quicklook-from="batch">Batch</a>. For these messages, the address of the parent chain sender is effectively ignored at child chain.
 
-These signed messages submitted through the delayed inbox can be used to execute messages that bypass the Sequencer and require EOA authorization at L2, e.g., force-including an Ether withdrawal (see ["withdraw eth tutorial"](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)).
+These signed messages submitted through the delayed inbox can be used to execute messages that bypass the Sequencer and require EOA authorization at child chain, e.g., force-including an Ether withdrawal (see ["withdraw eth tutorial"](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)).
