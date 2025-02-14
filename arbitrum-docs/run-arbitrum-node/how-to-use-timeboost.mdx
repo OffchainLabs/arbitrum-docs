@@ -36,10 +36,18 @@ Auctions are facilitated by an auction contract, and bids get submitted to an au
 
 ### Pre-requisites: gather required information
 
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
 Before we begin, make sure you have:
 
 - Address of the auction contract
 - Endpoint of the autonomous auctioneer
+
+The following table shows this information for Arbitrum Sepolia:
+
+| Network          | Auction contract                                                              | Autonomous auctioneer endpoint  |
+| ---------------- | ----------------------------------------------------------------------------- | ------------------------------- |
+| Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://sepolia-bv.arbitrum.io/ |
 
 ### Step 1: deposit funds into the auction contract
 
