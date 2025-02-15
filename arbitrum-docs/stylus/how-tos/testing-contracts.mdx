@@ -1,0 +1,134 @@
+---
+id: 'testing-contracts'
+title: 'Testing contracts with Stylus'
+description: 'A hands-on guide to testing with Stylus.'
+sme: anegg0
+target_audience: 'Developers writing smart contracts using Stylus.'
+sidebar_position: 3
+---
+
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+This guide explains how to write tests for Stylus contracts using the built-in testing framework.
+
+## Overview
+
+The Stylus SDK provides a testing framework through the `stylus_test` crate, which is automatically re-exported via `stylus_sdk::testing` when targeting native architectures.
+
+## Basic Testing Setup
+
+Let's walk through testing a simple counter contract:
+
+```rust
+use stylus_sdk::{alloy_primitives::U256, prelude::*};
+
+#[entrypoint]
+#[storage]
+pub struct Counter {
+    number: StorageU256,
+}
+
+#[public]
+impl Counter {
+    pub fn number(&self) -> U256 {
+        self.number.get()
+    }
+
+    pub fn increment(&mut self) {
+        let number = self.number.get();
+        self.number.set(number + U256::from(1));
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use stylus_sdk::testing::*;
+
+    #[test]
+    fn test_counter() {
+        // Create a test VM environment
+        let vm = TestVM::default();
+
+        // Initialize the contract with the test VM
+        let mut contract = Counter::from(&vm);
+
+        // Test initial state
+        assert_eq!(U256::ZERO, contract.number());
+
+        // Test state changes
+        contract.increment();
+        assert_eq!(U256::from(1), contract.number());
+    }
+}
+```
+
+## Key Testing Components
+
+### TestVM
+
+The `TestVM` struct provides a simulated Ethereum environment for tests.
+
+`TestVM` handles:
+
+- Contract storage
+- Transaction context
+- Block information
+- Gas metering
+
+You can customize the test environment using `TestVMBuilder`:
+
+```rust
+#[test]
+fn test_with_custom_setup() {
+    let vm = TestVMBuilder::new()
+        .with_sender(Address::from([0x1; 20]))
+        .with_value(U256::from(100))
+        .build();
+
+    let contract = Counter::from(&vm);
+    // ... test logic
+}
+```
+
+### Storage Testing
+
+The testing framework automatically handles persistent storage simulation. Your contract's storage operations work exactly as they would on-chain, but in a controlled test environment.
+
+### Best Practices
+
+1. **Test Organization**
+
+   - Keep tests in a separate module marked with `#[cfg(test)]`
+
+2. **Isolation**
+   - Create a new `TestVM` instance for each test
+   - Don't rely on state from previous tests
+
+## Running Tests
+
+**Note:**: I'm really not sure how to run tests in the context of the Stylus SDK, so I winged it here.
+Is it done with `cargo stylus`?
+
+Run your tests using the standard Rust test command:
+
+```shell
+cargo test
+```
+
+For more verbose output:
+
+```shell
+cargo test -- --nocapture
+```
+
+## Advanced Testing Features
+
+The testing framework also supports:
+
+- Transaction context simulation
+- Gas metering
+- Block information
+- Contract-to-contract calls
+
+Check the [Stylus SDK documentation](https://docs.arbitrum.io/stylus/stylus-overview) for more advanced testing scenarios.
