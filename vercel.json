@@ -881,6 +881,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
+      "destination": "/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
       "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
       "permanent": false
