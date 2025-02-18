@@ -208,7 +208,7 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 ### Frequently asked questions
 
-#### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) page?
+#### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
