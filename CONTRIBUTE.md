@@ -113,7 +113,6 @@ Every document should be a specific _type_ of document. Each type of document ha
 | ------------- | ------- |
 | Gentle introduction | Onboard a specific reader audience with tailored questions and answers |
 | Quickstart | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
-
 | How-to | Provide task-oriented procedural guidance |
 | Concept | Explain what things are and how they work |
 | FAQ | Address frequently asked questions |
