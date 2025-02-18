@@ -882,7 +882,7 @@
     },
     {
       "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
-      "destination": "/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade",
       "permanent": false
     },
     {
