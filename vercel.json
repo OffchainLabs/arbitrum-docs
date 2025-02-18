@@ -886,6 +886,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui/?)",
+      "destination": "/launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
       "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
       "permanent": false
