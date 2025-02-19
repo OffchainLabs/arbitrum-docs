@@ -15,11 +15,8 @@ const options: Partial<PostHogConfig> = {
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return (
-    <BasePostHogProvider
-      apiKey="phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL"
-      options={options}
-    >
+    <BasePostHogProvider apiKey="phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL" options={options}>
       {children}
     </BasePostHogProvider>
   );
-} 
+}
