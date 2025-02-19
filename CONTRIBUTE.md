@@ -1,5 +1,5 @@
 
-Thank you for considering to contribute to the Arbitrum documentation! We're excited to have you on board.
+Thank you for considering contributing to the Arbitrum documentation! We're excited to have you on board.
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
