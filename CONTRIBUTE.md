@@ -143,7 +143,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
 7.  **Targeting**
     - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) with a _specific need_.
-    - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit in the beginning of your document.
+    - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit at the beginning of your document.
 8.  **Flow**
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
     - **Value up front**: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
