@@ -139,7 +139,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - Opt for short, clear sentences that use translation-friendly, plain language.
     - Use contractions wherever they feel natural. This approach can help convey a friendly and conversational tone.
 6.  **Formality**
-    - Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
+    - Don't worry too much about formality. The most valuable writing provides value to readers, and readers generally want to "flow" through guidance.
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
 7.  **Targeting**
     - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) who has a _specific need_.
