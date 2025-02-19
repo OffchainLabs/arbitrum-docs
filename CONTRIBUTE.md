@@ -148,7 +148,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
     - **Value upfront**: Lead with what matters most to your target reader persona. Then, progressively build a bridge that carries them toward task completion as efficiently as possible.
 9.  **Cross-linking**
-    - We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
+    - We want to maintain both **high discoverability** and **high relevance**. Generally, links to other docs should be "very likely useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 10. **Things to avoid**
     - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
     - **Jargon**: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
