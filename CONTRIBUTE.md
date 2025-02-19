@@ -128,7 +128,7 @@ The following style guidelines provide recommendations that help us deliver **a 
 1.  **Casing**
     - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
 2.  **Linking**
-    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, link to the document's title verbatim.
 3.  **Titling**
     - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
 4.  **Separate procedural from conceptual (most of the time)**
