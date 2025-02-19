@@ -132,7 +132,7 @@ The following style guidelines provide recommendations that help us deliver **a 
 3.  **Titling**
     - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
 4.  **Separate procedural from conceptual (most of the time)**
-    - Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
+    - Avoid including too much conceptual content within procedural docs like how-tos and quickstarts. Provide only the conceptual information that the target reader _needs_ to complete the task. Otherwise, organize conceptual information within conceptual docs and link to them "just in case" from other docs.
 5.  **Voice**
     - Address the reader as "you".
     - Write like you'd speak to a really smart friend who's in a rush.
