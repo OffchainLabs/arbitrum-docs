@@ -146,7 +146,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit at the beginning of your document.
 8.  **Flow**
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
-    - **Value up front**: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
+    - **Value upfront**: Lead with what matters most to your target reader persona. Then, progressively build a bridge that carries them toward task completion as efficiently as possible.
 9.  **Cross-linking**
     - We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 10. **Things to avoid**
