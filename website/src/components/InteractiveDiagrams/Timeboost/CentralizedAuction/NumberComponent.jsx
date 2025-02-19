@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
 import styles from './styles.module.css';
-
+import ButtonComponent from './ButtonComponent';
 const CIRCLE_RADIUS = 20.95;
 
 const numberPaths = {
@@ -24,16 +24,17 @@ const coordinates = {
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
-  const animationProps = (number === 1 || number === 5) ? 
-    { opacity: 1 } : 
-    useSpring({
-      from: { opacity: 0.3 },
-      to: { opacity: 1 },
-      config: { duration: 1000 },
-      loop: { reverse: true },
-      reset: true,
-      immediate: false,
-    });
+  const animationProps =
+    number === 1 || number === 5
+      ? { opacity: 1 }
+      : useSpring({
+          from: { opacity: 0.3 },
+          to: { opacity: 1 },
+          config: { duration: 1000 },
+          loop: { reverse: true },
+          reset: true,
+          immediate: false,
+        });
 
   const coords = coordinates[number];
   const pathData = numberPaths[number];
