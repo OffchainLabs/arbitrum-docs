@@ -170,7 +170,7 @@ Example:
 
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click this document's `Request an update` button if you have any feedback.
 
 :::
 
