@@ -57,7 +57,7 @@ mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/
 
 Test run:
 
-1. Check that the i18n settings in `website/docusaurus.config.js` have included your new language:
+1. Check that the `i18n` settings in `website/docusaurus.config.js` have included your new language:
 
 ```
 i18n: {
