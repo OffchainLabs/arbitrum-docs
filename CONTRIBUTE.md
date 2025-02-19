@@ -1,15 +1,16 @@
-Thank you for considering to contribute to the Arbitrum documentation! We're excited to have you on board.
+
+Thank you for considering contributing to the Arbitrum documentation! We're excited to have you on board.
 
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
-This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
+This document shows you how to craft and publish Arbitrum documentation. There is an expectation to have familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs).
 
 ### Add a new core document
 
 If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
 1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
+2.  Issue a `Draft` pull request into `master`. Pull requests into `master` will generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
 3.  Include answers to the following questions in your PR description:
     ```markdown
     1. Audience: Who am I writing for?
@@ -25,17 +26,17 @@ If a document isn't in a `Third-party content` sidebar node, it's a **core docum
 
 **Third-party docs** are documents that help readers of Arbitrum docs use other products, services, and protocols (like the ones listed in the [Arbitrum portal](https://portal.arbitrum.io/)) with Arbitrum products.
 
-See [Contribute third-party docs](/for-devs/third-party-docs/contribute) for detailed instructions.
+See [Contribute third-party docs](https://docs.arbitrum.io/for-devs/third-party-docs/contribute) for detailed instructions.
 
 ### Request an update
 
-If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
 
 ### Add a new translation page
 
 If you would like to participate in translating the Arbitrum docs, you can:
 
-1. Check whether `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
+1. Check if `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
 
 ```
 cd ./website
@@ -52,11 +53,11 @@ mkdir i18n/{Your_language}/docusaurus-plugin-content-docs/current && mkdir i18n/
 
 3. Translate one of more docs files located in `/arbitrum-docs`.
 
-4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in i18n should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
+4. Place the translated document into the folder `i18n/{Your_language}/docusaurus-plugin-content-docs/translated` according to its relative path in `arbitrum-docs`. For example, if you translated `/arbitrum-docs/how-arbitrum-works/arbos/introduction.md`, then its path in `i18n` should be `i18n/{Your_language}/docusaurus-plugin-content-docs/translated/how-arbitrum-works/arbos/introduction.md`.
 
 Test run:
 
-1. Check that the i18n settings in `website/docusaurus.config.js` have included your new language:
+1. Check that the `i18n` settings in `website/docusaurus.config.js` have included your new language:
 
 ```
 i18n: {
@@ -108,11 +109,10 @@ npm run serve
 
 Every document should be a specific _type_ of document. Each type of document has its own purpose:
 
-| Document type       | Purpose                                                                            |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             |
-| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
-
+| Document type | Purpose |
+| ------------- | ------- |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers |
+| Quickstart | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
 | How-to | Provide task-oriented procedural guidance |
 | Concept | Explain what things are and how they work |
 | FAQ | Address frequently asked questions |
@@ -123,41 +123,41 @@ This isn't an exhaustive list, but it includes most of the document types that w
 
 ### Style conventions
 
-The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
+The following style guidelines provide recommendations that help us deliver **a consistent content experience** across our docs:
 
 1.  **Casing**
     - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
 2.  **Linking**
-    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, try to link to the document's title verbatim.
+    - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, link to the document's title verbatim.
 3.  **Titling**
-    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
+    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This format helps with SEO and reader UX.
 4.  **Separate procedural from conceptual (most of the time)**
-    - Within procedural docs like how-tos and quickstarts, avoid including too much conceptual content. Provide only the conceptual information that the target reader _needs_ in order to complete the task at hand. Otherwise, organize conceptual information within conceptual docs, and link to them "just in case" from other docs.
+    - Avoid including too much conceptual content within procedural docs like how-tos and quickstarts. Provide only the conceptual information that the target reader _needs_ to complete the task. Otherwise, organize conceptual information within conceptual docs and link to them "just in case" from other docs.
 5.  **Voice**
     - Address the reader as "you".
     - Write like you'd speak to a really smart friend who's in a rush.
     - Opt for short, clear sentences that use translation-friendly, plain language.
-    - Use contractions wherever it feels natural - this can help convey a friendly and conversational tone.
+    - Use contractions wherever they feel natural. This approach can help convey a friendly and conversational tone.
 6.  **Formality**
-    - Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
+    - Don't worry too much about formality. The most valuable writing provides value to readers, and readers generally want to "flow" through guidance.
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
 7.  **Targeting**
-    - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) who has a _specific need_.
-    - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit in the beginning of your document.
+    - Don't try to write for everyone; write for a _specific reader persona_ (also referred to as "audience" in this document) with a _specific need_.
+    - Make assumptions about prior knowledge (or lack thereof) and make these assumptions explicit at the beginning of your document.
 8.  **Flow**
     - **Set expectations**: Begin documents by setting expectations. Who is the document for? What value will it provide to your target audience? What assumptions are you making about their prior knowledge? Are there any prerequisites?
-    - **Value up front**: Lead with what matters most to the reader persona you're targeting. Then, progressively build a bridge that carries them towards task completion as efficiently as possible.
+    - **Value upfront**: Lead with what matters most to your target reader persona. Then, progressively build a bridge that carries them toward task completion as efficiently as possible.
 9.  **Cross-linking**
-    - We want to maintain both **high discoverability** and **high relevance**. As a general rule of thumb, links to other docs should be "very likely to be useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
+    - We want to maintain both **high discoverability** and **high relevance**. Generally, links to other docs should be "very likely useful for most readers". Every link is a subtle call to action; we want to avoid CTA overload.
 10. **Things to avoid**
     - **Symbols where words will do**: Minimize usage of `&` and `/` - spell out words like "_and_" and "_or_".
-    - **Jargon**: Using precise technical terminology is ok, as long as your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
+    - **Jargon**:  precise technical terminology is ok if your target audience is likely to understand the terminology. When in doubt, opt for clear, unambiguous, _accessible_ language.
 
-Don't stress too much about checking off all of these boxes; we periodically review and edit our most heavily-trafficked docs, bringing them up to spec with the latest style guidelines.
+Don't stress too much about checking off all these boxes; we periodically review and edit our most heavily trafficked docs, bringing them up to spec with the latest style guidelines.
 
 Some important disclaimers:
 
-- **This isn't an exhaustive list**. These are just the min-bar guidelines that will be applied to all new content moving forward.
+- **This isn't an exhaustive list**. These are just the minimum guidelines applicable to all new content moving forward.
 - **Many of our docs don't yet follow this guidance**. Our small-but-mighty team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
 
 ### Banner conventions
@@ -170,7 +170,7 @@ Example:
 
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click this document's `Request an update` button if you have any feedback.
 
 :::
 
@@ -179,7 +179,7 @@ Usage:
 ```
 :::caution UNDER CONSTRUCTION
 
-The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click the `Request an update` at the top of this document if you have any feedback along the way.
+The following steps are under construction and will be updated with more detailed guidance soon. Stay tuned, and don't hesitate to click this document's `Request an update` button if you have any feedback.
 
 :::
 ```
@@ -208,15 +208,15 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 ### Frequently asked questions
 
-#### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) page?
+#### Can I point to my product from core docs? For example - if my product hosts a public RPC endpoint, can I add it to your [RPC endpoints and providers](https://docs.arbitrum.io/for-devs/dev-tools-and-resources/chain-info#third-party-rpc-providers) section?
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
 Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
 
-#### How long does it take for my third-party content contribution to be reviewed?
+#### How long does it take to review my third-party content contribution?
 
-Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
+Our small-but-mighty team continuously balances competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. We process them in the order received, generally within a week or two.
 
 #### Is there any way to expedite third-party content contribution reviews?
 
