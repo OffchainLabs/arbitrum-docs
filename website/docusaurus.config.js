@@ -117,7 +117,7 @@ const config = {
       {
         apiKey: 'phc_AscFTQ876SsPAVMgxMmLn0EIpxdcRRq0XmJWnpG1SHL',
         appUrl: 'https://app.posthog.com',
-        enableInDevelopment: false,
+        enableInDevelopment: true,
         persistence: 'memory',
         disable_session_recording: true,
       },
