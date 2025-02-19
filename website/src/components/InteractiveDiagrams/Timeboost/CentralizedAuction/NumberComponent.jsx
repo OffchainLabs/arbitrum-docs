@@ -25,7 +25,7 @@ export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
   const animationProps =
-    number === 1 || number === 5
+    number === 1 || number === 3 || number === 4 || number === 5
       ? { opacity: 1 }
       : useSpring({
           from: { opacity: 0.3 },
@@ -51,6 +51,14 @@ export const NumberComponent = ({ number }) => {
 
   return (
     <g id={`number${number}`}>
+      {number === 2 && (
+        <ButtonComponent
+          x={coords.circle.x - CIRCLE_RADIUS}
+          y={coords.circle.y - CIRCLE_RADIUS}
+          width={CIRCLE_RADIUS * 2}
+          height={CIRCLE_RADIUS * 2}
+        />
+      )}
       <animated.circle
         id={`circle${number}`}
         cx={coords.circle.x}
@@ -59,12 +67,11 @@ export const NumberComponent = ({ number }) => {
         className={circleClassName}
         style={animationProps}
       />
-      <animated.path
+      <path
         id={`path${number}`}
         d={pathData}
         className={pathClassName}
         transform={`translate(${offsetX}, ${offsetY})`}
-        style={animationProps}
       />
     </g>
   );
