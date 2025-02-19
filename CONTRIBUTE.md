@@ -10,7 +10,7 @@ This document shows you how to craft and publish Arbitrum documentation. There i
 If a document isn't in a `Third-party content` sidebar node, it's a **core document**. To contribute a new core doc:
 
 1.  Begin by creating a branch (internal) or fork (external) of the [Arbitrum docs repo](https://github.com/OffchainLabs/arbitrum-docs).
-2.  Issue a `Draft` pull request into `master`. Pull requests into `master` generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
+2.  Issue a `Draft` pull request into `master`. Pull requests into `master` will generate a preview of your changes via a PR-specific Docusaurus deployment; this preview will update as you push commits to your remote.
 3.  Include answers to the following questions in your PR description:
     ```markdown
     1. Audience: Who am I writing for?
