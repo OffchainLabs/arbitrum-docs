@@ -137,7 +137,7 @@ The following style guidelines provide recommendations that help us deliver **a 
     - Address the reader as "you".
     - Write like you'd speak to a really smart friend who's in a rush.
     - Opt for short, clear sentences that use translation-friendly, plain language.
-    - Use contractions wherever it feels natural - this can help convey a friendly and conversational tone.
+    - Use contractions wherever they feel natural. This approach can help convey a friendly and conversational tone.
 6.  **Formality**
     - Don't worry too much about formality. The most valuable writing is writing that provides value to readers, and readers generally want to "flow" through guidance.
     - Aim at "informal professionalism" that prioritizes **audience-tailored problem-solving** and **consistent style and structure**.
