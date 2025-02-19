@@ -2,6 +2,7 @@ import React from 'react';
 import OriginalLayout from '@theme-original/Layout';
 import Head from '@docusaurus/Head';
 import { useLocation } from '@docusaurus/router';
+import { PostHogProvider } from '@site/src/components/PostHogProvider';
 
 const pathNameToPreviewText = (pathName: string) => {
   const splitPaths = pathName.split('/').filter((x) => x);
@@ -27,7 +28,9 @@ export default function Layout(props) {
         <meta name="twitter:description" content="Arbitrum Docs" />
         <meta name="twitter:image" content="https://developer.arbitrum.io/img/devdocs.png" />
       </Head>
-      <OriginalLayout {...props} />
+      <PostHogProvider>
+        <OriginalLayout {...props} />
+      </PostHogProvider>
     </>
   );
 }
