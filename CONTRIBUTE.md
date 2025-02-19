@@ -216,7 +216,7 @@ Instead of opening a PR for this type of contribution, click the `Request an upd
 
 #### How long does it take to review my third-party content contribution?
 
-Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
+Our small-but-mighty team continuously balances competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. We process them in the order received, generally within a week or two.
 
 #### Is there any way to expedite third-party content contribution reviews?
 
