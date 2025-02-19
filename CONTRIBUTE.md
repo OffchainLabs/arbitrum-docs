@@ -214,7 +214,7 @@ These types of contributions are generally **not merged** unless they're submitt
 
 Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
 
-#### How long does it take for my third-party content contribution to be reviewed?
+#### How long does it take to review my third-party content contribution?
 
 Our small-but-mighty team is continuously balancing competing priorities, so we can't guarantee a specific turnaround time for third-party docs PRs. They're processed in the order in which they're received, generally within a week or two.
 
