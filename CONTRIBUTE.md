@@ -123,7 +123,7 @@ This isn't an exhaustive list, but it includes most of the document types that w
 
 ### Style conventions
 
-The following style guidelines provide a number of loose recommendations that help us deliver **a consistent content experience** across our docs:
+The following style guidelines provide recommendations that help us deliver **a consistent content experience** across our docs:
 
 1.  **Casing**
     - Sentence-case "content labels": document titles, sidebar titles, menu items, section headers, etc.
