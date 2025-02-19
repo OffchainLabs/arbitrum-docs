@@ -30,7 +30,7 @@ See [Contribute third-party docs](https://docs.arbitrum.io/for-devs/third-party-
 
 ### Request an update
 
-If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button located at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
+If you'd like to request an update or share a suggestion related to an **existing document** without submitting a pull request to implement the improvement yourself, click the `Request an update` button at the top of each published document. This button will lead you to a prefilled Github issue that you can use to elaborate on your request or suggestion.
 
 ### Add a new translation page
 
