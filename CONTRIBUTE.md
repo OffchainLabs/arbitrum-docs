@@ -36,7 +36,7 @@ If you'd like to request an update or share a suggestion related to an **existin
 
 If you would like to participate in translating the Arbitrum docs, you can:
 
-1. Check whether `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
+1. Check if `/website/i18n` has a corresponding language (currently there are `ja` and `zh`). If not, you can use the following command to add it (we take adding French as an example):
 
 ```
 cd ./website
