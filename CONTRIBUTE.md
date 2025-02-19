@@ -157,7 +157,7 @@ Don't stress too much about checking off all these boxes; we periodically review
 
 Some important disclaimers:
 
-- **This isn't an exhaustive list**. These are just the min-bar guidelines that will be applied to all new content moving forward.
+- **This isn't an exhaustive list**. These are just the minimum guidelines applicable to all new content moving forward.
 - **Many of our docs don't yet follow this guidance**. Our small-but-mighty team is working on it! If you notice an obvious content bug, feel free to submit an [issue](https://github.com/OffchainLabs/arbitrum-docs/issues) or [PR](https://github.com/OffchainLabs/arbitrum-docs/pulls).
 
 ### Banner conventions
