@@ -457,7 +457,12 @@
     },
     {
       "source": "/stylus/concepts/stylus-cache-manager",
-      "destination": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
       "permanent": false
     },
     {
@@ -878,6 +883,16 @@
     {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
       "destination": "/node-running/how-tos/running-an-orbit-node",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui/?)",
+      "destination": "/launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui",
       "permanent": false
     },
     {
