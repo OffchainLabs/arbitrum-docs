@@ -9,7 +9,7 @@
     "update_variable_refs": "ts-node src/scripts/update-variable-references.ts",
     "prepare": "husky",
     "postinstall": "git config core.hooksPath .husky",
-    "start": "yarn clear && yarn install_sdk_dependencies && docusaurus start",
+    "start": "yarn clear && yarn format && yarn install_sdk_dependencies && docusaurus start",
     "build_translation": "yarn ts-node ./src/scripts/move-untranslated-files.ts",
     "build": "yarn install_sdk_dependencies && docusaurus build",
     "swizzle": "docusaurus swizzle",
