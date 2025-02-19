@@ -130,7 +130,7 @@ The following style guidelines provide recommendations that help us deliver **a 
 2.  **Linking**
     - Avoid anchoring links to words like "here" or "this". Descriptive anchor text can help set expectations for readers who may hesitate to click on ambiguous links. When linking to docs, link to the document's title verbatim.
 3.  **Titling**
-    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This helps with SEO and reader UX.
+    - Titles should balance brevity with precision - _Node running overview_ is preferred to _Overview_. This format helps with SEO and reader UX.
 4.  **Separate procedural from conceptual (most of the time)**
     - Avoid including too much conceptual content within procedural docs like how-tos and quickstarts. Provide only the conceptual information that the target reader _needs_ to complete the task. Otherwise, organize conceptual information within conceptual docs and link to them "just in case" from other docs.
 5.  **Voice**
