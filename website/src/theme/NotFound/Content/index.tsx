@@ -44,7 +44,7 @@ export default function NotFoundContent({className}: Props): JSX.Element {
             <Translate
               id="theme.NotFound.p2"
               description="The 2nd paragraph of the 404 page">
-              CONTENT
+Use the search feature in the upper right corner to find what you need, or join our [Discord](https://discord.gg/ZpZuw7p) community.
             </Translate>
           </p>
         </div>
