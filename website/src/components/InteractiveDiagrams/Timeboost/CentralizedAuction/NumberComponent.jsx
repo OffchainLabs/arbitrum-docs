@@ -9,7 +9,16 @@ import { NumberComponentProps } from './types';
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
-  const animationProps = { opacity: 1 };
+  const animationProps = number === 1 || number === 5 
+    ? { opacity: 1 }
+    : useSpring({
+        from: { opacity: 0.6 },
+        to: { opacity: 1 },
+        config: { duration: 2000 },
+        loop: { reverse: true },
+        reset: true,
+        immediate: false,
+      });
 
   const coords = coordinates[number];
   const pathData = numberPaths[number];
