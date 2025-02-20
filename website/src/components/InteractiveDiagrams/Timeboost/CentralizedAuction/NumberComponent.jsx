@@ -17,7 +17,7 @@ export const NumberComponent = ({ number }) => {
           { opacity: 1 },
           { opacity: 0 }
         ],
-        config: { duration: 1500 },
+        config: { duration: 500 },
         loop: true,
         reset: true,
         immediate: false,
