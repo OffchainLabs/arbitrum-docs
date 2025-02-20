@@ -4,7 +4,7 @@ import { useColorMode } from '@docusaurus/theme-common';
 import styles from './styles.module.css';
 import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
-import type { NumberComponentProps } from './types';
+import { NumberComponentProps } from './types';
 
 export const NumberComponent = ({ number }: NumberComponentProps) => {
   const { isDarkTheme } = useColorMode();
