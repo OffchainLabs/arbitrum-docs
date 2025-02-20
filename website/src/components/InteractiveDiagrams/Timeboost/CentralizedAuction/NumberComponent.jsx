@@ -12,10 +12,13 @@ export const NumberComponent = ({ number }) => {
   const animationProps = number === 1 || number === 5 
     ? { opacity: 1 }
     : useSpring({
-        from: { opacity: 0.6 },
-        to: { opacity: 1 },
-        config: { duration: 2000 },
-        loop: { reverse: true },
+        from: { opacity: 0 },
+        to: [
+          { opacity: 1 },
+          { opacity: 0 }
+        ],
+        config: { duration: 1500 },
+        loop: true,
         reset: true,
         immediate: false,
       });
