@@ -35,7 +35,7 @@ export const NumberComponent = ({ number }) => {
 
   return (
     <g id={`number${number}`}>
-      {number === 2 && (
+      {(number === 2 || number === 3 || number === 4) && (
         <ButtonComponent
           x={coords.circle.x - CIRCLE_RADIUS}
           y={coords.circle.y - CIRCLE_RADIUS}
