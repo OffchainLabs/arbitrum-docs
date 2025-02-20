@@ -65,7 +65,7 @@ export const NumberComponent = ({ number }) => {
         cy={coords.circle.y}
         r={CIRCLE_RADIUS}
         className={circleClassName}
-        style={animationProps}
+        style={{...animationProps, fill: '#ff7f2a'}}
       />
       <path
         id={`path${number}`}
