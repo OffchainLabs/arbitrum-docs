@@ -6,7 +6,7 @@ import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
 
-export const NumberComponent = ({ number }: NumberComponentProps) => {
+export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
   const animationProps = { opacity: 1 };
