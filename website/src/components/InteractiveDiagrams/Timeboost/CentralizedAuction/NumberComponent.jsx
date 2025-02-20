@@ -25,7 +25,7 @@ export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
   const animationProps =
-    number === 1 || number === 3 || number === 4 || number === 5
+    number === 1 || number === 5
       ? { opacity: 1 }
       : useSpring({
           from: { opacity: 0.3 },
