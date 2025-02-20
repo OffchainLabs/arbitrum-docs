@@ -42,7 +42,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 :::
 
-- Latest Docker Image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@</code>
+- Latest Docker Image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@</code>
 - Database snapshot (required for Arbitrum One, optional for other chains)
   - Use the parameter `--init.latest <snapshot type>`, accepted values: "archive" | "pruned" | "genesis".
   - When running more than one node, it's easier to manually download the different parts of the snapshot, join them into a single archive, and host it locally for your nodes. You can then use `--init.url="file:///path/to/snapshot/in/container/snapshot-file.tar"` to use it. (For how to manually download the snapshot parts, please see [Downloading the snapshot manually](/run-arbitrum-node/nitro/03-nitro-database-snapshots.mdx#downloading-the-snapshot-manually))
@@ -61,9 +61,10 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - Note: this parameter was called `--l1.url` in versions prior to `v2.1.0`
   - Note: 8545 is usually the default port for the execution layer. For the Beacon endpoint port, you should connect to the correct port set on your parent chain's consensus client.
 - L2 chain ID or name
-  - Use the parameter `--chain.id=<L2 chain ID>` to set the L2 chain from its chain id. See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and their respective L2 chain IDs.
-  - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the L2 chain from its name (options are: `arb1`, `nova` and `sepolia-rollup`)
+  - Use the parameter `--chain.id=<L2 chain ID>` to set the child chain (L2) chain from its chain id. See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) for a list of Arbitrum chains and their respective child chain chain IDs.
+  - Alternatively, you can use the parameter `--chain.name=<L2 chain name>` to set the child chain from its name (options are: `arb1`, `nova` and `sepolia-rollup`)
   - Note: this parameter was called --l2.chain-id and only accepted chain IDs in versions before `v2.1.0`
+- For Arbitrum One or Arbitrum Nova chains (or any chains that have BoLD enabled), we recommend setting `--node.bold.enable=true` to ensure your node monitors for L1 assertions and alerts properly when an invalid assertion is observed on-chain. Setting this flag is not required as your node will continue to operate properly, validate the Arbitrum One/Nova chain, and serve RPC requests as usual, regardless of this flag.
 
 ### Important ports
 
@@ -83,7 +84,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the docker container won't be able to write to it
 
   ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.4.0-d896e9c@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
   ```
 
   - Note that if you are running an L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
@@ -104,7 +105,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 ### Watchtower mode
 
-- By default, the full node will run in Watchtower mode. This means that the node watches the on-chain assertions, and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`.
+- By default, the full node will run in Watchtower mode. This means that the node watches the on-chain assertions, and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova, the `--node.bold.enable=true` flag must be set to ensure your node can monitor for on-chain assertions properly.
 - Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode using the parameter `--node.staker.enable=false`.
 
 ### Pruning

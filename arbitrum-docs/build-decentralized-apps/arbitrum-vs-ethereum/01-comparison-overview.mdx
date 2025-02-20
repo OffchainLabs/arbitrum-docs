@@ -14,7 +14,7 @@ This section describes the differences, perks, and gotchas that devs are advised
 
 ## Block numbers and time
 
-Time in L2s is tricky. The timing assumptions one is used to making about Ethereum blocks don't exactly carry over into the timing of Arbitrum blocks. See [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) for details about how block numbers and time are handled in Arbitrum.
+Time in child chains is tricky. The timing assumptions one is used to making about Ethereum blocks don't exactly carry over into the timing of Arbitrum blocks. See [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) for details about how block numbers and time are handled in Arbitrum.
 
 ## RPC methods
 
@@ -26,17 +26,17 @@ You can deploy Solidity contracts onto Arbitrum just like you do on Ethereum. Th
 
 ## Fees
 
-The fees for executing an Arbitrum transaction work like gas fees on Ethereum. However, Arbitrum transactions must also pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, an L2, is posted to Ethereum, an L1). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx) and L1 pricing.
+The fees for executing an Arbitrum transaction work like gas fees on Ethereum. However, Arbitrum transactions must also pay a fee component to cover the cost of posting their calldata to the parent chain (for example, calldata on Arbitrum One, a child chain, is posted to Ethereum, a parent chain). Find more information about the two components of gas fees in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx) and parent chain pricing.
 
 ## Cross-chain messaging
 
-Arbitrum chains support arbitrary message passing from a parent chain (for example, a Layer 1 (L1) like Ethereum) to a child chain (for example, a Layer 2 (L2) like Arbitrum One or Arbitrum Nova). These are commonly known as "L1 to L2 messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [L1 to L2 messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+Arbitrum chains support arbitrary message passing from a parent chain (for example, a parent chain like Ethereum) to a child chain (for example, a child chain like Arbitrum One or Arbitrum Nova). These are commonly known as "parent chain to child chain messages". Developers using this functionality should familiarize themselves with how they work. Find more information about it in [Parent chain to child chain messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
-Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [L2 to L1 messaging and the outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx).
+Similarly, Arbitrum chains can also send messages to the parent chain. Find more information about them in [Child chain to parent chain messaging and the outbox](/how-arbitrum-works/11-l2-to-l1-messaging.mdx).
 
 ## Precompiles
 
-Besides supporting all precompiles available in Ethereum, Arbitrum provides L2-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.mdx).
+Besides supporting all precompiles available in Ethereum, Arbitrum provides child chain-specific precompiles with methods smart contracts can call the same way they can solidity functions. You can find a full reference of them in [Precompiles](/build-decentralized-apps/precompiles/01-overview.mdx).
 
 ## NodeInterface
 
