@@ -1,6 +1,7 @@
 import * as React from 'react';
+import type { ButtonComponentProps } from './types';
 
-const ButtonComponent = ({ x, y, width, height }) => {
+const ButtonComponent: React.FC<ButtonComponentProps> = ({ x, y, width, height }) => {
   return (
     <svg 
       xmlns="http://www.w3.org/2000/svg" 
