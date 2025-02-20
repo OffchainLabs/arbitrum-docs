@@ -24,17 +24,7 @@ const coordinates = {
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
-  const animationProps =
-    number === 1 || number === 5
-      ? { opacity: 1 }
-      : useSpring({
-          from: { opacity: 0.3 },
-          to: { opacity: 1 },
-          config: { duration: 1000 },
-          loop: { reverse: true },
-          reset: true,
-          immediate: false,
-        });
+  const animationProps = { opacity: 1 };
 
   const coords = coordinates[number];
   const pathData = numberPaths[number];
