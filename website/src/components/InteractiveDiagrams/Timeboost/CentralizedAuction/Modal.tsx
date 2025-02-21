@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { useTransition, animated } from '@react-spring/web';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
-import { modalContent } from './ModalContent';
+import step1Content from './modal-centralized-auction-step-1.mdx';
+import step2Content from './modal-centralized-auction-step-2.mdx';
+import step3Content from './modal-centralized-auction-step-3.mdx';
+import step4Content from './modal-centralized-auction-step-4.mdx';
+import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import { MDXProvider } from '@mdx-js/react';
@@ -52,7 +56,14 @@ const components = {
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkTheme } = useColorMode();
-  const StepContent = modalContent;
+  const stepContent = {
+    1: step1Content,
+    2: step2Content,
+    3: step3Content,
+    4: step4Content,
+    5: step5Content,
+  };
+  const StepContent = stepContent[number];
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
