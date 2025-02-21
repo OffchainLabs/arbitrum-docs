@@ -5,6 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import { MDXProvider } from '@mdx-js/react';
+import type { MDXComponents } from '@mdx-js/react/lib';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
