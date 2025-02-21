@@ -1,0 +1,74 @@
+# Step 1: Deposit funds into the auction contract
+
+Users must first deposit ERC-20 tokens into the auction contract to participate in bidding.
+
+1. Call `submitDeposit()` on the IExpressLaneAuction contract
+2. The contract emits a DepositSubmitted event with the bidder's address and amount
+3. Funds are now available for bidding in future auction rounds
+
+```solidity
+function submitDeposit(uint256 amount) external;
+```
+
+# Step 2: `timeboost_submitBid()`
+
+Users submit bids through the auctioneer's RPC API for the upcoming round.
+
+1. Create a bid with chain ID, round number, and bid amount
+2. Sign the bid data with your private key
+3. Submit the bid via timeboost_submitBid RPC method
+
+```javascript
+{
+  chain_id: "uint64",
+  address: "0x...",
+  round: "uint64",
+  amount: "uint256",
+  signature: "0x..."
+}
+```
+
+# Step 3: Auctioneer Response
+
+The auctioneer validates the bid and responds with success or failure.
+
+1. Auctioneer verifies chain ID, round number, and signature
+2. Checks if sender is a depositor with sufficient balance
+3. Returns status OK or an error code if validation fails
+
+```javascript
+{
+  status: "OK" | "ERROR",
+  error?: "MALFORMED_DATA" | "NOT_DEPOSITOR" | "WRONG_CHAIN_ID" | "WRONG_SIGNATURE" | "BAD_ROUND_NUMBER" | "INSUFFICIENT_BALANCE"
+}
+```
+
+# Step 4: `auctioneer_submitBidAuctionTransaction`
+
+The auctioneer submits the winning bids to resolve the auction.
+
+1. Auctioneer collects and sorts all valid bids for the round
+2. Identifies the two highest bids
+3. Calls resolveAuction() with the winning bids
+
+```solidity
+function resolveAuction(Bid calldata bid1, Bid calldata bid2) external;
+```
+
+# Step 5: Sequencer prioritizes the auction contract calls
+
+The sequencer ensures timely processing of auction-related transactions.
+
+1. Auction resolution transactions get priority processing
+2. Winner is declared as express lane controller for the round
+3. Second-highest bid amount is deducted from winner's balance
+4. AuctionResolved event is emitted with the results
+
+```solidity
+event AuctionResolved(
+    uint256 winningBidAmount,
+    uint256 loserBidAmount,
+    address indexed winningBidder,
+    uint256 indexed winnerRound
+);
+```
