@@ -10,7 +10,10 @@ content_type: faq
 
 ### What's an `ELI5` on Timeboost?
 
-Timeboost is a new transaction ordering policy for Arbitrum chains where any participant can bid for the right to have their transactions sequenced slightly faster than other transactions.
+<a data-quicklook-from="timeboost">Timeboost</a> is a new <a data-quicklook-from="transaction">
+  transaction
+</a> ordering policy for <a data-quicklook-from="arbitrum">Arbitrum</a> chains where any participant
+can bid for the right to have their transactions sequenced slightly faster than other transactions.
 
 Notably, user transactions **will remain private until** they are sequenced, meaning no one can front-run or sandwich other users. Timeboost bid proceeds are collected by the Arbitrum DAO in either `ETH` or `ARB`, depending on DAO approval.
 
@@ -18,7 +21,7 @@ Notably, user transactions **will remain private until** they are sequenced, mea
 
 The only difference users should experience is a slight delay when submitting their transactions. The default configuration for this delay is 200ms, and the DAO can change it.
 
-This delay gives the express lane controller an advantage, as they can include transactions slightly quicker than others. Importantly, user transactions will remain private until they are sequenced, meaning that the express lane controller cannot frontrun or sandwich other users.
+This delay gives the <a data-quicklook-from="express-lane">express lane</a> controller an advantage, as they can include transactions slightly quicker than others. Importantly, user transactions will remain private until they are sequenced, meaning that the <a data-quicklook-from="express-lane-controller">Express Lane Controller</a> cannot frontrun or sandwich other users.
 
 ### Where does the Timeboost income stream come from?
 
@@ -31,11 +34,11 @@ This AIP proposes two main options the community can vote on if it adopts Timebo
 - Option 1: Collect bids in `ETH` and send the proceeds to the DAO treasury.
 - Option 2: Collect bids in `ARB` and burn the proceeds.
 
-Depending on which option the Arbitrum DAO chooses, the auction contract can transfer the proceeds to a designated account or burn them. As of Sept 19, 2024, the Arbitrum DAO has signaled a preference for Option 1 (collecting bids in `ETH`) in the temperature check vote on Snapshot [here](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0xffe9bb38228fdaf3d121140856fd2d51c2ca7f8e0d1021c07e791cebb541129a).
+Depending on which option the Arbitrum DAO chooses, the <a data-quicklook-from="auction-contract">auction contract</a> can transfer the proceeds to a designated account or burn them. As of Sept 19, 2024, the Arbitrum DAO has signaled a preference for Option 1 (collecting bids in `ETH`) in the temperature check vote on Snapshot [here](https://snapshot.org/#/arbitrumfoundation.eth/proposal/0xffe9bb38228fdaf3d121140856fd2d51c2ca7f8e0d1021c07e791cebb541129a).
 
 ### How can I participate in Timeboost directly?
 
-Interested parties can participate in the Timeboost auctions by depositing funds in the auction contract and sending bids to the autonomous auctioneer. We will have docs with more information.
+Interested parties can participate in the Timeboost auctions by depositing funds in the auction contract and sending bids to the <a data-quicklook-from="autonomous-auctioneer">autonomous auctioneer</a>. We will have docs with more information.
 
 The Timeboost auction is open to everyone; however, since auctions require a non-zero bid to win, we believe that only parties who can return from capturing arbitrage opportunities, backrunning opportunities, or reselling the express lane rights will benefit from participating.
 
@@ -43,7 +46,7 @@ The Timeboost protocol works behind the scenes with minimal impact on regular us
 
 ### How much estimated revenue will this drive to the DAO?
 
-Estimating how much revenue Timeboost will generate is complex and is based on many factors. There are no ways to confidently estimate the amount of arbitrage or backrunning opportunities that currently exist or will exist on Arbitrum chains in the future. The expectation is that the revenue will be significant on Arbitrum One due to the high amount of DeFi activity.
+Estimating how much revenue Timeboost will generate is complex and is based on many factors. There are no ways to confidently estimate the amount of arbitrage or backrunning opportunities that currently exist or will exist on Arbitrum chains in the future. The expectation is that the revenue will be significant on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> due to the high amount of DeFi activity.
 
 ### What is the goal of Timeboost?
 
@@ -63,13 +66,13 @@ Orbit chains can adopt Timeboost, and Orbit chain owners can also choose to use 
 
 ### How does Timeboost affect Orbit chains that settle to Arbitrum One or Arbitrum Nova?
 
-will introduce a (proposed) 200 ms delay on non-express lane transactions and grant a time advantage/privilege of immediate sequencing of transactions sent by the auction winner. This delay is a new transaction ordering policy at the sequencer level, and, as with many other Nitro tech features, this will be available for Orbit chains to adopt, including those that settle on Arbitrum One or Arbitrum Nova.
+will introduce a (proposed) 200 ms delay on non-express lane transactions and grant a time advantage/privilege of immediate sequencing of transactions sent by the auction winner. This delay is a new <a data-quicklook-from="transaction-ordering-policy">Transaction Ordering Policy</a> at the <a data-quicklook-from="sequencer">Sequencer</a> level, and, as with many other Nitro tech features, this will be available for Orbit chains to adopt, including those that settle on Arbitrum One or <a data-quicklook-from="arbitrum-nova">Arbitrum Nova</a>.
 
-However, there's probably no meaningful time advantage for the L3's batched transactions data or assertion here. There could be a world where an Orbit chain is incredibly time-sensitive and participates in the Timeboost auctions because they want a faster confirmation that their data and/or assertion gets sequenced on the parent chain. Still, we're talking about a 200 ms difference between the non-express and express lanes.
+However, there's probably no meaningful time advantage for the L3's batched transactions data or <a data-quicklook-from="assertion">assertion</a> here. There could be a world where an Orbit chain is incredibly time-sensitive and participates in the Timeboost auctions because they want a faster <a data-quicklook-from="confirmation">confirmation</a> that their data and/or assertion gets sequenced on the <a data-quicklook-from="parent-chain">parent chain</a>. Still, we're talking about a 200 ms difference between the non-express and express lanes.
 
 ### Does this vote to pass automatically mean that all orbit chains will have Timeboost implemented?
 
-No, Timeboost implementations are at the sequencer level, so if the DAO passes this vote, Timeboost will roll out to the sequencer for Arbitrum One and Nova. This approach is the same strategy for ArbOS upgrades since Orbit chains can choose to adopt Timeboost if they want to - of the voting outcome for adoption on Arbitrum One and Nova.
+No, Timeboost implementations are at the sequencer level, so if the DAO passes this vote, Timeboost will roll out to the sequencer for Arbitrum One and Nova. This approach is the same strategy for <a data-quicklook-from="arbos">ArbOS</a> upgrades since Orbit chains can choose to adopt Timeboost if they want to - of the voting outcome for adoption on Arbitrum One and Nova.
 
 Technically, the vote passing will mean Orbit L3s settling to Arbitrum One, and Nova will have their batched transaction data and assertions in the parent chain's non-express lane or express lane. Still, Orbit teams can decide whether they want their Orbit chain's sequencer to implement Timeboost. Your chain, your rules.
 
@@ -93,7 +96,7 @@ This AIP is proposing that the current sequencer operator has the autonomy to ma
 
 On having a clearer user interface:
 
-- Users can subscribe to the sequencer feed to view, in real-time, the final order of transactions. This sequencer feed is usable today and in a world where the DAO adopts Timeboost (should the vote pass). Arbitrum chains currently operate with a single sequencer with no public mempool. Today, the logic used to sort transactions is "first-come-first-serve" or FCFS.
+- Users can subscribe to the <a data-quicklook-from="sequencer-feed">sequencer feed</a> to view, in real-time, the final order of transactions. This sequencer feed is usable today and in a world where the DAO adopts Timeboost (should the vote pass). Arbitrum chains currently operate with a single sequencer with no public mempool. Today, the logic used to sort transactions is "first-come-first-serve" or FCFS.
 - With Timeboost, the logic changes so that transactions signed by the express lane controller get sequenced immediately (similar to FCFS), while other types of transactions get sequenced with a 200ms (proposed) delay. We believe using the sequencer feed is a sufficient solution for helping users understand the logic behind sorting their transactions. Documentation and diagrams will be forthcoming to help illustrate this workflow.
 - On having an optional setting to adjust the sensitivity to the time factor: In this proposal, the ArbitrumDAO can, via governance, change the amount of time that non-express lane transactions get delayed. This parameter, defined as the NonExpressDelayMsec, is denominated in milliseconds and is proposed to be 200ms to start.
 
@@ -105,7 +108,7 @@ Timeboost will be rolled out on private testing-focused devnets and public testn
 
 Timeboost is implemented via changes to the sequencer to add an express lane. An autonomous auctioneer service gets deployed to facilitate the auction (sealed-bid, second-price) for temporary rights to control said express lane.
 
-Other variations of Timeboost are possible but have not yet been fully designed or developed. These are setups where the sequencer is decentralized but uses a trusted single autonomous auctioneer service or another setup where the sequencer is decentralized and the autonomous auctioneer is trustless (potentially through decentralization or by other means).
+Other variations of Timeboost are possible but have not yet been fully designed or developed. These are setups where the sequencer is decentralized but uses a trusted single autonomous auctioneer service or another setup where the sequencer is decentralized and the autonomous auctioneer is <a data-quicklook-from="trustless">trustless</a> (potentially through decentralization or by other means).
 
 The current proposal before the ArbitrumDAO is to implement Timeboost with a centralized sequencer and a single, trusted autonomous auctioneer, which we can define as "Centralized Timeboost." This decision to propose Centralized Timeboost now, without those other variations being ready for production, was made to deliver a form of Timeboost earlier to quickly gather and iterate on feedback received from the market.
 
@@ -125,9 +128,9 @@ The second point: in this proposal, the ArbitrumDAO can, via governance, change 
 
 ### How will Timeboost affect block time finality on Arbitrum chains? Does this mean that an Arbitrum chain's new block time will be 450ms?
 
-Recall that Arbitrum chains have two types of finality: (1) a trusted or soft confirmation and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user's transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately 250ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their child chain transaction gets finalized on the parent chain as part of a batch of transactions posted to Ethereum, which can take two epochs or roughly 13 minutes in today's Proof-of-Stake Ethereum. Read more about these two types of finality [here](https://docs.arbitrum.io/how-arbitrum-works/tx-lifecycle).
+Recall that Arbitrum chains have two types of finality: (1) a trusted or <a data-quicklook-from="soft-confirmation">soft confirmation</a> and (2) Ethereum-equivalent finality. A trusted or soft confirmation for a user's transaction relies on the user trusting the sequencer and the near-instant transaction receipt issued by the sequencer, which takes approximately 250ms. For (2), the user can use the Ethereum-equivalent finality heuristic once their <a data-quicklook-from="child-chain">child chain</a> transaction gets finalized on the parent chain as part of a <a data-quicklook-from="batch">batch</a> of transactions posted to Ethereum, which can take two epochs or roughly 13 minutes in today's Proof-of-Stake Ethereum. Read more about these two types of finality [here](https://docs.arbitrum.io/how-arbitrum-works/tx-lifecycle).
 
-If Timeboost gets implemented on an Arbitrum chain, both of these finality timelines for non-express lane transactions (250ms for soft finality and ~13minutes for Ethereum-equivalent finality) will get extended by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively. There will be no impact on transaction finality for express lane transactions, meaning that finality will remain at 250ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
+If Timeboost gets implemented on an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>, both of these finality timelines for non-express lane transactions (250ms for soft finality and ~13minutes for Ethereum-equivalent finality) will get extended by the default 200ms delay proposed in Timeboost, which will be roughly ~450ms and ~13 minutes & 0.2 seconds for soft finality and Ethereum-equivalent finality, respectively. There will be no impact on transaction finality for express lane transactions, meaning that finality will remain at 250ms and ~13 minutes for soft finality and Etheruem-equivalent finality, respectively.
 
 ### When is it going live?
 
@@ -163,7 +166,7 @@ As stated in the AIP, the mentioned rights will "only be exercised in circumstan
 
 As with any MEV strategy or implementation, there are trade-offs and no such thing as a "completely perfect" solution. The trade-off space includes various stakeholders and aspects, such as Arbitrum DAO revenue from bid proceeds, robust security and stability of the chain, preserving an excellent user experience, and downstream effects on the DeFi ecosystem.
 
-It is important that the Arbitrum DAO works collaboratively together with the ecosystem to help monitor and ultimately fine-tune Timeboost over time to strike the right balance of trade-offs alongside Offchain Labs. We further hope that members of the community, including the Arbitrum Research & Development Committee (ARDC) and other teams, will conduct thorough research and analyses on Timeboost's performance over time to support and review proposals to change the Timeboost parameters (if at all).
+It is important that the Arbitrum DAO works collaboratively together with the ecosystem to help monitor and ultimately fine-tune Timeboost over time to strike the right balance of trade-offs alongside <a data-quicklook-from="offchain-labs">Offchain Labs</a>. We further hope that members of the community, including the Arbitrum Research & Development Committee (ARDC) and other teams, will conduct thorough research and analyses on Timeboost's performance over time to support and review proposals to change the Timeboost parameters (if at all).
 
 It is important to emphasize again that:
 
