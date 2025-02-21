@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
-import modalContent from './modalContent.mdx';
+import { MDXProvider } from '@mdx-js/react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
@@ -14,30 +14,43 @@ import { useColorMode } from '@docusaurus/theme-common';
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
-type StepNumber = '1' | '2' | '3' | '4' | '5';
+const stepTitles = {
+  1: "Step 1: Deposit funds into the auction contract",
+  2: "Step 2: timeboost_submitBid()",
+  3: "Step 3: Auctioneer Response",
+  4: "Step 4: auctioneer_submitBidAuctionTransaction",
+  5: "Step 5: Sequencer prioritizes the auction contract calls"
+};
 
-interface CodeBlock {
-  language: string;
-  code: string;
-}
-
-interface ModalContent {
-  title: string;
-  content: {
-    description: string;
-    steps: string[];
-    codeBlocks?: CodeBlock[];
-    codeLink?: {
-      text: string;
-      url: string;
-    };
-  };
-}
+const components = {
+  h1: ({ children }) => <Title>{children}</Title>,
+  p: ({ children }) => <p>{children}</p>,
+  ol: ({ children }) => <ul>{children}</ul>,
+  li: ({ children }) => <li>{children}</li>,
+  pre: ({ children }) => children,
+  code: ({ children, className }) => {
+    const language = className?.replace('language-', '') || 'text';
+    return (
+      <SyntaxHighlighter
+        language={language}
+        style={useColorMode().isDarkTheme ? oneDark : oneLight}
+        customStyle={{
+          margin: 0,
+          padding: '16px',
+          borderRadius: '4px',
+          backgroundColor: useColorMode().isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
+        }}
+      >
+        {children}
+      </SyntaxHighlighter>
+    );
+  }
+};
 
 export function Modal({ number }: { number: number }) {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkTheme } = useColorMode();
-  const content: ModalContent = modalContent[number.toString() as StepNumber];
+  const StepContent = modalContent;
 
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
@@ -117,32 +130,11 @@ export function Modal({ number }: { number: number }) {
                             <CloseIcon />
                           </CloseButton>
                         </DialogHeader>
-                        <Title $isDark={isDarkTheme}>{content.title}</Title>
+                        <Title $isDark={isDarkTheme}>{stepTitles[number]}</Title>
                         <DialogBody $isDark={isDarkTheme}>
-                          <div>
-                            <p>{content.content.description}</p>
-                            <ul>
-                              {content.content.steps.map((step, index) => (
-                                <li key={index}>{step}</li>
-                              ))}
-                            </ul>
-                          </div>
-                          {content.content.codeBlocks?.map(renderCodeBlock)}
-                          {content.content.codeLink && (
-                            <a
-                              href={content.content.codeLink.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                color: isDarkTheme ? '#9dcced' : '#0066cc',
-                                textDecoration: 'none',
-                                display: 'inline-block',
-                                marginTop: '8px',
-                              }}
-                            >
-                              {content.content.codeLink.text} ↗
-                            </a>
-                          )}
+                          <MDXProvider components={components}>
+                            <StepContent />
+                          </MDXProvider>
                         </DialogBody>
                       </Content>
                     </div>
