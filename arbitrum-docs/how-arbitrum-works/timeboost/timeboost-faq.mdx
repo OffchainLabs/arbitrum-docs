@@ -122,7 +122,7 @@ The first point about a clearer user interface is that users can subscribe to th
 
 Arbitrum chains currently operate with a single sequencer with no public mempool. Today, the logic for sorting transactions is "first-come-first-serve," or FCFS. With Timeboost, the logic changes so that transactions signed by the express lane controller are sequenced immediately (similar to FCFS). In contrast, other types of transactions get sequenced with a 200ms (proposed) delay.
 
-We believe using the sequencer feed is a sufficient solution for helping users understand the logic behind how their transactions get sorted. Documentation and diagrams will be forthcoming to help illustrate this workflow.
+We believe using the sequencer feed is a sufficient solution for helping users understand the logic behind how their transactions get sorted. Documentation and diagrams will be provided to help illustrate this workflow.
 
 The second point: in this proposal, the ArbitrumDAO can, via governance, change the amount of delay that non-express lane transactions receive. This parameter, defined as the NonExpressDelayMsec, is denominated in milliseconds and is proposed to be 200ms to start.
 
