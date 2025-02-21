@@ -22,7 +22,7 @@ SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 
 const components = {
-  h1: ({ children }) => <Title>{children}</Title>,
+  h1: ({ children }) => <Title $isDark={useColorMode().isDarkTheme}>{children}</Title>,
   p: ({ children }) => <p>{children}</p>,
   ol: ({ children }) => <ul>{children}</ul>,
   li: ({ children }) => <li>{children}</li>,
@@ -263,7 +263,7 @@ const Title = styled(Dialog.Title)<{ $isDark: boolean }>`
   margin-bottom: 16px;
   padding-right: 24px;
   flex-shrink: 0;
-  color: ${(props) => (props.$isDark ? '#fff' : '#000')};
+  color: ${(props) => (props.$isDark ? 'rgba(255, 255, 255, 0.87)' : '#000')};
 
   @media (max-width: 768px) {
     font-size: 18px;
