@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
-import modalContent from './modalContent.json';
+import modalContent from './modalContent.mdx';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
