@@ -20,13 +20,6 @@ import { useColorMode } from '@docusaurus/theme-common';
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
-const stepTitles = {
-  1: 'Step 1: Deposit funds into the auction contract',
-  2: 'Step 2: timeboost_submitBid()',
-  3: 'Step 3: Auctioneer Response',
-  4: 'Step 4: auctioneer_submitBidAuctionTransaction',
-  5: 'Step 5: Sequencer prioritizes the auction contract calls',
-};
 
 const components = {
   h1: ({ children }) => <Title>{children}</Title>,
@@ -143,12 +136,9 @@ export function Modal({ number }: { number: number }) {
                             <CloseIcon />
                           </CloseButton>
                         </DialogHeader>
-                        <Title $isDark={isDarkTheme}>{stepTitles[number]}</Title>
-                        <DialogBody $isDark={isDarkTheme}>
-                          <MDXProvider components={components}>
-                            <StepContent />
-                          </MDXProvider>
-                        </DialogBody>
+                        <MDXProvider components={components}>
+                          <StepContent />
+                        </MDXProvider>
                       </Content>
                     </div>
                   ),
