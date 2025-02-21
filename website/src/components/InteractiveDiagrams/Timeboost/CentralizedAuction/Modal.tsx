@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTransition, animated } from '@react-spring/web';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
+import { modalContent } from './ModalContent';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import { MDXProvider } from '@mdx-js/react';
