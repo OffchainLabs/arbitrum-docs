@@ -15,11 +15,11 @@ SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 const stepTitles = {
-  1: "Step 1: Deposit funds into the auction contract",
-  2: "Step 2: timeboost_submitBid()",
-  3: "Step 3: Auctioneer Response",
-  4: "Step 4: auctioneer_submitBidAuctionTransaction",
-  5: "Step 5: Sequencer prioritizes the auction contract calls"
+  1: 'Step 1: Deposit funds into the auction contract',
+  2: 'Step 2: timeboost_submitBid()',
+  3: 'Step 3: Auctioneer Response',
+  4: 'Step 4: auctioneer_submitBidAuctionTransaction',
+  5: 'Step 5: Sequencer prioritizes the auction contract calls',
 };
 
 const components = {
@@ -44,7 +44,7 @@ const components = {
         {children}
       </SyntaxHighlighter>
     );
-  }
+  },
 };
 
 export function Modal({ number }: { number: number }) {
