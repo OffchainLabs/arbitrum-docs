@@ -1,3 +1,5 @@
+Thank you for considering to contribute to the Arbitrum documentation! We're excited to have you on board.
+
 The [`docs.arbitrum.io`](https://docs.arbitrum.io/) docs portal is the **single source of truth** for documentation that supports Offchain Labs' product portfolio. Contributions are welcome from the entire Ethereum community.
 
 This document shows you how to craft and publish Arbitrum documentation. Familiarity with [Markdown](https://www.markdownguide.org/basic-syntax/) syntax, Github, and [Docusaurus](https://docusaurus.io/docs) is expected.
@@ -106,17 +108,16 @@ npm run serve
 
 Every document should be a specific _type_ of document. Each type of document has its own purpose:
 
-| Document type | Purpose | Example(s) to refer to |
-| ------------- | ------- | ---------------------- |
+| Document type       | Purpose                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| Gentle introduction | Onboard a specific reader audience with tailored questions and answers             |
+| Quickstart          | Onboard a specific reader audience with step-by-step "learn by doing" instructions |
 
-| Gentle introduction | Onboard a specific reader audience with tailored questions and answers | [A gentle introduction to Orbit](/launch-orbit-chain/01-a-gentle-introduction.md) |
-| Quickstart | Onboard a specific reader audience with step-by-step "learn by doing" instructions | [Quickstart: Build dApps](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) |
-
-| How-to | Provide task-oriented procedural guidance | [How to run a full chain simulation](/run-arbitrum-node/04-run-local-full-chain-simulation.mdx) |
-| Concept | Explain what things are and how they work | [Token bridging](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx) <br/>[Nodes and networks](https://docs.prylabs.network/docs/concepts/nodes-networks) |
-| FAQ | Address frequently asked questions | [FAQ: Run a node](../node-running/faq.mdx) |
-| Troubleshooting | List common troubleshooting scenarios and solutions | [Troubleshooting: Run a node](/run-arbitrum-node/06-troubleshooting.mdx) |
-| Reference | Lists and tables of things, such as API endpoints and developer resources | [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) |
+| How-to | Provide task-oriented procedural guidance |
+| Concept | Explain what things are and how they work |
+| FAQ | Address frequently asked questions |
+| Troubleshooting | List common troubleshooting scenarios and solutions |
+| Reference | Lists and tables of things, such as API endpoints and developer resources |
 
 This isn't an exhaustive list, but it includes most of the document types that we use.
 
@@ -211,17 +212,7 @@ The following document was contributed by @todo-twitter-handle. Give them a shou
 
 These types of contributions are generally **not merged** unless they're submitted by employees of Offchain Labs.
 
-Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable amount of scrutiny.
-
-#### Can I use AI-generated content?
-
-"No". By issuing PRs into our docs repo, you're acknowledging that your content has been produced organically. Content produced under the influence of AI/ML tooling, such as ChatGPT, is "strictly not allowed".
-
-#### Should I be wary of contributing to FAQs and Glossaries? It looks like there are some automations configured against these document types.
-
-You're right! We draft FAQs and Glossaries on Notion to make it easier for nontechnical internal contributors to contribute. This content is then published to our docs repo using a script that reads from Notion and writes to Markdown.
-
-You can still submit changes to the Glossary and FAQ markdown files; we manually synchronize these types of changes with Notion content whenever we need to.
+Instead of opening a PR for this type of contribution, click the `Request an update` button at the top of the published document to create an issue. Generally, third-party services are included in core docs only if we can confidently assert that the services are "**trustworthy, highly relevant to the core document at hand, and battle-tested by Arbitrum developers**" under a reasonable scrutiny.
 
 #### How long does it take for my third-party content contribution to be reviewed?
 
