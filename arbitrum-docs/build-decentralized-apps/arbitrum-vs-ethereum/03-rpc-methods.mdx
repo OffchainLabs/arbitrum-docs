@@ -21,34 +21,34 @@ When calling [`eth_getTransactionByHash`](https://ethereum.org/en/developers/doc
 
 ### Transaction types
 
-In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/arbos/geth.mdx#transaction-types).
+In addition to the [three transaction types](https://ethereum.org/en/developers/docs/transactions/#types-of-transactions) currently supported on Ethereum, Arbitrum adds additional types listed below and [documented in full detail here](/how-arbitrum-works/04-geth-at-the-core.mdx#transaction-types).
 
 On RPC calls that return transactions, the `type` field will reflect the custom codes where applicable.
 
-| Transaction type code | Transaction type name           | Description                                                                                                                                                     |
-| --------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from L1 to L2 via the Arbitrum bridge                                                                                                       |
-| `101`                 | `ArbitrumUnsignedTxType`        | Used to call an L2 contract from L1, originated by a user through the Arbitrum bridge                                                                           |
-| `102`                 | `ArbitrumContractTxType`        | Used to call an L2 contract from L1, originated by a contract through the Arbitrum bridge                                                                       |
-| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx) on L2 that failed to execute automatically (usually due to low gas) |
-| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#submission) via the Arbitrum bridge on L1                                     |
-| `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the L1 base fee and the block number                                          |
+| Transaction type code | Transaction type name           | Description                                                                                                                                                                |
+| --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from a parent chain to child chain via the Arbitrum bridge                                                                                             |
+| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parenet chain, originated by a user through the Arbitrum bridge                                                                 |
+| `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
+| `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
+| `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
+| `106`                 | `ArbitrumInternalTxType`        | Internal transactions created by the ArbOS itself for certain state updates, like the parent chain base fee and the block number                                           |
 
 ### Additional fields
 
 On RPC calls that return transactions, the following fields are added to the returned object.
 
-| Field name  | Description                                                                           |
-| ----------- | ------------------------------------------------------------------------------------- |
-| `requestId` | On L1 to L2 transactions, this field is added to indicate position in the Inbox queue |
+| Field name  | Description                                                                                        |
+| ----------- | -------------------------------------------------------------------------------------------------- |
+| `requestId` | On parent to child chain transactions, this field is added to indicate position in the Inbox queue |
 
 ### Existing fields with different behavior
 
 On RPC calls that return transactions, the following fields will have a different content than what's received on Ethereum.
 
-| Field name | Description                                                                                                                                                        |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `from`     | On L1 to L2 transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/arbos/l1-l2-messaging.mdx#address-aliasing) of the L1's `msg.sender` |
+| Field name | Description                                                                                                                                                                               |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `from`     | On parent to child chain transactions, this field will contain the [_aliased_ version](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#address-aliasing) of the parent chain's `msg.sender` |
 
 ## Transaction receipts
 
@@ -58,10 +58,10 @@ When calling [`eth_getTransactionReceipt`](https://ethereum.org/en/developers/do
 
 On RPC calls that return transaction receipts, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                 |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | The L1 block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | Amount of gas spent on L1 calldata in units of L2 gas. More information in [Gas and fees](/how-arbitrum-works/gas-fees.mdx)                                                                 |
+| Field name      | Description                                                                                                                                                                                           |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | The parent chain block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `gasUsedForL1`  | Amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                     |
 
 ## Blocks
 
@@ -71,11 +71,11 @@ When calling [`eth_getBlockByHash`](https://ethereum.org/en/developers/docs/apis
 
 On RPC calls that return a block, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                   |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | An approximate L1 block number that occurred before this L2 block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `sendCount`     | The number of L2 to L1 messages since Nitro genesis                                                                                                                                           |
-| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                      |
+| Field name      | Description                                                                                                                                                                                                      |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | An approximate parent chain block number that occurred before this child chain block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `sendCount`     | The number of child to parent chain messages since Nitro genesis                                                                                                                                                 |
+| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                         |
 
 ### Existing fields with different behavior
 
@@ -114,7 +114,7 @@ Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitr
 | `batchProcessed`               | Last batch that was processed on the parent chain. Processing means dividing the batch into messages                                                                                     |
 | `messageOfProcessedBatch`      | Last message in the last processed batch                                                                                                                                                 |
 | `msgCount`                     | Number of messages known/queued by the Nitro node                                                                                                                                        |
-| `blockNum`                     | Last block created by the Nitro node (up-to-date L2 block the node is synced to)                                                                                                         |
+| `blockNum`                     | Last block created by the Nitro node (up-to-date child chain block the node is synced to)                                                                                                |
 | `messageOfLastBlock`           | Message that was used to produce the block above                                                                                                                                         |
 | `broadcasterQueuedMessagesPos` | If different than 0, this is expected to be greater than `msgCount`. This field notes a message that was read from the feed but not processed because earlier messages are still missing |
 | `lastL1BlockNum`               | Last block number from the parent chain that Nitro sees. This is used to debug the connection with the parent chain                                                                      |
@@ -157,7 +157,7 @@ The table below describes each field of the `stylusTracer` return value.
 | `address`  | For \*call HostIOs, the address of the called contract.         |
 | `steps`    | For \*call HostIOs, the steps performed by the called contract. |
 
-For example, the command below illustrates how to call this tracer for a transaction.
+For example, the command below illustrates how to call this tracer for a transaction:
 
 ```
 curl -s \
@@ -167,7 +167,7 @@ curl -s \
     <nitro-node-rpc>
 ```
 
-The result of this call will be something along the lines of.
+The result of this call will be something along the lines of:
 
 ```
 {

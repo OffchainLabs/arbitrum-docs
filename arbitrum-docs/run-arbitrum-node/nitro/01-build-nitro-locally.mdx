@@ -60,7 +60,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @nitroVersionTag@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.5.1@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -144,21 +144,21 @@ rustup component add rust-src --toolchain nightly
 cargo install cbindgen
 ```
 
-### Step 7. Configure Go [1.23](https://github.com/moovweb/gvm)
+### Step 7. Install Bison [3.8.2](https://savannah.gnu.org/projects/bison/)
 
-#### Install Bison
-
-##### For Debian/Ubuntu
+#### For Debian/Ubuntu
 
 ```shell
 sudo apt-get install bison
 ```
 
-##### For MacOS
+#### For MacOS
 
 ```shell
 brew install bison
 ```
+
+### Step 8. Configure Go [1.23](https://github.com/moovweb/gvm)
 
 #### Install and configure Go
 
@@ -179,13 +179,21 @@ curl -L https://foundry.paradigm.xyz | bash
 foundryup
 ```
 
-### Step 8. Start build
+### Step 9. Check dependencies
+
+```shell
+./scripts/check-build.sh
+```
+
+If this script shows any errors, fix them before proceeding to the next step.
+
+### Step 10. Start build
 
 ```shell
 make
 ```
 
-### Step 9. Produce binaries
+### Step 11. Produce binaries
 
 ```shell
 make build
@@ -195,18 +203,18 @@ make build
 
 In MacOS with Apple Silicon, warnings like the following might appear but they will not hinder the compilation process.
 
-```
+```shell
 ld: warning: object file was built for newer 'macOS' version (14.4) than being linked (14.0)
 ```
 
-To solve these warnings, export the following environment variables before building Nitro.
+To silence these warnings, export the following environment variables before building Nitro.
 
-```
+```shell
 export MACOSX_DEPLOYMENT_TARGET=$(sw_vers -productVersion)
 export CGO_LDFLAGS=-Wl,-no_warn_duplicate_libraries
 ```
 
-### Step 10. Run your node
+### Step 12. Run your node
 
 To run your node using the generated binaries, use the following command from the `nitro` folder, with your desired parameters
 
@@ -218,7 +226,7 @@ To run your node using the generated binaries, use the following command from th
 
 Since v2.3.4, the State Transition Function (STF) contains code that is not yet activated on the current mainnet and testnet chains. Because of that, you might receive the following error when connecting your built node to those chains:
 
-```
+```shell
 ERROR[05-21|21:59:17.415] unable to find validator machine directory for the on-chain WASM module root err="stat {WASM_MODULE_ROOT}: no such file or directory"
 ```
 
