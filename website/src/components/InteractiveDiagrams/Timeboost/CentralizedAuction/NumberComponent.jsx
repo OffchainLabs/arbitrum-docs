@@ -13,9 +13,9 @@ export const NumberComponent = ({ number }) => {
     number === 1 || number === 5
       ? { opacity: 1 }
       : useSpring({
-          from: { opacity: 0 },
-          to: [{ opacity: 1 }, { opacity: 0 }],
-          config: { tension: 170, friction: 6 },
+          from: { opacity: 0.2 },
+          to: [{ opacity: 1 }, { opacity: 0.2 }],
+          config: { tension: 200, friction: 8 },
           loop: true,
           reset: true,
           immediate: false,
