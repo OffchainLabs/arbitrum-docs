@@ -9,19 +9,17 @@ import { NumberComponentProps } from './types';
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
-  const animationProps = number === 1 || number === 5 
-    ? { opacity: 1 }
-    : useSpring({
-        from: { opacity: 0 },
-        to: [
-          { opacity: 1 },
-          { opacity: 0 }
-        ],
-        config: { duration: 500 },
-        loop: true,
-        reset: true,
-        immediate: false,
-      });
+  const animationProps =
+    number === 1 || number === 5
+      ? { opacity: 1 }
+      : useSpring({
+          from: { opacity: 0 },
+          to: [{ opacity: 1 }, { opacity: 0 }],
+          config: { duration: 100 },
+          loop: true,
+          reset: true,
+          immediate: false,
+        });
 
   const coords = coordinates[number];
   const pathData = numberPaths[number];
@@ -52,7 +50,7 @@ export const NumberComponent = ({ number }) => {
         cy={coords.circle.y}
         r={CIRCLE_RADIUS}
         className={circleClassName}
-        style={{...animationProps, fill: '#ff7f2a'}}
+        style={{ ...animationProps, fill: '#ff7f2a' }}
       />
       <path
         id={`path${number}`}
