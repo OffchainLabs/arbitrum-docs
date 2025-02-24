@@ -20,7 +20,6 @@ import { useColorMode } from '@docusaurus/theme-common';
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
-
 const components = {
   h1: ({ children }) => <Title $isDark={useColorMode().isDarkTheme}>{children}</Title>,
   p: ({ children }) => <p>{children}</p>,
