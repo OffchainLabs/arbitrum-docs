@@ -457,7 +457,12 @@
     },
     {
       "source": "/stylus/concepts/stylus-cache-manager",
-      "destination": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
       "permanent": false
     },
     {
