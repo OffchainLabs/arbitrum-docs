@@ -98,6 +98,56 @@ article {
       width: 900px;
     }
 
+    .image-zoom {
+      &__modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+      }
+
+      &__container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 90vw;
+        height: 90vh;
+      }
+
+      &__image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      &__close {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        padding: 8px;
+        z-index: 100000;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+
+      &__loading {
+        color: white;
+      }
+    }
+
     .theme-admonition {
       margin-bottom: 2em;
 
