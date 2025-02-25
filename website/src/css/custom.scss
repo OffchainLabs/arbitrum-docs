@@ -11,3 +11,9 @@
 @use './partials/_sidebar.scss';
 @use './partials/_footer.scss';
 @use './partials/_navbar.scss';
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}

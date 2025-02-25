@@ -38,6 +38,7 @@ const ButtonComponent = ({ x, y, width, height }) => {
           fill: '#ff7f2a',
           filter: isHovered ? 'brightness(1.2)' : 'none',
           transition: 'filter 0.2s',
+          animation: 'blink 2s ease-in-out infinite',
         }}
       />
     </svg>
