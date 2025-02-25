@@ -32,11 +32,11 @@ parent chain.{' '}
 
 ### Recommended Adoption Path
 
-BoLD brings new security benefits to Orbit chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Orbit chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**.
+BoLD brings new security benefits to Orbit chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Orbit chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**. We currently recommend Orbit chain owners to adopt Arbitrum BoLD ~30 days after BoLD has been activated on Arbitrum One and Arbitrum Nova (timestamps [here](https://docs.arbitrum.foundation/network-upgrades#network-activation-statuses)) to minimize any stability risks/bugs.
 
 :::warning
 
-It is strongly recommended that existing and prospective Orbit chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations.
+It is strongly recommended that existing and prospective Orbit chains upgrade to use Arbitrum BoLD but **keep validation permissioned** because of the increased risks associated with allowing any entity to advance and challenge the state of your chain. The risks are summarized below. Rigorous testing and research has been poured into the parameters chosen for Arbitrum One and so we cannot formally support or endorse use of permissionless Arbitrum BoLD in other configurations. Please note that when a chain upgrades to use Arbitrum BoLD, any withdrawals (to the parent chain) will be delayed by an additional challenge period. The default challenge period is 6.4 days. We recommend informing the Offchain Labs teams of your timelines and intent to upgrade so adequate warning can be provided to your chain's users on the [Arbitrum Bridge](https://bridge.arbitrum.io/).
 
 :::
 
