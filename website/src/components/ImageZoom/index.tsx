@@ -31,18 +31,35 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
     setIsOpen(false);
   };
 
-  const renderModal = () => (
-    <div className="image-zoom__modal" onClick={handleClose}>
-      <div className="image-zoom__container" onClick={(e) => e.stopPropagation()}>
-        {imageLoaded ? (
-          <img src={src} alt={alt || ''} className="image-zoom__image" />
-        ) : (
-          <div className="image-zoom__loading">Loading...</div>
-        )}
-        <button className="image-zoom__close" onClick={handleClose}>✕</button>
+  const renderModal = () => {
+    if (!isOpen) return null;
+    
+    return (
+      <div className="image-zoom__modal" onClick={handleClose}>
+        <div className="image-zoom__container">
+          {imageLoaded ? (
+            <img 
+              src={src} 
+              alt={alt || ''} 
+              className="image-zoom__image"
+              onClick={(e) => e.stopPropagation()} 
+            />
+          ) : (
+            <div className="image-zoom__loading">Loading...</div>
+          )}
+          <button 
+            className="image-zoom__close" 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClose(e);
+            }}
+          >
+            ✕
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>
