@@ -27,6 +27,7 @@ For most production use-cases, we encourage Orbit chain operators to work with o
 Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Orbit chain. The following explorers support Orbit chains, and can be used to monitor and analyze your chain's activity:
 
 - [Blockscout](https://www.blockscout.com/)
+- [Tenderly](https://www.tenderly.co/?mtm_campaign=ext-docs&mtm_kwd=arbitrum)
 - [Socialscan](https://socialscan.io/)
 - [Lore](https://www.lorescan.com/)
 - [Routescan](https://routescan.io/)
@@ -93,6 +94,7 @@ RPC endpoints are the primary interface through which users and developers inter
 - [Chainstack](https://chainstack.com/)
 - [QuickNode](https://www.quicknode.com?utm_source=arb-docs)
 - [Sequence](https://sequence.xyz/node-gateway)
+- [Tenderly](https://tenderly.co/?mtm_campaign=ext-docs&mtm_kwd=arbitrum)
 
 ## Alternative data availability
 
