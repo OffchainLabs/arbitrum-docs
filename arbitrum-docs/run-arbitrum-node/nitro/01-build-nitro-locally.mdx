@@ -128,19 +128,19 @@ nvm install 18
 nvm use 18
 ```
 
-### Step 6. Configure Rust [1.80.1](https://www.rust-lang.org/tools/install)
+### Step 6. Configure [Rust](https://www.rust-lang.org/tools/install)
 
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.80.1
-rustup default 1.80.1
-rustup install nightly
-rustup target add wasm32-unknown-unknown --toolchain 1.80.1
-rustup target add wasm32-wasi --toolchain 1.80.1
-rustup target add wasm32-unknown-unknown --toolchain nightly
-rustup target add wasm32-wasi --toolchain nightly
-rustup component add rust-src --toolchain nightly
+rustup install 1.84.1
+rustup default 1.84.1
+rustup install nightly-2025-02-14
+rustup target add wasm32-unknown-unknown --toolchain 1.84.1
+rustup target add wasm32-wasi --toolchain 1.84.1
+rustup target add wasm32-unknown-unknown --toolchain nightly-2025-02-14
+rustup target add wasm32-wasi --toolchain nightly-2025-02-14
+rustup component add rust-src --toolchain nightly-2025-02-14
 cargo install cbindgen
 ```
 
