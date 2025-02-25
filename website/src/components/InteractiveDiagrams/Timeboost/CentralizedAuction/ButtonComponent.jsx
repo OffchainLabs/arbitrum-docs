@@ -4,8 +4,8 @@ const ButtonComponent = ({ x, y, width, height }) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
       x={x - width * 0.25}
       y={y - height * 0.25}
       width={width * 1.5}
@@ -23,11 +23,11 @@ const ButtonComponent = ({ x, y, width, height }) => {
       <path
         d="M448,256c0-106-86-192-192-192S64,150,64,256s86,192,192,192S448,362,448,256Z"
         style={{
-          fill: 'none', 
+          fill: 'none',
           stroke: '#ffffff',
-          strokeMiterlimit: 10, 
+          strokeMiterlimit: 10,
           strokeWidth: '32px',
-          filter: 'drop-shadow(0px 0px 4px rgba(255,255,255,0.5))'
+          filter: 'drop-shadow(0px 0px 4px rgba(255,255,255,0.5))',
         }}
       />
       <circle
@@ -37,7 +37,7 @@ const ButtonComponent = ({ x, y, width, height }) => {
         style={{
           fill: '#ff7f2a',
           filter: isHovered ? 'brightness(1.2)' : 'none',
-          transition: 'filter 0.2s'
+          transition: 'filter 0.2s',
         }}
       />
     </svg>
