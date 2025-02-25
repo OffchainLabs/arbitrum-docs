@@ -5,6 +5,9 @@ author: Rohit Ramesh
 sme: rohit-710
 sidebar_label: 'Reown'
 ---
+
+import ImageZoom from '@site/src/components/ImageZoom';
+
 # Reown (prev. known as WalletConnect)
 
 :::info Community member contribution
@@ -21,29 +24,27 @@ AppKit is a powerful, free, and fully open-source SDK for developers looking to 
 
 ## How to get started with AppKit on Arbitrum?
 
-Learn how to use Reown AppKit to enable wallet connections and interact with the Arbitrum network. 
+Learn how to use Reown AppKit to enable wallet connections and interact with the Arbitrum network.
 
-With AppKit, you can provide seamless wallet connections, including email and social logins, on-ramp functionality, smart accounts, one-click authentication, and wallet notifications, all designed to deliver an exceptional user experience. 
+With AppKit, you can provide seamless wallet connections, including email and social logins, on-ramp functionality, smart accounts, one-click authentication, and wallet notifications, all designed to deliver an exceptional user experience.
 
----
 
 In this tutorial, you will learn how to:
 
 1. Set up Reown AppKit.
 2. Configure a wallet connection modal and enable interactions with the Arbitrum network.
 
-This guide takes approximately 10 minutes to complete.
+This guide takes approximately ten minutes to complete.
 
 Let’s get started!
 
 ### Setup
 
-In this section, you'll learn how to set up the development environment to use AppKit with Arbitrum. 
+In this section, you'll learn how to set up the development environment to use AppKit with Arbitrum.
 
 For this tutorial, we'll be using Next.js, though you can use any other framework compatible with AppKit.
 
 > AppKit is available on eight frameworks, including React, Next.js, Vue, JavaScript, React Native, Flutter, Android, iOS, and Unity.
-> 
 
 Now, let’s create a Next app. In order to do so, please run the command given below:
 
@@ -51,90 +52,112 @@ Now, let’s create a Next app. In order to do so, please run the command given 
 npx create-next-app@latest appkit-example
 ```
 
-The above command creates a Next app and sets the name of the Next app as “appkit-example”.
+The above command creates a Next app and sets the name of the Next app as `appkit-example`.
 
 #### Install AppKit
 
-Now, we need to install AppKit and other dependencies that we need for our app to function as expected. For this tutorial, we will be using “wagmi” as our preferred Ethereum library. However, you can also use [Ethers](https://docs.reown.com/appkit/next/core/installation?platform=ethers). 
+Now, we need to install AppKit and other dependencies that we need for our app to function as expected. For this tutorial, we will be using “wagmi” as our preferred Ethereum library. However, you can also use [Ethers](https://docs.reown.com/appkit/next/core/installation?platform=ethers).
 
 ```bash
 npm install @reown/appkit @reown/appkit-wagmi-adapter wagmi @tanstack/react-query
 ```
 
 > You can also use other package managers such as `yarn`, `bun`, `pnpm`, etc.
-> 
 
 #### Create a new project on Reown Cloud
 
-Now, we need to get a project Id from Reown Cloud that we will use to set up AppKit with Wagmi config. Navigate to [cloud.reown.com](https://cloud.reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks) and sign in. If you have not created an account yet, please do so before we proceed. 
+Now, we need to get a project Id from Reown Cloud that we will use to set up AppKit with Wagmi config. Navigate to [cloud.reown.com](https://cloud.reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks) and sign in. If you have not created an account yet, please do so before we proceed.
 
-After you have logged in, please navigate to the “**Projects**” section of the Cloud and click on “**Create Project**”. 
+After you have logged in, please navigate to the “**Projects**” section of the Cloud and click on **Create Project**.
 
-![image.png](reown1.png)
+<ImageZoom
+  src="/img/third-party-reown1.png"
+  alt=""
+  className="img-600px"
+/>
 
-Now, enter the name for your project and click on “**Continue**”.
+Now, enter the name for your project and click on **Continue**.
 
-![image.png](reown.png)
+<ImageZoom
+  src="/img/third-party-reown.png"
+  alt=""
+  className="img-600px"
+/>
 
-Select the product as “**AppKit**” and click on “**Continue**”. 
+Select the product as “**AppKit**” and click on **Continue**.
 
-![image.png](reown3.png)
+<ImageZoom
+  src="/img/third-party-reown3.png"
+  alt=""
+  className="img-600px"
+/>
 
-Select the framework as “**Next.js**” and click on “**Create**”. Reown Cloud will now create a new project for you which will also generate a project Id. 
+Select the framework as “**Next.js**” and click on **Create**. Reown Cloud will now create a new project for you which will also generate a project Id.
 
-![image.png](reown4.png)
+<ImageZoom
+  src="/img/third-party-reown4.png"
+  alt=""
+  className="img-600px"
+/>
 
-You will notice that your project was successfully created. On the top left corner, you will be able to find your Project Id. Please copy that as you will need that later. 
+You will notice that your project was successfully created. On the top left corner, you will be able to find your Project Id. Please copy that as you will need that later.
 
-![image.png](reown6.png)
+<ImageZoom
+  src="/img/third-party-reown6.png"
+  alt=""
+  className="img-600px"
+/>
 
 ### Build the App using AppKit
 
 Before we build the app, let’s first configure our `.env` file. On the root level of your code directory, create a new file named `.env`.
 
-Open that file and create a new variable `NEXT_PUBLIC_PROJECT_ID`.  You will assign the project Id that you copied in the previous step to this environment variable that you just created. This is what it will look like:
+Open that file and create a new variable `NEXT_PUBLIC_PROJECT_ID`. You will assign the project Id that you copied in the previous step to this environment variable that you just created. This is what it will look like:
 
 ```jsx
 NEXT_PUBLIC_PROJECT_ID = <YOUR_PROJECT_ID_HERE>
 ```
 
-> ***Note:*** Please make sure you follow the best practices when you are working with secret keys and other sensitive information. Environment variables that start with `NEXT_PUBLIC` will be exposed by your app which can be misused by bad actors.
-> 
+:::info
+
+Please make sure you follow the best practices when you are working with secret keys and other sensitive information. Environment variables that start with `NEXT_PUBLIC` will be exposed by your app which can be misused by bad actors.
+
+:::
 
 #### Configure AppKit
 
 On the root level of your code directory, create a new folder named `config` and within that folder, create a new code file named `config/index.tsx`. Now, paste the code snippet shared below inside the code file, i.e., `config/index.tsx`.
 
 ```tsx
-import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { cookieStorage, createStorage } from "wagmi";
-import { arbitrum, arbitrumSepoliaarbitrum, arbitrumSepolia } from '@reown/appkit/networks'
+import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import { cookieStorage, createStorage } from 'wagmi';
+import { arbitrum, arbitrumSepoliaarbitrum, arbitrumSepolia } from '@reown/appkit/networks';
 
 // Get projectId from https://cloud.reown.com
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
 
-export const networks = [arbitrum, arbitrumSepolia]
+export const networks = [arbitrum, arbitrumSepolia];
 
-if (!projectId) throw new Error("Project ID is not defined");
+if (!projectId) throw new Error('Project ID is not defined');
 
 // Set up the Wagmi Adapter (config)
 export const wagmiAdapter = new WagmiAdapter({
   storage: createStorage({
-    storage: cookieStorage
+    storage: cookieStorage,
   }),
   ssr: true,
   networks,
-  projectId
-})
+  projectId,
+});
 
-export const config = wagmiAdapter.wagmiConfig
+export const config = wagmiAdapter.wagmiConfig;
 ```
 
 So what's happening in the above code? Let's understand it step-by-step:
 
-1. First, we need to import the necessary functions from their respective packages. 
-    1. `WagmiAdapter` - this is used to create a WAGMI configuration which is then initialized to the `wagmiAdapter`
-    2. `cookieStorage`**,** `createStorage` **-** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this case, using cookies).
+1. First, we need to import the necessary functions from their respective packages.
+   1. `WagmiAdapter` - this is used to create a WAGMI configuration which is then initialized to the `wagmiAdapter`
+   2. `cookieStorage`**,** `createStorage` **-** this provides a storage mechanism using cookies and a function to create custom storage solutions (in this case, using cookies).
 
 #### Create the Modal for your app
 
@@ -143,30 +166,31 @@ Now, we need to create a context provider to wrap our application in and initial
 On the root level of your code directory, create a new folder named `context` and within that folder, create a new code file named `context/index.tsx`. Now, paste the code snippet shared below inside the code file, i.e., `context/index.tsx`.
 
 ```tsx
-'use client'
+'use client';
 
-import { wagmiAdapter, projectId } from '@/config'
-import { createAppKit } from '@reown/appkit/react' 
-import { arbitrum, arbitrumSepolia } from '@reown/appkit/networks'
+import { wagmiAdapter, projectId } from '@/config';
+import { createAppKit } from '@reown/appkit/react';
+import { arbitrum, arbitrumSepolia } from '@reown/appkit/networks';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import React, { type ReactNode } from 'react'
-import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { type ReactNode } from 'react';
+import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi';
 
 // Set up queryClient
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 if (!projectId) {
-  throw new Error('Project ID is not defined')
+  throw new Error('Project ID is not defined');
 }
 
 // Set up metadata
-const metadata = { //this is optional
-  name: "appkit-example-arbitrum",
-  description: "AppKit Example - Arbitrum",
-  url: "https://arbitrum-app.com", // origin must match your domain & subdomain
-  icons: ["https://avatars.githubusercontent.com/u/179229932"]
-}
+const metadata = {
+  //this is optional
+  name: 'appkit-example-arbitrum',
+  description: 'AppKit Example - Arbitrum',
+  url: 'https://arbitrum-app.com', // origin must match your domain & subdomain
+  icons: ['https://avatars.githubusercontent.com/u/179229932'],
+};
 
 // Create the modal
 const modal = createAppKit({
@@ -177,54 +201,54 @@ const modal = createAppKit({
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
   },
-  themeMode: 'light'
-})
+  themeMode: 'light',
+});
 
 function ContextProvider({ children, cookies }: { children: ReactNode; cookies: string | null }) {
-  const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies)
+  const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig as Config, cookies);
 
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig as Config} initialState={initialState}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
-  )
+  );
 }
 
-export default ContextProvider
+export default ContextProvider;
 ```
 
 Let’s understand what is happening in the above code:
 
 1. First, we import the necessary functions from their respective packages. After this, we need to create the modal component for our app.
-2. **`metadata`** - This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app. **This is optional.**
+2. `metadata` - (*optional*)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
 3. `createAppKit` - this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
-    1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
-4. **`WagmiProvider`**: Provides blockchain and wallet connection context to the app.
-    1. **`QueryClientProvider`**: Provides the React Query context for managing server-state data.
+   1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
+4. `WagmiProvider`: Provides blockchain and wallet connection context to the app.
+   1. `QueryClientProvider`: Provides the React Query context for managing server-state data.
 
-Now, let’s create the layout for our app. In `app/layout.tsx`, remove the existing code and paste the code snippet given below. 
+Now, let’s create the layout for our app. In `app/layout.tsx`, remove the existing code and paste the code snippet given below.
 
 ```tsx
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
-import { headers } from "next/headers"; // added
-import ContextProvider from '@/context'
+import { headers } from 'next/headers'; // added
+import ContextProvider from '@/context';
 
 export const metadata: Metadata = {
-  title: "AppKit Example App",
-  description: "Powered by Reown"
+  title: 'AppKit Example App',
+  description: 'Powered by Reown',
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
-  const cookies = headers().get('cookie')
+  const cookies = headers().get('cookie');
 
   return (
     <html lang="en">
@@ -232,7 +256,7 @@ export default function RootLayout({
         <ContextProvider cookies={cookies}>{children}</ContextProvider>
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -240,11 +264,11 @@ export default function RootLayout({
 
 For our app to have the UI with which your users can interact, you need to set a simple UI and configure the modal. Since, we have already set up AppKit, you can use `<w3m-button>` which will serve as a “Connect Wallet” button or you can build your own custom button using the [hooks](https://docs.walletconnect.com/appkit/next/core/hooks) that AppKit provides.
 
-Open the `app/page.tsx` file and remove the existing boilerplate code, and then replace it with the code snippet given below. 
+Open the `app/page.tsx` file and remove the existing boilerplate code, and then replace it with the code snippet given below.
 
 ```tsx
-"use client";
-import { useAccount } from "wagmi";
+'use client';
+import { useAccount } from 'wagmi';
 
 export default function Home() {
   const { isConnected } = useAccount();
@@ -262,13 +286,15 @@ export default function Home() {
         <div className="grid bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
           <h3 className="text-sm font-semibold bg-gray-100 p-2 text-center">Connect your wallet</h3>
           <div className="flex justify-center items-center p-4">
-          <w3m-button />
+            <w3m-button />
           </div>
-        </div> 
+        </div>
         <br></br>
         {isConnected && (
           <div className="grid bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-            <h3 className="text-sm font-semibold bg-gray-100 p-2 text-center">Network selection button</h3>
+            <h3 className="text-sm font-semibold bg-gray-100 p-2 text-center">
+              Network selection button
+            </h3>
             <div className="flex justify-center items-center p-4">
               <w3m-network-button />
             </div>
@@ -288,24 +314,21 @@ You can now run the app and test it out. In order to do so, run the command give
 npm run dev
 ```
 
-> If you are using alternative package managers, you can try either of these commands - `yarn dev`, or `pnpm dev`, or `bun dev`.
-> 
+> If you are using alternative package managers, you can try either of these commands - `yarn dev`, or `pnpm dev`, or `bun dev`.
 
 ### Conclusion
 
-And that’s it! You have now learned how to create a simple app using AppKit that allows users to connect their wallet and interact with the Arbitrum network. 
+And that’s it! You have now learned how to create a simple app using AppKit that allows users to connect their wallet and interact with the Arbitrum network.
 
-**Reown AppKit**  is a powerful solution for developers looking to integrate wallet connections and other Web3 functionalities into their apps on any EVM chain. In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and notifications—streamlining their experience while enabling advanced features like on-ramp functionality and smart accounts. By following this guide, you'll quickly get up and running with Reown’s AppKit, enhancing your app’s user experience and interaction with blockchain technology.
+**Reown AppKit** is a powerful solution for developers looking to integrate wallet connections and other Web3 functionalities into their apps on any EVM chain. In just a few simple steps, you can provide your users with seamless wallet access, one-click authentication, social logins, and notifications—streamlining their experience while enabling advanced features like on-ramp functionality and smart accounts. By following this guide, you'll quickly get up and running with Reown’s AppKit, enhancing your app’s user experience and interaction with blockchain technology.
 
-You can view the complete code repository below. 
-
-https://github.com/rohit-710/reown-appkit-evm
+You can view the complete code repository [here](https://github.com/rohit-710/reown-appkit-evm).
 
 ### What's Next?
 
-If you're wondering how to use Reown for various use cases and build apps with great UX, feel free to check out our other blogs below.
+If you're wondering how to use Reown for various use cases and build apps with great UX, feel free to check out our other blogs [here](https://reown.com/blog).
 
-https://reown.com/blog
+
 
 ### Need help?
 
@@ -314,6 +337,7 @@ For support, please join the official [Reown Discord Server](https://discord.com
 You will be able to use Reown AppKit to power end-to-end wallet interactions on your Web3 app deployed on Arbitrum.
 
 ## Learn more about Reown:
+
 - [Website](https://reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks)
 - [Blog](https://reown.com/blog?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks)
 - [Docs](https://docs.reown.com/?utm_source=arbitrum&utm_medium=docs&utm_campaign=backlinks)
