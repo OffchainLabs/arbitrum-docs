@@ -43,6 +43,7 @@
     "docusaurus-plugin-sass": "^0.2.5",
     "ethers": "5.7.2",
     "got": "11.8.5",
+    "marked": "^15.0.7",
     "posthog-docusaurus": "^2.0.0",
     "posthog-js": "^1.219.6",
     "prism-react-renderer": "^1.3.5",

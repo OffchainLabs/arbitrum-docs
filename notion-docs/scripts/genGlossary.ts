@@ -1,8 +1,6 @@
 import { Client } from '@notionhq/client'
 import {
   Definition,
-  RenderedKnowledgeItem,
-  renderKnowledgeItem,
   escapeForJSON,
   lookupProject,
   lookupGlossaryTerms,
@@ -13,6 +11,11 @@ import {
   KnowledgeItem,
   LinkableTerms,
   LinkValidity,
+  renderRichTexts,
+  renderBlocks,
+  formatAnchor,
+  RenderMode,
+  RenderKnowledgeItemError,
 } from '@offchainlabs/notion-docs-generator'
 import fs from 'fs'
 import dotenv from 'dotenv'
@@ -54,14 +57,41 @@ const getContentFromCMS = async (): Promise<Definition[]> => {
   })
 }
 
-function printItem(item: RenderedKnowledgeItem): string {
-  return `---
-title: ${item.title}
-key: ${item.key}
-titleforSort: ${item.titleforSort}
+export function renderKnowledgeItem(
+  item: KnowledgeItem,
+  linkableTerms: LinkableTerms
+): {md: string, key: string} {
+  try {
+    const title = renderRichTexts(
+      item.title,
+      linkableTerms,
+      RenderMode.Markdown
+    )
+    const titleforSort = renderRichTexts(
+      item.title,
+      linkableTerms,
+      RenderMode.Plain
+    )
+    const dashDelimitedKey = formatAnchor(item.title, linkableTerms)
+
+    let renderedText = renderBlocks(item.blocks, linkableTerms)
+    if (renderedText.length == 0) {
+      renderedText = renderRichTexts(
+        item.text,
+        linkableTerms,
+        RenderMode.Markdown
+      )
+    }
+    return {md:`---
+title: ${title}
+key: ${dashDelimitedKey}
+titleforSort: ${titleforSort}
 ---
-${item.text}
-`
+${renderedText}
+`, key: dashDelimitedKey}
+  } catch (e) {
+    throw new RenderKnowledgeItemError(item, e)
+  }
 }
 
 async function generateFiles() {
@@ -86,11 +116,10 @@ async function generateFiles() {
 
   const validGlossaryTerms = glossaryTerms.filter(isValid)
   addItems(validGlossaryTerms, '/intro/glossary')
-  const renderedTerms = validGlossaryTerms.map(t => renderKnowledgeItem(t, linkableTerms))
-  for (const item of renderedTerms) {
-    let md = printItem(item)
+  for (const item of validGlossaryTerms) {
+    let {md, key} = renderKnowledgeItem(item, linkableTerms)
     fs.writeFileSync(
-      `../arbitrum-docs/partials/glossary/_${item.key}.mdx`,
+      `../arbitrum-docs/partials/glossary/_${key}.mdx`,
       md
     )
   }
