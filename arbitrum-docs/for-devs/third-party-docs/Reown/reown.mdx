@@ -28,7 +28,6 @@ Learn how to use Reown AppKit to enable wallet connections and interact with the
 
 With AppKit, you can provide seamless wallet connections, including email and social logins, on-ramp functionality, smart accounts, one-click authentication, and wallet notifications, all designed to deliver an exceptional user experience.
 
-
 In this tutorial, you will learn how to:
 
 1. Set up Reown AppKit.
@@ -70,43 +69,23 @@ Now, we need to get a project Id from Reown Cloud that we will use to set up App
 
 After you have logged in, please navigate to the “**Projects**” section of the Cloud and click on **Create Project**.
 
-<ImageZoom
-  src="/img/third-party-reown1.png"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/third-party-reown1.png" alt="" className="img-600px" />
 
 Now, enter the name for your project and click on **Continue**.
 
-<ImageZoom
-  src="/img/third-party-reown.png"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/third-party-reown.png" alt="" className="img-600px" />
 
 Select the product as “**AppKit**” and click on **Continue**.
 
-<ImageZoom
-  src="/img/third-party-reown3.png"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/third-party-reown3.png" alt="" className="img-600px" />
 
 Select the framework as “**Next.js**” and click on **Create**. Reown Cloud will now create a new project for you which will also generate a project Id.
 
-<ImageZoom
-  src="/img/third-party-reown4.png"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/third-party-reown4.png" alt="" className="img-600px" />
 
 You will notice that your project was successfully created. On the top left corner, you will be able to find your Project Id. Please copy that as you will need that later.
 
-<ImageZoom
-  src="/img/third-party-reown6.png"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/third-party-reown6.png" alt="" className="img-600px" />
 
 ### Build the App using AppKit
 
@@ -220,7 +199,7 @@ export default ContextProvider;
 Let’s understand what is happening in the above code:
 
 1. First, we import the necessary functions from their respective packages. After this, we need to create the modal component for our app.
-2. `metadata` - (*optional*)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
+2. `metadata` - (_optional_)This object contains information about our application that will be used by AppKit. This includes the name of the app, the description, the url and the icons representing our app.
 3. `createAppKit` - this is called to initialize the AppKit component, which handles the user interface for connecting to blockchain wallets. The function is configured with various options, such as the app's metadata, theming, and enabling features like analytics and onramp services.
    1. `networks` - these are the networks that we want our app to support. So import the chains you want your app to support from `@reown/appkit/network` and assign it to this network parameter. Since we want to enable wallet interactions on the Arbitrum network, we import the Arbitrum mainnet and testnet. You can view the complete list of supported chains [here](https://wagmi.sh/core/api/chains).
 4. `WagmiProvider`: Provides blockchain and wallet connection context to the app.
@@ -327,8 +306,6 @@ You can view the complete code repository [here](https://github.com/rohit-710/re
 ### What's Next?
 
 If you're wondering how to use Reown for various use cases and build apps with great UX, feel free to check out our other blogs [here](https://reown.com/blog).
-
-
 
 ### Need help?
 
