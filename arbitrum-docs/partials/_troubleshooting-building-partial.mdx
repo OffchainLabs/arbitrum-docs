@@ -381,9 +381,9 @@ Make sure you have enough funds in your wallet, and the gas fields of the reques
 </p>
 
 
-### How can I verify that an L2 block has been processed as part of a specific assertion?
+### How can I verify that a child chain block has been processed as part of a specific assertion?
 <p>
-If you want to verify that the latest confirmed (or created) assertion has processed a specific L2 block, you can follow these steps:
+If you want to verify that the latest confirmed (or created) assertion has processed a specific child chain block, you can follow these steps:
 </p>
 
 <ol>
@@ -391,7 +391,7 @@ If you want to verify that the latest confirmed (or created) assertion has proce
 <li>Obtain the node information through <code>getNode</code></li>
 <li>Find the <code>NodeCreated</code> event that was emitted when that node was created.</li>
 <li>In that NodeCreated event, there's an <code>assertion</code> property that contains the state of the chain before processing the specified blocks, and after processing them. Get the <code>afterState.globalState</code> property</li>
-<li>That value contains a bytes32Vals array with the latest L2 block hash processed in the first element.</li>
+<li>That value contains a bytes32Vals array with the latest child chain block hash processed in the first element.</li>
 </ol>
 <p>
 You can find an example script in our <a href="https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/l2-block-verification-in-assertion">arbitrum-tutorials</a> repository.
