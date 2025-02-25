@@ -90,7 +90,7 @@ async function generateFiles() {
   for (const item of renderedTerms) {
     let md = printItem(item)
     fs.writeFileSync(
-      `../arbitrum-docs/partials/glossary/${item.key}.mdx`,
+      `../arbitrum-docs/partials/glossary/_${item.key}.mdx`,
       md
     )
   }
