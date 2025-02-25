@@ -1,0 +1,11 @@
+# Step 4: `auctioneer_submitBidAuctionTransaction`
+
+The auctioneer submits the winning bids to resolve the auction.
+
+1. Auctioneer collects and sorts all valid bids for the round
+2. Identifies the two highest bids
+3. Calls resolveAuction() with the winning bids
+
+```solidity
+function resolveAuction(Bid calldata bid1, Bid calldata bid2) external;
+```

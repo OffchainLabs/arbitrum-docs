@@ -7,8 +7,6 @@ content_type: concept
 sidebar_label: Oracles
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 :::note
 
 This is a conceptual overview of oracles. For more detailed information on how to use oracles in your applications, check out our [third-party oracles documentation](/for-devs/oracles/oracles-content-map).
@@ -35,13 +33,13 @@ Oracles can be classified based on their source, direction of information, trust
 
 Push oracles proactively provide data to smart contracts without being explicitly requested. When a specified event or condition occurs, the push oracle triggers the smart contract with the relevant data. For example, a push oracle might send weather data to a smart contract once the temperature reaches a certain threshold.
 
-<ImageZoom src="/img/dapps-push-oracle.svg" alt="Push oracle" className="img-600px" />
+![900px-img](../images/push-oracle.svg)
 
 ### How do pull oracles work?
 
 Pull oracles require smart contracts to request data explicitly. A smart contract sends a query to the oracle, retrieving and relaying the requested information to the contract. For example, a smart contract might request the current price of a specific digital asset from a pull oracle.
 
-<ImageZoom src="/img/dapps-pull-oracle.svg" alt="Pull oracle" className="img-600px" />
+![900px-img](../images/pull-oracle.svg)
 
 ### Use cases for oracles
 

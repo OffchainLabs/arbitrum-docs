@@ -8,8 +8,6 @@ target_audience: 'Developers who want to build on Arbitrum using popular program
 sidebar_position: 1
 ---
 
-import ImageZoom from '@site/src/components/ImageZoom';
-
 # A gentle introduction: Stylus
 
 ### In a nutshell:
@@ -22,7 +20,7 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 Stylus is an upgrade to Arbitrum Nitro [(ArbOS 32)](https://docs.arbitrum.io/run-arbitrum-node/arbos-releases/arbos32), the tech stack powering Arbitrum One, Arbitrum Nova, and Arbitrum Orbit chains. This upgrade adds a second, coequal virtual machine to the EVM, where EVM contracts continue to behave exactly as they would in Ethereum. We call this paradigm **MultiVM** since **everything is entirely additive.**
 
-<ImageZoom src="/img/stylus-multivm.jpg" alt="Stylus gives you MultiVM" className="img-600px" />
+![Stylus gives you MultiVM](./assets/stylus-multivm.jpg)
 
 This second virtual machine executes WebAssembly (WASM) rather than EVM bytecode. WASM is a modern binary format popularized by its use in major web standards, browsers, and companies to speed up computation. WASM is built to be fast, portable, and human-readable. It has sandboxed execution environments for security and simplicity. Working with WASM is nothing new for Arbitrum chains. Ever since the [Nitro upgrade](https://medium.com/offchainlabs/arbitrum-nitro-one-small-step-for-l2-one-giant-leap-for-ethereum-bc9108047450), WASM has been a fundamental component of Arbitrum's fully functioning fraud proofs.
 

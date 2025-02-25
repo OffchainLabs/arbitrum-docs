@@ -97,11 +97,11 @@ Gas estimation for Retryable submissions is possible via the [NodeInterface](/bu
 
 ### The Speed Limit
 
-The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">Validator</a> creates an assertion, other validators will check it, and respond with a correct assertion and a <a data-quicklook-from="challenge">Challenge</a> if it is wrong. This requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
+The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">Validator</a> creates an <a data-quicklook-from="rblock">RBlock</a>, other validators will check it, and respond with a correct RBlock and a <a data-quicklook-from="challenge">Challenge</a> if it is wrong. This requires that the other validators have the time and resources to check each RBlock quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for RBlocks.
 
-This sets an effective speed limit on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit, enforced by the Rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
+This sets an effective speed limit on execution of a Nitro chain: in the long run the chain cannot make progress faster than a validator can emulate its execution. If RBlocks are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit, enforced by the Rollup protocol contracts, on how far in the future a deadline can be, this will eventually cause new RBlocks to be slowed down, thereby enforcing the effective speed limit.
 
-Being able to set the speed limit accurately depends on being able to estimate the time required to validate an assertion, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower, to be safe. And we do not want to set the speed limit lower, so we try to enable accurate estimation.
+Being able to set the speed limit accurately depends on being able to estimate the time required to validate an RBlock, with some accuracy. Any uncertainty in estimating validation time will force us to set the speed limit lower, to be safe. And we do not want to set the speed limit lower, so we try to enable accurate estimation.
 
 ## Total fee and gas estimation
 
