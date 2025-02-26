@@ -100,8 +100,8 @@ article {
 
     img {
       transition: transform 0.3s ease-in-out;
-      
-      &[role="button"] {
+
+      &[role='button'] {
         cursor: zoom-in;
         &:hover {
           transform: scale(1.02);
@@ -169,8 +169,12 @@ article {
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes zoomIn {
