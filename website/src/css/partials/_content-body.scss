@@ -139,7 +139,8 @@ article {
         height: 100%;
         object-fit: contain;
         cursor: zoom-out;
-        animation: zoomIn 0.3s ease-in-out;
+        animation: zoomIn 0.3s ease-in-out forwards;
+        will-change: transform;
       }
 
       &__close {
@@ -183,7 +184,7 @@ article {
       }
       to {
         opacity: 1;
-        transform: scale(1.5);
+        transform: scale(2);
       }
     }
 
