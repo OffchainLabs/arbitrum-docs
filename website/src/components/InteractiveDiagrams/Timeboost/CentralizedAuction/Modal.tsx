@@ -20,7 +20,7 @@ SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 const components = {
-  h1: ({ children }) => <Title $isDark={useColorMode().isDarkTheme}>{children}</Title>,
+  h1: ({ children }) => <h1 className="modal__title">{children}</h1>,
   p: ({ children }) => <p>{children}</p>,
   ol: ({ children }) => <ul>{children}</ul>,
   li: ({ children }) => <li>{children}</li>,
