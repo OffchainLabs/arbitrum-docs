@@ -80,16 +80,17 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
 
   return (
     <>
-      <div className="markdown">
-        <img
-          src={src}
-          alt={alt || ''}
-          className={className}
-          onClick={handleImageClick}
-          style={{ cursor: 'zoom-in' }}
-        />
-      </div>
-      {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
+      <img
+        src={src}
+        alt={alt || ''}
+        className={`${className || ''}`}
+        onClick={handleImageClick}
+        style={{ cursor: 'zoom-in' }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === 'Enter' && handleImageClick()}
+      />
+      {renderModal()}
     </>
   );
 }

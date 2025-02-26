@@ -98,6 +98,17 @@ article {
       width: 900px;
     }
 
+    img {
+      transition: transform 0.3s ease-in-out;
+      
+      &[role="button"] {
+        cursor: zoom-in;
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+    }
+
     .image-zoom {
       &__modal {
         position: fixed;
@@ -105,11 +116,12 @@ article {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.9);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 99999;
+        animation: fadeIn 0.2s ease-in-out;
       }
 
       &__container {
@@ -128,6 +140,7 @@ article {
         max-height: 90%;
         object-fit: contain;
         cursor: zoom-out;
+        animation: zoomIn 0.3s ease-in-out;
       }
 
       &__close {
@@ -141,15 +154,33 @@ article {
         cursor: pointer;
         padding: 8px;
         z-index: 100000;
+        opacity: 0.8;
+        transition: opacity 0.2s ease;
 
         &:hover {
-          opacity: 0.8;
+          opacity: 1;
         }
       }
 
       &__loading {
         color: white;
         font-size: 16px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
       }
     }
 
