@@ -1,0 +1,42 @@
+/* Base circle styles */
+.circle-base {
+  r: 20.95px;
+  transition: opacity 0.3s ease;
+}
+
+.cls-5 {
+  @extend .circle-base;
+  fill: #ff7f2a;
+}
+
+.cls-5-light {
+  @extend .circle-base;
+  fill: #ff7f2a;
+}
+
+/* Path styles */
+.path-base {
+  fill: #fff;
+  transition: fill 0.3s ease;
+}
+
+.cls-10 {
+  @extend .path-base;
+  fill: #fff;
+}
+
+.cls-10-light {
+  @extend .path-base;
+  fill: #000;
+}
+
+/* Animation */
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+
+.blinking {
+  animation: blink 2s ease-in-out infinite;
+}

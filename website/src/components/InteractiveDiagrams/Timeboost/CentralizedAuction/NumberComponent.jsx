@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
-import styles from './styles.module.css';
+import styles from '@site/src/css/partials/_number-component.scss';
 import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
