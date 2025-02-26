@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
-import styles from './styles.module.scss';
+import '../../../../../css/custom.css';
 import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
@@ -31,8 +31,8 @@ export const NumberComponent = ({ number }) => {
   const offsetX = coords.circle.x - coords.path.x + (coords.offset?.x || 0);
   const offsetY = coords.circle.y - coords.path.y + (coords.offset?.y || 0);
 
-  const circleClassName = isDarkTheme ? styles['cls-5'] : styles['cls-5-light'];
-  const pathClassName = isDarkTheme ? styles['cls-10'] : styles['cls-10-light'];
+  const circleClassName = isDarkTheme ? 'cls-5' : 'cls-5-light';
+  const pathClassName = isDarkTheme ? 'cls-10' : 'cls-10-light';
 
   return (
     <g id={`number${number}`}>
