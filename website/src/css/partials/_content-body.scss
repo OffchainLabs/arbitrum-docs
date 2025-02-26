@@ -105,7 +105,7 @@ article {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.8);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -127,8 +127,7 @@ article {
         max-width: 90%;
         max-height: 90%;
         object-fit: contain;
-        transform: scale(2);
-        transition: transform 0.3s ease-in-out;
+        cursor: zoom-out;
       }
 
       &__close {
@@ -138,9 +137,9 @@ article {
         background: none;
         border: none;
         color: white;
+        font-size: 24px;
         cursor: pointer;
         padding: 8px;
-        font-size: 24px;
         z-index: 100000;
 
         &:hover {

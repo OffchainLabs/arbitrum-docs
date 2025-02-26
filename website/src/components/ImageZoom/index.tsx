@@ -31,8 +31,24 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen]);
+
   const renderModal = () => {
-    if (!isOpen) return null;
+    if (!isOpen || typeof window === 'undefined') return null;
     
     return (
       <div className="image-zoom__modal" onClick={handleClose}>
@@ -53,6 +69,7 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
               e.stopPropagation();
               handleClose(e);
             }}
+            aria-label="Close zoom view"
           >
             ✕
           </button>
