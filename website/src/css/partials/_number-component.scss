@@ -1,46 +1,37 @@
-/* Base circle styles */
-.circle-base {
-  r: 20.95px;
-  transition: opacity 0.3s ease;
+:export {
+  cls5: cls-5;
+  cls5Light: cls-5-light;
+  cls10: cls-10;
+  cls10Light: cls-10-light;
+  blinking: blinking;
 }
 
 .cls-5 {
-  @extend .circle-base;
+  r: 20.95px;
+  transition: opacity 0.3s ease;
   fill: #ff7f2a;
 }
 
 .cls-5-light {
-  @extend .circle-base;
+  r: 20.95px;
+  transition: opacity 0.3s ease;
   fill: #ff7f2a;
 }
 
-/* Path styles */
-.path-base {
+.cls-10 {
   fill: #fff;
   transition: fill 0.3s ease;
 }
 
-.cls-10 {
-  @extend .path-base;
-  fill: #fff;
-}
-
 .cls-10-light {
-  @extend .path-base;
   fill: #000;
+  transition: fill 0.3s ease;
 }
 
-/* Animation */
 @keyframes blink {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
 .blinking {
