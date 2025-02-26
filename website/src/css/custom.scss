@@ -12,7 +12,6 @@
 @use './partials/_footer.scss';
 @use './partials/_navbar.scss';
 @use './partials/_modal.scss';
-@use './partials/_number-component.scss';
 
 @keyframes blink {
   0% {
@@ -24,4 +23,40 @@
   100% {
     opacity: 1;
   }
+}
+
+/* Number component styles */
+.number-component {
+  cursor: pointer;
+  
+  &__circle {
+    transition: fill 0.3s ease;
+    
+    &:hover {
+      fill: #ff9f5a;
+    }
+  }
+  
+  &__text {
+    pointer-events: none;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite ease-in-out;
 }

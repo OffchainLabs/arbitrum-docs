@@ -16,6 +16,12 @@ import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javasc
 import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
 import { useColorMode } from '@docusaurus/theme-common';
 
+// Define the CodeBlock interface
+interface CodeBlock {
+  language: string;
+  code: string;
+}
+
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
 
