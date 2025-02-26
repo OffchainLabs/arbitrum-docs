@@ -49,22 +49,22 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
 
   const renderModal = () => {
     if (!isOpen || typeof window === 'undefined') return null;
-    
+
     return (
       <div className="image-zoom__modal" onClick={handleClose}>
         <div className="image-zoom__container">
           {imageLoaded ? (
-            <img 
-              src={src} 
-              alt={alt || ''} 
+            <img
+              src={src}
+              alt={alt || ''}
               className="image-zoom__image"
-              onClick={(e) => e.stopPropagation()} 
+              onClick={(e) => e.stopPropagation()}
             />
           ) : (
             <div className="image-zoom__loading">Loading...</div>
           )}
-          <button 
-            className="image-zoom__close" 
+          <button
+            className="image-zoom__close"
             onClick={(e) => {
               e.stopPropagation();
               handleClose(e);
