@@ -131,6 +131,7 @@
     position: fixed;
     inset: 0;
     z-index: 9999;
+    backdrop-filter: blur(4px);
   }
 
   &__content {
@@ -138,7 +139,7 @@
     width: 100%;
     max-width: 800px;
     min-height: 200px;
-    max-height: calc(100vh - 40px);
+    max-height: calc(100vh - 40px); 
     background-color: var(--ifm-background-color);
     border-radius: 4px;
     padding: 24px;
@@ -148,6 +149,8 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     overflow: hidden;
     will-change: transform, opacity;
+    backdrop-filter: blur(16px);
+    background-color: rgba(var(--ifm-background-color), 0.9);
 
     @media (max-width: 768px) {
       padding: 16px;
