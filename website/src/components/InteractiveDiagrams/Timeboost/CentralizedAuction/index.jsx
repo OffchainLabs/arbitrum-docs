@@ -2,6 +2,10 @@ import * as React from 'react';
 import { Modal } from './Modal';
 import { NumberComponent } from './NumberComponent';
 
+export default function CentralizedAuction() {
+  return <FlowChart />;
+}
+
 export const FlowChart = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

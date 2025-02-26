@@ -60,3 +60,11 @@
 .pulse {
   animation: pulse 2s infinite ease-in-out;
 }
+
+/* Interactive diagram specific styles */
+.interactive-diagram {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}

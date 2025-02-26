@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTransition, animated } from '@react-spring/web';
 import * as Dialog from '@radix-ui/react-dialog';
 import step1Content from './modal-centralized-auction-step-1.mdx';

@@ -3,7 +3,6 @@ import { useSpring, animated } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
 import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
-import { NumberComponentProps } from './types';
 
 export const NumberComponent = ({ number }) => {
   const { isDarkTheme } = useColorMode();
@@ -31,7 +30,7 @@ export const NumberComponent = ({ number }) => {
   const offsetY = coords.circle.y - coords.path.y + (coords.offset?.y || 0);
 
   return (
-    <g id={`number${number}`}>
+    <g id={`number${number}`} className="number-component">
       {(number === 2 || number === 3 || number === 4) && (
         <ButtonComponent
           x={coords.circle.x - CIRCLE_RADIUS}
@@ -45,6 +44,7 @@ export const NumberComponent = ({ number }) => {
         cx={coords.circle.x}
         cy={coords.circle.y}
         r={CIRCLE_RADIUS}
+        className="number-component__circle"
         style={{ 
           ...animationProps, 
           fill: '#ff7f2a',
@@ -55,6 +55,7 @@ export const NumberComponent = ({ number }) => {
       <path
         id={`path${number}`}
         d={pathData}
+        className="number-component__text"
         style={{ 
           fill: isDarkTheme ? '#fff' : '#000'
         }}
