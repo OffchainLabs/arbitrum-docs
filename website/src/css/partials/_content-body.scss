@@ -135,8 +135,8 @@ article {
       }
 
       &__image {
-        width: 100%;
-        height: 100%;
+        max-width: 90%;
+        max-height: 90vh;
         object-fit: contain;
         cursor: zoom-out;
         animation: zoomIn 0.3s ease-in-out forwards;
@@ -184,7 +184,7 @@ article {
       }
       to {
         opacity: 1;
-        transform: scale(2);
+        transform: scale(1.2);
       }
     }
 
