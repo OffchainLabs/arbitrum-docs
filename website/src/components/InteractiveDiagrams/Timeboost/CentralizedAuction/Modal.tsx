@@ -102,16 +102,15 @@ export function Modal({ number }: { number: number }) {
         createPortal(
           <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
             <Dialog.Portal>
-              {overlayTransitions((styles, item) => 
-                item && (
-                  <Dialog.Overlay className="modal__overlay" style={styles} />
-                )
+              {overlayTransitions(
+                (styles, item) =>
+                  item && <Dialog.Overlay className="modal__overlay" style={styles} />,
               )}
               {transitions(
                 (styles, item) =>
                   item && (
                     <div className="modal__container">
-                      <Dialog.Content 
+                      <Dialog.Content
                         className="modal__content"
                         forceMount
                         style={{
@@ -120,7 +119,10 @@ export function Modal({ number }: { number: number }) {
                         }}
                       >
                         <header className="modal__header">
-                          <Dialog.Close className="modal__close-button" onClick={() => setIsOpen(false)}>
+                          <Dialog.Close
+                            className="modal__close-button"
+                            onClick={() => setIsOpen(false)}
+                          >
                             <CloseIcon />
                           </Dialog.Close>
                         </header>
@@ -147,4 +149,3 @@ const CloseIcon = () => (
     />
   </svg>
 );
-
