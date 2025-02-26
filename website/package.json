@@ -33,6 +33,8 @@
     "@docusaurus/preset-classic": "^3.6.3",
     "@docusaurus/theme-live-codeblock": "^3.6.3",
     "@docusaurus/theme-mermaid": "^3.6.3",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@react-spring/web": "^9.7.3",
     "@types/mdx": "^2.0.11",
     "@types/prismjs": "^1.26.5",
     "@types/react": "^18.2.55",
@@ -58,8 +60,6 @@
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.3.2",
     "@offchainlabs/prettier-config": "0.2.1",
-    "@radix-ui/react-dialog": "^1.1.6",
-    "@react-spring/web": "^9.7.5",
     "@stitches/react": "^1.2.8",
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/node": "^22.10.10",
