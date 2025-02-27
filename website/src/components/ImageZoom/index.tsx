@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import {
-  Modal,
-  Container,
-  ZoomedImage,
-  CloseButton,
-  LoadingIndicator
-} from './styles';
 
 interface ImageZoomProps {
   src: string;
@@ -79,25 +72,27 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
     if (!isOpen || !portalContainer) return null;
 
     return createPortal(
-      <Modal onClick={handleClose}>
-        <Container>
+      <div className="image-zoom__modal" onClick={handleClose}>
+        <div className="image-zoom__container">
           {imageLoaded ? (
-            <ZoomedImage
+            <img
               src={src}
               alt={alt || ''}
+              className="image-zoom__image"
               onClick={(e) => e.stopPropagation()}
             />
           ) : (
-            <LoadingIndicator>Loading...</LoadingIndicator>
+            <div className="image-zoom__loading">Loading...</div>
           )}
-          <CloseButton
+          <button
+            className="image-zoom__close"
             onClick={handleClose}
             aria-label="Close zoom view"
           >
             ✕
-          </CloseButton>
-        </Container>
-      </Modal>,
+          </button>
+        </div>
+      </div>,
       portalContainer
     );
   };
