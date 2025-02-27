@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from './Modal';
 import { coordinates, CIRCLE_RADIUS } from './constants';
 
-export default function CentralizedAuction(): JSX.Element {
+function CentralizedAuctionDiagram(): JSX.Element {
   return (
     <svg width="100%" height="100%" viewBox="0 0 1200 900">
       {Object.entries(coordinates).map(([number, coord]) => (
@@ -21,3 +21,6 @@ export default function CentralizedAuction(): JSX.Element {
     </svg>
   );
 }
+
+export const FlowChart = CentralizedAuctionDiagram;
+export default CentralizedAuctionDiagram;
