@@ -13,9 +13,13 @@ export const NumberComponent = ({ number }) => {
     number === 1 || number === 5
       ? { opacity: 1 }
       : useSpring({
-          from: { opacity: 0 },
-          to: [{ opacity: 1 }, { opacity: 0 }],
-          config: { tension: 20800, friction: 32 },
+          from: { opacity: 0, fill: '#ff7f2a' },
+          to: [
+            { opacity: 1, fill: '#ff7f2a' },
+            { opacity: 1, fill: '#3578e5' },
+            { opacity: 0, fill: '#3578e5' }
+          ],
+          config: { tension: 20000, friction: 10 },
           loop: true,
           reset: true,
           immediate: false,
@@ -50,7 +54,7 @@ export const NumberComponent = ({ number }) => {
         cy={coords.circle.y}
         r={CIRCLE_RADIUS}
         className={circleClassName}
-        style={{ ...animationProps, fill: '#ff7f2a' }}
+        style={{ ...animationProps }}
       />
       <path
         id={`path${number}`}
