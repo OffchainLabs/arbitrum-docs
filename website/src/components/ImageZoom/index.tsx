@@ -1,5 +1,12 @@
+/**
+ * ImageZoom Component
+ *
+ * A React component that adds a click-to-zoom feature to images with smooth animations.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import styled from 'styled-components';
 
 interface ImageZoomProps {
   src: string;
@@ -7,57 +14,64 @@ interface ImageZoomProps {
   className?: string;
 }
 
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vw;
+  height: 90vh;
+`;
+
+const ZoomedImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
+const CloseButton = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 100000;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+
 export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    // Create portal container on mount
-    if (typeof window !== 'undefined') {
-      const container = document.createElement('div');
-      container.id = 'image-zoom-portal';
-      document.body.appendChild(container);
-      setPortalContainer(container);
-
-      return () => {
-        document.body.removeChild(container);
-      };
-    }
-  }, []);
 
   useEffect(() => {
     if (isOpen) {
       const img = new Image();
       img.src = src;
       img.onload = () => setImageLoaded(true);
-      img.onerror = (e) => {
-        console.error('Error loading image:', e);
-        setIsOpen(false);
-      };
-      // Prevent body scroll when modal is open
-      document.body.style.overflow = 'hidden';
+      img.onerror = (e) => console.error('Error loading image:', e);
     } else {
       setImageLoaded(false);
-      document.body.style.overflow = 'unset';
     }
   }, [isOpen, src]);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen]);
 
   const handleImageClick = () => {
     setIsOpen(true);
@@ -68,48 +82,31 @@ export default function ImageZoom({ src, alt, className }: ImageZoomProps) {
     setIsOpen(false);
   };
 
-  const renderModal = () => {
-    if (!isOpen || !portalContainer) return null;
-
-    return createPortal(
-      <div className="image-zoom__modal" onClick={handleClose}>
-        <div className="image-zoom__container">
-          {imageLoaded ? (
-            <img
-              src={src}
-              alt={alt || ''}
-              className="image-zoom__image"
-              onClick={(e) => e.stopPropagation()}
-            />
-          ) : (
-            <div className="image-zoom__loading">Loading...</div>
-          )}
-          <button
-            className="image-zoom__close"
-            onClick={handleClose}
-            aria-label="Close zoom view"
-          >
-            ✕
-          </button>
-        </div>
-      </div>,
-      portalContainer
-    );
-  };
+  const renderModal = () => (
+    <Modal onClick={handleClose}>
+      <ImageContainer onClick={(e) => e.stopPropagation()}>
+        {imageLoaded ? (
+          <ZoomedImage src={src} alt={alt || ''} />
+        ) : (
+          <div style={{ color: 'white' }}>Loading...</div>
+        )}
+        <CloseButton onClick={handleClose}>✕</CloseButton>
+      </ImageContainer>
+    </Modal>
+  );
 
   return (
     <>
-      <img
-        src={src}
-        alt={alt || ''}
-        className={className}
-        onClick={handleImageClick}
-        style={{ cursor: 'zoom-in' }}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => e.key === 'Enter' && handleImageClick()}
-      />
-      {renderModal()}
+      <div className="markdown">
+        <img
+          src={src}
+          alt={alt || ''}
+          className={className}
+          onClick={handleImageClick}
+          style={{ cursor: 'zoom-in' }}
+        />
+      </div>
+      {isOpen && typeof document !== 'undefined' && createPortal(renderModal(), document.body)}
     </>
   );
 }
