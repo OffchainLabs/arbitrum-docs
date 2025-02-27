@@ -13,7 +13,7 @@ export const NumberComponent = ({ number }) => {
     number === 1 || number === 5
       ? { opacity: 1 }
       : useSpring({
-          from: { opacity: 0.2 },
+          from: { opacity: 0 },
           to: [{ opacity: 1 }, { opacity: 0 }],
           config: { tension: 20800, friction: 32 },
           loop: true,
