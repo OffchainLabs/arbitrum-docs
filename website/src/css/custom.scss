@@ -28,15 +28,15 @@
 /* Number component styles */
 .number-component {
   cursor: pointer;
-  
+
   &__circle {
     transition: fill 0.3s ease;
-    
+
     &:hover {
       fill: #ff9f5a;
     }
   }
-  
+
   &__text {
     pointer-events: none;
   }
