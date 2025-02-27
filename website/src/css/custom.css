@@ -22,7 +22,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,14 +46,16 @@
 
 .image-zoom__close {
   position: absolute;
-  top: -40px;
-  right: -40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: transparent;
   border: none;
   color: white;
   font-size: 24px;
   cursor: pointer;
   padding: 8px;
+  z-index: 1001;
 }
 
 .image-zoom__close:hover {
