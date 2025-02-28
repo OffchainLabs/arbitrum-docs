@@ -16,7 +16,7 @@ As another example, assume that a transaction is submitted at `t=150ms`. If the 
 
 ## How express lane transactions are ordered into blocks
 
-The express lane time advantage is currently set to 200ms while the current block creation time is 250ms. This means that if an express lane transaction and a normal transaction both arrive at the sequencer at the same time, but _before 50ms have passed from whence the last block was produced_, then both the transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction.
+The express lane time advantage is currently set to 200ms while the current block creation time is 250ms. This means that if an express lane transaction and a normal transaction both arrive at the sequencer at the same time, but _before 50ms have passed since the last block was produced_, then both the transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction.
 
 Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The first expected sequence number for a new round is zero and increments for each accepted transaction. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
