@@ -50,12 +50,12 @@ The transaction may still have been processed, despite this error message, if tr
 #### Error 2: Sequence number reaching the max allowed limit
 
 `"message sequence number has reached max allowed limit. SequenceNumber: %d, Limit: %d",`
-This means the sequence number of the received transaction is ahead of the next expected sequence number by more than the limit. Submit the messages in sequential order.
+This means the `sequenceNumber` of the received transaction is ahead of the next expected sequence number by more than the limit. To resolve, we simply re-submit your transactions in sequential `sequenceNumber` order.
 
 #### Error 3: Already-consumed `sequenceNumber` related errors
 
 `"Accepted timeboost tx failed: Sequence number: %d (consumed), Transaction hash: %v, Error: $some error unrelated to timeout$”`  
-This type of error means that the underlying transaction of the express lane submission has errored and the corresponding `sequenceNumber` has been consumed.
+This type of error means that the underlying transaction of the express lane submission has errored for another reason and the corresponding `sequenceNumber` has been consumed. A description of these other types of errors can be found [here](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
 #### Other Errors
 
