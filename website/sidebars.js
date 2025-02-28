@@ -370,6 +370,7 @@ const sidebars = {
               id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
               label: `Enable fast withdrawals`,
             },
+
             {
               type: 'category',
               label: 'AEP fee router',
