@@ -7,71 +7,74 @@ user_story: As a current or prospective Arbitrum user, I need to learn more abou
 content_type: get-started
 ---
 
-Suppose the rollup chain looks like this:
+import ImageZoom from '@site/src/components/ImageZoom';
 
-![img](https://lh4.googleusercontent.com/kAZY9H73dqcHvboFDby9nrtbYZrbsHCYtE5X9NIZQsvcz58vV0WUWUq1xsYKzYWQSc1nPZ8W86LLX0lD3y-ctEaG2ISa2Wpz2pYxTzW09P1UvqSDuoqkHlGDYLLMTzLqX4rlP8Ca)
+This document attempts to give an account of BoLD, Arbitrum's new all-vs-all challenge protocol, in terms that might be familiar to people used to studying Arbitrum's previous, 1-vs-1 challenge protocol. For another explanation of BoLD's concepts, refer to [Gentle Introduction](/how-arbitrum-works/bold/gentle-introduction.mdx), [Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx), or the BoLD [Research whitepaper](https://arxiv.org/abs/2404.10491).
 
-RBlocks 93 and 95 are siblings (they both have 92 as predecessor). Alice is bonded on 93 and Bob is bonded on 95.
+Suppose the Rollup chain looks like this:
 
-At this point we know that Alice and Bob disagree about the correctness of <a data-quicklook-from="rblock">RBlock</a> 93, with Alice committed to 93 being correct and Bob committed to 93 being incorrect. (Bob is bonded on 95, and 95 implicitly claims that 92 is the last correct RBlock before it, which implies that 93 must be incorrect.)
+<ImageZoom
+  src="/img/haw-interactive-fraud-proof.svg"
+  alt="Interactive fraud proof"
+  className="img-600px"
+/>
 
-Whenever two bonders are bonded on sibling RBlocks, and neither of those bonders is already in a <a data-quicklook-from="challenge">Challenge</a>, anyone can start a challenge between the two. The rollup protocol will record the challenge and referee it, eventually declaring a winner and confiscating the loser’s bond. The loser will be removed as a bonder.
+Assertions 93 and 95 are siblings (they both have 92 as predecessor). Alice is bonded on 93 and Bob is bonded on 95.
 
-The challenge is a game in which Alice and Bob alternate moves, with an Ethereum contract as the referee. Alice, the defender, moves first.
+At this point we know that Alice and Bob disagree about the correctness of assertion 93, with Alice committed to 93 being correct and Bob committed to 93 being incorrect. (Bob is bonded on 95, and 95 implicitly claims that 92 is the last correct assertion before it, which implies that 93 must be incorrect.)
 
-The game will operate in two phases: <a data-quicklook-from="dissection">Dissection</a>, followed by one-step proof. Dissection will narrow down the size of the dispute until it is a dispute about just one instruction of execution. Then the one-step proof will determine who is right about that one instruction.
+Whenever two (or more) proposers are bonded on sibling assertions, a challenge begins between all of them. (There can only be one bonder per assertion, but multiple assertions may participate in a challenge.) The Rollup protocol will record and referee the challenge, eventually declaring a winner and confiscating the losers' bonds. This will cause the losers to be removed as proposers.
 
-We’ll describe the dissection part of the protocol twice. First, we’ll give a simplified version which is easier to understand but less efficient. Then we’ll describe how the real version differs from the simplified one.
+The challenge is a game in which two or more parties make moves in an attempt to defend the correctness of assertions they (or their allies) have staked on, with an Ethereum contract as the referee. The goal of the system is to determine which assertion corresponds to the correct execution.
 
-## Dissection Protocol: Simplified Version
+The game will operate in two phases: Bisection, followed by one-step proof. Bisection will narrow down the size of the dispute until it is a dispute about just one instruction of execution. Then the one-step proof will determine who is right about that one instruction.
 
-Alice is defending the claim that starting with the state in the predecessor RBlock, the state of the Virtual Machine can advance to the state specified in RBlock A. Essentially she is claiming that the Virtual Machine can execute N instructions, and that that execution will consume M inbox messages and transform the hash of outputs from H’ to H.
+We’ll describe the bisection part of the protocol twice. First, we’ll give a simplified version which is easier to understand. Then we’ll describe some ways in which the real version differs from the simplified one. For an even more thorough explanation, please see the [BoLD research whitepaper](https://arxiv.org/abs/2404.10491).
 
-Alice’s first move requires her to dissect her claims about intermediate states between the beginning (0 instructions executed) and the end (N instructions executed). So we require Alice to divide her claim in half, and post the state at the half-way point, after N/2 instructions have been executed.
+## Bisection Protocol: Simplified Version
 
-Now Alice has effectively bisected her N-step <a data-quicklook-from="assertion">Assertion</a> into two (N/2)-step assertions. Bob has to point to one of those two half-size assertions and claim it is wrong.
+Alice (or one of her allies - for the sake of brevity we'll refer to this party as Alice) is defending the claim that starting with the state in the predecessor assertion, the state of the Virtual Machine can advance to the state specified in assertion A. Once a challenge starts, Alice has to provide a commitment to the entire history of the computation: that is, to the state after each step of execution.
 
-At this point we’re effectively back in the original situation: Alice having made an assertion that Bob disagrees with. But we have cut the size of the assertion in half, from N to N/2. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to N/4. And we can continue bisecting, so that after a logarithmic number of rounds Alice and Bob will be disagreeing about a single step of execution. That’s where the dissection phase of the protocol ends, and Alice must make a one-step proof which will be checked by the EthBridge.
+Alice’s first move requires her to bisect her claims about intermediate states between the beginning (0 instructions executed) and the end (`N` instructions executed). So we require Alice to divide her claim in half, and post the state at the half-way point, after `N/2` instructions have been executed.
 
-## Why Dissection Correctly Identifies a Cheater
+Now Alice has effectively bisected her `N`-step <a data-quicklook-from="assertion">Assertion</a> into two (`N/2`)-step assertions. Bob (or one of his allies; for brevity, Bob) needs to do the same for his assertion, also deriving two new (`N/2`)-step assertions. At most one of these will be a "rival" of one of Alice's assertions. Two assertions are "rivals" if they agree on a prefix of the state history to which they commit but disagree on the rest; this is very similar to the concept of "siblings" for assertions. Whichever of the two of Alice's assertions now has a rival, Alice will proceed to defend it.
 
-Before talking about the complexities of the real <a data-quicklook-from="challenge-protocol">Challenge protocol</a>, let’s stop to understand why the simplified version of the protocol is correct. Here correctness means two things: (1) if Alice’s initial claim is correct, Alice can always win the challenge, and (2) if Alice’s initial claim is incorrect, Bob can always win the challenge.
+At this point we’re effectively back in the original situation: Alice having made an assertion that Bob disagrees with. But we have cut the size of the assertion in half, from `N` to `N/2`. We can apply the same method again, with Alice bisecting and Bob choosing one of the halves, to reduce the size to `N/4`. And we can continue bisecting, so that after a logarithmic number of rounds Alice and Bob will be disagreeing about a single step of execution. That’s where the bisection phase of the protocol ends, and Alice must make a one-step proof which will be checked by the EthBridge.
+
+## Why Bisection Correctly Identifies a Cheater
+
+Before talking about the complexities of the real <a data-quicklook-from="challenge-protocol">Challenge protocol</a>, let’s stop to understand why the simplified version of the protocol is correct. Here correctness means two things: (1) if Alice’s initial claim is correct, Alice (or her ally) can always win the challenge, and (2) if Alice’s initial claim is incorrect, and there is at least one honest validator participating in the protocol, Alice and her allies never win the challenge.
 
 To prove (1), observe that if Alice’s initial claim is correct, she can offer a truthful midpoint claim, and both of the implied half-size claims will be correct. So whichever half Bob objects to, Alice will again be in the position of defending a correct claim. At each stage of the protocol, Alice will be defending a correct claim. At the end, Alice will have a correct one-step claim to prove, so that claim will be provable and Alice can win the challenge.
 
-To prove (2), observe that if Alice’s initial claim is incorrect, this can only be because her claimed endpoint after N steps is incorrect. Now when Alice offers her midpoint state claim, that midpoint claim is either correct or incorrect. If it’s incorrect, then Bob can challenge Alice’s first-half claim, which will be incorrect. If Alice’s midpoint state claim is correct, then her second-half claim must be incorrect, so Bob can challenge that. So whatever Alice does, Bob will be able to challenge an incorrect half-size claim. At each stage of the protocol, Bob can identify an incorrect claim to challenge. At the end, Alice will have an incorrect one-step claim to prove, which she will be unable to do, so Bob can win the challenge.
+To prove (2), observe that if Alice’s initial claim is incorrect, this can only be because her claimed endpoint after `N` steps is incorrect. Now when Alice offers her midpoint state claim, that midpoint claim is either correct or incorrect. If it’s incorrect, then Bob can force Alice to defend her first-half claim, which will be incorrect. If Alice’s midpoint state claim is correct, then her second-half claim must be incorrect, and Bob can force her to defend that. So whatever Alice does, Bob will be able to challenge an incorrect half-size claim. At each stage of the protocol, Bob can identify an incorrect claim to challenge. At the end, Alice will have an incorrect one-step claim to prove, which she will be unable to do, so Bob can win the challenge.
 
-(If you’re a stickler for mathematical precision, it should be clear how these arguments can be turned into proofs by induction on N.)
+:::note
 
-## The Real Dissection Protocol
+If you’re a stickler for mathematical precision, we invite you to read the [BoLD research whitepaper](https://arxiv.org/abs/2404.10491). Formalizing these and other arguments pertaining to BoLD is quite tricky and subtle!
 
-The real dissection protocol is conceptually similar to the simplified one described above, but with several changes that improve efficiency or deal with necessary corner cases. Here is a list of the differences.
+:::
 
-**Dissection over L2 blocks, then over instructions:** Alice's assertion is over an RBlock, which asserts the result of creating some number of Layer 2 Nitro blocks. Dissection first occurs over these Layer 2 blocks, to narrow the dispute down to a dispute about a single Layer 2 Nitro block. At this point, the dispute transforms into a dispute about a single execution of the <a data-quicklook-from="state-transition-function">State Transition Function</a> or in other words about the execution of a sequence of WAVM instructions. The protocol then executes the recursive dissection sub-protocol again, this time over WAVM instructions, to narrow the dispute to a single instruction. The dispute concludes with a one-step proof of a single instruction (or a party failing to act and losing by timeout).
+## The real bisection protocol
 
-**K-way dissection:** Rather than dividing a claim into two segments of size N/2, we divide it into K segments of size N/K. This requires posting K-1 intermediate claims, at points evenly spaced through the claimed execution. This reduces the number of rounds by a factor of log(K)/log(2).
+The real bisection protocol is conceptually similar to the simplified one described above, but with several changes that improve efficiency or deal with necessary corner cases. Here is a list of the differences.
 
-**Answer a dissection with a dissection:** Rather than having each round of the protocol require two moves, where Alice dissects and Bob chooses a segment to challenge, we instead require Bob, in challenging a segment, to post his own claimed endpoint state for that segment (which must differ from Alice’s) as well as his own dissection of his version of the segment. Alice will then respond by identifying a subsegment, posting an alternative endpoint for that segment, and dissecting it. This reduces the number of moves in the game by an additional factor of 2, because the size is cut by a factor of K for every move, rather than for every two moves.
-
-**Deal With the Empty-Inbox Case**: The real AVM can’t always execute N units of gas without getting stuck. The machine might halt, or it might have to wait because its inbox is exhausted so it can’t go on until more messages arrive. So Bob must be allowed to respond to Alice’s claim of N units of execution by claiming that N steps are not possible. The real protocol thus allows any response (but not the initial claim) to claim a special end state that means essentially that the specified amount of execution is not possible under the current conditions.
-
-**Time Limits:** Each player is given a time allowance. The total time a player uses for all of their moves must be less than the time allowance, or they lose the game. Think of the time allowance as being about a week.
+**Bisection over L2 blocks, then over "big steps" of many instructions, then over single instructions: **Alice's assertion is over an assertion, which asserts the result of creating some number of Layer 2 Nitro blocks. Bisection first occurs over these Layer 2 blocks, to narrow the dispute down to a dispute about a single Layer 2 Nitro block. Next, the dispute transforms into a dispute about executing a "big step" of 2^26 instructions (this intermediate level is needed to reduce the workload on the validator). At this point, the dispute transforms into a dispute about a single execution of the <a data-quicklook-from="state-transition-function">State Transition Function</a> or in other words about the execution of a sequence of WAVM instructions. The protocol then executes the recursive bisection sub-protocol again, this time over WAVM instructions, to narrow the dispute to a single instruction. For details about how these "subchallenges" work, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
+**Time Limits:** The protocol can be seen as tracking a timer for each assertion, counting (essentially) how much time has passed while that assertion could be seen as the presumptive winner of the game (that is, the amount of time during which the onus is on parties opposing the assertion to act.) Think of the time allowance as being about a week. Once an assertion's timer reaches this time allowance, it can be confirmed. The time allowance is designed to give the honest parties in the protocol enough time to act, including the time needed to calculate, submit, and process moves, as well as to account for possible censorship on L1.
 
 It should be clear that these changes don’t affect the basic correctness of the challenge protocol. They do, however, improve its efficiency and enable it to handle all of the cases that can come up in practice.
 
 ## Efficiency
 
-The challenge protocol is designed so that the dispute can be resolved with a minimum of work required by the protocol (via its Layer 1 Ethereum contracts) in its role as referee. When it is Alice’s move, the protocol only needs to keep track of the time Alice uses, and ensure that her move does include K-1 intermediate points as required. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”.
+The challenge protocol is designed to resolve the dispute with a minimum of work required by the protocol (via its parent chain contracts) in its role as referee. The protocol needs to track information for the assertions created by parties in the challenge, including their history commitments and timers that can be used to calculate how long they have gone without a rival. The protocol doesn’t need to pay attention to whether those claims are correct in any way; it only needs to know whether Alice’s move “has the right shape”. For more information on what the protocol needs to keep track of, see [BoLD: Technical deep dive](/bold/concepts/bold-technical-deep-dive.mdx)
 
 The only point where the protocol needs to evaluate a move “on the merits” is at the one-step proof, where it needs to look at Alice’s proof and determine whether the proof that was provided does indeed establish that the virtual machine moves from the before state to the claimed after state after one step of computation.
-
-import ChallengeManagerDiagram from '../diagrams/_challenge-manager.mdx';
 
 ## ChallengeManager
 
 This section is a technical deep dive into the `ChallengeManager` and will walk through the arbitration of a challenge game in great detail. The `ChallengeManager` plays the role of the arbiter of challenge games. Here's a diagram of the challenge state machine:
 
-<ChallengeManagerDiagram />
+<ImageZoom src="/img/haw-challenge-manager.svg" alt="Challenge manager" className="img-600px" />
 
 ### Block challenge
 
@@ -82,51 +85,18 @@ Once the challenge has been bisected down to an individual block,
 This operates similarly to a bisection in that the responder must provide a competing global state and machine state,
 but it uses that information to transition to the execution challenge phase.
 
-### Execution challenge
+### "Big-Step" execution challenge
 
-Once narrowed down to an individual block, the actual machine execution can be bisected.
-Once the execution has been bisected down to an individual step,
-`oneStepProveExecution` can be called by the current responder.
-The current responder must provide proof data to execute a step of the machine.
-If executing that step ends in a different state than was previously asserted,
-the current responder wins the challenge.
+Once narrowed down to an individual block, the actual machine execution can be bisected. We begin by bisecting the machine execution until we reach a "chunk" of 2^26 `WASM` instructions. Once the disagreement has reached this granularity, we can proceed with a "small-step" execution challenge ([see below](#small-step-execution-challenge)). For more detail on why we use two levels of execution challenges ("big step" and "small-step"), see "[Challenge Resolution](/bold/concepts/bold-technical-deep-dive.mdx#challenge-resolution)" in the BoLD technical deep dive.
 
-### General bisection protocol
+### "Small-Step" Execution challenge
 
-_**Note:** the term bisection in this document is used for clarity but refers to a dissection of any degree._
-
-The `ChallengeLib` helper library contains a `hashChallengeState` method which hashes a list of segment hashes,
-a start position, and a total segments length, which generates the `ChallengeLib.Challenge`'s `challengeStateHash`.
-This is enough information to infer the position of each segment hash.
-The challenge "degree" refers to the number of segment hashes minus one.
-The distance (in steps) between one segment and the next is `floor(segmentsLength / degree)`, except for the
-last pair of segments, where `segmentsLength % degree` is added to the normal distance, so that
-the total distance is `segmentsLength`.
-
-A challenge begins with only two segments (a degree of one), which is the asserter's initial assertion.
-Then, the bisection game begins on the challenger's turn.
-In each round of the game, the current responder must choose an adjacent pair of segments to challenge.
-By doing so, they are disputing their opponent's claim that starting with the first segment and executing
-for the specified distance (number of steps) will result in the second segment. At this point the two parties
-agree on the correctness of the first segment but disagree about the correctness of the second segment.
-The responder must provide a bisection with a start segment equal to the first segment, but an end segment
-different from the second segment.
-In doing so, they break the challenge down into smaller distances, and it becomes their opponent's turn.
-Each bisection must have degree `min(40, numStepsInChallengedSegment)`, ensuring the challenge makes progress.
-
-In addition, a segment with a length of only one step cannot be bisected.
-What happens there is specific to the phase of the challenge, as either a `challengeExecution` or `oneStepProveExecution`.
-
-Note that unlike in a traditional bisection protocol, where one party proposes segments and the other decides which to challenge,
-this protocol is symmetric in that both players take turns deciding where to challenge and proposing bisections
-when challenging.
+After reaching a "chunk" of 2^26 instructions, we begin a new challenge level, bisecting this chunk until we reach a dispute over a single instruction. Once the execution has been bisected down to an individual step, `oneStepProveExecution` can be called by any player to resolve the one-step dispute. That player must provide proof data to execute a step of the machine. This proof is checked on L1. If it is correct, the one-step edge to which the one-step proof is applied and considered confirmed.
 
 ### Winning the challenge
 
 Note that for the time being, winning the challenge isn't instant.
-Instead, it simply makes the current responder the winner's opponent,
-and sets the state hash to 0. In that state the party does not have any
-valid moves, so it will eventually lose by timeout.
+
 This is done as a precaution, so that if a challenge is resolved incorrectly,
 there is time to diagnose and fix the error with a contract upgrade.
 
@@ -138,13 +108,14 @@ in a correct execution. This documents those assumptions about what's being exec
 If a case is "unreachable", that is, the case is assumed to never arise in correct execution,
 then the OSP can implement any instruction semantics in that case.
 
-- In a challenge between malicious parties, any case can arise. The challenge protocol must do
+- In a challenge between malicious assertions, that start from an unreachable machine state, any case
+  can arise. The challenge protocol must do
   something safe in every case. But the instruction semantics can be weird in such cases because
-  if both parties to a challenge are malicious, the protocol doesn't care who wins the challenge.
+  no honest party ever needs to try to refute an assertion that starts from an unreachable state. All assertions engaging in a dispute starting from an unreachable state must be malicious, and the protocol doesn't need to care which one wins. In particular, it is OK for the onchain one-step proof contract to differ in its behavior from the node software's execution engine in this case (and _only_ in this case).
 - In a challenge with one honest party, the honest party will never need to one-step prove an
   unreachable case. The honest party will only assert correct executions, so it will only have to
   prove reachable cases.
-- In a challenge with one honest party, the dishonest party could assert an execution that transitions
+- In a challenge with an honest party, a dishonest party could assert an execution that transitions
   into an unreachable case, but such an execution must include an invalid execution of a reachable case
   earlier in the assertion. Because a challenge involving an honest party will eventually require an OSP
   over the first instruction where the parties disagree, the eventual OSP will be over the earlier point
@@ -182,18 +153,16 @@ leaving 13,108 bytes for other proving data.
 
 WAVM has an opcode which resolves the preimage of a Keccak-256 hash.
 This can only be executed if the preimage is already known to all nodes,
-and can only be proven if the preimage isn't too long. Violations of this assumption are
-undetectable by the OSP checker.
+and can only be proven if the preimage isn't too long. Violations of this assumption are undetectable by the OSP checker.
 
 The current length limit is 117,964 bytes for the reasons mentioned above.
-Here's a list of which preimages may be requested by Nitro, and why they're known to all parties,
-and not too large:
+Here's a list of which preimages may be requested by Nitro, and why they're known to all parties, and not too large:
 
 #### Block headers
 
 Nitro may request up to the last 256 <a data-quicklook-from="l2-block">L2 Block</a> headers.
 The last block header is required to determine the current state,
-and blocks before it are required to implement the `BLOCKHASH` evm instruction.
+and blocks before it are required to implement the `BLOCKHASH` EVM instruction.
 
 This is safe as previous block headers are a fixed size, and are known to all nodes.
 
@@ -202,9 +171,7 @@ This is safe as previous block headers are a fixed size, and are known to all no
 To resolve state, Nitro traverses the state trie by resolving preimages.
 
 This is safe as validators retain archive state of unconfirmed blocks,
-each trie branch is of a fixed size,
-and the only variable sized entry in the trie is contract code,
-which is limited by EIP-170 to about 24KB.
+each trie branch is of a fixed size, and the only variable sized entry in the trie is contract code, which is limited by EIP-170 to about 24KB.
 
 ## WASM to WAVM
 
@@ -268,7 +235,7 @@ They are translated by bitcasting `f32` and `f64` arguments to `i32`s and `i64`s
 then a cross module call to the floating point library,
 and finally bitcasts of any return values from `i32`s and `i64`s to `f32`s and `f64`s.
 
-## WAVM Custom opcodes not in WASM
+## WAVM custom opcodes not in WASM
 
 In addition to the MVP WASM specification,
 WAVM implements the multi value and sign extension ops WASM proposals.
@@ -279,7 +246,7 @@ which are not part of WASM nor any WASM proposal.
 ### Invariants
 
 Many of these opcodes have implicit invariants about what's on the stack,
-e.g. "Pops an i32 from the stack" assumes that the top of the stack has an i32.
+e.g., "Pops an i32 from the stack" assumes that the top of the stack has an i32.
 If these conditions are not satisfied, execution is generally not possible.
 These invariants are maintained by WASM validation and Arbitrator codegen. (See [One Step Proof Assumptions](#one-step-proof-assumptions).)
 
@@ -400,7 +367,7 @@ For Rust it calls `main` with no arguments.
 Libraries may export functions with the name pattern `module__name`,
 which future libraries or the main module can import as `"module" "name"`.
 
-For instance, this is used for wasi-stub to provide functions rust imports according
+For instance, this is used for wasi-stub to provide functions Rust imports according
 to the WebAssembly System Interface.
 
 ### Floating point operations

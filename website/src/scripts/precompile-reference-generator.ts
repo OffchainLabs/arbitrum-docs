@@ -258,7 +258,7 @@ const generatePrecompileReferenceTables = async (
     eventOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.md`, methodsTable + eventsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_${precompileName}.mdx`, methodsTable + eventsTable);
 };
 
 const generateNodeInterfaceReferenceTables = async (
@@ -285,7 +285,7 @@ const generateNodeInterfaceReferenceTables = async (
     methodOverrides,
   );
 
-  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.md`, methodsTable);
+  fs.writeFileSync(`${partialTablesBasePath}/_NodeInterface.mdx`, methodsTable);
 };
 
 const main = async (precompilesInformation, nodeInterfaceInformation) => {
