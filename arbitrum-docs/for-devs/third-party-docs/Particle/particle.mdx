@@ -6,6 +6,8 @@ sme: TABASCOatw
 sidebar_label: 'Particle Network'
 ---
 
+import ImageZoomComponent from '@site/src/components/ImageZoom';
+
 :::info Community member contribution
 
 Shoutout to [@TABASCOatw](https://github.com/TABASCOatw) for contributing the following [third-party document](/for-devs/third-party-docs/contribute)!
@@ -37,7 +39,7 @@ Given its modular architecture, developers have the liberty to choose which of t
 
 The user flow with Particle Network begins with social logins (using either a custom authentication or preset login methods provided by Particle Network), which leads to the generation of an EOA through MPC-TSS. This EOA is then used as a Signer for a smart account implementation that best fits the needs of the application in question (natively, this means a choice between SimpleAccount, Biconomy V1/V2, Light Account, and Cyber Account). A visualization of this process can be found below:
 
-![](https://i.imgur.com/qfEpjgz.png)
+<ImageZoom src="https://i.imgur.com/qfEpjgz.png" alt="Particle Network User Flow" />
 
 ---
 
@@ -126,7 +128,7 @@ export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
 };
 ```
 
-This code sets up Particle Connect with a configuration for wallet authentication and blockchain interactions on Arbitrum Sepolia. It includes social logins and traditional Web3 options through WalletConnect and enables Account Abstraction (AA) with a `SimpleAccount` instance version 2.0.0. The configured `ConnectKitProvider` component then wraps the app’s content, making this configuration available.
+This code sets up Particle Connect with a configuration for wallet authentication and blockchain interactions on Arbitrum Sepolia. It includes social logins and traditional Web3 options through WalletConnect and enables Account Abstraction (AA) with a `SimpleAccount` instance version 2.0.0. The configured `ConnectKitProvider` component then wraps the app's content, making this configuration available.
 
 ## Integrate Particle Connect in Your App
 
@@ -164,7 +166,7 @@ export default function RootLayout({
 
 With your project set up, dependencies installed, and Particle Connect configured, you can start building in the `page.tsx` file.
 
-In `page.tsx`, you’ll define the core features: login flow, data visualization, transaction handling, and the UI.
+In `page.tsx`, you'll define the core features: login flow, data visualization, transaction handling, and the UI.
 
 ### Connecting the Wallet
 

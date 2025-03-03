@@ -8,18 +8,18 @@ If you aren’t yet familiar with the Ethereum ecosystem, you can check out [eth
 
 #### Q: You said Arbitrum exists to “scale” Ethereum; why does Ethereum need this help? Is there something wrong with Ethereum?
 
-Ethereum is awesome; on its own, however, it’s also very limited. The Ethereum blockchain only allows about 20-40 transactions per second (TPS) (that’s in total, for all Ethereum users); when the limit is reached, users are forced to compete against each other for their transactions to be included, which causes fees to go up.
+Ethereum is awesome; on its own, however, it’s also very limited. The Ethereum <a data-quicklook-from="blockchain">Blockchain</a> only allows about 20-40 transactions per second (TPS) (that’s in total, for all Ethereum users); when the limit is reached, users are forced to compete against each other for their transactions to be included, which causes fees to go up.
 
 #### Q: Why does Ethereum have such low TPS?
 
-This was a deliberate decision in Ethereum’s design. Ethereum requires that its nodes (computers running the Ethereum software) have a way of coming to consensus on the current state of things; the way they do this is by processing every transaction in Ethereum’s history; i.e., if you’ve ever used Ethereum, every Ethereum full node has a copy of your transactions in its blockchain ledger.
+This was a deliberate decision in Ethereum’s design. Ethereum requires that its nodes (computers running the Ethereum software) have a way of coming to consensus on the current state of things; the way they do this is by processing every <a data-quicklook-from="transaction">Transaction</a> in Ethereum’s history; i.e., if you’ve ever used Ethereum, every Ethereum full node has a copy of your transactions in its blockchain ledger.
 
 One of the Ethereum community’s precepts, being an open, decentralized, peer to peer system, is that it should be reasonably accessible for anyone to run an Ethereum node and validate the chain for themselves; i.e., if it gets too expensive (in terms of hardware requirements / computational resources), this undercuts the fundamental goal of decentralization.
 The combination of these two factors — every node has to process every transaction, and we want it to be relatively feasible to run a node — means Ethereum transaction throughput has to be capped fairly low.
 
 #### Q: And Arbitrum Rollup fixes this?
 
-Arbitrum rollup fixes this! The basic idea is this: an Arbitrum Rollup chain runs as a sort of sub-module within Ethereum. Unlike regular, layer 1 ( “L1”) Ethereum transactions, we don’t require Ethereum nodes to process every Arbitrum transaction; rather, Ethereum adopts an [“innocent until proven guilty"](https://insights.deribit.com/market-research/making-sense-of-rollups-part-2-dispute-resolution-on-arbitrum-and-optimism/) attitude to Arbitrum. Layer 1 initially “optimistically assumes” activity on Arbitrum is following the proper rules. If a violation occurs (i.e., somebody claims “now I have all of your money”), this claim can be disputed back on L1; fraud will be proven, the invalid claim disregarded, and the malicious party will be financially penalized.
+Arbitrum rollup fixes this! The basic idea is this: an <a data-quicklook-from="arbitrum-rollup-chain">Arbitrum Rollup Chain</a> runs as a sort of sub-module within Ethereum. Unlike regular, layer 1 ( “L1”) Ethereum transactions, we don’t require Ethereum nodes to process every Arbitrum transaction; rather, Ethereum adopts an [“innocent until proven guilty"](https://insights.deribit.com/market-research/making-sense-of-rollups-part-2-dispute-resolution-on-arbitrum-and-optimism/) attitude to Arbitrum. Layer 1 initially “optimistically assumes” activity on Arbitrum is following the proper rules. If a violation occurs (i.e., somebody claims “now I have all of your money”), this claim can be disputed back on L1; fraud will be proven, the invalid claim disregarded, and the malicious party will be financially penalized.
 
 This ability to adjudicate and prove fraud on L1 is Arbitrum’s key, fundamental feature, and is how and why the system inherits Ethereum’s security.
 
@@ -41,12 +41,12 @@ Oh, it’s not so bad. In essence, if two validators disagree, only one of them 
 
 #### Q: This dispute game obviously takes some time; does this impose any sort of delay on Arbitrum users' transactions?
 
-The only delay that's felt by a user is in "withdrawing" — moving their funds from Arbitrum back to Ethereum; if users are withdrawing directly from Arbitrum to Ethereum, they must typically wait 1 week before receiving their funds on L1. If users use a fast-bridge application, however, they can bypass this delay period entirely (likely for a small fee). Anything else a user does — i.e., depositing funds from Ethereum onto Arbitrum, or using a dapp deployed on an Arbitrum chain — doesn't incur this delay period.
+The only delay that's felt by a user is in "withdrawing" — moving their funds from Arbitrum back to Ethereum; if users are withdrawing directly from Arbitrum to Ethereum, they must typically wait 1 week before receiving their funds on L1. If users use a fast-<a data-quicklook-from="bridge">Bridge</a> application, however, they can bypass this delay period entirely (likely for a small fee). Anything else a user does — i.e., depositing funds from Ethereum onto Arbitrum, or using a <a data-quicklook-from="dapp">dApp</a> deployed on an Arbitrum chain — doesn't incur this delay period.
 
 #### Q: Okay, so backing up: the “optimistic execution” part is how and why Arbitrum is able to offer low fees, yes?
 
 Primarily, yes, this is the heart of where the savings come from. However, there are a number of other means by which Arbitrum alleviates the burden on L1, all of which translate to lower transaction costs for end users.
-For one, Arbitrum transactions are submitted on the L1 in batches; typically, a single batch (submitted in a single L1 transaction) will contain several hundred L2 transactions. Batching amortizes the overhead cost of interacting with the L1, and thus offers significant savings over posting individual transactions at a time. Furthermore, the transaction data is posted on L1 in compressed form (and only decompressed within the L2 environment), further minimizing the transaction’s L1 footprint.
+For one, Arbitrum transactions are submitted on the L1 in batches; typically, a single <a data-quicklook-from="batch">Batch</a> (submitted in a single L1 transaction) will contain several hundred L2 transactions. Batching amortizes the overhead cost of interacting with the L1, and thus offers significant savings over posting individual transactions at a time. Furthermore, the transaction data is posted on L1 in compressed form (and only decompressed within the L2 environment), further minimizing the transaction’s L1 footprint.
 
 #### Q: As far as the experience of using Arbitrum: when you said that it’s very similar to using Ethereum…
 
@@ -57,7 +57,7 @@ Much development went into achieving this level of Ethereum compatibility. But a
 
 #### Q: So builders can do all the stuff they do on Ethereum on Arbitrum, nice! But can they do _more_?
 
-They can; the latest version of the Arbitrum tech stack, called <a data-quicklook-from='stylus'>Stylus</a>, keeps Nitro's Ethereum compatibility, while adding on powerful new features, namely the ability to write highly performant smart contracts in programming languages like Rust, C++, and more. Stylus is currently on public testnet; you can read more about it [here](../stylus/gentle-introduction.mdx).
+They can; the latest version of the Arbitrum tech stack, called <a data-quicklook-from='stylus'>Stylus</a>, keeps Nitro's Ethereum compatibility, while adding on powerful new features, namely the ability to write highly performant smart contracts in programming languages like Rust, C++, and more. <a data-quicklook-from="stylus">Stylus</a> is currently on public testnet; you can read more about it [here](../stylus/gentle-introduction.mdx).
 
 #### Q: So it sounds like Arbitrum Rollup is an ideal solution that solves any and all scaling problems…?
 
@@ -65,15 +65,33 @@ Arbitrum Rollup is very awesome and cool; its design is geared heavily toward av
 
 #### Q: What’s an AnyTrust chain?
 
-An Arbitrum AnyTrust chain doesn’t have the same decentralization / trustlessness / permissionless security guarantees of a Rollup chain, and thus can offer lower fees. Rollup and AnyTrust are similar in many ways, though have one key difference: whereas in Rollup, all data is posted on L1 (which allows anyone to permissionless join as a validator), in AnyTrust, data is managed off-chain. In the case of a challenge, an AnyTrust chain reverts back to “rollup mode”; the security assumption here is that at least 2 of the committee members are honest (i.e., they will provide the data when it’s necessary). Keeping the data off-chain in the happy/common case means the system can charge the user significantly lower fees.
+An <a data-quicklook-from="arbitrum-anytrust-chain">Arbitrum AnyTrust Chain</a> doesn’t have the same decentralization / trustlessness / permissionless security guarantees of a Rollup chain, and thus can offer lower fees. Rollup and AnyTrust are similar in many ways, though have one key difference: whereas in Rollup, all data is posted on L1 (which allows anyone to permissionless join as a validator), in AnyTrust, data is managed off-chain. In the case of a <a data-quicklook-from="challenge">Challenge</a>, an AnyTrust chain reverts back to “rollup mode”; the security assumption here is that at least 2 of the committee members are honest (i.e., they will provide the data when it’s necessary). Keeping the data off-chain in the happy/common case means the system can charge the user significantly lower fees.
 For applications that require high transaction throughput and don’t require the full decentralization that rollups provide, AnyTrust could be a sensible tradeoff.
 
 #### Q: So there's more than one Arbitrum chain out there?
 
-Yep! The fact that multiple chains can run in parallel is a crucial perk to off-chain scaling technology. Currently, on Ethereum mainnet, there are 2 Arbitrum chains: one Arbitrum Rollup chain, called ["Arbitrum One,"](https://portal.arbitrum.one/) and one AnyTrust chain, called ["Nova"](https://nova.arbitrum.io/); users and developers can pick whatever suits their security / transaction cost needs.
+Yep! The fact that multiple chains can run in parallel is a crucial perk to off-chain scaling technology.
 
-Developers also have the option of launching their own Arbitrum chains that run top an Arbitrum layer 2. These are called <a data-quicklook-from='arbitrum-orbit'>Orbit</a> chains and you can read more about them [here](/launch-orbit-chain/orbit-gentle-introduction.md).
+Here’s a snapshot of the chains running on Arbitrum:
+
+- On Ethereum mainnet:
+
+  - ["Arbitrum One"](https://portal.arbitrum.one/): an <a data-quicklook-from="arbitrum-rollup-chain">Arbitrum Rollup Chain</a> operated by the [Arbitrum Foundation](https://arbitrum.foundation)
+  - ["Nova"](https://nova.arbitrum.io/): an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Chain</a> operated by the [Arbitrum Foundation](https://arbitrum.foundation)
+
+- On Arbitrum One and Nova:
+  - Various L3 (Orbit) chain
+- On other L2s:
+  - Various L2 (Orbit) chain
+
+![700px-img](../assets/arbitrum-chains-diagram.jpeg)
+
+Developers can launch their own Arbitrum chains that run as an L2 chain on top of Ethereum. They can also run Arbitrum chains that run on top of an EVM L2 chain.
+
+Checkout the [Arbitrum Portal](https://portal.arbitrum.io/orbit/ecosystem) for an extensive overview of the Orbit chains running on Arbitrum.
+
+Users and developers can pick whatever suits their security / transaction cost needs.
 
 #### Q: Who makes decisions about the future of Arbitrum One and Arbitrum Nova?
 
-The Arbitrum One and Nova chains are owned by the Governance system; to learn more, see the [Arbitrum Governance docs](https://docs.arbitrum.foundation/).
+The <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova chains are owned by the Governance system; to learn more, see the [Arbitrum Governance docs](https://docs.arbitrum.foundation/).

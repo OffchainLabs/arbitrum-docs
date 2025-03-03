@@ -11,6 +11,12 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+
+    {
       "source": "/(proving/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
@@ -411,8 +417,8 @@
       "permanent": false
     },
     {
-      "source": "/(for-devs/quickstart-solidity-hardhat/?)",
-      "destination": "/build-decentralized-apps/quickstart-solidity-hardhat",
+      "source": "/(for-devs/quickstart-solidity-remix/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -457,7 +463,12 @@
     },
     {
       "source": "/stylus/concepts/stylus-cache-manager",
-      "destination": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/stylus/how-tos/cache-contracts",
+      "destination": "/stylus/how-tos/caching-contracts",
       "permanent": false
     },
     {
@@ -607,7 +618,7 @@
     },
     {
       "source": "/docs/tutorials",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -617,17 +628,17 @@
     },
     {
       "source": "/docs/frontend_integration",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/docs/contract_deployment",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
       "source": "/getting-started-devs",
-      "destination": "/for-devs/quickstart-solidity-hardhat",
+      "destination": "/for-devs/quickstart-solidity-remix",
       "permanent": false
     },
     {
@@ -878,6 +889,16 @@
     {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
       "destination": "/node-running/how-tos/running-an-orbit-node",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui/?)",
+      "destination": "/launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui",
       "permanent": false
     },
     {

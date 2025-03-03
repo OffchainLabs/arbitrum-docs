@@ -81,7 +81,7 @@ zig build-lib ./src/main.zig -target wasm32-freestanding -dynamic --export=user_
 This is enough for us to deploy on the Stylus testnet! We'll use the [Stylus CLI tool](https://github.com/OffchainLabs/cargo-stylus), which you installed earlier using `cargo install`:
 
 ```
-cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file-path=main.wasm
+cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file=main.wasm
 ```
 
 The tool will send two transactions: one to deploy your Zig contract's code onchain, and the other to activate it for usage.
@@ -165,7 +165,7 @@ const std = @import("std");
 const allocator = std.heap.WasmAllocator;
 ```
 
-Our code compiles, but will it deploy onchain? Run `cargo stylus check --wasm-file-path=main.wasm` and see:
+Our code compiles, but will it deploy onchain? Run `cargo stylus check --wasm-file=main.wasm` and see:
 
 ```
 Caused by:
@@ -200,7 +200,7 @@ Stylus program with same WASM code is already activated onchain
 Let's deploy it:
 
 ```
-cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file-path=main.wasm
+cargo stylus deploy --private-key=<YOUR_TESTNET_PRIVKEY> --wasm-file=main.wasm
 ```
 
 Now if we try to call it, it will output whatever input we send it, like an echo. Let's send it the input 0x123456:

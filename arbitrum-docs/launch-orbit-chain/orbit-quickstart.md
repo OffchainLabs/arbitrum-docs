@@ -18,7 +18,7 @@ This quickstart is intended for development purposes only and is not suitable fo
 
 By the end of this quickstart, you'll have a **local devnet chain** that hosts EVM-compatible smart contracts. Your chain will process transactions locally while settling to the public **Arbitrum Sepolia testnet**. Familiarity with Ethereum, Ethereum's testnets, and Arbitrum is expected.
 
-If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/orbit-gentle-introduction.md).
+If you're looking for a conceptual introduction to Orbit chains, see the [Gentle introduction to Orbit chains](/launch-orbit-chain/01-a-gentle-introduction.md).
 
 ## Prerequisites
 
@@ -64,7 +64,7 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 
 <PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner" />
 
-The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](./how-tos/customize-deployment-configuration.md):
+The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx):
 
 <!-- todo: determine whether or not we want to align the UI with docs section-casing and param-casing patterns; align docs to UI if needed -->
 
