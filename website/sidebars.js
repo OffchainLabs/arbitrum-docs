@@ -957,11 +957,6 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
               label: 'Public preview',
             },
-            {
-              type: 'doc',
-              id: 'how-arbitrum-works/timeboost/timeboost-faq',
-              label: 'Public preview',
-            },
           ],
         },
       ],
