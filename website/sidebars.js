@@ -964,7 +964,7 @@ const sidebars = {
             },
             {
               type: 'link',
-              href: 'hhttps://github.com/OffchainLabs/decentralized-timeboost-spec',
+              href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
               label: 'Specification: Timeboost with decentralized sequencing',
             },
             
