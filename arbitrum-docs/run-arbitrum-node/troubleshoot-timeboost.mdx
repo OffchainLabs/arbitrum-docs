@@ -16,7 +16,7 @@ As another example, assume that a transaction is submitted at `t=150ms`. If the 
 
 ## How express lane transactions are ordered into blocks
 
-The express lane time advantage is currently set to 200ms, while the current block creation time is 250ms. This means that if an express lane transaction and a normal transaction both arrive at the sequencer at the same time, but _before 50ms have passed since the last block was produced_, then both the transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction.
+The express lane time advantage is currently set to 200ms, while the current block creation time is 250ms. This means that if an express lane transaction and a normal transaction both arrive at the sequencer at the same time, but _before 50ms have passed since the last block was produced_, then both the transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction (assuming that the block's gas limit has not yet been reached).
 
 Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The first expected sequence number for a new round is zero and increments for each accepted transaction. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
@@ -33,7 +33,7 @@ If the sequence number for your express lane transaction is:
 - Less than `n`, then your transaction will be rejected because it has already accepted a transaction with that sequence number (`error="SEQUENCE_NUMBER_TOO_LOW"`).
 - Exactly `n`, then your transaction will be accepted as soon as the sequencer receives it.
 - Greater than `n` but less than or equal to `m`, then your transaction will be buffered to be processed. Your transaction will only be accepted once transactions with the other sequence numbers arrive to fill in the “gap” between the sequencer number `n` and your transaction’s sequence number. You may receive a timeout error if the transactions within the gap arrive after the timeout (i.e., between n and your transaction’s sequence number). However, this doesn’t mean your transaction was rejected - it may eventually get processed. So we recommend checking the transaction receipts ([error #1 below](../run-arbitrum-node/troubleshoot-timeboost.mdx#error-1)).
-- Greater than `m`, then your transaction will be rejected ([error #2 below](../run-arbitrum-node/troubleshoot-timeboost.mdx#error-2)).
+- Greater than `n + m`, then your transaction will be rejected ([error #2 below](../run-arbitrum-node/troubleshoot-timeboost.mdx#error-2)).
 
 Timeboost's implementation of the above-described sequence number reordering buffer is intended to handle out-of-order delivery of transactions in the case of network delays (en route to the sequencer). This implementation is subject to change as we gather feedback from users.
 
@@ -45,17 +45,17 @@ This means the transaction was received with a sequence number after the expecte
 
 Using an example to illustrate this case, this error could arise where the sequencer has already sequenced an express lane transaction with `sequenceNumber=3`, but the express lane transaction that was submitted used `sequenceNumber=5`. Since `sequenceNumber=4` has not yet been sequenced, the sequencer will respond by saying the result for the submitted transaction (with `sequenceNumber=5`) is “not yet available”.
 
-Despite this error message, the transaction may still have been processed if transactions with the missing prior sequence numbers are received. Check for the transaction receipt.
+Despite this error message, the transaction may still be processed if transactions with the missing prior sequence numbers are received. Check for the transaction receipt.
 
 #### Error 2: Sequence number reaching the max allowed limit
 
 `"message sequence number has reached max allowed limit. SequenceNumber: %d, Limit: %d",`
-This means the `sequenceNumber` of the received transaction is ahead of the next expected sequence number by more than the limit. To resolve this, we simply re-submit your transactions in sequential `sequenceNumber` order.
+This means the `sequenceNumber` of the received transaction is ahead of the next expected sequence number by more than the limit. To resolve this, simply re-submit your transactions in sequential `sequenceNumber` order.
 
 #### Error 3: Already-consumed `sequenceNumber` related errors
 
 `"Accepted timeboost tx failed: Sequence number: %d (consumed), Transaction hash: %v, Error: $some error unrelated to timeout$”`  
-This type of error means that the underlying transaction of the express lane submission has erred for another reason, and the corresponding `sequenceNumber` has been consumed. A description of these other types of errors can be found [in our guide about how to submit transactions to the express lane"](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
+This type of error means that the underlying transaction of the express lane submission has errored for another reason, and the corresponding `sequenceNumber` has been consumed. A description of these other types of errors can be found [in our guide about how to submit transactions to the express lane"](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
 #### Other Errors
 
