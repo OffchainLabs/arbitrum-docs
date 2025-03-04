@@ -853,6 +853,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          id: 'how-arbitrum-works/l1-to-l2-messaging',
+          label: 'Parent to Child chain messaging',
+        },
+        {
+          type: 'doc',
           id: 'how-arbitrum-works/geth-at-the-core',
           label: 'Geth at the Core',
         },
@@ -880,11 +885,6 @@ const sidebars = {
           type: 'doc',
           id: 'how-arbitrum-works/gas-fees',
           label: 'Gas and fees',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/l1-to-l2-messaging',
-          label: 'L1 to L2 messaging',
         },
         {
           type: 'doc',

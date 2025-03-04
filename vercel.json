@@ -11,6 +11,12 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+
+    {
       "source": "/(proving/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
