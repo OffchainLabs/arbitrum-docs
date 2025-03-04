@@ -10,7 +10,7 @@ This is a short guide on how response times work and how <a data-quicklook-from=
 
 ## How response times work
 
-The response for a <a data-quicklook-from="transaction">Transaction</a> submission is returned only once the block containing the transaction is produced. For example, irrespective of the type of transaction (express lane or normal), if a transaction arrives at the <a data-quicklook-from="sequencer">Sequencer</a> at `t=0ms` and the block is produced at `t=250ms`, then the expected response time is always (`time_to_arrive`) + 250ms, where `time_to_arrive` is the time it took for the transaction to be received by the sequencer.
+The response for a <a data-quicklook-from="transaction">Transaction</a> submission is returned only once the block containing the transaction is produced. For example, irrespective of the type of transaction (express lane or normal), if a transaction is sent to the <a data-quicklook-from="sequencer">Sequencer</a> at `t=0ms` and the block is produced at `t=250ms`, then the expected response time is at least `time_to_arrive` + 250ms, where `time_to_arrive` is the time it took for the transaction to be received by the sequencer.
 
 As another example, assume that a transaction is submitted at `t=150ms`. If the transaction is an express lane transaction, the response would be returned at `t =(time_to_arrive)+ 100ms`. If, however, the submitted transaction is normal, then the transaction’s inclusion will be delayed by 200ms, resulting in a response time at `t=(time_to_arrive)+100ms+250ms` (250ms because this is the time it takes to create the next block).
 
