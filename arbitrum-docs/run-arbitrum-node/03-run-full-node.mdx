@@ -92,7 +92,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
   - When shutting down the Docker image, it is important to allow a graceful shutdown to save the current state to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
   ```shell
-  docker stop --time=300 $(docker ps -aq)
+  docker stop --time=1800 $(docker ps -aq)
   ```
 
 ### Note on permissions
