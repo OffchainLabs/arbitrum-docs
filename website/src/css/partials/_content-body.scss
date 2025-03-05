@@ -37,9 +37,24 @@ article {
     }
 
     a {
-      font-weight: 600;
+      &:link {
+        color: #5b7bb6; /* Change the link color */
+        text-decoration: none !important;
+        font-weight: 600;
+      }
 
       &:hover {
+        color: #86b8da; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:visited {
+        color: #7c93cf; /* Change the link color */
+        cursor: pointer;
+        opacity: 0.9;
+      }
+      &:active {
+        color: #86b8da; /* Change the link color */
         cursor: pointer;
         opacity: 0.9;
       }
@@ -47,6 +62,40 @@ article {
 
     strong {
       font-weight: 600;
+    }
+
+    img[alt='20px-img'] {
+      width: 10px;
+    }
+    img[alt='20px-img'] {
+      width: 20px;
+    }
+    img[alt='50px-img'] {
+      width: 50px;
+    }
+    img[alt='100px-img'] {
+      width: 100px;
+    }
+    img[alt='200px-img'] {
+      width: 200px;
+    }
+    img[alt='400px-img'] {
+      width: 400px;
+    }
+    img[alt='500px-img'] {
+      width: 500px;
+    }
+    img[alt='600px-img'] {
+      width: 600px;
+    }
+    img[alt='700px-img'] {
+      width: 600px;
+    }
+    img[alt='800px-img'] {
+      width: 600px;
+    }
+    img[alt='900px-img'] {
+      width: 900px;
     }
 
     .theme-admonition {
@@ -71,11 +120,9 @@ article {
     }
 
     .footnotes {
-      border-top: 1px solid #ddd;
       margin-top: 50px;
 
       &:before {
-        content: 'Footnotes:';
         font-weight: 600;
         margin-top: 30px;
         display: inline-block;
@@ -100,6 +147,31 @@ article {
       padding: 3px 6px;
       border-radius: 3px;
       background-color: rgba(150, 150, 150, 0.2);
+    }
+
+    .img-20px {
+      width: 20px;
+    }
+    .img-50px {
+      width: 50px;
+    }
+    .img-100px {
+      width: 100px;
+    }
+    .img-200px {
+      width: 200px;
+    }
+    .img-400px {
+      width: 400px;
+    }
+    .img-500px {
+      width: 500px;
+    }
+    .img-600px {
+      width: 600px;
+    }
+    .img-900px {
+      width: 900px;
     }
   }
 }

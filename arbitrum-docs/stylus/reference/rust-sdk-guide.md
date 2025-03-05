@@ -7,11 +7,9 @@ sidebar_position: 1
 target_audience: Developers using the Stylus Rust SDK to write and deploy smart contracts.
 ---
 
-import PublicPreviewBannerPartial from '../../partials/_public-preview-banner-partial.mdx';
+import StylusNoMultiInheritanceBannerPartial from '../partials/_stylus-no-multi-inheritance-banner-partial.mdx';
 
-<PublicPreviewBannerPartial />
-
-This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../stylus-gentle-introduction.md). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../stylus-quickstart.md).
+This document provides information about advanced features included in the [Stylus Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs), that are not described in the previous pages. For information about deploying Rust smart contracts, see the `cargo stylus` [CLI Tool](https://github.com/OffchainLabs/cargo-stylus). For a conceptual introduction to Stylus, see [Stylus: A Gentle Introduction](../gentle-introduction.mdx). To deploy your first Stylus smart contract using Rust, refer to the [Quickstart](../quickstart.mdx).
 
 :::info
 
@@ -21,7 +19,7 @@ Many of the affordances use macros. Though this section details what each does, 
 
 ## Storage
 
-This section provides extra information about how the Stylus Rust SDK handles storage. You can find more information and basic examples in [Variables](/stylus-by-example/variables.mdx).
+This section provides extra information about how the Stylus Rust SDK handles storage. You can find more information and basic examples in [Variables](/stylus-by-example/basic_examples/variables.mdx).
 
 Rust smart contracts may use state that persists across transactions. There’s two primary ways to define storage, depending on if you want to use Rust or Solidity definitions. Both are equivalent, and are up to the developer depending on their needs.
 
@@ -114,6 +112,16 @@ impl Contract {
         if msg::sender() == self.owner.get() { // we'll discuss msg::sender later
             self.owner.set(new_owner);
         }
+    }
+
+    /// Unlike other storage type, stringStorage needs to
+    /// use `.set_str()` and `.get_string()` to set and get.
+    pub fn set_base_uri(&mut self, base_uri: String) {
+        self.base_uri.set_str(base_uri);
+    }
+
+    pub fn get_base_uri(&self) -> String {
+        self.base_uri.get_string()
     }
 }
 ```
@@ -228,7 +236,7 @@ The above allows consumers of `Erc20` to choose immutable constants via speciali
 
 ## Functions
 
-This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/bytes_in_bytes_out.mdx), [Inheritance](/stylus-by-example/inheritance.mdx) and [Sending ether](/stylus-by-example/sending_ether.mdx).
+This section provides extra information about how the Stylus Rust SDK handles functions. You can find more information and basic examples in [Functions](/stylus-by-example/basic_examples/function.mdx), [Bytes in, bytes out programming](/stylus-by-example/basic_examples/bytes_in_bytes_out.mdx), [Inheritance](/stylus-by-example/basic_examples/inheritance.mdx) and [Sending ether](/stylus-by-example/basic_examples/sending_ether.mdx).
 
 ### Pure, View, and Write functions
 
@@ -256,7 +264,7 @@ The above will make the public methods of `Contract` the first to consider durin
 
 ### Reentrancy
 
-If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus programs revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
+If a contract calls another that then calls the first, it is said to be reentrant. By default, all Stylus contracts revert when this happens. However, you can opt out of this behavior by enabling the `reentrant` feature flag.
 
 ```rust
 stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
@@ -271,6 +279,8 @@ If enabled, the Stylus SDK will flush the storage cache in between reentrant cal
 The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
 ### Inheritance, `#[inherit]`, and `#[borrow]`.
+
+<StylusNoMultiInheritanceBannerPartial />
 
 Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[public]`][public] provides, can be connected via inheritance.
 

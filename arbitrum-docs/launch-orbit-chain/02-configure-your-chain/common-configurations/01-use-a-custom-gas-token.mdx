@@ -1,0 +1,43 @@
+---
+title: 'How to use a custom gas token on your Orbit chain'
+description: 'Learn how to deploy your Orbit chain with a custom gas token'
+author: jose-franco
+sme: jose-franco
+sidebar_position: 3
+content_type: how-to
+---
+
+When deploying your AnyTrust Orbit chain you have the option of using a custom gas token, different than ETH, that is natively used for gas payments on the network. When choosing this option, there are certain requirements that the token needs to comply with, as well as certain chain configuration that needs to be adjusted. This guide covers this information.
+
+## Requirements of the custom gas token
+
+The main requirements for a custom gas token is that it must be an ERC-20 token, and it must be natively deployed on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Orbit chain.
+
+There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the ERC-20 token include:
+
+- The token can't be rebasing or have a transfer fee.
+- The token must not revert on transfers of 0 value (as per standard implementations).
+- The token must only be transferrable via a call to the token address itself.
+- The token must only be able to set allowance via a call to the token address itself.
+- The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
+
+:::info
+
+While certain restrictions are in place today (see above), some of them may be removed in upcoming releases of the custom gas token feature. Please reach out to the Offchain Labs team with any questions or requests for additions to the custom gas token feature.
+
+:::
+
+## Configuration of the Orbit chain when using a custom gas token
+
+There are several parameter changes required to ensure proper functioning of an Orbit chain configured to use a custom gas token.
+
+After deploying the chain, you must reset the base fees of the parent chain by calling the following functions in the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile:
+
+- `SetL1PricePerUnit`, setting `pricePerUnit` to `0`
+- `SetL1PricingRewardRate`, setting `perUnitReward` to `0`
+
+_Note: these methods use L1 to refer to the parent chain of the Orbit chain._
+
+These parameter changes are strongly recommended to avoid charging users for a non-existent parent chain's base fee. The impact of not doing this is that Nitro will apply a parent chain's fee to all transactions. As Nitro assumes the native asset is ETH, all fees are expected to be denominated in ETH. This has the consequence of overcharging users for parent chain fees in native tokens that are more expensive than ETH (for example, if you use wrapped BTC as the custom gas token). In the case for tokens with prices much lower than ETH, the impact is far less pronounced.
+
+In either case we strongly recommend taking these steps to avoid any issues with chain economics. You can read more about how Nitro manages fees in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx).
