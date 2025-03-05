@@ -34,14 +34,24 @@ Remember that, by default, each round lasts 60 seconds, and the auction for a sp
 
 Auctions are facilitated by an auction contract, and bids get submitted to an autonomous auctioneer that interact with the contract. Let's look at the process of submitting bids and finding out the winner of an auction.
 
-### Pre-requisites: gather required information
+### Prerequisites: Gather the required information
+
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
 Before we begin, make sure you have:
 
 - Address of the auction contract
 - Endpoint of the autonomous auctioneer
 
-### Step 1: deposit funds into the auction contract
+The following table shows this information for the Arbitrum DAO-owned chains:
+
+| Network          | Auction contract                                                              | Autonomous auctioneer endpoint   |
+| ---------------- | ----------------------------------------------------------------------------- | -------------------------------- |
+| Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://sepolia-bv.arbitrum.io/  |
+| Arbitrum One     | Pending on-chain governance vote                                              | Pending on-chain governance vote |
+| Arbitrum Nova    | Pending on-chain governance vote                                              | Pending on-chain governance vote |
+
+### Step 1: Deposit funds into the auction contract
 
 Before bidding on an auction, we need to deposit funds in the auction contract. These funds are deposited in the form of the ERC-20 token used to bid, also known as the `bidding token`. We will be able to bid for an amount that is equal to or less than the tokens we have deposited in the auction contract.
 
