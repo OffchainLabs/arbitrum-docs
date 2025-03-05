@@ -957,6 +957,16 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
               label: 'Public preview',
             },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
+              label: 'Specification: Timeboost',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
+              label: 'Specification: Timeboost with decentralized sequencing',
+            },
           ],
         },
       ],
