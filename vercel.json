@@ -588,7 +588,7 @@
     {
       "source": "/(for-devs/quickstart-solidity-hardhat/?)",
       "destination": "/build-decentralized-apps/quickstart-solidity-remix",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/",
@@ -978,7 +978,7 @@
     {
       "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
       "destination": "/launch-orbit-chain/a-gentle-introduction",
-      "permanent": true
+      "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
