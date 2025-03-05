@@ -63,6 +63,7 @@
     "@stitches/react": "^1.2.8",
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/node": "^22.10.10",
+    "@types/react": "^19.0.10",
     "docusaurus-plugin-typedoc": "^1.0.1",
     "husky": "^9.1.7",
     "markdown-link-extractor": "^3.1.0",
