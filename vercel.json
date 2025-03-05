@@ -15,7 +15,11 @@
       "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
       "permanent": false
     },
-
+    {
+      "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
+      "destination": "/launch-orbit-chain/a-gentle-introduction",
+      "permanent": true
+    },
     {
       "source": "/(proving/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
@@ -435,6 +439,11 @@
       "source": "/(for-devs/gentle-introduction-dapps/?)",
       "destination": "/welcome/arbitrum-gentle-introduction",
       "permanent": false
+    },
+    {
+      "source": "/(for-devs/quickstart-solidity-hardhat/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "permanent": true
     },
     {
       "source": "/",
