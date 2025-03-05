@@ -7,6 +7,9 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "downlevelIteration": true,
-    "types": ["node"]
+    "types": ["node", "@types/react"],
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
   }
 }
