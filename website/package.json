@@ -24,7 +24,9 @@
     "format:app": "prettier --write --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\"",
     "format:docs": "prettier --write --config \"./.prettierrc.js\" -- \"../arbitrum-docs/**/*.{md,mdx}\"",
     "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"../arbitrum-docs/**/*.{md,mdx}\"",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
@@ -78,7 +80,8 @@
     "typedoc": "^0.25.13",
     "typedoc-plugin-frontmatter": "^1.0.0",
     "typedoc-plugin-markdown": "4.0.1",
-    "typescript": "^5.1"
+    "typescript": "^5.1",
+    "vitest": "^3.0.7"
   },
   "resolutions": {
     "image-size": "~1.0.2"
