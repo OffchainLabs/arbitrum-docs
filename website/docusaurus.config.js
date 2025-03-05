@@ -4,6 +4,8 @@
 const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -31,6 +33,14 @@ const config = {
     // locales: ['en', 'ja', 'zh'],
     locales: ['en'],
   },
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ],
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -38,6 +48,8 @@ const config = {
       ({
         docs: {
           path: '../arbitrum-docs',
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
