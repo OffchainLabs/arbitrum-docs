@@ -11,16 +11,6 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
-      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
-      "permanent": false
-    },
-    {
-      "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
-      "destination": "/launch-orbit-chain/a-gentle-introduction",
-      "permanent": true
-    },
-    {
       "source": "/(proving/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
@@ -158,6 +148,11 @@
     {
       "source": "/(node-running/troubleshooting-running-nodes/?)",
       "destination": "/run-arbitrum-node/troubleshooting",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos32",
       "permanent": false
     },
     {
@@ -498,6 +493,11 @@
     {
       "source": "/stylus/stylus-gentle-introduction",
       "destination": "/stylus/gentle-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+      "destination": "/run-arbitrum-node/run-local-dev-node",
       "permanent": false
     },
     {
@@ -896,8 +896,123 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
+      "destination": "/launch-orbit-chain/a-gentle-introduction",
+      "permanent": true
+    },
+    {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
       "destination": "/node-running/how-tos/running-an-orbit-node",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/reference/how-tos/orbit-managing-state-growth/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-growth",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-size-limit",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-sdk-deploying-rollup-chain/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-sdk-deploying-anytrust-chain/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-sdk-deploying-custom-gas-token-chain/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-sdk-deploying-token-bridge/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/use-a-custom-gas-token/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/customize-precompile/?)",
+      "destination": "launch-orbit-chain/customize-your-chain/customize-precompile",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/customize-stf/?)",
+      "destination": "/launch-orbit-chain/customize-your-chain/customize-stf",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/customize-arbos/?)",
+      "destination": "/launch-orbit-chain/customize-your-chain/customize-arbos",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/usdc-standard-bridge/?)",
+      "destination": "/launch-orbit-chain/third-party-integrations/bridged-usdc-standard",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/set-up-aep-fee-router/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/arbos-upgrade/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/reference/monitoring-tools-and-considerations/?)",
+      "destination": "/launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/add-orbit-chain-to-bridge-ui/?)",
+      "destination": "/launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/infra-options-orbit-chains/?)",
+      "destination": "/launch-orbit-chain/third-party-integrations/third-party-providers",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/troubleshooting-building-orbit/?)",
+      "destination": "/launch-orbit-chain/faq-troubleshooting/troubleshooting-building-orbit",
       "permanent": false
     },
     {
@@ -913,16 +1028,6 @@
     {
       "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
       "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
-      "permanent": false
-    },
-    {
-      "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
-      "destination": "/run-arbitrum-node/run-local-dev-node",
-      "permanent": false
-    },
-    {
-      "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
-      "destination": "/run-arbitrum-node/arbos-releases/arbos32",
       "permanent": false
     }
   ]
