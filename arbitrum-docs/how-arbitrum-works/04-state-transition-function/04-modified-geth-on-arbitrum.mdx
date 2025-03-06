@@ -7,9 +7,9 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-Nitro makes minimal modifications to Geth in hopes of not violating its assumptions. This section will explore the relationship between Geth and ArbOS, which consists of a series of hooks, interface implmentations, and strategic re-appropriations of Geth's basic types.
+Nitro makes minimal modifications to <a data-quicklook-from="geth">Geth</a> in hopes of not violating its assumptions. This section will explore the relationship between Geth and <a data-quicklook-from="arbos">ArbOS</a>, which consists of a series of hooks, interface implmentations, and strategic re-appropriations of Geth's basic types.
 
-We store ArbOS's state at an address inside a Geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a transaction's direct state changes to ArbOS would get discarded upon a revert.
+We store ArbOS's state at an address inside a Geth `statedb`. In doing so, ArbOS inherits the `statedb`'s statefulness and lifetime properties. For example, a <a data-quicklook-from="transaction">Transaction</a>'s direct state changes to ArbOS would get discarded upon a revert.
 
 `0xA4B05FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` is a fictional account representing ArbOS.
 
@@ -21,9 +21,9 @@ Any links on this page may reference old releases of Nitro or our fork of Geth. 
 
 ## Hooks
 
-Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
+<a data-quicklook-from="arbitrum">Arbitrum</a> uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
 
-Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#readyevmforl2) installs the alternative child chain hooks.
+Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#readyevmforl2) installs the alternative <a data-quicklook-from="child-chain">child chain</a> hooks.
 
 - `core.ApplyTransaction` -> `core.applyTransaction` -> `core.ApplyMessage`
   - `core.NewStateTransition`
@@ -53,7 +53,7 @@ A call to `ReadyEVMForL2` installs the other transaction-specific hooks into eac
 
 Geth calls the `StartTxHook` before a transaction executes, which allows ArbOS to handle two Arbitrum-specific transaction types.
 
-If the transaction is `ArbitrumDepositTx`, ArbOS adds balance to the destination account. This approach is safe because the parent chain bridge submits such a transaction only after collecting the same amount of funds on the parent chain.
+If the transaction is `ArbitrumDepositTx`, ArbOS adds balance to the destination account. This approach is safe because the <a data-quicklook-from="parent-chain">parent chain</a> <a data-quicklook-from="bridge">bridge</a> submits such a transaction only after collecting the same amount of funds on the parent chain.
 
 If the transaction is an `ArbitrumSubmitRetryableTx`, ArbOS creates a retryable based on the transaction's fields. ArbOS schedules a retry of the new retryable if the transaction includes sufficient gas.
 
@@ -89,7 +89,7 @@ The `EndTxHook` calls after the `EVM` has returned a transaction's result, allow
 
 ### [`APIBackend`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/apibackend.go#L34)
 
-`APIBackend` implements the `ethapi.Backend` interface, which allows simple integration of the Arbitrum chain to the existing Geth API. The `Backend` member answers most calls.
+`APIBackend` implements the `ethapi.Backend` interface, which allows simple integration of the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> to the existing Geth API. The `Backend` member answers most calls.
 
 ### [`Backend`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/arbitrum/backend.go#L15)
 
@@ -113,7 +113,7 @@ Nitro Geth includes a few child chain-specific transaction types. Click any to j
 | [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message | [`EndTxHook`](#endtxhook)     | Bridge      |
 | [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                   | [`StartTxHook`](#starttxhook) | Bridge      |
 | [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                             | [`StartTxHook`](#starttxhook) | Bridge      |
-| [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A retryable redeem attempt                       | [`EndTxHook`](#endtxhook)     | Child chain |
+| [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A <a data-quicklook-from="retryable-redeem">retryable redeem</a> attempt                       | [`EndTxHook`](#endtxhook)     | Child chain |
 | [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                               | [`StartTxHook`](#starttxhook) | ArbOS       |
 
 The following reference documents each type.
@@ -124,7 +124,7 @@ It provides a mechanism for a user on a parent chain to message a contract on a 
 
 ### [`ArbitrumContractTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L104)
 
-These are like [`ArbitrumUnsignedTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L43)'s but intended for smart contracts. These use the bridge's unique, sequential nonce rather than requiring the caller to specify their own. A parent chain contract may still use an `ArbitrumUnsignedTx`, but doing so may necessitate tracking the nonce in the parent chain state.
+These are like [`ArbitrumUnsignedTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L43)'s but intended for smart contracts. These use the bridge's unique, sequential nonce rather than requiring the caller to specify their own. A parent chain contract may still use an `ArbitrumUnsignedTx`, but doing so may necessitate tracking the nonce in the parent <a data-quicklook-from="chain-state">chain state</a>.
 
 ### [`ArbitrumDepositTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L338)
 
@@ -168,7 +168,7 @@ Introduces [ArbOS](/how-arbitrum-works/state-transition-function/05-arbos.mdx), 
 
 ### `AllowDebugPrecompiles`
 
-Allows access to debug precompiles. Not enabled for Arbitrum One. When false, calls to debut precompiles will always revert.
+Allows access to debug precompiles. Not enabled for <a data-quicklook-from="arbitrum-one">Arbitrum One</a>. When false, calls to debut precompiles will always revert.
 
 ### `DataAvailabilityCommittee`
 
@@ -186,7 +186,7 @@ The total amount of the child chain ether in the system should not change except
 
 ### `MixDigest` and `ExtraData`
 
-The root hash and leaf count of ArbOS's [send Merkle accumulator](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/merkleAccumulator/merkleAccumulator.go#L13) are stored in each child chain block's `MixDigest` and `ExtraData` fields to aid with Outbox proof construction. The yellow paper specifies that the `ExtraData` field may be no larger than 32 bytes, so we use the first 8 bytes of the `MixDigest`, which has no meaning in a system without miners/stakers, to store the send count.
+The root hash and leaf count of ArbOS's [send Merkle accumulator](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/merkleAccumulator/merkleAccumulator.go#L13) are stored in each child chain block's `MixDigest` and `ExtraData` fields to aid with <a data-quicklook-from="outbox">outbox</a> proof construction. The yellow paper specifies that the `ExtraData` field may be no larger than 32 bytes, so we use the first 8 bytes of the `MixDigest`, which has no meaning in a system without miners/stakers, to store the send count.
 
 ### Retryable support
 
@@ -203,7 +203,7 @@ We created the `AdvancedPrecompile` interface, which executes and charges gas wi
 
 ### WASM build support
 
-The WASM Arbitrum executable does not support file operations. We created [`fileutil.go`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/rawdb/fileutil.go) to wrap `fileutil` calls, stubbing them out when building WASM. [`fake_leveldb.go`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for `leveldb`. The WASM block-replayer does not require these.
+The <a data-quicklook-from="wasm">WASM</a> Arbitrum executable does not support file operations. We created [`fileutil.go`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/rawdb/fileutil.go) to wrap `fileutil` calls, stubbing them out when building WASM. [`fake_leveldb.go`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/ethdb/leveldb/fake_leveldb.go) is a similar WASM-mock for `leveldb`. The WASM block-replayer does not require these.
 
 ### Types
 

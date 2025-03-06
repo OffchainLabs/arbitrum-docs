@@ -7,19 +7,19 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-This section details how Stylus integrates into the State Transition Function (STF), covering execution flow, messaging handling, caching, and interactions with ArbOS and Geth.
+This section details how <a data-quicklook-from="stylus">Stylus</a> integrates into the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF), covering execution flow, messaging handling, caching, and interactions with <a data-quicklook-from="arbos">ArbOS</a> and <a data-quicklook-from="geth">Geth</a>.
 
 ## 1. Execution flow of a Stylus transaction
 
-When a transaction interacts with a Stylus contract, its execution follows a distinct path compared to EVM transactions:
+When a <a data-quicklook-from="transaction">Transaction</a> interacts with a Stylus contract, its execution follows a distinct path compared to EVM transactions:
 
 - **Transaction submission and routing**
 
-  - The transaction is included in a child chain block by the Sequencer.
+  - The transaction is included in a <a data-quicklook-from="child-chain">child chain</a> block by the <a data-quicklook-from="sequencer">Sequencer</a>.
 
   - Geth processes the transaction and determines its target contract.
 
-  - If the target is a Stylus contract, ArbOS routes execution to the WASM runtime instead of the EVM.
+  - If the target is a Stylus contract, ArbOS routes execution to the <a data-quicklook-from="wasm">WASM</a> runtime instead of the EVM.
 
 - **Stylus execution within ArbOS**
 
@@ -29,7 +29,7 @@ When a transaction interacts with a Stylus contract, its execution follows a dis
 
   - The WASM module executes within ArbOS, processing instructions efficiently and calling host I/O functions.
 
-- **Host I/O operations for blockchain state access**
+- **Host I/O operations for <a data-quicklook-from="blockchain">blockchain</a> state access**
 
   - Stylus contracts do not use EVM opcodes. Instead, they interact with the blockchain through host I/O calls handled by ArbOS.
 
@@ -51,7 +51,7 @@ This process bypasses the EVM interpreter entirely, allowing Stylus contracts to
 
 Unlike standard EVM gas pricing, Stylus pricing follows a multi-dimensional cost model, incorporating:
 
-- **Ink cost (memory and execution cost)**
+- **<a data-quicklook-from="ink">Ink</a> cost (memory and execution cost)**
 
   - Measure in `Ink` units (Stylus's equivalent of computational gas).
 
@@ -98,7 +98,7 @@ Stylus contracts leverage an advanced caching system to minimize execution overh
 
 ## 4. Go-WASI and co-threads in Stylus execution
 
-ArbOS executes Stylus contracts using Go-WASI, a WASM-compatible runtime with custom optimizations for Arbitrum. Key features include:
+ArbOS executes Stylus contracts using Go-WASI, a WASM-compatible runtime with custom optimizations for <a data-quicklook-from="arbitrum">Arbitrum</a>. Key features include:
 
 - **Memory management**: WASM modules execute in a sandboxed environment with strict memory allocation policies.
 

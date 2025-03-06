@@ -7,9 +7,9 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-ArbOS is the child chain hypervisor that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue" component that runs at the child chain as part of the State Transition Function (STF). It accounts for and manages network resources, produces blocks from incoming messages and cross-chain messaging, and operates its instrumented instance of Geth for smart contract execution.
+<a data-quicklook-from="arbos">ArbOS</a> is the <a data-quicklook-from="child-chain">child chain</a> hypervisor that facilitates the execution environment of the child chain <a data-quicklook-from="arbitrum">Arbitrum</a>. ArbOS is a trusted "system glue" component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). It accounts for and manages network resources, produces blocks from incoming messages and cross-chain messaging, and operates its instrumented instance of <a data-quicklook-from="geth">Geth</a> for <a data-quicklook-from="smart-contract">smart contract</a> execution.
 
-In Arbitrum, much of the work that would otherwise have to be done expensively on the parent chain gets completed by ArbOS, who will trustlessly perform these functions at the speed and low cost of the child chain.
+In Arbitrum, much of the work that would otherwise have to be done expensively on the <a data-quicklook-from="parent-chain">Parent chain</a> gets completed by ArbOS, who will trustlessly perform these functions at the speed and low cost of the child chain.
 
 Supporting these functions in the child chain trusted software, rather than building them into the parent chain-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at the child chain, instead of having to manage those resources as part of a parent chain contract. Having a trusted operating system at the child chain also has significant advantages in flexibility because the child chain code is easier to evolve or to customize for a particular chain than a parent chain enforced architecture would be.
 
@@ -23,19 +23,19 @@ A precompile consists of a Solidity interface in `contracts/src/precompiles/` an
 
 Completion of calling, dispatching, and recording of precompile methods occurs via runtime reflection, which avoids any human error manually parsing and writing bytes could introduce, and uses Geth's stable APIs for [packing and unpacking](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L438) values.
 
-Each time a transaction calls a method of a child chain-specific precompile, a [`call context`](https://github.com/OffchainLabs/nitro/blob/f11ba39cf91ee1fe1b5f6b67e8386e5efd147667/precompiles/context.go#L26) gets created to track and record the gas burnt. For convenience, it also provides access to the public fields of the underlying [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38). Because sub-transactions could revert without updates to this struct, the `TxProcessor` only makes public what is safe, such as the amount of parent chain calldata paid by the top-level transaction.
+Each time a <a data-quicklook-from="transaction">transaction</a> calls a method of a child chain-specific precompile, a [`call context`](https://github.com/OffchainLabs/nitro/blob/f11ba39cf91ee1fe1b5f6b67e8386e5efd147667/precompiles/context.go#L26) gets created to track and record the gas burnt. For convenience, it also provides access to the public fields of the underlying [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38). Because sub-transactions could revert without updates to this struct, the `TxProcessor` only makes public what is safe, such as the amount of parent chain calldata paid by the top-level transaction.
 
 ## Precompile descriptions
 
-- `ArbAggregator`: Provides methods for configuring transaction aggregation. The Arbitrum One Sequencer is the default aggregator unless changed by users. The precompile manages fee collection and batch posters for chain aggregation.
+- `ArbAggregator`: Provides methods for configuring transaction aggregation. The <a data-quicklook-from="arbitrum-one">Arbitrum One</a> <a data-quicklook-from="sequencer">Sequencer</a> is the default aggregator unless changed by users. The precompile manages fee collection and <a data-quicklook-from="batch">batch</a> posters for chain aggregation.
 
 - `ArbGasInfo`: Retrieves various gas-related statistics, including gas prices in both `Wei` and `Ink`, parent chain gas price estimates, transaction fees, and congestion metrics. It is crucial in estimating transaction costs and adjusting gas pricing dynamically.
 
 - `ArbRetryableTx`: Handles retryable transactions, enabling parent-to-child messaging with delayed execution. The precompile manages retryables, checks expiration times, extends their lifetime, and cancels pending retryables.
 
-- `ArbSys`: Provides system-level utilities for interacting with the Arbitrum chain. It exposes methods to retrieve chain-specific information such as block numbers, chain IDs, and gas availability. It also supports child-to-parent messaging and contract aliasing.
+- `ArbSys`: Provides system-level utilities for interacting with the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a>. It exposes methods to retrieve chain-specific information such as block numbers, chain IDs, and gas availability. It also supports child-to-parent messaging and contract aliasing.
 
-- `ArbWasm`: Facilitates the deployment and management of Stylus contracts on Arbitrum Nitro. It provides lifecycle management for WASM-based programs, including activation, expiration handling, memory footprint calculation, and version tracking.
+- `ArbWasm`: Facilitates the deployment and management of <a data-quicklook-from="stylus">Stylus</a> contracts on <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>. It provides lifecycle management for <a data-quicklook-from="wasm">WASM</a>-based programs, including activation, expiration handling, memory footprint calculation, and version tracking.
 
 - `ArbWasmCache`: Manages Stylus caching mechanisms. It allows chain owners or designated managers to cache WASM programs for efficient execution, reduce computation costs, and improve call performance.
 
@@ -55,7 +55,7 @@ Each time a transaction calls a method of a child chain-specific precompile, a [
 
 - `ArbosTest` (legacy): A historical precompile used for burning arbitrary amounts of gas. It has limited utility in Nitro.
 
-- `ArbStatistics`: Provides historical data about the chain's state before the Nitro upgrade. Most functions that required this precompile in Arbitrum Classic now have better alternatives.
+- `ArbStatistics`: Provides historical data about the chain's state before the Nitro upgrade. Most functions that required this precompile in <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> now have better alternatives.
 
 ## Messages
 
@@ -78,7 +78,7 @@ ArbOS upgrades are scheduled to happen [when finalizing the first block](https:/
 
 ### [`blockhashes`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
 
-This component maintains the last 256 parent chain block hashes in a circular buffer. This component allows the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) to implement the `BLOCKHASH` and `NUMBER` opcodes and supports the precompile methods that involve the outbox. To avoid changing the ArbOS state outside of a transaction, blocks made from messages with a new parent chain–block number update this info during an [`InternalTxUpdateL1BlockNumber`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/internal_tx.go#L24) [`ArbitrumInternalTx`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go) included as the first transaction of the block.
+This component maintains the last 256 parent chain block hashes in a circular buffer. This component allows the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) to implement the `BLOCKHASH` and `NUMBER` opcodes and supports the precompile methods that involve the <a data-quicklook-from="outbox">Outbox</a>. To avoid changing the ArbOS state outside of a transaction, blocks made from messages with a new parent chain–block number update this info during an [`InternalTxUpdateL1BlockNumber`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/internal_tx.go#L24) [`ArbitrumInternalTx`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go) included as the first transaction of the block.
 
 ### [`l1PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l1pricing/l1pricing.go#L16)
 
@@ -206,7 +206,7 @@ When the Sequencer posts a batch to the parent chain inbox:
 
 1. **Batch posting report generation**:
 
-   - The parent chain inbox inserts a "batch posting report" transaction into the chain's delayed inbox
+   - The parent chain inbox inserts a "batch posting report" transaction into the chain's <a data-quicklook-from="delayed-inbox">delayed inbox</a>
 
    - After a delay, this report gets processed by ArbOS's pricer module
 
@@ -362,7 +362,7 @@ Users and developers can access parent chain fee-related data through the follow
 
 ### [`l2PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
 
-The child chain pricing state tracks child chain resource usage to determine a reasonable child chain gas price. This process considers various factors, including user demand, the state of Geth, and the computational speed limit. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as child chain–specific resources are consumed and filled as time passes. Parent chain-specific resources, such as parent chain `calldata`, are not accounted for in the pools since they do not directly impact the computational workload of network actors. Instead, the design of the speed limit mechanism regulates execution resources to ensure consistent system performance and synchronization.
+The child chain pricing state tracks child chain resource usage to determine a reasonable child chain gas price. This process considers various factors, including user demand, the state of Geth, and the computational <a data-quicklook-from="speed-limit">speed limit</a>. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as child chain–specific resources are consumed and filled as time passes. Parent chain-specific resources, such as parent chain `calldata`, are not accounted for in the pools since they do not directly impact the computational workload of network actors. Instead, the design of the speed limit mechanism regulates execution resources to ensure consistent system performance and synchronization.
 
 While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompiles, most changes are automatic and happen during [block production](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L77) and the [transaction hooks](/how-arbitrum-works/state-transition-function/04-modified-geth-on-arbitrum.mdx#hooks). Each of an incoming message's transactions removes the parent chain component of the gas it uses from the pool. Afterward, the message's timestamp [informs the pricing mechanism](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L336) of the time passed as ArbOS [finalizes the block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350).
 
@@ -406,7 +406,7 @@ Gas estimation for retryable submissions is possible via the [`NodeInterface`](/
 
 ## The speed limit
 
-The security of Nitro chains depends on the assumption that when one validator creates an assertion, other validators will check it and respond with a correct assertion and a challenge if it is wrong. This assumption requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
+The security of Nitro chains depends on the assumption that when one <a data-quicklook-from="validator">validator</a> creates an <a data-quicklook-from="assertion">assertion</a>, other validators will check it and respond with a correct assertion and a <a data-quicklook-from="challenge">challenge</a> if it is wrong. This assumption requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
 
 This approach sets an effective speed limit on execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit enforced by the Rollup protocol contracts on how far a deadline can be in the future, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
 
