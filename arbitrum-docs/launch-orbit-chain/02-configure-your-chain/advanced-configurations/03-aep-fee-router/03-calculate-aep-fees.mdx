@@ -85,7 +85,7 @@ If a team elects to deduct their assertion posting costs from eligible validator
 
 To implement the deduction, the team should do the following:
 
-- [Configure all Orbit chain fee components](https://docs.arbitrum.io/launch-orbit-chain/how-tos/manage-fee-collectors#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
+- [Configure all Orbit chain fee components](/launch-orbit-chain/02-configure-your-chain/common-configurations/06-fee-management.mdx#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
   - For ease of accounting, it’s strongly recommended that this multisig handle no funds other than the rewards earned from the protocol.
 - On the established regular cadence (e.g., quarterly) deduct _all eligible assertion gas costs_ from the multisig’s balance by transferring it to your preferred fee-collecting address. The remainder of the amount must be forwarded to the `RewardDistributor` contract (configured as directed previously)
 - Following this, the `RewardDistributor` will split the post-deduction funds between the **AEP Fee Router** contracts and the configured chain-owner controlled addresses.
