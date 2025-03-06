@@ -23,24 +23,24 @@ Any links on this page may reference old releases of Nitro or our fork of Geth. 
 
 Arbitrum uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
 
-Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](/how-arbitrum-works/04-geth-at-the-core.mdx#enablearbos) set to true, [`ReadyEVMForL2`](/how-arbitrum-works/04-geth-at-the-core.mdx#readyevmforl2) installs the alternative child chain hooks.
+Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#readyevmforl2) installs the alternative child chain hooks.
 
 - `core.ApplyTransaction` -> `core.applyTransaction` -> `core.ApplyMessage`
   - `core.NewStateTransition`
     - `ReadyEVMForL2`
   - `core.TransitionDb`
-    - [`StartTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#starttxhook)
+    - [`StartTxHook`](#starttxhook)
     - `core.transitionDbImpl`
       - if `IsArbitrum()` remove tip
-      - [`GasChargingHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#gascharginghook)
+      - [`GasChargingHook`](#gascharginghook)
       - `evm.Call`
         - `core.vm.EVMInterpreter.Run`
-          - [`PushCaller`](/how-arbitrum-works/04-geth-at-the-core.mdx#pushcaller)
+          - [`PushCaller`](#pushcaller)
           - `PopCaller`
       - `core.StateTransition.refundGas`
-        - [`ForceRefundGas`](/how-arbitrum-works/04-geth-at-the-core.mdx#forcerefundgas)
-        - [`NonrefundableGas`](/how-arbitrum-works/04-geth-at-the-core.mdx#nonrefundablegas)
-      - [`EndTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#endtxhook)
+        - [`ForceRefundGas`](#forcerefundgas)
+        - [`NonrefundableGas`](#nonrefundablegas)
+      - [`EndTxHook`](#endtxhook)
   - added return parameter: `transactionResult`
 
 What follows is an overview of each hook in chronological order.
@@ -109,12 +109,12 @@ Nitro Geth includes a few child chain-specific transaction types. Click any to j
 
 | Tx Type                                                                                              | Represents                                       | Last Hook Reached                                                        | Source      |
 | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------ | ----------- |
-| [`ArbitrumUnsignedTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumunsignedtx)               | A parent chain to child chain message            | [`EndTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#endtxhook)     | Bridge      |
-| [`ArbitrumContractTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumcontracttx)               | A nonce-less parent chain to child chain message | [`EndTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#endtxhook)     | Bridge      |
-| [`ArbitrumDepositTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumdeposittx)                 | A user deposit                                   | [`StartTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#starttxhook) | Bridge      |
-| [`ArbitrumSubmitRetryableTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumsubmitretryabletx) | Creating a retryable                             | [`StartTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#starttxhook) | Bridge      |
-| [`ArbitrumRetryTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumretrytx)                     | A retryable redeem attempt                       | [`EndTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#endtxhook)     | Child chain |
-| [`ArbitrumInternalTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitruminternaltx)               | ArbOS state update                               | [`StartTxHook`](/how-arbitrum-works/04-geth-at-the-core.mdx#starttxhook) | ArbOS       |
+| [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message            | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                   | [`StartTxHook`](#starttxhook) | Bridge      |
+| [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                             | [`StartTxHook`](#starttxhook) | Bridge      |
+| [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A retryable redeem attempt                       | [`EndTxHook`](#endtxhook)     | Child chain |
+| [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                               | [`StartTxHook`](#starttxhook) | ArbOS       |
 
 The following reference documents each type.
 
@@ -132,9 +132,9 @@ It represents a user deposit from a parent chain to a child chain. This represen
 
 ### [`ArbitrumSubmitRetryableTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L232)
 
-It represents a retryable submission and may schedule an [`ArbitrumRetryTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumretrytx) if enough gas is available. Fore more info, please see the [retryables documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets).
+It represents a retryable submission and may schedule an [`ArbitrumRetryTx`](#arbitrumretrytx) if enough gas is available. Fore more info, please see the [retryables documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets).
 
-### [`ArbitrumRetryTx`](/how-arbitrum-works/04-geth-at-the-core.mdx#arbitrumretrytx)
+### [`ArbitrumRetryTx`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/arb_types.go#L161)
 
 These calls get scheduled by calls using the `redeem` method of the [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) precompile and via retryable auto-redemption. Fore more info, please see the [retryables documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets).
 
@@ -164,7 +164,7 @@ Nitro's Geth is configurable with the following [child chain-specific chain para
 
 ### `EnableArbos`
 
-Introduces [ArbOS](/how-arbitrum-works/04-geth-at-the-core.mdx#arbos), converting what would otherwise be a vanilla parent chain into a child chain Arbitrum rollup.
+Introduces [ArbOS](/how-arbitrum-works/state-transition-function/05-arbos.mdx), converting what would otherwise be a vanilla parent chain into a child chain Arbitrum rollup.
 
 ### `AllowDebugPrecompiles`
 
