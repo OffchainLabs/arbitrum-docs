@@ -894,11 +894,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/geth-at-the-core',
-          label: 'Geth at the Core',
-        },
-        {
-          type: 'doc',
           id: 'how-arbitrum-works/separating-execution-from-proving',
           label: 'Separating Execution from Proving',
         },

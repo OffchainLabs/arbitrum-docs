@@ -27,9 +27,15 @@ The design of EVM is a stack machine with a maximum depth of 1024 items. Each it
 
 During execution, the EVM uses transient _memory_ (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia _storage_ trie–a word-addressable word array–that forms part of the global state.
 
-<a data-quicklook-from="smart-contract">smart contract</a> bytecode compiles into a series of EVM opcodes that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations (such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
+<a data-quicklook-from="smart-contract">smart contract</a> bytecode compiles into a series of EVM opcodes
+that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations
+(such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
 
-<a data-quicklook-from="geth">Geth</a> (go-Ethereum) is one of the primary <a data-quicklook-from="client">client</a> implementations of Ethereum, serving as the practical embodiment of both the STF and the EVM execution engine. It processes transactions by executing the smart contract's bytecode and updating the global state, ensuring that every state change is deterministic and secure.
+<a data-quicklook-from="geth">Geth</a> (go-Ethereum) is one of the primary <a data-quicklook-from="client">
+  client
+</a> implementations of Ethereum, serving as the practical embodiment of both the STF and the EVM execution
+engine. It processes transactions by executing the smart contract's bytecode and updating the global
+state, ensuring that every state change is deterministic and secure.
 
 In essence, Geth converts transaction inputs into precise computational steps within the EVM, maintaining the intricate data structures that underpin Ethereum's blockchain. Its robust design not only powers the core operations of Ethereum but also provides the foundation for advanced modificaitons in platforms like the <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a> stack.
 

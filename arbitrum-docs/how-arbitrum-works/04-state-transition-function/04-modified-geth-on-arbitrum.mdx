@@ -21,7 +21,10 @@ Any links on this page may reference old releases of Nitro or our fork of Geth. 
 
 ## Hooks
 
-<a data-quicklook-from="arbitrum">Arbitrum</a> uses various hooks to modify Geth's behavior when processing transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152) function.
+<a data-quicklook-from="arbitrum">Arbitrum</a> uses various hooks to modify Geth's behavior when processing
+transactions. Each provides an opportunity for ArbOS to update its state and make decisions about the
+transaction during its lifetime. Transactions are applied using Geth's [`ApplyTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/state_processor.go#L152)
+function.
 
 Below is `ApplyTransaction`'s callgraph, with additional info on where the various Arbitrum-specific hooks are. Click on any to go to their section. By default, these hooks do nothing to leave Geth's default behavior unchanged, but for chains configured with [`EnableArbOS`](#enablearbos) set to true, [`ReadyEVMForL2`](#readyevmforl2) installs the alternative <a data-quicklook-from="child-chain">child chain</a> hooks.
 
@@ -107,14 +110,14 @@ This interface is the main interaction between geth-standard APIs and the Arbitr
 
 Nitro Geth includes a few child chain-specific transaction types. Click any to jump to their section.
 
-| Tx Type                                                                                              | Represents                                       | Last Hook Reached                                                        | Source      |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------ | ----------- |
-| [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message            | [`EndTxHook`](#endtxhook)     | Bridge      |
-| [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message | [`EndTxHook`](#endtxhook)     | Bridge      |
-| [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                   | [`StartTxHook`](#starttxhook) | Bridge      |
-| [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                             | [`StartTxHook`](#starttxhook) | Bridge      |
-| [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A <a data-quicklook-from="retryable-redeem">retryable redeem</a> attempt                       | [`EndTxHook`](#endtxhook)     | Child chain |
-| [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                               | [`StartTxHook`](#starttxhook) | ArbOS       |
+| Tx Type                                                   | Represents                                                               | Last Hook Reached             | Source      |
+| --------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------- | ----------- |
+| [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message                                    | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message                         | [`EndTxHook`](#endtxhook)     | Bridge      |
+| [`ArbitrumDepositTx`](#arbitrumdeposittx)                 | A user deposit                                                           | [`StartTxHook`](#starttxhook) | Bridge      |
+| [`ArbitrumSubmitRetryableTx`](#arbitrumsubmitretryabletx) | Creating a retryable                                                     | [`StartTxHook`](#starttxhook) | Bridge      |
+| [`ArbitrumRetryTx`](#arbitrumretrytx)                     | A <a data-quicklook-from="retryable-redeem">retryable redeem</a> attempt | [`EndTxHook`](#endtxhook)     | Child chain |
+| [`ArbitrumInternalTx`](#arbitruminternaltx)               | ArbOS state update                                                       | [`StartTxHook`](#starttxhook) | ArbOS       |
 
 The following reference documents each type.
 
@@ -164,7 +167,7 @@ Nitro's Geth is configurable with the following [child chain-specific chain para
 
 ### `EnableArbos`
 
-Introduces [ArbOS](/how-arbitrum-works/state-transition-function/05-arbos.mdx), converting what would otherwise be a vanilla parent chain into a child chain Arbitrum rollup.
+Introduces [ArbOS](/how-arbitrum-works/04-state-transition-function/05-arbos.mdx), converting what would otherwise be a vanilla parent chain into a child chain Arbitrum rollup.
 
 ### `AllowDebugPrecompiles`
 
