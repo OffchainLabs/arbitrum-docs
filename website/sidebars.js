@@ -923,7 +923,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'bold/concepts/bold-technical-deep-dive',
+              id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
             },
             {
