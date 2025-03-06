@@ -8,10 +8,15 @@ content_type: get-started
 ---
 
 <a data-quicklook-from="arbos">ArbOS</a> is the <a data-quicklook-from="child-chain">child chain</a> hypervisor
-that facilitates the execution environment of the child chain <a data-quicklook-from="arbitrum">Arbitrum</a>
-. ArbOS is a trusted "system glue" component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). It accounts for and manages network resources, produces blocks from incoming messages and cross-chain messaging, and operates its instrumented instance of <a data-quicklook-from="geth">Geth</a> for <a data-quicklook-from="smart-contract">smart contract</a> execution.
+that facilitates the execution environment of the child chain Arbitrum. ArbOS is a trusted "system glue"
+component that runs at the child chain as part of the <a data-quicklook-from="state-transition-function">
+  State Transition Function
+</a> (STF). It accounts for and manages network resources, produces blocks from incoming messages and
+cross-chain messaging, and operates its instrumented instance of <a data-quicklook-from="geth">
+  Geth
+</a> for <a data-quicklook-from="smart-contract">smart contract</a> execution.
 
-In Arbitrum, much of the work that would otherwise have to be done expensively on the <a data-quicklook-from="parent-chain">Parent chain</a> gets completed by ArbOS, who will trustlessly perform these functions at the speed and low cost of the child chain.
+In Arbitrum, much of the work that would otherwise have to be done expensively on the <a data-quicklook-from="parent-chain">parent chain</a> gets completed by ArbOS, who will trustlessly perform these functions at the speed and low cost of the child chain.
 
 Supporting these functions in the child chain trusted software, rather than building them into the parent chain-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at the child chain, instead of having to manage those resources as part of a parent chain contract. Having a trusted operating system at the child chain also has significant advantages in flexibility because the child chain code is easier to evolve or to customize for a particular chain than a parent chain enforced architecture would be.
 
