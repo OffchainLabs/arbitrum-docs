@@ -7,7 +7,7 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-Arbitrum nodes receive transaction inputs through a dual-channel approach that enhances reliability and consistency. First, nodes subscribe to the sequencer feed, receiving the upcoming ordered transactions published in real time. To learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-works/03-sequencer.mdx#real-time-sequencer-feed). 
+Arbitrum nodes receive transaction inputs through a dual-channel approach that enhances reliability and consistency. First, nodes subscribe to the sequencer feed, receiving the upcoming ordered transactions published in real time. To learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-works/03-sequencer.mdx#real-time-sequencer-feed).
 
 In addition to the sequencer feed, Arbitrum nodes subscribe to the `SequencerBatchDelivered` event on the parent chain. This event occurs whenever a batch of transactions gets delivered to the parent chain via the batch poster. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those previously provided by the sequencer feed. If discrepancies arise, nodes re-organize to adopt the transactions confirmed on the parent chain, using the parent chain as the definitive source of truth.
 
@@ -16,9 +16,10 @@ As discussed in the [considerations and limitations section](/how-arbitrum-works
 Arbitrum nodes reliably receive an ordered set of transactions through these mechanisms, which serve as inputs for the State Transition Function (STF). The function then processes these transactions to compute and output the final state, ensuring consistency and security across the network.
 
 ## Message types
+
 Arbitrum supports submitting a variety of message types to its chains. These messages fall into two broad categories: those submitted directly to the Sequencer as child chain messages and those submitted on the parent chain. For more details on message types beyond standard child chain transactions, please refer to the [L1-to-L2 messaging documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
-In the system, we refer to these messages as `L1IncomingMessage` [soure code reference](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54). 
+In the system, we refer to these messages as `L1IncomingMessage` [soure code reference](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54).
 
 When submitted to the sequencer feed, messages are tagged with a unique identifier, ensuring Arbitrum nodes correctly differentiate and process them. Below is the list of message types, their associated constant values, and descriptions:
 
@@ -34,6 +35,7 @@ uint8 constant L2MessageType_unsignedContractTx = 1;
 uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;
 uint8 constant INITIALIZATION_MSG_TYPE = 11;
 ```
+
 - `L2_MSG` (3): Child chain messages submitted directly to the Sequencer.
 
 - `L1MessageType_L2FundedByL1` (7): Child chain messages that go to the parent chain's delayed inbox, with funding provided on the parent chain itself.
@@ -50,6 +52,6 @@ uint8 constant INITIALIZATION_MSG_TYPE = 11;
 
 - `ROLLUP_PROTOCOL_EVENT_TYPE` (8): Arbitrum classic used it for messages sent to bridge, Nitro does not use it.
 
-- `INITIALIZATION_MSG_TYPE` (11): The first message added to a new rollup inbox.  Its presence indicates proper initialization of the rollup.
+- `INITIALIZATION_MSG_TYPE` (11): The first message added to a new rollup inbox. Its presence indicates proper initialization of the rollup.
 
 These tagged identifiers enable Arbitrum nodes to parse incoming messages and direct their payloads appropriately, ensuring smooth and reliable network operation.

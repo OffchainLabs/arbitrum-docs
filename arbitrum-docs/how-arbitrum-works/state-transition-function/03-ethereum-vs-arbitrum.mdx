@@ -9,10 +9,10 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-
 This section explains the architecture and implementation of the State Transition Function (STF) in Ethereum and the Arbitrum Nitro stack, highlighting their similarities and key differences.
 
 ## STF in Ethereum
+
 In Ethereum, the STF receives transactions as inputs, processes them via the EVM, and produces the final state as output.
 
 In Ethereum, the state is a vast data structure represented by a modified Merkle Patricia Trie. This structure holds all accounts, linking them via hashes and reducing the entire state to a single root hash stored on the blockchain.
@@ -25,7 +25,7 @@ Here, `S` represents the current state, `T` denotes the transaction, and `S'` is
 
 The design of EVM is a stack machine with a maximum depth of 1024 items. Each item is a 256-bit word, chosen for compatibility with 256-bit cryptography (e.g., Keccak-256 hashes and secp256k1 signatures).
 
-During execution, the EVM uses transient *memory* (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia *storage* trie–a word-addressable word array–that forms part of the global state.
+During execution, the EVM uses transient _memory_ (a word-addresses byte array) that only persists for the duration of a transaction. In contrast, each contract maintains a persistent Merkle Patricia _storage_ trie–a word-addressable word array–that forms part of the global state.
 
 Smart contract bytecode compiles into a series of EVM opcodes that perform standard stack operations (such as `XOR`, `AND`, `ADD`, `SUB`) and blockchain-specific operations (such as `ADDRESS`, `BALANCE`, `BLOCKHASH`).
 
@@ -34,6 +34,7 @@ Geth (go-Ethereum) is one of the primary client implementations of Ethereum, ser
 In essence, Geth converts transaction inputs into precise computational steps within the EVM, maintaining the intricate data structures that underpin Ethereum's blockchain. Its robust design not only powers the core operations of Ethereum but also provides the foundation for advanced modificaitons in platforms like the Arbitrum Nitro stack.
 
 ## STF on Arbitrum
+
 The Arbitrum Nitro stack implements a modified version of Ethereum's STF. While it retains the core principles of Ethereum, several Arbitrum-specific features and processes distinguish it from Ethereum's implementation. Key differences include:
 
 - **Gas accounting**: In Arbitrum, executing a transaction incurs two costs, one for executing on the child chain and another for submitting transaction batches to the parent chain. This dual fee structure requires a different approach to gas accounting.
@@ -42,7 +43,7 @@ The Arbitrum Nitro stack implements a modified version of Ethereum's STF. While 
 
 - **Cross-chain bridge functionalities**: Arbitrum supports cross-chain messaging and regular transactions, facilitating seamless interactions between the child and parent chains.
 
-- **Block time and block number**: The Arbitrum chain uses two block numbers: the parent chain's block number and the child chain's block number. Additionally, block times are determined by the child chain's sequencer clock, as described in the [Block numbers and time documentation](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx). 
+- **Block time and block number**: The Arbitrum chain uses two block numbers: the parent chain's block number and the child chain's block number. Additionally, block times are determined by the child chain's sequencer clock, as described in the [Block numbers and time documentation](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx).
 
 - **Precompiles**: Specific precompiled contracts on the Arbitrum chain will process Arbitrum-specific features. Moreover, individual Arbitrum Orbit chains may implement their own custom precompiles.
 
@@ -51,6 +52,7 @@ The Arbitrum Nitro stack implements a modified version of Ethereum's STF. While 
 - **Stylus in the STF**: With the introduction of Stylus, Arbitrum Nitro now supports executing smart contracts written in Rust, C, and C++, offering a high-performance alternative to the EVM. Unlike standard Ethereum transactions, Stylus contracts execute in a WASM-based runtime within ArbOS, leveraging efficient host I/O operations and optimized caching mechanisms.
 
 ## Implementation overview
+
 The Arbitrum STF is implemented using a modified version of Geth and integrated with ArbOS. This combination allows Arbitrum to support additional functionalities while maintaining compatibility with Ethereum's core execution model. The following diagram provides an abstract overview:
 
 <ImageZoom src="/img/haw-geth-sandwich.svg" alt="Geth sandwich" className="img-600px" />
@@ -76,6 +78,7 @@ The State Transition Function (STF) itself consists of the modified Geth core (b
 - Emits a new block header (formatted in Ethereum's block header structure) that appends to the Nitro chain.
 
 ## Modified Geth on Nitro
+
 Nitro's design builds upon the robust foundation of Geth with targeted modifications that enable it to support child chain-specific functionalities. These modifications include:
 
 - **Custom hooks and interface adaptions**: Nitro integrates a series of custom hooks within Geth's transaction processing flow. These hooks allow Nitro to implement dual gas accounting, manage parent chain calldata fees, and handle custom transaction types–such as retryable transactions–without deviating from Ethereum's core logic.
@@ -89,6 +92,7 @@ Nitro's design builds upon the robust foundation of Geth with targeted modificat
 Detailed technical explanations of these modifications are in the following sections, where we dive deeper into how Nitro's custom hooks, interface implementations, and Geth adaptations come together to support an advanced, high-performance STF.
 
 ## ArbOS overview
+
 ArbOS is the child chain EVM hypervisor that provides the execution environment for the Arbitrum chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
 
 - **Managing network resources**: It allocates and tracks resources necessary for executing transcations on the child chain.

@@ -14,6 +14,7 @@ In Arbitrum, much of the work that would otherwise have to be done expensively o
 Supporting these functions in the child chain trusted software, rather than building them into the parent chain-enforced rules of the architecture as Ethereum does, offers significant advantages in cost because these operations can benefit from the lower cost of computation and storage at the child chain, instead of having to manage those resources as part of a parent chain contract. Having a trusted operating system at the child chain also has significant advantages in flexibility because the child chain code is easier to evolve or to customize for a particular chain than a parent chain enforced architecture would be.
 
 ## Precompiles
+
 ArbOS provides child chain-specific precompiles with methods smart contracts can call the same way they can Solidity functions. Visit the [precompiles conceptual page](/build-decentralized-apps/precompiles/01-overview.mdx) for more information about how these work and the [precompiles reference page](/build-decentralized-apps/precompiles/02-reference.mdx) for a full reference of the precompiles available in Arbitrum chains.
 
 A precompile consists of a Solidity interface in `contracts/src/precompiles/` and a corresponding Golang implementation in `precompiles/`. Using Geth's ABI generator, `solgen/gen.go` generates `solgen/go/precompilesgen/precompilesgen.go`, which collects the ABI data of the precompiles. The [runtime installer](https://github.com/OffchainLabs/nitro/blob/bc6b52daf7232af2ca2fec3f54a5b546f1196c45/precompiles/precompile.go#L379) uses this generated file to check the type safety of each precompile's implementer.
@@ -25,6 +26,7 @@ Completion of calling, dispatching, and recording of precompile methods occurs v
 Each time a transaction calls a method of a child chain-specific precompile, a [`call context`](https://github.com/OffchainLabs/nitro/blob/f11ba39cf91ee1fe1b5f6b67e8386e5efd147667/precompiles/context.go#L26) gets created to track and record the gas burnt. For convenience, it also provides access to the public fields of the underlying [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38). Because sub-transactions could revert without updates to this struct, the `TxProcessor` only makes public what is safe, such as the amount of parent chain calldata paid by the top-level transaction.
 
 ## Precompile descriptions
+
 - `ArbAggregator`: Provides methods for configuring transaction aggregation. The Arbitrum One Sequencer is the default aggregator unless changed by users. The precompile manages fee collection and batch posters for chain aggregation.
 
 - `ArbGasInfo`: Retrieves various gas-related statistics, including gas prices in both `Wei` and `Ink`, parent chain gas price estimates, transaction fees, and congestion metrics. It is crucial in estimating transaction costs and adjusting gas pricing dynamically.
@@ -56,12 +58,15 @@ Each time a transaction calls a method of a child chain-specific precompile, a [
 - `ArbStatistics`: Provides historical data about the chain's state before the Nitro upgrade. Most functions that required this precompile in Arbitrum Classic now have better alternatives.
 
 ## Messages
+
 An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions depending on load and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, ultimately, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
 
 ## Retryables
+
 A retryable is a special message type for creating atomic parent chain to child chain messages; for details, see [L1-to-L2 messaging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
 ## ArbOS state
+
 ArbOS's state is viewed and modified via [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects, which provide convenient abstractions for working with the underlying data of its [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51). The backing storage's [keyed subspace strategy](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L21) makes [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36)'s convenient getters and setters possible, minimizing the need to work directly with the specific keys and values of the underlying storage's [`stateDB`](https://github.com/OffchainLabs/go-ethereum/blob/0ba62aab54fd7d6f1570a235f4e3a877db9b2bd0/core/state/statedb.go#L66).
 
 Because two [`ArbosState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L36) objects with the same [`backingStorage`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/storage/storage.go#L51) contain and mutate the same underlying state, different `ArbosState` objects can provide different views of ArbOS's contents. [`Burner`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/burn/burn.go#L11) objects, which track gas usage while working with the `ArbosState`, provide the internal mechanism. Some are read-only, causing transactions to revert with `vm.ErrWriteProtection` upon a mutating request. Others demand the caller have elevated privileges. Meanwhile, others dynamically charge users when doing stateful work. This view is chosen for safety when [`OpenArbosState()`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/arbosState/arbosstate.go#L57) creates the object and may never change.
@@ -72,276 +77,291 @@ Must of ArbOS's state exists to facilitate its [precompiles](/build-decentralize
 ArbOS upgrades are scheduled to happen [when finalizing the first block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350) after the `upgradeTimestamp`.
 
 ### [`blockhashes`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/blockhash/blockhash.go#L15)
+
 This component maintains the last 256 parent chain block hashes in a circular buffer. This component allows the [`TxProcessor`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/tx_processor.go#L38) to implement the `BLOCKHASH` and `NUMBER` opcodes and supports the precompile methods that involve the outbox. To avoid changing the ArbOS state outside of a transaction, blocks made from messages with a new parent chain–block number update this info during an [`InternalTxUpdateL1BlockNumber`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/internal_tx.go#L24) [`ArbitrumInternalTx`](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/internal_tx.go) included as the first transaction of the block.
 
 ### [`l1PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l1pricing/l1pricing.go#L16)
+
 In addition to supporting the [`ArbAggregator precompile`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator), the parent chain pricing state provides tools for determining the parent chain component of a transaction's gas costs. This part of the state tracks the total amount of funds collected from transactions in parent chain gas fees and the funds spent by batch posters to post data breaches on the parent chain.
 
 Based on this information, ArbOS maintains a parent chain data fee, which is also tracked as part of this state, determining how much transaction fees will cost for parent chain fees. ArbOS dynamically adjusts this value so that fees collected are approximately equal to batch posting costs.
 
 ## Parent chain pricing model
+
 Efficient handling of parent chain gas costs is crucial for the Arbitrum network's scalability and economic sustainability. The Sequencer implements a dynamic parent chain pricing model to ensure that fees collected from transactions closely match the actual costs incurred when posting data to the parent chain. This section details the challenges in pricing parent chain resources, how fees are collected and allocated, and how the system adjusts to maintain equilibrium over time.
 
 ## Challenges in pricing parent chain resources
+
 There are two main challenges in accurately pricing parent chain resources:
 
-1. Apportioning batch costs among transactions:
-    
-    - **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
-    
-    - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the overall compressibility of the batch.
-    
-    - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
+1. **Apportioning batch costs among transactions**:
 
-2. Assessing parent chain fees at sequencing time:
-    
-    - **Determinism requirement**: The parent chain fee charged to a transaction must be known when the transaction is sequenced to maintain the determinism of the STF.
-  
-    - **Future uncertainty**: At sequencing time, the actual cost of the batch is unknown because it depends on:
-    
-        - The parent chain base fee at the future time of batch posting
-        
-        - The remaining contents of the batch affect its size and compressability
+   - **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
 
-    - **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
+   - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the overall compressibility of the batch.
+
+   - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
+
+2. **Assessing parent chain fees at sequencing time**:
+
+   - **Determinism requirement**: The parent chain fee charged to a transaction must be known when the transaction is sequenced to maintain the determinism of the STF.
+
+   - **Future uncertainty**: At sequencing time, the actual cost of the batch is unknown because it depends on:
+
+     - The parent chain base fee at the future time of batch posting
+
+     - The remaining contents of the batch affect its size and compressability
+
+   - **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
 
 ## Nitro's approach to addressing the challenges
+
 To overcome these challenges, Arbitrum's Nitro implements a two-fold strategy:
 
-1. Estimated relative footprint
+1. **Estimated relative footprint**
 
-    - Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
+   - Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
 
-2. Adaptive fee per data unit
-    
-    - A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
+2. **Adaptive fee per data unit**
+
+   - A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
 
 ## Apprortioning costs among transactions
+
 To approximate each transaction's contribution to parent chain costs, Arbitrum employs the following method:
 
 - **Compression estimation**:
 
-    - Each transaction individually compresses using the Brotli compressor at its lowest compression level (fastest setting).
-    
-    - This approach reduces computational overhead within the STF.
+  - Each transaction individually compresses using the Brotli compressor at its lowest compression level (fastest setting).
+
+  - This approach reduces computational overhead within the STF.
 
 - **Data unit calculation**:
-    
-    - The size of the compressed transaction is multiplied by 16 (since Ethereum charges 16 gas per non-zero byte).
-    
-    - This product represents the transaction's estimated footprint in data units.
+
+  - The size of the compressed transaction is multiplied by 16 (since Ethereum charges 16 gas per non-zero byte).
+
+  - This product represents the transaction's estimated footprint in data units.
 
 - **Rationale**:
-    
-    - This method approximates the transaction's size after full batch compression.
-    
-    - While not exact, it's computationally efficient and suitable for real-time processing.
+
+  - This method approximates the transaction's size after full batch compression.
+
+  - While not exact, it's computationally efficient and suitable for real-time processing.
 
 ## Determining cost per data unit
+
 Charging a transaction based on the parent chain base fee is not viable due to:
 
 - **ArbOS limitations**:
 
-    - ArbOS cannot directly measure the parent chain base fee
+  - ArbOS cannot directly measure the parent chain base fee
 
-    - Relying on the Sequencer to report the parent chain base fee isn't secure, as it could  manipulate fees for profit
+  - Relying on the Sequencer to report the parent chain base fee isn't secure, as it could manipulate fees for profit
 
 - **Approximation errors**:
 
-    - The estimated data units per transaction don't precisely reflect parent chain costs
+  - The estimated data units per transaction don't precisely reflect parent chain costs
 
-    - The total number of data units charged may not be directly proportional to the Sequencer's expenses
+  - The total number of data units charged may not be directly proportional to the Sequencer's expenses
 
 ### Adaptive pricing algorithm
+
 To align collected fees with actual costs, Arbitrum uses an adaptive algorithm with two primary goals:
 
 1. **Cost alignment**
 
-    - Minimize the long-term difference between collected fees and the Sequencer's parent chain costs
+   - Minimize the long-term difference between collected fees and the Sequencer's parent chain costs
 
 2. **Stability**
 
-    - Avoid sudden fluctuations in the data price, ensuring a stable fee environment
+   - Avoid sudden fluctuations in the data price, ensuring a stable fee environment
 
 ### Pricer components
+
 The pricer module within ArbOS tracks:
 
 - **Amount owed to the Sequencer**:
 
-    - The cumulative parent chain costs incurred by the Sequencer for batch posting
+  - The cumulative parent chain costs incurred by the Sequencer for batch posting
 
 - **Reimbursement fund**:
-  
-    - Collects all funds charged to transactions for parent chain fees
-  
-    - Acts as a pool to reimburse the Sequencer
+
+  - Collects all funds charged to transactions for parent chain fees
+
+  - Acts as a pool to reimburse the Sequencer
 
 - **Data unit count**:
 
-    - The total number of recent data units processed
-    
-    - Increases with each transaction's estimated data units
+  - The total number of recent data units processed
+
+  - Increases with each transaction's estimated data units
 
 - **Current parent chain data unit price**:
 
-    - The adaptive fee per data unit expressed in Wei
+  - The adaptive fee per data unit expressed in Wei
 
 ### Algorithm for price adjustment
+
 When the Sequencer posts a batch to the parent chain inbox:
 
 1. **Batch posting report generation**:
 
-	- The parent chain inbox inserts a "batch posting report" transaction into the chain's delayed inbox
+   - The parent chain inbox inserts a "batch posting report" transaction into the chain's delayed inbox
 
-    - After a delay, this report gets processed by ArbOS's pricer module
+   - After a delay, this report gets processed by ArbOS's pricer module
 
 2. **Processing the batch posting report**:
 
-    - **Compute batch cost**:
+   - **Compute batch cost**:
 
-        - ArbOS calculates the actual cost of posting the batch by:
+     - ArbOS calculates the actual cost of posting the batch by:
 
-            - Retrieving the batch data from the inbox state
+       - Retrieving the batch data from the inbox state
 
-            - Counting zero and non-zero bytes to determine parent chain gas usage
+       - Counting zero and non-zero bytes to determine parent chain gas usage
 
-        - The cost is added to the amount owed to the Sequencer
+     - The cost is added to the amount owed to the Sequencer
 
-	- **Update data units**:
+   - **Update data units**:
 
-		- Calculate the data units assigned to this update $( U_{\text{upd}}$
-    	$$
-    	U_{\text{upd}} = U \times \frac{T_{\text{upd}} - T_{\text{prev}}}{T - T_{\text{prev}}}
-    	$$
+     - Calculate the data units assigned to this update $(U_{\text{upd}})$
 
-		- $U$: Total recent data units
+       $$
+       U_{\text{upd}} = U \times \frac{T_{\text{upd}} - T_{\text{prev}}}{T - T_{\text{prev}}}
+       $$
 
-		- $T$: Current time
+     - $U$: Total recent data units
 
-		- $T_{\text{upd}}$: Time when the update occurred
+     - $T$: Current time
 
-		- $T_{\text{prev}}$: Time of the previous update
+     - $T_{\text{upd}}$: Time when the update occurred
 
-		- Subtract $U_{\text{upd}}$ from the total $U$
+     - $T_{\text{prev}}$: Time of the previous update
 
-	- **Reimburse the Sequencer**:
+     - Subtract $U_{\text{upd}}$ from the total $U$
 
-		- Pay the Sequencer from the reimbursement fund:
+   - **Reimburse the Sequencer**:
 
-			- The amount paid is the lesser of the amount owed or the fund balance.
+     - Pay the Sequencer from the reimbursement fund:
 
-		- Deduct the paid amount from both the reimbursement fund and the amount owed
+       - The amount paid is the lesser of the amount owed or the fund balance.
 
-	- **Compute surplus and derivative**:
+     - Deduct the paid amount from both the reimbursement fund and the amount owed
 
-		- Surplus ($S$):
-	    $$
-	    S = \text{Reimbursement Fund Balance} - \text{Amount Owed}
-	    $$
+   - **Compute surplus and derivative**:
 
-		- Derivative of surplus ($D$):
+     - Surplus ($S$):
 
-			- $D = \frac{S - S_{\text{prev}}}{U_{\text{upd}}}$
+       $$
+       S = \text{Reimbursement Fund Balance} - \text{Amount Owed}
+       $$
 
-			- $S_{\text{prev}}$: Surplus at the previous update
+     - Derivative of surplus ($D$):
 
-	- **Compute derivative goal($D'$)**:
+       - $D = \frac{S - S_{\text{prev}}}{U_{\text{upd}}}$
 
-		- Establish a target derivative to eliminate surplus over time:
+       - $S_{\text{prev}}$: Surplus at the previous update
 
-			- $D' = -\frac{S}{E}$
+   - **Compute derivative goal($D'$)**:
 
-			- $E$: Equilibration constant (time horizon for balancing surplus).
+     - Establish a target derivative to eliminate surplus over time:
 
-	- **Adjust price ($\Delta P)$)**:
+       - $D' = -\frac{S}{E}$
 
-		- Calculate the change in the data unit price:
+       - $E$: Equilibration constant (time horizon for balancing surplus).
 
-			- $\Delta P = \frac{(D' - D) \times U_{\text{upd}}}{\alpha + U_{\text{upd}}}$
+   - **Adjust price ($\Delta P)$)**:
 
-			- $\alpha$: Smoothing parameter to prevent abrupt changes
+     - Calculate the change in the data unit price:
 
-		- Update the price:
+       - $\Delta P = \frac{(D' - D) \times U_{\text{upd}}}{\alpha + U_{\text{upd}}}$
 
-			- $P = \max(0, P_{\text{prev}} + \Delta P)$
+       - $\alpha$: Smoothing parameter to prevent abrupt changes
 
-	- **Outcome**:
+     - Update the price:
 
-		- The adaptive algorithm adjusts the parent chain-data unit price to align collected fees with actual costs.
+       - $P = \max(0, P_{\text{prev}} + \Delta P)$
 
-		- Ensures that the Sequencer gets fairly reimbursed while avoiding surpluses or deficits.
+   - **Outcome**:
+
+     - The adaptive algorithm adjusts the parent chain-data unit price to align collected fees with actual costs.
+
+     - Ensures that the Sequencer gets fairly reimbursed while avoiding surpluses or deficits.
 
 ### Additional Considerations
+
 - **Per-unit rewards**:
 
-    - An optional per-unit reward can be included and payable to a designated address.
+  - An optional per-unit reward can be included and payable to a designated address.
 
-    - Useful for covering additional expenses such as infrastructure or operations.
+  - Useful for covering additional expenses such as infrastructure or operations.
 
 - **Recompression scenarios**:
 
-    - Recompression of existing batch segments may occur if:
+  - Recompression of existing batch segments may occur if:
 
-        - The batch exceeds the maximum size limits
+    - The batch exceeds the maximum size limits
 
-        - The batch hasn't been properly closed
+    - The batch hasn't been properly closed
 
 - **Compression levels**:
 
-    - Dynamic adjustments of compression levels based on backlog size ($B$):
+  - Dynamic adjustments of compression levels based on backlog size ($B$):
 
-        - **Compression level ($CL$)**:
+    - **Compression level ($CL$)**:
 
-            - For $B \leq 20$
+      - For $B \leq 20$
 
-                - $CL = \min(6, UC)$
+        - $CL = \min(6, UC)$
 
-            - For $20 < B < 60$
+      - For $20 < B < 60$
 
-                - $CL = UC$
+        - $CL = UC$
 
-            - For $B > 60$
+      - For $B > 60$
 
-                - $CL = \min(4, UC)$
+        - $CL = \min(4, UC)$
 
-        - **Recompression level ($RL$)**:
+    - **Recompression level ($RL$)**:
 
-            - For $B < 40$:
+      - For $B < 40$:
 
-                - $RL = UC$
+        - $RL = UC$
 
-            - For $B \geq 40$:
+      - For $B \geq 40$:
 
-                - $RL = \min(6, UC)$
+        - $RL = \min(6, UC)$
 
-    	- $UC$: User-configured compression level
+    - $UC$: User-configured compression level
 
 ## Retrieving parent chain fee information
+
 Users and developers can access parent chain fee-related data through the following methods:
 
 - Parent chain gas base fee estimate:
 
-    - **Method**: `ArbGasInfo.getL1BaseFeeEstimate()`
+  - **Method**: `ArbGasInfo.getL1BaseFeeEstimate()`
 
-    - **Purpose**: Retrieves the current estimated parent–gas base fee for calculating transaction costs.
+  - **Purpose**: Retrieves the current estimated parent–gas base fee for calculating transaction costs.
 
 - Estimating transaction parent chain fees:
 
-    - **Methods**:
+  - **Methods**:
 
-        - `NodeInterface.gasEstimateComponents()`
+    - `NodeInterface.gasEstimateComponents()`
 
-        - `NodeInterface.gasEstimateL1Component()`
+    - `NodeInterface.gasEstimateL1Component()`
 
-    - **Purpose**: Provides an estimate of the parent chain gas a transaction will consume.
+  - **Purpose**: Provides an estimate of the parent chain gas a transaction will consume.
 
 - Transaction receipts:
 
-    - **Field**: `gasUsedForL1`
+  - **Field**: `gasUsedForL1`
 
-    - **Description**: Indicates the child chain gas used to cover parent chain costs.
+  - **Description**: Indicates the child chain gas used to cover parent chain costs.
 
 ### [`l2PricingState`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/l2pricing/l2pricing.go#L14)
+
 The child chain pricing state tracks child chain resource usage to determine a reasonable child chain gas price. This process considers various factors, including user demand, the state of Geth, and the computational speed limit. The primary mechanism for doing so consists of a pair of pools, one larger than the other, that drain as child chain–specific resources are consumed and filled as time passes. Parent chain-specific resources, such as parent chain `calldata`, are not accounted for in the pools since they do not directly impact the computational workload of network actors. Instead, the design of the speed limit mechanism regulates execution resources to ensure consistent system performance and synchronization.
 
 While much of this state is accessible through the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) and [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompiles, most changes are automatic and happen during [block production](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L77) and the [transaction hooks](/how-arbitrum-works/04-geth-at-the-core.mdx#hooks). Each of an incoming message's transactions removes the parent chain component of the gas it uses from the pool. Afterward, the message's timestamp [informs the pricing mechanism](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L336) of the time passed as ArbOS [finalizes the block](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L350).
@@ -353,12 +373,15 @@ We need a per-block gas limit because arbitrator WAVM execution is much slower t
 ArbOS's per-block gas limit is distinct from Geth's block limit, which ArbOS [sets sufficiently high](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L166) to never run out. This approach is safe since Geth's block limit exists to constrain the work done per block, which ArbOS already does via its own per-block gas limit. Though it'll never run out, a block's transactions use the [same Geth gas pool](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L199) to maintain the invariant that the pool decreases monotonically after each transaction. Block headers [use the Geth block limit](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L67) for internal consistency and to ensure gas estimation works. There are distinct from the [`gasLeft`](https://github.com/OffchainLabs/nitro/blob/2ba6d1aa45abcc46c28f3d4f560691ce5a396af8/arbos/block_processor.go#L146) variable, which ephemerally exists outside of the global state to keep child chain blocks from exceeding ArbOS's per-block gas limit and to deduct space where the state transition failed or [used negligible amounts](https://github.com/OffchainLabs/nitro/blob/faf55a1da8afcabb1f3c406b291e721bfde71a05/arbos/block_processor.go#L328) of compute gas. ArbOS does not need to persist `gasLeft` because its pool induces a revert, and transactions use the Geth block limit during EVM execution.
 
 ## Child chain gas pricing
+
 The child chain gas price on a given Arbitrum chain has a set floor, which is queriable via [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently 0.01 gwei on Arbitrum One and 0.01 gwei on Nova).
 
 ## Estimating child chain gas
+
 Calling an Arbitrum Node's `eth_estimateGas` RPC gives a value sufficient to cover the full transaction fee at the given child chain gas price, i.e., the value returned from `eth_estimateGas` multiplied by the child chain gas price tells you how much total Ether is required for the transaction to succeed. Note that this means that for a given operation the value returned by `eth_estimateGas` will change over time (as the parent chain calldata price fluctuates). See [2-D fees](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9) and [How to estimate gas in Arbitrum](/build-decentralized-apps/02-how-to-estimate-gas.mdx) for more information.
 
 ## Child chain gas fees
+
 Child chain gas fees work very similarly to gas on Ethereum. The amount of gas is multiplied by the current basefee to get the child chain gas fee charged to the transaction.
 
 The child chain basefee is set by a version of the "exponential mechanism" widely discussed in the Ethereum community and shown to be equivalent to Ethereum's EIP-1559 gas pricing mechanism.
@@ -370,16 +393,19 @@ Intuitively, if the backlog grows, the algorithm should increase the gas price t
 More precisely, the basefee is an exponential function of the backlog, `F = exp(-a(B-b))`, where `a` and `b` are suitably chosen constants: `a` controls how rapidly the price escalates with the backlog, and `b` allows a small backlog before the basefee escalation begins.
 
 ## Child chain tips
+
 The Sequencer prioritizes transactions on a first-come, first-served basis. Because tips do not make sense in this model, they are ignored. Arbitrum users always pay the basefee regardless of the tip they choose.
 
-## Gas estimating retryables 
+## Gas estimating retryables
+
 When a transaction schedules another, the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) when estimating gas via the node's RPC. Finding a gas estimate for a transaction is only possible if all the transactions succeed at a given gas limit. This estimation is especially important when working with retryables and scheduling `redeem` attempts.
 
 Because a call to `redeem` donates all of the call's gas, doing multiple requires limiting the amount of gas provided to each sub-call. Otherwise, the first will take all of the gas and force the second to fail, irrespective of the estimation's gas limit.
 
-Gas estimation for retryable submissions is possible via the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed. 
+Gas estimation for retryable submissions is possible via the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
 
 ## The speed limit
+
 The security of Nitro chains depends on the assumption that when one validator creates an assertion, other validators will check it and respond with a correct assertion and a challenge if it is wrong. This assumption requires that the other validators have the time and resources to check each assertion quickly enough to issue a timely challenge. The Arbitrum protocol takes this into account in setting deadlines for assertions.
 
 This approach sets an effective speed limit on execution of a Nitro chain: in the long run, the chain cannot make progress faster than a validator can emulate its execution. If assertions are published at a rate faster than the speed limit, their deadlines will get farther and farther in the future. Due to the limit enforced by the Rollup protocol contracts on how far a deadline can be in the future, this will eventually cause new assertions to be slowed down, thereby enforcing the effective speed limit.
