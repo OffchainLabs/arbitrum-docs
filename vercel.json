@@ -976,11 +976,6 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
-      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
-      "permanent": false
-    },
-    {
       "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
       "destination": "/launch-orbit-chain/a-gentle-introduction",
       "permanent": false
@@ -1056,6 +1051,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction",
       "permanent": false
@@ -1068,6 +1068,21 @@
     {
       "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1108,6 +1123,11 @@
     {
       "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
       "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/manage-fee-collectors/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/fee-management",
       "permanent": false
     }
   ]
