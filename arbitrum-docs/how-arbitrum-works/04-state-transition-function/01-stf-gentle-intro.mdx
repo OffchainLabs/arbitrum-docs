@@ -16,15 +16,19 @@ Beyond these foundational aspects, the STF on the <a data-quicklook-from="arbitr
 With the introduction of <a data-quicklook-from="stylus">Stylus</a>, Arbitrum expands its execution model beyond the Ethereum Virtual Machine (EVM) by adding WebAssembly (<a data-quicklook-from="wasm">WASM</a>)–based smart contract execution. This enhancement allows high-performance smart contracts written in Rust, C, and C++ to run alongside traditional EVM contracts. The integration of Stylus introduces several modifications to the STF, including:
 
 ### Stylus-specific transaction processing
+
 A modified version of <a data-quicklook-from="geth">Geth</a> that recognizes and processes Stylus transactions, ensuring proper inclusion in state transitions.
 
 ### Execution in a WASM runtime
+
 Stylus transactions execute in <a data-quicklook-from="arbos">ArbOS</a>'s WASM runtime instead of the EVM, enabling faster execution and more efficient computation.
 
 ### Stylus gas accounting and pricing
+
 Unlike standard EVM transactions, Stylus transactions introduce new gas pricing models that account for factors such as opcode pricing, host I/O operations, and <a data-quicklook-from="ink">Ink</a> usage costs.
 
 ### Interoperability with the EVM
+
 Stylus contracts can interact seamlessly with Solidity contracts, enabling hybrid applications that leverage EVM and WASM execution environments.
 
 These Stylus-related changes aim to maintain compatibility with Ethereum's execution model while introducing a more efficient, flexible, and scalable alternative for smart contract development.
