@@ -10,7 +10,7 @@ user_story: As a current or prospective Orbit chain deployer, I need to understa
 content_type: how-to
 ---
 
-### What is the speed limit on an Orbit chain?
+## What is the speed limit on an Orbit chain?
 
 The parameter that governs an Orbit chain's throughput limit is known as the `gas speed limit`.
 
@@ -18,7 +18,7 @@ The gas speed limit is measured in _gas per second_ and is used as a threshold f
 
 For example, Arbitrum One and Arbitrum Nova have a gas speed limit of 7 million gas per second. This means that when cumulative usage onchain exceeds 7 million gas per second, the `L2 base fee` rises to increase the amount of gwei charged per unit of gas. This happens using a similar approach to [Ethereum's EIP-1559 pricing algorithm](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1559.md).
 
-### Why do we have throughput limits on blockchains?
+## Why do we have throughput limits on blockchains?
 
 The effect of raising gas prices at the speed limit is to curb user demand when the chain is congested. Doing so protects the chain's underlying infrastructure from being overloaded.
 
@@ -26,15 +26,15 @@ This is because blockchain nodes have computation constraints that should not be
 
 The speed limit, therefore, is fundamentally a protective mechanism. If the chain load exceeds what a Nitro validator node can process, then a chain risks halting due to validator downtime. It's important to note here that the security and liveness of an Orbit chain are always maintained through its parent chain contracts, but undoubtedly, the best user experience requires the validators and sequencer to be online.
 
-### What is the recommended speed limit for Orbit chains?
+## What is the recommended speed limit for Orbit chains?
 
 **Please note: We recommend against teams raising their chain's default speed target beyond 7 million gas per second.**
 
-### What are the risks of increasing my gas speed limit?
+## What are the risks of increasing my gas speed limit?
 
 An increase in the speed target allows users and apps to perform more on-chain actions without incurring additional costs. This makes it possible for a chain's nodes to experience higher and unexpected loads. When faced with high, sustained demand, the additional load could eventually lead to undesirable increases in infrastructure costs, cause nodes to lag behind the chain, and risk halting if the demand exceeds the resources of validator nodes.
 
-Refer to [State Growth](/launch-orbit-chain/04-maintain-your-chain/guidance/04-state-size-limit.mdx) for more information
+Refer to [State Growth](/launch-orbit-chain/04-maintain-your-chain/04-guidance/04-state-size-limit.mdx) for more information.
 
 ## Is Offchain Labs working on software improvements to allow Orbit chain owners to _safely_ raise their chain's speed target?
 
