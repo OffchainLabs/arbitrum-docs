@@ -45,7 +45,7 @@ The Arbitrum Nitro stack implements a modified version of Ethereum's STF. While 
 
 - **Gas accounting**: In Arbitrum, executing a transaction incurs two costs, one for executing on the <a data-quicklook-from="child-chain">child chain</a> and another for submitting transaction batches to the <a data-quicklook-from="parent-chain">parent chain</a>. This dual fee structure requires a different approach to gas accounting.
 
-- **Base fee mechanism**: Gas prices and base fees on Arbitrum change differently from Ethereum's. Arbitrum maintains two base fees: one to track the cost of execution on the child chain and another to estimate the cost of posting batches to the parent chain. The mechanism that changes the child chain basefee differs from what is currently on Ethereum.
+- **Base fee mechanism**: Gas prices and base fees on Arbitrum change differently from Ethereum's. Arbitrum maintains two base fees: one to track the cost of execution on the child chain and another to estimate the cost of posting batches to the parent chain. The mechanism that changes the child chain's base fee differs from what is currently on Ethereum.
 
 - **Cross-chain <a data-quicklook-from="bridge">bridge</a> functionalities**: Arbitrum supports cross-chain messaging and regular transactions, facilitating seamless interactions between the child and parent chains.
 
