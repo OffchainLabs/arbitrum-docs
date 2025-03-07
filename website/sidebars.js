@@ -906,9 +906,40 @@ const sidebars = {
           label: 'Parent to Child chain messaging',
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/geth-at-the-core',
-          label: 'Geth at the Core',
+          type: 'category',
+          label: 'State Transition Function',
+          items: [
+            {
+              type: 'doc',
+              label: 'STF Overview',
+              id: 'how-arbitrum-works/state-transition-function/stf-gentle-intro',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/state-transition-function/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'Ethereum vs Arbitrum',
+              id: 'how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum',
+            },
+            {
+              type: 'doc',
+              label: 'Modified Geth on Arbitrum',
+              id: 'how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum',
+            },
+            {
+              type: 'doc',
+              label: 'ArbOS',
+              id: 'how-arbitrum-works/state-transition-function/arbos',
+            },
+            {
+              type: 'doc',
+              label: 'Stylus execution path',
+              id: 'how-arbitrum-works/state-transition-function/stylus-execution-path',
+            },
+          ],
         },
         {
           type: 'doc',
