@@ -31,6 +31,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/geth-at-the-core/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
