@@ -14,4 +14,12 @@ if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
   yarn format
 fi
 
+# Check for missing redirects
+yarn ts-node scripts/check-redirects.ts
+CHECK_REDIRECTS_EXIT_CODE=$?
+
+if [ $CHECK_REDIRECTS_EXIT_CODE -ne 0 ]; then
+  exit 1
+fi
+
 echo "\n✅ Pre-commit tasks completed\n💡 Note: To bypass hooks, use git commit --no-verify"
