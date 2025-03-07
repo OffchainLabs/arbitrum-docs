@@ -1124,6 +1124,11 @@
       "source": "/(launch-orbit-chain/how-tos/manage-fee-collectors/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/fee-management",
       "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/concepts/chain-ownership/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/ownership-structure-access-control",
+      "permanent": false
     }
   ]
 }
