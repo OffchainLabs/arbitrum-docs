@@ -21,7 +21,11 @@ Arbitrum nodes reliably receive an ordered set of transactions through these mec
 
 ## Message types
 
-Arbitrum supports submitting a variety of message types to its chains. These messages fall into two broad categories: those submitted directly to the Sequencer as <a data-quicklook-from="child-chain">child chain</a> messages and those submitted on the parent chain. For more details on message types beyond standard child chain transactions, please refer to the [L1-to-L2 messaging documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+Arbitrum supports submitting a variety of message types to its chains. These messages fall into two broad categories: 
+- Messages submitted directly to the Sequencer as <a data-quicklook-from="child-chain">child chain</a> messages
+- Messages submitted to the parent chain
+
+For more details on message types beyond standard child chain transactions, please refer to the [L1-to-L2 messaging documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
 In the system, we refer to these messages as `L1IncomingMessage` [soure code reference](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54).
 
