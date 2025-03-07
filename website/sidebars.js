@@ -464,8 +464,8 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/chain-ownership',
-          label: 'Orbit chain ownership',
+          id: 'launch-orbit-chain/maintain-your-chain/ownership-structure-access-control',
+          label: 'Ownership structure and access control',
         },
         {
           type: 'doc',
