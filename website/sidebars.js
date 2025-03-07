@@ -333,7 +333,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
-              label: `Use a custom gas token`,
+              label: `Configure a custom gas token`,
             },
             {
               type: 'doc',
@@ -352,7 +352,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/manage-fee-collectors',
+              id: 'launch-orbit-chain/configure-your-chain/common-configurations/fee-management',
               label: `Manage the fee parameters`,
             },
             {
@@ -377,17 +377,17 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction',
                   label: `AEP fee router overview`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
                   label: `Set up AEP fee router`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
                   label: `Calculate AEP license fees`,
                 },
               ],
@@ -956,6 +956,16 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
               label: 'Public preview',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
+              label: 'Specification: Timeboost',
+            },
+            {
+              type: 'link',
+              href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
+              label: 'Specification: Timeboost with decentralized sequencing',
             },
           ],
         },

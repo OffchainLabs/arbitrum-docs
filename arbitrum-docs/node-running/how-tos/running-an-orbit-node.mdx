@@ -127,7 +127,7 @@ For how to get the url of the DAS REST endpoints, please contact chain owners to
 - When shutting down the Docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running
 
   ```shell
-  docker stop --time=300 $(docker ps -aq)
+  docker stop --time=1800 $(docker ps -aq)
   ```
 
 ### Note on permissions
