@@ -6,6 +6,11 @@
       "permanent": false
     },
     {
+      "source": "/(bold/concepts/bold-technical-deep-dive/?)",
+      "destination": "/how-arbitrum-works/bold/bold-technical-deep-dive",
+      "permanent": false
+    },
+    {
       "source": "/(bold/concepts/public-preview-expectations/?)",
       "destination": "/how-arbitrum-works/bold/public-preview-expectations",
       "permanent": false
