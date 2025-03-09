@@ -1,0 +1,68 @@
+---
+title: 'Inputs to the State Transition Function'
+description: 'Learn the fundamentals of Nitro, Arbitrum stack.'
+author: petevielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
+content_type: get-started
+---
+
+<a data-quicklook-from="arbitrum">Arbitrum</a> nodes receive <a data-quicklook-from="transaction">
+  transaction
+</a> inputs through a dual-channel approach that enhances reliability and consistency.{' '}
+
+First, nodes subscribe
+to the <a data-quicklook-from="sequencer">Sequencer</a> feed, receiving the upcoming ordered transactions
+published in real time. To learn more, refer to the [real-time sequencer feed documentation](/how-arbitrum-works/03-sequencer.mdx#real-time-sequencer-feed).
+
+In addition to the <a data-quicklook-from="sequencer-feed">Sequencer Feed</a>, Arbitrum nodes subscribe to the `SequencerBatchDelivered` event on the <a data-quicklook-from="parent-chain">parent chain</a>. This event occurs whenever a <a data-quicklook-from="batch">batch</a> of transactions gets delivered to the parent chain via the batch poster. Upon receiving this event, nodes verify that the transactions recorded on the parent chain match those previously provided by the sequencer feed. If discrepancies arise, nodes re-organize to adopt the transactions confirmed on the parent chain, using the parent chain as the definitive source of truth.
+
+As discussed in the [considerations and limitations section](/how-arbitrum-works/03-sequencer.mdx#considerations-and-limitations), these methods may be more appropriate for different applications depending on their specific requirements.
+
+Arbitrum nodes reliably receive an ordered set of transactions through these mechanisms, which serve as inputs for the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF). The function then processes these transactions and outputs the final state, ensuring consistency and security across the network.
+
+## Message types
+
+Arbitrum supports submitting a variety of message types to its chains. These messages fall into two broad categories:
+
+- Messages submitted directly to the Sequencer as <a data-quicklook-from="child-chain">child chain</a> messages
+- Messages submitted to the parent chain
+
+For more details on message types beyond standard child chain transactions, please refer to the [L1-to-L2 messaging documentation](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+
+In the system, we refer to these messages as `L1IncomingMessage` [source code reference](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54).
+
+When submitted to the sequencer feed, messages are tagged with a unique identifier, ensuring Arbitrum nodes correctly differentiate and process them. Below is the list of message types, their associated constant values, and descriptions:
+
+```solidity
+uint8 constant L2_MSG = 3;
+uint8 constant L1MessageType_L2FundedByL1 = 7;
+uint8 constant L1MessageType_submitRetryableTx = 9;
+uint8 constant L1MessageType_ethDeposit = 12;
+uint8 constant L1MessageType_batchPostingReport = 13;
+uint8 constant L2MessageType_unsignedEOATx = 0;
+uint8 constant L2MessageType_unsignedContractTx = 1;
+
+uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;
+uint8 constant INITIALIZATION_MSG_TYPE = 11;
+```
+
+- `L2_MSG` (3): Child chain messages submitted directly to the Sequencer.
+
+- `L1MessageType_L2FundedByL1` (7): Child chain messages that go to the parent chain's <a data-quicklook-from="delayed-inbox">delayed inbox</a>, with funding provided on the parent chain itself.
+
+- `L1MessageType_submitRetryableTx` (9): Submitting parent chain messages to the child chain via retryable tickets.
+
+- `L1MessageType_ethDeposit` (12): Child chain messages that handle deposits of native tokens (`ETH`) into the child chain.
+
+- `L1MessageType_batchPostingReport` (13): Used by the Sequencer to update the pricing model based on payment(s) by the batch poster.
+
+- `L2MessageType_unsignedEOATx` (0): Child chain messages submitted by externally owned accounts (EOAs) to the parent chain that does not include a signature.
+
+- `L2MessageType_unsignedContractTx` (1): Child chain messages submitted on the parent chain that does not include a signature.
+
+- `ROLLUP_PROTOCOL_EVENT_TYPE` (8): <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> used it for messages sent to <a data-quicklook-from="bridge">bridge</a>, Nitro does not use it.
+
+- `INITIALIZATION_MSG_TYPE` (11): The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup.
+
+These tagged identifiers enable Arbitrum nodes to parse incoming messages and direct their payloads appropriately, ensuring smooth and reliable network operation.

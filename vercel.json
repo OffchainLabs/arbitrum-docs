@@ -6,6 +6,11 @@
       "permanent": false
     },
     {
+      "source": "/(bold/concepts/bold-technical-deep-dive/?)",
+      "destination": "/how-arbitrum-works/bold/bold-technical-deep-dive",
+      "permanent": false
+    },
+    {
       "source": "/(bold/concepts/public-preview-expectations/?)",
       "destination": "/how-arbitrum-works/bold/public-preview-expectations",
       "permanent": false
@@ -23,6 +28,11 @@
     {
       "source": "/(fraud-proofs/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/geth-at-the-core/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
       "permanent": false
     },
     {

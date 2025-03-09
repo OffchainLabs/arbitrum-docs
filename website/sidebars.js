@@ -252,66 +252,204 @@ const sidebars = {
           label: 'Orbit licensing',
         },
         {
-          type: 'doc',
-          id: 'launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period',
-          label: 'Customizable challenge period',
-        },
-        {
           type: 'category',
-          label: 'Guidance for Orbit chain operators',
+          label: 'Configure your chain',
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'launch-orbit-chain/maintain-your-chain/guidance/state-growth',
-              label: `Manage gas state growth`,
+              type: 'category',
+              label: 'Common features',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
+                  label: `Configure a custom gas token`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period',
+                  label: 'Customize the challenge period',
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/fee-management',
+                  label: `Manage the fee parameters`,
+                },
+                {
+                  type: 'category',
+                  label: 'Data Availability Committees',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'run-arbitrum-node/data-availability-committees/get-started',
+                      label: 'Get started',
+                    },
+                    {
+                      type: 'doc',
+                      id: 'run-arbitrum-node/data-availability-committees/deploy-das',
+                      label: 'Deploy a Data Availability Server (DAS)',
+                    },
+                    {
+                      type: 'doc',
+                      id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
+                      label: 'Deploy a mirror Data Availability Server',
+                    },
+                    {
+                      type: 'doc',
+                      id: 'run-arbitrum-node/data-availability-committees/configure-dac',
+                      label: 'Configure a Data Availability Committee (DAC)',
+                    },
+                  ],
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
+                  label: `Customize your chain's deployment`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+                  label: `Additional configuration parameters`,
+                },
+              ],
             },
             {
-              type: 'doc',
-              id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
-              label: `Manage gas speed limit`,
+              type: 'category',
+              label: 'Advanced features',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
+                  label: `Enable fast withdrawals`,
+                },
+                {
+                  type: 'category',
+                  label: 'Configure AEP fee routing',
+                  collapsed: true,
+                  items: [
+                    {
+                      type: 'doc',
+                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction',
+                      label: `AEP fee router overview`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
+                      label: `Set up AEP fee router`,
+                    },
+                    {
+                      type: 'doc',
+                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
+                      label: `Calculate AEP license fees`,
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
         {
           type: 'category',
-          label: 'Production Orbit chain setup',
+          label: 'Deploy an Orbit chain',
+          collapsed: true,
+          items: [
+            {
+              type: 'category',
+              label: 'Deploy a production chain',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/orbit-sdk-introduction',
+                  label: `Introduction`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain',
+                  label: `Deploy a Rollup chain`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain',
+                  label: `Deploy an AnyTrust chain`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain',
+                  label: `Deploy a custom gas token chain`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+                  label: `Generate the node config file`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge',
+                  label: `Deploy a token bridge`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain',
+                  label: `Configure your chain`,
+                },
+              ],
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
+              label: 'Monitoring tools and considerations',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Maintain your chain',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/orbit-sdk-introduction',
-              label: `Introduction`,
+              id: 'launch-orbit-chain/maintain-your-chain/ownership-structure-access-control',
+              label: 'Ownership structure and access control',
             },
             {
-              type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain',
-              label: `Rollup Orbit Deployment`,
+              type: 'category',
+              label: 'ArbOS',
+              collapsed: true,
+              items: [
+                {
+                  type: 'html',
+                  value:
+                    '<a class="menu__link menu__list-item" href="/run-arbitrum-node/arbos-releases/overview">ArbOS software releases <span class="other-section-icon">↓</span></a>',
+                  // q: why use an anchor html tag here?
+                  // a: see note at end of file
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade',
+                  label: `Upgrade ArbOS`,
+                },
+              ],
             },
             {
-              type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain',
-              label: `AnyTrust Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain',
-              label: `Custom Gas Token Orbit Deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
-              label: `Node Config Generation`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge',
-              label: `Token bridge deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain',
-              label: `Orbit Chain Configuration`,
+              type: 'category',
+              label: 'Guidance',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/state-growth',
+                  label: `Manage gas state growth`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
+                  label: `Manage gas speed limit`,
+                },
+              ],
             },
           ],
         },
@@ -320,21 +458,6 @@ const sidebars = {
           label: 'Customize your chain',
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
-              label: `Customize your chain's deployment`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/reference/additional-configuration-parameters',
-              label: `Additional configuration parameters`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
-              label: `Configure a custom gas token`,
-            },
             {
               type: 'doc',
               id: 'launch-orbit-chain/customize-your-chain/customize-precompile',
@@ -347,19 +470,21 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
-              label: `Configure delayed inbox finality`,
-            },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/configure-your-chain/common-configurations/fee-management',
-              label: `Manage the fee parameters`,
-            },
-            {
-              type: 'doc',
               id: 'launch-orbit-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              label: `Configure delayed inbox finality`,
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Third-party integrations and features',
+          collapsed: true,
+          items: [
             {
               type: 'doc',
               id: 'launch-orbit-chain/third-party-integrations/bridged-usdc-standard',
@@ -367,105 +492,34 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
-              label: `Enable fast withdrawals`,
-            },
-            {
-              type: 'category',
-              label: 'AEP fee router',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction',
-                  label: `AEP fee router overview`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
-                  label: `Set up AEP fee router`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
-                  label: `Calculate AEP license fees`,
-                },
-              ],
+              id: 'launch-orbit-chain/third-party-integrations/third-party-providers',
+              label: 'Third-party infrastructure providers',
             },
           ],
         },
         {
           type: 'category',
-          label: 'ArbOS',
+          label: 'Run a node for an Orbit chain',
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              id: 'node-running/how-tos/running-an-orbit-node',
+              label: 'Run a full node',
+            },
             {
               type: 'html',
               value:
-                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/arbos-releases/overview">ArbOS software releases</a>',
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Run a validator <span class="other-section-icon">↓</span></a>',
               // q: why use an anchor html tag here?
               // a: see note at end of file
             },
-            {
-              type: 'doc',
-              id: 'launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade',
-              label: `Upgrade ArbOS`,
-            },
           ],
-        },
-        {
-          type: 'category',
-          label: 'Data Availability Committees',
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/get-started',
-              label: 'Get started',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-das',
-              label: 'Deploy a Data Availability Server (DAS)',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/deploy-mirror-das',
-              label: 'Deploy a mirror Data Availability Server',
-            },
-            {
-              type: 'doc',
-              id: 'run-arbitrum-node/data-availability-committees/configure-dac',
-              label: 'Configure a Data Availability Committee (DAC)',
-            },
-          ],
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/run-arbitrum-node/more-types/run-validator-node">Add new validators to Orbit chain <span class="other-section-icon">↓</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
-          label: 'Monitoring tools and considerations',
-        },
-        {
-          type: 'doc',
-          id: 'node-running/how-tos/running-an-orbit-node',
-          label: 'Run a full Orbit node',
         },
         {
           type: 'doc',
           id: 'launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/maintain-your-chain/ownership-structure-access-control',
-          label: 'Ownership structure and access control',
         },
         {
           type: 'doc',
@@ -481,11 +535,6 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/public-preview-expectations',
           label: 'Public preview',
-        },
-        {
-          type: 'doc',
-          id: 'launch-orbit-chain/third-party-integrations/third-party-providers',
-          label: 'Third-party infrastructure providers',
         },
         {
           type: 'doc',
@@ -857,9 +906,40 @@ const sidebars = {
           label: 'Parent to Child chain messaging',
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/geth-at-the-core',
-          label: 'Geth at the Core',
+          type: 'category',
+          label: 'State Transition Function',
+          items: [
+            {
+              type: 'doc',
+              label: 'STF Overview',
+              id: 'how-arbitrum-works/state-transition-function/stf-gentle-intro',
+            },
+            {
+              type: 'doc',
+              label: 'STF inputs',
+              id: 'how-arbitrum-works/state-transition-function/stf-inputs',
+            },
+            {
+              type: 'doc',
+              label: 'Ethereum vs Arbitrum',
+              id: 'how-arbitrum-works/state-transition-function/ethereum-vs-arbitrum',
+            },
+            {
+              type: 'doc',
+              label: 'Modified Geth on Arbitrum',
+              id: 'how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum',
+            },
+            {
+              type: 'doc',
+              label: 'ArbOS',
+              id: 'how-arbitrum-works/state-transition-function/arbos',
+            },
+            {
+              type: 'doc',
+              label: 'Stylus execution path',
+              id: 'how-arbitrum-works/state-transition-function/stylus-execution-path',
+            },
+          ],
         },
         {
           type: 'doc',
@@ -923,7 +1003,7 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'bold/concepts/bold-technical-deep-dive',
+              id: 'how-arbitrum-works/bold/bold-technical-deep-dive',
               label: 'Technical deep dive',
             },
             {
