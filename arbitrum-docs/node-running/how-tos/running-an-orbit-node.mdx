@@ -75,21 +75,21 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chains</a>, you ne
 
 And, you need to set the following flag to specify the DAS REST endpoints, there 2 optional methods:
 
-1. Set urls directly:
+1. Set URLs directly:
 
 ```shell
 --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only 1 url>
 ```
 
-2. Or set a url that returns a list of the DAS REST endpoints:
+2. Or set a URL that returns a list of the DAS REST endpoints:
 
 ```shell
 --node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
 ```
 
-For how to get the url of the DAS REST endpoints, please contact chain owners to get. If you are a chain owner, please refer to the [DAC setup guide](/run-arbitrum-node/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set up.
+Please contact the chain owners to get the URL of the DAS REST endpoints. If you are a chain owner, please refer to the [DAC setup guide](/run-arbitrum-node/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set it up.
 
-(Batch posters only) In order for your batch posters to post data to DAS, you need to follow [step 3 of config das](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#Step-3:-Craft-the-new-configuration-for-the-batch-poster) to your node config.
+(Batch posters only) For your batch posters to post data to the DAS, you need to follow [step 3 of config das](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#Step-3:-Craft-the-new-configuration-for-the-batch-poster) to your node config.
 
 ### 3.Important ports
 
@@ -127,7 +127,7 @@ For how to get the url of the DAS REST endpoints, please contact chain owners to
 - When shutting down the Docker image, it is important to allow a graceful shutdown so that the current state can be saved to disk. Here is an example of how to do a graceful shutdown of all Docker images currently running
 
   ```shell
-  docker stop --time=300 $(docker ps -aq)
+  docker stop --time=1800 $(docker ps -aq)
   ```
 
 ### Note on permissions
