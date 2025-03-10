@@ -36,13 +36,13 @@ This dual compilation approach ensures that Arbitrum nodes execute transactions 
 
 <a data-quicklook-from="stylus">Stylus</a> extends Arbitrum's execution model by enabling WASM-based
 smart contracts. While execution occurs natively in WAVM, the proving process follows the same interactive
-fraud-proof mechanism as the EVM, ensuring Stylus transactions are challengable and deterministically
+fraud-proof mechanism as the EVM, ensuring Stylus transactions are challengeable and deterministically
 verifiable. Fraud proofs for Stylus transactions involve WAVM opcode evaluation, leveraging Arbitrum's
 existing one-step proof (OSP) system.
 
 ## The role of validators and the Rollup chain
 
-Arbitrum's Rollup Protocol relies on validators––network participants responsbile for ensuring state corectness. The protocol enforces security through the following principles:
+Arbitrum's Rollup Protocol relies on validators––network participants responsible for ensuring state correctness. The protocol enforces security through the following principles:
 
 - **Permissionless validation**: Anyone can become a validator by running an Arbitrum node.
 
@@ -79,7 +79,7 @@ Before diving into the Rollup Protocol, it is important to clarify two key point
 2. The protocol does not determine transaction results, it only confirms them.
    - The ordered sequence of messages in the chain's inbox dictates the transaction outcomes. The protocol ensures correctness and finality but does not alter execution results.
 
-Since transcation execution is deterministic, the Rollup Protocol exists to confirm results and prevent fraud. This mechanism serves two key purposes:
+Since transaction execution is deterministic, the Rollup Protocol exists to confirm results and prevent fraud. This mechanism serves two key purposes:
 
 - **Detecting dishonest behavior**: If a validator submits an incorrect state, others can challenge it.
 - **Anchoring Rollup state to the parent chain**: The parent chain itself does not execute every <a data-quicklook-from="child-chain">child chain</a> transaction but serves as the final arbiter of state correctness.
@@ -131,7 +131,7 @@ Except for the assertion number, the contents of the assertion are all just clai
 
 An assertion implicitly claims that its predecessor assertion is correct, which implies that an assertion implicitly claims the correctness of a complete history of the chain: a sequence of ancestor assertions that reaches back to the birth of the chain.
 
-An assertion also implicitly claims that its older sibilings (older assertions with the same predecessor), if there are any, are incorrect. If two assertions are siblings, and the older sibling is correct––then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
+An assertion also implicitly claims that its older siblings (older assertions with the same predecessor), if there are any, are incorrect. If two assertions are siblings, and the older sibling is correct––then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
 The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, this will equal the time the assertion was posted, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge Period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party who proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
 
@@ -158,7 +158,7 @@ There's a lot going on here, so let's unpack it:
 - Assertion 100 was confirmed.
 - Assertion 101 claimed to be a correct successor to assertion 100, but 101 was rejected.
 - Assertion 102 eventually receives <a data-quicklook-from="confirmation">confirmation</a> as the correct successor to 100.
-- Assertion 103 was confimed and is now the latest confirmed assertion.
+- Assertion 103 was confirmed and is now the latest confirmed assertion.
 - Assertion 104 was proposed as a successor to assertion 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, consequently, 105 was rejected because it's predecessor was rejected.
 - Assertion 106 is unresolved. It claims to be a correct successor to assertion 103 but the protocol hasn't yet decided whether to confirm or reject it. It is the first unresolved assertion.
 - Assertions 107 and 108 claim to chain from 106. They are also unresolved. If 106 gets rejected, they will be automatically rejected too.
@@ -188,7 +188,7 @@ Arbitrum requires validators to stake `ETH` as a security deposit to ensure hone
 
 - **Proposers** (validators submitting assertions) must bond `ETH` to support their claims.
 - **Challenges** against incorrect assertions result in bond forfeiture for dishonest validators.
-- **Successful challengers** receive a portion of the dishonest validator'sbond as a reward.
+- **Successful challengers** receive a portion of the dishonest validator's bond as a reward.
 
 Validators can adopt different roles:
 
@@ -235,10 +235,10 @@ Despite these delays, Arbitrum guarantees that honest assertions always succeed,
 
 Arbitrum's validation process is permissionless, allowing anyone to participate. However, in practice, most users will not act as validators.
 
-Common validator motiviations include:
+Common validator motivations include:
 
 - **Financial incentives**: Some validators receive payment from network fees or the chain's owner.
 - **Asset protection**: dApp developers, exchanges, and liquidity providers may validate the chain to protect their holdings.
 - **Public interest**: Some participants validate purely for network integrity, ensuring fair execution.
 
-For most users, validation is unnecessary, as the network relies on economoic incentives and fraud-proof mechanisms to maintain security.
+For most users, validation is unnecessary, as the network relies on economic incentives and fraud-proof mechanisms to maintain security.

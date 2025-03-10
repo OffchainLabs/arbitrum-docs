@@ -9,7 +9,7 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a speicalized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
+This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a specialized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
 
 ## 1. Separating execution from proving
 
@@ -33,7 +33,7 @@ WAVM is a modified version of WASM designed to meet the needs of fraud proofs. T
   - WASM was selected because it is portable, well-specified, and supported by robust tools.
 - **Modifications made in WAVM**:
   - **Removal of unused features**:
-    - WAVM removes some WASM features that the Go compiler never generates. The transfomration phase ensures these features are absent.
+    - WAVM removes some WASM features that the Go compiler never generates. The transformation phase ensures these features are absent.
   - **Restrictions on certain features**:
     - Floating-point instructions: WAVM does not contain floating-point instructions. Instead, any floating-point operations get replaced by calls to the Berkeley SoftFloat library.
       - Rationale: Using software floating-point libraries reduces the risk of incompatibilities between different architecture.
@@ -113,7 +113,7 @@ Arbitrum favors interactive proving due to its efficiency and flexibility.
   - Alice provides a commitment to the entire computation history.
   - She bisects her claim into two halves.
   - Bob selects the half he disputes.
-  - This interative bisection continues until the dispute reaches a single instruction.
+  - This iteration of the bisection continues until the dispute reaches a single instruction.
 
 #### Why bisection correctly identifies a cheater
 
@@ -132,7 +132,7 @@ Arbitrum favors interactive proving due to its efficiency and flexibility.
   - In case of a dispute, the parent chain would re-execute every transaction to verify the correctness.
 - **Drawbacks**:
   - Requires a state claim for every transaction, increasing computational load.
-  - In a dispute, the entire transaction muts be re-executed onchain, leading to high gas costs.
+  - In a dispute, the entire transaction must be re-executed onchain, leading to high gas costs.
 
 :::info
 
@@ -270,8 +270,8 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
       - Unconditional branch (to skip else)
       - `Else` block: [else-statement instructions]
       - `End` block
-- \*\*Branch instructions (`br` and `br_if`):
-  - Translated into `ArbitaryJump` and `ArbitaryJumpIf` with jump destinations known at compile time.
+- **Branch instructions (`br` and `br_if`)**:
+  - Translated into `ArbitraryJump` and `ArbitraryJumpIf` with jump destinations known at compile time.
 - **Branch table (`br_table`)**:
   - Translated to a series of conditional checks for each possible branch, with a default branch if no conditions are met.
 - **`Local.tee`**:
@@ -283,7 +283,7 @@ Not all WASM instructions are mapped directly 1:1 to WAVM opcodes. The transform
     - Finally, `MoveFromInternalToStack` opcodes are added for each return value, followed by a `Return` opcode.
 - **Floating-point instructions**:
   - `f32` and `f64` values are bitcast to `i32` and `i64`.
-  - Cross-module calls go to the flatoing-point library.
+  - Cross-module calls go to the floating-point library.
   - Return values are bitcast back to floating-point types.
 
 ### 7.4 WAVM custom opcodes not in WASM
@@ -389,7 +389,7 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
 
 ## 10. Stylus proving and fraud detection
 
-<a data-quicklook-from="stylus">Stylus</a> introduces an execution path alonside the EVM, enabling <a data-quicklook-from="smart-contract">
+<a data-quicklook-from="stylus">Stylus</a> introduces an execution path alongside the EVM, enabling <a data-quicklook-from="smart-contract">
   smart Contract
 </a> execution in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than
 interpreted via Geth's EVM implementation––the proving mechanism required modifications to the standard
