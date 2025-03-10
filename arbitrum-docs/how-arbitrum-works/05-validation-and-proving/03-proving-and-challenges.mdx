@@ -13,11 +13,7 @@ This document details the mechanisms for proving correct execution and resolving
 
 ## 1. Separating execution from proving
 
-<ImageZoom
-  src="/img/haw-geth-sandwich.svg"
-  alt=""
-  className="img-600px"
-/>
+<ImageZoom src="/img/haw-geth-sandwich.svg" alt="" className="img-600px" />
 
 One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution. Nitro addresses this <a data-quicklook-from="challenge">challenge</a> by using the same source code for both purposes but compiling it to different targets:
 

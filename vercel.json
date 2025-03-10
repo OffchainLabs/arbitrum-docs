@@ -31,6 +31,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/05-separating-execution-from-proving/?)",
+      "destination": "/how-arbitrum-works/05-validation-and-proving/01-validation-and-proving.mdx",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/geth-at-the-core/?)",
       "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
       "permanent": false
