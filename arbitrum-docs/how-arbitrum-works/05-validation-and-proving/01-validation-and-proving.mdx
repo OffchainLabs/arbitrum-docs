@@ -1,0 +1,20 @@
+---
+title: Validation and Proving Mechanisms
+description: 'Learn the fundamentals of validation and proving mechanisms on Arbitrum.'
+author: pete-vielhaber
+sme: Mehdi
+user_story: As a current or prospective Arbitrum user, I need to learn more about validation and proving mechanisms.
+content_type: get-started
+---
+
+The validation and proving mechanism in Arbitrum ensures the intergrity of offchain execution while maintaining Ethereum's security guarantees. As an Optimistic Rollup, Arbitrum assumes that transactions execute correctly unless challenged. Arbitrum employs interactive fraud proofs to resolve conflicts efficiently, if a dispute arises.
+
+At the core of Arbitrum's validation model is the separation of execution and proving: transactions execute optimistically, while state transitions can be verified onchain if necessary. Arbitrum achieves this through WAVM (WebAssembly for Arbitrum Virtual Machine), a modified WASM format optimized for proving, and the BoLD dispute protocol, which resolves disagreements using an interactive, multi-round challenge system.
+
+This section will explore two primary topics:
+
+## [Rollup protocol and validation]()
+Reviews how Arbitrum records and validates transactions, the role of validators, and the mechaniscs of state confirmations.
+
+## [Proving and challenge protocols]()
+Discusses how the protocol handles resolving disputes using interactive proofs and narrowing conflicts down to a single execution step.
