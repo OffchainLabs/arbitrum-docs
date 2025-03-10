@@ -9,9 +9,9 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-Arbitrum operates as an Optimistic Rollup, which advances the chain's state based on transaction assertions unless a dispute arises. This approach enables scalability, lower costs, and high throughput while maintaining security through Ethereum's trustless validation model.
+<a data-quicklook-from="arbitrum">Arbitrum</a> operates as an Optimistic Rollup, which advances the chain's state based on <a data-quicklook-from="transaction">transaction</a> assertions unless a dispute arises. This approach enables scalability, lower costs, and high throughput while maintaining security through Ethereum's <a data-quicklook-from="trustless">trustless</a> validation model.
 
-Optimistic Rollups work by separating execution from proving to ensure efficient transaction processing without immediate validation. The execution process is covered in detail in the [State Transition Function](/how-arbitrum-works/04-state-transition-function/01-stf-gentle-intro.mdx). This section focuses on validation and proving mechanisms. We will cover how Arbitrum validators confirm the chain's state and how assertions are posted to Ethereum for finalization, with the potential for future challenges if an assertion is determined to be incorrect.
+Optimistic Rollups work by separating execution from proving to ensure efficient transaction processing without immediate validation. The execution process is covered in detail in the [State Transition Function](/how-arbitrum-works/04-state-transition-function/01-stf-gentle-intro.mdx). This section focuses on validation and proving mechanisms. We will cover how Arbitrum validators confirm the chain's state and how assertions are posted to Ethereum for finalization, with the potential for future challenges if an <a data-quicklook-from="assertion">assertion</a> is determined to be incorrect.
 
 ## Execution vs. proving: Separating responsibilities
 A fundamental design choice in Arbitrum is the separation of execution from proving, which allows for:
@@ -20,16 +20,16 @@ A fundamental design choice in Arbitrum is the separation of execution from prov
 
 - **Deterministic proving**: If challenged, state transitions are replayable and verified onchain.
 
-To achieve this, Arbitrum compiles the State Transition Function (STF) into different formats:
+To achieve this, Arbitrum compiles the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) into different formats:
 
-- **Execution mode**: Uses Go's native compiler for high-performance execution on validator nodes.
+- **Execution mode**: Uses Go's native compiler for high-performance execution on <a data-quicklook-from="validator">validator</a> nodes.
 
-- **Proving mode**: Compiles to WebAssembly (WASM), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.
+- **Proving mode**: Compiles to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.
 
 This dual compilation approach ensures that Arbitrum nodes execute transactions efficiently while allowing deterministic trustless verification on Ethereum.
 
 ### Stylus execution and proving
-Stylus extends Arbitrum's execution model by enabling WASM-based smart contracts. While execution occurs natively in WAVM, the proving process follows the same interactive fraud-proof mechanism as the EVM, ensuring Stylus transactions are challengable and deterministically verifiable. Fraud proofs for Stylus transactions involve WAVM opcode evaluation, leveraging Arbitrum's existing one-step proof (OSP) system.
+<a data-quicklook-from="stylus">Stylus</a> extends Arbitrum's execution model by enabling WASM-based smart contracts. While execution occurs natively in WAVM, the proving process follows the same interactive fraud-proof mechanism as the EVM, ensuring Stylus transactions are challengable and deterministically verifiable. Fraud proofs for Stylus transactions involve WAVM opcode evaluation, leveraging Arbitrum's existing one-step proof (OSP) system.
 
 ## The role of validators and the Rollup chain
 Arbitrum's Rollup Protocol relies on validators––network participants responsbile for ensuring state corectness. The protocol enforces security through the following principles:
@@ -38,7 +38,7 @@ Arbitrum's Rollup Protocol relies on validators––network participants respon
 
 - **Trustless verification**: Validators confirm assertions, ensuring transactions adhere to protocol rules.
 
-- **Fraud-proof system**: If an incorrect assertion is detected, validators can challenge it and trigger an interactive fraud-proof.
+- **Fraud-proof system**: If an incorrect assertion is detected, validators can <a data-quicklook-from="challenge">challenge</a> it and trigger an interactive fraud-proof.
 
 Validators interact with the Rollup chain, a sequence of assertions representing state updates. Each assertion includes:
 
@@ -46,7 +46,7 @@ Validators interact with the Rollup chain, a sequence of assertions representing
 
 - **State transition output**: The result of applying transactions.
 
-- **Inbox message consumption**: A record of processed messages from the parent chain.
+- **Inbox message consumption**: A record of processed messages from the <a data-quicklook-from="parent-chain">parent chain</a>.
 
 - **Execution claim**: A cryptographic commitment to the computed state.
 
@@ -71,7 +71,7 @@ Before diving into the Rollup Protocol, it is important to clarify two key point
 Since transcation execution is deterministic, the Rollup Protocol exists to confirm results and prevent fraud. This mechanism serves two key purposes:
 
 - **Detecting dishonest behavior**: If a validator submits an incorrect state, others can challenge it.
-- **Anchoring Rollup state to the parent chain**: The parent chain itself does not execute every child chain transaction but serves as the final arbiter of state correctness.
+- **Anchoring Rollup state to the parent chain**: The parent chain itself does not execute every <a data-quicklook-from="child-chain">child chain</a> transaction but serves as the final arbiter of state correctness.
 
 ## Validators and assertions in the Rollup Protocol
 Validators play a central role in maintaining Arbitrum's integrity. Some validators act as proposers, submitting assertions to Ethereum and placing a `WETH` bond as collateral. If their assertion is determined to be incorrect, they lose their bond.
@@ -104,11 +104,11 @@ Arbitrum ensures assertions are automatically confirmed or rejected based on pro
 	- Its predecessor assertion is invalid.
 	- A conflicting assertion has been confirmed.
 
-For more details on how the Rollup chain works under BoLD, the [gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) provides an overview that touches on the Rollup chain.
+For more details on how the Rollup chain works under <a data-quicklook-from="bold">BoLD</a>, the [gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) provides an overview that touches on the Rollup chain.
 
 :::note
 
-Validators and proposers serve different roles. Validators validate transactions by computing the next chain state using the chain's STF, whereas proposers can also assert and challenge the chain state on the parent chain.
+Validators and proposers serve different roles. Validators validate transactions by computing the next <a data-quicklook-from="chain-state">chain state</a> using the chain's STF, whereas proposers can also assert and challenge the chain state on the parent chain.
 
 :::
 
@@ -119,7 +119,7 @@ An assertion implicitly claims that its predecessor assertion is correct, which 
 
 An assertion also implicitly claims that its older sibilings (older assertions with the same predecessor), if there are any, are incorrect. If two assertions are siblings, and the older sibling is correct––then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
-The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, this will equal the time the assertion was posted, plus an interval of time known as the Challenge Period; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party who proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
+The assertion is assigned a deadline, which indicates how much time other validators have to respond to it. For an assertion `R` with no older siblings, this will equal the time the assertion was posted, plus an interval of time known as the <a data-quicklook-from="challenge-period">challenge Period</a>; subsequent younger siblings will have the same deadline as their oldest sibling (`R`). You don't need to do anything if you're a validator and agree that an assertion is correct. If you disagree with an assertion, you can post another assertion with a different result, and you'll probably end up in a challenge against the party who proposed the first assertion (or another party acting in support of that assertion). More on challenges below:
 
 In the normal case, the Rollup chain will look like this:
 
@@ -147,7 +147,7 @@ There's a lot going on here, so let's unpack it:
 
 - Assertion 100 was confirmed.
 - Assertion 101 claimed to be a correct successor to assertion 100, but 101 was rejected.
-- Assertion 102 eventually receives confirmation as the correct successor to 100.
+- Assertion 102 eventually receives <a data-quicklook-from="confirmation">confirmation</a> as the correct successor to 100.
 - Assertion 103 was confimed and is now the latest confirmed assertion.
 - Assertion 104 was proposed as a successor to assertion 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, consequently, 105 was rejected because it's predecessor was rejected.
 - Assertion 106 is unresolved. It claims to be a correct successor to assertion 103 but the protocol hasn't yet decided whether to confirm or reject it. It is the first unresolved assertion.
@@ -167,7 +167,7 @@ The only delay users experience during a dispute is their [Child to parent chain
 Anyone can do it, but most people will choose not to. In practice, we expect people to validate a chain for several reasons.
 
 - It is possible to pay validators for their work by the party that created the chain or someone else. A chain is configurable, so some of the funds from user transaction fees are paid directly to validators.
-- Parties with significant assets at bond on a chain, such as dApp developers, exchanges, power users, and liquidity providers, may choose to validate in order to protect their investment.
+- Parties with significant assets at bond on a chain, such as <a data-quicklook-from="dapp">dApp</a> developers, exchanges, power users, and liquidity providers, may choose to validate in order to protect their investment.
 - Anyone who wants to validate can do so. Some users may choose to validate to protect their interests or be good citizens. But ordinary users don't need to validate, and we expect most users won't.
 
 ### Staking and validator incentives

@@ -10,23 +10,23 @@ content_type: get-started
 import ImageZoom from '@site/src/components/ImageZoom';
 
 
-This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms WASM into a speicalized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
+This document details the mechanisms for proving correct execution and resolving disputes in the Rollup Protocol. It explains how the system separates ordinary execution from proving, transforms <a data-quicklook-from="wasm">WASM</a> into a speicalized proving format (WAVM), and employs interactive fraud proofs to resolve disputes efficiently.
 
 ## 1. Separating execution from proving
 
 <ImageZoom
-  src="/img/haw-geth-sandwich.svg"
-  alt="Transaction lifecycle diagram showing various pathways for submitting transactions"
+  src="/img/haw-<a data-quicklook-from="geth">Geth</a>-sandwich.svg"
+  alt="<a data-quicklook-from="transaction">transaction</a> lifecycle diagram showing various pathways for submitting transactions"
   className="img-600px"
 />
 
-One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution. Nitro addresses this challenge by using the same source code for both purposes but compiling it to different targets:
+One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution. Nitro addresses this <a data-quicklook-from="challenge">challenge</a> by using the same source code for both purposes but compiling it to different targets:
 
 - **Execution compilation**:
 	- The Nitro node software is compiled with the ordinary Go compiler into native code for the target architecture.
 	- This native binary is distributed as source code and as a Docker image, making it deployable on various nodes.
 - **Proving compilation**:
-	- For proving, only the portion of the code that is the State Transition Function (STF) gets compiled by the Go compiler into WebAssembly (WASM).
+	- For proving, only the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) gets compiled by the Go compiler into WebAssembly (WASM).
 	- The generated WASM code transforms into a specialized format called WAVM.
 	- In any dispute regarding the STF, the WAVM code is referenced to resolve the correct result.
 
@@ -45,7 +45,7 @@ WAVM is a modified version of WASM designed to meet the needs of fraud proofs. T
 		- WAVM flattens control flow constructs by converting them into jump instructions.
 	- **Variable-time instructions**:
 		-Some instructions in WASM may take a variable amount of time to execute. WAVM transforms these into constructs with fixed-cost instructions to simplify proving.
-	- **Additional opcodes for blockchain interaction**:
+	- **Additional opcodes for <a data-quicklook-from="blockchain">blockchain</a> interaction**:
 		- WAVM adds new opcodes to enable the code to interact with the blockchain environment.
 		- For example, new instructions allow the WAVM code to read and write the chain's global state, retrieve the next message from the chain's inbox, or signal a successful end to the STF execution.
 
@@ -64,11 +64,11 @@ An interesting instruction in WAVM is `ReadPreImage`, which the "hash oracle tri
 		- Nitro's state tree is stored offchain as a Merkle tree, with nodes indexed by their Merkle hashes.
 		- The STF only stores the root hash but can retrieve any node's contents using `ReadPreImage`.
 	- **Block headers**:
-		- The instruction fetches recent publicly known child chain block headers of bounded size.
+		- The instruction fetches recent publicly known <a data-quicklook-from="child-chain">child chain</a> block headers of bounded size.
 
 :::note Historical Note
 
-This "hash oracle trick" originates from the original Arbitrum design, where the Merkle hash of a data structure is stored and full contents are retrievable on demand.
+This "hash oracle trick" originates from the original <a data-quicklook-from="arbitrum">Arbitrum</a> design, where the Merkle hash of a data structure is stored and full contents are retrievable on demand.
 
 :::
 
@@ -82,7 +82,7 @@ Disputes resolution in optimistic Rollups is a critical design decision. The pro
 	- **Interactive proving**:
 		- Parties engage in a challenge game to narrow down the dispute executed steps.
 	- **Re-executing transactions**:
-		- The parent chain re-executes transactions, checking each state transition.
+		- The <a data-quicklook-from="parent-chain">parent chain</a> re-executes transactions, checking each state transition.
 
 :::note
 
@@ -98,7 +98,7 @@ Arbitrum favors interactive proving due to its efficiency and flexibility.
 	- Suppose Alice claims that the chain will produce a specific result. Bob disagrees.
 2. **Bisection of the dispute**:
 	- **First round**:
-		- Alice posts an assertion covering `N` steps.
+		- Alice posts an <a data-quicklook-from="assertion">assertion</a> covering `N` steps.
 		- Bob challenges the assertion.
 		- Alice then provides two sub-assertions, each covering `N/2` steps.
 	- **Subsequent rounds**:
@@ -362,7 +362,7 @@ WASM's notion of modules is extended in WAVM to support multi-module programs. T
 	- Only libraries can access their caller's memory; restrictions prevent the main module from doing so.
 
 ## 10. Stylus proving and fraud detection
-Stylus introduces an execution path alonside the EVM, enabling smart contract execution in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than interpreted via Geth's EVM implementation––the proving mechanism required modifications to the standard Arbitrum proving architecture.
+<a data-quicklook-from="stylus">Stylus</a> introduces an execution path alonside the EVM, enabling <a data-quicklook-from="smart-contract">smart Contract</a> execution in WebAssembly (WASM). Given that Stylus program are fraud-proven directly rather than interpreted via Geth's EVM implementation––the proving mechanism required modifications to the standard Arbitrum proving architecture.
 
 ### 10.1 Proving Stylus programs
 Unlike EVM-based contracts, Stylus programs are dynamically linked into the replay machine when proving fraud. This is achieved through two key opcodes:
@@ -373,9 +373,9 @@ Unlike EVM-based contracts, Stylus programs are dynamically linked into the repl
 These opcodes ensure that Stylus contracts are treated as part as part of the replay machine, allowing for precise fraud-proof bisection at the WASM level.
 
 ### 10.2 Execution-proving separation
-Stylus leverages Arbitrum's execution-proving separation, where the replay machine runs in WAVM, and disputes over Stylus transactions follow the standard interactive fraud-proof protocol (BoLD), which means:
+Stylus leverages Arbitrum's execution-proving separation, where the replay machine runs in WAVM, and disputes over Stylus transactions follow the standard interactive fraud-proof protocol (<a data-quicklook-from="bold">BoLD</a>), which means:
 
-1. A challenge initiates if a validator disputes the execution of a Stylus transaction.
+1. A challenge initiates if a <a data-quicklook-from="validator">validator</a> disputes the execution of a Stylus transaction.
 2. The dispute narrows to a single WAVM opcode via the bisection protocol.
 3. The One-Step Proof (OSP) mechanism extends to handle Stylus-specific operations, proving the correctness of WASM execution at the opcode level.
 
