@@ -18,7 +18,7 @@ This document details the mechanisms for proving correct execution and resolving
 One of the key challenges in designing a practical Rollup system is balancing fast, ordinary execution with the need for reliable proofs of that execution. Nitro addresses this <a data-quicklook-from="challenge">challenge</a> by using the same source code for both purposes but compiling it to different targets:
 
 - **Execution compilation**:
-  - The Nitro node software is compiled with the ordinary Go compiler into native code for the target architecture.
+  - The [Nitro node software](https://github.com/OffchainLabs/nitro) is compiled with the ordinary Go compiler into native code for the target architecture.
   - This native binary is distributed as source code and as a Docker image, making it deployable on various nodes.
 - **Proving compilation**:
   - For proving, only the portion of the code that is the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) gets compiled by the Go compiler into WebAssembly (WASM).
@@ -92,6 +92,12 @@ Zero-knowledge Rollups avoid the dispute situation by directly proving correctne
 ### 4.2 Interactive proving
 
 Arbitrum favors interactive proving due to its efficiency and flexibility.
+
+<ImageZoom
+  src="/img/haw-interactive-fraud-proof.svg"
+  alt="Interactive fraud proof"
+  className="img-600px"
+/>
 
 #### The interactive proving process
 
