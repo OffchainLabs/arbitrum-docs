@@ -129,7 +129,7 @@ Validators and proposers serve different roles. Validators validate transactions
 
 Except for the assertion number, the contents of the assertion are all just claims by the assertion's proposer. Arbitrum doesn't know at first whether any of these fields are correct. The protocol should eventually confirm the assertion if all of these fields are correct. The protocol should eventually reject the assertion if one or more of these fields are incorrect.
 
-An assertion implicitly claims that its predecessor assertion is correct, which implies that an assertion implicitly claims the correctness of a complete history of the chain: a sequence of ancestor assertions that reaches back to the birth of the chain.
+An assertion implicitly claims that its predecessor assertion is correct, which means that it also claims the correctness of a complete history of the chain: a sequence of ancestor assertions that reaches back to the birth of the chain.
 
 An assertion also implicitly claims that its older siblings (older assertions with the same predecessor), if there are any, are incorrect. If two assertions are siblings, and the older sibling is correct––then the younger sibling is considered incorrect, even if everything else in the younger sibling is true.
 
