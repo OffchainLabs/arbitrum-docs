@@ -52,29 +52,49 @@ existing one-step proof (OSP) system.
 
 Arbitrum's Rollup Protocol relies on validators––network participants responsible for ensuring state correctness. The protocol enforces security through the following principles:
 
-- **Permissionless validation**: Anyone can become a validator by running an Arbitrum node.
+#### Permissionless validation
 
-- **Trustless verification**: Validators confirm assertions, ensuring transactions adhere to protocol rules.
+Anyone can become a validator by running an Arbitrum node.
 
-- **Fraud-proof system**: If an incorrect assertion is detected, validators can <a data-quicklook-from="challenge">challenge</a> it and trigger an interactive fraud-proof.
+#### Trustless verification
+
+Validators confirm assertions, ensuring transactions adhere to protocol rules.
+
+#### Fraud-proof system
+
+If an incorrect assertion is detected, validators can <a data-quicklook-from="challenge">challenge</a> it and trigger an interactive fraud-proof.
 
 Validators interact with the Rollup chain, a sequence of assertions representing state updates. Each assertion includes:
 
-- **Predecessor assertion**: The last confirmed valid state.
+#### Predecessor assertion
 
-- **State transition output**: The result of applying transactions.
+The last confirmed valid state.
 
-- **Inbox message consumption**: A record of processed messages from the <a data-quicklook-from="parent-chain">parent chain</a>.
+#### State transition output
 
-- **Execution claim**: A cryptographic commitment to the computed state.
+The result of applying transactions.
 
-Assertions progress through different stages:
+#### Inbox message consumption
 
-- **Proposed**: A validator submits a state assertion.
+A record of processed messages from the <a data-quicklook-from="parent-chain">parent chain</a>.
 
-- **Challenged** (if necessary): If another validator disputes the assertion, an interactive fraud-proof initiates.
+#### Execution claim
 
-- **Confirmed**: It becomes final if no one challenges the assertion within the dispute window (6.4 days).
+A cryptographic commitment to the computed state.
+
+### Assertions progress through different stages:
+
+#### Proposed
+
+A validator submits a state assertion.
+
+#### Challenged (if necessary)
+
+If another validator disputes the assertion, an interactive fraud-proof initiates.
+
+#### Confirmed
+
+It becomes final if no one challenges the assertion within the dispute window (6.4 days).
 
 This model ensures that as long at least one honest validator participates, the correct execution will always be confirmed.
 
@@ -145,7 +165,7 @@ The assertion is assigned a deadline, which indicates how much time other valida
 
 In the normal case, the Rollup chain will look like this:
 
-<ImageZoom src="/img/haw-normal-rollup.svg" alt="Normal Rollup" className="img-600px" />
+<ImageZoom src="/img/haw-normal-rollup.svg" alt="Normal Rollup" className="img-200px" />
 
 On the left, representing an earlier part of the chain's history, we have confirmed assertions. These have been fully accepted and recorded by the parent chain contracts that manage the chain. The newest of the confirmed assertions, assertion 94, is called the "latest confirmed assertion."
 
