@@ -14,7 +14,7 @@ state based on <a data-quicklook-from="transaction">transaction</a> assertions u
 This approach enables scalability, lower costs, and high throughput while maintaining security through
 Ethereum's <a data-quicklook-from="trustless">trustless</a> validation model.
 
-Optimistic Rollups work by separating execution from proving to ensure efficient transaction processing without immediate validation. The execution process is covered in detail in the [State Transition Function](/how-arbitrum-works/04-state-transition-function/01-stf-gentle-intro.mdx). This section focuses on validation and proving mechanisms. We will cover how Arbitrum validators confirm the chain's state and how assertions are posted to Ethereum for finalization, with the potential for future challenges if an <a data-quicklook-from="assertion">assertion</a> is determined to be incorrect.
+Optimistic Rollups work by separating execution from proving to ensure efficient transaction processing without immediate validation. The execution process is covered in detail in the [State Transition Function](/how-arbitrum-works/04-state-transition-function/01-stf-gentle-intro.mdx). This section focuses on validation and proving mechanisms. We will cover how child chain validators confirm the chain's state and how assertions are posted to parent chain for finalization, with the potential for future challenges if an <a data-quicklook-from="assertion">assertion</a> is determined to be incorrect.
 
 ## Execution vs. proving: Separating responsibilities
 
