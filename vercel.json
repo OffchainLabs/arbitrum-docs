@@ -26,6 +26,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/optimistic-rollup/?)",
+      "destination": "/how-arbitrum-works/validation-and-proving/rollup-protocol",
+      "permanent": false
+    },
+    {
       "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
       "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
       "permanent": false
