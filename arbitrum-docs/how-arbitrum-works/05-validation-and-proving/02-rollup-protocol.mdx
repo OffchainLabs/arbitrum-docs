@@ -21,17 +21,21 @@ Optimistic Rollups work by separating execution from proving to ensure efficient
 A fundamental design choice in Arbitrum is the separation of execution from proving, which allows for:
 
 #### Efficient execution
+
 Transactions are processed optimistically without immediate verification.
 
 #### Deterministic proving
+
 If challenged, state transitions are replayable and verified onchain.
 
 To achieve this, Arbitrum compiles the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF) into different formats:
 
 #### Execution mode
+
 Uses Go's native compiler for high-performance execution on <a data-quicklook-from="validator">validator</a> nodes.
 
 #### Proving mode
+
 Compiles to WebAssembly (<a data-quicklook-from="wasm">WASM</a>), which transforms into WebAssembly for Arbitrum Virtual Machine (WAVM) for fraud-proof verification.
 
 This dual compilation approach ensures that Arbitrum nodes execute transactions efficiently while allowing deterministic trustless verification on parent chain.

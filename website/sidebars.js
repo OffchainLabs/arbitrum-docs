@@ -969,11 +969,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/interactive-fraud-proofs',
-          label: 'Challenges: Interactive Fraud Proofs',
-        },
-        {
-          type: 'doc',
           id: 'how-arbitrum-works/anytrust-protocol',
           label: 'AnyTrust protocol',
         },
