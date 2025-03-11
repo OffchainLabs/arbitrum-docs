@@ -964,11 +964,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/optimistic-rollup',
-          label: 'Optimistic Rollup',
-        },
-        {
-          type: 'doc',
           id: 'how-arbitrum-works/anytrust-protocol',
           label: 'AnyTrust protocol',
         },
