@@ -26,7 +26,7 @@ Currently, adding a testnet Orbit chain to the Arbitrum bridge must be done loca
 
 ### Prerequisites
 
-- A local testnet Orbit chain's configuration. See the [Orbit quickstart](/launch-orbit-chain/orbit-quickstart.md) to deploy a local Orbit chain, or use an existing JSON configuration.
+- A local testnet Orbit chain's configuration. Use an existing JSON configuration or follow the instructions on [Deploy and Orbit chain](https://docs.arbitrum.io/launch-orbit-chain/orbit-sdk-introduction) page for guidance on creating an L2 or L3 Orbit chain.
 - A browser-based Ethereum wallet (i.e., [MetaMask](https://metamask.io/) or [OKX Wallet](https://www.okx.com/web3))
 
 ### Procedure
