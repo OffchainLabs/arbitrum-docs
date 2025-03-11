@@ -159,7 +159,7 @@ There's a lot going on here, so let's unpack it:
 - Assertion 101 claimed to be a correct successor to assertion 100, but 101 was rejected.
 - Assertion 102 eventually receives <a data-quicklook-from="confirmation">confirmation</a> as the correct successor to 100.
 - Assertion 103 was confirmed and is now the latest confirmed assertion.
-- Assertion 104 was proposed as a successor to assertion 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, consequently, 105 was rejected because it's predecessor was rejected.
+- Assertion 104 was proposed as a successor to assertion 103, and 105 was proposed as a successor to 104. 104 was rejected as incorrect, consequently, 105 was rejected because its predecessor was rejected.
 - Assertion 106 is unresolved. It claims to be a correct successor to assertion 103 but the protocol hasn't yet decided whether to confirm or reject it. It is the first unresolved assertion.
 - Assertions 107 and 108 claim to chain from 106. They are also unresolved. If 106 gets rejected, they will be automatically rejected too.
 - Assertion 109 disagrees with assertion 106 because they both claim the same predecessor. At least one of them will eventually be rejected, but the protocol hasn't yet resolved them.
