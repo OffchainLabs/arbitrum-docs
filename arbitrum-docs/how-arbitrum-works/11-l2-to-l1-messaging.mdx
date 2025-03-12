@@ -9,14 +9,14 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-Arbitrum's outbox system allows for arbitrary child chain to parent chain contract calls, i.e., messages initiated from the child chain, which eventually resolve in execution on the parent chain. Child-to-parent chain messages (aka "outgoing" messages) bear some things in common with Arbitrum's [parent chain to child chain messages](/how-arbitrum-works/11-l1-to-l2-messaging.mdx), which are "in reverse" though with differences, which we'll explore in this section.
+<a data-quicklook-from="arbitrum">Arbitrum</a>'s <a data-quicklook-from="outbox">outbox</a> system allows for arbitrary <a data-quicklook-from="child-chain">child chain</a> to <a data-quicklook-from="parent-chain">parent chain</a> contract calls, i.e., messages initiated from the child chain, which eventually resolve in execution on the parent chain. Child-to-parent chain messages (aka "outgoing" messages) bear some things in common with Arbitrum's [parent chain to child chain messages](/how-arbitrum-works/11-l1-to-l2-messaging.mdx), which are "in reverse" though with differences, which we'll explore in this section.
 
 ## Protocol flow
 Messages from child to parent are included in Arbitrum's Rollup state and finalized through the Rollup Protocol. The process follows these steps:
 
 1. **Message creation on child chain**:
 	- To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the `ArbSys` precompile.
-2. **Message inclusion in an assertion**:
+2. **Message inclusion in an <a data-quicklook-from="assertion">assertion</a>**:
 	- The message is batched with other transactions and included in a Rollup assertion.
 	- Assertions are submitted to the Rollup contract on the parent chain and enter the dispute window (~one week).
 3. **Assertion confirmation**:
@@ -35,7 +35,7 @@ ArbSys(100).sendTxToL1(destAddress, calldata);
 ```
 
 ### Executing the message on the parent chain
-After the seven-day challenge period, if the assertion is confirmed, anyone can execute the message on the parent chain.
+After the seven-day <a data-quicklook-from="challenge">Challenge</a> period, if the assertion is confirmed, anyone can execute the message on the parent chain.
 
 1. **Retrieve proof data**:
 	- Call the `constructOutboxProof` method from the `NodeInterface` contract to get proof data.
@@ -71,8 +71,8 @@ Each message progresses through three primary states:
 | Stage                    | Description |
 | ------------------------ | ----------- |
 | Posted on child chain    | The message is sent via `ArbSys.sendTxToL1`. |
-| Waiting for finalization | The assertion containing the message is in the challenge period (~6.4 days) |
-| Confirmed and executable on the parent chain | If no fraud proof is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
+| Waiting for finalization | The assertion containing the message is in the <a data-quicklook-from="challenge-period">challenge period</a> (~6.4 days) |
+| Confirmed and executable on the parent chain | If no <a data-quicklook-from="fraud-proof">fraud proof</a> is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
 
 ## Withdrawing Ether
 Withdrawing Ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
@@ -94,7 +94,7 @@ The following diagram depicts the process that funds follow during a withdrawal 
 />
 
 ## `ERC-20` token withdrawal
-Arbitrum has a canonical bridge design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
+Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
 
 1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
 2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
@@ -112,4 +112,4 @@ Token withdrawals are the most common usage of child-to-parent chain messaging. 
 
 1. On the child chain, a user calls `L2GatewayRouter.outBoundTransfer`, which calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., L2ERC20Gateway).
 2. This call burns arbSomeERC20Token tokens and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will eventually execute on the parent chain.
-3. After the dispute window expires and the assertion with the user's transaction receives confirmation, a user can call `Outbox.executeTransaction`, which calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
+3. After the dispute window expires and the assertion with the user's <a data-quicklook-from="transaction">transaction</a> receives confirmation, a user can call `Outbox.executeTransaction`, which calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
