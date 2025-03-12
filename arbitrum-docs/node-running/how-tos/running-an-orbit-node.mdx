@@ -73,17 +73,23 @@ For <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chains</a>, you ne
 --node.data-availability.rest-aggregator.enable
 ```
 
-And:
+And, you need to set the following flag to specify the DAS REST endpoints, there two optional methods:
+
+1. Set URLs directly:
 
 ```shell
---node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints>
+--node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL>
 ```
 
-Or:
+2. Or set an URL that returns a list of the DAS REST endpoints:
 
 ```shell
---node.data-availability.rest-aggregator.online-url-list=<A url that returns a list of the DAS REST endpoints>
+--node.data-availability.rest-aggregator.online-url-list=<An URL that returns a list of the DAS REST endpoints>
 ```
+
+Please contact the chain owners to get the URL of the DAS REST endpoints. If you are a chain owner, please refer to the [DAC setup guide](/run-arbitrum-node/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set it up.
+
+(Batch posters only) For your batch posters to post data to the DAS, you need to follow [step 3 of config das](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#Step-3:-Craft-the-new-configuration-for-the-batch-poster) to your node config.
 
 ### 3.Important ports
 
