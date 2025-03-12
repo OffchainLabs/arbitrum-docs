@@ -123,7 +123,7 @@ Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and a
 
 For any given gateway pairing, calls have to be initiated through the corresponding router (`L2GatewayRouter`), and the gateways must conform to the `TokenGateway` interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
-Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal process follows (for standard gateway):
+Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal happens as follows (for standard gateway):
 
 1. On the child chain, a user calls `L2GatewayRouter.outBoundTransfer`, which calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., L2ERC20Gateway).
 2. This call burns arbSomeERC20Token tokens and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will eventually execute on the parent chain.
