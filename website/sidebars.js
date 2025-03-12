@@ -243,11 +243,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
           id: 'launch-orbit-chain/aep-license',
           label: 'Orbit licensing',
         },
