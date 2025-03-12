@@ -113,7 +113,7 @@ Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and a
 
 1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
 2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
-3. Which finally communicates to its corresponding gateway contract on the parent chain using the `L1ArbitrumGateway` contract.
+3. `L2ArbitrumGateway` finally communicates to its corresponding gateway contract on the parent chain using the `L1ArbitrumGateway` contract.
 
 <ImageZoom
   src="/img/dapps-bridge_withdrawals.png"
