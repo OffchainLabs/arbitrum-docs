@@ -964,7 +964,7 @@ const sidebars = {
         {
           type: 'doc',
           id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'L2 to L1 messaging',
+          label: 'Child to parent chain messaging',
         },
         {
           type: 'doc',
