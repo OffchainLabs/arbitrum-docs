@@ -2,6 +2,7 @@
 title: How to adopt the bridged USDC standard on your Orbit chain
 description: How to implement Circle bridged USDC standard on Orbit chain
 author: shughesocl
+sme: shughesocl
 sidebar_position: 5
 content_type: how-to
 ---
@@ -10,7 +11,7 @@ Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-stan
 
 ## Why adopt the bridged USDC standard?
 
-When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for ERC-20s](/build-decentralized-apps/token-bridging/token-bridge-erc20). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
+When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for ERC-20s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
 
 The challenge with this user flow is twofold.
 
@@ -40,7 +41,7 @@ Other requirements:
 
 - It is assumed there is already a USDC token deployed and used on the parent chain.
 - Also, it is assumed that the standard Orbit chain ownership system is used, i.e., `UpgradeExecutor` is the owner of the `ownable` contracts, and there is an EOA or multi-sig that has the executor role on the `UpgradeExecutor`.
-- Refer to the [token bridge overview page](/launch-orbit-chain/03-deploy-an-orbit-chain/05-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/token-bridge-erc20#other-flavors-of-gateways).
+- Refer to the [token bridge overview page](/launch-orbit-chain/03-deploy-an-orbit-chain/05-deploying-token-bridge.md) for more information about the token bridge design and operational dynamics. You can learn more in our [overview of gateways operating models](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 ## Deployment steps
 

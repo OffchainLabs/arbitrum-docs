@@ -92,7 +92,7 @@ Arbitrum's "operating system" that trustlessly handles system-level operations; 
 
 ### Assertion {#assertion}
 <p>
-A staked claim by an Arbitrum <a href="/intro/glossary#validator">Validator</a>. An assertion may, e.g., propose a new <a href="/intro/glossary#rblock">RBlock</a>, or may be a step in a <a href="/intro/glossary#challenge">Challenge</a>.
+A staked claim made by an Arbitrum <a href="/intro/glossary#validator">Validator</a> representing a claim about an Arbitrum chain's state. An <a href="/intro/glossary#assertion">Assertion</a> may, e.g., propose a new assertion, or may be a step in a <a href="/intro/glossary#challenge">Challenge</a>.
 </p>
 
 ### Auction Contract {#auction-contract}
@@ -147,12 +147,12 @@ When two <a href="/intro/glossary#staker">Staker</a>s disagree about the correct
 
 ### Challenge Period {#challenge-period}
 <p>
-Window of time (1 week on Arbitrum One) over which an asserted <a href="/intro/glossary#rblock">RBlock</a>  can be challenged, and after which the RBlock can be confirmed.
+Window of time (one week on Arbitrum One) over which an <a href="/intro/glossary#assertion">Assertion</a> can be challenged, and after which the assertion can be confirmed.
 </p>
 
 ### Challenge protocol {#challenge-protocol}
 <p>
-The protocol by which <a href="/intro/glossary#rblock">RBlock</a>s are submitted, disputed, and ultimately confirmed. The Challenge Protocol guarantees that only valid RBlocks will be confirmed provided that there is at least one honest <a href="/intro/glossary#active-validator">Active Validator</a>.
+The protocol by which assertions are submitted, disputed, and ultimately confirmed. The Challenge Protocol guarantees that only valid <a href="/intro/glossary#assertion">Assertion</a> will be confirmed provided that there is at least one honest <a href="/intro/glossary#active-validator">Active Validator</a>.
 </p>
 
 ### Child chain {#child-chain}
@@ -167,7 +167,7 @@ A program running on a user's machine, often in the user's browser, that interac
 
 ### Confirmation {#confirmation}
 <p>
-The decision by an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>  to finalize an <a href="/intro/glossary#rblock">RBlock</a>  as part of the chain's history. Once an RBlock is confirmed its <a href="/intro/glossary#l2-to-l1-message">L2 to L1 Message</a>s  (e.g., withdrawals) can be executed.
+The decision by an <a href="/intro/glossary#arbitrum-chain">Arbitrum chain</a>  to finalize an assertion  as part of the chain's history. Once an <a href="/intro/glossary#assertion">Assertion</a> is confirmed its <a href="/intro/glossary#l2-to-l1-message">L2 to L1 Message</a>s  (e.g., withdrawals) can be executed.
 </p>
 
 ### Cross-chain message {#crosschain-message}
@@ -354,7 +354,7 @@ A web application maintained by <a href="/intro/glossary#offchain-labs">Offchain
 
 ### RBlock {#rblock}
 <p>
-An assertion by an Arbitrum <a href="/intro/glossary#validator">Validator</a> that represents a claim about an Arbitrum chain's state.
+Refer to <a href="/intro/glossary#assertion">Assertion</a> 
 </p>
 
 ### Reorg {#reorg}
@@ -414,7 +414,7 @@ Target computation limit for an Arbitrum chain. <a href="/intro/glossary#arbitru
 
 ### Staker {#staker}
 <p>
-A <a href="/intro/glossary#validator">Validator</a> who deposits a stake (in Ether on <a href="/intro/glossary#arbitrum-one">Arbitrum One</a> and <a href="/intro/glossary#arbitrum-nova">Arbitrum Nova</a> ) to vouch for a particular <a href="/intro/glossary#rblock">RBlock</a>  in an Arbitrum Chain. A validator who stakes on a false RBlock can expect to lose their stake. An honest staker can recover their stake once the RBlock they are staked on has been confirmed.
+A <a href="/intro/glossary#validator">Validator</a> who deposits a stake (in Ether on <a href="/intro/glossary#arbitrum-one">Arbitrum One</a> and <a href="/intro/glossary#arbitrum-nova">Arbitrum Nova</a> ) to vouch for a particular <a href="/intro/glossary#assertion">Assertion</a> in an Arbitrum Chain. A validator who stakes on a false assertion can expect to lose their stake. An honest staker can recover their stake once the assertion they are staked on has been confirmed.
 </p>
 
 ### Standard Arb-Token {#standard-arbtoken}

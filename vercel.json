@@ -6,6 +6,11 @@
       "permanent": false
     },
     {
+      "source": "/(bold/concepts/bold-technical-deep-dive/?)",
+      "destination": "/how-arbitrum-works/bold/bold-technical-deep-dive",
+      "permanent": false
+    },
+    {
       "source": "/(bold/concepts/public-preview-expectations/?)",
       "destination": "/how-arbitrum-works/bold/public-preview-expectations",
       "permanent": false
@@ -23,6 +28,11 @@
     {
       "source": "/(fraud-proofs/challenge-manager/?)",
       "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/geth-at-the-core/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
       "permanent": false
     },
     {
@@ -971,12 +981,12 @@
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/how-tos/fast-withdrawals/?)",
-      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
+      "destination": "/launch-orbit-chain/a-gentle-introduction",
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/orbit-gentle-introduction/?)",
+      "source": "/(launch-orbit-chain/orbit-quickstart/?)",
       "destination": "/launch-orbit-chain/a-gentle-introduction",
       "permanent": false
     },
@@ -1051,6 +1061,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/fast-withdrawals/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction",
       "permanent": false
@@ -1063,6 +1078,21 @@
     {
       "source": "/(launch-orbit-chain/how-tos/calculate-aep-fees/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/set-up-aep-fee-router/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/calculate-aep-fees/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
       "permanent": false
     },
     {
@@ -1103,6 +1133,16 @@
     {
       "source": "/(launch-orbit-chain/concepts/anytrust-orbit-chain-keyset-generation/?)",
       "destination": "/run-arbitrum-node/data-availability-committees/configure-dac",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/manage-fee-collectors/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/fee-management",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/concepts/chain-ownership/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/ownership-structure-access-control",
       "permanent": false
     }
   ]
