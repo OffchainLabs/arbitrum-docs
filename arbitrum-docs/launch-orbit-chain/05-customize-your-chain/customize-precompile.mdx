@@ -32,7 +32,7 @@ There are five primary ways to customize your chain's precompiles:
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.1@@ <https://github.com/OffchainLabs/nitro.git>
+git clone --branch @@nitroVersionTag=v3.5.2@@ <https://github.com/OffchainLabs/nitro.git>
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -224,7 +224,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 :::info
@@ -308,7 +308,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 :::info
@@ -542,11 +542,11 @@ The same goes for the path to precompiles interface.
 We can use the @@nitroContractsRepositorySlug=nitro-contracts@@ and @@nitroContractsPathToPrecompilesInterface=src/precompiles@@ variables once we release nitro version 2.1.0 or above.
 -->
 
-[precompile_impl_dir_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.1@@/@@nitroPathToPrecompiles=precompiles@@/
+[precompile_impl_dir_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.2@@/@@nitroPathToPrecompiles=precompiles@@/
 [precompile_interface_dir_link]: https://github.com/OffchainLabs/@@nitroContractsRepositorySlug=nitro-contracts@@/blob/@@nitroContractsCommit=763bd77906b7677da691eaa31c6e195d455197a4@@/@@nitroContractsPathToPrecompilesInterface=src/precompiles@@/
-[precompile_main_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.1@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go
-[arbosstate_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.1@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go
+[precompile_main_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.2@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go
+[arbosstate_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.2@@/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go
 [arbosstate_link]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L38
-[storage_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.1@@/@@nitroPathToStorage=arbos/storage@@/storage.go
+[storage_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.2@@/@@nitroPathToStorage=arbos/storage@@/storage.go
 [arbosstate_openstate]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L89
 [arbosstate_initializeArbosState]: https://github.com/OffchainLabs/nitro/blob/v2.2.0/arbos/arbosState/arbosstate.go#L212
