@@ -69,7 +69,7 @@ const globalVars = {
   sepoliaDisputeWindowMinutes: blocksToMinutes(sepoliaDisputeWindowBlocks),
 
   // base stake
-  arbOneBaesStakeEth: 1,
+  arbOneBaesStakeEth: 3600,
   novaBaesStakeEth: 1,
   goerliBaesStakeEth: 1,
   sepoliaBaesStakeEth: 1,
