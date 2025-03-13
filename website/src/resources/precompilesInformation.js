@@ -36,11 +36,38 @@ const precompilesInformation = {
         description:
           'GetCurrentTxL1GasFees gets the fee in wei paid to the batch poster for posting this tx',
       },
+      GetL1PricingEquilibrationUnits: {
+        availableSinceArbOS: 20,
+      },
+      GetLastL1PricingUpdateTime: {
+        availableSinceArbOS: 20,
+      },
+      GetL1PricingFundsDueForRewards: {
+        availableSinceArbOS: 20,
+      },
+      GetL1PricingUnitsSinceUpdate: {
+        availableSinceArbOS: 20,
+      },
+      GetLastL1PricingSurplus: {
+        availableSinceArbOS: 20,
+      },
     },
   },
   ArbInfo: {},
-  ArbOwner: {},
+  ArbOwner: {
+    methodOverrides: {
+      setBrotliCompressionLevel: {
+        description:
+          'Sets the Brotli compression level used for fast compression (default level is 1)',
+      },
+    },
+  },
   ArbOwnerPublic: {
+    methodOverrides: {
+      RectifyChainOwner: {
+        availableSinceArbOS: 11,
+      },
+    },
     eventOverrides: {
       chainownerrectified: {
         description: 'Emitted when verifying a chain owner',
