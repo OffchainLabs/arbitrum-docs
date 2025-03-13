@@ -89,8 +89,6 @@ And, you need to set the following flag to specify the DAS REST endpoints, there
 
 Please contact the chain owners to get the URL of the DAS REST endpoints. If you are a chain owner, please refer to the [DAC setup guide](/run-arbitrum-node/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set it up.
 
-(Batch posters only) For your batch posters to post data to the DAS, you need to follow [step 3 of config das](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#Step-3:-Craft-the-new-configuration-for-the-batch-poster) to your node config.
-
 ### 3.Important ports
 
 | Protocol          | Port   |
@@ -150,12 +148,6 @@ Set the following configurations to your fullnode to make it can receive the seq
 ```
 
 After that, your node can synchronize the latest state from the sequencer feed.
-
-(Chain owners only) In order for a node to read the sequencer feed, the chain's sequencer needs to be configured with the following parameters:
-
-```shell
---node.feed.output.enable=true --node.feed.output.addr=<Sequencer feed url> --node.feed.output.port=<Sequencer feed port>
-```
 
 ## Optional parameters
 
