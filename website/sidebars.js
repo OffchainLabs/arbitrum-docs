@@ -937,19 +937,25 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/separating-execution-from-proving',
-          label: 'Separating Execution from Proving',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/optimistic-rollup',
-          label: 'Optimistic Rollup',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/interactive-fraud-proofs',
-          label: 'Challenges: Interactive Fraud Proofs',
+          type: 'category',
+          label: 'Validation and Proving',
+          items: [
+            {
+              type: 'doc',
+              label: 'Validation and proving overview',
+              id: 'how-arbitrum-works/validation-and-proving/validation-and-proving',
+            },
+            {
+              type: 'doc',
+              label: 'Rollup protocol',
+              id: 'how-arbitrum-works/validation-and-proving/rollup-protocol',
+            },
+            {
+              type: 'doc',
+              label: 'Proving and challenges',
+              id: 'how-arbitrum-works/validation-and-proving/proving-and-challenges',
+            },
+          ],
         },
         {
           type: 'doc',
