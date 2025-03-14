@@ -964,13 +964,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas and fees',
+          id: 'how-arbitrum-works/l2-to-l1-messaging',
+          label: 'Child to parent chain messaging',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'L2 to L1 messaging',
+          id: 'how-arbitrum-works/gas-fees',
+          label: 'Gas and fees',
         },
         {
           type: 'doc',
