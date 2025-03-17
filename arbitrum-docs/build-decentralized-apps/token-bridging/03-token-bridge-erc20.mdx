@@ -62,7 +62,7 @@ By default, any ERC-20 token on L1 that isn't registered to a gateway can be per
 
 You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to L2 via this gateway.
 
-### Example: Standard Arb-ERC20 deposit and withdraw
+### Example: Standard Arb-ERC-20 deposit and withdraw
 
 To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard ERC-20 gateway looks like. Here, we're assuming that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard ERC-20 gateway.
 
@@ -76,7 +76,7 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 ❗️ _[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `L1GatewayRouter.outboundTransfer`._
 
-Note that arbSomeERC20Token is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the L2ERC20Gateway.
+Note that `arbSomeERC20Token` is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
 
 #### Withdrawals
 
@@ -86,7 +86,7 @@ Note that arbSomeERC20Token is an instance of [StandardArbERC20](https://github.
 
 ## The Arbitrum generic-custom gateway
 
-Just because a token has requirements beyond what are offered via the standard ERC-20 gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
+Just because a token has requirements beyond what are offered via the standard `ERC-20` gateway, that doesn't necessarily mean that a unique gateway needs to be tailor-made for the token in question. Our generic-custom gateway is designed to be flexible enough to be suitable for most (but not necessarily all) custom fungible token needs. As a general rule:
 
 **If your custom token has the ability to increase its supply (i.e., mint) directly on the L2, and you want the L2-minted tokens be withdrawable back to L1 and recognized by the L1 contract, it will probably require its own special gateway. Otherwise, the generic-custom gateway is likely the right solution for you!**
 

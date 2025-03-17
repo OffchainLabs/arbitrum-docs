@@ -11,7 +11,7 @@ Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-stan
 
 ## Why adopt the bridged USDC standard?
 
-When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for ERC-20s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
+When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
 
 The challenge with this user flow is twofold.
 
