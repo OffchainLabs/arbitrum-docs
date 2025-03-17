@@ -416,6 +416,11 @@
       "permanent": false
     },
     {
+      "source": "/(node-running/how-tos/running-an-orbit-node/?)",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
       "source": "/(bridge-tokens/concepts/usdc-concept/?)",
       "destination": "/arbitrum-bridge/usdc-arbitrum-one",
       "permanent": false

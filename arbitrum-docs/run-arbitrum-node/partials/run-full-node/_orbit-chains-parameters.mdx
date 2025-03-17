@@ -1,0 +1,92 @@
+<!--
+    Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
+-->
+
+#### 1. Parent chain parameters
+
+The `--parent-chain.connection.url` parameter needs to provide a standard RPC endpoint for an EVM node, whether self-hosted or obtained from a node service provider:
+
+```shell
+--parent-chain.connection.url=<Parent chain RPC URL>
+```
+
+:::info Public Arbitrum RPC endpoints
+
+[Public Arbitrum RPC endpoints](/build-decentralized-apps/reference/01-node-providers.mdx#arbitrum-public-rpc-endpoints) rate-limit connections. To avoid hitting a bottleneck, you can run a local node for the parent chain or rely on third-party RPC providers.
+
+:::
+
+Additionally, if the chain is a Layer-2 (L2) chain on top of Ethereum and uses blobs to post calldata, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
+
+```shell
+--parent-chain.blob-client.beacon-url=<Parent chain beacon chain RPC URL>
+```
+
+You can find a list of Ethereum beacon chain RPC providers [here](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. This means that the beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/run-arbitrum-node/arbos-releases/arbos20.mdx#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
+
+#### 2. Child chain parameters
+
+The parameter `--chain.info-json` specifies a JSON string that contains the information about the Orbit chain required by the node.
+
+```shell
+--chain.info-json=<Orbit chain's info>
+```
+
+This information should be provided by the chain owner and will look something like the following:
+
+```shell
+--chain.info-json="[{\"chain-id\":94692861356,\"parent-chain-id\":421614,\"chain-name\":\"My Arbitrum L3 Chain\",\"chain-config\":{\"chainId\":94692861356,\"homesteadBlock\":0,\"daoForkBlock\":null,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"berlinBlock\":0,\"londonBlock\":0,\"clique\":{\"period\":0,\"epoch\":0},\"arbitrum\":{\"EnableArbOS\":true,\"AllowDebugPrecompiles\":false,\"DataAvailabilityCommittee\":false,\"InitialArbOSVersion\":10,\"InitialChainOwner\":\"0xAde4000C87923244f0e95b41f0e45aa3C02f1Bb2\",\"GenesisBlockNum\":0}},\"rollup\":{\"bridge\":\"0xde835286442c6446E36992c036EFe261AcD87F6d\",\"inbox\":\"0x0592d3861Ea929B5d108d915c36f64EE69418049\",\"sequencer-inbox\":\"0xf9d77199288f00440Ed0f494Adc0005f362c17b1\",\"rollup\":\"0xF5A42aDA664E7c2dFE9DDa4459B927261BF90E09\",\"validator-utils\":\"0xB11EB62DD2B352886A4530A9106fE427844D515f\",\"validator-wallet-creator\":\"0xEb9885B6c0e117D339F47585cC06a2765AaE2E0b\",\"deployed-at\":1764099}}]"
+```
+
+Use the parameter `--chain.name` to specify the chain you're running this node for. The name of the chain should match the name used in the JSON string used in `--chain.info-json`:
+
+```shell
+--chain.name=<Orbit chain name>
+```
+
+#### 3. Parameters to connect to the sequencer
+
+Use the parameter `--node.feed.input.url` to point at the sequencer feed endpoint, which should be provided by the chain owner.
+
+```shell
+--node.feed.input.url=<Sequencer feed url>
+```
+
+Use the parameter `--execution.forwarding-target` to point at the sequencer node of the orbit chain, which should also be provided by the chain owner.
+
+```shell
+--execution.forwarding-target=<Sequencer node endpoint url>
+```
+
+#### 3. Additional parameters for AnyTrust chains
+
+If you're running a node for an <a data-quicklook-from="arbitrum-anytrust-chain">Anytrust chain</a>, you need to specify information about the Data Availability Committee (DAC) in the configuration of your node.
+
+First, enable `data-availability` using the following parameters:
+
+```shell
+--node.data-availability.enable
+--node.data-availability.rest-aggregator.enable
+```
+
+Then, choose one of these methods to specify the DAS REST endpoints that your node will read the information from. These endpoints should also be provided by the chain owner.
+
+    1. Set the DAS REST endpoints directly:
+
+    ```shell
+    --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, separated by commas>
+    ```
+
+    2. Set a URL that returns a list of the DAS REST endpoints:
+
+    ```shell
+    --node.data-availability.rest-aggregator.online-url-list=<A URL that returns a list of the DAS REST endpoints>
+    ```
+
+::::tip Setting a DAS (for chain owners)
+
+If you are a chain owner, please refer to the [DAC setup guide](/run-arbitrum-node/data-availability-committees/01-get-started.mdx#if-you-are-a-chain-owner) to set it up.
+
+Additionally, for your batch poster to post data to the DAS, follow [step 3 of How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#Step-3:-Craft-the-new-configuration-for-the-batch-poster) to configure your batch poster node.
+
+::::
