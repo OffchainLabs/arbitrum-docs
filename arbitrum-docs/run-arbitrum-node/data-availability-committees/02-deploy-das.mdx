@@ -105,7 +105,7 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
-The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
+The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
 When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in.
 
@@ -298,7 +298,7 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: RPC health check
 
-The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns a status `200` if the DAS is active.
+The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method `das_healthCheck` that returns a status `200` if the DAS is active.
 
 Example:
 
@@ -331,7 +331,7 @@ docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@lat
 
 #### Step 2: Change the DAS configuration and restart the server
 
-Add the following configuration parameter to `daserver`:
+Add the following configuration parameter to `daserver`:
 
 ```shell
 --data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
@@ -347,7 +347,7 @@ And then restart it.
 
 #### Step 3: Store data signed with the ECDSA private key
 
-Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
+Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
 ```shell
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
@@ -365,7 +365,7 @@ You can also use the `docker run` command:
 docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
-The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
+The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
 
 #### Step 4: Retrieve the stored data
 
@@ -387,7 +387,7 @@ The retention period defaults to 24 hours, but can be configured when calling `d
 
 ### Test 3: REST health check
 
-The REST interface has a health check on the path `/health` which will return a status `200` if the underlying storage is working, otherwise `503`.
+The REST interface has a health check on the path `/health` which will return a status `200` if the underlying storage is working, otherwise `503`.
 
 Example:
 

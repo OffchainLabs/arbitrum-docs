@@ -7,7 +7,7 @@ sidebar_position: 5
 content_type: how-to
 ---
 
-Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-standard) is a specification and process for deploying a bridged form of USDC on EVM blockchains with optionality for Circle to seamlessly upgrade to native issuance in the future.
+Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-standard) is a specification and process for deploying a bridged form of USDC on EVM blockchains with optionality for Circle to seamlessly upgrade to native issuance in the future.
 
 ## Why adopt the bridged USDC standard?
 
@@ -24,8 +24,8 @@ By deploying the bridged USDC standard from the start, all USDC tokens that are 
 
 We provide a custom USDC gateway implementation (for parent and child chains) that follows the Bridged USDC Standard. These contracts can be used by new Orbit chains. This solution will NOT be used in existing Arbitrum chains that are governed by the DAO.
 
-- On a parent chain the contract `L1USDCGateway` is used in case the child chain uses ETH as native currency, or `L1OrbitUSDCGateway` in case the child chain uses a custom fee token.
-- On a child chain, `L2USDCGateway` is used.
+- On a parent chain the contract `L1USDCGateway` is used in case the child chain uses ETH as native currency, or `L1OrbitUSDCGateway` in case the child chain uses a custom fee token.
+- On a child chain, `L2USDCGateway` is used.
 - For the USDC token contracts, Circle's reference [implementation](https://github.com/circlefin/stablecoin-evm/blob/master/doc/bridged_USDC_standard.md) is used.
 
 This page describes how to deploy a USDC bridge compatible with both the Orbit token bridge and Circle’s Bridged USDC Standard.
@@ -47,7 +47,7 @@ Other requirements:
 
 <aside>
 
-Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Orbit chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`.
+Throughout the docs and code, the terms `L1` and `L2` are used interchangeably with `parent chain` and `child chain`. They have the same meaning, i.e., if an Orbit chain is deployed on top of ArbitrumOne, then ArbitrumOne is `L1`/`parent chain`, while Orbit is `L2`/`child chain`.
 
 You can find more details by consulting the [usdc bridge deployment script and its README](https://github.com/OffchainLabs/token-bridge-contracts/tree/v1.2.3/scripts/usdc-bridge-deployment).
 
@@ -92,8 +92,8 @@ The script will do the following:
 - deploy L1 USDC gateway
 - deploy L2 USDC gateway
 - init both gateways
-- if `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
-- if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
+- if `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
+- if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
 - set minter role to L2 USDC gateway with max allowance
 
 Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now in place to support transition to native USDC issuance if Circle and the Orbit chain owner agree to it.
@@ -102,16 +102,16 @@ Now, new USDC gateways can be used to deposit/withdraw USDC. Everything is now i
 
 Once a transition to native USDC is agreed upon, the following steps are required:
 
-- L1 gateway owner pauses deposits on the parent chain by calling `pauseDeposits()`
-- L2 gateway owner pauses withdrawals on the child chain by calling `pauseWithdrawals()`
+- L1 gateway owner pauses deposits on the parent chain by calling `pauseDeposits()`
+- L2 gateway owner pauses withdrawals on the child chain by calling `pauseWithdrawals()`
 - master minter removes the minter role from the child chain gateway
-  - NOTE: there should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a USDC deposit
-- L1 gateway owner sets Circle's account as burner on the parent chain gateway using `setBurner(address)`
-- L1 gateway owner reads the total supply of USDC on the child chain and then invokes `setBurnAmount(uint256)` on the parent/child gateway where the amount matches the total supply
+  - **Note**: there should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a USDC deposit
+- L1 gateway owner sets Circle's account as burner on the parent chain gateway using `setBurner(address)`
+- L1 gateway owner reads the total supply of USDC on the child chain and then invokes `setBurnAmount(uint256)` on the parent/child gateway where the amount matches the total supply
 - USDC `masterMinter` gives the minter role with `0 `allowance to the L1 gateway so that the burn can be executed
-- on the child chain, the L2 gateway owner calls the `setUsdcOwnershipTransferrer(address)` to set the account (provided and controlled by Circle), which will be able to transfer the bridged USDC ownership and proxy admin
+- on the child chain, the L2 gateway owner calls the `setUsdcOwnershipTransferrer(address)` to set the account (provided and controlled by Circle), which will be able to transfer the bridged USDC ownership and proxy admin
 - if not already owned by the gateway, the L2 USDC owner transfers ownership to the gateway, and proxy admin transfers admin rights to the gateway
-- Circle uses the `usdcOwnershipTransferrer` account to trigger `transferUSDCRoles(address)`, which will set the caller as USDC proxy admin and will transfer USDC ownership to the provided address
-- Circle calls `burnLockedUSDC()` on the L1 gateway using the `burner` account to burn the `burnAmount` of USDC
+- Circle uses the `usdcOwnershipTransferrer` account to trigger `transferUSDCRoles(address)`, which will set the caller as USDC proxy admin and will transfer USDC ownership to the provided address
+- Circle calls `burnLockedUSDC()` on the L1 gateway using the `burner` account to burn the `burnAmount` of USDC
   - remaining USDC will be cleared off when remaining in-flight USDC withdrawals are executed, if any
   - The L1 gateway owner is trusted to not front-run this transaction to modify the burning amount

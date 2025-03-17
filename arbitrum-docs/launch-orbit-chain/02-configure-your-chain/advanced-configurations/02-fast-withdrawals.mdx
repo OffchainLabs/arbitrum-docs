@@ -163,7 +163,7 @@ yarn install
 cp .env.example .env
 ```
 
-3. Execute the action. The upgrade can be executed using  `cast`  CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
+3. Execute the action. The upgrade can be executed using `cast` CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
 
 ```shell
 (export $(cat .env | xargs) && cast send $PARENT_UPGRADE_EXECUTOR_ADDRESS "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]) --rpc-url $PARENT_CHAIN_RPC --account EXECUTOR)
