@@ -932,19 +932,25 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/separating-execution-from-proving',
-          label: 'Separating Execution from Proving',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/optimistic-rollup',
-          label: 'Optimistic Rollup',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/interactive-fraud-proofs',
-          label: 'Challenges: Interactive Fraud Proofs',
+          type: 'category',
+          label: 'Validation and Proving',
+          items: [
+            {
+              type: 'doc',
+              label: 'Validation and proving overview',
+              id: 'how-arbitrum-works/validation-and-proving/validation-and-proving',
+            },
+            {
+              type: 'doc',
+              label: 'Rollup protocol',
+              id: 'how-arbitrum-works/validation-and-proving/rollup-protocol',
+            },
+            {
+              type: 'doc',
+              label: 'Proving and challenges',
+              id: 'how-arbitrum-works/validation-and-proving/proving-and-challenges',
+            },
+          ],
         },
         {
           type: 'doc',
@@ -953,13 +959,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas and fees',
+          id: 'how-arbitrum-works/l2-to-l1-messaging',
+          label: 'Child to parent chain messaging',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'L2 to L1 messaging',
+          id: 'how-arbitrum-works/gas-fees',
+          label: 'Gas and fees',
         },
         {
           type: 'doc',
