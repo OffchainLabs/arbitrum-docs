@@ -19,14 +19,14 @@ We now describe some core goals that motivated the design of our bridging system
 
 ### Custom gateway functionality
 
-For many ERC-20 tokens, "standard" bridging functionality is sufficient, which entails the following: a token contract on Ethereum is associated with a "paired" token contract on Arbitrum.
+For many `ERC-20` tokens, "standard" bridging functionality is sufficient, which entails the following: a token contract on Ethereum is associated with a "paired" token contract on Arbitrum.
 
-Depositing a token entails escrowing some amount of the token in an L1 bridge contract, and minting the same amount at the paired token contract on L2. On L2, the paired contract behaves much like a normal ERC-20 token contract. Withdrawing entails burning some amount of the token in the L2 contract, which then can later be claimed from the L1 bridge contract.
+Depositing a token entails escrowing some amount of the token in an L1 bridge contract, and minting the same amount at the paired token contract on L2. On L2, the paired contract behaves much like a normal `ERC-20` token contract. Withdrawing entails burning some amount of the token in the L2 contract, which then can later be claimed from the L1 bridge contract.
 
 Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.:
 
 - Tokens which accrue interest to their holders need to ensure that the interest is dispersed properly across layers, and doesn't simply accrue to the bridge contracts
-- Our cross-domain WETH implementations requires tokens be wrapped and unwrapped as they move across layers.
+- Our cross-domain `WETH` implementations requires tokens be wrapped and unwrapped as they move across layers.
 
 Thus, our bridge architecture must allow not just the standard deposit and withdraw functionalities, but for new, custom gateways to be dynamically added over time.
 
@@ -40,7 +40,7 @@ With this in mind, we provide an overview of our token bridging architecture.
 
 Our architecture consists of three types of contracts:
 
-1. **Asset contracts**: These are the token contracts themselves, i.e., an ERC-20 on L1 and it's counterpart on Arbitrum.
+1. **Asset contracts**: These are the token contracts themselves, i.e., an `ERC-20` on L1 and it's counterpart on Arbitrum.
 2. **Gateways**: Pairs of contracts (one on L1, one on L2) that implement a particular type of cross-chain asset bridging.
 3. **Routers**: Exactly two contracts (one on L1, one on L2) that route each asset to its designated gateway.
 
@@ -54,22 +54,22 @@ Similarly, Arbitrum to Ethereum transfers are initiated via the router contract 
 
 <ImageZoom src="/img/dapps-bridge_withdrawals.png" alt="" className="img-600px" />
 
-For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [TokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
+For any given gateway pairing, we require that calls be initiated through the corresponding router (`L1GatewayRouter` or `L2GatewayRouter`), and that the gateways conform to the [`TokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/TokenGateway.sol) interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
 
-## The standard ERC-20 gateway {#default-standard-bridging}
+## The standard `ERC-20` gateway {#default-standard-bridging}
 
-By default, any ERC-20 token on L1 that isn't registered to a gateway can be permissionlessly bridged through the `StandardERC20Gateway`.
+By default, any `ERC-20` token on L1 that isn't registered to a gateway can be permissionlessly bridged through the `StandardERC20Gateway`.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to L2 via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to L2 via this gateway.
 
 ### Example: Standard Arb-ERC-20 deposit and withdraw
 
-To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard ERC-20 gateway looks like. Here, we're assuming that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard ERC-20 gateway.
+To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard `ERC-20` gateway looks like. Here, we're assuming that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard `ERC-20` gateway.
 
 #### Deposits
 
 1. A user calls `L1GatewayRouter.outboundTransferCustomRefund` **[1]** (with `SomeERC20Token`'s L1 address as an argument).
-2. `L1GatewayRouter` looks up `SomeERC20Token`'s gateway, and finds that it's the standard ERC-20 gateway (the `L1ERC20Gateway` contract).
+2. `L1GatewayRouter` looks up `SomeERC20Token`'s gateway, and finds that it's the standard `ERC-20` gateway (the `L1ERC20Gateway` contract).
 3. `L1GatewayRouter` calls `L1ERC20Gateway.outboundTransferCustomRefund`, forwarding the appropriate parameters.
 4. `L1ERC20Gateway` escrows the tokens sent and creates a retryable ticket to trigger `L2ERC20Gateway`'s `finalizeInboundTransfer` method on L2.
 5. `L2ERC20Gateway.finalizeInboundTransfer` mints the appropriate amount of tokens at the `arbSomeERC20Token` contract on L2.
@@ -81,7 +81,7 @@ Note that `arbSomeERC20Token` is an instance of [StandardArbERC20](https://githu
 #### Withdrawals
 
 1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., L2ERC20Gateway).
-2. This burns arbSomeERC20Token tokens, and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will be eventually executed on L1.
+2. This burns `arbSomeERC20Token` tokens, and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will be eventually executed on L1.
 3. After the dispute window expires and the assertion with the user's transaction is confirmed, a user can call `Outbox.executeTransaction`, which in turn calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
 
 ## The Arbitrum generic-custom gateway
@@ -102,21 +102,21 @@ Follow the following steps to get your token set up to use the generic-custom ga
 
 **0. Have an L1 token**
 
-Your token on L1 should conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [TestCustomTokenL1](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
+Your token on L1 should conform to the [`ICustomToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [`TestCustomTokenL1`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
 
 **1. Deploy your token on Arbitrum**
 
-Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [L2GatewayToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
+Your token should conform to the minimum [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface; i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [L2GatewayToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
 
 import TokenCompatibilityPartial from './partials/_token-compatibility.mdx';
 
 <TokenCompatibilityPartial />
 
-**2. Register your token on L1 to your token on L2 via the L1CustomGateway contract**
+**2. Register your token on L1 to your token on L2 via the `L1CustomGateway` contract**
 
 Have your L1 token's contract make an external call to `L1CustomGateway.registerTokenToL2`. This registration can alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation) proposal.
 
-**3. Register your token on L1 to the L1GatewayRouter**
+**3. Register your token on L1 to the `L1GatewayRouter`**
 
 After your token's registration to the generic-custom gateway is complete, have your L1 token's contract make an external call to `L1GatewayRouter.setGateway`; this registration can also alternatively be performed as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation) proposal.
 
@@ -128,9 +128,9 @@ If you have questions about your custom token needs, feel free to reach out on o
 
 ## Other flavors of gateways
 
-Note that in the system described above, one pair of gateway contracts handles the bridging of many ERC-20s; i.e., many ERC-20s on L1 are each paired with their own ERC-20s on Arbitrum via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
+Note that in the system described above, one pair of gateway contracts handles the bridging of many `ERC-20`'s; i.e., many `ERC-20`'s on L1 are each paired with their own `ERC-20`'s on Arbitrum via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
 
-Take our wrapped Ether implementation for example: here, a single WETH contract on L1 is connected to a single WETH contract on L2. When transferring WETH from one domain to another, the L1/L2 gateway architecture is used to unwrap the WETH on domain A, transfer the now-unwrapped Ether, and then re-wrap it on domain B. This ensures that WETH can behave on Arbitrum the way users are used to it behaving on Ethereum, while ensuring that all WETH tokens are always fully collateralized on the layer in which they reside.
+Take our wrapped Ether implementation for example: here, a single `WETH` contract on L1 is connected to a single `WETH` contract on L2. When transferring `WETH` from one domain to another, the L1/L2 gateway architecture is used to unwrap the `WETH` on domain A, transfer the now-unwrapped Ether, and then re-wrap it on domain B. This ensures that `WETH` can behave on Arbitrum the way users are used to it behaving on Ethereum, while ensuring that all `WETH` tokens are always fully collateralized on the layer in which they reside.
 
 No matter the complexity of a particular token's bridging needs, a gateway can in principle be created to accommodate it within our canonical bridging system.
 

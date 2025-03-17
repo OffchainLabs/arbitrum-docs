@@ -1,5 +1,5 @@
 ---
-title: "Bridge tokens via Arbitrum's standard ERC-20 gateway"
+title: "Bridge tokens via Arbitrum's standard `ERC-20` gateway"
 description: Learn how to programmatically bridge tokens between Ethereum and Arbitrum using Arbitrum’s standard ER-C20 gateway
 user_story: As a developer, I want to understand how to bridge tokens between Ethereum and Arbitrum using the standard ER-C20 gateway.
 content_type: how-to
@@ -15,7 +15,7 @@ We will go through all steps involved in the process. However, if you want to ju
 
 We‘ll begin the process by creating and deploying on L1 a sample token to bridge. If you already have a token contract on L1, you don’t need to perform this step.
 
-We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only 1 adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
+We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only one adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -76,7 +76,7 @@ main()
 
 As stated in the [token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging), when using Arbitrum’s standard `ERC-20` gateway, you don’t need to do any pre-configuration process. Your token will be “bridgeable” out of the box.
 
-As explained in the conceptual page, there are 2 contracts that we need to be aware of when bridging tokens:
+As explained in the conceptual page, there are two contracts that we need to be aware of when bridging tokens:
 
 - **Router contract**: this is the contract that we’ll interact with. It keeps a mapping of the gateway contracts assigned to each token, fallbacking to a default gateway for standard `ERC-20` tokens.
 - **Gateway contract**: this is the contract that escrows or burns the tokens in the layer of origin, and sends the message over to the counterpart layer to mint or release the tokens there.
@@ -96,7 +96,7 @@ You can find the addresses of the contracts involved in the process in [this pag
 
 The gateway contract will be the one that will transfer the tokens to be bridged over. So the next step is to allow the gateway contract to do so.
 
-We typically do that by using the `approve` method of the token, but you can use Arbitrum’s SDK to abstract this process, by calling the method [approveToken](../../../sdk/reference/assetBridger/erc20Bridger.md#approvetoken) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will call the approve method of the token passed by parameter, and set the allowance to the appropriate gateway contract.
+We typically do that by using the `approve` method of the token, but you can use Arbitrum’s SDK to abstract this process, by calling the method [`approveToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#approvetoken) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will call the approve method of the token passed by parameter, and set the allowance to the appropriate gateway contract.
 
 ```tsx
 /**
@@ -132,7 +132,7 @@ As mentioned before, you can also call the `approve` method of the token and sen
 
 After allowing the gateway contract to transfer the tokens, we can now start the bridging process.
 
-You can use Arbitrum’s SDK to abstract this process, by calling the method [deposit](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will estimate the gas parameters (\_maxGas, \_gasPriceBid and maxSubmissionCost, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
+You can use Arbitrum’s SDK to abstract this process, by calling the method [`deposit`](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will estimate the gas parameters (`maxGas`, `gasPriceBid` and `maxSubmissionCost`, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
 
 - `amount`: Amount of tokens to bridge
 - `erc20L1Address`: L1 address of the `ERC-20` token being bridged
@@ -197,7 +197,7 @@ If you’re going the manual way, you can verify if the message has been execute
 
 Finally, let’s find the token contract that has been created on L2.
 
-Using Arbitrum’s SDK, you can call method [getChildErc20Address](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getchildgatewayaddress) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract in L2 that corresponds to the L1 token contract sent as parameter.
+Using Arbitrum’s SDK, you can call method [`getChildErc20Address`](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getchildgatewayaddress) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract in L2 that corresponds to the L1 token contract sent as parameter.
 
 ```tsx
 /**
@@ -210,7 +210,7 @@ const l2Token = erc20Bridger.getChildTokenContract(l2Provider, l2TokenAddress);
 
 To do this operation manually, you can call method `calculateL2TokenAddress` of the router contract.
 
-If you visit that address in [Arbiscan](https://arbiscan.io/), you’ll notice that it is a copy of the contract [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol). This is the standard contract that is automatically created the first time a token that doesn’t exist in Arbitrum is bridged. [The token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging) has more information about this contract.
+If you visit that address in [Arbiscan](https://arbiscan.io/), you’ll notice that it is a copy of the contract [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol). This is the standard contract that is automatically created the first time a token that doesn’t exist in Arbitrum is bridged. [The token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging) has more information about this contract.
 
 ## Conclusion
 

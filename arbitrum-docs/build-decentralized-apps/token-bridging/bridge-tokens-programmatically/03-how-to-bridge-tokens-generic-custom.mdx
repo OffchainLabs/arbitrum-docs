@@ -305,7 +305,7 @@ When using this function two actions will be performed:
 1. Call function `registerTokenToL2` of `L1CustomGateway`. This will change the `l1ToL2Token` internal mapping it holds and will send a retryable ticket to the counterpart `L2CustomGateway` contract in L2, to also set its mapping to the new values.
 2. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [AdminErc20Bridger](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
 
 ```tsx
 /**
@@ -371,7 +371,7 @@ As mentioned in the concept page, the token registration can alternatively be pe
 
 ### Can I set up the generic-custom gateway after a standard `ERC-20` token exists on L2?
 
-Yes, if your token has a standard `ERC-20` counterpart on L2, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your L1 token will have 2 counterpart tokens on L2, but only your new custom L2 token will be minted when depositing tokens from L1 (L1-to-L2 bridging). Both L2 tokens will be withdrawable (L2-to-L1 bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to L1 (using the L2CustomGateway contract instead of the bridge UI) and then deposit to L2 to get the new custom L2 tokens.
+Yes, if your token has a standard `ERC-20` counterpart on L2, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your L1 token will have 2 counterpart tokens on L2, but only your new custom L2 token will be minted when depositing tokens from L1 (L1-to-L2 bridging). Both L2 tokens will be withdrawable (L2-to-L1 bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to L1 (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to L2 to get the new custom L2 tokens.
 
 ## Resources
 

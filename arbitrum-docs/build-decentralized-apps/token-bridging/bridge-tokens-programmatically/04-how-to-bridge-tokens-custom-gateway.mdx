@@ -23,20 +23,20 @@ Before starting to implement and deploy a custom gateway, it is strongly encoura
 
 Having said that, there are multiple prerequisites to keep in mind when deploying your own custom gateway.
 
-First of all, the **L1 counterpart of the gateway**, must conform to the [IL1ArbitrumGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/IL1ArbitrumGateway.sol) and the [ITokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interfaces. This means that it must have, at least:
+First of all, the **L1 counterpart of the gateway**, must conform to the [`IL1ArbitrumGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/IL1ArbitrumGateway.sol) and the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interfaces. This means that it must have, at least:
 
 - A method `outboundTransferCustomRefund`, to handle forwarded calls from `L1GatewayRouter.outboundTransferCustomRefund`. It should only allow calls from the router.
 - A method `outboundTransfer`, to handle forwarded calls from `L1GatewayRouter.outboundTransfer`. It should only allow calls from the router.
-- A method `finalizeInboundTransfer`, to handle messages coming ONLY from L2’s gateway.
+- A method `finalizeInboundTransfer`, to handle messages coming **only** from L2’s gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [L1ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
 
 Furthermore, if you plan on having permissionless registration of tokens in your gateway, your L1 gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
 
-On the other hand, the **L2 counterpart of the gateway**, must conform to the [ITokenGateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interface. This means that it must have, at least:
+On the other hand, the **L2 counterpart of the gateway**, must conform to the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interface. This means that it must have, at least:
 
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
-- A method `finalizeInboundTransfer`, to handle messages coming ONLY from L1’s gateway.
+- A method `finalizeInboundTransfer`, to handle messages coming **only** from L1’s gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
@@ -786,7 +786,7 @@ In this case, when using this function only one action will be performed:
 
 1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK and call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [AdminErc20Bridger](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
 ```tsx
 /**

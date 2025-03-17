@@ -253,7 +253,7 @@ To deploy our `VendingMachine` smart contract locally, we will:
 
 #### Run a local chain
 
-Here, we'll use [Foundry's `anvil`](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
+Here, we'll use [Foundry's **anvil**](https://book.getfoundry.sh/anvil/) to run a local Ethereum network and node.
 
 ```shell
 curl -L https://foundry.paradigm.xyz | bash && anvil
@@ -313,9 +313,9 @@ Derivation path: m/44'/60'/0'/0/
 
 Next, open Metamask and create or import a wallet by following the displayed instructions.
 
-By default, Metamask will connect to Ethereum's mainnet. To connect to our local "testnet," enable test networks for Metamask by clicking `Show/hide test networks.`
+By default, Metamask will connect to Ethereum's mainnet. To connect to our local "testnet," enable test networks for Metamask by clicking **Show/hide test networks**.
 
-Next, click Metamask's network selector dropdown and click the `Add Network` button. Click "Add a network manually" and then provide the following information:
+Next, click Metamask's network selector dropdown and click the **Add Network** button. Click "Add a network manually" and then provide the following information:
 
 - Network Name: `localhost`
 - New RPC URL: `https://127.0.0.1:8545`
@@ -369,13 +369,13 @@ At this point, we're ready to deploy our smart contract to any chain we want.
   />
 </CustomDetails>
 
-Then copy and paste your **contract address** below and click `Get cupcake!`. A prompt should ask you to sign a transaction that gives you a cupcake.
+Then copy and paste your **contract address** below and click **Get cupcake!**. A prompt should ask you to sign a transaction that gives you a cupcake.
 
 <VendingMachine id="smart-local-cupcakes" type="web3-localhost" />
 
 ### What's going on, here?
 
-Our first `VendingMachine` is labeled `Web2` because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
+Our first `VendingMachine` is labeled "Web2" because it demonstrates traditional client-server web application architecture: the back-end lives in a centralized network of servers.
 
 <ImageZoom
   src="/img/dapps-quickstart-vending-machine-architecture.png"
@@ -383,7 +383,7 @@ Our first `VendingMachine` is labeled `Web2` because it demonstrates traditional
   className="img-600px"
 />
 
-The `Web3` architecture is similar to the `Web2` architecture, with one key difference: with the `Web3` version, business logic and data are hosted by decentralized network of nodes\*\*
+The `Web3` architecture is similar to the "Web2" architecture, with one key difference: with the "Web3" version, business logic and data are hosted by decentralized network of nodes\*\*
 
 Let's take a closer look at the differences between our `VendingMachine` implementations:
 
@@ -394,9 +394,9 @@ Let's take a closer look at the differences between our `VendingMachine` impleme
 | **Data** (cupcakes)   | Stored only in your **browser**. (Usually, stored by centralized infrastructure.)       | Stored on your **device** in an **emulated Ethereum network** (via smart contract).       | Stored on Ethereum's **decentralized test network** (via smart contract).              | Stored on Ethereum's **decentralized mainnet network** (via smart contract).              |
 | **Logic** (vending)   | Served from **Offchain's servers**. Executed by your **browser**.                       | Stored and executed by your **locally emulated Ethereum network** (via smart contract).   | Stored and executed by Arbitrum's **decentralized test network** (via smart contract). | Stored and executed by Arbitrum's **decentralized mainnet network** (via smart contract). |
 | **Presentation** (UI) | Served from **Offchain's servers**. Rendered and executed by your **browser**.          | ← same                                                                                    | ← same                                                                                 | ← same                                                                                    |
-| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators.                 | ← same, but instead of testnet $ETH, they use **mainnet $ETH**.                           |
+| **Money**             | Devs and users pay centralized service providers for server access using fiat currency. | ← same, but only for the presentation-layer concerns (code that supports frontend UI/UX). | ← same, but devs and users pay **testnet $ETH** to testnet validators.                 | ← same, but instead of testnet `$ETH`, they use **mainnet `$ETH`**.                           |
 
-So far, we've deployed our `Web3` app to an emulated blockchain (Anvil), which is a normal step in EVM development.
+So far, we've deployed our "Web3" app to an emulated blockchain (Anvil), which is a normal step in EVM development.
 
 Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sepolia testnet.
 
@@ -410,7 +410,7 @@ To be able to pay the transaction fee, we will:
 - Use our MetaMask crypto wallet
 - Obtain some Arbitrum Sepolia testnet's token called `$ETH`.
 
-Click Metamask's network selector dropdown, and then click the `Add Network` button. Click "Add a network manually" and then provide the following information:
+Click Metamask's network selector dropdown, and then click the **Add Network** button. Click **Add a network manually** and then provide the following information:
 
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
@@ -426,13 +426,13 @@ Next, let's deposit some `$ETH` into the wallet corresponding to the private key
 
 Once you've acquired some `$ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to `Arbitrum Sepolia` in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
+This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to "Arbitrum Sepolia" in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's parent chian Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
 To view your smart contract in a blockchain explorer, visit `https://sepolia.arbiscan.io/address/0x...B3`, but replace the `0x...B3` part of the URL with the full address of your deployed smart contract.
 
-Select `Arbitrum Sepolia` from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click `Get cupcake!`. You should be prompted to sign a transaction that gives you a cupcake.
+Select **Arbitrum Sepolia** from Metamask's dropdown, paste your contract address into the `VendingMachine` below, and click **Get cupcake!**. You should be prompted to sign a transaction that gives you a cupcake.
 
 <VendingMachine id="smart-sepolia-cupcakes" type="web3-arb-sepolia" />
 
@@ -451,7 +451,7 @@ In this quickstart, we:
 - Converted a vending machine's Javascript business logic into a **Solidity smart contract**.
 - **Deployed our smart contract** to a local development network, and then Arbitrum's Sepolia testnet.
 
-If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the `Request an update` button at the top of this page - we're listening!
+If you have any questions or feedback, reach out to us on [Discord](https://discord.gg/ZpZuw7p) and/or click the **Request an update** button at the top of this page - we're listening!
 
 ### Learning resources
 

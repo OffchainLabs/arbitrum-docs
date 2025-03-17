@@ -27,7 +27,7 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 
 | Transaction type code | Transaction type name           | Description                                                                                                                                                                |
 | --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from a parent chain to child chain via the Arbitrum bridge                                                                                             |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to child chain via the Arbitrum bridge                                                                                             |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parenet chain, originated by a user through the Arbitrum bridge                                                                 |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
 | `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
@@ -154,8 +154,8 @@ The table below describes each field of the `stylusTracer` return value.
 | `outs`     | Outputs of the HostIO encoded as hex.                           |
 | `startInk` | Amount of Ink before executing the HostIO.                      |
 | `endInk`   | Amount of Ink after executing the HostIO.                       |
-| `address`  | For \*call HostIOs, the address of the called contract.         |
-| `steps`    | For \*call HostIOs, the steps performed by the called contract. |
+| `address`  | For call HostIOs, the address of the called contract.         |
+| `steps`    | For call HostIOs, the steps performed by the called contract. |
 
 For example, the command below illustrates how to call this tracer for a transaction:
 
