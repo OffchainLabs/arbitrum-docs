@@ -42,7 +42,7 @@ We‘ll begin the process by creating and deploying on L1 a sample token to brid
 
 However, you will need to upgrade the contract if it doesn’t include the required methods described in the previous step.
 
-We first create a standard ERC20 contract using OpenZeppelin’s implementation. We make only 1 adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
+We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only 1 adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
 
 We’ll also add the required methods to make our token bridgeable via the generic-custom gateway.
 
@@ -209,7 +209,7 @@ main()
 
 We’ll now create and deploy on L2 the counterpart of the token we created on L1.
 
-We’ll create a standard ERC20 contract using OpenZeppelin’s implementation, and add the required methods from `IArbToken`.
+We’ll create a standard `ERC-20` contract using OpenZeppelin’s implementation, and add the required methods from `IArbToken`.
 
 ```solidity
 // SPDX-License-Identifier: Apache-2.0
@@ -357,7 +357,7 @@ Once this step is done, your L1 and L2 tokens will be connected through the gene
 
 You can bridge tokens between L1 and L2 using the origin L1 token and the custom token deployed on L2, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
 
 ## Frequently asked questions
 
@@ -369,9 +369,9 @@ No, you can only register once an L2 token for the same L1 token. After that, th
 
 As mentioned in the concept page, the token registration can alternatively be performed as a chain-owner registration via **[Arbitrum DAO](https://forum.arbitrum.foundation/)** proposal.
 
-### Can I set up the generic-custom gateway after a standard ERC20 token exists on L2?
+### Can I set up the generic-custom gateway after a standard `ERC-20` token exists on L2?
 
-Yes, if your token has a standard ERC20 counterpart on L2, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your L1 token will have 2 counterpart tokens on L2, but only your new custom L2 token will be minted when depositing tokens from L1 (L1-to-L2 bridging). Both L2 tokens will be withdrawable (L2-to-L1 bridging), so users holding the old standard ERC20 token will be able to withdraw back to L1 (using the L2CustomGateway contract instead of the bridge UI) and then deposit to L2 to get the new custom L2 tokens.
+Yes, if your token has a standard `ERC-20` counterpart on L2, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your L1 token will have 2 counterpart tokens on L2, but only your new custom L2 token will be minted when depositing tokens from L1 (L1-to-L2 bridging). Both L2 tokens will be withdrawable (L2-to-L1 bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to L1 (using the L2CustomGateway contract instead of the bridge UI) and then deposit to L2 to get the new custom L2 tokens.
 
 ## Resources
 
