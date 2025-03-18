@@ -23,7 +23,7 @@ For many ERC-20 tokens, "standard" bridging functionality is sufficient, which e
 
 Depositing a token entails escrowing some amount of the token in an L1 bridge contract, and minting the same amount at the paired token contract on L2. On L2, the paired contract behaves much like a normal ERC-20 token contract. Withdrawing entails burning some amount of the token in the L2 contract, which then can later be claimed from the L1 bridge contract.
 
-Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.:
+Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.,:
 
 - Tokens which accrue interest to their holders need to ensure that the interest is dispersed properly across layers, and doesn't simply accrue to the bridge contracts
 - Our cross-domain WETH implementations requires tokens be wrapped and unwrapped as they move across layers.

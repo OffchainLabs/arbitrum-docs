@@ -47,7 +47,7 @@ Wasm module roots are backward compatible, so upgrading them before an ArbOS ver
 
 To schedule an ArbOS version upgrade for your Orbit chain, [follow this guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/arbos-upgrades/at-timestamp). In addition to the upgrade action contract address and the account address for the chain owner account, you will need the following inputs:
 
-1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g. `20`).
+1. **`newVersion`**: Specify the ArbOS version you wish to upgrade to (e.g., `20`).
 2. **`timestamp`**: Set the exact Unix timestamp at which you want your Orbit chain to transition to the new ArbOS version.
 
 If you would prefer to do this manually, simply call the [`scheduleArbOSUpgrade`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/precompiles/ArbOwner.sol#L61) function on the `ArbOwner` precompile of the Orbit chain(s) you're upgrading. Because this is an administrative action (similar to upgrading your Wasm module root), the **chain owner account** must call the target chain's `upgrade executor` contract with the appropriate calldata in order to invoke the `scheduleArbOSUpgrade` function of the ArbOwner precompile. This will schedule the ArbOS upgrade using the specified version and timestamp.
