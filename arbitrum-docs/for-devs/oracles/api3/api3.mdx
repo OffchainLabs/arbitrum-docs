@@ -9,7 +9,7 @@ user_story: As an Arbitrum developer, I want to learn how to use oracles in my d
 content_type: get-started
 ---
 
-[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push off-chain data to onchain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
+[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push offchain data to onchain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
 
 ### Querying the price of $ARB through API3
 
@@ -65,7 +65,7 @@ You can adapt this contract to your needs. Just remember to use the address of t
 
 [API3 QRNG](https://docs.api3.org/explore/qrng/) is a public utility provided with the courtesy of [Australian National University (ANU)](https://www.anu.edu.au/). It is served as a public good, it is free of charge (apart from the gas costs), and it provides quantum randomness when requiring RNG onchain.
 
-To request randomness onchain, the requester submits a request for a random number to `AirnodeRrpV0`. The ANU Airnode gathers the request from the `AirnodeRrpV0` protocol contract, retrieves the random number off-chain, and sends it back to `AirnodeRrpV0`. Once received, it performs a callback to the requester with the random number.
+To request randomness onchain, the requester submits a request for a random number to `AirnodeRrpV0`. The ANU Airnode gathers the request from the `AirnodeRrpV0` protocol contract, retrieves the random number offchain, and sends it back to `AirnodeRrpV0`. Once received, it performs a callback to the requester with the random number.
 
 Here’s an example of a basic `QrngRequester` that requests a random number.
 
