@@ -24,6 +24,4 @@ Once receiving your request, our team will review and apply internal criteria to
 
 To add a testnet Orbit chain to the Arbitrum bridge you can submit a request at the same GitHub link and indicate that it is a testnet (https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
 
-
-
 Congratulations! Your chain should now appear in both the network dropdown in the top navigation pane, and as an option in the bridging UI directly.
