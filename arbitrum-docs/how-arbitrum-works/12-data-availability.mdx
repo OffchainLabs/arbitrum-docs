@@ -78,11 +78,11 @@ Arbitrum full nodes decode data received from the parent chain (and, in the case
 
          | Batch Segment Message type           | What is the usage of this message                                                                        |
          | ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-         | BatchSegmentKindL2Message            | This message will contain raw data on a series of transactions. Usually, this is a single block.         |
-         | BatchSegmentKindL2MessageBrotli      | The message is the same as the above one, but this is brotli compressed data.                            |
-         | BatchSegmentKindDelayedMessages      | This message contains a new delayed message read from the parent chain delayed inbox.                    |
-         | BatchSegmentKindAdvanceTimestamp     | This message will notify the State Transition Function (STF) to advance a second of the timestamp state. |
-         | BatchSegmentKindAdvanceL1BlockNumber | This message will notify STF to advance a new parent chain block number.                                 |
+         | `BatchSegmentKindL2Message`            | This message will contain raw data on a series of transactions. Usually, this is a single block.         |
+         | `BatchSegmentKindL2MessageBrotli`      | The message is the same as the above one, but this is brotli compressed data.                            |
+         | `BatchSegmentKindDelayedMessages`      | This message contains a new delayed message read from the parent chain delayed inbox.                    |
+         | `BatchSegmentKindAdvanceTimestamp`     | This message will notify the State Transition Function (STF) to advance a second of the timestamp state. |
+         | `BatchSegmentKindAdvanceL1BlockNumber` | This message will notify STF to advance a new parent chain block number.                                 |
 
    2. State transition: finally, the State Transition Function (STF) processes these messages, and the STF will follow the rules to execute and update the Arbitrum node's local state.
 
