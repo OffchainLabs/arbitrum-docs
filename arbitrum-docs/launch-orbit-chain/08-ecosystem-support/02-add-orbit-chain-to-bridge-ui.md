@@ -22,21 +22,8 @@ Once receiving your request, our team will review and apply internal criteria to
 
 ## Add a local testnet Orbit chain to the Arbitrum bridge
 
-Currently, adding a testnet Orbit chain to the Arbitrum bridge must be done locally. This means that you will configure the UI to display the desired chain, but this change will only apply to you.
+To add a testnet Orbit chain to the Arbitrum bridge you can submit a request at the same github link and indicate it is a testnet (https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
 
-### Prerequisites
 
-- A local testnet Orbit chain's configuration. Use an existing JSON configuration or follow the instructions on [Deploy and Orbit chain](https://docs.arbitrum.io/launch-orbit-chain/orbit-sdk-introduction) page for guidance on creating an L2 or L3 Orbit chain.
-- A browser-based Ethereum wallet (i.e., [MetaMask](https://metamask.io/) or [OKX Wallet](https://www.okx.com/web3))
-
-### Procedure
-
-1. Navigate to https://bridge.arbitrum.io/.
-2. Connect to the bridge UI using your wallet. The bridge UI will automatically switch to the correct testnet view.
-3. Activate "Testnet mode", by clicking on your address in the top right corner -> Settings -> Turn on testnet mode.
-4. In the same screen, scroll down to "Add Testnet Orbit Chain":
-   <ImageZoom src="/img/orbit-bridge-testnet-mode.png" alt="Orbit bridge" className="img-600px" />
-5. Copy and paste the JSON configuration (for Orbit chains deployed locally, use the configuration in your generated `outputInfo.json` file).
-6. Click "Add Chain".
 
 Congratulations! Your chain should now appear in both the network dropdown in the top navigation pane, and as an option in the bridging UI directly.
