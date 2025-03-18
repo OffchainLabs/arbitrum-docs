@@ -22,7 +22,7 @@ Once receiving your request, our team will review and apply internal criteria to
 
 ## Add a local testnet Orbit chain to the Arbitrum bridge
 
-To add a testnet Orbit chain to the Arbitrum bridge you can submit a request at the same github link and indicate it is a testnet (https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
+To add a testnet Orbit chain to the Arbitrum bridge you can submit a request at the same GitHub link and indicate that it is a testnet (https://github.com/OffchainLabs/arbitrum-token-bridge/issues/new/choose).
 
 
 
