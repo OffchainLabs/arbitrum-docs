@@ -18,11 +18,11 @@ In this how-to, you'll learn how to deploy a DAS that exposes:
 1. **An RPC interface** that the sequencer uses to store batches of data on the DAS.
 2. **An HTTP REST interface** that lets the DAS respond to requests for those batches of data.
 
-For more information related to configuring a DAC, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx)_.
+For more information related to configuring a DAC, refer to the [Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx).
 
 This how-to assumes that you're familiar with:
 
-- The DAC's role in the AnyTrust protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx)_ for a refresher.
+- The DAC's role in the AnyTrust protocol. Refer to [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## How does a DAS work?
@@ -37,12 +37,12 @@ When setting up a DAS, there are certain options you can configure to suit your 
 
 ### Interfaces available in a DAS
 
-There are two main interfaces that can be enabled in a DAS: an **RPC interface** to store data in the DAS, intended to be used only by the AnyTrust sequencer; and a **REST interface** that supports only GET operations and is intended for public use.
+There are two main interfaces that can be enabled in a DAS: an **RPC interface** to store data in the DAS, intended to be used only by the AnyTrust Sequencer; and a **REST interface** that supports only `GET` operations and is intended for public use.
 
 DA servers listen on two primary interfaces:
 
 1.  Its **RPC interface** listens for `das_store` RPC messages coming from the sequencer. Messages are signed by the sequencer, and the DAS checks this signature upon receipt.
-2.  Its **REST interface** respond to HTTP GET requests pointed at `/get-by-hash/<hex encoded data hash>`. This uses the hash of the data batch as a unique identifier, and will always return the same data for a given hash.
+2.  Its **REST interface** respond to HTTP `GET` requests pointed at `/get-by-hash/<hex encoded data hash>`. This uses the hash of the data batch as a unique identifier, and will always return the same data for a given hash.
 
 ### Storage options
 
@@ -89,7 +89,7 @@ Gather the following information:
 
 - The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/node-running/how-tos/running-an-orbit-node.mdx) to prevent being rate limited.
-- The SequencerInbox contract address in the parent chain.
+- The `SequencerInbox` contract address in the parent chain.
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
 
 <!--
@@ -105,7 +105,7 @@ Depending on the storage backend you use for your DAS, you'll need to configure 
 
 Next, we'll generate a BLS keypair. The private key will be used to sign the <a data-quicklook-from="data-availability-certificate">Data Availability Certificates (DACert)</a> when receiving requests to store data, and the public key will be used to prove that the DACert was signed by the DAS. The BLS private key is sensitive and care must be taken to ensure it is generated and stored in a safe environment.
 
-The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
+The BLS keypair must be generated using the `datool keygen` utility. Later, it will be passed to the DAS by file or command line.
 
 When running the key generator, we'll specify the `--dir` parameter with the absolute path to the directory inside the volume to store the keys in.
 
@@ -123,7 +123,7 @@ To run the DAS, we'll use the `daserver` tool and we'll configure the following 
 | Parameter                                   | Description                                                                                                     |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | --data-availability.parent-chain-node-url   | RPC endpoint of a parent chain node                                                                             |
-| --data-availability.sequencer-inbox-address | Address of the SequencerInbox in the parent chain                                                               |
+| --data-availability.sequencer-inbox-address | Address of the `SequencerInbox` in the parent chain                                                               |
 | --data-availability.key.key-dir             | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
 | --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                              |
 | --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                       |
@@ -284,7 +284,11 @@ To activate the "archive mode" in your DAS, set the parameter `discard-after-tim
 --data-availability.s3-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
+:::note
+
+The `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
+
+:::
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 
@@ -298,9 +302,9 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: RPC health check
 
-The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method  `das_healthCheck` that returns a status `200` if the DAS is active.
+The RPC interface enabled in the DAS has a health check for the underlying storage that can be invoked by using the RPC method `das_healthCheck` that returns a status `200` if the DAS is active.
 
-Example:
+**Example**:
 
 ```shell
 curl -X POST \
@@ -331,7 +335,7 @@ docker run --rm -it -v /some/local/dir:/home/user/data --entrypoint datool @@lat
 
 #### Step 2: Change the DAS configuration and restart the server
 
-Add the following configuration parameter to `daserver`:
+Add the following configuration parameter to `daserver`:
 
 ```shell
 --data-availability.extra-signature-checking-public-key /some/local/dir/keys/ecdsa.pub
@@ -347,7 +351,7 @@ And then restart it.
 
 #### Step 3: Store data signed with the ECDSA private key
 
-Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
+Now you can use the `datool` utility to send store requests signed with the ECDSA private key:
 
 ```shell
 datool client rpc store  --url http://localhost:9876 --message "Hello world" --signing-key /some/local/dir/keys/ecdsa
@@ -365,7 +369,7 @@ You can also use the `docker run` command:
 docker run --rm -it -v /some/local/dir:/home/user/data --network="host" --entrypoint datool @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ client rpc store --url http://localhost:9876 --message "Hello world" --signing-key /home/user/data/keys/ecdsa
 ```
 
-The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
+The above command will output the `Hex Encoded Data Hash` which can then be used to retrieve the data in the next step.
 
 #### Step 4: Retrieve the stored data
 
@@ -387,7 +391,7 @@ The retention period defaults to 24 hours, but can be configured when calling `d
 
 ### Test 3: REST health check
 
-The REST interface has a health check on the path `/health` which will return a status `200` if the underlying storage is working, otherwise `503`.
+The REST interface has a health check on the path `/health` which will return a status `200` if the underlying storage is working, otherwise `503`.
 
 Example:
 
@@ -459,8 +463,8 @@ The Committee servers would need to additionally specify the public key to accep
 Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
 
 - Public key
-- The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
-- The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
+- The https URL for the RPC endpoint which includes some random string (e.g., das.your-chain.io/rpc/randomstring123), communicated through a secure channel
+- The https URL for the REST endpoint (e.g., das.your-chain.io/rest)
 
 import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
 import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';

@@ -35,7 +35,7 @@ Gas metering is essential for certifying that computational resources are paid f
 
 Stylus programs execute in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
-EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
+EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
 
 ## Proving
 
@@ -51,7 +51,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 ### One chain, many languages
 
-There are roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
+There are roughly 20k Solidity developers, compared to three million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
 
 ### A better EVM
 

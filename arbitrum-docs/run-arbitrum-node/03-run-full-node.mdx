@@ -78,10 +78,14 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 ### Putting it all together
 
-- When running the Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the docker image should be `/home/user/.arbitrum`
+- When running the Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be `/home/user/.arbitrum`
 - Here is an example of how to run nitro-node:
 
-  - Note that it is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the docker container won't be able to write to it
+:::note
+
+It is important that `/some/local/dir/arbitrum` already exists; otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
+
+:::
 
   ```shell
   docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
@@ -97,7 +101,8 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 ### Note on permissions
 
-- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the docker image, run this command to allow all users to update the persistent folders
+- The Docker image is configured to run as non-root UID 1000. This means if you are running in Linux or OSX and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
+
   ```shell
   mkdir /data/arbitrum
   chmod -fR 777 /data/arbitrum
@@ -105,7 +110,7 @@ Even though there are alpha and beta versions of the <a data-quicklook-from='arb
 
 ### Watchtower mode
 
-- By default, the full node will run in Watchtower mode. This means that the node watches the on-chain assertions, and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova, the `--node.bold.enable=true` flag must be set to ensure your node can monitor for on-chain assertions properly.
+- By default, the full node will run in Watchtower mode. This means that the node watches the onchain assertions, and if it disagrees with them, it will log an error containing the string `found incorrect assertion in watchtower mode`. For a BoLD-enabled chain like Arbitrum One or Arbitrum Nova, the `--node.bold.enable=true` flag must be set to ensure your node can monitor for onchain assertions properly.
 - Watchtower mode adds a small amount of execution and memory overhead. You can deactivate this mode using the parameter `--node.staker.enable=false`.
 
 ### Pruning
