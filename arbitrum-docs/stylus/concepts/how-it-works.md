@@ -19,7 +19,7 @@ Developers can now write smart contracts in any programming language that compil
 Some high-level languages generate far more performant WASMs than others.
 :::
 
-Currently, there is support for Rust, C, and C++. However, the levels of support vary. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat, enabling the deployment of existing contracts in those languages on-chain with minimal modifications.
+Currently, there is support for Rust, C, and C++. However, the levels of support vary. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat, enabling the deployment of existing contracts in those languages onchain with minimal modifications.
 
 The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use in Stylus. The SDK also makes it possible to perform all EVM-specific functionalities that smart contract developers use. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html).
 
@@ -41,7 +41,7 @@ EVM contracts continue to execute the same way they were before Stylus. When cal
 
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
-Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx#simplified-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
+Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven onchain through a [“one-step proof.”](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx#simplified-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
 
 For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/01-a-gentle-introduction.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 

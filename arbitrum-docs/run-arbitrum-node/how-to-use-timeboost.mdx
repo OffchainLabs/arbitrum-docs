@@ -48,8 +48,8 @@ The following table shows this information for the Arbitrum DAO-owned chains:
 | Network          | Auction contract                                                              | Autonomous auctioneer endpoint   |
 | ---------------- | ----------------------------------------------------------------------------- | -------------------------------- |
 | Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://sepolia-bv.arbitrum.io/  |
-| Arbitrum One     | Pending onchain governance vote                                              | Pending on-chain governance vote |
-| Arbitrum Nova    | Pending onchain governance vote                                              | Pending on-chain governance vote |
+| Arbitrum One     | Pending onchain governance vote                                              | Pending onchain governance vote |
+| Arbitrum Nova    | Pending onchain governance vote                                              | Pending onchain governance vote |
 
 ### Step 1: Deposit funds into the auction contract
 
@@ -236,7 +236,7 @@ When sending the request, the autonomous auctioneer will return an empty result 
 | `WRONG_CHAIN_ID`        | Wrong chain id for the target chain                                                                         |
 | `WRONG_SIGNATURE`       | Signature failed to verify                                                                                  |
 | `BAD_ROUND_NUMBER`      | Incorrect round, such as one from the past                                                                  |
-| `RESERVE_PRICE_NOT_MET` | Bid amount does not meet the minimum required reserve price on-chain                                        |
+| `RESERVE_PRICE_NOT_MET` | Bid amount does not meet the minimum required reserve price onchain                                        |
 | `INSUFFICIENT_BALANCE`  | The bid amount specified in the request is higher than the deposit balance of the depositor in the contract |
 
 ### Step 3: find out the winner of the auction
@@ -367,7 +367,7 @@ When sending the request, the sequencer will return an empty result with an HTTP
 | `WRONG_SIGNATURE`             | Signature failed to verify                                            |
 | `BAD_ROUND_NUMBER`            | Incorrect round, such as one from the past                            |
 | `NOT_EXPRESS_LANE_CONTROLLER` | The sender is not the express lane controller                         |
-| `NO_ONCHAIN_CONTROLLER`       | There is no defined, on-chain express lane controller for the round   |
+| `NO_ONCHAIN_CONTROLLER`       | There is no defined, onchain express lane controller for the round   |
 
 ::::info What happens if you're not the express lane controller?
 
