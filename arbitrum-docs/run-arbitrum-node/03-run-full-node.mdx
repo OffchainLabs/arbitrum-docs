@@ -87,17 +87,17 @@ It is important that `/some/local/dir/arbitrum` already exists; otherwise, the d
 
 :::
 
-  ```shell
-  docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
-  ```
+```shell
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url https://l1-node:8545 --chain.id=<L2ChainId> --http.api=net,web3,eth --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+```
 
-  - Note that if you are running an L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
+- Note that if you are running an L1 node on localhost, you may need to add `--network host` right after `docker run` to use docker host-based networking
 
-  - When shutting down the Docker image, it is important to allow a graceful shutdown to save the current state to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
+- When shutting down the Docker image, it is important to allow a graceful shutdown to save the current state to disk. Here is an example of how to do a graceful shutdown of all docker images currently running
 
-  ```shell
-  docker stop --time=1800 $(docker ps -aq)
-  ```
+```shell
+docker stop --time=1800 $(docker ps -aq)
+```
 
 ### Note on permissions
 

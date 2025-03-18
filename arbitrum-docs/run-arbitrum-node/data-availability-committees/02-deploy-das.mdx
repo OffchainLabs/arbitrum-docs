@@ -123,7 +123,7 @@ To run the DAS, we'll use the `daserver` tool and we'll configure the following 
 | Parameter                                   | Description                                                                                                     |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | --data-availability.parent-chain-node-url   | RPC endpoint of a parent chain node                                                                             |
-| --data-availability.sequencer-inbox-address | Address of the `SequencerInbox` in the parent chain                                                               |
+| --data-availability.sequencer-inbox-address | Address of the `SequencerInbox` in the parent chain                                                             |
 | --data-availability.key.key-dir             | The absolute path to the directory inside the volume to read the BLS keypair ('das_bls.pub' and 'das_bls') from |
 | --enable-rpc                                | Enables the HTTP-RPC server listening on --rpc-addr and --rpc-port                                              |
 | --rpc-addr                                  | HTTP-RPC server listening interface (default "localhost")                                                       |
@@ -151,7 +151,7 @@ To enable the REST aggregator, use the following parameters:
 | --data-availability.rest-aggregator.sync-to-storage.eager                   | When using a REST aggregator, eagerly syncs batch data to this DAS's storage from the REST endpoints, using the parent chain as the index of batch data hashes; otherwise only syncs lazily |
 | --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block | When using a REST aggregator that's eagerly syncing, starts indexing forward from this block from the parent chain. Only used if there is no sync state.                                    |
 | --data-availability.rest-aggregator.sync-to-storage.retention-period        | When using a REST aggregator, period to retain the synced data (defaults to forever)                                                                                                        |
-| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e., the block number currently synced up to, so that it doesn't sync from scratch each time                            |
+| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e., the block number currently synced up to, so that it doesn't sync from scratch each time                           |
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
