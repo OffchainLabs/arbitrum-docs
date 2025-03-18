@@ -127,7 +127,7 @@ Following functions will facilitate whitelisting your requester smart contracts 
 
 `addContracttoWhitelist(address)` - The whitelisted users will have to whitelist their contract which they will be using to request for random numbers. The parameter this function takes is the User’s contract address. This function will be called after the user deploys the requester contract post development and makes it ready for interacting with the Supra Contracts.
 
-`depositFundClient()` - is another mandatory function for a user to use once, before the user starts requesting from that contract. This is a function which will deposit funds in the deposit contract from the users for the response/callback transaction. The funds for a specific user should remain higher than the minimum amount set by the Supra( 0.1 `ETH` for Arbitrum testnet) for the new request transactions to be accepted.  
+`depositFundClient()` - is another mandatory function for a user to use once, before the user starts requesting from that contract. This is a function which will deposit funds in the deposit contract from the users for the response/callback transaction. The funds for a specific user should remain higher than the minimum amount set by the Supra( 0.1 `ETH` for Arbitrum testnet) for the new request transactions to be accepted.
 
 Basically the gist here is that the user will have to interact with the Deposit contract and add funds for their accounts, which will be utilized for the response transaction gas fee. There will be a script from Supra which will be monitoring the funds and will alert the user if a refill is required.
 

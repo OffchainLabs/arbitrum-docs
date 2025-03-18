@@ -7,9 +7,9 @@ user_story: As an Orbit chain deployer, I want to know what third-party infrastr
 content_type: overview
 ---
 
-This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments. 
+This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments.
 
-:::note 
+:::note
 
 This list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
 
