@@ -27,7 +27,7 @@ First of all, the **parent chain counterpart of the gateway**, must conform to t
 
 - A method `outboundTransferCustomRefund`, to handle forwarded calls from `L1GatewayRouter.outboundTransferCustomRefund`. It should only allow calls from the router.
 - A method `outboundTransfer`, to handle forwarded calls from `L1GatewayRouter.outboundTransfer`. It should only allow calls from the router.
-- A method `finalizeInboundTransfer`, to handle messages coming ONLY from L2’s gateway.
+- A method `finalizeInboundTransfer`, to handle messages coming **only** from child chain's gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [L1ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
 

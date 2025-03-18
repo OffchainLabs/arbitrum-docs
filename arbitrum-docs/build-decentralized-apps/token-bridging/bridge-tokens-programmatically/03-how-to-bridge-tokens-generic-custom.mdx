@@ -29,7 +29,7 @@ Keep in mind that this registration can only be done once.
 
 Also, the **child chain counterpart of the token**, must conform to the [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
 
-- It must have`bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract
+- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
 - It must have an `l1Address` view method that returns the address of the token on the parent chain
 
 import TokenCompatibilityPartial from '../partials/_token-compatibility.mdx';
@@ -305,7 +305,7 @@ When using this function two actions will be performed:
 1. Call function `registerTokenToL2` of `L1CustomGateway`. This will change the `l1ToL2Token` internal mapping it holds and will send a retryable ticket to the counterpart `L2CustomGateway` contract on the child chain, to also set its mapping to the new values.
 2. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract on the child chain, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
 ```tsx
 /**
@@ -371,7 +371,7 @@ As mentioned in the concept page, the token registration can alternatively be pe
 
 ### Can I set up the generic-custom gateway after a standard ERC20 token exists on the child chain?
 
-Yes, if your token has a standard ERC20 counterpart on the child chain, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your parent chain token will have two counterpart tokens on the child chain, but only your new custom child chain token will be minted when depositing tokens from the parent chain (parent-to-child chain bridging). Both child chain tokens will be withdrawable (child-to-parent chain bridging), so users holding the old standard ERC20 token will be able to withdraw back to the parent chain (using the L2CustomGateway contract instead of the bridge UI) and then deposit to the child chain to get the new custom child chain tokens.
+Yes, if your token has a standard ERC20 counterpart on the child chain, you can go through the process of registering your custom child chain token as outlined in this page. At that moment, your parent chain token will have two counterpart tokens on the child chain, but only your new custom child chain token will be minted when depositing tokens from the parent chain (parent-to-child chain bridging). Both child chain tokens will be withdrawable (child-to-parent chain bridging), so users holding the old standard ERC20 token will be able to withdraw back to the parent chain (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to the child chain to get the new custom child chain tokens.
 
 ## Resources
 
