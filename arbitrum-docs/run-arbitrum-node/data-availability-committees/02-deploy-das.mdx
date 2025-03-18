@@ -151,7 +151,7 @@ To enable the REST aggregator, use the following parameters:
 | --data-availability.rest-aggregator.sync-to-storage.eager                   | When using a REST aggregator, eagerly syncs batch data to this DAS's storage from the REST endpoints, using the parent chain as the index of batch data hashes; otherwise only syncs lazily |
 | --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block | When using a REST aggregator that's eagerly syncing, starts indexing forward from this block from the parent chain. Only used if there is no sync state.                                    |
 | --data-availability.rest-aggregator.sync-to-storage.retention-period        | When using a REST aggregator, period to retain the synced data (defaults to forever)                                                                                                        |
-| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e. the block number currently synced up to, so that it doesn't sync from scratch each time                            |
+| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e., the block number currently synced up to, so that it doesn't sync from scratch each time                            |
 
 Finally, for the storage backends you wish to configure, use the following parameters. Toggle between the different options to see all available parameters.
 
