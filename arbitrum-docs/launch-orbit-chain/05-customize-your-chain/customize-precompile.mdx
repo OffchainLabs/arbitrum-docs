@@ -78,7 +78,7 @@ You should see something like this:
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
 ```
 
-`0x6869` is the hex-encoded utf8 representation of `hi`, which you'll see embedded in the `result` hex string.
+`0x6869` is the hex-encoded UTF-8 representation of `hi`, which you'll see embedded in the `result` hex string.
 
 ### Call your function using Foundry's `cast call`
 
@@ -109,7 +109,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-Then, update [precompile.go][precompile_main_file_link] to register the new precompile under the `Precompiles()` method:
+Then, update [`precompile.go`][precompile_main_file_link] to register the new precompile under the `Precompiles()` method:
 
 ```go
 insert(MakePrecompile(pgen.ArbHiMetaData, &ArbHi{Address: hex("11a")})) // 0x011a here is an example address
@@ -400,9 +400,9 @@ To learn more about the gas cost model, see [how to estimate gas](/build-decentr
 
 In this example, we'll demonstrate how to _read from_ and _write to_ a precompile contract's [ArbOS state][arbosstate_link].
 
-First, open the [arbosstate.go][arbosstate_file_link] file and locate the [ArbosState][arbosstate_link] structure. This is where ArbOS state is defined.
+First, open the [`arbosstate.go`][arbosstate_file_link] file and locate the [ArbosState][arbosstate_link] structure. This is where ArbOS state is defined.
 
-Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [storage.go][storage_link]:
+Define a state key called `myNumber` of type `storage.StorageBackedUint64`. You can find more types in [`storage.go`][storage_link]:
 
 ```
 type ArbosState struct {

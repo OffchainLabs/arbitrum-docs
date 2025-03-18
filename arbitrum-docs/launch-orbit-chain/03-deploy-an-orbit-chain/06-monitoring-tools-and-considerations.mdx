@@ -33,7 +33,7 @@ Following is a non-comprehensive list of other elements of the network that shou
 
 - **Sequencer's transaction backlog size**: This can be considered as a sign of the network health. In some edge cases, a large and growing backlog might cause the sequencer to experience issues when posting batches on the parent chain.
 
-- **Batches posted in the SequencerInbox contract on the parent chain**: The sequencer regularly posts batches on the parent chain, as long as it receives transactions on the Orbit chain. If batches are not being posted in the SequencerInbox for any reason, further analysis should be conducted to understand why.
+- **Batches posted in the `SequencerInbox` contract on the parent chain**: The sequencer regularly posts batches on the parent chain, as long as it receives transactions on the Orbit chain. If batches are not being posted in the `SequencerInbox` for any reason, further analysis should be conducted to understand why.
 
 - **RBlocks (nodes) created in the Rollup contract on the parent chain**: RBlocks are created by validators and contain assertions of the current state of the chain (viewed by the validators). If RBlocks are not being created or confirmed on the parent chain, further analysis should be conducted to understand why.
 

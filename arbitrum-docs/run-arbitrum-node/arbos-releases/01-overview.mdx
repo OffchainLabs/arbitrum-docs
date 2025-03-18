@@ -15,7 +15,11 @@ Arbitrum chains are powered by Arbitrum nodes running the Nitro software stack. 
 
 Although new Nitro releases are shipped regularly, only a subset of Nitro releases carry ArbOS upgrades. These special Nitro releases are significant because ArbOS upgrades are Arbitrum's equivalent to a ["hard fork"](https://ethereum.org/en/history/) - an upgrade that alters a node's ability to produce valid Arbitrum blocks. This is why validator nodes supporting a public Arbitrum chain (One, Nova) **must update Nitro** whenever a new ArbOS version is released and voted for adoption by the ArbitrumDAO.
 
-Note that every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade.
+:::note
+
+Every Nitro release is backwards compatible. In other words, the latest version of Nitro will support all previous ArbOS releases. This means that your validator's Nitro version must be greater than or equal to the version that includes the latest ArbOS upgrade.
+
+:::
 
 import PublicPreviewBannerPartial from '../../node-running/partials/_upgrade-cadence-recommendations-partial.mdx';
 
@@ -35,7 +39,7 @@ Visit [How Arbitrum works](/how-arbitrum-works/01-a-gentle-introduction.mdx) to 
 
 Beginning with ArbOS 20, ArbOS releases use the name of planetary moons in our solar system, ascending in alphabetical order (i.e. the next ArbOS upgrade after ArbOS 20 "Atlas" will be a planetary moon that begins with the letter "B").
 
-The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e., the next ArbOS upgrade after ArbOS 20 will be ArbOS 31). This was done because there are teams who have customized their Orbit chain's [behavior](/launch-orbit-chain/05-customize-your-chain/customize-stf.mdx) or [precompiles](/launch-orbit-chain/05-customize-your-chain/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g. ArbOS 12 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
+The number used to denote each upgrade will increment by 10, starting from ArbOS 20 (i.e., the next ArbOS upgrade after ArbOS 20 will be ArbOS 31). This was done because there are teams who have customized their Orbit chain's [behavior](/launch-orbit-chain/05-customize-your-chain/customize-stf.mdx) or [precompiles](/launch-orbit-chain/05-customize-your-chain/customize-precompile.mdx) and who may wish to use ArbOS's naming schema between official ArbOS version bumps (e.g., ArbOS 12 could be the name of a customized version of ArbOS for a project's L3 Orbit chain).
 
 Note that there may be cases where special optimizations or critical fixes are needed for a specific family of ArbOS releases that will diverge from the standard numbering scheme described above. For example, ArbOS 32 will be the canonical ArbOS version for the “Bianca” family of releases. Node operators and chain owners are expected to upgrade from ArbOS 20 directly to ArbOS 32 (instead of ArbOS 30 or ArbOS 31).
 
