@@ -67,12 +67,12 @@
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
@@ -147,11 +147,6 @@
     },
     {
       "source": "/(fraud-proofs/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
       "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
@@ -362,7 +357,7 @@
     },
     {
       "source": "/(docs/dispute_resolution/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
@@ -372,7 +367,7 @@
     },
     {
       "source": "/(docs/avm_specification/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
