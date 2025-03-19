@@ -286,6 +286,26 @@
       "permanent": false
     },
     {
+      "source": "/(sequencer/?)",
+      "destination": "/how-arbitrum-works/sequencer",
+      "permanent": false
+    },
+    {
+      "source": "/(learn-more/?)",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/(learnmore/faq/?)",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/(txlifecycle/?)",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
+      "permanent": false
+    },
+    {
       "source": "/(docs/censorship_resistance/?)",
       "destination": "/how-arbitrum-works/sequencer",
       "permanent": false
@@ -566,6 +586,11 @@
       "permanent": false
     },
     {
+      "source": "/(for-devs/concepts/oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
       "source": "/(devs-how-tos/how-to-use-oracles/?)",
       "destination": "/build-decentralized-apps/oracles/how-to-use-oracles",
       "permanent": false
@@ -727,6 +752,11 @@
     },
     {
       "source": "/docs/(mainnet-beta/?)",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/(mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
