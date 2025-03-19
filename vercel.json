@@ -532,22 +532,22 @@
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
-      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started",
       "permanent": false
     },
     {
@@ -592,7 +592,7 @@
     },
     {
       "source": "/(devs-how-tos/how-to-use-oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/how-to-use-oracles",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
       "permanent": false
     },
     {
