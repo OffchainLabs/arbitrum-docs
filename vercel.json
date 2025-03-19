@@ -1246,6 +1246,226 @@
       "permanent": false
     },
     {
+      "source": "/(sdk/dataEntities_signerOrProvider/?)",
+      "destination": "/sdk/reference/dataEntities/signerOrProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities_constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_errors/?)",
+      "destination": "/sdk/reference/dataEntities/errors",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_networks/?)",
+      "destination": "/sdk/reference/dataEntities/networks",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/signerOrProvider/?)",
+      "destination": "/sdk/reference/dataEntities/signerOrProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_lib/?)",
+      "destination": "/sdk/reference/utils/lib",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1MessageClassic/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageClassic",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/arbProvider/?)",
+      "destination": "/sdk/reference/utils/arbProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2MessageCreator/?)",
+      "destination": "",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_arbProvider/?)",
+      "destination": "/sdk/reference/utils/arbProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_transactionRequest/?)",
+      "destination": "/sdk/reference/dataEntities/transactionRequest",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1MessageNitro/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageNitro",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils/multicall/?)",
+      "destination": "/sdk/reference/utils/multicall",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_rpc/?)",
+      "destination": "/sdk/reference/dataEntities/rpc",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2MessageGasEstimator/?)",
+      "destination": "/sdk/reference/message/ParentToChildGasEstimator",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1Transaction/?)",
+      "destination": "/sdk/reference/message/ParentTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/assetBridger_erc20Bridger/?)",
+      "destination": "/sdk/reference/assetBridger/erc20Bridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1Message/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/assetBridger_ethBridger/?)",
+      "destination": "/sdk/reference/assetBridger/ethBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2Message/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/address/?)",
+      "destination": "/sdk/reference/dataEntities/address",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/types/?)",
+      "destination": "/sdk/reference/utils/types",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1ToL2Message/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/networks?)",
+      "destination": "/sdk/reference/dataEntities/networks",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1Transaction/?)",
+      "destination": "/sdk/reference/message/ParentTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1MessageNitro/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageNitro",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_address/?)",
+      "destination": "/sdk/reference/dataEntities/address",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/eventFetcher/?)",
+      "destination": "/sdk/reference/utils/eventFetcher",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/inbox_inbox/?)",
+      "destination": "/sdk/reference/inbox/inbox",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/ethBridger/?)",
+      "destination": "/sdk/reference/assetBridger/ethBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/?)",
+      "destination": "/sdk/reference/assetBridger/assetBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/rpc/?)",
+      "destination": "/sdk/reference/dataEntities/rpc",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1ToL2MessageCreator/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessageCreator",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/retryableData/?)",
+      "destination": "/sdk/reference/dataEntities/retryableData",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1Message/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/transactionRequest/?)",
+      "destination": "/sdk/reference/dataEntities/transactionRequest",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1MessageClassic/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageClassic",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/message/?)",
+      "destination": "/sdk/reference/dataEntities/message",
+      "permanent": false
+    },
+    {
       "source": "/(sdk/utils_multicall?)",
       "destination": "/sdk/reference/utils/multicall",
       "permanent": false
