@@ -626,6 +626,11 @@
       "permanent": false
     },
     {
+      "source": "/(welcome/?)",
+      "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/(for-devs/gentle-introduction-dapps/?)",
       "destination": "/welcome/arbitrum-gentle-introduction",
       "permanent": false
@@ -1193,6 +1198,46 @@
     {
       "source": "/(launch-orbit-chain/concepts/chain-ownership/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/ownership-structure-access-control",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_eventFetcher/?)",
+      "destination": "/sdk/reference/utils/eventFetcher",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_event/?)",
+      "destination": "/sdk/reference/dataEntities/event",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_retryableData/?)",
+      "destination": "/sdk/reference/dataEntities/retryableData",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/inbox/?)",
+      "destination": "/sdk/inbox/inbox",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/byte_serialize_params/?)",
+      "destination": "/sdk/reference/utils/byte_serialize_params",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/lib/?)",
+      "destination": "/sdk/reference/utils/lib",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/event/?)",
+      "destination": "/sdk/reference/dataEntities/event",
       "permanent": false
     },
     {
