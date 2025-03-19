@@ -201,6 +201,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/inside-anytrust/?)",
+      "destination": "/how-arbitrum-works/anytrust-protocol",
+      "permanent": false
+    },
+    {
       "source": "/(anytrust/inside-anytrust/?)",
       "destination": "/how-arbitrum-works/anytrust-protocol",
       "permanent": false
@@ -482,7 +487,7 @@
     },
     {
       "source": "/(for-devs/useful-addresses/?)",
-      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "destination": "/build-decentralized-apps/reference/02-contract-addresses",
       "permanent": false
     },
     {
@@ -517,6 +522,11 @@
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
+      "destination": "/build-decentralized-apps/token-bridging/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/gentle-introduction-bridge/?)",
       "destination": "/build-decentralized-apps/token-bridging/get-started",
       "permanent": false
     },
@@ -621,6 +631,11 @@
       "permanent": false
     },
     {
+      "source": "/(build-decentralized-apps/quickstart-solidity-hardhat/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "permanent": false
+    },
+    {
       "source": "/",
       "destination": "/welcome/get-started",
       "permanent": false
@@ -677,7 +692,12 @@
     },
     {
       "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
-      "destination": "/run-arbitrum-node/run-local-dev-node",
+      "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/run-local-dev-node/?)",
+      "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
       "permanent": false
     },
     {
@@ -1085,6 +1105,11 @@
       "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
       "permanent": false
     },
+    {
+      "source": "/(launch-orbit-chain/aeplicense/?)",
+      "destination": "/launch-orbit-chain/aep-license",
+      "permanent": false
+    }, 
     {
       "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction",
