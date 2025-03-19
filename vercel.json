@@ -777,7 +777,12 @@
     },
     {
       "source": "/docs/useful_addresses",
-      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "destination": "/build-decentralized-apps/reference/contract-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/reference/useful-addresses/?)",
+      "destination": "/build-decentralized-apps/reference/contract-addresses",
       "permanent": false
     },
     {
