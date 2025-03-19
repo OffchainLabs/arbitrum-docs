@@ -6,6 +6,21 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/arbos/geth/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/introduction/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/l2-l1-messaging/?)",
+      "destination": "/how-arbitrum-works/l2-to-l1-messaging",
+      "permanent": false
+    },
+    {
       "source": "/(bold/concepts/bold-technical-deep-dive/?)",
       "destination": "/how-arbitrum-works/bold/bold-technical-deep-dive",
       "permanent": false
@@ -62,72 +77,72 @@
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wasm-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wasm-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
@@ -136,13 +151,18 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
+      "permanent": false
+    },
+    {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/geth-at-the-core",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
       "permanent": false
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/geth-at-the-core",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
       "permanent": false
     },
     {
@@ -188,6 +208,11 @@
     {
       "source": "/(how-arbitrum-works/l1-gas-pricing/?)",
       "destination": "/how-arbitrum-works/gas-fees",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/timeboost/?)",
+      "destination": "/how-arbitrum-works/timeboost/gentle-introduction",
       "permanent": false
     },
     {
@@ -582,7 +607,7 @@
     },
     {
       "source": "/(for-devs/dev-tools-and-resources/oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/reference",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
       "permanent": false
     },
     {
