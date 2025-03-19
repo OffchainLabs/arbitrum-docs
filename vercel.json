@@ -571,8 +571,18 @@
       "permanent": false
     },
     {
+      "source": "/(/build-decentralized-apps/oracles/how-to-use-oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
       "source": "/(for-devs/concepts/oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/overview",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/oracles/reference/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
       "permanent": false
     },
     {
