@@ -216,6 +216,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/arbos/l1-l2-messaging/?)",
+      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
+      "permanent": false
+    },
+    {
       "source": "/(arbos/l2-l1-messaging/?)",
       "destination": "/how-arbitrum-works/l2-to-l1-messaging",
       "permanent": false
@@ -1188,6 +1193,16 @@
     {
       "source": "/(launch-orbit-chain/concepts/chain-ownership/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/ownership-structure-access-control",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_multicall?)",
+      "destination": "/sdk/reference/utils/multicall",
       "permanent": false
     }
   ]
