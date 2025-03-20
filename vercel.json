@@ -381,6 +381,11 @@
       "permanent": false
     },
     {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos30/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+      "permanent": false
+    },
+    {
       "source": "/(node-running/how-tos/migrate-state-and-history-from-classic/?)",
       "destination": "/run-arbitrum-node/nitro/02-migrate-state-and-history-from-classic",
       "permanent": false
@@ -692,6 +697,11 @@
     },
     {
       "source": "/(for-devs/quickstart-solidity-hardhat/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "permanent": false
+    },
+    {
+      "source": "/(quickstart/?)",
       "destination": "/build-decentralized-apps/quickstart-solidity-remix",
       "permanent": false
     },
@@ -1427,6 +1437,11 @@
     },
     {
       "source": "/(sdk/assetBridger_erc20Bridger/?)",
+      "destination": "/sdk/reference/assetBridger/erc20Bridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/erc20Bridger/?)",
       "destination": "/sdk/reference/assetBridger/erc20Bridger",
       "permanent": false
     },
