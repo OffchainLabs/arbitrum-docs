@@ -44,7 +44,7 @@ Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
 This buffer takes into account the cost of posting the transaction, batched and compressed, on the parent chain. The parent chain estimated posting cost is calculated by multiplying these two values:
 
 - L1S, which estimates the amount of data the transaction will take up in the batch by compressing the transaction with Brotli.
-- L1P, which is the L2's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
+- L1P, which is the child chain's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
 
 More information is available [in this page](/how-arbitrum-works/09-gas-fees.mdx).
 

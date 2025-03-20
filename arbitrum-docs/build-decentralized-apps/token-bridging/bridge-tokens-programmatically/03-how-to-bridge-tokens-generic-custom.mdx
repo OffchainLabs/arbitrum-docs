@@ -5,7 +5,7 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: how-to
 ---
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
+In this how-to you’ll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain), using [Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#the-arbitrum-generic-custom-gateway). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -15,34 +15,34 @@ We will go through all steps involved in the process. However, if you want to ju
 
 As stated in the [token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#the-arbitrum-generic-custom-gateway), there are a few prerequisites to keep in mind while using this method to make a token bridgeable.
 
-First of all, the **L1 counterpart of the token**, must conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface. This means that:
+First of all, the **parent chain counterpart of the token**, must conform to the [`ICustomToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface. This means that:
 
 - It must have a `isArbitrumEnabled` method that returns `0xb1`
-- It must have a method that makes an external call to `L1CustomGateway.registerCustomL2Token` specifying the address of the L2 contract, and to `L1GatewayRouter.setGateway` specifying the address of the custom gateway. These calls should be made only once to configure the gateway.
+- It must have a method that makes an external call to `L1CustomGateway.registerCustomL2Token` specifying the address of the child chain contract, and to `L1GatewayRouter.setGateway` specifying the address of the custom gateway. These calls should be made only once to configure the gateway.
 
-These methods are needed to register the token via the gateway contract. If your L1 contract does not include these methods and it is not upgradeable, registration could alternatively be performed in one of these ways:
+These methods are needed to register the token via the gateway contract. If your parent chain contract does not include these methods and it is not upgradeable, registration could alternatively be performed in one of these ways:
 
 - As a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
-- By wrapping your L1 token and registering the wrapped version of your token.
+- By wrapping your parent chain token and registering the wrapped version of your token.
 
 Keep in mind that this registration can only be done once.
 
-Also, the **L2 counterpart of the token**, must conform to the [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
+Also, the **child chain counterpart of the token**, must conform to the [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
 
-- It must have`bridgeMint` and `bridgeBurn` methods only callable by the L2CustomGateway contract
-- It must have an `l1Address` view method that returns the address of the token in L1
+- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
+- It must have an `l1Address` view method that returns the address of the token on the parent chain
 
 import TokenCompatibilityPartial from '../partials/_token-compatibility.mdx';
 
 <TokenCompatibilityPartial />
 
-## Step 2: Create a token and deploy it on L1
+## Step 2: Create a token and deploy it on the parent chain
 
-We‘ll begin the process by creating and deploying on L1 a sample token to bridge. If you already have a token contract on L1, you don’t need to perform this step.
+We‘ll begin the process by creating and deploying on the parent chain a sample token to bridge. If you already have a token contract on the parent chain, you don’t need to perform this step.
 
 However, you will need to upgrade the contract if it doesn’t include the required methods described in the previous step.
 
-We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only 1 adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
+We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only one adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
 
 We’ll also add the required methods to make our token bridgeable via the generic-custom gateway.
 
@@ -153,7 +153,7 @@ contract L1Token is Ownable, ICustomToken, ERC20 {
 }
 ```
 
-We now deploy that token to L1.
+We now deploy that token to the parent chain.
 
 ```tsx
 const { ethers } = require('hardhat');
@@ -205,9 +205,9 @@ main()
   });
 ```
 
-## Step 3: Create a token and deploy it on L2
+## Step 3: Create a token and deploy it on the child chain
 
-We’ll now create and deploy on L2 the counterpart of the token we created on L1.
+We’ll now create and deploy on the child chain the counterpart of the token we created on the parent chain.
 
 We’ll create a standard `ERC-20` contract using OpenZeppelin’s implementation, and add the required methods from `IArbToken`.
 
@@ -250,7 +250,7 @@ contract L2Token is ERC20, IArbToken {
 }
 ```
 
-We now deploy that token to L2.
+We now deploy that token to the child chain.
 
 ```tsx
 const { ethers } = require('hardhat');
@@ -298,14 +298,14 @@ main()
 
 Once both our contracts are deployed in their respective chains, it’s time to register the token in the generic-custom gateway.
 
-As mentioned before, this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned before, this action needs to be done by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 When using this function two actions will be performed:
 
-1. Call function `registerTokenToL2` of `L1CustomGateway`. This will change the `l1ToL2Token` internal mapping it holds and will send a retryable ticket to the counterpart `L2CustomGateway` contract in L2, to also set its mapping to the new values.
-2. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
+1. Call function `registerTokenToL2` of `L1CustomGateway`. This will change the `l1ToL2Token` internal mapping it holds and will send a retryable ticket to the counterpart `L2CustomGateway` contract on the child chain, to also set its mapping to the new values.
+2. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract on the child chain, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [registerCustomToken](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK. We’ll call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
 ```tsx
 /**
@@ -353,25 +353,25 @@ console.log(
 
 ## Conclusion
 
-Once this step is done, your L1 and L2 tokens will be connected through the generic-custom gateway.
+Once this step is done, your parent and child chain tokens will be connected through the generic-custom gateway.
 
-You can bridge tokens between L1 and L2 using the origin L1 token and the custom token deployed on L2, along with the router and gateway contracts from each layer.
+You can bridge tokens between the parent and child chain using the origin parent chain token and the custom token deployed on the child chain, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
 
 ## Frequently asked questions
 
-### Can I run the same register token process multiple times for the same L1 token?
+### Can I run the same register token process multiple times for the same parent chain token?
 
-No, you can only register once an L2 token for the same L1 token. After that, the call to `registerTokenToL2` will revert if run again.
+No, you can only register once a child chain token for the same parent chain token. After that, the call to `registerTokenToL2` will revert if run again.
 
-### What can I do if my L1 token is not upgradable?
+### What can I do if my parent chain token is not upgradable?
 
 As mentioned in the concept page, the token registration can alternatively be performed as a chain-owner registration via **[Arbitrum DAO](https://forum.arbitrum.foundation/)** proposal.
 
-### Can I set up the generic-custom gateway after a standard `ERC-20` token exists on L2?
+### Can I set up the generic-custom gateway after a standard `ERC-20` token exists on the child chain?
 
-Yes, if your token has a standard `ERC-20` counterpart on L2, you can go through the process of registering your custom L2 token as outlined in this page. At that moment, your L1 token will have 2 counterpart tokens on L2, but only your new custom L2 token will be minted when depositing tokens from L1 (L1-to-L2 bridging). Both L2 tokens will be withdrawable (L2-to-L1 bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to L1 (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to L2 to get the new custom L2 tokens.
+Yes, if your token has a standard `ERC-20` counterpart on the child chain, you can go through the process of registering your custom child chain token as outlined in this page. At that moment, your parent chain token will have two counterpart tokens on the child chain, but only your new custom child chain token will be minted when depositing tokens from the parent chain (parent-to-child chain bridging). Both child chain tokens will be withdrawable (child-to-parent chain bridging), so users holding the old standard `ERC-20` token will be able to withdraw back to the parent chain (using the `L2CustomGateway` contract instead of the bridge UI) and then deposit to the child chain to get the new custom child chain tokens.
 
 ## Resources
 

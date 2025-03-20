@@ -5,15 +5,15 @@ user_story: As a developer, I want to understand how to bridge tokens between Et
 content_type: how-to
 ---
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using [Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
+In this how-to you’ll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain), using [Arbitrum’s standard `ERC20` gateway](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging). For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Remix)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/token-deposit) that encapsulates the entire process.
 
-## Step 1: Create a token and deploy it on L1
+## Step 1: Create a token and deploy it on the parent chain
 
-We‘ll begin the process by creating and deploying on L1 a sample token to bridge. If you already have a token contract on L1, you don’t need to perform this step.
+We‘ll begin the process by creating and deploying on the parent chain a sample token to bridge. If you already have a token contract on the parent chain, you don’t need to perform this step.
 
 We first create a standard `ERC-20` contract using OpenZeppelin’s implementation. We make only one adjustment to that implementation, for simplicity, although it is not required: we specify an `initialSupply` to be pre-minted and sent to the deployer address upon creation.
 
@@ -35,7 +35,7 @@ contract DappToken is ERC20 {
 }
 ```
 
-We now deploy that token to L1.
+We now deploy that token to the parent chain.
 
 ```tsx
 const { ethers } = require('hardhat');
@@ -81,14 +81,14 @@ As explained in the conceptual page, there are two contracts that we need to be 
 - **Router contract**: this is the contract that we’ll interact with. It keeps a mapping of the gateway contracts assigned to each token, fallbacking to a default gateway for standard `ERC-20` tokens.
 - **Gateway contract**: this is the contract that escrows or burns the tokens in the layer of origin, and sends the message over to the counterpart layer to mint or release the tokens there.
 
-For simplicity, in this how-to we’ll focus on the first case: bridging from Ethereum (L1) to Arbitrum (L2).
+For simplicity, in this how-to we’ll focus on the first case: bridging from the parent chain (Ethereum) to the child chain (Arbitrum).
 
 We’ll explain below what specific contracts and methods need to be called to bridge your token, but you can abstract this whole process of finding the right addresses by using Arbitrum’s SDK. You can use the [deposit](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) function of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class to bridge your tokens, which will use the appropriate router contract based on the network you’re connected to, and will relay the request to the appropriate gateway contract. You can also use the function [getParentGatewayAddress](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getparentgatewayaddress) to get the address of the gateway contract that’s going to be used. But don’t worry about any of this yet, we’ll use those functions in the next steps.
 
 Now, here’s an explanation of the contracts and methods that need to be called to manually bridge your token:
 
-- When bridging from Ethereum (L1) to Arbitrum (L2), you’ll need to interact with the `L1GatewayRouter` contract, by calling the `outboundTransferCustomRefund` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L1ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L1GatewayRouter` contract.
-- When bridging from Arbitrum (L2) to Ethereum (L1), you’ll need to interact with the `L2GatewayRouter` contract, by calling the `outBoundTransfer` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L2ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L2GatewayRouter` contract.
+- When bridging from the parent chain (Ethereum) to the child chain (Arbitrum), you’ll need to interact with the `L1GatewayRouter` contract, by calling the `outboundTransferCustomRefund` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L1ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L1GatewayRouter` contract.
+- When bridging from the child chain (Arbitrum) to the parent chain (Ethereum), you’ll need to interact with the `L2GatewayRouter` contract, by calling the `outBoundTransfer` method. This router contract will relay your request to the appropriate gateway contract, in this case, the `L2ERC20Gateway` contract. To get the address of the gateway contract that’s going to be used, you can call the `getGateway` function in the `L2GatewayRouter` contract.
 
 You can find the addresses of the contracts involved in the process in [this page](/build-decentralized-apps/reference/contract-addresses#token-bridge-smart-contracts).
 
@@ -135,9 +135,9 @@ After allowing the gateway contract to transfer the tokens, we can now start the
 You can use Arbitrum’s SDK to abstract this process, by calling the method [`deposit`](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will estimate the gas parameters (`maxGas`, `gasPriceBid` and `maxSubmissionCost`, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
 
 - `amount`: Amount of tokens to bridge
-- `erc20L1Address`: L1 address of the `ERC-20` token being bridged
-- `l1Signer`: Signer object of the account transferring the tokens, connected to the L1 network
-- `l2Provider`: Provider connected to the L2 network
+- `erc20L1Address`: Parent chain address of the `ERC-20` token being bridged
+- `l1Signer`: Signer object of the account transferring the tokens, connected to the parent chain network
+- `l2Provider`: Provider connected to the child chain network
 
 ```tsx
 /**
@@ -160,21 +160,21 @@ const depositTx = await erc20Bridger.deposit({
 
 As mentioned before, you can also call the method `outboundTransferCustomRefund` manually in the router contract and specify the following parameters:
 
-- address `_token`: L1 address of the `ERC-20` token being bridged
-- address `_refundTo`: Account to be credited with the excess gas refund in L2
-- address `_to`: Account to be credited with the tokens in L2
+- address `_token`: Parent chain address of the `ERC-20` token being bridged
+- address `_refundTo`: Account to be credited with the excess gas refund on the child chain
+- address `_to`: Account to be credited with the tokens on the child chain
 - uint256 `_amount`: Amount of tokens to bridge
-- uint256 `_maxGas`: Max gas deducted from user’s L2 balance to cover the execution in L2
-- uint256 `_gasPriceBid`: Gas price for the execution in L2
+- uint256 `_maxGas`: Max gas deducted from user’s child chain balance to cover the execution on the child chain
+- uint256 `_gasPriceBid`: Gas price for the execution on the child chain
 - bytes `_data`: 2 pieces of data encoded:
-  - uint256 `maxSubmissionCost`: Max gas deducted from user's L2 balance to cover base submission fee
+  - uint256 `maxSubmissionCost`: Max gas deducted from user's child chain balance to cover base submission fee
   - bytes `extraData`: “0x”
 
-## Step 5: Wait for execution on L2
+## Step 5: Wait for execution on the child chain
 
-After calling the deposit method (or the `outboundTransferCustomRefund` if you’re choosing the manual way), you’ll have to wait a bit until the message is executed on L2. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page to learn more about [L1-to-L2 messages, also known as retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
+After calling the deposit method (or the `outboundTransferCustomRefund` if you’re choosing the manual way), you’ll have to wait a bit until the message is executed on the child chain. We will verify the status of the underlying retryable ticket created to bridge the tokens. Check this page to learn more about [parent-to-child chain messages, also known as retryables](/how-arbitrum-works/10-l1-to-l2-messaging.mdx).
 
-You can programmatically wait for the execution of the transaction on L2 using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the L2 transaction.
+You can programmatically wait for the execution of the transaction on the child chain using Arbitrum’s SDK. You should first wait for the execution of the submission transaction (the one sent to the router contract) and then the execution of the child chain transaction.
 
 ```tsx
 /**
@@ -191,13 +191,13 @@ l2Result.complete
   : console.log(`L2 message failed: status ${L1ToL2MessageStatus[l2Result.status]}`);
 ```
 
-If you’re going the manual way, you can verify if the message has been executed on L2 through the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/). Just paste the hash of transaction submitted to the router contract and the tool will tell you whether it’s been redeemed or not.
+If you’re going the manual way, you can verify if the message has been executed on the child chain through the [Retryables Dashboard](https://retryable-dashboard.arbitrum.io/). Just paste the hash of transaction submitted to the router contract and the tool will tell you whether it’s been redeemed or not.
 
-## Step 6: Check the new token contract created on L2
+## Step 6: Check the new token contract created on the child chain
 
-Finally, let’s find the token contract that has been created on L2.
+Finally, let’s find the token contract that has been created on the child chain.
 
-Using Arbitrum’s SDK, you can call method [`getChildErc20Address`](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getchildgatewayaddress) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract in L2 that corresponds to the L1 token contract sent as parameter.
+Using Arbitrum’s SDK, you can call method [`getChildErc20Address`](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getchildgatewayaddress) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract on the child chain that corresponds to the parent chain token contract sent as parameter.
 
 ```tsx
 /**
@@ -214,7 +214,7 @@ If you visit that address in [Arbiscan](https://arbiscan.io/), you’ll notice t
 
 ## Conclusion
 
-After finishing this process, you’ll now have a counterpart token contract automatically created on L2. You can bridge tokens between L1 and L2 using the original token contract on L1 and the standard created contract on L2, along with the router and gateway contracts from each layer.
+After finishing this process, you’ll now have a counterpart token contract automatically created on the child chain. You can bridge tokens between parent and child chain using the original token contract on the parent chain and the standard created contract on the child chain, along with the router and gateway contracts from each layer.
 
 ## Resources
 

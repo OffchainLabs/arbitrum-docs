@@ -11,7 +11,7 @@ Before starting to implement and deploy a custom gateway, it is strongly encoura
 
 :::
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (Layer 1 or L1) and Arbitrum (Layer 2 or L2), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
+In this how-to you’ll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
 Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Remix)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
@@ -23,28 +23,28 @@ Before starting to implement and deploy a custom gateway, it is strongly encoura
 
 Having said that, there are multiple prerequisites to keep in mind when deploying your own custom gateway.
 
-First of all, the **L1 counterpart of the gateway**, must conform to the [`IL1ArbitrumGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/IL1ArbitrumGateway.sol) and the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interfaces. This means that it must have, at least:
+First of all, the **parent chain counterpart of the gateway**, must conform to the [`IL1ArbitrumGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/IL1ArbitrumGateway.sol) and the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interfaces. This means that it must have, at least:
 
 - A method `outboundTransferCustomRefund`, to handle forwarded calls from `L1GatewayRouter.outboundTransferCustomRefund`. It should only allow calls from the router.
 - A method `outboundTransfer`, to handle forwarded calls from `L1GatewayRouter.outboundTransfer`. It should only allow calls from the router.
-- A method `finalizeInboundTransfer`, to handle messages coming **only** from L2’s gateway.
+- A method `finalizeInboundTransfer`, to handle messages coming **only** from child chain's gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [L1ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
 
-Furthermore, if you plan on having permissionless registration of tokens in your gateway, your L1 gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
+Furthermore, if you plan on having permissionless registration of tokens in your gateway, your parent chain gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
 
-On the other hand, the **L2 counterpart of the gateway**, must conform to the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interface. This means that it must have, at least:
+On the other hand, the **child chain counterpart of the gateway**, must conform to the [`ITokenGateway`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/gateway/ITokenGateway.sol) interface. This means that it must have, at least:
 
 - A method `outboundTransfer`, to handle external calls, and forwarded calls from `L2GatewayRouter.outboundTransfer`.
-- A method `finalizeInboundTransfer`, to handle messages coming **only** from L1’s gateway.
+- A method `finalizeInboundTransfer`, to handle messages coming **only** from the parent chain's gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
 - Methods to send cross-chain messages through the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys). An example implementation can be found in `sendTxToL1` on [L2ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/L2ArbitrumMessenger.sol).
 
 ### What about my custom tokens?
 
-If you are deploying custom gateways, you will probably want to support your custom tokens on L1 and L2 too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
+If you are deploying custom gateways, you will probably want to support your custom tokens on the parent chain and the child chain too. They also have several requirements they must comply with. You can find more information about it in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx).
 
-## Step 1: Create a gateway and deploy it on L1
+## Step 1: Create a gateway and deploy it on the parent chain
 
 :::caution This code is for testing purposes
 
@@ -52,7 +52,7 @@ The code contained within the following sections is meant for testing purposes o
 
 :::
 
-We‘ll begin the process by creating our custom gateway and deploying it on L1. A good example of a custom gateway is [Arbitrum’s generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol). It includes all methods required plus some more to support the wide variety of tokens that can be bridged through it.
+We‘ll begin the process by creating our custom gateway and deploying it on the parent chain. A good example of a custom gateway is [Arbitrum’s generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol). It includes all methods required plus some more to support the wide variety of tokens that can be bridged through it.
 
 In this case, we’ll use a simpler approach. We’ll create a gateway that supports only one token and has the ability to be disabled/enabled by the owner of the contract. It will also implement all necessary methods. To simplify the deployment process even further, we won’t worry about setting the addresses of the counterpart gateway and the custom tokens at deployment time. Instead, we will use a function `setTokenBridgeInformation` that will be called by the owner of the contract to initialize the gateway.
 
@@ -279,7 +279,7 @@ contract L1CustomGateway is IL1CustomGateway, L1CrosschainMessenger, Ownable {
 }
 ```
 
-`IL1CustomGateway` is an interface very similar to `ICustomGateway`, and `L1CrosschainMessenger` implements a method to send the cross-chain message to L2 through the Inbox.
+`IL1CustomGateway` is an interface very similar to `ICustomGateway`, and `L1CrosschainMessenger` implements a method to send the cross-chain message to the child chain through the Inbox.
 
 ```solidity
 /**
@@ -359,7 +359,7 @@ abstract contract L1CrosschainMessenger {
 }
 ```
 
-We now deploy that gateway to L1.
+We now deploy that gateway to the parent chain.
 
 ```tsx
 const { ethers } = require('hardhat');
@@ -411,11 +411,11 @@ main()
   });
 ```
 
-## Step 2: Create a gateway and deploy it on L2
+## Step 2: Create a gateway and deploy it on the child chain
 
-We’ll now create the counterpart of the gateway we created on L1 and deploy it on L2. A good example of a custom gateway on L2 is [Arbitrum’s generic-custom gateway on L2](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/gateway/L2CustomGateway.sol).
+We’ll now create the counterpart of the gateway we created on the parent chain and deploy it on the child chain. A good example of a custom gateway on the child chain is [Arbitrum’s generic-custom gateway on a child chain](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/gateway/L2CustomGateway.sol).
 
-As we did with the L1 gateway, we’ll use a simpler approach with the same characteristics of that in L1: supports only one token and has the ability to be disabled/enabled by the owner of the contract. It will also have a `setTokenBridgeInformation` to be called by the owner of the contract to initialize the gateway.
+As we did with the parent chain gateway, we’ll use a simpler approach with the same characteristics of that on the parent chain: supports only one token and has the ability to be disabled/enabled by the owner of the contract. It will also have a `setTokenBridgeInformation` to be called by the owner of the contract to initialize the gateway.
 
 ```solidity
 // SPDX-License-Identifier: Apache-2.0
@@ -629,7 +629,7 @@ contract L2CustomGateway is IL2CustomGateway, L2CrosschainMessenger, Ownable {
 }
 ```
 
-`IL2CustomGateway` is also an interface very similar to `ICustomGateway`, and `L2CrosschainMessenger` implements a method to send the cross-chain message to L1 through ArbSys.
+`IL2CustomGateway` is also an interface very similar to `ICustomGateway`, and `L2CrosschainMessenger` implements a method to send the cross-chain message to the parent chain through ArbSys.
 
 ```solidity
 /**
@@ -681,7 +681,7 @@ abstract contract L2CrosschainMessenger {
 }
 ```
 
-We now deploy that gateway to L2.
+We now deploy that gateway to the child chain.
 
 ```tsx
 const { ethers } = require('hardhat');
@@ -734,9 +734,9 @@ main()
   });
 ```
 
-## Step 3: Deploy the custom tokens on L1 and L2
+## Step 3: Deploy the custom tokens on the parent and child chains
 
-This step will depend on your setup. In this case, as our simplified gateway supports only one token, we will deploy those on L1 and L2 to be able to call the `setTokenBridgeInformation` method on both gateways afterwards.
+This step will depend on your setup. In this case, as our simplified gateway supports only one token, we will deploy those on the parent chain and the child chain to be able to call the `setTokenBridgeInformation` method on both gateways afterwards.
 
 We won’t go through the process of deploying custom tokens in this How-to, but you can see a detailed explanation of the steps to take in the page [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx)
 
@@ -780,11 +780,11 @@ console.log(
 
 Once all contracts are deployed on their respective chains, and they all have the information of the gateways and tokens, it’s time to register the token in your custom gateway.
 
-As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx), this action needs to be done by the L1 token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
+As mentioned in [How to bridge tokens via Arbitrum’s generic-custom gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/03-how-to-bridge-tokens-generic-custom.mdx), this action needs to be done by the parent chain token, and we’ve implemented the function `registerTokenOnL2` to do it. So now we only need to call that function.
 
 In this case, when using this function only one action will be performed:
 
-1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract in L2, to also set its mapping to the new values.
+1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract on the child chain, to also set its mapping to the new values.
 
 To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
@@ -829,11 +829,11 @@ console.log('Your custom token and gateways are now registered on the token brid
 
 ## Conclusion
 
-Once this step is done, your L1 and L2 gateways will be registered in the token bridge and both tokens will be connected through your custom gateway.
+Once this step is done, your parent chain and child chain gateways will be registered in the token bridge and both tokens will be connected through your custom gateway.
 
-You can bridge tokens between L1 and L2 using the custom tokens, along with the router and gateway contracts from each layer.
+You can bridge tokens between the parent chain and child chain using the custom tokens, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from L1 to L2 using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
 
 The full code of this how-to and a more extensive deployment and testing script can be found [in this package of our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging).
 
