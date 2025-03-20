@@ -82,7 +82,7 @@ Developers and users should design their applications and interactions with thes
 
 ### **Delayed messages on the Sequencer feed**
 
-As illustrated in the diagram, the Sequencer feed not only sends <a data-quicklook-from="child-chain">child chain</a> transactions posted directly to the Sequencer but also incorporates parent chain (L1)-submitted child chain (L2) transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> Contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
+As illustrated in the diagram, the Sequencer feed not only sends <a data-quicklook-from="child-chain">child chain</a> transactions posted directly to the Sequencer but also incorporates parent chain-–submitted child chain transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> Contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
 
 It is important to note that the Nitro node can be configured to add delayed inbox transactions immediately after their submission to the parent chain, even before finalization. However, this approach introduces a risk of the child chain reorganization if the transaction fails to finalize on the parent chain. To mitigate this risk, on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova, the Sequencer only includes these transactions in the feed once they are finalized on the Ethereum chain.
 
@@ -290,9 +290,9 @@ The `delayBuffer` replenishes at a linear rate when the sequencer is operating c
 
 Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Arbitrum Nova:
 
-- `delay buffer` = 14400 L1 Ethereum blocks (2 days)
-- `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 L1 Ethereum blocks (1 hour) for Arbitrum Nova
-- `replenish rate` = 5% (meaning 1 day is replenished every 20 days or roughly a 95% uptime)
+- `delay buffer` = 14400 parent chain (Ethereum) blocks (2 days)
+- `threshold` = 150 L1 Ethereum blocks (30 minutes) for Arbitrum One and 300 parent chain (Ethereum) blocks (one hour) for Arbitrum Nova
+- `replenish rate` = 5% (meaning one day is replenished every 20 days or roughly a 95% uptime)
 
 We believe that the Censorship Timeout feature provides stronger guarantees of censorship resistance for Arbitrum chains - especially those that settle to Arbitrum One or Arbitrum Nova. As always, chain owners can decide whether to utilize this feature for their chain and can also change the default parameters as they see fit for their use case.
 
