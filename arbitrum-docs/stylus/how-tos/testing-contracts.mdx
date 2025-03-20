@@ -1,0 +1,354 @@
+---
+id: 'testing-contracts'
+title: 'Testing contracts with Stylus'
+description: 'A hands-on guide to testing with Stylus.'
+sme: anegg0
+target_audience: 'Developers writing smart contracts using Stylus.'
+sidebar_position: 3
+---
+
+import CustomDetails from '@site/src/components/CustomDetails';
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+## Introduction
+
+The Stylus SDK provides a testing framework that allows developers to write and run tests directly in Rust without deploying to a blockchain. This guide will walk you through the process of writing and running tests for Stylus contracts using the built-in testing framework.
+
+The Stylus testing framework allows you to:
+
+- Simulate an Ethereum environment for your tests
+- Test storage operations
+- Mock transaction context and block information
+- Test contract-to-contract interactions
+- Verify contract logic without deployment costs
+
+### Prerequisites
+
+Before you begin, make sure you have:
+
+- Basic familiarity with Rust and smart contract development
+
+<details>
+<summary>Rust toolchain</summary>
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</details>
+
+<!-- - The Stylus SDK installed -->
+
+<details>
+<summary>Docker</summary>
+
+The testnode we will use as well as some `cargo stylus` commands require Docker to operate.
+
+You can download Docker from [Docker's website](https://www.docker.com/products/docker-desktop).
+
+</details>
+
+<details>
+<summary>Nitro devnode</summary>
+
+Stylus is available on Arbitrum Sepolia, but we'll use nitro devnode which has a pre-funded wallet saving us the effort of wallet provisioning or running out of tokens to send transactions.
+
+```shell title="Install your devnode"
+git clone https://github.com/OffchainLabs/nitro-devnode.git
+cd nitro-devnode
+```
+
+```shell title="Launch your devnode"
+./run-dev-node.sh
+```
+
+</details>
+
+## Example Smart Contract
+
+Let's look at the implementation of a decentralized cupcake vending machine using the Stylus SDK. This example demonstrates the core functionality we'll test.
+
+<CustomDetails summary="Vending-machine contract">
+```rust
+//!
+//! Stylus Cupcake Example
+//!
+//! The contract is ABI-equivalent with Solidity, which means you can call it from both Solidity and Rust.
+//! To do this, run `cargo stylus export-abi`.
+//!
+//! Note: this code is a template-only and has not been audited.
+//!
+
+// Allow `cargo stylus export-abi` to generate a main function if the "export-abi" feature is enabled. #![cfg_attr(not(feature = "export-abi"), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, Uint};
+// Import items from the SDK. The prelude contains common traits and macros.
+use stylus_sdk::alloy_primitives::U256;
+use stylus_sdk::prelude::\*;
+use stylus_sdk::{block, console};
+
+// Define persistent storage using the Solidity ABI.
+// `VendingMachine` will be the entrypoint for the contract.
+sol_storage! { #[entrypoint]
+pub struct VendingMachine {
+// Mapping from user addresses to their cupcake balances.
+mapping(address => uint256) cupcake_balances;
+// Mapping from user addresses to the last time they received a cupcake.
+mapping(address => uint256) cupcake_distribution_times;
+}
+}
+
+// Declare that `VendingMachine` is a contract with the following external methods. #[public]
+impl VendingMachine {
+// Give a cupcake to the specified user if they are eligible (i.e., if at least 5 seconds have passed since their last cupcake).
+pub fn give_cupcake_to(&mut self, user_address: Address) -> bool {
+// Get the last distribution time for the user.
+let last_distribution = self.cupcake_distribution_times.get(user_address);
+// Calculate the earliest next time the user can receive a cupcake.
+let five_seconds_from_last_distribution = last_distribution + U256::from(5);
+
+        // Get the current block timestamp.
+        let current_time = block::timestamp();
+        // Check if the user can receive a cupcake.
+        let user_can_receive_cupcake =
+            five_seconds_from_last_distribution <= Uint::<256, 4>::from(current_time);
+
+        if user_can_receive_cupcake {
+            // Increment the user's cupcake balance.
+            let mut balance_accessor = self.cupcake_balances.setter(user_address);
+            let balance = balance_accessor.get() + U256::from(1);
+            balance_accessor.set(balance);
+
+            // Update the distribution time to the current time.
+            let mut time_accessor = self.cupcake_distribution_times.setter(user_address);
+            let new_distribution_time = block::timestamp();
+            time_accessor.set(Uint::<256, 4>::from(new_distribution_time));
+            return true;
+        } else {
+            // User must wait before receiving another cupcake.
+            console!(
+                "HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)"
+            );
+            return false;
+        }
+    }
+
+    // Get the cupcake balance for the specified user.
+    pub fn get_cupcake_balance_for(&self, user_address: Address) -> Uint<256, 4> {
+        // Return the user's cupcake balance from storage.
+        return self.cupcake_balances.get(user_address);
+    }
+
+}
+
+````
+</CustomDetails>
+
+## Writing Tests
+
+The Stylus SDK testing framework is available through the `stylus_sdk::testing` module, which is re-exported when targeting native architectures. This allows you to write and run tests using Rust's standard testing infrastructure.
+
+### Setting Up Your Test Environment
+
+To write tests for your contract, follow these steps:
+
+1. Create a test module in your contract file or in a separate file
+2. Import the testing framework
+3. Create a test VM environment
+4. Initialize your contract with the test VM
+5. Write your test assertions
+
+Here's a complete example of how to test our NFT contract:
+
+<CustomDetails summary="test file">
+```rust
+#[cfg(test)]
+mod test {
+    use super::*;
+    use stylus_sdk::testing::*;
+    use alloy_primitives::{Address, U256};
+
+    #[test]
+    fn test_mint() {
+        // Create a test VM environment
+        let vm = TestVM::default();
+
+        // Set a specific sender address for the test
+        let sender = Address::from([0x1; 20]);
+        vm.set_sender(sender);
+
+        // Initialize the contract with the test VM
+        let mut contract = StylusTestNFT::from(&vm);
+
+        // Test initial state
+        assert_eq!(contract.total_supply().unwrap(), U256::ZERO);
+
+        // Test minting
+        contract.mint().unwrap();
+
+        // Verify the result
+        assert_eq!(contract.total_supply().unwrap(), U256::from(1));
+        assert_eq!(contract.erc721.balance_of(sender).unwrap(), U256::from(1));
+    }
+
+    #[test]
+    fn test_mint_to() {
+        // Create a test VM environment
+        let vm = TestVM::default();
+
+        // Initialize the contract with the test VM
+        let mut contract = StylusTestNFT::from(&vm);
+
+        // Set up recipient address
+        let recipient = Address::from([0x2; 20]);
+
+        // Test minting to a specific address
+        contract.mint_to(recipient).unwrap();
+
+        // Verify the result
+        assert_eq!(contract.total_supply().unwrap(), U256::from(1));
+        assert_eq!(contract.erc721.balance_of(recipient).unwrap(), U256::from(1));
+    }
+
+    #[test]
+    fn test_burn() {
+        // Create a test VM environment
+        let vm = TestVM::default();
+
+        // Set a specific sender address for the test
+        let sender = Address::from([0x1; 20]);
+        vm.set_sender(sender);
+
+        // Initialize the contract with the test VM
+        let mut contract = StylusTestNFT::from(&vm);
+
+        // Mint a token first
+        contract.mint().unwrap();
+        assert_eq!(contract.erc721.balance_of(sender).unwrap(), U256::from(1));
+
+        // Burn the token
+        contract.burn(U256::ZERO).unwrap();
+
+        // Verify the token was burned
+        // Note: total_supply doesn't decrease after burning
+        assert_eq!(contract.total_supply().unwrap(), U256::from(1));
+        assert_eq!(contract.erc721.balance_of(sender).unwrap(), U256::ZERO);
+    }
+}
+````
+
+</CustomDetails>
+
+### Advanced Testing Features
+
+#### Customizing the Test Environment
+
+You can customize your test environment using `TestVMBuilder` for more complex scenarios:
+
+<CustomDetails summary="ERC-721">
+```rust
+#[test]
+fn test_with_custom_setup() {
+    let vm = TestVMBuilder::new()
+        .with_sender(Address::from([0x1; 20]))
+        .with_value(U256::from(100))
+        .with_contract_address(Address::from([0x3; 20]))
+        .build();
+
+    let contract = StylusTestNFT::from(&vm);
+    // Test logic here
+
+}
+
+````
+
+#### Testing Contract Interactions
+
+To test contract interactions, you can mock calls to other contracts:
+
+```rust
+#[test]
+fn test_external_contract_interaction() {
+    let vm = TestVM::default();
+
+    // Address of an external contract
+    let external_contract = Address::from([0x5; 20]);
+
+    // Mock data and response
+    let call_data = vec![/* function selector and parameters */];
+    let expected_response = vec![/* expected return data */];
+
+    // Mock the call
+    vm.mock_call(external_contract, call_data.clone(), Ok(expected_response));
+
+    // Initialize your contract
+    let contract = StylusTestNFT::from(&vm);
+
+    // Test logic that involves calling the external contract
+    // ...
+}
+````
+
+</CustomDetails>
+
+#### Testing Storage
+
+The testing framework automatically handles persistent storage simulation. Storage operations in your tests will work exactly as they would on-chain, but in a controlled test environment.
+
+```rust
+#[test]
+fn test_storage_persistence() {
+    let vm = TestVM::default();
+
+    // You can also set storage values directly
+    let key = U256::from(1);
+    let value = B256::from([0xff; 32]);
+    vm.set_storage(key, value);
+
+    // And retrieve them
+    assert_eq!(vm.get_storage(key), value);
+}
+```
+
+### Best Practices
+
+1. **Test Organization**
+
+   - Keep tests in a separate module marked with `#[cfg(test)]`
+   - Group related tests together
+
+2. **Test Isolation**
+
+   - Create a new `TestVM` instance for each test
+   - Don't rely on state from previous tests
+
+3. **Comprehensive Testing**
+
+   - Test happy paths and error cases
+   - Test edge cases and boundary conditions
+   - Test access control and authorization
+
+4. **Meaningful Assertions**
+   - Make assertions that verify the actual behavior you care about
+   - Use descriptive error messages in assertions
+
+## Running Tests
+
+### Testing with cargo-stylus
+
+When using the `cargo-stylus` CLI tool, you can run tests with:
+
+```shell
+cargo stylus test
+```
+
+You can also run specific tests by name:
+
+```shell
+cargo test test_mint
+```
+
+## Conclusion
+
+Testing is an essential part of smart contract development to ensure security, correctness, and reliability. The Stylus SDK provides powerful testing tools that allow you to thoroughly test your contracts before deployment.
+
+The ability to test Rust contracts directly, without requiring a blockchain environment, makes the development cycle faster and more efficient.
