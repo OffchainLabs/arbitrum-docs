@@ -446,6 +446,11 @@ const sidebars = {
                 },
               ],
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/maintain-your-chain/upgrade-to-bold',
+              label: 'Upgrade to BoLD',
+            },
           ],
         },
         {
