@@ -55,12 +55,6 @@ function sayHi() external view returns(string memory);
 
 Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
 
-:::info
-
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
-
-:::
-
 Once your node is running, you can call `ArbSys.sol` either directly using `curl`, or through Foundry's `cast call`.
 
 ### Call your function directly using `curl`
@@ -129,12 +123,6 @@ interface ArbHi {
 ```
 
 Next, follow the steps in [How to customize your Orbit chain's behavior](./customize-stf.mdx#step-3-run-the-node-without-fraud-proofs) to build a modified Arbitrum Nitro node docker image and run it.
-
-:::info
-
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
-
-:::
 
 Once your node is running, you can call `ArbHi.sol` either directly using `curl`, or through Foundry's `cast call`.
 
@@ -227,12 +215,6 @@ Run Nitro with the following command:
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
-:::info
-
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
-
-:::
-
 ### Send the transaction and get the transaction receipt
 
 To send a transaction to `ArbSys`, we need to include a gas cost, because the function is no longer a view/pure function:
@@ -310,12 +292,6 @@ Run Nitro with the following command:
 ```shell
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
-
-:::info
-
-Note that the instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/node-running/how-tos/running-an-orbit-node.mdx#optional-parameters) for Orbit-specific CLI flags.
-
-:::
 
 ### Send the transaction and get the transaction receipt
 
