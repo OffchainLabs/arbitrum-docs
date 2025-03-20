@@ -74,7 +74,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 
 ## Oracles
 
-The following Oracle providers can be used to integrate off-chain data with your Orbit chain's smart contracts:
+The following Oracle providers can be used to integrate offchain data with your Orbit chain's smart contracts:
 
 - [Chainlink](https://chain.link/)
 - [Chronicle](https://chroniclelabs.org/)
@@ -96,7 +96,7 @@ RPC endpoints are the primary interface through which users and developers inter
 
 ## Alternative data availability
 
-One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)

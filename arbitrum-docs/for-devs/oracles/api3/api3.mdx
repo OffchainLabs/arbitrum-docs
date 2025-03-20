@@ -9,11 +9,11 @@ user_story: As an Arbitrum developer, I want to learn how to use oracles in my d
 content_type: get-started
 ---
 
-[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push off-chain data to on-chain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
+[API3](https://api3.org/) is a collaborative project to deliver traditional API services to smart contract platforms in a decentralized and trust-minimized way. API3 provides the technology for [Airnodes](https://docs.api3.org/reference/airnode/latest/understand/) to push offchain data to onchain contracts. This data can then be queried directly through the Airnode (initiating a “pull-type” request) or through [dAPIs](https://docs.api3.org/guides/dapis/) (data-feeds sourced directly from multiple first-party oracles owned and operated by API providers).
 
 ### Querying the price of $ARB through API3
 
-Here’s an example of how to use an API3 data feed to query the current price of $ARB on-chain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
+Here’s an example of how to use an API3 data feed to query the current price of $ARB onchain. The [API3 market](https://market.api3.org/arbitrum) provides a list of all the dAPIs available across multiple chains including testnets. You can go forward and activate the dAPI you want to use.
 
 API3 provides an npm package with the contracts needed to access their feeds. We first install that package in our project:
 
@@ -63,9 +63,9 @@ You can adapt this contract to your needs. Just remember to use the address of t
 
 ### Querying a random number through API3
 
-[API3 QRNG](https://docs.api3.org/explore/qrng/) is a public utility provided with the courtesy of [Australian National University (ANU)](https://www.anu.edu.au/). It is served as a public good, it is free of charge (apart from the gas costs), and it provides quantum randomness when requiring RNG on-chain.
+[API3 QRNG](https://docs.api3.org/explore/qrng/) is a public utility provided with the courtesy of [Australian National University (ANU)](https://www.anu.edu.au/). It is served as a public good, it is free of charge (apart from the gas costs), and it provides quantum randomness when requiring RNG onchain.
 
-To request randomness on-chain, the requester submits a request for a random number to `AirnodeRrpV0`. The ANU Airnode gathers the request from the `AirnodeRrpV0` protocol contract, retrieves the random number off-chain, and sends it back to `AirnodeRrpV0`. Once received, it performs a callback to the requester with the random number.
+To request randomness onchain, the requester submits a request for a random number to `AirnodeRrpV0`. The ANU Airnode gathers the request from the `AirnodeRrpV0` protocol contract, retrieves the random number offchain, and sends it back to `AirnodeRrpV0`. Once received, it performs a callback to the requester with the random number.
 
 Here’s an example of a basic `QrngRequester` that requests a random number.
 
@@ -80,7 +80,7 @@ We’ll need several pieces of data to request a random number:
 - `address airnodeRrp`: Address of the protocol contract. See the [Chains](https://docs.api3.org/reference/qrng/chains.html) page for a list of addresses on different chains. For Arbitrum, we’ll use `0xb015ACeEdD478fc497A798Ab45fcED8BdEd08924`.
 - `address airnode`: The address that belongs to the Airnode that will be called to get the QRNG data via its endpoints. See the [Providers](https://docs.api3.org/reference/qrng/providers.html) page for a list of addresses on different chains. For Arbitrum we’ll use `0x9d3C147cA16DB954873A498e0af5852AB39139f2`.
 - `bytes32 endpointId`: Endpoint ID known by the Airnode that will map to an API provider call (allowed to be `bytes32(0)`). You can also find that information in the [Providers](https://docs.api3.org/reference/qrng/providers.html) page. For Arbitrum we’ll use `0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78`.
-- `address sponsorWallet`: The address of the wallet that will pay for the gas costs for the callback request to get the random number on-chain. You need to fund this wallet with enough ETH to cover the gas costs.
+- `address sponsorWallet`: The address of the wallet that will pay for the gas costs for the callback request to get the random number onchain. You need to fund this wallet with enough ETH to cover the gas costs.
 
 To derive your sponsorWallet address, you can use the following command:
 

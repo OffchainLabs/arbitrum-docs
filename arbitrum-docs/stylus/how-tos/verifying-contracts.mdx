@@ -64,7 +64,7 @@ Save this tx hash, as verifiers will need it.
 
 To verify a program, the verifier will need Docker installed and also know:
 
-- System architecture the deployer used (x86 / ARM). Note: ARM devices that can emulate x86, such as Mac M series via rosetta, can verify x86 Stylus deployments
+- System architecture the deployer used (x86 / ARM). Note: ARM devices that can emulate x86, such as Mac M series via Rosetta, can verify x86 Stylus deployments
 - The git commit of the project the deployer used
 - Your cargo stylus version the deployer used
 - The deployment transaction hash
@@ -80,7 +80,7 @@ This command will run the verification pipeline through a Docker environment, re
 
 ## How it works
 
-On deployment, a `keccak256` hash is created from the contents of all Rust source files in the project, sorted by file path, along with a rust-toolchain.toml, Cargo.toml and Cargo.lock files by default. This hash is injected in as a custom section of the user wasm's code. This means all data in the source files will be used for reproducible verification of a Stylus contract, including code comments.
+On deployment, a `keccak256` hash is created from the contents of all Rust source files in the project, sorted by file path, along with a rust-toolchain.toml, Cargo.toml and Cargo.lock files by default. This hash is injected in as a custom section of the user WASM's code. This means all data in the source files will be used for reproducible verification of a Stylus contract, including code comments.
 
 This means the `codehash` onchain of the program will change due to this deployment metadata hash.
 
@@ -89,7 +89,7 @@ The verification routine fetches the deployment transaction by hash via RPC, the
 ## Important details
 
 **Docker image**
-The Docker container used for reproducibility standardizes all builds to x86, and it looks like this:
+The docker container used for reproducibility standardizes all builds to x86, and it looks like this:
 
 ```shell
 FROM --platform=linux/amd64 rust:1.79 as builder
