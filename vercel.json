@@ -1116,6 +1116,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/how-tos/orbit-managing-state-growth/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-growth",
+      "permanent": false
+    },    
+    {
       "source": "/(launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-size-limit",
       "permanent": false
