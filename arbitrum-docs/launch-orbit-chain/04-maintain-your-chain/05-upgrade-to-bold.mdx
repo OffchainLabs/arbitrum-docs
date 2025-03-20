@@ -141,14 +141,7 @@ export const arb1: Config = {
 };
 ```
 
-Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Note the following:
-
-- `contracts.excessStakeReceiver` should be an address that will receive both the excess stakes of the Rollup contract and the loser stakes.
-- Note that in the first `contracts` property, you need to specify the contract addresses, while the next `proxyAdmins` property expects the addresses of the ProxyAdmin of those contracts (they all generally use the same ProxyAdmin contract).
-- Make sure `disableValidatorWhitelist` is set to `false` unless you're absolutely sure you want to allow for permissionless validation.
-- Adjust `maxDataSize` to match that of your chain (you can call `Inbox.maxDataSize()` to get the value needed)
-- Set `chainId` to the id of your chain.
-- Adjust `stakeAmt` and `miniStakeAmounts` to the desired amounts.
+Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLd's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
 
 ### Step 3: Prepare and deploy the upgrade contract
 
