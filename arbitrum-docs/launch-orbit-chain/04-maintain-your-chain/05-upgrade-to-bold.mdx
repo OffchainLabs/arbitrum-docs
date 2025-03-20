@@ -10,7 +10,7 @@ This how-to provides step-by-step instructions for Orbit chain operators who wan
 
 ::::info This is not an ArbOS upgrade
 
-Enabling BoLD in your chain involves updating the Nitro contracts of your chain and making sure that your nodes are running the expected minimum (or higher) version.
+Enabling BoLD in your chain involves updating your chain's Nitro contracts and ensuring that your nodes are running the expected minimum (or higher) version.
 
 However, enabling BoLD does not require upgrading your ArbOS version.
 
@@ -27,7 +27,7 @@ Let's dive into it.
 
 ## 1. Upgrade your nodes to Nitro v3.5.1 or higher
 
-Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.1 introduced compatibility with both pre-BoLD and BoLD chains, to ensure a smooth upgrade. Nodes will automatically detect whether the chain is running pre-BoLD Rollup and Challenge contracts, or BoLD ones, and will perform the appropriate calls depending on that check.
+Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.1 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and Challenge contracts and will perform the appropriate calls depending on that check.
 
 Most of the parameters used in Nitro before v3.5.1 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters:
 
@@ -36,18 +36,18 @@ Most of the parameters used in Nitro before v3.5.1 will stay the same when runni
 
 ## 2. Upgrade your Nitro contracts to v3.0.0
 
-This section explains how to perform the upgrade of your chain contracts to v3.0.0. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need to use a different updating script/contract than the one available.
+This section explains how to upgrade of your chain contracts to v3.0.0. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
 
 During the upgrade operation, the following actions will be performed:
 
 1. Upgrade the Bridge, Inbox, RollupEventInbox, Outbox and SequencerInbox contracts to v3.0.0
 2. Deploy the new v3.0.0 BoLD ChallengeManager
 3. Migrate the v2 Rollup contract into a new v3.0.0 Rollup contract address
-4. Setup the Rollup contract according to the new configuration and use the latest confirmed assertion on the old rollup as genesis of the new rollup
+4. Setup the Rollup contract according to the new configuration and use the latest confirmed assertion on the old rollup as the genesis of the new rollup
 
 ### Step 0: Pre-requisites
 
-To effectively upgrade your Nitro contracts using the provided upgrade action, your contracts must be in one these versions:
+To effectively upgrade your Nitro contracts using the provided upgrade action, your contracts must be in one of these versions:
 
 - Inbox: v1.1.0 - v2.1.0 inclusive
 - Outbox: any
@@ -60,15 +60,19 @@ To effectively upgrade your Nitro contracts using the provided upgrade action, y
 - RollupUserLogic: v2.0.0 - v2.1.0 inclusive
 - ChallengeManager: v2.0.0 - v2.1.0 inclusive
 
-To determine the exact version used by your contracts, [follow these instructions](https://github.com/OffchainLabs/orbit-actions#check-version-and-upgrade-path).
+To determine the exact version your contracts use, [follow these instructions](https://github.com/OffchainLabs/orbit-actions#check-version-and-upgrade-path).
 
-Note that some of the contracts will not be updated and that it's normal to have some contracts still in the old version after the upgrade, since their code is equivalent to the new version.
+:::note
 
-### Step 1: Clone the nitro-contracts repository and build the contracts
+Some contracts will not be updated, and it's normal to have some contracts still in the old version after the upgrade since their code is equivalent to the new version.
 
-We'll be using a `BOLDUpgradeAction.sol` contract available in the nitro-contracts repository to perform the upgrade operation.
+:::
 
-So let's first clone the nitro-contracts repository and checkout the appropriate tag:
+### Step 1: Clone the `nitro-contracts` repository and build the contracts
+
+You'll use a `BOLDUpgradeAction.sol` contract in the `nitro-contracts` repository to perform the upgrade operation.
+
+First clone the `nitro-contracts` repository and checkout the appropriate version:
 
 ```shell
 $ git clone https://github.com/OffchainLabs/nitro-contracts.git
@@ -76,7 +80,7 @@ $ cd nitro-contracts
 $ git checkout v3.0.0
 ```
 
-Once in the right version, let's install the dependencies and build the contracts
+Once you have the correct version, install the dependencies and build the contracts:
 
 ```shell
 $ yarn install
@@ -85,7 +89,7 @@ $ yarn build:all
 
 ### Step 2: Configure your chain parameters
 
-The action contract that performs the upgrade will need to be parametrized with the information of your chain. To set this configuration, create a new file `scripts/files/configs/custom.ts` with the following contents:
+The action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, create a new file, `scripts/files/configs/custom.ts`, with the following contents:
 
 ```typescript
 import { parseEther } from 'ethers/lib/utils';
@@ -137,34 +141,34 @@ export const arb1: Config = {
 };
 ```
 
-Adjust the configuration to match that of your chain. Pay close attention to every parameter since it will override the existing configuration of your chain. Note the following:
+Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Note the following:
 
-- `contracts.excessStakeReceiver` should be an address that will receive both the excess stakes of the Rollup contract, and the loser stakes.
-- Note that in the first `contracts` property you need to specify the contracts addresses, while the next `proxyAdmins` property expects the addresses of the ProxyAdmin of those contracts (they all generally use the same ProxyAdmin contract).
+- `contracts.excessStakeReceiver` should be an address that will receive both the excess stakes of the Rollup contract and the loser stakes.
+- Note that in the first `contracts` property, you need to specify the contract addresses, while the next `proxyAdmins` property expects the addresses of the ProxyAdmin of those contracts (they all generally use the same ProxyAdmin contract).
 - Make sure `disableValidatorWhitelist` is set to `false` unless you're absolutely sure you want to allow for permissionless validation.
-- Adjust `maxDataSize` to match that of your chain (you can call `Inbox.maxDataSize()` to get the right value)
+- Adjust `maxDataSize` to match that of your chain (you can call `Inbox.maxDataSize()` to get the value needed)
 - Set `chainId` to the id of your chain.
 - Adjust `stakeAmt` and `miniStakeAmounts` to the desired amounts.
 
 ### Step 3: Prepare and deploy the upgrade contract
 
-We'll now prepare the upgrade contract with the parameters we just set, and we'll deploy it in the parent chain of our chain.
+You'll now prepare the upgrade contract with the parameters you just set and then deploy it in the parent chain of our chain.
 
-First create a `.env` file based on the `.env-sample` file.
+First, create a `.env` file based on the `.env-sample` file.
 
 ```shell
 $ cp .env-sample .env
 ```
 
-Make sure you update the `CONFIG_NETWORK_NAME` env variable to match the filename of the configuration file you created in the previous step.
+Ensure you update the `CONFIG_NETWORK_NAME` env variable to match the filename of the configuration file you created in the previous step.
 
 ```shell
 CONFIG_NETWORK_NAME=custom
 ```
 
-Now you can run the `prepare` script, which will deploy the action contract with the specified configuration parameters. Note that:
+Now, you can run the `prepare` script to deploy the action contract with the specified configuration parameters. Note that:
 
-- you can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
 - `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ```shell
@@ -176,9 +180,9 @@ Done.
 
 Optionally, the script can try to verify the deployed contracts by adding the following parameters:
 
-- set `DISABLE_VERIFICATION` to `false`.
-- use the right key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
-- set the `network` flag to your parent chain.
+- Set `DISABLE_VERIFICATION` to `false`.
+- Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
+- Set the `network` flag to your parent chain.
 
 ```shell
 $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
@@ -186,13 +190,17 @@ $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx
 
 ### Step 4: Gather the information of the current state of the chain
 
-We now gather the information of the current state of the chain (the last confirmed assertion) so we can initialize the new Rollup contract with that confirmed assertion.
+The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion.
 
-To prevent validators from confirming new assertions, it is recommended to temporarily stop all validator nodes at this point.
+:::info
+
+It is recommended to temporarily stop all validator nodes at this point to prevent them from confirming new assertions.
+
+:::
 
 Note that:
 
-- you can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
 - `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ```shell
@@ -203,16 +211,16 @@ Done.
 
 ### Step 5: Run the upgrade script
 
-We are now ready to perform the upgrade. The following script will either perform the upgrade directly or print the upgrade payload depending on the private key used:
+You are now ready to perform the upgrade. The following script will either perform the upgrade directly or print the upgrade payload depending on the private key used:
 
 - If `L1_PRIV_KEY` is the chain owner, the script will perform the upgrade directly. Note that it will not ask for confirmation before sending the transaction.
 - If `L1_PRIV_KEY` is NOT the chain owner, the script will print the upgrade payload.
 
-::::warning
+:::warning
 
 The following script will send the upgrade transaction directly if the `L1_PRIV_KEY` specified is the private key of the chain owner.
 
-::::
+:::
 
 ```shell
 $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-local-execute
@@ -222,6 +230,6 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 
 ### Step 6: Monitor the validation process
 
-Once the upgrade is executed, monitor that assertions are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` and `AssertionConfirmed`.
+Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` and `AssertionConfirmed`.
 
-If you stopped all validators in Step 4, make sure you start them again so they can continue creating assertions.
+If you stopped all validators in Step 4, start them again so they can continue creating assertions.
