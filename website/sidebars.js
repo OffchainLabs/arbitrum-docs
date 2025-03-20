@@ -503,9 +503,11 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'node-running/how-tos/running-an-orbit-node',
-              label: 'Run a full node',
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node <span class="other-section-icon">↓</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
             },
             {
               type: 'html',
@@ -745,13 +747,6 @@ const sidebars = {
           type: 'doc',
           label: 'Use Timeboost',
           id: 'run-arbitrum-node/how-to-use-timeboost',
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
         },
         {
           type: 'html',
