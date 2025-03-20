@@ -4,31 +4,126 @@ description: 'Learn the fundamentals of L2 to L1 messaging on Arbitrum.'
 author: pete-vielhaber
 sme: TucksonDev
 user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between L2 and L1 on Arbitrum.
-content_type: get-started
+content_type: concept
 ---
 
-<a data-quicklook-from="arbitrum">Arbitrum</a>'s <a data-quicklook-from="outbox">Outbox</a> system
-allows for arbitrary child chain to parent chain contract calls; i.e., messages initiated from the
-child chain which eventually resolve in execution on the parent chain. Child chain-to-parent chain
-messages (aka "outgoing" messages) bear many things in common with Arbitrum's [Parent chain-to-child
-chain messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) (Retryables), "in reverse" though
-with a few differences.
+import ImageZoom from '@site/src/components/ImageZoom';
 
-### Protocol Flow
+<a data-quicklook-from="arbitrum">Arbitrum</a>'s <a data-quicklook-from="outbox">outbox</a> system
+allows for arbitrary <a data-quicklook-from="child-chain">child chain</a> to <a data-quicklook-from="parent-chain">
+  parent chain
+</a> contract calls, i.e., messages initiated from the child chain, which eventually resolve in
+execution on the parent chain. Child-to-parent chain messages (aka "outgoing" messages) bear some
+things in common with Arbitrum's [parent chain to child chain
+messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which are "in reverse" though with
+differences, which we'll explore in this section.
 
-Part of the child chain state of an <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> — and consequently, part of every assertion — is a Merkle root of all child chain-to-parent chain messages in the chain's history. Upon an assertion being confirmed (typically ~1 week after its asserted), this Merkle root is posted on parent chain in the `Outbox` contract. The Outbox contract then lets users execute their messages — validating Merkle proofs of inclusion, and tracking which child to parent chain messages have already been spent.
+## Protocol flow
 
-### Client Flow
+Messages from child to parent are included in Arbitrum's Rollup state and finalized through the Rollup Protocol. The process follows these steps:
 
-From a <a data-quicklook-from="client">Client</a> perspective, a child to parent chain message begins with a call to the child chain [`ArbSys`](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys) precompile contract's `sendTxToL1` method. Once the message is included in an <a data-quicklook-from="assertion">Assertion</a> (typically within ~1 hour) and the assertion is confirmed (typically about ~1 week), any client can execute the message. To do this, the client first retrieves the proof data via a call to the Arbitrum chain's "virtual"/precompile-esque\*\* `NodeInterface` contract's `constructOutboxProof` method. The data returned can then be used in the `Outbox`'s `executeTransaction` method to perform the parent chain execution.
+1. **Message creation on child chain**:
+   - To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the `ArbSys` precompile.
+2. **Message inclusion in an <a data-quicklook-from="assertion">assertion</a>**:
+   - The message is batched with other transactions and included in a Rollup assertion.
+   - Assertions are submitted to the Rollup contract on the parent chain and enter the dispute window (~one week).
+3. **Assertion confirmation**:
+   - If the assertion remains unchallenged after the dispute window, the Rollup contract finalizes the assertion.
+   - The assertion's Merkle root gets posted to the outbox contract on the parent chain.
+4. **Execution on the parent chain**:
+   - Once the assertion is confirmed, anyone can execute the message on the parent chain by proving its inclusion.
+   - Execution is possible using `Outbox.executeTransaction`, which takes a Merkle proof proving the message exists in the finalized assertion.
 
-### Protocol Design Details
+## Client flow (How to send and execute messages)
 
-An important feature in the design of the Outbox system is that calls to `confirmNode` have constant overhead. Requiring that `confirmNode` only update the constant-sized outgoing message root hash, and that users themselves carry out the final step of execution, achieves this goal; i.e., no matter the number of outgoing messages in the root, or the gas cost of executing them on the parent chain, the cost of confirming nodes remains constant; this ensures that the assertion <a data-quicklook-from="confirmation">confirmation</a> processed can't be griefed.
+### Sending a message from a child to parent chain
 
-Unlike Retryables, which have an option to provide Ether for automatic child chain execution, outgoing messages can't provide in-protocol automatic parent chain execution, for the simple reason that Ethereum itself doesn't offer scheduled execution affordances. However, application-layer contracts that interact with the Outbox could in principle be built to provide somewhat-analogous "execution market" functionality for outsourcing the final parent chain execution step.
+A contract or user sends a message from the child chain by calling:
 
-Another difference between outgoing messages and Retryables is that Retryables have a limited lifetime before which they must be redeemed (or have their lifetime explicitly extended), whereas child to parent chain messages are stored in parent chain state, and thus persist permanently / have no deadline before which they must be executed.  
-The week long delay period before outgoing messages can be executed is inherent and fundamental to the nature of Arbitrum rollup, or any optimistic rollup style child chain; the moment a <a data-quicklook-from="transaction">Transaction</a> is published on-chain, any observer can anticipate its result; however, for Ethereum itself to accept its result, the protocol must give time for Arbitrum validators to detect and prove fault if need-be. For a protocol overview, see [How Arbitrum works](/how-arbitrum-works/01-a-gentle-introduction.mdx)
+```solidity
+ArbSys(100).sendTxToL1(destAddress, calldata);
+```
 
-\*\* We refer to `NodeInterface` as a "virtual" contract; its methods are accessible via calls `0x00000000000000000000000000000000000000C8`, but it doesn't really live on chain. It isn't really a precompile, but behaves a lot like a precompile that can't receive calls from other contracts. This is a cute trick that let's us provide Arbitrum-specific data without having to implement a custom RPC.
+### Executing the message on the parent chain
+
+After the seven-day <a data-quicklook-from="challenge">Challenge</a> period, if the assertion is confirmed, anyone can execute the message on the parent chain.
+
+1. **Retrieve proof data**:
+   - Call the `constructOutboxProof` method from the `NodeInterface` contract to get proof data.
+
+:::note
+
+We refer to `NodeInterface` as a "virtual" contract; its methods are accessible via calls `0x00000000000000000000000000000000000000C8`, but it doesn't live onchain. It isn't a precompile but behaves like a precompile that can't receive calls from other contracts. This approach is a cute trick that lets us provide Arbitrum-specific data without implementing a custom RPC.
+
+:::
+
+2. **Execute on the parent chain**;
+   - Call `Outbox.executeTransaction` with the proof data to execute the message on the parent chain.
+
+## Protocol design details
+
+### Constant overhead for node confirmation
+
+- Calling `confirmNode` on the Rollup contract has constant gas overhead, regardless of the number of messages in the assertion.
+- This confirmation ensures malicious actors cannot grief the network by submitting assertions with many outgoing messages.
+
+### Why child to parent chain messages require manual execution
+
+Unlike [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain message must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
+
+However, applications can implement execution markets that allow third parties to execute messages for a fee.
+
+### Persistence and expiry
+
+- **Child-to-parent chain messages**: - Persist indefinitely on the parent chain once included in the outbox.
+
+## Parent-to-child chain message lifecycle
+
+Each message progresses through three primary states:
+| Stage | Description |
+| ------------------------ | ----------- |
+| Posted on child chain | The message is sent via `ArbSys.sendTxToL1`. |
+| Waiting for finalization | The assertion containing the message is in the <a data-quicklook-from="challenge-period">challenge period</a> (~6.4 days) |
+| Confirmed and executable on the parent chain | If no <a data-quicklook-from="fraud-proof">fraud proof</a> is submitted, the assertion is confirmed, and the message is available for execution in the outbox. |
+
+## Withdrawing Ether
+
+Withdrawing Ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
+
+```solidity
+ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
+```
+
+Upon withdrawing, the Ether balance is burnt on the child chain side and will later be made available on the parent chain side.
+
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain. Once the withdraw executes (removed from the outbox), the user's Ether balance will receive credit on the parent chain.
+
+The following diagram depicts the process that funds follow during a withdrawal operation.
+
+<ImageZoom
+  src="/img/dapps-withdrawing-ether.svg"
+  alt="Process funds follow during withdrawal operation"
+  className="img-800px"
+/>
+
+## `ERC-20` token withdrawal
+
+Arbitrum has a canonical <a data-quicklook-from="bridge">bridge</a> design and architecture, which we explain in detail in the [Token bridging](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#token-bridging) section of Bridging from a parent chain to a child chain article. This section will explain how the Arbitrum canonical bridge works on the child-to-parent chain token bridging.
+
+1. Initiation of a child-to-parent chain transfer occurs via the `L2GatewayRouter` contract on the child chain.
+2. The token's gateway contract (`L2ArbitrumGateway`) on the child chain gets called.
+3. `L2ArbitrumGateway` finally communicates to its corresponding gateway contract on the parent chain using the `L1ArbitrumGateway` contract.
+
+<ImageZoom
+  src="/img/dapps-bridge_withdrawals.png"
+  alt="Withdrawal process using the gateway"
+  className="img-800px"
+/>
+
+For any given gateway pairing, calls have to be initiated through the corresponding router (`L2GatewayRouter`), and the gateways must conform to the `TokenGateway` interfaces; the `TokenGateway` interfaces should be flexible and extensible enough to support any bridging functionality a particular token may require.
+
+Token withdrawals are the most common usage of child-to-parent chain messaging. The standard withdrawal happens as follows (for standard gateway):
+
+1. On the child chain, a user calls `L2GatewayRouter.outBoundTransfer`, which calls `outBoundTransfer` on `arbSomeERC20Token`'s gateway (i.e., `L2ERC20Gateway`).
+2. This call burns arbSomeERC20Token tokens and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will eventually execute on the parent chain.
+3. After the dispute window expires and the assertion with the user's <a data-quicklook-from="transaction">transaction</a> receives confirmation, a user can call `Outbox.executeTransaction`, which calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
