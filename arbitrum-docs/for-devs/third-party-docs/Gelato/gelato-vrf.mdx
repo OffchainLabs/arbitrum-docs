@@ -14,10 +14,10 @@ Gelato VRF offers real randomness for blockchain applications on Arbitrum by lev
 
 The potential applications of a reliable and transparent random number generator on the blockchain are vast. Here are just a few use cases:
 
-- Gaming and Gambling: Determine fair outcomes for online games or decentralized gambling applications.
-- Decentralized Finance (DeFi): Use in protocols where random selections, like lottery systems, are required.
-- NFT Generation: Randomly generate traits or characteristics for unique digital assets.
-- Protocol Decision Making: In protocols where decisions need to be randomized, such as selecting validators or jurors.
+- **Gaming and Gambling**: Determine fair outcomes for online games or decentralized gambling applications.
+- **Decentralized Finance (DeFi)**: Use in protocols where random selections, like lottery systems, are required.
+- **NFT Generation**: Randomly generate traits or characteristics for unique digital assets.
+- **Protocol Decision Making**: In protocols where decisions need to be randomized, such as selecting validators or jurors.
 
 # How does Gelato VRF work?
 
@@ -25,14 +25,14 @@ Gelato VRF (Verifiable Random Function) provides trustable randomness on EVM-com
 
 Core Components:
 
-- Drand: Gelato VRF utilizes Drand, a decentralized randomness beacon ensuring unpredictability and unbiased randomness.
+- **Drand**: Gelato VRF utilizes Drand, a decentralized randomness beacon ensuring unpredictability and unbiased randomness.
 
 Top-level Flow:
 
-- Contract Deployment: Use GelatoVRFConsumerBase.sol as an interface for requesting random numbers.
-- Requesting Randomness: Emit the RequestedRandomness event to signal the need for a random number.
-- Processing: Web3 functions fetch the random number from Drand.
-- Delivery: The fulfillRandomness function delivers the random number to the requesting contract.
+- **Contract Deployment**: Use `GelatoVRFConsumerBase.sol` as an interface for requesting random numbers.
+- **Requesting Randomness**: Emit the `RequestedRandomness` event to signal the need for a random number.
+- **Processing**: Web3 functions fetch the random number from Drand.
+- **Delivery**: The `fulfillRandomness` function delivers the random number to the requesting contract.
 
 # Quick start guide
 
@@ -44,7 +44,7 @@ Ensure you have either [Foundry](https://book.getfoundry.sh/getting-started/inst
 
 ## Step 2: Install the Gelato VRF contracts
 
-- For hardhat users:
+- For Hardhat users:
 
 ```shell
  npm install --save-dev @gelatodigital/vrf-contracts

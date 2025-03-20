@@ -147,15 +147,15 @@ More information can be found on [How to debug Stylus transactions using Cargo S
 
 The table below describes each field of the `stylusTracer` return value.
 
-| Field Name | Description                                                     |
-| ---------- | --------------------------------------------------------------- |
-| `name`     | Name of the execute HostIO.                                     |
-| `args`     | Arguments of the HostIO encoded as hex.                         |
-| `outs`     | Outputs of the HostIO encoded as hex.                           |
-| `startInk` | Amount of Ink before executing the HostIO.                      |
-| `endInk`   | Amount of Ink after executing the HostIO.                       |
-| `address`  | For \*call HostIOs, the address of the called contract.         |
-| `steps`    | For \*call HostIOs, the steps performed by the called contract. |
+| Field Name | Description                                                   |
+| ---------- | ------------------------------------------------------------- |
+| `name`     | Name of the execute HostIO.                                   |
+| `args`     | Arguments of the HostIO encoded as hex.                       |
+| `outs`     | Outputs of the HostIO encoded as hex.                         |
+| `startInk` | Amount of Ink before executing the HostIO.                    |
+| `endInk`   | Amount of Ink after executing the HostIO.                     |
+| `address`  | For call HostIOs, the address of the called contract.         |
+| `steps`    | For call HostIOs, the steps performed by the called contract. |
 
 For example, the command below illustrates how to call this tracer for a transaction:
 

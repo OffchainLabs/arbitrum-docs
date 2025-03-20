@@ -53,7 +53,7 @@ const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-::: note
+:::note
 This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information.
 :::
 
@@ -94,7 +94,9 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C 
 
 You can then calculate the current Orbit surplus fees as `currentBaseFee - minimumBaseFee`.
 
-_Note: `getPricesInWei()` also returns the correspondent fees due to congestion in the second-to-last result of the returned tuple._
+:::note
+`getPricesInWei()` also returns the correspondent fees due to congestion in the second-to-last result of the returned tuple.
+:::
 
 ::::info Orbit surplus fees are automatically adjusted
 
@@ -222,7 +224,9 @@ Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You 
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
 ```
 
-_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain._
+:::note
+The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+:::
 
 Alternatively, you can use the Orbit SDK to retrieve the current address configured as `infraFeeAccount`:
 
@@ -266,13 +270,15 @@ await orbitChainClient.sendRawTransaction({
 
 ### Orbit surplus fee
 
-Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()(address)` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Orbit surplus fees are paid to the `networkFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getNetworkFeeAccount()(address)` of the [`ArbOwnerPublic`](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getNetworkFeeAccount() (address)"
 ```
 
-_Note: The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain._
+:::note
+The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+:::
 
 Alternatively, you can use the Orbit SDK to retrieve the current address configured as `networkFeeAccount`:
 
@@ -287,7 +293,7 @@ const networkFeeAccount = await orbitChainClient.arbOwnerReadContract({
 });
 ```
 
-To set a new `networkFeeAccount`, use the method `setNetworkFeeAccount(address)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+To set a new `networkFeeAccount`, use the method `setNetworkFeeAccount(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setNetworkFeeAccount(address) ()" $NEW_NETWORKFEEACCOUNT_ADDRESS
@@ -316,7 +322,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Parent chain base fee
 
-Parent chain base fees are paid to the fee collector of the active batch poster configured in your chain. The current configured batch posters can be obtained by calling the method `getBatchPosters()(address[])` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile. For example:
+Parent chain base fees are paid to the fee collector of the active batch poster configured in your chain. The current configured batch posters can be obtained by calling the method `getBatchPosters()(address[])` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getBatchPosters() (address[])"
@@ -328,7 +334,7 @@ This list has to also be verified against the `SequencerInbox` contract living o
 cast call --rpc-url $PARENT_CHAIN_RPC $SEQUENCER_INBOX_ADDRESS "isBatchPoster(address) (bool)" $BATCH_POSTER_ADDRESS
 ```
 
-Alternatively, you can use the Orbit SDK to retrieve the current configured batch posters. This method will not use the ArbAggregator precompile, but instead will rely on events emitted when configuring a new batch poster in the SequencerInbox contract.
+Alternatively, you can use the Orbit SDK to retrieve the current configured batch posters. This method will not use the `ArbAggregator` precompile, but instead will rely on events emitted when configuring a new batch poster in the SequencerInbox contract.
 
 ```typescript
 const parentChainClient = createPublicClient({
@@ -342,7 +348,7 @@ const batchPosters = await getBatchPosters(parentChainClient, {
 });
 ```
 
-Once you have the current batch poster, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and passing the address of the batch poster.
+Once you have the current batch poster, you can obtain the fee collector address configured for that batch poster by calling the method `getFeeCollector(address)(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and passing the address of the batch poster.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006D "getFeeCollector(address) (address)" $BATCH_POSTER_ADDRESS
@@ -362,7 +368,7 @@ const networkFeeAccount = await orbitChainClient.arbAggregatorReadContract({
 });
 ```
 
-To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the batch poster and the address of the new fee collector.
+To set a new fee collector for a specific batch poster, use the method `setFeeCollector(address, address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the batch poster and the address of the new fee collector.
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "setFeeCollector(address,address) ()" $BATCH_POSTER_ADDRESS $NEW_FEECOLLECTOR_ADDRESS
@@ -389,7 +395,7 @@ await orbitChainClient.sendRawTransaction({
 });
 ```
 
-Finally, if you want to set a new batch poster, you can call the method `addBatchPoster(address)` of the [ArbAggregator](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the new batch poster, and later call the method `setIsBatchPoster(address,bool)` of the SequencerInbox contract on the parent chain.
+Finally, if you want to set a new batch poster, you can call the method `addBatchPoster(address)` of the [`ArbAggregator`](/build-decentralized-apps/precompiles/02-reference.mdx#arbaggregator) precompile and pass the address of the new batch poster, and later call the method `setIsBatchPoster(address,bool)` of the `SequencerInbox` contract on the parent chain.
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x000000000000000000000000000000000000006D "addBatchPoster(address) ()" $NEW_BATCH_POSTER_ADDRESS
@@ -399,11 +405,13 @@ cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x00000000
 cast send --rpc-url $PARENT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY $SEQUENCER_INBOX_ADDRESS "setIsBatchPoster(address,bool) ()" $NEW_BATCH_POSTER_ADDRESS true
 ```
 
-_Note: When setting a new batch poster, its fee collector will be configured to the same address by default._
+:::note
+When setting a new batch poster, its fee collector will be configured to the same address by default.
+:::
 
 ### Parent chain surplus fee
 
-Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. For example:
+Parent chain surplus fees are paid to a specific `L1RewardRecipient` address that is configured individually per chain. The current fee collector address can be obtained by calling the method `getL1RewardRecipient()(address)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRecipient() (address)"
@@ -422,7 +430,7 @@ const parentChainRewardRecipient = await orbitChainClient.arbGasInfoReadContract
 });
 ```
 
-To set a new `L1RewardRecipient` address, you can call the method `setL1PricingRewardRecipient(address)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the address of the new reward recipient. For example:
+To set a new `L1RewardRecipient` address, you can call the method `setL1PricingRewardRecipient(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the address of the new reward recipient. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRecipient(address) ()" $NEW_L1REWARDRECIPIENT_ADDRESS

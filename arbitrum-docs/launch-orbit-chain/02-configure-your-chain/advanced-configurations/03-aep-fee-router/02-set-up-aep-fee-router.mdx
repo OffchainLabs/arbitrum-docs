@@ -74,7 +74,7 @@ The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/a
 
 The standard script deploys and sets up the AEP fee router contracts to route funds to the parent chain.
 L2 chains are expected to route funds to the [multisig wallet owned by the Arbitrum Foundation](#canonical-contracts) living on Ethereum.
-L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses ETH as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
+L3 chains (or further layers) might need to specify a different target address on the parent chain depending on the gas token of the chain. If the chain uses `ETH` as the gas token, and a [ChildToParentRouter](#canonical-contracts) contract is deployed in the parent chain, they can route their funds to that contract. If the chain uses a different gas token, please contact the Arbitrum Foundation to confirm the target address to withdraw the AEP fees to.
 
 ::::
 

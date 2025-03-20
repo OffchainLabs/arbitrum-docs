@@ -37,7 +37,7 @@ After selecting a chain type, you need to specify your Orbit chain's node config
 
 ## 4. Deploy your Orbit chain's token bridge
 
-Your Orbit chain's token bridge contracts allow ERC-20 tokens to move between your Orbit chain and its underlying parent chain. See [Deploy your Orbit chain's token bridge](/launch-orbit-chain/03-deploy-an-orbit-chain/05-deploying-token-bridge.md), then proceed to the next step.
+Your Orbit chain's token bridge contracts allow `ERC-20` tokens to move between your Orbit chain and its underlying parent chain. See [Deploy your Orbit chain's token bridge](/launch-orbit-chain/03-deploy-an-orbit-chain/05-deploying-token-bridge.md), then proceed to the next step.
 
 ## 5. Configure your Orbit chain
 
