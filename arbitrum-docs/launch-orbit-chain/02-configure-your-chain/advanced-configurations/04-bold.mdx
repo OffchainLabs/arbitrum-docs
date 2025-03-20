@@ -16,12 +16,12 @@ an Arbitrum chain's Rollup contracts.{' '}
 To read more about Arbitrum BoLD, please refer to the [Gentle Introduction for BoLD](../../../how-arbitrum-works/bold/gentle-introduction.mdx). To learn more about some guidelines/best-practices for using BoLD on your Orbit chain, please refer to our guide on [BoLD adoption for Orbit chains](../../bold-adoption-for-orbit-chains.mdx).
 
 :::caution
-As mentioned in our guide on [BoLD Adoption for Orbit chains](../../bold-adoption-for-orbit-chains.mdx), it is highly recommended that Orbit chains keep validation permissione by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the whitelist via the `validators[]` array.
+As mentioned in our guide on [BoLD adoption for Orbit chains](../../bold-adoption-for-orbit-chains.mdx), the recommendation is that Orbit chains keep validation permissioned by having `disableValidatorWhitelist` be `false` (which is the default) and by having a list of validators on the whitelist via the `validators[]` array.
 :::
 
 ## Table of Arbitrum BoLD parameters
 
-The following configuration parameters can be used when deploying or managing your Orbit chain. For an example of a configuration, feel free to reference [Arbitrum One's configuration](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/files/configs/arb1.ts).
+The following configuration parameters can be applied when deploying or managing your Orbit chain. For an example of a configuration, feel free to reference [Arbitrum One's configuration](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/files/configs/arb1.ts).
 
 import OptionalOrbitCompatibleCLIFlagsPartial from '../../../partials/_bold-config-params.mdx';
 
