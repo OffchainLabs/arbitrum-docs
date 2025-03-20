@@ -1,3 +1,5 @@
+import ImageZoom from '@site/src/components/ImageZoom';
+
 #### Q: Hello! What’s Arbitrum?
 
 Hi! <a data-quicklook-from='arbitrum'>Arbitrum</a> is a technology suite designed to scale Ethereum. You can use Arbitrum chains to do all things you do on Ethereum — use Web3 apps, deploy smart contracts, etc., but your transactions will be cheaper and faster. Our flagship product — Arbitrum Rollup — is an Optimistic rollup protocol that inherits Ethereum-level security.
@@ -37,7 +39,7 @@ Additionally, as long as there’s even just one honest validator, the chain wil
 
 #### Q: And how exactly is “fraud” “proven”? Sounds complicated.
 
-Oh, it’s not so bad. In essence, if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1 and will necessarily prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/07-interactive-fraud-proofs.mdx).
+Oh, it’s not so bad. In essence, if two validators disagree, only one of them (at most) can be telling the truth. In a dispute, the two validators play an interactive, call-and-response game in which they narrow down their dispute to a single computational step (think of something small and simple, like multiplying two numbers). This one step gets executed on L1 and will necessarily prove that the honest party was telling the truth. For a more detailed rundown, see [here](/how-arbitrum-works/05-validation-and-proving/01-validation-and-proving.mdx).
 
 #### Q: This dispute game obviously takes some time; does this impose any sort of delay on Arbitrum users' transactions?
 
@@ -84,7 +86,11 @@ Here’s a snapshot of the chains running on Arbitrum:
 - On other L2s:
   - Various L2 (Orbit) chain
 
-![700px-img](../assets/arbitrum-chains-diagram.jpeg)
+<ImageZoom
+  src="/img/arbitrum-chains-diagram.jpeg"
+  alt="Arbitrum chains diagram"
+  className="img-600px"
+/>
 
 Developers can launch their own Arbitrum chains that run as an L2 chain on top of Ethereum. They can also run Arbitrum chains that run on top of an EVM L2 chain.
 
