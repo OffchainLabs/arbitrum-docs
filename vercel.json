@@ -17,37 +17,22 @@
     },
     {
       "source": "/(proving/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/optimistic-rollup/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/rollup-protocol",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
-      "permanent": false
-    },
-    {
-      "source": "/(how-arbitrum-works/separating-execution-from-proving/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving.mdx",
+      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/geth-at-the-core/?)",
-      "destination": "/how-arbitrum-works/state-transition-function/stf-gentle-intro",
+      "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
       "permanent": false
     },
     {
@@ -428,11 +413,6 @@
     {
       "source": "/(node-running/gentle-introduction-run-node/?)",
       "destination": "/run-arbitrum-node/overview",
-      "permanent": false
-    },
-    {
-      "source": "/(node-running/how-tos/running-an-orbit-node/?)",
-      "destination": "/run-arbitrum-node/run-full-node",
       "permanent": false
     },
     {

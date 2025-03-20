@@ -11,7 +11,6 @@ type PrecompileMethodInfo = {
   implementationLine: number;
   description: string;
   deprecated?: boolean;
-  availableSinceArbOS?: number;
 };
 
 type PrecompileEventInfo = {
@@ -90,17 +89,11 @@ const renderMethodsInTable = (
   });
 
   if (methodOverrides) {
-    // Making all method names lowercase
-    const lowercasedMethodOverrides = Object.keys(methodOverrides).reduce((acc, key) => {
-      acc[key.toLowerCase()] = methodOverrides[key];
-      return acc;
-    }, {});
-
     // Merge potential overrides
-    Object.keys(lowercasedMethodOverrides).map((methodName: string) => {
+    Object.keys(methodOverrides).map((methodName: string) => {
       methodsInformation[methodName] = {
         ...methodsInformation[methodName],
-        ...lowercasedMethodOverrides[methodName],
+        ...methodOverrides[methodName],
       };
     });
   }
@@ -123,9 +116,6 @@ const renderMethodsInTable = (
         .map((methodInfo: PrecompileMethodInfo) => {
           if (methodInfo.deprecated) {
             showDeprecationFlag = true;
-          }
-          if (methodInfo.availableSinceArbOS) {
-            methodInfo.description += ` (Available since ArbOS ${methodInfo.availableSinceArbOS})`;
           }
 
           return `<tr>
