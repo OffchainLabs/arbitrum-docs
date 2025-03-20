@@ -27,8 +27,8 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 
 | Transaction type code | Transaction type name           | Description                                                                                                                                                                |
 | --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to child chain via the Arbitrum bridge                                                                                           |
-| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parenet chain, originated by a user through the Arbitrum bridge                                                                 |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from a parent chain to child chain via the Arbitrum bridge                                                                                             |
+| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                  |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
 | `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
 | `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
@@ -159,7 +159,7 @@ The table below describes each field of the `stylusTracer` return value.
 
 For example, the command below illustrates how to call this tracer for a transaction:
 
-```
+```shell
 curl -s \
     -X POST \
     -H "Content-Type: application/json" \
@@ -169,7 +169,7 @@ curl -s \
 
 The result of this call will be something along the lines of:
 
-```
+```shell
 {
   "jsonrpc": "2.0",
   "id": 1,
