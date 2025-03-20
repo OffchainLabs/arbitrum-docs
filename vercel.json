@@ -1554,6 +1554,96 @@
       "source": "/(sdk/utils_multicall?)",
       "destination": "/sdk/reference/utils/multicall",
       "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/abi_decode/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/abi_decode",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/abi_encode/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/abi_encode",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/bytes_in_bytes_out/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/errors/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/errors",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/events/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/events",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/function/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/function",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/function_selector/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/hashing/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/hello_world/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/hello_world",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/inheritance/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/primitive_data_types/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/primitive_data_types",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/sending_ether/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/sending_ether",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/variables/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/variables",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/concepts/stylus-cache-manager/?)",
+      "destination": "/stylus/concepts/how-it-works",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/debug-stylus-transactions/?)",
+      "destination": "/stylus/how-tos/debugging-tx",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+      "destination": "/stylus/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/verify-contracts/?)",
+      "destination": "/stylus/how-tos/verifying-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/using-stylus-cli/?)",
+      "destination": "/stylus/using-cli",
+      "permanent": false
     }
   ]
 }
