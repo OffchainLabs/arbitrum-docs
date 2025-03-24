@@ -25,7 +25,7 @@ The response for a transaction submission to the express lane is returned immedi
 When it comes to submitting express lane transactions, there are a few scenarios to consider.
 
 ### Scenario 1: You get an error response immediately
-In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will be consumed and you may need to re-submit your transaction after rectifying any errors. See [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane) for a full list of error responses and how to interpret them.
+In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will not be consumed if the error is timeboost related and consumed otherwise, hence you may need to re-submit your transaction after rectifying any errors with the appropriate sequence number. See [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane) for a full list of error responses and how to interpret them.
 
 ### Scenario 2: Your transaction got an empty response with an HTTP status of `200`
 In this scenario, a `null` response is immediately returned after you send an express lane transaction. This means that your transaction's `sequenceNumber` was consumed and your transaction was accepted. However, this does not mean that your transaction was sequenced into a block due to a block-based timeout explained below. We recommend checking transaction receipts for confirmation on whether your transactions were sequenced into a block or not.
