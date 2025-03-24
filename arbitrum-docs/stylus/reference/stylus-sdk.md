@@ -11,19 +11,13 @@ If you are looking to write and deploy Stylus contracts, please see the followin
 
 | Repo                           | Use cases                   | License           |
 | :----------------------------- | :-------------------------- | :---------------- |
-| [Rust SDK][Rust]               | Everything!                 | Apache 2.0 or MIT |
-| [C/C++ SDK][C]                 | Cryptography and algorithms | Apache 2.0 or MIT |
-| [Bf SDK][Bf]                   | Educational                 | Apache 2.0 or MIT |
-| [Cargo Stylus CLI Tool][Cargo] | Program deployment          | Apache 2.0 or MIT |
+| [Rust SDK](https://github.com/OffchainLabs/stylus-sdk-rs)               | Everything!                 | Apache 2.0 or MIT |
+| [C/C++ SDK](https://github.com/OffchainLabs/stylus-sdk-c)                 | Cryptography and algorithms | Apache 2.0 or MIT |
+| [Bf SDK](https://github.com/OffchainLabs/stylus-sdk-bf)                   | Educational                 | Apache 2.0 or MIT |
+| [Cargo Stylus CLI Tool](https://github.com/OffchainLabs/cargo-stylus) | Program deployment          | Apache 2.0 or MIT |
 
 The Stylus SDKs are open-source, allowing anyone to build their own! The following SDKs have been developed from the ecosystem of Stylus developers.
 
 | Repo           |
 | :------------- |
-| [Zig SDK][Zig] |
-
-[Rust]: https://github.com/OffchainLabs/stylus-sdk-rs
-[C]: https://github.com/OffchainLabs/stylus-sdk-c
-[Bf]: https://github.com/OffchainLabs/stylus-sdk-bf
-[Cargo]: https://github.com/OffchainLabs/cargo-stylus
-[Zig]: https://github.com/Stylish-Stylus/zig-stylus
+| [Zig SDK](https://github.com/Stylish-Stylus/zig-stylus) |
