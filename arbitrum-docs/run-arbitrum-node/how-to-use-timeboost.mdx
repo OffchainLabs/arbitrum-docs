@@ -1,5 +1,5 @@
 ---
-title: 'How to use Timeboost'
+title: "How to use Timeboost"
 description: Learn how to use timeboost
 author: jose-franco
 content_type: how-to
@@ -36,7 +36,7 @@ Auctions are facilitated by an auction contract, and bids get submitted to an au
 
 ### Prerequisites: Gather the required information
 
-import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+import { AddressExplorerLink as AEL } from "@site/src/components/AddressExplorerLink";
 
 Before we begin, make sure you have:
 
@@ -51,7 +51,7 @@ The following table shows this information for the Arbitrum DAO-owned chains:
 | ---------------- | ----------------------------------------------------------------------------- | -------------------------------- |
 | Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://sepolia-bv.arbitrum.io/  |
 | Arbitrum One     | <AEL address="0x5fcb496a31b7AE91e7c9078Ec662bd7A55cd3079" chainID={42161} />  | Pending on-chain governance vote |
-| Arbitrum Nova    | <AEL address="0xa5abadaf73dfcf5261c7f55420418736707dc0db" chainID={42170} />  | Pending on-chain governance vote |
+| Arbitrum Nova    | <AEL address="0xa5aBADAF73DFcf5261C7f55420418736707Dc0db" chainID={42170} />  | Pending on-chain governance vote |
 
 ### Step 1: Deposit funds into the auction contract
 
@@ -63,10 +63,12 @@ To see the amount of tokens we have deposited in the auction contract, we can ca
 const depositedBalance = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'balanceOf',
+  functionName: "balanceOf",
   args: [userAddress],
 });
-console.log(`Current balance of ${userAddress} in auction contract: ${depositedBalance}`);
+console.log(
+  `Current balance of ${userAddress} in auction contract: ${depositedBalance}`
+);
 ```
 
 If we want to deposit more funds to the auction contract, we first need to know what the bidding token is. To obtain the address of the bidding token, we can call the function `biddingToken` in the auction contract:
@@ -75,7 +77,7 @@ If we want to deposit more funds to the auction contract, we first need to know 
 const biddingTokenContractAddress = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'biddingToken',
+  functionName: "biddingToken",
 });
 console.log(`biddingToken: ${biddingTokenContractAddress}`);
 ```
@@ -93,8 +95,8 @@ Once we know what the bidding token is, we can deposit funds to the auction cont
 const approveHash = await walletClient.writeContract({
   account,
   address: biddingTokenContractAddress,
-  abi: parseAbi(['function approve(address,uint256)']),
-  functionName: 'approve',
+  abi: parseAbi(["function approve(address,uint256)"]),
+  functionName: "approve",
   args: [auctionContract, amountToDeposit],
 });
 console.log(`Approve transaction sent: ${approveHash}`);
@@ -104,7 +106,7 @@ const depositHash = await walletClient.writeContract({
   account,
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'deposit',
+  functionName: "deposit",
   args: [amountToDeposit],
 });
 console.log(`Deposit transaction sent: ${depositHash}`);
@@ -120,7 +122,7 @@ We can obtain the current round by calling the function `currentRound` in the au
 const currentRound = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'currentRound',
+  functionName: "currentRound",
 });
 console.log(`Current round: ${currentRound}`);
 ```
@@ -131,13 +133,14 @@ The above shows the current round that's running. At the same time, the auction 
 let currentAuctionRoundIsClosed = await publicClient.readContract({
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'isAuctionRoundClosed',
+  functionName: "isAuctionRoundClosed",
 });
 ```
 
 <aside>
-  Remember that, by default, auctions for a given round open 60 seconds before that round starts and
-  close 15 seconds before the round starts, so there might be no auctions opened at certain times.
+  Remember that, by default, auctions for a given round open 60 seconds before
+  that round starts and close 15 seconds before the round starts, so there might
+  be no auctions opened at certain times.
 </aside>
 
 Once we know what is the current round we can bid for (`currentRound + 1`) and we have verified that the auction is still open (`!currentAuctionRoundIsClosed`), we can submit a bid.
@@ -198,19 +201,19 @@ const currentAuctionRound = currentRound + 1;
 
 const signatureData = hashTypedData({
   domain: {
-    name: 'ExpressLaneAuction',
-    version: '1',
+    name: "ExpressLaneAuction",
+    version: "1",
     chainId: Number(publicClient.chain.id),
     verifyingContract: auctionContractAddress,
   },
   types: {
     Bid: [
-      { name: 'round', type: 'uint64' },
-      { name: 'expressLaneController', type: 'address' },
-      { name: 'amount', type: 'uint256' },
+      { name: "round", type: "uint64" },
+      { name: "expressLaneController", type: "address" },
+      { name: "amount", type: "uint256" },
     ],
   },
-  primaryType: 'Bid',
+  primaryType: "Bid",
   message: {
     round: currentAuctionRound,
     expressLaneController: userAddress,
@@ -447,9 +450,11 @@ const initWithdrawalTransaction = await walletClient.writeContract({
   account,
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'initiateWithdrawal',
+  functionName: "initiateWithdrawal",
 });
-console.log(`Initiate withdrawal transaction sent: ${initWithdrawalTransaction}`);
+console.log(
+  `Initiate withdrawal transaction sent: ${initWithdrawalTransaction}`
+);
 ```
 
 This transaction will initiate a withdrawal of all funds deposited by the sender account. When executing it, the contract will emit a `WithdrawalInitiated` event, with the following structure:
@@ -471,9 +476,11 @@ const finalizeWithdrawalTransaction = await walletClient.writeContract({
   account,
   address: auctionContractAddress,
   abi: auctionContractAbi,
-  functionName: 'finalizeWithdrawal',
+  functionName: "finalizeWithdrawal",
 });
-console.log(`Finalize withdrawal transaction sent: ${finalizeWithdrawalTransaction}`);
+console.log(
+  `Finalize withdrawal transaction sent: ${finalizeWithdrawalTransaction}`
+);
 ```
 
 ## How to identify timeboosted transactions
