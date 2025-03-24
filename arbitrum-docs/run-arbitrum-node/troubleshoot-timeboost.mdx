@@ -12,7 +12,7 @@ This is a short guide on how response times work and how <a data-quicklook-from=
 
 The express lane time advantage is currently set to 200ms, while the current block creation time is 250ms. Both express lane transactions and regular transactions are processed together in a single queue after taking into account the timeboost time advantage and artificial delay. This means that if an express lane transaction and a normal transaction both arrive at the <a data-quicklook-from="sequencer">sequencer</a> at the same time, but _before 50ms have passed since the last block was produced_, then both transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction (assuming that the block's gas limit has not yet been reached).
 
-Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The `sequenceNumber` field is important because transactions with `sequenceNumber=n` can only be sequenced after all the transactions from `sequenceNumber=0` to `sequenceNumber=n-1` have been sequenced. The first expected sequence number for a new round is zero and increments for each accepted transaction.
+Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The `sequenceNumber` field is important because transactions with `sequenceNumber = n` can only be sequenced after all the transactions from `sequenceNumber = 0` to `sequenceNumber = n-1` have been sequenced. The first expected sequence number for a new round is zero and increments for each accepted transaction.
 
 ## How response times work
 
@@ -24,7 +24,7 @@ When it comes to submitting express lane transactions, there are a few scenarios
 
 ### Scenario 1: You get an error response immediately
 
-In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related and consumed otherwise, hence you may need to re-submit your transaction after rectifying any errors with the appropriate sequence number. See [Common Timeboost error responses below](#common-error-responses) for a full list of Timeboost-related error responses and how to interpret them.
+In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related and consumed otherwise, hence you may need to re-submit your transaction after rectifying any errors with the appropriate sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
 
 ### Scenario 2: Your transaction got an empty response with an HTTP status of `200`
 
@@ -38,7 +38,7 @@ A block-based timeout is applied to all express lane transactions, even those in
 
 ## Common error responses
 
-The below two tables can also be found on our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx)
+The below two tables can also be found on our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx).
 
 #### Table 1: Errors relating to bid submission
 
