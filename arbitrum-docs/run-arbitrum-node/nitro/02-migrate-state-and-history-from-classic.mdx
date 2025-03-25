@@ -27,7 +27,7 @@ To successfully migrate the state and history of the chain from a classic (pre-N
 
 ## Step 1: Enable export options in your classic node
 
-Launch your classic node with the option `--node.rpc.nitroexport.enable=true`. All exported data will be written to directory "nitroexport" under the classic instance directory (e.g. `${HOME}/.arbitrum/mainnet/nitroexport`). Make sure the classic node has read the entire rollup state.
+Launch your classic node with the option `--node.rpc.nitroexport.enable=true`. All exported data will be written to directory "nitroexport" under the classic instance directory (e.g., `${HOME}/.arbitrum/mainnet/nitroexport`). Make sure the classic node has read the entire rollup state.
 
 :::caution Caution
 
@@ -37,7 +37,7 @@ Enabling the export options is only recommended for nodes with no public/externa
 
 :::info Exported file contents are not deterministic
 
-Exporting the state of your own classic node should produce the same state as using files supplied by the Arbitrum Foundation (i.e. the same genesis blockhash). However, multiple exports of the same state will not necessarily create identical intermediate files. For example, state export is done in parallel, so the order of entries in the file is not deterministic.
+Exporting the state of your own classic node should produce the same state as using files supplied by the Arbitrum Foundation (i.e., the same genesis blockhash). However, multiple exports of the same state will not necessarily create identical intermediate files. For example, state export is done in parallel, so the order of entries in the file is not deterministic.
 
 :::
 
@@ -45,7 +45,7 @@ Exporting the state of your own classic node should produce the same state as us
 
 ### Block & transaction history
 
-These are block headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and parentHash is taken from the last block's blockHash.
+These are block headers, transactions and receipts executed in the classic node. Nitro node uses the history to be able to answer simple requests, like `eth_getTransactionReceipt`, from the classic history. The last block in the chain is the only one that affects the genesis block: timestamp is copied from the last block, and `parentHash` is taken from the last block's `blockHash`.
 
 - Call the RPC method `arb_exportHistory` with parameter `"latest"` to initiate history export. It will return immediately.
 - Calling `arb_exportHistoryStatus` will return the latest block exported, or an error if the export failed.
@@ -55,7 +55,7 @@ These are block headers, transactions and receipts executed in the classic node.
 
 The rollup state is exported as a series of JSON files. State read from these JSON files will be added to Nitro's genesis block.
 
-- Call the RPC method `arb_exportState` with parameter `"latest"` to initiate state export. Unless disconnected, this will only return after the state export is done.
+- Call the RPC method `arb_exportState` with parameter `latest` to initiate state export. Unless disconnected, this will only return after the state export is done.
 - Data will be stored in the directory `nitroexport/state/<block_number>/`.
 
 ### Outbox messages (optional)

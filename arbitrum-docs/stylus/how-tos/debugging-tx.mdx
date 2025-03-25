@@ -121,7 +121,9 @@ Options:
 --use-native-tracer: Uses the native Stylus tracer instead of the default JS tracer. The native tracer has broader support from RPC providers.
 ```
 
-**Note:** The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
+:::note
+The `--use-native-tracer` flag uses `stylusTracer` instead of `jsTracer`, which is required for tracing Stylus transactions on most RPC providers. See more details [below](#rpc-endpoint-compatibility).
+:::
 
 The debugger will load and set a breakpoint automatically at the `user_entrypoint` internal Stylus function. While the examples below showcase GDB commands, you can find the LLDB equivalents [here](https://lldb.llvm.org/use/map.html).
 
