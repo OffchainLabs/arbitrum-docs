@@ -15,7 +15,9 @@ import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-
 
 Before customizing your Orbit chain, it's important to understand what the State Transition Function (aka the STF) is.
 The STF defines how new blocks are produced from input messages (i.e., transactions).
-This guide is only necessary for changes that modify the State Transition Function.
+
+This guide is only necessary for changes that modify the STF.
+
 To customize other node behavior, such as RPC behavior or the sequencer's ordering policy, you can simply
 [build your own node](/run-arbitrum-node/nitro/01-build-nitro-locally.mdx) without worrying about the rest of this guide.
 However, changes that modify the STF require updating the fraud proving system to recognize the new behavior as correct.
@@ -45,8 +47,8 @@ Here are some requirements for the Arbitrum Nitro State Transition Function:
 - The STF must be deterministic. For instance, if you gave an address a random balance using the Go randomness library,
   every node would disagree on the correct amount of balance and the blockchain would not function correctly.
   However, it is acceptable to take a non-deterministic path to a deterministic output.
-  For instance, if you randomly shuffled a list of addresses, and then gave them each 1 Ether, that would be fine,
-  because no matter how the list of addresses is shuffled the result is the same and all addresses are given 1 Ether.
+  For instance, if you randomly shuffled a list of addresses, and then gave them each one `ETH`, that would be fine,
+  because no matter how the list of addresses is shuffled the result is the same and all addresses are given one `ETH`.
 - The STF must not reach a new result for old blocks. For instance, if you have been running an Arbitrum Nitro chain for a while,
   and then you decide to modify the STF to not charge for gas, a new node that syncs the blockchain will reach a different result
   for historical blocks. It's also important to synchronize between nodes when an upgrade takes effect. A common mechanism
@@ -135,6 +137,12 @@ This method will only run the customized Nitro node (i.e., it will not run Block
 docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:8449:8449 custom-nitro-node --conf.file /home/user/.arbitrum/nodeConfig.json
 ```
 
+:::info
+
+The instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/run-arbitrum-node/03-run-full-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+
+:::
+
 Once your node is running, you can try out your modifications to the State Transition Function and confirm they work as expected.
 
 ### Step 4. Enable fraud proofs
@@ -148,7 +156,7 @@ It has three forms:
   It's used by Arbitrator when actually entering a challenge and performing the fraud proofs,
   and has identical behavior to `replay.wasm`.
 - The WASM module root (stored in `module-root.txt`) is a 32 byte hash usually expressed in hexadecimal which is a merkelization of `machine.wavm.br`.
-  The replay binary is much too large to post onchain, so this hash is set in the L1 rollup contract to determine the correct replay binary during fraud proofs.
+  The replay binary is much too large to post on-chain, so this hash is set in the L1 Rollup contract to determine the correct replay binary during fraud proofs.
 
 To run a validator node with fraud proofs enabled, the validator node's Docker image will need to contain all three of these versions of the replay binary.
 
@@ -204,7 +212,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 The primary issue with simply using a nitro-node-dev build is that, whenever the code changes at all, the replay binary will also change.
 
 If the node is missing the replay binary corresponding to the onchain WASM module root, it will be unable to act as a validator.
-Therefore, when releasing new node Docker images it's important to include the currently onchain WASM module root.
+Therefore, when releasing new node Docker images it's important to include the currently on-chain WASM module root.
 
 To do that, you'll need to first extract the replay binary from the `nitro-node-dev` Docker image built earlier:
 

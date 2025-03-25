@@ -35,11 +35,11 @@ Note that the challenge period is measured in blocks on the underlying L1 chain,
 
 ### Gas token
 
-The `Gas Token` parameter specifies the token (ETH or an ERC-20 token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the gas token is ETH. Orbit chains that are configured as AnyTrust chains can specify a different gas token as long as it falls within certain requirements.
+The `Gas Token` parameter specifies the token (`ETH` or an `ERC-20` token) that is natively used for gas payments on the network. On Ethereum, Arbitrum One, and Arbitrum Nova the gas token is `ETH`. Orbit chains that are configured as AnyTrust chains can specify a different gas token as long as it falls within certain requirements.
 
-The main requirement for custom gas tokens is that they are natively deployed on the parent chain. For example, if a team deploying an Orbit chain wants to use a specific ERC-20 as the gas token, that token must be deployed on the parent chain first (i.e., Arbitrum One or Nova). During chain deployment, that token is "natively bridged" and then properly configured as the native gas token on the new network.
+The main requirement for custom gas tokens is that they are natively deployed on the parent chain. For example, if a team deploying an Orbit chain wants to use a specific `ERC-20` as the gas token, that token must be deployed on the parent chain first (i.e., Arbitrum One or Nova). During chain deployment, that token is "natively bridged" and then properly configured as the native gas token on the new network.
 
-There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the ERC-20 token include:
+There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the `ERC-20` token include:
 
 - In this version, only tokens with **18** decimals are permitted to be the native token.
 - The token can't be rebasing or have a transfer fee.
@@ -47,21 +47,21 @@ There are other important considerations to keep in mind when deciding to use a 
 - The token must only be able to set allowance via a call to the token address itself.
 - The token must not have a callback on transfer, and more generally a user must not be able to make a transfer to themselves revert.
 
-It is worth reiterating that currently this feature is only supported on **Orbit AnyTrust chains**. Additionally, using a gas token other than ETH adds additional overhead when it comes to ensuring chains are funded properly when posting data to their parent chain.
+It is worth reiterating that currently this feature is only supported on **Orbit AnyTrust chains**. Additionally, using a gas token other than `ETH` adds additional overhead when it comes to ensuring chains are funded properly when posting data to their parent chain.
 
 ### Stake token
 
 Your Orbit chain will be supported by at least one validator node. In order for your chain's validators to post assertions of the state of the chain on the base chain (L2), they're required to stake some value as a way to incentivize honest participation.
 
-This `Stake token` parameter specifies the token that your chain's validators must deposit into this contract when they stake. This is specified using the token's contract address on the L2 chain that your chain is settling to, or `0x0000000000000000000000000000000000000000` if you want to use ETH as the stake token.
+This `Stake token` parameter specifies the token that your chain's validators must deposit into this contract when they stake. This is specified using the token's contract address on the L2 chain that your chain is settling to, or `0x0000000000000000000000000000000000000000` if you want to use `ETH` as the stake token.
 
 ### Base stake
 
-The `Base stake` parameter specifies the amount of the stake token (ETH or an ERC-20 token) that your chain's validators must deposit in order to post assertions of the state of your Orbit chain on the base chain's rollup contracts. This is specified using a float value.
+The `Base stake` parameter specifies the amount of the stake token (`ETH` or an `ERC-20` token) that your chain's validators must deposit in order to post assertions of the state of your Orbit chain on the base chain's rollup contracts. This is specified using a float value.
 
 If your `Base stake` is low, the barrier to participation will be low, but your chain will be more vulnerable to certain types of attacks.
 
-For example, an Orbit chain with a base stake of 0.01 ETH could be halted by an adversary who can afford to deploy sacrificial validators that maliciously challenge every assertion submitted to your Orbit chain's base chain.
+For example, an Orbit chain with a base stake of 0.01 `ETH` could be halted by an adversary who can afford to deploy sacrificial validators that maliciously challenge every assertion submitted to your Orbit chain's base chain.
 
 The malicious challenges would result in slashed Orbit chain validators (one slashed validator per malicious challenge), but from the adversary's perspective, periodic slashing is just the price they have to pay to keep your chain offline.
 
@@ -75,7 +75,11 @@ This account address is responsible for deploying, owning, and updating your Orb
 
 In production scenarios, this is a high-stakes address that's often controlled by a DAO's governance protocol or multisig. For your Orbit devnet chain, think of this as a low-stakes administrative service account.
 
-Note that **you'll have to fund this address** with enough ETH to cover the gas costs of deploying your core contracts to L2.
+:::note
+
+You **will** have to fund this address with enough `ETH` to cover the gas costs of deploying your core contracts to L2.
+
+:::
 
 When deploying your Orbit chain, this address must be a standard Ethereum wallet address (precisely speaking, an EOA); it can't be a smart contract/wallet contract.
 

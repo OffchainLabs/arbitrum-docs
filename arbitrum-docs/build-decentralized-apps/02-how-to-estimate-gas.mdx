@@ -66,7 +66,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We'll use one resource available in Arbitrum: the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx).
+We'll use one resource available in Arbitrum: the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx).
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at @@arbOneGasFloorGwei=0.01@@ gwei on Arbitrum One (@@novaGasFloorGwei=0.01@@ gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
   - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
@@ -85,7 +85,7 @@ For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to g
 
 Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We'll use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to the `NodeInterface`.
 
-We first instantiate a factory object for the NodeInterface, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the child chain network we are using, and `NODE_INTERFACE_ADDRESS` is the addresses that we need to call to access NodeInterface methods in said network.
+We first instantiate a factory object for the `NodeInterface`, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the child chain network we are using, and `NODE_INTERFACE_ADDRESS` is the addresses that we need to call to access the `NodeInterface` methods in said network.
 
 ```ts
 const { NodeInterface__factory } = require("@arbitrum/sdk/dist/lib/abi/factories/NodeInterface__factory");
