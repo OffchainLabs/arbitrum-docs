@@ -86,7 +86,7 @@ The Multicall contract offers a great case study for the differences between par
 
 The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behaviour.
 
-You can find a version of the adapted Multicall2 deployed on Arbitrum One at [0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF](https://arbiscan.io/address/0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF#code).
+You can find a version of the adapted `Multicall2` deployed on Arbitrum One at [0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF](https://arbiscan.io/address/0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF#code).
 
 By default the `getBlockNumber`, `tryBlockAndAggregate`, and `aggregate` functions return the child chain block number. This allows you to use this value to compare your state against the tip of the chain.
 

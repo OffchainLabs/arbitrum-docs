@@ -17,13 +17,13 @@ import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-
 
 2. If your desired changes need to be made to a live and operational Orbit chain
 
-If your changes meet both those 2 points, then you will need a custom ArbOS upgrade.
+If your changes meet both those two points, then you will need a custom ArbOS upgrade.
 
 Also, if you made changes to a live and operational chain and want to upgrade them later in the future, then you will likely need an ArbOS upgrade to facilitate the upgrade.
 
 ## Where should I insert ArbOS Upgrade related code?
 
-Below, you will find 4 examples of ArbOS-related code changes and, generally, how to make them:
+Below, you will find four examples of ArbOS-related code changes and, generally, how to make them:
 
 ### 1. Add a new method to existing precompile on a specific ArbOS version:
 
@@ -67,7 +67,7 @@ for _, method := range ArbHi.methods {
 }
 ```
 
-In this way, ArbHi and all its methods will be activated after the ArbOS version you set.
+In this way, `ArbHi` and all its methods will be activated after the ArbOS version you set.
 
 ### 3. Create a new ArbOS state on a specific ArbOS version
 
@@ -98,13 +98,13 @@ switch nextArbosVersion {
 }
 ```
 
-Here, we will ensure that the initial value of $(a random number) after ArbOS is upgraded to V21.
+Here, we will ensure that the initial value of $(a random number) after ArbOS is upgraded to v21.
 
 :::caution
 It should be noted that when you initialize the state (initial code is in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state)), you need to initialize it to 0 or null value first to avoid a potential re-org on your chain.
 :::
 
-Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS V21.
+Also, please make sure your program cannot call the `state.SetNewMyNumber` or other functions may change the value of `myNumber` before ArbOS v21.
 To prevent this, if you are using an external call to the precompile contract to change the value, you can refer to [point 1](./customize-arbos.mdx#1-add-a-new-method-to-existing-precompile-on-a-specific-arbos-version) or
 [point 2](./customize-arbos.mdx#2-create-a-new-precompile-contract-on-a-specific-arbos-version) to set the activation time of the precompile contract method.
 If your nitro code needs to call this method to change the state, you can continue reading [point 4](./customize-arbos.mdx#4-any-changes-in-the-stf-logic-that-will-affect-the-final-execution-result).

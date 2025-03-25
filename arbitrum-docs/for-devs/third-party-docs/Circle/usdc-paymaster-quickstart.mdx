@@ -7,26 +7,27 @@ sme: circle-cooper
 
 import CustomDetails from '@site/src/components/CustomDetails';
 
-Gas fees are often a barrier to entry for users interacting with apps that process transactions over blockchain networks. Typically, these fees are paid in the blockchain’s native token, like `ETH`, which adds complexity for users who primarily transact with USDC. Circle Paymaster simplifies this process by allowing users to pay for gas fees directly from their USDC balance.
+Gas fees are often a barrier to entry for users interacting with apps that process transactions over blockchain networks. Typically, these fees are paid in the blockchain’s native token, like `ETH`, which adds complexity for users who primarily transact with `USDC`. Circle Paymaster simplifies this process by allowing users to pay for gas fees directly from their `USDC` balance.
 
 ## What is Circle Paymaster?
 
-[Circle Paymaster](https://hubs.li/Q034mZmH0) is a smart contract within the Account Abstraction (ERC-4337) framework that sponsors gas fees on behalf of users.
+[Circle Paymaster](https://hubs.li/Q034mZmH0) is a smart contract within the Account Abstraction (`ERC-4337`) framework that sponsors gas fees on behalf of users.
 
 ### How Circle Paymaster handles transactions with a bundler
 
 Paymaster is operated by Circle and integrates seamlessly with bundlers such as Pimlico and Alchemy, which facilitate transaction bundling. A bundler is a service that collects user operations, combines them into a single transaction, and submits it to the blockchain network for execution, optimizing gas usage and efficiency. Below are the sequential steps outlining how Paymaster processes a transaction, with references to relevant contract functions:
 
-1. **USDC Balance Verification:** Paymaster uses the `balanceOf(address)` function of the USDC token contract to check whether the user’s balance is sufficient to cover the transaction and associated gas fees.
-2. **USDC to `ETH` Conversion for Gas Calculation:** The `fetchPrice()` function retrieves the real-time USDC to `ETH` conversion rate, ensuring accurate calculation of the gas fee equivalent in USDC and preventing overcharging.
-3. **Transaction Authorization with Bundlers:** The `_validatePaymasterUserOp()` function processes an EIP-2612 permit, which authorizes Paymaster to deduct the required USDC amount from the user. The permit is signed off-chain by the user and submitted with the transaction.
-4. **Gas Payment Processing:** The `_postOp()` function debits the required USDC from the user’s balance and handles the exchange of USDC for `ETH` using the `swapForNative(uint256 amountIn, uint256 slippageBips, uint24 poolFee)` function. The bundler then processes the transaction on the blockchain.
+1. **`USDC` Balance Verification:** Paymaster uses the `balanceOf(address)` function of the `USDC` token contract to check whether the user’s balance is sufficient to cover the transaction and associated gas fees.
+2. **`USDC` to `ETH` Conversion for Gas Calculation:** The `fetchPrice()` function retrieves the real-time `USDC` to `ETH` conversion rate, ensuring accurate calculation of the gas fee equivalent in `USDC` and preventing overcharging.
+3. **Transaction Authorization with Bundlers:** The `_validatePaymasterUserOp()` function processes an EIP-2612 permit, which authorizes Paymaster to deduct the required `USDC` amount from the user. The permit is signed off-chain by the user and submitted with the transaction.
+4. **Gas Payment Processing:** The `_postOp()` function debits the required `USDC` from the user’s balance and handles the exchange of `USDC` for `ETH` using the `swapForNative(uint256 amountIn, uint256 slippageBips, uint24 poolFee)` function. The bundler then processes the transaction on the blockchain.
+
 5. **Transaction Finalization:** The bundler confirms the transaction completion and Paymaster ensures all balances and gas payment records are updated accordingly.
 
 Key functions involved in this process include:
 
-- `balanceOf(address)` – Retrieves the USDC balance of the user.
-- `getPrice(address token1, address token2)` – Fetches the exchange rate between USDC and `ETH` for accurate gas fee calculations.
+- `balanceOf(address)` – Retrieves the `USDC` balance of the user.
+- `getPrice(address token1, address token2)` – Fetches the exchange rate between `USDC` and `ETH` for accurate gas fee calculations.
 - `processTransaction(bytes calldata userOperation)` – Manages the transaction execution and gas fee deduction.
 
 The paymaster contract addresses for Circle Paymaster are as follows:
@@ -34,16 +35,16 @@ The paymaster contract addresses for Circle Paymaster are as follows:
 - **Arbitrum Mainnet:** [0x6C973eBe80dCD8660841D4356bf15c32460271C9](https://arbiscan.io/address/0x6C973eBe80dCD8660841D4356bf15c32460271C9)
 - **Arbitrum Testnet:** [0x31BE08D380A21fc740883c0BC434FcFc88740b58](https://sepolia.arbiscan.io/address/0x31BE08D380A21fc740883c0BC434FcFc88740b58)
 
-These addresses are essential for configuring and interacting with Paymaster in your application. The paymaster interacts with the blockchain network to cover gas fees by leveraging off-chain signatures that authorize the paymaster to spend a user's USDC balance. It calculates the required gas, converts it into an equivalent USDC value, and then deducts the amount from the user's balance while ensuring the transaction is processed seamlessly on-chain without needing the native token.
+These addresses are essential for configuring and interacting with Paymaster in your application. The paymaster interacts with the blockchain network to cover gas fees by leveraging off-chain signatures that authorize the paymaster to spend a user's `USDC` balance. It calculates the required gas, converts it into an equivalent `USDC` value, and then deducts the amount from the user's balance while ensuring the transaction is processed seamlessly on-chain without needing the native token.
 
 ## Why use Circle Paymaster?
 
-1. **Improved User Experience:** Users can interact with your app using only USDC, eliminating the need to acquire `ETH` for gas payments.
+1. **Improved User Experience:** Users can interact with your app using only `USDC`, eliminating the need to acquire `ETH` for gas payments.
 2. **EIP-2612 Permit Support:** Paymaster supports EIP-2612, allowing users to authorize gas payments through off-chain signatures, reducing gas costs.
-3. **Reliability from Circle:** Backed by Circle, the issuer of USDC, Paymaster offers trust and operational reliability.
+3. **Reliability from Circle:** Backed by Circle, the issuer of `USDC`, Paymaster offers trust and operational reliability.
 4. **Deep Liquidity:** Paymaster is funded with deep native gas token liquidity, ensuring consistent transaction reliability.
 
-Here’s a step-by-step guide to building an app that uses Paymaster. You can fork and run the code directly from Circle's Replit [link](https://replit.com/@buildoncircle/Circle-Paymaster-Wallet?v=1)—feel free to check it out\!
+Here’s a step-by-step guide to building an app that uses Paymaster. You can fork and run the code directly from Circle's Replit [link](https://replit.com/@buildoncircle/Circle-Paymaster-Wallet?v=1)—feel free to check it out!
 
 ![image1]
 
@@ -897,15 +898,15 @@ npm run dev
 
 Once the development server is running, visit **http://localhost:3000** in your browser. Follow these steps to test the application:
 
-1\. Click on the **Create Smart Account** button to generate a smart wallet address.
+1. Click on the **Create Smart Account** button to generate a smart wallet address.
 
-2\. Deposit testnet USDC into the smart wallet address. You can source testnet USDC from [https://faucet.circle.com](https://faucet.circle.com).
+2. Deposit testnet `USDC` into the smart wallet address. You can source testnet `USDC` from [https://faucet.circle.com](https://faucet.circle.com).
 
-3\. Navigate to the **Transfer** tab.
+3. Navigate to the **Transfer** tab.
 
-4\. Input the recipient address and the amount of USDC to transfer.
+4. Input the recipient address and the amount of `USDC` to transfer.
 
-5\. Click on the **Transfer USDC** button to initiate the transfer.
+5. Click on the **Transfer USDC** button to initiate the transfer.
 
 This process demonstrates the functionality of the smart wallet and gas fee management using Circle Paymaster.
 

@@ -81,13 +81,13 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example ERC 20](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example `ERC-20`](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
 
 Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
 :::warning Storage layout in contracts using inheritance
 
-Note that one exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
+One exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
 
 :::
 
@@ -233,7 +233,7 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
+The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [`WETH` sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
 
 ## Functions
 
@@ -271,7 +271,7 @@ If a contract calls another that then calls the first, it is said to be reentran
 stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
 ```
 
-This is dangerous, and should be done only after careful review — ideally by 3rd party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
+This is dangerous, and should be done only after careful review––ideally by third-party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
 
 If enabled, the Stylus SDK will flush the storage cache in between reentrant calls, persisting values to state that might be used by inner calls. Note that preventing storage invalidation is only part of the battle in the fight against exploits. You can tell if a call is reentrant via `msg::reentrant`, and condition your business logic accordingly.
 
@@ -304,7 +304,7 @@ impl Erc20 {
 
 Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html), calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
 
-Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the ERC 20, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
+Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the `ERC-20`, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
 ::::warning
 
@@ -314,7 +314,7 @@ Stylus does not currently contain explicit `override` or `virtual` keywords for 
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
-Note that for the above to work, `Token` must implement [`Borrow<Erc20>`](https://doc.rust-lang.org/core/borrow/trait.Borrow.html). You can implement this yourself, but for simplicity, [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) and [`sol_storage!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html) provide a `#[borrow]` annotation.
+For the above to work, `Token` must implement [`Borrow<Erc20>`](https://doc.rust-lang.org/core/borrow/trait.Borrow.html). You can implement this yourself, but for simplicity, [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) and [`sol_storage!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html) provide a `#[borrow]` annotation.
 
 ```rust
 sol_storage! {
@@ -448,9 +448,9 @@ pub fn do_call(
 }
 ```
 
-Note that in the context of a [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`](https://docs.alchemy.com/docs/solidity-payable-functions). This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
+In the context of a [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`](https://docs.alchemy.com/docs/solidity-payable-functions). This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
 
-Note too that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
+Also, that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
 
 ### [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html)
 
@@ -468,7 +468,9 @@ In each case the calldata is supplied as a [`Vec<u8>`](https://doc.rust-lang.org
 
 This method provides a convenient shorthand for transferring ether.
 
-Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) function may be used instead.
+:::note
+This method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) function may be used instead.
+:::
 
 ```rust
 transfer_eth(recipient, value)?;                 // these two are equivalent
@@ -488,12 +490,16 @@ let data = RawCall::new_delegate()   // configure a delegate call
     .call(contract, calldata)?;      // do the call
 ```
 
-Note that the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) for more information.
+:::note
+The [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) for more information.
+:::
 
 ## [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) and `unsafe` deployments
 
 Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html), similar to [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html). As with [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html), this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html).
 
-Note that the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
+:::note
+That the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
+:::
 
 When configured with a `salt`, [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) will use [`CREATE2`](https://www.evm.codes/#f5) instead of the default [`CREATE`](https://www.evm.codes/#f0), facilitating address determinism.

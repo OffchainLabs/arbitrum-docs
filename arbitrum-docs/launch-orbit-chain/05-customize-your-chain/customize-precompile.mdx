@@ -32,7 +32,7 @@ There are five primary ways to customize your chain's precompiles:
 Clone the Nitro repository before you begin:
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.2@@ <https://github.com/OffchainLabs/nitro.git>
+git clone --branch @@nitroVersionTag=v3.5.3@@ <https://github.com/OffchainLabs/nitro.git>
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -72,7 +72,7 @@ You should see something like this:
 {"jsonrpc":"2.0","id":1,"result":"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000026869000000000000000000000000000000000000000000000000000000000000"}
 ```
 
-`0x6869` is the hex-encoded utf8 representation of `hi`, which you'll see embedded in the `result` hex string.
+`0x6869` is the hex-encoded UTF-8 representation of `hi`, which you'll see embedded in the `result` hex string.
 
 ### Call your function using Foundry's `cast call`
 
@@ -212,7 +212,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.3-0a9c975@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 ### Send the transaction and get the transaction receipt
@@ -290,7 +290,7 @@ Next, build Nitro by following the instructions in [How to build Nitro locally](
 Run Nitro with the following command:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.2-33d30c0@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.3-0a9c975@@ --parent-chain.connection.url=<YourParentChainUrl> --chain.id=<YourOrbitChainId> --http.api=net,web3,eth,debug --http.corsdomain=* --http.addr=0.0.0.0 --http.vhosts=*
 ```
 
 ### Send the transaction and get the transaction receipt
