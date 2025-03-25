@@ -38,7 +38,7 @@ To deploy a contract post-launch:
 
 **3. Send the message from the parent chain:** Call `Inbox.sendL2Message(bytes calldata message)` on the Orbit chain’s inbox contract. Provide the signed transaction as the input.
 
-**4. Execute the transaction on the child chain:** The child chain will process the message and execute it as a regular transaction. This flow does not use retryables, so the transaction is not auto-retried if it fails.
+**4. Execute the transaction on the child chain:** The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so the transaction is not auto-retried if it fails.
 
 ## Advantages and considerations
 
