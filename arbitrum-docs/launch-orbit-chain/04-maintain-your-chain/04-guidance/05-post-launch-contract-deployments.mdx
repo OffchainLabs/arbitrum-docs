@@ -10,7 +10,7 @@ user_story: As a current or prospective Orbit chain deployer, I need to learn ho
 content_type: how-to
 ---
 
-You can deploy contracts like `Multicall3`, the `EntryPoint` contract, or a `create2` factory to a live Orbit chain using a post-launch method that doesn't require any chain configuration changes or upgrades.
+You can deploy contracts like `Multicall3`, the `EntryPoint` contract, or a `create2` factory to a live Orbit chain using a post-launch method that doesn't require chain configuration changes or upgrades.
 
 This method leverages Arbitrum's built-in cross-chain messaging infrastructure. Specifically, it uses the `Inbox.sendL2Message` function to submit a pre-signed child chain transaction from the parent chain. Unlike retryable tickets, messages sent this way do not incur any parent chain data fees and are not limited by the 100,000 gas cap that applies to certain deterministic deployment flows.
 
