@@ -1,0 +1,45 @@
+---
+title: 'Deploying contracts after Orbit chain launch'
+sidebar_label: ' Post-launch deployments'
+description: 'Learn about deploying contracts like Multicall3 to an Orbit chain after launch using sendL2Message, without needing a chain upgrade or predeploy.'
+author: mahsamoosavi
+sme: mahsamoosavi
+target_audience: 'Developers deploying and maintaining Orbit chains.'
+sidebar_position: 8
+user_story: As a current or prospective Orbit chain deployer, I need to learn how to deploy contracts like Multicall3 *after* the chain has launched, so that I can use them at known addresses without needing to restart or modify the chain config.
+content_type: how-to
+---
+
+You can deploy contracts like `Multicall3`, the `EntryPoint` contract, or a `create2` factory to a live Orbit chain using a post-launch method that doesn't require any chain configuration changes or upgrades.
+
+This method leverages Arbitrum's built-in cross-chain messaging infrastructure. Specifically, it uses the `Inbox.sendL2Message` function to submit a pre-signed child chain transaction from the parent chain. Unlike retryable tickets, messages sent this way do not incur any parent chain data fees and are not limited by the 100,000 gas cap that applies to certain deterministic deployment flows.
+
+## When to use this method
+
+This a is useful when:
+
+- Your Orbit chain is already live.
+- You want to deploy a contract at a specific address (e.g., using CREATE2).
+- The contract was not included in the chain’s genesis configuration.
+
+Common use cases include:
+
+- Deploying `Multicall3`.
+- Deploying the `ERC-4337 EntryPoint` contract.
+- Deploying a `create2` factory or deterministic deployment proxy.
+
+## Overview
+
+To deploy a contract post-launch:
+
+**1. Fund the deployer address on the child chain:** Send ETH to the child chain address that will be used to send the deployment transaction. This can be done using a retryable ticket or parent chain to child chain deposit.
+
+**2. Create the signed child chain transaction:** Construct and sign a raw child chain transaction that performs the contract deployment (e.g., using CREATE2). [DeployHelper.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/DeployHelper.sol) can be used as a reference for formatting the transaction.
+
+**3. Send the message from the parent chain:** Call `Inbox.sendL2Message(bytes calldata message)` on the Orbit chain’s inbox contract. Provide the signed transaction as the input.
+
+**4. Execute the transaction on the child chain:** The child chain will process the message and execute it as a regular transaction. This flow does not use retryables, so the transaction is not auto-retried if it fails.
+
+## Advantages and considerations
+
+This approcah avoids parent chain data fees and bypasses the 100,000 gas limit associated with retryable tickets. It also requires no chain upgrade or restart and works on any standard Arbitrum or Orbit chain setup. However, since the flow bypasses retryable safety mechanisms, failed transactions are not automatically retried. The sender must have enough ETH on child chain to cover gas costs, and the signed transaction must be valid and use the correct nonce.
