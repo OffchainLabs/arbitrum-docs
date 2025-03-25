@@ -136,6 +136,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              label: 'Layer Leap contracts',
+              id: 'build-decentralized-apps/token-bridging/layer-leap',
+            },
+            {
+              type: 'doc',
               label: 'ERC-20 token bridging',
               id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
