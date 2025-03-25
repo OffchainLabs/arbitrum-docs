@@ -23,9 +23,9 @@ This section provides extra information about how the Stylus Rust SDK handles st
 
 Rust smart contracts may use state that persists across transactions. There’s two primary ways to define storage, depending on if you want to use Rust or Solidity definitions. Both are equivalent, and are up to the developer depending on their needs.
 
-### [`#[storage]`][storage]
+### [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html)
 
-The [`#[storage]`][storage] macro allows a Rust struct to be used in persistent storage.
+The [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) macro allows a Rust struct to be used in persistent storage.
 
 ```rust
 #[storage]
@@ -41,26 +41,28 @@ pub struct SubStruct {
 }
 ```
 
-Any type implementing the [`StorageType`][StorageType] trait may be used as a field, including other structs, which will implement the trait automatically when [`#[storage]`][storage] is applied. You can even implement [`StorageType`][StorageType] yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
+Any type implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait may be used as a field, including other structs, which will implement the trait automatically when [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) is applied. You can even implement [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) yourself to define custom storage types. However, we’ve gone ahead and implemented the common ones.
 
 | Type                                     | Info                                                                           |
 | ---------------------------------------- | ------------------------------------------------------------------------------ |
-| [`StorageBool`][StorageBool]             | Stores a bool                                                                  |
-| [`StorageAddress`][StorageAddress]       | Stores an Alloy [`Address`][Address]                                           |
-| [`StorageUint`][StorageUint]             | Stores an Alloy [`Uint`][Uint]                                                 |
-| [`StorageSigned`][StorageSigned]         | Stores an Alloy [`Signed`][Signed]                                             |
-| [`StorageFixedBytes`][StorageFixedBytes] | Stores an Alloy [`FixedBytes`][FixedBytes]                                     |
-| [`StorageBytes`][StorageBytes]           | Stores a Solidity bytes                                                        |
-| [`StorageString`][StorageString]         | Stores a Solidity string                                                       |
-| [`StorageVec`][StorageVec]               | Stores a vector of [`StorageType`][StorageType]                                |
-| [`StorageMap`][StorageMap]               | Stores a mapping of [`StorageKey`][StorageKey] to [`StorageType`][StorageType] |
-| [`StorageArray`][StorageArray]           | Stores a fixed-sized array of [`StorageType`][StorageType]                     |
+| [`StorageBool`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
+)             | Stores a bool                                                                  |
+| [`StorageAddress`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html)       | Stores an Alloy [`Address`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html)                                           |
+| [`StorageUint`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageUint.html)             | Stores an Alloy [`Uint`](https://docs.rs/ruint/1.10.1/ruint/struct.Uint.html)                                                 |
+| [`StorageSigned`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageSigned.html)         | Stores an Alloy [`Signed`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html)                                             |
+| [`StorageFixedBytes`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageFixedBytes.html) | Stores an Alloy [`FixedBytes`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.FixedBytes.html)                                     |
+| [`StorageBytes`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBytes.html)           | Stores a Solidity bytes                                                        |
+| [`StorageString`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageString.html)         | Stores a Solidity string                                                       |
+| [`StorageVec`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html)               | Stores a vector of [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html)                                |
+| [`StorageMap`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html)               | Stores a mapping of [`StorageKey`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageKey.html) to [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) |
+| [`StorageArray`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageArray.html)           | Stores a fixed-sized array of [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html)                     |
 
-Every [Alloy primitive][alloy_primitives] has a corresponding [`StorageType`][StorageType] implementation with the word `Storage` before it. This includes aliases, like [`StorageU256`][StorageUint256] and [`StorageB64`][StorageB64].
+Every [Alloy primitive](https://docs.rs/alloy-primitives/latest/alloy_primitives/) has a corresponding [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) implementation with the word `Storage` before it. This includes aliases, like [`StorageU256`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU256.html) and [`StorageB64`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageB64.html).
 
-### [`sol_storage!`][sol_storage]
+### [`sol_storage!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
+)
 
-The types in [`#[storage]`][storage] are laid out in the EVM state trie exactly as they are in [Solidity][sol_abi]. This means that the fields of a struct definition will map to the same storage slots as they would in EVM programming languages.
+The types in [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) are laid out in the EVM state trie exactly as they are in [Solidity](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html). This means that the fields of a struct definition will map to the same storage slots as they would in EVM programming languages.
 
 Because of this, it is often nice to define your types using Solidity syntax, which makes that guarantee easier to see. For example, the earlier Rust struct can re-written to:
 
@@ -80,9 +82,9 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`][StorageType] trait. Many contracts, like [our example ERC 20][erc20], do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) trait. Many contracts, like [our example ERC 20](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs), do exactly this.
 
-Because the layout is identical to [Solidity’s][sol_abi], existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
+Because the layout is identical to [Solidity’s](https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html), existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
 :::warning Storage layout in contracts using inheritance
 
@@ -126,7 +128,7 @@ impl Contract {
 }
 ```
 
-In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`][SLOAD] or [`SSTORE`][SSTORE] operations.
+In Solidity, one has to be very careful about storage access patterns. Getting or setting the same value twice doubles costs, leading developers to avoid storage access at all costs. By contrast, the Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`](https://www.evm.codes/#54) or [`SSTORE`](https://www.evm.codes/#55) operations.
 
 :::tip
 
@@ -138,7 +140,7 @@ However it must be said that storage is ultimately more expensive than memory. S
 
 ### Collections
 
-Collections like [`StorageVec`][StorageVec] and [`StorageMap`][StorageMap] are dynamic and have methods like [`push`][StorageVec_push], [`insert`][StorageMap_insert], [`replace`][StorageMap_replace], and similar.
+Collections like [`StorageVec`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html) and [`StorageMap`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html) are dynamic and have methods like [`push`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.push), [`insert`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.insert), [`replace`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.replace), and similar.
 
 ```rust
 impl SubStruct {
@@ -152,7 +154,7 @@ impl SubStruct {
 }
 ```
 
-You may notice that some methods return types like [`StorageGuard`][StorageGuard] and [`StorageGuardMut`][StorageGuardMut]. This allows us to leverage the Rust borrow checker for storage mistakes, just like it does for memory. Here’s an example that will fail to compile.
+You may notice that some methods return types like [`StorageGuard`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuard.html) and [`StorageGuardMut`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html). This allows us to leverage the Rust borrow checker for storage mistakes, just like it does for memory. Here’s an example that will fail to compile.
 
 ```rust
 fn mistake(vec: &mut StorageVec<StorageU64>) -> U64 {
@@ -164,13 +166,13 @@ fn mistake(vec: &mut StorageVec<StorageU64>) -> U64 {
 }
 ```
 
-Under the hood, [`vec.setter()`][StorageVec_setter] returns a [`StorageGuardMut`][StorageGuardMut] instead of a [`&mut StorageU64`][StorageU64]. Because the guard is bound to a [`&mut StorageVec`][StorageVec] lifetime, `value` and `alias` cannot be alive simultaneously. This causes the Rust compiler to reject the above code, saving you from entire classes of storage aliasing errors.
+Under the hood, [`vec.setter()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.setter) returns a [`StorageGuardMut`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html) instead of a [`&mut StorageU64`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU64.html). Because the guard is bound to a [`&mut StorageVec`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html) lifetime, `value` and `alias` cannot be alive simultaneously. This causes the Rust compiler to reject the above code, saving you from entire classes of storage aliasing errors.
 
 In this way the Stylus SDK safeguards storage access the same way Rust ensures memory safety. It should never be possible to alias Storage without `unsafe` Rust.
 
-### [`SimpleStorageType`][SimpleStorageType]
+### [`SimpleStorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html)
 
-You may run into scenarios where a collection’s methods like [`push`][StorageVec_push] and [`insert`][StorageMap_insert] aren’t available. This is because only primitives, which implement a special trait called [`SimpleStorageType`][SimpleStorageType], can be added to a collection by value. For nested collections, one instead uses the equivalent [`grow`][StorageVec_grow] and [`setter`][StorageVec_setter].
+You may run into scenarios where a collection’s methods like [`push`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.push) and [`insert`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.insert) aren’t available. This is because only primitives, which implement a special trait called [`SimpleStorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html), can be added to a collection by value. For nested collections, one instead uses the equivalent [`grow`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.grow) and [`setter`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.setter).
 
 ```rust
 fn nested_vec(vec: &mut StorageVec<StorageVec<StorageU8>>) {
@@ -184,11 +186,12 @@ fn nested_map(map: &mut StorageMap<u32, StorageVec<U8>>) {
 }
 ```
 
-### [`Erase`][Erase] and [`#[derive(Erase)]`][derive_erase]
+### [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) and [`#[derive(Erase)]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html)
 
-Some [`StorageType`][StorageType] values implement [`Erase`][Erase], which provides an [`erase()`][erase] method for clearing state. We’ve implemented [`Erase`][Erase] for all primitives, and for vectors of primitives, but not maps. This is because a solidity [`mapping`][mapping] does not provide iteration, and so it’s generally impossible to know which slots to set to zero.
+Some [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) values implement [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html), which provides an [`erase()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase) method for clearing state. We’ve implemented [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) for all primitives, and for vectors of primitives, but not maps. This is because a solidity [`mapping`](https://docs.soliditylang.org/en/latest/types.html#mapping-types
+) does not provide iteration, and so it’s generally impossible to know which slots to set to zero.
 
-Structs may also be [`Erase`][Erase] if all of the fields are. [`#[derive(Erase)]`][derive_erase] lets you do this automatically.
+Structs may also be [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) if all of the fields are. [`#[derive(Erase)]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html) lets you do this automatically.
 
 ```rust
 sol_storage! {
@@ -205,17 +208,17 @@ sol_storage! {
 }
 ```
 
-You can also implement [`Erase`][Erase] manually if desired. Note that the reason we care about [`Erase`][Erase] at all is that you get storage refunds when clearing state, lowering fees. There’s also minor implications for patterns using `unsafe` Rust.
+You can also implement [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) manually if desired. Note that the reason we care about [`Erase`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html) at all is that you get storage refunds when clearing state, lowering fees. There’s also minor implications for patterns using `unsafe` Rust.
 
 ### The storage cache
 
-The Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`][SLOAD] or [`SSTORE`][SSTORE] operations needed to get and set state. For the vast majority of use cases, this happens in the background and requires no input from the user.
+The Stylus SDK employs an optimal storage-caching policy that avoids the underlying [`SLOAD`](https://www.evm.codes/#54) or [`SSTORE`](https://www.evm.codes/#55) operations needed to get and set state. For the vast majority of use cases, this happens in the background and requires no input from the user.
 
-However, developers working with `unsafe` Rust implementing their own custom [`StorageType`][StorageType] collections, the [`StorageCache`][StorageCache] type enables direct control over this data structure. Included are `unsafe` methods for manipulating the cache directly, as well as for bypassing it altogether.
+However, developers working with `unsafe` Rust implementing their own custom [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) collections, the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html) type enables direct control over this data structure. Included are `unsafe` methods for manipulating the cache directly, as well as for bypassing it altogether.
 
-### Immutables and [`PhantomData`][PhantomData]
+### Immutables and [`PhantomData`](https://doc.rust-lang.org/core/marker/struct.PhantomData.html)
 
-So that generics are possible in [`sol_interface!`][sol_interface], [`core::marker::PhantomData`][PhantomData] implements [`StorageType`][StorageType] and takes up zero space, ensuring that it won’t cause storage slots to change. This can be useful when writing libraries.
+So that generics are possible in [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html), [`core::marker::PhantomData`](https://doc.rust-lang.org/core/marker/struct.PhantomData.html) implements [`StorageType`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html) and takes up zero space, ensuring that it won’t cause storage slots to change. This can be useful when writing libraries.
 
 ```rust
 pub trait Erc20Params {
@@ -232,7 +235,7 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract][erc20] for a full example of this feature.
+The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract](https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs) for a full example of this feature.
 
 ## Functions
 
@@ -240,9 +243,9 @@ This section provides extra information about how the Stylus Rust SDK handles fu
 
 ### Pure, View, and Write functions
 
-For non-payable methods the [`#[public]`][public] macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them, or even this one if the `reentrant` feature is enabled.
+For non-payable methods the [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) macro can figure state mutability out for you based on the types of the arguments. Functions with `&self` will be considered `view`, those with `&mut self` will be considered `write`, and those with neither will be considered `pure`. Please note that `pure` and `view` functions may change the state of other contracts by calling into them, or even this one if the `reentrant` feature is enabled.
 
-### [`#[entrypoint]`][entrypoint]
+### [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html)
 
 This macro allows you to define the entrypoint, which is where Stylus execution begins. Without it, the contract will fail to pass `cargo stylus check`. Most commonly, the macro is used to annotate the top level storage struct.
 
@@ -274,15 +277,15 @@ This is dangerous, and should be done only after careful review — ideally by 3
 
 If enabled, the Stylus SDK will flush the storage cache in between reentrant calls, persisting values to state that might be used by inner calls. Note that preventing storage invalidation is only part of the battle in the fight against exploits. You can tell if a call is reentrant via `msg::reentrant`, and condition your business logic accordingly.
 
-### [`TopLevelStorage`][TopLevelStorage]
+### [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html)
 
-The [`#[entrypoint]`][entrypoint] macro will automatically implement the [`TopLevelStorage`][TopLevelStorage] trait for the annotated `struct`. The single type implementing [`TopLevelStorage`][TopLevelStorage] is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
+The [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html) macro will automatically implement the [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html) trait for the annotated `struct`. The single type implementing [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html) is special in that mutable access to it represents mutable access to the entire program’s state. This idea will become important when discussing calls to other programs in later sections.
 
 ### Inheritance, `#[inherit]`, and `#[borrow]`.
 
 <StylusNoMultiInheritanceBannerPartial />
 
-Composition in Rust follows that of Solidity. Types that implement [`Router`][Router], the trait that [`#[public]`][public] provides, can be connected via inheritance.
+Composition in Rust follows that of Solidity. Types that implement [`Router`](https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html), the trait that [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) provides, can be connected via inheritance.
 
 ```rust
 #[public]
@@ -301,7 +304,7 @@ impl Erc20 {
 }
 ```
 
-Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`][entrypoint], calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
+Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html), calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
 
 Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the ERC 20, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
@@ -313,7 +316,8 @@ Stylus does not currently contain explicit `override` or `virtual` keywords for 
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
-Note that for the above to work, `Token` must implement [`Borrow<Erc20>`][Borrow]. You can implement this yourself, but for simplicity, [`#[storage]`][storage] and [`sol_storage!`][sol_storage] provide a `#[borrow]` annotation.
+Note that for the above to work, `Token` must implement [`Borrow<Erc20>`](https://doc.rust-lang.org/core/borrow/trait.Borrow.html). You can implement this yourself, but for simplicity, [`#[storage]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html) and [`sol_storage!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
+) provide a `#[borrow]` annotation.
 
 ```rust
 sol_storage! {
@@ -332,7 +336,7 @@ sol_storage! {
 
 ## Calls
 
-Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool][abi_export].
+Just as with storage and functions, Stylus SDK calls are Solidity ABI equivalent. This means you never have to know the implementation details of other contracts to invoke them. You simply import the Solidity interface of the target contract, which can be auto-generated via the `cargo stylus` [CLI tool](https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis).
 
 :::tip
 
@@ -340,7 +344,7 @@ You can call contracts in any programming language with the Stylus SDK.
 
 :::
 
-### [`sol_interface!`][sol_interface]
+### [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html)
 
 This macro defines a `struct` for each of the Solidity interfaces provided.
 
@@ -365,7 +369,7 @@ Currently only functions are supported, and any other items in the interface wil
 
 ::::
 
-For example, `IService` will have a `make_payment` method that accepts an [`Address`][Address] and returns a [`B256`][B256].
+For example, `IService` will have a `make_payment` method that accepts an [`Address`](https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html) and returns a [`B256`](https://docs.rs/alloy-primitives/latest/alloy_primitives/aliases/type.B256.html).
 
 ```rust
 pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Error> {
@@ -373,11 +377,12 @@ pub fn do_call(&mut self, account: IService, user: Address) -> Result<String, Er
 }
 ```
 
-Observe the casing change. [`sol_interface!`][sol_interface] computes the selector based on the exact name passed in, which should almost always be `CamelCase`. For aesthetics, the rust functions will instead use `snake_case`.
+Observe the casing change. [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html) computes the selector based on the exact name passed in, which should almost always be `CamelCase`. For aesthetics, the rust functions will instead use `snake_case`.
 
-### Configuring gas and value with [`Call`][Call]
+### Configuring gas and value with [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html)
 
-[`Call`][Call] lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
+[`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) lets you configure a call via optional configuration methods. This is similar to how one would configure opening a [`File`](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
+) in Rust.
 
 ```rust
 pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
@@ -389,11 +394,12 @@ pub fn do_call(account: IService, user: Address) -> Result<String, Error> {
 }
 ```
 
-By default [`Call`][Call] supplies all gas remaining and zero value, which often means [`Call::new_in()`][Call_new_in] may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
+By default [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) supplies all gas remaining and zero value, which often means [`Call::new_in()`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in
+) may be passed to the method directly. Additional configuration options are available in cases of reentrancy.
 
 ### Reentrant calls
 
-Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`][StorageCache_flush] or [`clear`][StorageCache_clear] the [`StorageCache`][StorageCache] to safeguard state. This happens automatically via the type system.
+Contracts that opt into reentrancy via the `reentrant` feature flag require extra care. When the `storage-cache` feature is enabled, cross-contract calls must [`flush`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.flush) or [`clear`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.clear) the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html) to safeguard state. This happens automatically via the type system.
 
 ```rust
 sol_interface! {
@@ -428,9 +434,10 @@ impl Contract {
 }
 ```
 
-In the above, we’re able to pass `&self` and `&mut self` because `Contract` implements [`TopLevelStorage`][TopLevelStorage], which means that a reference to it entails access to the entirety of the contract’s state. This is the reason it is sound to make a call, since it ensures all cached values are invalidated and/or persisted to state at the right time.
+In the above, we’re able to pass `&self` and `&mut self` because `Contract` implements [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html), which means that a reference to it entails access to the entirety of the contract’s state. This is the reason it is sound to make a call, since it ensures all cached values are invalidated and/or persisted to state at the right time.
 
-When writing Stylus libraries, a type might not be [`TopLevelStorage`][TopLevelStorage] and therefore `&self` or `&mut self` won’t work. Building a [`Call`][Call] from a generic parameter via [`new_in`][Call_new_in] is the usual solution.
+When writing Stylus libraries, a type might not be [`TopLevelStorage`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html) and therefore `&self` or `&mut self` won’t work. Building a [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) from a generic parameter via [`new_in`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in
+) is the usual solution.
 
 ```rust
 pub fn do_call(
@@ -447,27 +454,29 @@ pub fn do_call(
 }
 ```
 
-Note that in the context of a [`#[public]`][public] call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`][payable]. This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
+Note that in the context of a [`#[public]`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html) call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`](https://docs.alchemy.com/docs/solidity-payable-functions). This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
 
 Note too that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
 
-### [`call`][fn_call], [`static_call`][fn_static_call], and [`delegate_call`][fn_delegate_call]
+### [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html), [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html), and [`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html
+)
 
-Though [`sol_interface!`][sol_interface] and [`Call`][Call] form the most common idiom to invoke other contracts, their underlying [`call`][fn_call] and [`static_call`][fn_static_call] are exposed for direct access.
+Though [`sol_interface!`](https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html) and [`Call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html) form the most common idiom to invoke other contracts, their underlying [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) and [`static_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html) are exposed for direct access.
 
 ```rust
 let return_data = call(Call::new_in(self), contract, call_data)?;
 ```
 
-In each case the calldata is supplied as a [`Vec<u8>`][Vec]. The return result is either the raw return data on success, or a call [`Error`][CallError] on failure.
+In each case the calldata is supplied as a [`Vec<u8>`](https://doc.rust-lang.org/alloc/vec/struct.Vec.html). The return result is either the raw return data on success, or a call [`Error`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/enum.Error.html) on failure.
 
-[`delegate_call`][fn_delegate_call] is also available, though it's `unsafe` and doesn't have a richly-typed equivalent. This is because a delegate call must trust the other contract to uphold safety requirements. Though this function clears any cached values, the other contract may arbitrarily change storage, spend ether, and do other things one should never blindly allow other contracts to do.
+[`delegate_call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html
+) is also available, though it's `unsafe` and doesn't have a richly-typed equivalent. This is because a delegate call must trust the other contract to uphold safety requirements. Though this function clears any cached values, the other contract may arbitrarily change storage, spend ether, and do other things one should never blindly allow other contracts to do.
 
-### [`transfer_eth`][transfer_eth]
+### [`transfer_eth`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html)
 
 This method provides a convenient shorthand for transferring ether.
 
-Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`][fn_call] function may be used instead.
+Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html) function may be used instead.
 
 ```rust
 transfer_eth(recipient, value)?;                 // these two are equivalent
@@ -475,9 +484,10 @@ transfer_eth(recipient, value)?;                 // these two are equivalent
 call(Call::new_in().value(value), recipient, &[])?; // these two are equivalent
 ```
 
-### [`RawCall`][RawCall] and `unsafe` calls
+### [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html) and `unsafe` calls
 
-Occasionally, an untyped call to another contract is necessary. [`RawCall`][RawCall] lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a [`File`][File] in Rust.
+Occasionally, an untyped call to another contract is necessary. [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html) lets you configure an `unsafe` call by calling optional configuration methods. This is similar to how one would configure opening a [`File`](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
+) in Rust.
 
 ```rust
 let data = RawCall::new_delegate()   // configure a delegate call
@@ -487,84 +497,12 @@ let data = RawCall::new_delegate()   // configure a delegate call
     .call(contract, calldata)?;      // do the call
 ```
 
-Note that the [`call`][RawCall_call] method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`][RawCall_flush_storage_cache] and [`clear_storage_cache`][RawCall_clear_storage_cache] for more information.
+Note that the [`call`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call) method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache) and [`clear_storage_cache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache) for more information.
 
-## [`RawDeploy`][RawDeploy] and `unsafe` deployments
+## [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) and `unsafe` deployments
 
-Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`][RawDeploy], similar to [`RawCall`][RawCall]. As with [`RawCall`][RawCall], this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`][StorageCache].
+Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html), similar to [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html). As with [`RawCall`](https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html), this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html).
 
 Note that the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
 
-When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CREATE2] instead of the default [`CREATE`][CREATE], facilitating address determinism.
-
-[abi_export]: https://github.com/OffchainLabs/cargo-stylus#exporting-solidity-abis
-[StorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageType.html
-[StorageKey]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.StorageKey.html
-[SimpleStorageType]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.SimpleStorageType.html
-[TopLevelStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.TopLevelStorage.html
-[Erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html
-[erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/trait.Erase.html#tymethod.erase
-[StorageCache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html
-[StorageCache_flush]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.flush
-[StorageCache_clear]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageCache.html#method.clear
-[EagerStorage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.EagerStorage.html
-[StorageBool]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBool.html
-[StorageAddress]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageAddress.html
-[StorageUint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageUint.html
-[StorageUint256]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU256.html
-[StorageU64]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageU64.html
-[StorageB64]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/type.StorageB64.html
-[StorageSigned]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageSigned.html
-[StorageFixedBytes]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageFixedBytes.html
-[StorageBytes]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageBytes.html
-[StorageString]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageString.html
-[StorageVec]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html
-[StorageMap]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html
-[StorageArray]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageArray.html
-[StorageGuard]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuard.html
-[StorageGuardMut]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageGuardMut.html
-[Address]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Address.html
-[B256]: https://docs.rs/alloy-primitives/latest/alloy_primitives/aliases/type.B256.html
-[Uint]: https://docs.rs/ruint/1.10.1/ruint/struct.Uint.html
-[Signed]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.Signed.html
-[FixedBytes]: https://docs.rs/alloy-primitives/latest/alloy_primitives/struct.FixedBytes.html
-[alloy_primitives]: https://docs.rs/alloy-primitives/latest/alloy_primitives/
-[erc20]: https://github.com/OffchainLabs/stylus-sdk-rs/blob/stylus/examples/erc20/src/main.rs
-[SLOAD]: https://www.evm.codes/#54
-[SSTORE]: https://www.evm.codes/#55
-[CREATE]: https://www.evm.codes/#f0
-[CREATE2]: https://www.evm.codes/#f5
-[StorageVec_push]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.push
-[StorageVec_grow]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.grow
-[StorageVec_setter]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageVec.html#method.setter
-[StorageMap_insert]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.insert
-[StorageMap_replace]: https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/struct.StorageMap.html#method.replace
-[Call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html
-[Call_new_in]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.Call.html#method.new_in
-[CallError]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/enum.Error.html
-[fn_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.call.html
-[fn_static_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.static_call.html
-[fn_delegate_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.delegate_call.html
-[transfer_eth]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/fn.transfer_eth.html
-[Router]: https://docs.rs/stylus-sdk/latest/stylus_sdk/abi/trait.Router.html
-[RawCall]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html
-[RawCall_call]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.call
-[RawCall_flush_storage_cache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.flush_storage_cache
-[RawCall_clear_storage_cache]: https://docs.rs/stylus-sdk/latest/stylus_sdk/call/struct.RawCall.html#method.clear_storage_cache
-[RawDeploy]: https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html
-[storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.storage.html
-[sol_storage]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_storage.html
-[sol_interface]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/macro.sol_interface.html
-[derive_erase]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/derive.Erase.html
-[public]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.public.html
-[entrypoint]: https://docs.rs/stylus-sdk/latest/stylus_sdk/prelude/attr.entrypoint.html
-[PhantomData]: https://doc.rust-lang.org/core/marker/struct.PhantomData.html
-[DerefMut]: https://doc.rust-lang.org/core/ops/trait.DerefMut.html
-[Vec]: https://doc.rust-lang.org/alloc/vec/struct.Vec.html
-[Borrow]: https://doc.rust-lang.org/core/borrow/trait.Borrow.html
-[File]: https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#examples
-[sol_abi]: https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html
-[pure]: https://docs.soliditylang.org/en/develop/contracts.html#pure-functions
-[view]: https://docs.soliditylang.org/en/develop/contracts.html#view-functions
-[payable]: https://docs.alchemy.com/docs/solidity-payable-functions
-[mapping]: https://docs.soliditylang.org/en/latest/types.html#mapping-types
+When configured with a `salt`, [`RawDeploy`](https://docs.rs/stylus-sdk/latest/stylus_sdk/deploy/struct.RawDeploy.html) will use [`CREATE2`](https://www.evm.codes/#f5) instead of the default [`CREATE`](https://www.evm.codes/#f0), facilitating address determinism.
