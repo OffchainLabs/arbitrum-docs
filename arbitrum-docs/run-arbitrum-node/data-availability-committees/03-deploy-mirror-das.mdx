@@ -8,7 +8,7 @@ content_type: how-to
 
 :::caution Running a regular DAS vs running a mirror DAS
 
-The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx)_ if needed.
+The main use-case for running a mirror DAS is to complement your setup as a Data Availability Committee (DAC) member. That means that you should run your main DAS first, and then configure the mirror DAS. Refer to [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) if needed.
 
 :::
 
@@ -19,11 +19,11 @@ The main use-case for running a mirror DAS is to complement your setup as a Data
   members of the DAC run a Data Availability Server (DAS) to handle these operations.
 </p>
 
-In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the _[Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx)_.
+In this how-to, you'll learn how to configure a mirror DAS that serves `GET` requests for stored batches of information through a REST HTTP interface. For a refresher on DACs, refer to the [Introduction](/run-arbitrum-node/data-availability-committees/01-get-started.mdx).
 
 This how-to assumes that you're familiar with:
 
-- How a regular DAS works and what configuration options are available. Refer to _[How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx)_ for a refresher.
+- How a regular DAS works and what configuration options are available. Refer to [How to deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx) for a refresher.
 - [Kubernetes](https://kubernetes.io/). The examples in this guide use Kubernetes to containerize your DAS.
 
 ## What is a mirror DAS?
@@ -90,13 +90,13 @@ To run the mirror DAS, we'll use the `daserver` tool and we'll configure the fol
 | --rest-port                                                                 | (Optional) REST server listening port (default 9877)                                                                                                                                        |
 | --log-level                                                                 | Log level: 1 - ERROR, 2 - WARN, 3 - INFO, 4 - DEBUG, 5 - TRACE (default 3)                                                                                                                  |
 | --data-availability.rest-aggregator.enable                                  | Enables retrieval of sequencer batch data from a list of remote REST endpoints                                                                                                              |
-| --data-availability.rest-aggregator.online-url-list                         | A URL to a list of URLs of REST DAS endpoints that is checked at startup. This option is additive with the urls option                                                                      |
+| --data-availability.rest-aggregator.online-url-list                         | A URL to a list of URLs of REST DAS endpoints that is checked at startup. This option is additive with the URLs option                                                                      |
 | --data-availability.rest-aggregator.urls                                    | List of URLs including 'http://' or 'https://' prefixes and port numbers to REST DAS endpoints. This option is additive with the online-url-list option                                     |
 | --data-availability.rest-aggregator.sync-to-storage.check-already-exists    | When using a REST aggregator, checks if the data already exists in this DAS's storage. Must be disabled for fast sync with an IPFS backend (default true)                                   |
 | --data-availability.rest-aggregator.sync-to-storage.eager                   | When using a REST aggregator, eagerly syncs batch data to this DAS's storage from the REST endpoints, using the parent chain as the index of batch data hashes; otherwise only syncs lazily |
 | --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block | When using a REST aggregator that's eagerly syncing, starts indexing forward from this block from the parent chain. Only used if there is no sync state.                                    |
 | --data-availability.rest-aggregator.sync-to-storage.retention-period        | When using a REST aggregator, period to retain the synced data (defaults to forever)                                                                                                        |
-| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e. the block number currently synced up to, so that it doesn't sync from scratch each time                            |
+| --data-availability.rest-aggregator.sync-to-storage.state-dir               | When using a REST aggregator, directory to store the sync state in, i.e., the block number currently synced up to, so that it doesn't sync from scratch each time                           |
 
 To enable caching, you can use the following parameters:
 
@@ -257,7 +257,7 @@ Once the DAS is running, we can test if everything is working correctly using th
 
 ### Test 1: REST health check
 
-The REST interface enabled in the mirror DAS has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise `503`.
+The REST interface enabled in the mirror DAS has a health check on the path `/health` which will return `200` if the underlying storage is working, otherwise `503`.
 
 Example:
 
@@ -275,7 +275,7 @@ For a mirror DAS, using a load balancer is recommended to manage incoming traffi
 
 Once the DAS is deployed and tested, you'll have to communicate the following information to the chain owner, so they can update the chain parameters and configure the sequencer:
 
-- The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
+- The https URL for the REST endpoint (e.g., `das.your-chain.io/rest`)
 
 import DASOptionalParameters from '../../node-running/how-tos/data-availability-committee/partials/_das-optional-parameters.mdx';
 import DASMetrics from '../../node-running/how-tos/data-availability-committee/partials/_das-metrics.mdx';
