@@ -7,7 +7,13 @@ user_story: As an Orbit chain deployer, I want to know what third-party infrastr
 content_type: overview
 ---
 
-This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments. Note that this list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
+This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments.
+
+:::note
+
+This list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
+
+:::
 
 ## Rollup-as-a-Service (RaaS) providers
 
@@ -48,7 +54,7 @@ For applications that require the ability to transfer assets to chains outside o
 
 ## Data availability providers for AnyTrust Chains
 
-AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least 3 members as part of your Data Availability Committee. Here are some providers we recommend:
+AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least three members as part of your Data Availability Committee. Here are some providers we recommend:
 
 - [Chainbase](https://chainbase.com/)
 - [Ankr](https://www.ankr.com/)
