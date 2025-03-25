@@ -32,7 +32,7 @@ Common use cases include:
 
 To deploy a contract post-launch:
 
-**1. Fund the deployer address on the child chain:** Send ETH to the child chain address that will be used to send the deployment transaction. This can be done using a retryable ticket or parent chain to child chain deposit.
+**1. Fund the deployer address on the child chain:** Send `ETH` to the child chain address that will send the deployment transaction. Funding is possible using a retryable ticket or parent chain-to-child chain deposit.
 
 **2. Create the signed child chain transaction:** Construct and sign a raw child chain transaction that performs the contract deployment (e.g., using CREATE2). [DeployHelper.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/DeployHelper.sol) can be used as a reference for formatting the transaction.
 
