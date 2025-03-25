@@ -79,6 +79,7 @@ We’ll need several pieces of data to request a random number:
 
 - `address airnodeRrp`: Address of the protocol contract. See the [Chains](https://docs.api3.org/reference/qrng/chains.html) page for a list of addresses on different chains. For Arbitrum, we’ll use `0xb015ACeEdD478fc497A798Ab45fcED8BdEd08924`.
 - `address airnode`: The address that belongs to the Airnode that will be called to get the QRNG data via its endpoints. See the [Providers](https://docs.api3.org/reference/qrng/providers.html) page for a list of addresses on different chains. For Arbitrum we’ll use `0x9d3C147cA16DB954873A498e0af5852AB39139f2`.
+
 - `bytes32 endpointId`: Endpoint ID known by the Airnode that will map to an API provider call (allowed to be `bytes32(0)`). You can also find that information in the [Providers](https://docs.api3.org/reference/qrng/providers.html) page. For Arbitrum we’ll use `0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78`.
 - `address sponsorWallet`: The address of the wallet that will pay for the gas costs for the callback request to get the random number on-chain. You need to fund this wallet with enough `ETH` to cover the gas costs.
 

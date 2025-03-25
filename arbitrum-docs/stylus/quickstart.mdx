@@ -142,7 +142,9 @@ At this point, you can move on to the next step of this guide or develop your fi
 
 By running `cargo stylus check` against your first contract, you can check if your program can be successfully **deployed and activated** onchain.
 
-**Important:** Ensure your Docker service runs so this command works correctly.
+:::warning Important
+Ensure your Docker service runs so this command works correctly.
+:::
 
 ```shell
 cargo stylus check
@@ -176,8 +178,7 @@ Compressed WASM size: 3 KB
 Program succeeded Stylus onchain activation checks with Stylus version: 1
 ```
 
-Note that running `cargo stylus check` may take a few minutes, especially if you're verifying a contract for the first time
-.
+Note that running `cargo stylus check` may take a few minutes, especially if you're verifying a contract for the first time.
 
 See `cargo stylus check --help` for more options.
 

@@ -21,6 +21,7 @@ Paymaster is operated by Circle and integrates seamlessly with bundlers such as 
 2. **`USDC` to `ETH` Conversion for Gas Calculation:** The `fetchPrice()` function retrieves the real-time `USDC` to `ETH` conversion rate, ensuring accurate calculation of the gas fee equivalent in `USDC` and preventing overcharging.
 3. **Transaction Authorization with Bundlers:** The `_validatePaymasterUserOp()` function processes an EIP-2612 permit, which authorizes Paymaster to deduct the required `USDC` amount from the user. The permit is signed off-chain by the user and submitted with the transaction.
 4. **Gas Payment Processing:** The `_postOp()` function debits the required `USDC` from the user’s balance and handles the exchange of `USDC` for `ETH` using the `swapForNative(uint256 amountIn, uint256 slippageBips, uint24 poolFee)` function. The bundler then processes the transaction on the blockchain.
+
 5. **Transaction Finalization:** The bundler confirms the transaction completion and Paymaster ensures all balances and gas payment records are updated accordingly.
 
 Key functions involved in this process include:
