@@ -42,4 +42,4 @@ To deploy a contract post-launch:
 
 ## Advantages and considerations
 
-This approcah avoids parent chain data fees and bypasses the 100,000 gas limit associated with retryable tickets. It also requires no chain upgrade or restart and works on any standard Arbitrum or Orbit chain setup. However, since the flow bypasses retryable safety mechanisms, failed transactions are not automatically retried. The sender must have enough ETH on child chain to cover gas costs, and the signed transaction must be valid and use the correct nonce.
+This approach avoids parent chain data fees and bypasses the 100,000 gas limit associated with retryable tickets. It also requires no chain upgrade or restart and works on any standard Arbitrum or Orbit chain setup. However, failed transactions are not automatically retried since the flow bypasses retryable safety mechanisms. The sender must have enough `ETH` on child chain to cover gas costs, and the signed transaction must be valid and use the correct nonce.
