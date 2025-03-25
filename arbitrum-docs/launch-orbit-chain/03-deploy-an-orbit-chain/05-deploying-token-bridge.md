@@ -180,7 +180,7 @@ The last step in spinning up the token bridge for an `ETH`- based Orbit chain is
 
 That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain.
 
-You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
+You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](/build-decentralized/apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 :::
 
