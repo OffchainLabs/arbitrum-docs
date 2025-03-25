@@ -506,7 +506,6 @@ l1BlockNumber           "0x6e8b49"
 timeboosted             true
 ```
 
-
 In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMetadata` field that represents whether a particular transaction in the block was timeboosted or not. The field blockMetadata is an array of bytes and it starts with a byte representing the version (`0`), followed by `ceil(N/8)` number of bytes where `N` is the number of transactions in the block. If a particular transaction was timeboosted, the bit representing its position in the block will be set to `1`, while the rest will be set to `0`. For example, if the `blockMetadata` of a particular message, viewed as bits is `00000000 01100000`, then the 2nd and 3rd transactions in that block were timeboosted.
 
 ## How to view historical bid data
