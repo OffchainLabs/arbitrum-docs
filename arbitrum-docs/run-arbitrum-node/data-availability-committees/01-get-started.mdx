@@ -15,7 +15,7 @@ content_type: overview
 
 This section offers information and a series of how-to guides to help you along the process of setting up a Data Availability Committee. These guides target two audiences: Committee members who wish to deploy a Data Availability Server, and chain owners who wish to configure their chain with the information of the Committee.
 
-Before following the guides in this section, you should be familiar with how the AnyTrust protocol works and the role of the DAC in the protocol. Refer to _[Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx)_ to learn more.
+Before following the guides in this section, you should be familiar with how the AnyTrust protocol works and the role of the DAC in the protocol. Refer to [Inside AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) to learn more.
 
 ## If you are a DAC member
 
@@ -25,10 +25,10 @@ Here's a basic checklist of actions to complete for DAC members:
 
 - [Deploy a DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx). Send the following information to the chain owner:
   - Public BLS key
-  - The https URL for the RPC endpoint which includes some random string (e.g. das.your-chain.io/rpc/randomstring123), communicated through a secure channel
-  - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
+  - The https URL for the RPC endpoint which includes some random string (e.g., das.your-chain.io/rpc/randomstring123), communicated through a secure channel
+  - The https URL for the REST endpoint (e.g., das.your-chain.io/rest)
 - [Deploy a mirror DAS](/run-arbitrum-node/data-availability-committees/03-deploy-mirror-das.mdx) if you want to complement your setup with a mirror DAS. Send the following information to the chain owner:
-  - The https URL for the REST endpoint (e.g. das.your-chain.io/rest)
+  - The https URL for the REST endpoint (e.g., das.your-chain.io/rest)
 
 ## If you are a chain owner
 
@@ -42,7 +42,7 @@ Here's a basic checklist of actions to complete for chain owners:
   - URL(s) of the REST endpoint(s)
 - Ensure that at least one DAS is running as an [archive DAS](/run-arbitrum-node/data-availability-committees/02-deploy-das.mdx#archive-da-servers)
 - [Generate the keyset and keyset hash](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#step-1-generate-the-keyset-and-keyset-hash-with-all-the-information-from-the-servers) with all the information from the servers
-- [Update the SequencerInbox contract](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#step-2-update-the-sequencerinbox-contract)
+- [Update the `SequencerInbox` contract](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#step-2-update-the-sequencerinbox-contract)
 - [Craft the new configuration for the batch poster](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#step-3-craft-the-new-configuration-for-the-batch-poster)
 - [Craft the new configuration for your chain's nodes](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx#step-4-craft-the-new-configuration-for-your-chains-nodes)
 

@@ -19,7 +19,7 @@ Developers can now write smart contracts in any programming language that compil
 Some high-level languages generate far more performant WASMs than others.
 :::
 
-Currently, there is support for Rust, C, and C++. However, the levels of support vary. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat, enabling the deployment of existing contracts in those languages on-chain with minimal modifications.
+Currently, there is support for Rust, C, and C++. However, the levels of support vary. Rust has rich language support from day one, with an open-source SDK that makes writing smart contracts in Rust as easy as possible. C and C++ are supported off the bat, enabling the deployment of existing contracts in those languages onchain with minimal modifications.
 
 The Stylus SDK for Rust contains the smart contract development framework and language features most developers will need to use in Stylus. The SDK also makes it possible to perform all EVM-specific functionalities that smart contract developers use. Check out the [Rust SDK Guide](https://docs.arbitrum.io/stylus/rust-sdk-guide) and the [Crate Docs](https://docs.rs/stylus-sdk/latest/stylus_sdk/index.html).
 
@@ -35,13 +35,13 @@ Gas metering is essential for certifying that computational resources are paid f
 
 Stylus programs execute in a fork of [Wasmer](https://wasmer.io/), the leading WebAssembly runtime, with minimal changes to optimize their codebase for blockchain-specific use cases. Wasmer executes native code much faster than <a data-quicklook-from="geth">Geth</a> executes EVM bytecode, contributing to the significant gas savings that Stylus provides.
 
-EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
+EVM contracts continue to execute the same way they were before Stylus. When calling a contract, the difference between an EVM contract and a WASM program is visible via an [EOF](https://notes.ethereum.org/@ipsilon/evm-object-format-overview)-inspired contract header. From there, the contract executes using its corresponding runtime. Contracts written in Solidity and WASM languages can make cross-contract calls to each other, meaning a developer never has to consider which language the contract is in. Everything is interoperable.
 
 ## Proving
 
 Nitro operates in two modes: a "happy case" where it compiles execution history to native code, and a "sad case" during validator disputes, where it compiles execution history to WASM for interactive fraud proofs on Ethereum. Stylus builds on Nitro's fraud-proving technology, allowing it to verify both execution history and WASM programs deployed by developers.
 
-Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven on-chain through a [“one-step proof.”](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx#simplified-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
+Stylus is made possible by Nitro’s ability to replay and verify disputes using WASM. Validators bisect disputes until an invalid step is identified and proven onchain through a [“one-step proof.”](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx#simplified-bisection-protocol). This deterministic fraud-proving capability ensures the correctness of any arbitrary program compiled to WASM. The combination of WASM's and Nitro's properties enables this technological leap we call Stylus.
 
 For more details on Nitro’s architecture, refer to the [documentation](/how-arbitrum-works/01-a-gentle-introduction.mdx) or the [Nitro whitepaper](https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf).
 
@@ -51,7 +51,7 @@ Stylus innovates on many levels, with the key ones described here:
 
 ### One chain, many languages
 
-There are roughly 20k Solidity developers, compared to 3 million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
+There are roughly 20k Solidity developers, compared to three million Rust developers or 12 million C developers [[1](https://slashdatahq.medium.com/state-of-the-developer-nation-23rd-edition-the-fall-of-web-frameworks-coding-languages-711525e3df3a)]. Developers can now use their preferred programming language, which is interoperable on any <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> with Stylus. By onboarding the next million developers, scaling to the next billion users becomes possible.
 
 ### A better EVM
 

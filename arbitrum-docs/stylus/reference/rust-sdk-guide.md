@@ -80,13 +80,13 @@ sol_storage! {
 }
 ```
 
-The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`][StorageType] trait. Many contracts, like [our example ERC 20][erc20], do exactly this.
+The above will expand to the equivalent definitions in Rust, each structure implementing the [`StorageType`][StorageType] trait. Many contracts, like [our example `ERC-20`][erc20], do exactly this.
 
 Because the layout is identical to [Solidity’s][sol_abi], existing Solidity smart contracts can upgrade to Rust without fear of storage slots not lining up. You simply copy-paste your type definitions.
 
 :::warning Storage layout in contracts using inheritance
 
-Note that one exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
+One exception to this storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in solidity, but not inherited structs. We plan to revisit this behavior in an upcoming release.
 
 :::
 
@@ -232,7 +232,7 @@ sol_storage! {
 }
 ```
 
-The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [WETH sample contract][erc20] for a full example of this feature.
+The above allows consumers of `Erc20` to choose immutable constants via specialization. See our [`WETH` sample contract][erc20] for a full example of this feature.
 
 ## Functions
 
@@ -270,7 +270,7 @@ If a contract calls another that then calls the first, it is said to be reentran
 stylus-sdk = { version = "0.6.0", features = ["reentrant"] }
 ```
 
-This is dangerous, and should be done only after careful review — ideally by 3rd party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
+This is dangerous, and should be done only after careful review––ideally by third-party auditors. Numerous exploits and hacks have in Web3 are attributable to developers misusing or not fully understanding reentrant patterns.
 
 If enabled, the Stylus SDK will flush the storage cache in between reentrant calls, persisting values to state that might be used by inner calls. Note that preventing storage invalidation is only part of the battle in the fight against exploits. You can tell if a call is reentrant via `msg::reentrant`, and condition your business logic accordingly.
 
@@ -303,7 +303,7 @@ impl Erc20 {
 
 Because `Token` inherits `Erc20` in the above, if `Token` has the [`#[entrypoint]`][entrypoint], calls to the contract will first check if the requested method exists within `Token`. If a matching function is not found, it will then try the `Erc20`. Only after trying everything `Token` inherits will the call revert.
 
-Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the ERC 20, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
+Note that because methods are checked in that order, if both implement the same method, the one in `Token` will override the one in `Erc20`, which won’t be callable. This allows for patterns where the developer imports a crate implementing a standard, like the `ERC-20`, and then adds or overrides just the methods they want to without modifying the imported `Erc20` type.
 
 ::::warning
 
@@ -313,7 +313,7 @@ Stylus does not currently contain explicit `override` or `virtual` keywords for 
 
 Inheritance can also be chained. `#[inherit(Erc20, Erc721)]` will inherit both `Erc20` and `Erc721`, checking for methods in that order. `Erc20` and `Erc721` may also inherit other types themselves. Method resolution finds the first matching method by [Depth First Search](https://en.wikipedia.org/wiki/Depth-first_search).
 
-Note that for the above to work, `Token` must implement [`Borrow<Erc20>`][Borrow]. You can implement this yourself, but for simplicity, [`#[storage]`][storage] and [`sol_storage!`][sol_storage] provide a `#[borrow]` annotation.
+For the above to work, `Token` must implement [`Borrow<Erc20>`][Borrow]. You can implement this yourself, but for simplicity, [`#[storage]`][storage] and [`sol_storage!`][sol_storage] provide a `#[borrow]` annotation.
 
 ```rust
 sol_storage! {
@@ -447,9 +447,9 @@ pub fn do_call(
 }
 ```
 
-Note that in the context of a [`#[public]`][public] call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`][payable]. This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
+In the context of a [`#[public]`][public] call, the `&mut impl` argument will correctly distinguish the method as being `write` or [`payable`][payable]. This means you can write library code that will work regardless of whether the reentrant feature flag is enabled.
 
-Note too that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
+Also, that code that previously compiled with reentrancy disabled may require modification in order to type-check. This is done to ensure storage changes are persisted and that the storage cache is properly managed before calls.
 
 ### [`call`][fn_call], [`static_call`][fn_static_call], and [`delegate_call`][fn_delegate_call]
 
@@ -467,7 +467,9 @@ In each case the calldata is supplied as a [`Vec<u8>`][Vec]. The return result i
 
 This method provides a convenient shorthand for transferring ether.
 
-Note that this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`][fn_call] function may be used instead.
+:::note
+That this method invokes the other contract, which may in turn call others. All gas is supplied, which the recipient may burn. If this is not desired, the [`call`][fn_call] function may be used instead.
+:::
 
 ```rust
 transfer_eth(recipient, value)?;                 // these two are equivalent
@@ -487,13 +489,17 @@ let data = RawCall::new_delegate()   // configure a delegate call
     .call(contract, calldata)?;      // do the call
 ```
 
-Note that the [`call`][RawCall_call] method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`][RawCall_flush_storage_cache] and [`clear_storage_cache`][RawCall_clear_storage_cache] for more information.
+:::note
+That the [`call`][RawCall_call] method is `unsafe` when reentrancy is enabled. See [`flush_storage_cache`][RawCall_flush_storage_cache] and [`clear_storage_cache`][RawCall_clear_storage_cache] for more information.
+:::
 
 ## [`RawDeploy`][RawDeploy] and `unsafe` deployments
 
 Right now the only way to deploy a contract from inside Rust is to use [`RawDeploy`][RawDeploy], similar to [`RawCall`][RawCall]. As with [`RawCall`][RawCall], this mechanism is inherently unsafe due to reentrancy concerns, and requires manual management of the [`StorageCache`][StorageCache].
 
-Note that the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
+:::note
+That the EVM allows init code to make calls to other contracts, which provides a vector for reentrancy. This means that this technique may enable storage aliasing if used in the middle of a storage reference's lifetime and if reentrancy is allowed.
+:::
 
 When configured with a `salt`, [`RawDeploy`][RawDeploy] will use [`CREATE2`][CREATE2] instead of the default [`CREATE`][CREATE], facilitating address determinism.
 
