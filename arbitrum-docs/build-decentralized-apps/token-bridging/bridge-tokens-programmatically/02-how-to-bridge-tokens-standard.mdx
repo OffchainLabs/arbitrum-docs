@@ -83,7 +83,7 @@ As explained in the conceptual page, there are two contracts that we need to be 
 
 For simplicity, in this how-to we’ll focus on the first case: bridging from the parent chain (Ethereum) to the child chain (Arbitrum).
 
-We’ll explain below what specific contracts and methods need to be called to bridge your token, but you can abstract this whole process of finding the right addresses by using Arbitrum’s SDK. You can use the [deposit](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) function of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class to bridge your tokens, which will use the appropriate router contract based on the network you’re connected to, and will relay the request to the appropriate gateway contract. You can also use the function [getParentGatewayAddress](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getparentgatewayaddress) to get the address of the gateway contract that’s going to be used. But don’t worry about any of this yet, we’ll use those functions in the next steps.
+We’ll explain below what specific contracts and methods need to be called to bridge your token, but you can abstract this whole process of finding the right addresses by using Arbitrum’s SDK. You can use the [deposit](/sdk/reference/assetBridger/erc20Bridger.md#deposit) function of the [`Erc20Bridger`](/sdk/reference/assetBridger/erc20Bridger.md) class to bridge your tokens, which will use the appropriate router contract based on the network you’re connected to, and will relay the request to the appropriate gateway contract. You can also use the function [getParentGatewayAddress](/sdk/reference/assetBridger/erc20Bridger.md#getparentgatewayaddress) to get the address of the gateway contract that’s going to be used. But don’t worry about any of this yet, we’ll use those functions in the next steps.
 
 Now, here’s an explanation of the contracts and methods that need to be called to manually bridge your token:
 
@@ -96,7 +96,7 @@ You can find the addresses of the contracts involved in the process in [this pag
 
 The gateway contract will be the one that will transfer the tokens to be bridged over. So the next step is to allow the gateway contract to do so.
 
-We typically do that by using the `approve` method of the token, but you can use Arbitrum’s SDK to abstract this process, by calling the method [`approveToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#approvetoken) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will call the approve method of the token passed by parameter, and set the allowance to the appropriate gateway contract.
+We typically do that by using the `approve` method of the token, but you can use Arbitrum’s SDK to abstract this process, by calling the method [`approveToken`](/sdk/reference/assetBridger/erc20Bridger.md#approvetoken) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will call the approve method of the token passed by parameter, and set the allowance to the appropriate gateway contract.
 
 ```tsx
 /**
@@ -132,7 +132,7 @@ As mentioned before, you can also call the `approve` method of the token and sen
 
 After allowing the gateway contract to transfer the tokens, we can now start the bridging process.
 
-You can use Arbitrum’s SDK to abstract this process, by calling the method [`deposit`](../../../sdk/reference/assetBridger/erc20Bridger.md#deposit) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will estimate the gas parameters (`maxGas`, `gasPriceBid` and `maxSubmissionCost`, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
+You can use Arbitrum’s SDK to abstract this process, by calling the method [`deposit`](/sdk/reference/assetBridger/erc20Bridger.md#deposit) of the [`Erc20Bridger`](/sdk/reference/assetBridger/erc20Bridger.md) class, which will estimate the gas parameters (`maxGas`, `gasPriceBid` and `maxSubmissionCost`, explained below) and call the `outboundTransferCustomRefund` method of the router contract. You will only need to specify the following parameters:
 
 - `amount`: Amount of tokens to bridge
 - `erc20L1Address`: Parent chain address of the `ERC-20` token being bridged
@@ -197,7 +197,7 @@ If you’re going the manual way, you can verify if the message has been execute
 
 Finally, let’s find the token contract that has been created on the child chain.
 
-Using Arbitrum’s SDK, you can call method [`getChildErc20Address`](https://docs.arbitrum.io/sdk/reference/assetBridger/erc20Bridger#getchildgatewayaddress) of the [`Erc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract on the child chain that corresponds to the parent chain token contract sent as parameter.
+Using Arbitrum’s SDK, you can call method [`getChildErc20Address`](/sdk/reference/assetBridger/erc20Bridger.md#getchildgatewayaddress) of the [`Erc20Bridger`](/sdk/reference/assetBridger/erc20Bridger.md) class, which will return the address of the token contract on the child chain that corresponds to the parent chain token contract sent as parameter.
 
 ```tsx
 /**
