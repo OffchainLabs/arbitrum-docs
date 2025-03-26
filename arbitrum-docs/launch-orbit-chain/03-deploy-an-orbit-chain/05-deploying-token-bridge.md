@@ -38,7 +38,7 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 2. **[Token bridge contract deployment](#2-token-bridge-contract-deployment)**
 3. **[Transaction recipient and checking for deployment on child chain](#3-transaction-recipient-and-checking-for-deployment-on-child-chain)**
 4. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
-5. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
+5. **[Setting up the `WETH` gateway](#5-setting-up-the-weth-gateway)**
 
 :::info
 
@@ -172,7 +172,7 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 });
 ```
 
-### 5. Setting up the WETH gateway
+### 5. Setting up the `WETH` gateway
 
 The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway.
 
