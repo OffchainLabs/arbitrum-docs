@@ -91,10 +91,10 @@ Arbitrum full nodes decode data received from the parent chain (and, in the case
 Once Arbitrum full nodes have caught up with the chain, they switch from initial synchronization to a real-time update mode. This switch involves receiving data from the sequencer feed, which continuously broadcasts updates about newly queued transactions.
 
 1. Data acquisition:
-   1. Full nodes maintain a connection to the sequencer feed or your private feed. For how to run a private feed, please refer to [**How to run a feed relay**](https://docs.arbitrum.io/run-arbitrum-node/sequencer/run-feed-relay)
+   1. Full nodes maintain a connection to the sequencer feed or your private feed. For how to run a private feed, please refer to [**How to run a feed relay**](/run-arbitrum-node/sequencer/01-run-feed-relay.mdx)
    2. The sequencer feed transmits data packets containing information about the latest queued transactions.
 2. Data decoding:
-   1. Full nodes decode the received data packets using the methods described in [How to read the sequencer feed](https://docs.arbitrum.io/run-arbitrum-node/sequencer/read-sequencer-feed).
+   1. Full nodes decode the received data packets using the methods described in [How to read the sequencer feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
 3. Message processing:
 
    1. After successful decoding, the full nodes obtain the same type of data as outlined in the previous section's Step 5.
