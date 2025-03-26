@@ -8,7 +8,7 @@ content_type: how-to
 sidebar_position: 11
 ---
 
-Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arb1 chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
+Nitro stores the chain state and data in a database in the local filesystem. When starting Nitro for the first time, it will initialize an empty database by default and start processing transactions from Genesis. It takes a long time for the node to sync from Genesis, so starting from a database snapshot is advisable instead. Moreover, for the Arbitrum One chain, you must start from a snapshot because Nitro cannot process transactions from the Classic Arbitrum node.
 
 ## Supply the snapshot URL to Nitro
 
@@ -139,7 +139,7 @@ This command purposely omits the `wasm` directory from the snapshot archive. The
 
 ### Optional: divide it into parts
 
-It is possible to divide the snapshot into smaller parts to facilitate its download. This is particularly useful for archive snapshots of heavily used chains, such as arb1. These kinds of snapshots can reach terabytes, so dividing them into smaller parts is helpful. The snippet below illustrates how to divide the snapshot into parts using the split command. The `-b` argument tells the split to divide the snapshot into 100 GB parts. The `-d` argument tells split to enumerate the parts using a numeric suffix instead of an alphabetic one.
+It is possible to divide the snapshot into smaller parts to facilitate its download. This is particularly useful for archive snapshots of heavily used chains, such as Arbitrum One. These kinds of snapshots can reach terabytes, so dividing them into smaller parts is helpful. The snippet below illustrates how to divide the snapshot into parts using the split command. The `-b` argument tells the split to divide the snapshot into 100 GB parts. The `-d` argument tells split to enumerate the parts using a numeric suffix instead of an alphabetic one.
 
 ```shell
 split -b 100g -d archive.tar.gz archive.tar.gz.part
