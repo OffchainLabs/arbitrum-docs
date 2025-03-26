@@ -1,5 +1,5 @@
 ---
-title: 'Deploying contracts after Orbit chain launch'
+title: 'Post-launch deployment of deterministic contracts'
 sidebar_label: ' Post-launch deployments'
 description: 'Learn about deploying contracts like Multicall3 to an Orbit chain after launch using sendL2Message, without needing a chain upgrade or predeploy.'
 author: mahsamoosavi
@@ -12,7 +12,7 @@ content_type: how-to
 
 You can deploy contracts like `Multicall3`, the `EntryPoint` contract, or a `create2` factory to a live Orbit chain using a post-launch method that doesn't require chain configuration changes or upgrades.
 
-This method leverages Arbitrum's built-in cross-chain messaging infrastructure. Specifically, it uses the `Inbox.sendL2Message` function to submit a pre-signed child chain transaction from the parent chain. Unlike retryable tickets, messages sent this way do not incur parent chain data fees and are not limited by the 100,000 gas cap that applies to certain deterministic deployment flows.
+This method leverages Arbitrum's built-in cross-chain messaging infrastructure. Specifically, it uses the `Inbox.sendL2Message` function to submit a pre-signed child chain transaction from the parent chain. Unlike retryable tickets, messages sent this way do not incur parent chain data fees during execution;they're paid upfront when the message is submitted on the parent chain. This also means they're not limited by the 100,000 gas cap that applies to certain deterministic deployment flows.
 
 ## When to use this method
 
@@ -22,23 +22,31 @@ This approach is useful when:
 - You want to deploy a contract at a specific address (e.g., using `create2`).
 - The chain's genesis configuration did not include the contract.
 
-Common use cases include:
+Common examples include deployments of contracts like `Multicall3`, the `ERC-4337 EntryPoint` contract, or a `create2` factory/deterministic deployment proxy.
+Note that if `deployFactoriesToL2` is set to `true` when calling `createRollup()`, the following contracts are deployed to the Orbit chain by default:
 
-- Deploying `Multicall3`.
-- Deploying the `ERC-4337 EntryPoint` contract.
-- Deploying a `create2` factory or deterministic deployment proxy.
+- `Multicall3`
+- `DeterministicDeploymentProxy`
+- `ERC-4337 EntryPoint`
+- `CREATE3Deployer`
 
 ## Overview
 
 To deploy a contract post-launch:
 
-**1. Fund the deployer address on the child chain:** Send `ETH` to the child chain address that will send the deployment transaction. Funding is possible using a retryable ticket or parent chain-to-child chain deposit.
+**1. Fund the deployer address on the child chain:** Send `ETH` to the child chain address that will send the deployment transaction. Funding is possible using a retryable ticket or Parent-to-Child chain deposit.
 
 **2. Create the signed child chain transaction:** Construct and sign a raw child chain transaction that performs the contract deployment (e.g., using `create2`). [`DeployHelper.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/DeployHelper.sol) can be used as a reference for formatting the transaction.
 
 **3. Send the message from the parent chain:** Call `Inbox.sendL2Message(bytes calldata message)` on the Orbit chain’s inbox contract. Provide the signed transaction as the input.
 
-**4. Execute the transaction on the child chain:** The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so the transaction is not auto-retried if it fails.
+**4. Wait for the transaction to be executed on the child chain:** The child chain will process and execute the message as a regular transaction. This flow does not use retryables, so if the transaction fails, it is not auto-retried and the nonce is consumed. This means the same transaction cannot be replayed, and a new transaction with a higher nonce must be created and submitted.
+
+:::warning
+
+Make sure the deployer address is sufficiently funded on the child chain before sending the transaction. If the transaction runs out of gas or fails for any reason, the nonce will be burned and the deployment will need to be retried with a new nonce and payload.
+
+:::
 
 ## Advantages and considerations
 
