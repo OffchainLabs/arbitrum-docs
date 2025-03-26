@@ -749,6 +749,11 @@ const sidebars = {
           id: 'run-arbitrum-node/how-to-use-timeboost',
         },
         {
+          type: 'doc',
+          label: 'Troubleshoot Timeboost',
+          id: 'run-arbitrum-node/troubleshoot-timeboost',
+        },
+        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
