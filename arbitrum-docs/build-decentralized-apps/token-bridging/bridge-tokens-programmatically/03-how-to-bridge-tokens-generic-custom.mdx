@@ -29,7 +29,7 @@ Keep in mind that this registration can only be done once.
 
 Also, the **child chain counterpart of the token**, must conform to the [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
 
-- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
+- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
 - It must have an `l1Address` view method that returns the address of the token on the parent chain
 
 import TokenCompatibilityPartial from '../partials/_token-compatibility.mdx';
