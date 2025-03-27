@@ -80,7 +80,7 @@ const client = createPublicClient({
 
 With `arbOwnerPublicActions` and the public client in the Orbit SDK, we've added two new methods to the public clients:
 
-#### 1. arbOwnerReadContract
+#### 1. `arbOwnerReadContract`
 
 This method can be used to read the parameters of the child chain discussed in the [previous section](#getter-functions). An example of using this method with the `client` defined in the previous section is:
 
