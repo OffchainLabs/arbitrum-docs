@@ -60,7 +60,7 @@ For any given gateway pairing, we require that calls be initiated through the co
 
 By default, any `ERC-20` token on a parent chain that isn't registered to a gateway can be permissionlessly bridged through the `StandardERC20Gateway`.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
 
 ### Example: Standard Arb-ERC-20 deposit and withdraw
 
@@ -76,7 +76,11 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 ❗️ _[1] Please keep in mind that some older custom gateways might not have `outboundTransferCustomRefund` implemented and `L1GatewayRouter.outboundTransferCustomRefund` does not fallback to `outboundTransfer`. In those cases, please use function `L1GatewayRouter.outboundTransfer`._
 
-Note that `arbSomeERC20Token` is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
+:::info
+
+`arbSomeERC20Token` is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
+
+:::
 
 #### Withdrawals
 
