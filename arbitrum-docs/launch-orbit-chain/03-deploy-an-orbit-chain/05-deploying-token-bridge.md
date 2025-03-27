@@ -16,7 +16,7 @@ The token bridge architecture includes contracts deployed on the <a data-quicklo
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the **Request an update** button at the top of this document.
 
 :::
 
