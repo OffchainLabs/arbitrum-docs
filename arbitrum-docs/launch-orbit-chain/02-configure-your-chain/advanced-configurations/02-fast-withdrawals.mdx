@@ -2,8 +2,8 @@
 title: 'Enable fast withdrawals on your Orbit chain'
 sidebar_label: 'Enable fast withdrawals'
 description: 'Learn to deploy Fast Withdrawals'
-author: coopermidroni, tucksondev
-sme: tucksondev
+author: coopermidroni, jose-franco
+sme: jose-franco
 user_story: As a current or prospective Orbit chain owner, I need to understand how to integrate with the Fast Withdrawal feature.
 content_type: get-started
 ---
@@ -163,7 +163,7 @@ yarn install
 cp .env.example .env
 ```
 
-3. Execute the action. The upgrade can be executed using  `cast`  CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
+3. Execute the action. The upgrade can be executed using `cast` CLI command ([cast is a part of the Foundry tools](https://book.getfoundry.sh/cast/)), using the owner account (the one with executor rights on parent chain `UpgradeExecutor`) to send the transaction:
 
 ```shell
 (export $(cat .env | xargs) && cast send $PARENT_UPGRADE_EXECUTOR_ADDRESS "execute(address, bytes)" $UPGRADE_ACTION_ADDRESS $(cast calldata "perform(address, address[])" $ROLLUP \[$FAST_CONFIRM_COMMITTEE\]) --rpc-url $PARENT_CHAIN_RPC --account EXECUTOR)

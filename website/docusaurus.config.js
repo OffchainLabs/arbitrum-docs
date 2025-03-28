@@ -4,6 +4,8 @@
 const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -31,6 +33,14 @@ const config = {
     // locales: ['en', 'ja', 'zh'],
     locales: ['en'],
   },
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
+      crossorigin: 'anonymous',
+    },
+  ],
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -38,6 +48,8 @@ const config = {
       ({
         docs: {
           path: '../arbitrum-docs',
+          remarkPlugins: [remarkMath],
+          rehypePlugins: [rehypeKatex],
           sidebarPath: require.resolve('./sidebars.js'),
           routeBasePath: '/',
           breadcrumbs: false,
@@ -123,7 +135,39 @@ const config = {
       },
     ],
     require.resolve('docusaurus-plugin-fathom'),
-    require.resolve('docusaurus-lunr-search'),
+    [
+      'docusaurus-lunr-search',
+      {
+        excludeRoutes: [
+          'launch-orbit-chain/02-configure-your-chain/advanced-configurations/01-layer-leap',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/03-stake-and-validator-configurations',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/04-arbos-configuration',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/05-gas-optimization-tools',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/07-batch-posting-assertion-control',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/08-sequencer-timing-adjustments',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/09-per-batch-gas-cost',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/10-smart-contract-size-limit',
+          'launch-orbit-chain/02-configure-your-chain/common-configurations/11-customizing-anytrust',
+          'launch-orbit-chain/02-start-your-journey',
+          'launch-orbit-chain/03-deploy-an-orbit-chain/07-canonical-factory-contracts',
+          'launch-orbit-chain/03-orbit-license',
+          'launch-orbit-chain/04-maintain-your-chain/01-bridging',
+          'launch-orbit-chain/04-maintain-your-chain/02-monitoring',
+          'launch-orbit-chain/04-maintain-your-chain/04-guidance/01-decentralization-security',
+          'launch-orbit-chain/04-maintain-your-chain/04-guidance/02-guidance-on-altda',
+          'launch-orbit-chain/06-third-party-integrations/03-integrations',
+          'launch-orbit-chain/07-orbit-node-runners/orbit-node-providers',
+          'launch-orbit-chain/08-ecosystem-support/01-orbit-portal',
+          'launch-orbit-chain/08-ecosystem-support/03-get-listed-orbit-platforms',
+          'launch-orbit-chain/how-tos/how-to-configure-your-chain',
+          'launch-orbit-chain/reference/orbit-batch-poster-configuration',
+          'launch-orbit-chain/reference/orbit-configuration-parameters',
+          'launch-orbit-chain/reference/orbit-fast-block-times',
+          'launch-orbit-chain/reference/orbit-sequencer-configuration',
+          'launch-orbit-chain/reference/orbit-smart-contract-size-limit',
+        ],
+      },
+    ],
     require.resolve('docusaurus-plugin-sass'),
   ],
   themeConfig:

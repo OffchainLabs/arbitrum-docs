@@ -7,7 +7,13 @@ user_story: As an Orbit chain deployer, I want to know what third-party infrastr
 content_type: overview
 ---
 
-This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments. Note that this list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
+This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments.
+
+:::note
+
+This list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
+
+:::
 
 ## Rollup-as-a-Service (RaaS) providers
 
@@ -48,7 +54,7 @@ For applications that require the ability to transfer assets to chains outside o
 
 ## Data availability providers for AnyTrust Chains
 
-AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least 3 members as part of your Data Availability Committee. Here are some providers we recommend:
+AnyTrust protocol offers native support data availability. If you are turning on Fast Withdrawals, we recommend having at least three members as part of your Data Availability Committee. Here are some providers we recommend:
 
 - [Chainbase](https://chainbase.com/)
 - [Ankr](https://www.ankr.com/)
@@ -74,7 +80,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 
 ## Oracles
 
-The following Oracle providers can be used to integrate off-chain data with your Orbit chain's smart contracts:
+The following Oracle providers can be used to integrate offchain data with your Orbit chain's smart contracts:
 
 - [Chainlink](https://chain.link/)
 - [Chronicle](https://chroniclelabs.org/)
@@ -96,7 +102,7 @@ RPC endpoints are the primary interface through which users and developers inter
 
 ## Alternative data availability
 
-One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data off-chain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data off-chain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)

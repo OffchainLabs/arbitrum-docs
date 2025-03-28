@@ -2,7 +2,7 @@
 title: Sequencing, Followed by Deterministic Execution
 description: 'Learn the fundamentals of the Arbitrum Transaction Lifecycle, sequencing, and deterministic execution.'
 author: pete-vielhaber
-sme: gmehta2
+sme: Mehdi
 user_story: As a current or prospective Arbitrum user, I need to learn more about the transaction lifecycle.
 content_type: get-started
 ---
@@ -13,7 +13,7 @@ This section explores the various methods users can employ to submit transaction
 
 The first subsection, [Submitting Transactions to the Sequencer](#submitting-transactions-to-the-sequencer), presents four different methods users can utilize to send their transactions to the sequencer: via Public RPC, Third-Party RPC, Arbitrum Nodes, and the Sequencer Endpoint. Transactions sent through the first three pathways will route through our Load Balancer before reaching the sequencer. In contrast, the Sequencer Endpoint allows transactions to bypass the Load Balancer and be sent directly to the sequencer.
 
-The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), describes an alternative method where users can include their transactions on the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> without relying on the sequencer. By sending transactions directly to the delayed inbox contract on the parent chain (L1), users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
+The second subsection, [Bypassing the Sequencer](#bypassing-the-sequencer), describes an alternative method where users can include their transactions on the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> without relying on the sequencer. By sending transactions directly to the delayed inbox contract on the parent chain, users gain additional flexibility, ensuring that their transactions can be processed even if the sequencer is unavailable or if they prefer not to use it.
 
 This diagram illustrates the various pathways for submitting transactions to the Arbitrum chain. It highlights the options for sending transactions through the sequencer or bypassing it and using the delayed inbox contract on the parent chain.
 

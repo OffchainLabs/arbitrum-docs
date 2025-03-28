@@ -9,7 +9,7 @@ content_type: how-to
 
 ## Child chain transactions
 
-Generally, transactions executed through the sequencer on Orbit chains [achieve finality](/how-arbitrum-works/02-transaction-lifecycle.mdx) equivalent to their parent chain once the relevant transaction data has been [posted in a batch](/how-arbitrum-works/06-optimistic-rollup.mdx). This means that transactions on Orbit chains are considered final in minutes.
+Generally, transactions executed through the sequencer on Orbit chains [achieve finality](/how-arbitrum-works/02-transaction-lifecycle.mdx) equivalent to their parent chain once the relevant transaction data has been [posted in a batch](/how-arbitrum-works/05-validation-and-proving/02-rollup-protocol.mdx). This means that transactions on Orbit chains are considered final in minutes.
 
 ## Parent chain → child chain transactions
 
@@ -23,7 +23,7 @@ However, in the instance of an L3 settling to Arbitrum One or Nova an L3 may als
 --node.delayed-sequencer.use-merge-finality=false
 ```
 
-Additionally, the delay in L3 finalization can be decreased to achieve extremely fast (\<1 min) deposits by configuring the sequencer to wait for fewer L2 block confirmations:
+Additionally, the delay in L3 finalization can be decreased to achieve extremely fast (1 min) deposits by configuring the sequencer to wait for fewer L2 block confirmations:
 
 ```
 --node.delayed-sequencer.finalize-distance=1
