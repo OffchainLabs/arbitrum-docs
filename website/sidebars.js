@@ -444,6 +444,11 @@ const sidebars = {
                   id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
                   label: `Manage gas speed limit`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  label: `Post-launch deployments`,
+                },
               ],
             },
           ],
