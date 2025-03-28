@@ -40,7 +40,7 @@ The parent chain pricer keeps track of the funds due to the reward address, base
 
 The parent chain calldata fees exist because the Sequencer, or the batch poster which posts the Sequencer's transaction batches on Ethereum, incurs costs in the parent chain gas to post transactions on Ethereum as calldata. Funds collected in the parent chain calldata fees are credited to the batch poster to cover its costs.
 
-Every transaction that comes in through the Sequencer will pay a parent chain calldata fee. Transactions that come in through the delayed inbox do not pay this fee because they don't add to batch posting costs--but these transactions pay gas fees to Ethereum when they are put into the Delayed Inbox.
+Every transaction that comes in through the Sequencer will pay a parent chain calldata fee. Transactions that come in through the Delayed Inbox do not pay this fee because they don't add to batch posting costs--but these transactions pay gas fees to Ethereum when they are put into the Delayed Inbox.
 
 The parent chain pricing algorithm assigns a parent chain calldata fee to each Sequencer transaction. First, it computes the transaction's size, which is an estimate of how many bytes the transaction will add to the compressed batch it is in; the formula for this includes an estimate of how compressible the transaction is. Second, it multiplies the computed size estimate by the current price per estimated byte, to determine the transaction's parent chain calldata `Wei`, in `Wei`. Finally, it divides this cost by the current child chain basefee to translate the fee into the child chain gas units. The result is reported as the "poster fee" for the transaction.
 

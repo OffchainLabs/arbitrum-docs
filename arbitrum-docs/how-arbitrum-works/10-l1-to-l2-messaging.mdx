@@ -75,7 +75,7 @@ A diagram illustrating this deposit process is below:
 
 ### Address aliasing
 
-All unsigned messages submitted through the delayed inbox have their sender addresses "aliased" when executed on the child chain. Instead of returning the parent chain sender's address as `msg.sender`, the child chain sees the "child alias" of that address. Formally, the child alias calculation is:
+All unsigned messages submitted through the Delayed Inbox have their sender addresses "aliased" when executed on the child chain. Instead of returning the parent chain sender's address as `msg.sender`, the child chain sees the "child alias" of that address. Formally, the child alias calculation is:
 
 ```solidity
 Child_Alias = Parent_Contract_Address + 0x1111000000000000000000000000000000001111
@@ -96,9 +96,9 @@ modifier onlyFromMyL1Contract() override {
 }
 ```
 
-## Transacting via the delayed inbox
+## Transacting via the Delayed Inbox
 
-Arbitrum provides a _delayed inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
+Arbitrum provides a _Delayed Inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
 
 1. **General cross-chain messaging**: Allows parent chain EOAs or parent chain contracts to send messages or transactions to a child chain. This functionality is critical for bridging assets (other than the chain's native token) and performing cross-chain operations.
 2. **Censorship resistance**: It ensures the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) for more details.
@@ -131,7 +131,7 @@ When submitting through the Delayed Inbox, a child chain transaction signature g
 Example use case:
 [Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
 
-#### Delayed inbox methods for signed messages
+#### Delayed Inbox methods for signed messages
 
 There are two primary methods for sending signed messages:
 
@@ -161,7 +161,7 @@ function sendL2MessageFromOrigin(
 
 ### Unsigned messages
 
-Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The delayed inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
+Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The Delayed Inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
 
 1. **Unsigned from EOA's**: These methods incorporate a nonce for replay protection, similar to standard EOA-based transactions on Ethereum.
 
