@@ -73,7 +73,7 @@ The current implementation of BoLD involves both onchain and offchain components
 
 - **State manager backend:** Software that can retrieve child chain states and produce commitments to `WAVM` histories for Arbitrum based on an execution server. The validator client, described below, will have access to a state manager backend in order to make moves on challenge vertices.
 
-- **Timers:** Each unrivaled edge (that is, an edge without another competing edge) will have a timer that _ticks up_. Time in the protocol is measured using parent blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain. We'll give a more detailed definition later, but two edges are considered rivals if they agree on some prefix of a computation starting from the same state but disagree on the remainder of that computation. Most importantly, timers are used to confirm assertions when an unrivaled edge's timer and associated assertion reaches the specified challenge period. See the section on [Timers and Edges](./bold-technical-deep-dive.mdx#timers) for more details.
+- **Timers:** Each unrivaled edge (that is, an edge without another competing edge) will have a timer that _ticks up_. Time in the protocol is measured using blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain), and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain. We'll give a more detailed definition later, but two edges are considered rivals if they agree on some prefix of a computation starting from the same state but disagree on the remainder of that computation. Most importantly, timers are used to confirm assertions when an unrivaled edge's timer and associated assertion reaches the specified challenge period. See the section on [Timers and Edges](./bold-technical-deep-dive.mdx#timers) for more details.
 
 - **Validating <a data-quicklook-from="bridge">bridge</a>:** The smart contract that leverages Ethereum's security and censorship-resistance to unlock bridged assets from the child chain back to the parent. Assets can be unlocked after an assertion (showing that those assets have been bridged from the child chain) has been posted and confirmed.
 
@@ -111,7 +111,7 @@ A key responsibility for Arbitrum proposers is to regularly post claims about th
 
 4. The number of messages in the Arbitrum <a data-quicklook-from="sequencer">Sequencer</a> inbox at the time the assertion is created
 
-The following assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay in parent chain blocks for assertion posting. Currently, this value is set to equal one hour for BoLD.
+The following assertion to be posted onchain must consume the specified number of inbox messages from the previous assertion. There is a required delay measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain) for assertion posting. Currently, this value is set to equal one hour for BoLD.
 
 Anyone can confirm assertions after a period of 6.4 days if they have not been challenged. In particular, assertions facilitate the process of withdrawing from Arbitrum back to Ethereum. Arbitrum withdrawals require specifying a blockhash, which must be confirmed as an assertion onchain. This is why withdrawals have a delay of 6.4 days if they are not actively challenged.
 
@@ -206,7 +206,7 @@ Once validators reach a single step of disagreement at the deepest subchallenge 
 
 #### Timers
 
-Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in parent blocks, and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain.
+Once a validator creates an edge, and if it does not have any rival edge contesting it, that edge will have a timer that ticks up called its **unrivaled timer**. Time in the protocol is measured in blocks of the first non-Arbitrum ancestor chain (i.e., Ethereum blocks for L2 chains and L3 chains settling to an Arbitrum chain, and parent chain blocks for chains settling to a non-Arbitrum L2 chain), and block numbers are used. An edge's timer stops ticking when a rival edge is created onchain.
 
 Edges also have an **inherited timer**, which is the sum of its unrivaled timer + the minimum inherited timer of an edge's children (recursive definition). Once one of the top-level edges that initiated a challenge has achieved an inherited timer >= a CHALLENGE_PERIOD (6.4 days), it can be confirmed. At this point, its assertion can also be confirmed as its associated challenge has completed. A minor but important detail is that edges also inherit the time their claimed assertion was unrivaled.
 
