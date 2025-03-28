@@ -13,9 +13,11 @@ content_type: get-started
 
 Arbitrum currently supports two primary data availability mechanisms:
 
-**Rollup Mode:** In this mode, all transaction data is included in either the calldata of transactions submitted to the parent chain (e.g., Ethereum mainnet for Arbitrum One) or the blobs submitted by the transaction. This inclusion ensures that all data is readily available onchain for anyone to download and verify.
+### Rollup Mode
+In this mode, all transaction data is included in either the calldata of transactions submitted to the parent chain (e.g., Ethereum mainnet for Arbitrum One) or the blobs submitted by the transaction. This inclusion ensures that all data is readily available onchain for anyone to download and verify.
 
-**Anytrust Mode:** In Anytrust mode, transaction data initially gets submitted to a group of nodes known as the Data Availability Committee (DAC). The DAC stores and distributes the data. Instead of including the entire dataset onchain, only a cryptographic proof that the data has been stored by the DAC (called a Data Availability Certificate, or DACert) is submitted to the parent chain. This proof significantly reduces the amount of data stored onchain, reducing costs.
+### AnyTrust Mode
+In AnyTrust mode, transaction data initially gets submitted to a group of nodes known as the Data Availability Committee (DAC). The DAC stores and distributes the data. Instead of including the entire dataset onchain, only a cryptographic proof that the data has been stored by the DAC (Data Availability Certificate, or DACert) is submitted to the parent chain. This proof significantly reduces the amount of data stored onchain, reducing costs.
 
 Because of those data availability mechanisms, Arbitrum Nitro nodes synchronize their data differently than Ethereum nodes or other layer-one network nodes. While Go-Ethereum nodes utilize a sophisticated P2P network to synchronize with the Ethereum blockchain by discovering other nodes, exchanging data, and participating in the consensus mechanism, Arbitrum nodes diverge from this traditional approach and use a trustless process.
 
@@ -33,7 +35,7 @@ Here's how Arbitrum data flow works:
    2. The node continues to follow this process to catch up with the latest chain height.
    3. Once caught up, the node receives updates on new sequencer-queued messages directly from the sequencer feed (we will provide details of this process in the last section).
 3. Catching up:
-   1. If a node falls behind the chain, it reverts to the process described in step 2 to resynchronize with the latest state.
+   1. If a node falls behind the chain, it reverts to the process described in Step 2 to resynchronize with the latest state.
 
 In essence, Arbitrum nodes prioritize data retrieval from the parent chain and rely on the sequencer for real-time updates, deviating from the traditional P2P synchronization approach used by Ethereum nodes.
 
