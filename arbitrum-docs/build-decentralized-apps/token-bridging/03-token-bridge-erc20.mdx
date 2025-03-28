@@ -9,7 +9,7 @@ sidebar_position: 3
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this page we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (parent chain) and Arbitrum (child chain) that leverages Arbitrum's [cross-chain message passing system](/build-decentralized-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
+The Arbitrum protocol itself technically has no native notion of any token standards, and gives no built-in advantage or special recognition to any particular token bridge. In this article we describe the "canonical bridge", which was implemented by Offchain Labs, and should be the primary bridge most users and applications use; it is (effectively) a decentralized app (dApp) with contracts on both Ethereum (parent chain) and Arbitrum (child chain) that leverages Arbitrum's [cross-chain messaging protocol](/build-decentralized-apps/04-cross-chain-messaging.mdx) to achieve basic desired token-bridging functionality. We recommend that you use it!
 
 ## Design rationale
 
@@ -21,7 +21,7 @@ We now describe some core goals that motivated the design of our bridging system
 
 For many `ERC-20` tokens, "standard" bridging functionality is sufficient, which entails the following: a token contract on Ethereum is associated with a "paired" token contract on Arbitrum.
 
-Depositing a token entails escrowing some amount of the token in an parent chain bridge contract, and minting the same amount at the paired token contract on a child chain. On the child chain, the paired contract behaves much like a normal `ERC-20` token contract. Withdrawing entails burning some amount of the token in the child chain contract, which then can later be claimed from the parent chain bridge contract.
+Depositing a token entails escrowing some amount of the token in an parent chain bridge contract, and minting the same amount at the paired token contract on a child chain. Then, on the child chain, the paired contract behaves much like a normal `ERC-20` token contract. Withdrawing entails burning some amount of the token in the child chain contract, which then can later be claimed from the parent chain bridge contract.
 
 Many tokens, however, require custom gateway systems, the possibilities of which are hard to generalize, e.g.,:
 
@@ -62,7 +62,7 @@ By default, any `ERC-20` token on a parent chain that isn't registered to a gate
 
 You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
 
-### Example: Standard Arb-ERC-20 deposit and withdraw
+### Example: Standard `Arb-ERC-20` deposit and withdraw
 
 To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard `ERC-20` gateway looks like. Here, we're assuming that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard `ERC-20` gateway.
 
@@ -78,13 +78,13 @@ To help illustrate what this all looks like in practice, let's go through the st
 
 :::info
 
-`arbSomeERC20Token` is an instance of [StandardArbERC20](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
+`arbSomeERC20Token` is an instance of [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol), which includes `bridgeMint` and `bridgeBurn` methods only callable by the `L2ERC20Gateway`.
 
 :::
 
 #### Withdrawals
 
-1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., L2ERC20Gateway).
+1. On Arbitrum, a user calls `L2GatewayRouter.outBoundTransfer`, which in turn calls `outBoundTransfer` on arbSomeERC20Token's gateway (i.e., `L2ERC20Gateway`).
 2. This burns `arbSomeERC20Token` tokens, and calls `ArbSys` with an encoded message to `L1ERC20Gateway.finalizeInboundTransfer`, which will be eventually executed on the parent chain.
 3. After the dispute window expires and the assertion with the user's transaction is confirmed, a user can call `Outbox.executeTransaction`, which in turn calls the encoded `L1ERC20Gateway.finalizeInboundTransfer` message, releasing the user's tokens from the `L1ERC20Gateway` contract's escrow.
 
@@ -132,7 +132,7 @@ If you have questions about your custom token needs, feel free to reach out on o
 
 ## Other flavors of gateways
 
-Note that in the system described above, one pair of gateway contracts handles the bridging of many `ERC-20`'s; i.e., many `ERC-20`'s on the parent chain are each paired with their own `ERC-20`'s on Arbitrum via a single gateway contract pairing. Other gateways may well bear different relations with the contracts that they bridge.
+Note that in the system described above, one pair of gateway contracts handles the bridging of many `ERC-20`'s; i.e., many `ERC-20`'s on the parent chain are each paired with their own `ERC-20`'s on Arbitrum via a single gateway contract pairing. Other gateways may bear different relations with the contracts that they bridge.
 
 Take our wrapped Ether implementation for example: here, a single `WETH` contract on the parent chain is connected to a single `WETH` contract on the child chain. When transferring `WETH` from one domain to another, the parent/child chain gateway architecture is used to unwrap the `WETH` on domain A, transfer the now-unwrapped Ether, and then re-wrap it on domain B. This ensures that `WETH` can behave on Arbitrum the way users are used to it behaving on Ethereum, while ensuring that all `WETH` tokens are always fully collateralized on the layer in which they reside.
 
@@ -146,4 +146,4 @@ Our [How to bridge tokens](/build-decentralized-apps/token-bridging/bridge-token
 
 ## A word of caution on bridges (aka, "I've got a bridge to sell you")
 
-Cross chain bridging is an exciting design space; alternative bridge designs can potentially offer faster withdrawals, interoperability with other chains, different trust assumptions with their own potentially valuable UX tradeoffs, etc. They can also potentially be completely insecure and/or outright scams. Users should treat other, non-canonical bridge applications the same way they treat any application running on Arbitrum, and exercise caution and due diligence before entrusting them with their value.
+Cross-chain bridging is an exciting design space; alternative bridge designs can potentially offer faster withdrawals, interoperability with other chains, different trust assumptions with their own potentially valuable UX tradeoffs, etc. They can also potentially be completely insecure and/or outright scams. Users should treat other, non-canonical bridge applications the same way they treat any application running on Arbitrum, and exercise caution and due diligence before entrusting them with their value.
