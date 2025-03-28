@@ -36,7 +36,7 @@ Each time a <a data-quicklook-from="transaction">transaction</a> calls a method 
 
 - `ArbAggregator`: Provides methods for configuring transaction aggregation. The <a data-quicklook-from="arbitrum-one">Arbitrum One</a> <a data-quicklook-from="sequencer">Sequencer</a> is the default aggregator unless changed by users. The precompile manages fee collection and <a data-quicklook-from="batch">batch</a> posters for chain aggregation.
 
-- `ArbGasInfo`: Retrieves various gas-related statistics, including gas prices in both `Wei` and `Ink`, parent chain gas price estimates, transaction fees, and congestion metrics. It is crucial in estimating transaction costs and adjusting gas pricing dynamically.
+- `ArbGasInfo`: Retrieves various gas-related statistics, including gas prices in both `wei` and `Ink`, parent chain gas price estimates, transaction fees, and congestion metrics. It is crucial in estimating transaction costs and adjusting gas pricing dynamically.
 
 - `ArbRetryableTx`: Handles retryable transactions, enabling parent-to-child messaging with delayed execution. The precompile manages retryables, checks expiration times, extends their lifetime, and cancels pending retryables.
 
@@ -207,7 +207,7 @@ The pricer module within ArbOS tracks:
 
 - **Current parent chain data unit price**:
 
-  - The adaptive fee per data unit expressed in Wei
+  - The adaptive fee per data unit expressed in `wei`
 
 ### Algorithm for price adjustment
 
@@ -383,7 +383,7 @@ ArbOS's per-block gas limit is distinct from Geth's block limit, which ArbOS [se
 
 ## Child chain gas pricing
 
-The child chain gas price on a given Arbitrum chain has a set floor, which is queriable via [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently 0.01 gwei on Arbitrum One and 0.01 gwei on Nova).
+The child chain gas price on a given Arbitrum chain has a set floor, which is queriable via [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo)'s `getMinimumGasPrice` method (currently 0.01 `gwei` on Arbitrum One and 0.01 `gwei` on Nova).
 
 ## Estimating child chain gas
 

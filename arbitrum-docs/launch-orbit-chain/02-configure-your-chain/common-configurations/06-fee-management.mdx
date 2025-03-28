@@ -57,7 +57,7 @@ const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
 This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information.
 :::
 
-To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in wei. For example:
+To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in `wei`. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256) ()" $NEW_MINIMUM_BASE_FEE_IN_WEI
@@ -166,7 +166,7 @@ Orbit chains that use a custom gas token should have their parent chain base fee
 
 ### Parent chain surplus fee
 
-The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of wei per gas unit paid to the appropriate fee collector. For example:
+The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of `wei` per gas unit paid to the appropriate fee collector. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
@@ -185,7 +185,7 @@ const parentChainRewardRate = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of wei per gas unit to reward. For example:
+To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of `wei` per gas unit to reward. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
