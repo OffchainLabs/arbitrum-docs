@@ -58,10 +58,10 @@ When calling [`eth_getTransactionReceipt`](https://ethereum.org/en/developers/do
 
 On RPC calls that return transaction receipts, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | The parent chain block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | Amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                     |
+| Field name      | Description                                                                                                                                                                                                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | The block number of the first non-Arbitrum ancestor chain that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `gasUsedForL1`  | Amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                                                 |
 
 ## Blocks
 
@@ -71,11 +71,11 @@ When calling [`eth_getBlockByHash`](https://ethereum.org/en/developers/docs/apis
 
 On RPC calls that return a block, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | An approximate parent chain block number that occurred before this child chain block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `sendCount`     | The number of child to parent chain messages since Nitro genesis                                                                                                                                                 |
-| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                         |
+| Field name      | Description                                                                                                                                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | An approximate block number of the first non-Arbitrum ancestor chain that occurred before this child chain block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `sendCount`     | The number of child to parent chain messages since Nitro genesis                                                                                                                                                                             |
+| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                                                     |
 
 ### Existing fields with different behavior
 
@@ -117,7 +117,7 @@ Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitr
 | `blockNum`                     | Last block created by the Nitro node (up-to-date child chain block the node is synced to)                                                                                                |
 | `messageOfLastBlock`           | Message that was used to produce the block above                                                                                                                                         |
 | `broadcasterQueuedMessagesPos` | If different than 0, this is expected to be greater than `msgCount`. This field notes a message that was read from the feed but not processed because earlier messages are still missing |
-| `lastL1BlockNum`               | Last block number from the parent chain that Nitro sees. This is used to debug the connection with the parent chain                                                                      |
+| `lastL1BlockNum`               | Last block number of the first non-Arbitrum ancestor chain that Nitro sees. This is used to debug the connection with the parent chain                                                   |
 | `lastl1BlockHash`              | Last block hash from the parent chain that Nitro sees. This is used to debug the connection with the parent chain                                                                        |
 
 :::info
