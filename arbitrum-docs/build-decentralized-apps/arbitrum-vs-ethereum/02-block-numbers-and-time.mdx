@@ -13,7 +13,7 @@ With the release of Arbitrum Orbit, Arbitrum chains can now be child chains (L2)
 
 :::
 
-As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [delayed inbox](/how-arbitrum-works/03-sequencer.mdx).
+As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [delayed inbox](/how-arbitrum-works/03-sequencer.mdx).
 
 Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
@@ -37,7 +37,7 @@ A single Ethereum block could include multiple Arbitrum blocks within it; howeve
 
 ### Ethereum block numbers within Arbitrum
 
-Accessing block numbers within an Arbitrum smart contract (i.e., `block.number` in Solidity) will return a value _close to_ (but not necessarily exactly) the L1 block number at which the sequencer received the transaction.
+Accessing block numbers within an Arbitrum smart contract (i.e., `block.number` in Solidity) will return a value _close to_ (but not necessarily exactly) the parent chain block number at which the sequencer received the transaction.
 
 ```sol
 // some Arbitrum contract:
@@ -52,7 +52,7 @@ Arbitrum blocks have their own block numbers, starting at 0 at the Arbitrum gene
 
 ArbOS and the sequencer are responsible for delineating when one Arbitrum block ends and the next one begins. However, block creation depends entirely on chain usage, meaning that blocks are only produced when there are transactions to sequence. In active chains, one can expect to see Arbitrum blocks produced at a relatively steady rate. In more quiet chains, block production might be sporadic depending on the rate at which transactions are received.
 
-A client that queries an Arbitrum node's RPC interface (e.g., transaction receipts) will receive the transaction's Arbitrum block number as the standard block number field. The parent chain block number will also be included in the added `l1BlockNumber field`.
+A client that queries an Arbitrum node's RPC interface (e.g., transaction receipts) will receive the transaction's Arbitrum block number as the standard block number field. The parent chain block number will also be included in the added `l1BlockNumber` field.
 
 ```ts
 const txnReceipt = await arbitrumProvider.getTransactionReceipt('0x...');
@@ -84,7 +84,7 @@ _\*\* **Arbitrum block number from RPCs:** note that this can be updated multipl
 
 The Multicall contract offers a great case study for the differences between parent and child chain block numbers.
 
-The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behaviour.
+The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behavior.
 
 You can find a version of the adapted `Multicall2` deployed on Arbitrum One at [0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF](https://arbiscan.io/address/0x7eCfBaa8742fDf5756DAC92fbc8b90a19b8815bF#code).
 
@@ -99,8 +99,8 @@ Block timestamps on Arbitrum are not linked to the timestamp of the parent chain
 1. Must be always equal or greater than the previous child chain block timestamp
 2. Must fall within the established boundaries (24 hours earlier than the current time or one hour in the future). More on this below.
 
-Furthermore, for transactions that are force-included from the parent chain (bypassing the sequencer), the block timestamp will be equal to either the parent chain timestamp when the transaction was put in the delayed inbox on the parent chain (not when it was force-included), or the child chain timestamp of the previous child chain block, whichever of the two timestamps is greater.
+Furthermore, for transactions that are force-included from the parent chain (bypassing the Sequencer), the block timestamp will be equal to either the parent chain timestamp when the transaction was put in the delayed inbox on the parent chain (not when it was force-included), or the child chain timestamp of the previous child chain block, whichever of the two timestamps is greater.
 
 ### Timestamp boundaries of the sequencer
 
-As mentioned, block timestamps are usually set based on the sequencer's clock. Because there's a possibility that the sequencer fails to post batches on the parent chain (i.e, Ethereum) for a period of time, it should have the ability to slightly adjust the timestamp of the block to account for those delays and prevent any potential reorganisations of the chain. To limit the degree to which the sequencer can adjust timestamps, some boundaries are set, currently to 24 hours earlier than the current time, and one hour in the future.
+As mentioned, block timestamps are usually set based on the sequencer's clock. Because there's a possibility that the Sequencer fails to post batches on the parent chain (i.e., Ethereum) for a period of time, it should have the ability to slightly adjust the timestamp of the block to account for those delays and prevent any potential reorganizations of the chain. To limit the degree to which the Sequencer can adjust timestamps, some boundaries are set, currently to 24 hours earlier than the current time, and one hour in the future.
