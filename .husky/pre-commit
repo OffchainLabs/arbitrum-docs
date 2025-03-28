@@ -15,10 +15,11 @@ if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
 fi
 
 # Check for missing redirects
-yarn ts-node scripts/check-redirects.ts
+yarn tsx scripts/check-redirects.ts
 CHECK_REDIRECTS_EXIT_CODE=$?
 
 if [ $CHECK_REDIRECTS_EXIT_CODE -ne 0 ]; then
+  echo "❌ Error: The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
   exit 1
 fi
 

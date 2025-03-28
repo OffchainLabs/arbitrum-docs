@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
 import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { resolve, dirname, basename } from 'path';
-import { access } from 'fs/promises';
 
 interface Redirect {
   source: string;
@@ -11,6 +10,26 @@ interface Redirect {
 
 interface VercelConfig {
   redirects: Redirect[];
+}
+
+interface MovedFile {
+  oldPath: string;
+  newPath: string;
+}
+
+interface RedirectCheckResult {
+  hasMissingRedirects: boolean;
+  missingRedirects: Array<{
+    from: string;
+    to: string;
+  }>;
+  error?: string;
+}
+
+interface RedirectCheckerOptions {
+  vercelJsonPath?: string;
+  mode: 'commit-hook' | 'ci';
+  gitCommand?: string;
 }
 
 /**
@@ -40,16 +59,71 @@ interface VercelConfig {
  */
 export class RedirectChecker {
   private vercelJsonPath: string;
-  private gitDiffCmd: string;
+  private mode: 'commit-hook' | 'ci';
+  private gitCommand?: string;
 
-  constructor(vercelJsonPath?: string, gitDiffCmd = 'git diff --cached --name-status -M100% --find-renames') {
-    this.vercelJsonPath = vercelJsonPath || resolve(process.cwd(), '..', 'vercel.json');
-    this.gitDiffCmd = gitDiffCmd;
+  constructor(options: RedirectCheckerOptions) {
+    this.vercelJsonPath = options.vercelJsonPath || resolve(process.cwd(), '..', 'vercel.json');
+    this.mode = options.mode;
+    this.gitCommand = options.gitCommand;
   }
 
+  /**
+   * Normalize a URL by removing parentheses, trailing slashes, and ensuring single leading slash
+   */
+  private normalizeUrl(url: string): string {
+    return '/' + url
+      .replace(/[()]/g, '')  // Remove parentheses
+      .replace(/^\/+/, '')   // Remove leading slashes before adding a single one
+      .replace(/\/+/g, '/')  // Replace multiple slashes with single slash
+      .replace(/\/\?$/, '')  // Remove optional trailing slash
+      .replace(/\/$/, '');   // Remove trailing slash
+  }
+
+  /**
+   * Get moved files from git diff based on mode
+   */
+  private getMovedFiles(): MovedFile[] {
+    const defaultCommands = {
+      'commit-hook': 'git diff --cached --name-status -M100% --find-renames',
+      'ci': 'git diff --name-status --diff-filter=R HEAD~1 HEAD'
+    };
+
+    const command = this.gitCommand || defaultCommands[this.mode];
+    
+    try {
+      const output = execSync(command, { 
+        encoding: 'utf8',
+        cwd: dirname(this.vercelJsonPath)
+      });
+      return !output.trim() ? [] : output.trim().split('\n')
+        .map(line => {
+          const match = line.match(/^R\d+\s+(.+?)\s+(.+?)$/);
+          if (match && (match[1].endsWith('.md') || match[1].endsWith('.mdx'))) {
+            return {
+              oldPath: match[1].trim(),
+              newPath: match[2].trim()
+            };
+          }
+          return null;
+        })
+        .filter((file): file is MovedFile => file !== null);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  /**
+   * Load and parse the vercel.json configuration file
+   */
   private loadVercelConfig(): VercelConfig {
     if (!existsSync(this.vercelJsonPath)) {
-      throw new Error(`vercel.json not found at ${this.vercelJsonPath}`);
+      if (this.mode === 'commit-hook') {
+        writeFileSync(this.vercelJsonPath, JSON.stringify({ redirects: [] }, null, 2));
+        throw new Error('vercel.json was created. Please review and stage the file before continuing.');
+      } else {
+        throw new Error(`vercel.json not found at ${this.vercelJsonPath}`);
+      }
     }
 
     const content = readFileSync(this.vercelJsonPath, 'utf8');
@@ -60,144 +134,138 @@ export class RedirectChecker {
     return config;
   }
 
-  private getMovedFiles(): { oldPath: string; newPath: string }[] {
-    let output: string;
-    try {
-      output = execSync(this.gitDiffCmd, { 
-        encoding: 'utf8',
-        cwd: dirname(this.vercelJsonPath)
-      });
-      console.log('Git diff output:', output);
-    } catch (error) {
-      // If the command fails (e.g., no previous commit), return empty array
-      console.error('Git diff error:', error);
-      return [];
+  /**
+   * Convert a file path to its corresponding URL path
+   */
+  private getUrlFromPath(filePath: string): string {
+    // Remove the file extension and convert to URL path
+    let urlPath = filePath
+      .replace(/^(pages|arbitrum-docs)\//, '') // Remove leading directory
+      .replace(/\d{2,3}-/g, '') // Remove leading numbers like '01-', '02-', etc.
+      .replace(/\.mdx?$/, '') // Remove .md or .mdx extension
+      .replace(/\/index$/, ''); // Convert /index to / for cleaner URLs
+
+    // Handle empty path (root index)
+    if (!urlPath || urlPath === 'index') {
+      return '/';
     }
 
-    if (!output.trim()) {
-      return [];
-    }
-
-    const movedFiles: { oldPath: string; newPath: string }[] = [];
-    const lines = output.trim().split('\n');
-
-    for (const line of lines) {
-      console.log('Processing line:', line);
-      const match = line.match(/^R\d+\s+(.+?)\s+(.+?)$/);
-      if (match) {
-        const [, oldPath, newPath] = match;
-        console.log('Found match:', { oldPath, newPath });
-        // Check if the file is a markdown file
-        if (oldPath.endsWith('.md') || oldPath.endsWith('.mdx')) {
-          movedFiles.push({
-            oldPath: oldPath.trim(),
-            newPath: newPath.trim()
-          });
-        }
-      }
-    }
-
-    console.log('Moved files:', movedFiles);
-    return movedFiles;
+    // Format URL to match existing patterns
+    return `/(${urlPath}/?)`; // Add parentheses and optional trailing slash
   }
 
-  private convertToUrl(filePath: string): string {
-    // Remove the file extension and any directory prefix
-    return '/' + filePath
-      .replace(/^.*?\//, '') // Remove everything up to the first slash
-      .replace(/\.(md|mdx)$/, '');
-  }
-
+  /**
+   * Check if a redirect exists in the config
+   */
   private hasRedirect(config: VercelConfig, oldUrl: string, newUrl: string): boolean {
-    return config.redirects.some(
-      redirect => redirect.source === oldUrl && redirect.destination === newUrl
-    );
+    return config.redirects.some(redirect => {
+      const normalizedSource = this.normalizeUrl(redirect.source);
+      const normalizedOldUrl = this.normalizeUrl(oldUrl);
+      const normalizedNewUrl = this.normalizeUrl(redirect.destination);
+      const normalizedDestination = this.normalizeUrl(newUrl);
+
+      return normalizedSource === normalizedOldUrl && normalizedNewUrl === normalizedDestination;
+    });
   }
 
-  private updateVercelConfig(oldUrl: string, newUrl: string, config: VercelConfig): void {
-    const newRedirect = {
+  /**
+   * Add a new redirect to the config
+   */
+  private addRedirect(oldUrl: string, newUrl: string, config: VercelConfig): void {
+    config.redirects.push({
       source: oldUrl,
-      destination: newUrl,
+      destination: newUrl, // Keep the same format as the source URL
       permanent: false
-    };
-    config.redirects.push(newRedirect);
+    });
     writeFileSync(this.vercelJsonPath, JSON.stringify(config, null, 2), 'utf8');
   }
 
-  public async check(): Promise<boolean> {
-    // Create vercel.json if it doesn't exist
-    if (!existsSync(this.vercelJsonPath)) {
-      writeFileSync(this.vercelJsonPath, JSON.stringify({ redirects: [] }, null, 2));
-      throw new Error('vercel.json was created. Please review and stage the file before continuing.');
-    }
-
-    // Check for unstaged changes to vercel.json
-    const cwd = dirname(this.vercelJsonPath);
-    console.log('Current working directory:', cwd);
-    const initialStatus = execSync('git status --porcelain', { cwd, encoding: 'utf8' });
-    console.log('Git status output:', initialStatus);
-    const vercelJsonStatus = initialStatus.split('\n').find(line => line.includes(basename(this.vercelJsonPath)));
-    console.log('vercel.json status:', vercelJsonStatus);
-    if (vercelJsonStatus && (vercelJsonStatus.startsWith(' M') || vercelJsonStatus.startsWith('??'))) {
-      throw new Error('Unstaged changes to vercel.json. Please review and stage the changes before continuing.');
-    }
-
-    // Get moved files
-    const movedFiles = await this.getMovedFiles();
-    if (movedFiles.length === 0) {
-      return true;
-    }
-
-    // Read vercel.json
-    const vercelJson = JSON.parse(readFileSync(this.vercelJsonPath, 'utf8'));
-    if (!vercelJson.redirects) {
-      vercelJson.redirects = [];
-    }
-
-    // Add new redirects
-    let redirectsAdded = false;
-    for (const { oldPath, newPath } of movedFiles) {
-      const oldUrl = this.getUrlFromPath(oldPath);
-      const newUrl = this.getUrlFromPath(newPath);
-
-      // Check if redirect already exists
-      const existingRedirect = vercelJson.redirects.find(
-        (r: any) => r.source === oldUrl && r.destination === newUrl
-      );
-
-      if (!existingRedirect) {
-        vercelJson.redirects.push({
-          source: oldUrl,
-          destination: newUrl,
-          permanent: false, // Default to non-permanent redirects
-        });
-        console.log(`Added redirect: ${oldUrl} -> ${newUrl}`);
-        redirectsAdded = true;
+  /**
+   * Check for missing redirects and optionally update vercel.json
+   */
+  public async check(): Promise<RedirectCheckResult> {
+    try {
+      // In commit-hook mode, check for unstaged changes
+      if (this.mode === 'commit-hook') {
+        const cwd = dirname(this.vercelJsonPath);
+        const initialStatus = execSync('git status --porcelain', { cwd, encoding: 'utf8' });
+        const vercelJsonStatus = initialStatus.split('\n').find(line => line.includes(basename(this.vercelJsonPath)));
+        
+        if (vercelJsonStatus && (vercelJsonStatus.startsWith(' M') || vercelJsonStatus.startsWith('??'))) {
+          throw new Error('Unstaged changes to vercel.json. Please review and stage the changes before continuing.');
+        }
       }
+
+      const config = this.loadVercelConfig();
+      const movedFiles = this.getMovedFiles();
+
+      if (movedFiles.length === 0) {
+        return {
+          hasMissingRedirects: false,
+          missingRedirects: []
+        };
+      }
+
+      const missingRedirects: Array<{ from: string; to: string }> = [];
+      let redirectsAdded = false;
+
+      for (const { oldPath, newPath } of movedFiles) {
+        const oldUrl = this.getUrlFromPath(oldPath);
+        const newUrl = this.getUrlFromPath(newPath);
+
+        if (!this.hasRedirect(config, oldUrl, newUrl)) {
+          missingRedirects.push({ from: oldUrl, to: newUrl });
+
+          // Only add redirects in commit-hook mode
+          if (this.mode === 'commit-hook') {
+            this.addRedirect(oldUrl, newUrl, config);
+            redirectsAdded = true;
+          }
+        }
+      }
+
+      if (this.mode === 'commit-hook' && redirectsAdded) {
+        throw new Error('New redirects added to vercel.json. Please review and stage the changes before continuing.');
+      }
+
+      return {
+        hasMissingRedirects: missingRedirects.length > 0,
+        missingRedirects
+      };
+
+    } catch (error) {
+      return {
+        hasMissingRedirects: false,
+        missingRedirects: [],
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
     }
-
-    if (redirectsAdded) {
-      // Write changes to vercel.json
-      writeFileSync(this.vercelJsonPath, JSON.stringify(vercelJson, null, 2));
-      throw new Error('New redirects added to vercel.json. Please review and stage the changes before continuing.');
-    }
-
-    return true;
-  }
-
-  private getUrlFromPath(filePath: string): string {
-    // Remove the file extension and convert to URL path
-    const urlPath = filePath
-      .replace(/^(pages|arbitrum-docs)\//, '') // Remove leading directory
-      .replace(/\.mdx?$/, ''); // Remove .md or .mdx extension
-    return '/' + urlPath;
   }
 }
 
+// CLI entry point
 if (require.main === module) {
-  const checker = new RedirectChecker();
-  checker.check().catch(error => {
-    console.error('Error:', error);
-    process.exit(1);
+  const mode = process.argv.includes('--ci') ? 'ci' : 'commit-hook';
+  const checker = new RedirectChecker({ mode });
+  
+  checker.check().then(result => {
+    if (result.error) {
+      console.error('Error:', result.error);
+      process.exit(1);
+    }
+
+    if (result.hasMissingRedirects) {
+      console.error('❌ Missing redirects found:');
+      for (const redirect of result.missingRedirects) {
+        console.error(`  From: ${redirect.from}`);
+        console.error(`  To:   ${redirect.to}`);
+      }
+      process.exit(1);
+    }
+
+    if (mode === 'ci') {
+      console.log('✅ All necessary redirects are in place');
+    }
+    process.exit(0);
   });
 } 
