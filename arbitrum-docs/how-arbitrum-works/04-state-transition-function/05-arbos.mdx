@@ -101,37 +101,39 @@ Efficient handling of parent chain gas costs is crucial for the Arbitrum network
 
 There are two main challenges in accurately pricing parent chain resources:
 
-1. **Apportioning batch costs among transactions**:
+### 1. Apportioning batch costs among transactions:
 
-   - **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
+- **Compression complexity**: The data posted to the parent chain is compressed using a general-purpose compression algorithm (Brotli). The effectiveness of compression depends on shared patterns among transactions in a batch.
 
-   - **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the overall compressibility of the batch.
+- **Contribution estimation**: It's difficult to determine how much a specific transaction contributes to the overall compressibility of the batch.
 
-   - **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
+- **Ideal vs. practical**: Ideally, transactions that enhance compressibility would get charged less, but there's no efficient way to calculate this precisely within the constraints of the STF.
 
-2. **Assessing parent chain fees at sequencing time**:
+### 2. Assessing parent chain fees at sequencing time:
 
-   - **Determinism requirement**: The parent chain fee charged to a transaction must be known when the transaction is sequenced to maintain the determinism of the STF.
+- **Determinism requirement**: The parent chain fee charged to a transaction must be known when the transaction is sequenced to maintain the determinism of the STF.
 
-   - **Future uncertainty**: At sequencing time, the actual cost of the batch is unknown because it depends on:
+- **Future uncertainty**: At sequencing time, the actual cost of the batch is unknown because it depends on:
 
-     - The parent chain base fee at the future time of batch posting
+  - The parent chain base fee at the future time of batch posting
 
-     - The remaining contents of the batch affect its size and compressability
+  - The remaining contents of the batch affect its size and compressability
 
-   - **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
+- **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
+
 
 ## Nitro's approach to addressing the challenges
 
 To overcome these challenges, Arbitrum's Nitro implements a two-fold strategy:
 
-1. **Estimated relative footprint**
+### 1. Estimated relative footprint
 
    - Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
 
-2. **Adaptive fee per data unit**
+### 2. Adaptive fee per data unit
 
    - A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
+
 
 ## Apprortioning costs among transactions
 
