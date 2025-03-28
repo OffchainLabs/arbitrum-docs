@@ -110,7 +110,7 @@ This interface is the main interaction between geth-standard APIs and the Arbitr
 
 Nitro Geth includes a few child chain-specific transaction types. Click any to jump to their section.
 
-| Tx Type                                                   | Represents                                                               | Last Hook Reached             | Source      |
+| Transaction Type                                                   | Represents                                                               | Last Hook Reached             | Source      |
 | --------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------- | ----------- |
 | [`ArbitrumUnsignedTx`](#arbitrumunsignedtx)               | A parent chain to child chain message                                    | [`EndTxHook`](#endtxhook)     | Bridge      |
 | [`ArbitrumContractTx`](#arbitrumcontracttx)               | A nonce-less parent chain to child chain message                         | [`EndTxHook`](#endtxhook)     | Bridge      |
@@ -155,7 +155,7 @@ A [geth message](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73
 
 A message [derived from a transaction](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L676) will carry that transaction in a field accessible via its [`UnderlyingTransaction`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L700) method. While this relates to how a given message is used, they are not one-to-one. The table below shows the various run modes and whether each could have an underlying transaction.
 
-| Run Mode                                                                                                                                               | Scope            | Carries an Underlying Tx?                                                                                      |
+| Run Mode                                                                                                                                               | Scope            | Carries an Underlying Transaction?                                                                                      |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------- |
 | [`MessageCommitMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L654)        | state transition | Always                                                                                                         |
 | [`MessageGasEstimationMode`](https://github.com/OffchainLabs/go-ethereum/blob/7503143fd13f73e46a966ea2c42a058af96f7fcf/core/types/transaction.go#L655) | gas estimation   | When created via [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx) or when scheduled |

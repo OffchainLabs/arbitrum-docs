@@ -85,7 +85,7 @@ function exampleRNG() external {
 }
 ```
 
-## Step 4 - Add the validation in the callback function of requester contract​
+## Step 4 - Add the validation in the callback function of requester contract
 
 Inside the callback function where the requester contract wants the random number (in this example the callback function is `exampleCallback`), the requester contract will have to add the validation such that only the Supra router contract can call the function. The validation is necessary to protect against malicious contracts/users executing the callback with fake data. For example, if the callback function is pickWinner in the requester contract, the snippet can be as follows.
 
