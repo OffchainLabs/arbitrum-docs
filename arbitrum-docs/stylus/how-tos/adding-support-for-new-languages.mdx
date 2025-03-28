@@ -12,7 +12,7 @@ sidebar_position: 1
 
 This is possible thanks to [WebAssembly](https://www.infoworld.com/article/3291780/what-is-webassembly-the-next-generation-web-platform-explained.html) technology, which all Stylus contracts compile to. Stylus smart contracts live under the **same Ethereum state trie** in Arbitrum nodes, and can fully interoperate with Solidity or Vyper EVM smart contracts. With Stylus, developers can write smart contracts in Rust that talk to Solidity and vice versa without any limitations.
 
-Today, the Stylus testnet also comes with two officially supported [SDKs](../reference/stylus-sdk.md) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
+Today, the Stylus testnet also comes with two officially supported [SDKs](/stylus/overview.mdx) for developers to write contracts in the [Rust](../reference/rust-sdk-guide.md) or [C](https://github.com/OffchainLabs/stylus-sdk-c) programming languages.
 
 However, _anyone_ can add support for new languages in Stylus. **As long as a programming language can compile to WebAssembly**, Stylus will let you use it to write EVM-compatible smart contracts. Note that in order to be deployed onchain, your compiled program must fit under the 24Kb brotli-compressed limit, and should meet Stylus gas metering requirements.
 
