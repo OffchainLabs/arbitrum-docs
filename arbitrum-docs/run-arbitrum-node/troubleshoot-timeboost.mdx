@@ -1,0 +1,68 @@
+---
+title: 'Troubleshoot Timeboost'
+description: A guide on common errors & best practices when using Timeboost
+user_story: As a developer, I want to understand how to troubleshoot common issues when using Timeboost
+author: dlee
+content_type: how-to
+---
+
+This is a short guide on how response times work and how <a data-quicklook-from="express-lane">express lane</a> <a data-quicklook-from="transaction">transactions</a> are sequenced, alongside common errors and best practices for using <a data-quicklook-from="timeboost">Timeboost</a>. This guide assumes you have reviewed our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx).
+
+## How express lane transactions are ordered into blocks
+
+The express lane time advantage is currently set to 200ms, while the current block creation time is 250ms. Both express lane transactions and regular transactions are processed together in a single queue after taking into account the timeboost time advantage and artificial delay. This means that if an express lane transaction and a normal transaction both arrive at the <a data-quicklook-from="sequencer">sequencer</a> at the same time, but _before 50ms have passed since the last block was produced_, then both transactions may appear in the same block, though the express lane transaction would be sequenced ahead of the normal transaction (assuming that the block's gas limit has not yet been reached).
+
+Express lane transactions are processed in the order of their `sequenceNumber`, which is a field in every express lane transaction. The `sequenceNumber` field is important because transactions with `sequenceNumber = n` can only be sequenced after all the transactions from `sequenceNumber = 0` to `sequenceNumber = n-1` have been sequenced. The first expected sequence number for a new round is zero and increments for each accepted transaction.
+
+## How response times work
+
+The response for a transaction submission to the express lane is returned immediately once received by the sequencer. For example, if an express lane transaction is sent to the sequencer at `t=0ms` and it took 50ms to arrive at the sequencer (defined as `time_to_arrive`), then the expected response time is at `t=50ms`. Note that an accepted transaction is defined as an express lane transaction submission where the sequencer returns an empty result with an HTTP status of `200` and will always have their `sequenceNumber` consumed. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
+
+## Errors relating to the `sequenceNumber`
+
+When it comes to submitting express lane transactions, there are a few scenarios to consider.
+
+### Scenario 1: You get an error response immediately
+
+In this scenario, an error response is immediately returned after you send an express lane transaction. The transaction's `sequenceNumber` will not be consumed if the error is Timeboost-related and consumed otherwise, hence you may need to re-submit your transaction after rectifying any errors with the appropriate sequence number. See [Common Timeboost error responses](#common-error-responses) below for a full list of Timeboost-related error responses and how to interpret them.
+
+### Scenario 2: Your transaction got an empty response with an HTTP status of `200`
+
+In this scenario, a `null` response is immediately returned after you send an express lane transaction. This means that your transaction's `sequenceNumber` was consumed and your transaction was accepted. However, this does not mean that your transaction was sequenced into a block due to a block-based timeout explained below. We recommend checking transaction receipts for confirmation on whether your transactions were sequenced into a block or not.
+
+#### The block-based timeout for express lane transactions
+
+If the express lane controller decides to send a burst of transactions to the express lane with ascending values for the `sequenceNumber`, then the sequencer will attempt to process them in the order defined by the `sequenceNumber` (as explained above). However, if the transactions arrive out-of-order at the sequencer, then the transactions that do not have the expected `sequenceNumber` will be buffered (up to a limit) to be processed until the sequencer receives the transaction with the expected `sequenceNumber`. Once the sequencer receives the transaction with the expected `sequenceNumber`, then the sequencer will begin processing the buffered transaction with the next `sequenceNumber`. In other words, a transaction will only be sequenced into a block once transactions with the other, missing sequence numbers arrive to fill in the “gap” between the expected `sequencerNumber` and a given transaction’s `sequenceNumber`.
+
+A block-based timeout is applied to all express lane transactions, even those in the buffer, such that any transactions accepted (meaning `sequenceNumber` is consumed) by the sequencer will be dropped if they are not sequenced into a block within 5 blocks. This timeout can occur if the cummulative gas usage of transactions (express lane or otherwise) fill up 5 blocks worth of transactions _before_ all of the buffered express lane transactions are sequenced. No timeout error will be returned in this case and we recommend checking transaction receipts for confirmation on whether your transactions were sequenced into a block or not. Note that each Arbitrum block has a gas limit of 32 million gas and 1 Arbitrum block is produced every 250ms. This block-based timeout is likely to be reached before the limit on buffered transactions is hit in almost all cases.
+
+## Common error responses
+
+The below two tables can also be found on our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx).
+
+#### Table 1: Errors relating to bid submission
+
+| Error                   | Description                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `MALFORMED_DATA`        | wrong input data, failed to deserialize, missing certain fields, etc.                                       |
+| `NOT_DEPOSITOR`         | the address is not an active depositor in the auction contract                                              |
+| `WRONG_CHAIN_ID`        | wrong chain id for the target chain                                                                         |
+| `WRONG_SIGNATURE`       | signature failed to verify                                                                                  |
+| `BAD_ROUND_NUMBER`      | incorrect round, such as one from the past                                                                  |
+| `RESERVE_PRICE_NOT_MET` | bid amount does not meet the minimum required reserve price on-chain                                        |
+| `INSUFFICIENT_BALANCE`  | the bid amount specified in the request is higher than the deposit balance of the depositor in the contract |
+
+#### Table 2: Errors relating to express lane transaction submission
+
+Note that if you get any of the errors below, then the sequence number used in your express lane transaction was _not_ consumed.
+| Error | Description |
+| ------------------------------ | --------------------------------------------------------------------- |
+| `MALFORMED_DATA` | wrong input data, failed to deserialize, missing certain fields, etc. |
+| `WRONG_CHAIN_ID` | wrong chain id for the target chain |
+| `WRONG_SIGNATURE` | signature failed to verify |
+| `BAD_ROUND_NUMBER` | incorrect round, such as one from the past |
+| `NOT_EXPRESS_LANE_CONTROLLER` | the sender is not the express lane controller |
+| `NO_ONCHAIN_CONTROLLER` | there is no defined, on-chain express lane controller for the round |
+| `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
+| `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
+| `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached |

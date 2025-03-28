@@ -39,15 +39,19 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo service docker start
 ```
 
-(Note that if you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.)
+:::note
+
+If you are running Ubuntu 22.04, you might get an `Unable to locate package docker-buildx-plugin` error. Try `sudo apt install docker-buildx` instead.
+
+:::
 
 #### For [MacOS](https://docs.docker.com/desktop/install/mac-install/)
 
 Depending on whether your Mac has an Intel processor or Apple silicon, download the corresponding disk image from [Docker](https://docs.docker.com/desktop/install/mac-install/), and move it into your Applications folder.
 
-#### [Optional] Run docker from a different user
+#### [Optional] Run Docker from a different user
 
-After installing docker, you might want to be able to run it with your current user instead of root. You can run the following commands to do so.
+After installing Docker, you might want to be able to run it with your current user instead of root. You can run the following commands to do so.
 
 ```shell
 sudo groupadd docker
@@ -60,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.1@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.5.3@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -96,7 +100,11 @@ Install [Homebrew](https://brew.sh/) package manager and add it to your `PATH` e
 echo "export PATH=/opt/homebrew/bin:$PATH" >> ~/.zprofile && source ~/.zprofile
 ```
 
-(replace `~/.zprofile` with `~/.bash_profile` if you use bash instead of zsh).
+:::note
+
+Replace `~/.zprofile` with `~/.bash_profile` if you use bash instead of zsh).
+
+:::
 
 Install essentials:
 
@@ -170,7 +178,11 @@ gvm use go1.23 --default
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
 ```
 
+:::note
+
 If you use zsh, replace `bash` with `zsh`.
+
+:::
 
 #### Install foundry
 

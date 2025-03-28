@@ -24,13 +24,13 @@ This initialization process, if repeated frequently, may lead to inefficiencies.
 
 ## CacheManager contract
 
-The core component of our caching strategy is the [CacheManager contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/chain/CacheManager.sol). This smart contract manages the cache, interacts with precompiles, and determines which contracts should be cached. The `CacheManager` can hold approximately 4,000 contracts in memory.
+The core component of our caching strategy is the [`CacheManager` contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/chain/CacheManager.sol). This smart contract manages the cache, interacts with precompiles, and determines which contracts should be cached. The `CacheManager` can hold approximately 4,000 contracts in memory.
 
 The `CacheManager` defines how contracts remain in the cache and how they compete with other contracts for cache space. Its primary purpose is to reduce high initialization costs, ensuring efficient contract activation and usage. The contract includes methods for adding and removing cache entries, querying the status of cached contracts, and managing the lifecycle of cached data.
 
 ### Key features
 
-The `CacheManager` plays a crucial role in our caching strategy by keeping a specific set of contracts in memory rather than retrieving them from disk. This significantly reduces the activation time for frequently accessed contracts. The `CacheManager` contract is an on-chain contract that accepts bids for inserting contract code into the cache. It then calls a precompile that loads or unloads the contracts in the `ArbOS` cache, which follows the on-chain cache but operates locally in the client and marks the contract as in or out of the cache in the `ArbOS` state.
+The `CacheManager` plays a crucial role in our caching strategy by keeping a specific set of contracts in memory rather than retrieving them from disk. This significantly reduces the activation time for frequently accessed contracts. The `CacheManager` contract is an onchain contract that accepts bids for inserting contract code into the cache. It then calls a precompile that loads or unloads the contracts in the `ArbOS` cache, which follows the onchain cache but operates locally in the client and marks the contract as in or out of the cache in the `ArbOS` state.
 
 The cache operates through an auction system where dApp developers submit bids to insert their contracts into the cache. If the cache is at capacity, lower bids are evicted to make space for higher bids. The cache maintains a minimum heap of bids for `codeHashes`, with bids encoded as `bid << 64 + index`, where `index` represents the position in the list of all bids. When an insertion exceeds the cache's maximum size, items are popped off the minimum heap and deleted until there is enough space to insert the new item. Contracts with equal bids will be popped in a random order, while the smallest bid is evicted first.
 
@@ -50,15 +50,15 @@ This section provides a practical guide for interacting with the `CacheManager` 
 
 Before placing a bid, it's important to know the minimum bid required to cache the Stylys contract. This can be done using the `getMinBid` function, or using the `cargo stylus cache suggest-bid` command.
 
-**Method 1: Direct smart contract call**
+### Method 1: Direct smart contract call
 
 ```solidity
 uint192 minBid = cacheManager.getMinBid(contractAddress);
 ```
 
-**Method 2: Cargo stylus command**
+### Method 2: Cargo stylus command
 
-Note that here, [contractAddress] is the address of the Stylus contract you want to cache.
+Here, the [`contractAddress`] is the address of the Stylus contract you want to cache.
 
 ```bash
 cargo stylus cache suggest-bid [contractAddress]
@@ -68,7 +68,7 @@ cargo stylus cache suggest-bid [contractAddress]
 
 You can place a bid using either of the following methods:
 
-**Method 1: Direct smart contract call**
+### Method 1: Direct smart contract call
 
 Here, `bidAmount` is the amount you want to bid, and `contractAddress` is the address of the Stylus contract you're bidding for.
 
@@ -76,7 +76,7 @@ Here, `bidAmount` is the amount you want to bid, and `contractAddress` is the ad
 cacheManager.placeBid{value: bidAmount}(contractAddress);
 ```
 
-**Method 2: Cargo stylus command**
+### Method 2: Cargo stylus command
 
 You can place a bid using the `cargo stylus cache bid` command:
 
@@ -99,7 +99,7 @@ cargo stylus cache status --address=[contractAddress]
 
 ### Additional information
 
-- Pausing Bids: The `CacheManager` contract has an `isPaused` state that can be toggled by the owner to prevent or allow new bids.
-- Checking Cache Size: You can monitor the current cache size and decay rate using the `getCacheSize` and `getDecayRate` functions respectively.
+- **Pausing Bids**: The `CacheManager` contract has an `isPaused` state that can be toggled by the owner to prevent or allow new bids.
+- **Checking Cache Size**: You can monitor the current cache size and decay rate using the `getCacheSize` and `getDecayRate` functions respectively.
 
 By following these steps, you can effectively interact with the `CacheManager` contract, either directly through smart contract calls or using the `cargo stylus` command-line tool. This ensures that your bids meet the necessary requirements for caching programs on the network, optimizing your contracts for faster and more efficient execution.

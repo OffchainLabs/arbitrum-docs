@@ -1,9 +1,9 @@
 ---
 title: Bridging from a parent chain to a child chain
-description: 'Learn the fundamentals of L1 to L2 messaging on Arbitrum.'
+description: 'Learn the fundamentals of parent to child chain messaging on Arbitrum.'
 author: pete-vielhaber
 sme: Mehdi Salehi
-user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between L1 and L2 within Arbitrum.
+user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between parent to child chain messaging within Arbitrum.
 content_type: get-started
 ---
 
@@ -83,7 +83,7 @@ Child_Alias = Parent_Contract_Address + 0x11110000000000000000000000000000000011
 
 #### Why aliasing?
 
-Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child-chain contracts can distinguish between parent-chain contract calls and those from child-chain-native addresses.
+Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child chain contracts can distinguish between parent-chain contract calls and those from child chain native addresses.
 
 #### Computing the original parent chain address
 
@@ -418,7 +418,7 @@ Any `ERC-20` token on a parent chain not registered to a gateway can be permissi
 
 You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
 
-#### Example: Standard `Arb-ERC20` deposit and withdraw
+#### Example: Standard `Arb-ERC-20` deposit and withdraw
 
 To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard `ERC-20` gateway looks like. We assume that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard `ERC-20` gateway.
 
