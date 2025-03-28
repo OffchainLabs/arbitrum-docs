@@ -28,7 +28,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetPricesInWeiWithAggregator</code> gets prices in <code>wei</code> when using the provided aggregator</td>
+      <td>
+        <code>GetPricesInWeiWithAggregator</code> gets prices in <code>wei</code> when using the
+        provided aggregator
+      </td>
     </tr>
     <tr>
       <td>
@@ -50,7 +53,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetPricesInWei</code> gets prices in <code>wei</code> when using the caller's preferred aggregator</td>
+      <td>
+        <code>GetPricesInWei</code> gets prices in <code>wei</code> when using the caller's
+        preferred aggregator
+      </td>
     </tr>
     <tr>
       <td>
@@ -73,7 +79,8 @@
         </a>
       </td>
       <td>
-        <code>GetPricesInArbGasWithAggregator</code> gets prices in ArbGas when using the provided aggregator
+        <code>GetPricesInArbGasWithAggregator</code> gets prices in ArbGas when using the provided
+        aggregator
       </td>
     </tr>
     <tr>
@@ -96,7 +103,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetPricesInArbGas</code> gets prices in ArbGas when using the caller's preferred aggregator</td>
+      <td>
+        <code>GetPricesInArbGas</code> gets prices in ArbGas when using the caller's preferred
+        aggregator
+      </td>
     </tr>
     <tr>
       <td>
@@ -118,7 +128,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetGasAccountingParams</code> gets the rollup's speed limit, pool size, and tx gas limit</td>
+      <td>
+        <code>GetGasAccountingParams</code> gets the rollup's speed limit, pool size, and tx gas
+        limit
+      </td>
     </tr>
     <tr>
       <td>
@@ -140,7 +153,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetMinimumGasPrice</code> gets the minimum gas price needed for a transaction to succeed</td>
+      <td>
+        <code>GetMinimumGasPrice</code> gets the minimum gas price needed for a transaction to
+        succeed
+      </td>
     </tr>
     <tr>
       <td>
@@ -162,7 +178,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetL1BaseFeeEstimate</code> gets the current estimate of the L1 basefee</td>
+      <td>
+        <code>GetL1BaseFeeEstimate</code> gets the current estimate of the L1 basefee
+      </td>
     </tr>
     <tr>
       <td>
@@ -185,7 +203,8 @@
         </a>
       </td>
       <td>
-        <code>GetL1BaseFeeEstimateInertia</code> gets how slowly ArbOS updates its estimate of the L1 basefee
+        <code>GetL1BaseFeeEstimateInertia</code> gets how slowly ArbOS updates its estimate of the
+        L1 basefee
       </td>
     </tr>
     <tr>
@@ -208,7 +227,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetL1RewardRate</code> gets the L1 pricer reward rate</td>
+      <td>
+        <code>GetL1RewardRate</code> gets the L1 pricer reward rate
+      </td>
     </tr>
     <tr>
       <td>
@@ -230,7 +251,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetL1RewardRecipient</code> gets the L1 pricer reward recipient</td>
+      <td>
+        <code>GetL1RewardRecipient</code> gets the L1 pricer reward recipient
+      </td>
     </tr>
     <tr>
       <td>
@@ -252,7 +275,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetL1GasPriceEstimate</code> gets the current estimate of the L1 basefee</td>
+      <td>
+        <code>GetL1GasPriceEstimate</code> gets the current estimate of the L1 basefee
+      </td>
     </tr>
     <tr>
       <td>
@@ -275,7 +300,8 @@
         </a>
       </td>
       <td>
-        <code>GetCurrentTxL1GasFees</code> gets the fee in <code>wei</code> paid to the batch poster for posting this tx
+        <code>GetCurrentTxL1GasFees</code> gets the fee in <code>wei</code> paid to the batch poster
+        for posting this tx
       </td>
     </tr>
     <tr>
@@ -298,7 +324,10 @@
           Implementation
         </a>
       </td>
-      <td><code>GetGasBacklog</code> gets the backlogged amount of gas burnt in excess of the speed limit</td>
+      <td>
+        <code>GetGasBacklog</code> gets the backlogged amount of gas burnt in excess of the speed
+        limit
+      </td>
     </tr>
     <tr>
       <td>
@@ -321,7 +350,8 @@
         </a>
       </td>
       <td>
-        <code>GetPricingInertia</code> gets how slowly ArbOS updates the L2 basefee in response to backlogged gas
+        <code>GetPricingInertia</code> gets how slowly ArbOS updates the L2 basefee in response to
+        backlogged gas
       </td>
     </tr>
     <tr>
@@ -345,8 +375,8 @@
         </a>
       </td>
       <td>
-        <code>GetGasBacklogTolerance</code> gets the forgivable amount of backlogged gas ArbOS will ignore when
-        raising the basefee
+        <code>GetGasBacklogTolerance</code> gets the forgivable amount of backlogged gas ArbOS will
+        ignore when raising the basefee
       </td>
     </tr>
     <tr>
@@ -370,8 +400,8 @@
         </a>
       </td>
       <td>
-        <code>GetL1PricingSurplus</code> gets the surplus of funds for L1 batch posting payments (may be
-        negative)
+        <code>GetL1PricingSurplus</code> gets the surplus of funds for L1 batch posting payments
+        (may be negative)
       </td>
     </tr>
     <tr>
@@ -395,8 +425,8 @@
         </a>
       </td>
       <td>
-        <code>GetPerBatchGasCharge</code> gets the base charge (in L1 gas) attributed to each data batch in the
-        calldata pricer
+        <code>GetPerBatchGasCharge</code> gets the base charge (in L1 gas) attributed to each data
+        batch in the calldata pricer
       </td>
     </tr>
     <tr>
@@ -419,7 +449,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetAmortizedCostCapBips</code> gets the cost amortization cap in basis points</td>
+      <td>
+        <code>GetAmortizedCostCapBips</code> gets the cost amortization cap in basis points
+      </td>
     </tr>
     <tr>
       <td>
@@ -441,7 +473,9 @@
           Implementation
         </a>
       </td>
-      <td><code>GetL1FeesAvailable</code> gets the available funds from L1 fees</td>
+      <td>
+        <code>GetL1FeesAvailable</code> gets the available funds from L1 fees
+      </td>
     </tr>
     <tr>
       <td>
@@ -464,8 +498,8 @@
         </a>
       </td>
       <td>
-        <code>GetL1PricingEquilibrationUnits</code> gets the equilibration units parameter for L1 price
-        adjustment algorithm (Available since ArbOS 20)
+        <code>GetL1PricingEquilibrationUnits</code> gets the equilibration units parameter for L1
+        price adjustment algorithm (Available since ArbOS 20)
       </td>
     </tr>
     <tr>
@@ -489,8 +523,8 @@
         </a>
       </td>
       <td>
-        <code>GetLastL1PricingUpdateTime</code> gets the last time the L1 calldata pricer was updated (Available
-        since ArbOS 20)
+        <code>GetLastL1PricingUpdateTime</code> gets the last time the L1 calldata pricer was
+        updated (Available since ArbOS 20)
       </td>
     </tr>
     <tr>
@@ -514,8 +548,8 @@
         </a>
       </td>
       <td>
-        <code>GetL1PricingFundsDueForRewards</code> gets the amount of L1 calldata payments due for rewards (per
-        the L1 reward rate) (Available since ArbOS 20)
+        <code>GetL1PricingFundsDueForRewards</code> gets the amount of L1 calldata payments due for
+        rewards (per the L1 reward rate) (Available since ArbOS 20)
       </td>
     </tr>
     <tr>
@@ -539,8 +573,8 @@
         </a>
       </td>
       <td>
-        <code>GetL1PricingUnitsSinceUpdate</code> gets the amount of L1 calldata posted since the last update
-        (Available since ArbOS 20)
+        <code>GetL1PricingUnitsSinceUpdate</code> gets the amount of L1 calldata posted since the
+        last update (Available since ArbOS 20)
       </td>
     </tr>
     <tr>
@@ -564,8 +598,8 @@
         </a>
       </td>
       <td>
-        <code>GetLastL1PricingSurplus</code> gets the L1 pricing surplus as of the last update (may be negative)
-        (Available since ArbOS 20)
+        <code>GetLastL1PricingSurplus</code> gets the L1 pricing surplus as of the last update (may
+        be negative) (Available since ArbOS 20)
       </td>
     </tr>
   </tbody>

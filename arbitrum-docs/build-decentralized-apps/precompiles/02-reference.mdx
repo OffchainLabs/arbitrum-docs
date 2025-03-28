@@ -15,8 +15,8 @@ This section is divided into two tables. We first list precompiles we expect use
 
 ### Common precompiles
 
-| Precompile                        | Address | Solidity interface                         | Go implementation                                    | Purpose                             |
-| --------------------------------- | ------- | ------------------------------------------ | ---------------------------------------------------- | ----------------------------------- |
+| Precompile                          | Address | Solidity interface                         | Go implementation                                    | Purpose                             |
+| ----------------------------------- | ------- | ------------------------------------------ | ---------------------------------------------------- | ----------------------------------- |
 | [`ArbAggregator`](#arbaggregator)   | `0x6d`  | [Interface][arbaggregator_link_interface]  | [Implementation][arbaggregator_link_implementation]  | Configuring transaction aggregation |
 | [`ArbGasInfo`](#arbgasinfo)         | `0x6c`  | [Interface][arbgasinfo_link_interface]     | [Implementation][arbgasinfo_link_implementation]     | Info about gas pricing              |
 | [`ArbRetryableTx`](#arbretryabletx) | `0x6e`  | [Interface][arbretryabletx_link_interface] | [Implementation][arbretryabletx_link_implementation] | Managing retryables                 |
@@ -26,10 +26,10 @@ This section is divided into two tables. We first list precompiles we expect use
 
 ### Other precompiles
 
-| Precompile                            | Address | Solidity interface                           | Go implementation                                      | Purpose                                            |
-| ------------------------------------- | ------- | -------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| Precompile                              | Address | Solidity interface                           | Go implementation                                      | Purpose                                            |
+| --------------------------------------- | ------- | -------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------- |
 | [`ArbAddressTable`](#arbaddresstable)   | `0x66`  | [Interface][arbaddresstable_link_interface]  | [Implementation][arbaddresstable_link_implementation]  | Supporting compression of addresses                |
-| ArbBLS                                | -       | -                                            | -                                                      | **Disabled** (Former registry of BLS public keys)  |
+| ArbBLS                                  | -       | -                                            | -                                                      | **Disabled** (Former registry of BLS public keys)  |
 | [`ArbDebug`](#arbdebug)                 | `0xff`  | [Interface][arbdebug_link_interface]         | [Implementation][arbdebug_link_implementation]         | Testing tools                                      |
 | [`ArbFunctionTable`](#arbfunctiontable) | `0x68`  | [Interface][arbfunctiontable_link_interface] | [Implementation][arbfunctiontable_link_implementation] | No longer used                                     |
 | [`ArbInfo`](#arbinfo)                   | `0x65`  | [Interface][arbinfo_link_interface]          | [Implementation][arbinfo_link_implementation]          | Info about accounts                                |

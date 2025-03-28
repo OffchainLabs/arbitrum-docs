@@ -121,19 +121,17 @@ There are two main challenges in accurately pricing parent chain resources:
 
 - **Impossibility of exact charges**: Charging based on future information is not feasible, so the system must rely on estimations.
 
-
 ## Nitro's approach to addressing the challenges
 
 To overcome these challenges, Arbitrum's Nitro implements a two-fold strategy:
 
 ### 1. Estimated relative footprint
 
-   - Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
+- Estimated size is calculated for each transaction and measured in data units to approximate its impact on batch size.
 
 ### 2. Adaptive fee per data unit
 
-   - A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
-
+- A dynamic fee per data unit is determined at any given time, adjusting to align collected fees with actual costs.
 
 ## Apprortioning costs among transactions
 
