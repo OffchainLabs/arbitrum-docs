@@ -34,7 +34,7 @@ We're going to build a digital cupcake vending machine using Solidity smart cont
 2. The vending machine's rules can't be changed by anyone.
 
 Here's the vending machine implemented with Javascript.
-To use it, enter a name in the form below and press the 'Cupcake please!' button, you should see your cupcake balance go up.
+To use it, enter a name in the form below and press the **Cupcake please!** button, you should see your cupcake balance go up.
 
 <VendingMachine id="dumb-cupcakes" type="web2" />
 
@@ -209,7 +209,7 @@ contract VendingMachine {
 
 Smart contracts need to be compiled to bytecode to be stored and executed onchain by the EVM; we'll use Remix to do that.
 
-Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat), but Remix doesn't require any local environment setup, so we'll choose it for this tutorial.
+Remix is a browser-based IDE for EVM development. There are other IDEs to choose from (Foundry, Hardhat), but Remix doesn't require any local environment setup, so we'll use it for this tutorial.
 
 Let's first add our smart contract to Remix following these steps:
 
@@ -315,7 +315,7 @@ Next, open Metamask and create or import a wallet by following the displayed ins
 
 By default, Metamask will connect to Ethereum's mainnet. To connect to our local "testnet," enable test networks for Metamask by clicking **Show/hide test networks**.
 
-Next, click Metamask's network selector dropdown and click the **Add Network** button. Click "Add a network manually" and then provide the following information:
+Next, click Metamask's network selector dropdown and click the **Add Network** button. Click **Add a network manually** and then provide the following information:
 
 - Network Name: `localhost`
 - New RPC URL: `https://127.0.0.1:8545`
@@ -336,7 +336,7 @@ Your wallet won't have a balance on your local testnet's node, but we can import
 
 :::caution Never share your private keys
 
-Your Ethereum Mainnet wallet's private key is the password to all of your money. Never share it with anyone; avoid copying it to your clipboard.
+Your Ethereum Mainnet wallet's private key is the password to all of your tokens. Never share it with anyone; avoid copying it to your clipboard.
 
 :::
 
@@ -402,7 +402,7 @@ Next, we'll deploy our smart contract to a network of real nodes: Arbitrum's Sep
 
 ### Deploy the smart contract to the Arbitrum Sepolia testnet
 
-We were able to deploy to a testnet for free because we were using Remix' built-in network, but now we'll deploy our contract to Arbitrum's Sepolia testnet.
+We were able to deploy to a testnet for free because we were using Remix's built-in network, but now we'll deploy our contract to Arbitrum's Sepolia testnet.
 Sepolia is powered by a network of nodes ran across the world by various participants, we'll need to compensate them with a small transaction fee in order to deploy our smart contract.
 
 To be able to pay the transaction fee, we will:
@@ -410,7 +410,7 @@ To be able to pay the transaction fee, we will:
 - Use our MetaMask crypto wallet
 - Obtain some Arbitrum Sepolia testnet's token called `ETH`.
 
-Click Metamask's network selector dropdown, and then click the **Add Network** button. Click **Add a network manually** and then provide the following information:
+Click Metamask's **Network selector** dropdown, and then click the **Add Network** button. Click **Add a network manually** and then provide the following information:
 
 - Network Name: `Arbitrum Sepolia`
 - New RPC URL: `https://sepolia-rollup.arbitrum.io/rpc`
@@ -426,7 +426,7 @@ Next, let's deposit some `ETH` into the wallet corresponding to the private key 
 
 Once you've acquired some `ETH`, you'll be able to deploy your smart contract to Arbitrum's Sepolia testnet by issuing the following command:
 
-This tells remix to deploy the compiled smart contract through the RPC endpoint corresponding to "Arbitrum Sepolia" in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints)
+This tells Remix to deploy the compiled smart contract through the RPC endpoint corresponding to "Arbitrum Sepolia" in MetaMask (MetaMask uses [INFURA](https://www.infura.io)'s nodes as endpoints).
 
 Congratulations! You've just deployed **business logic and data** to Arbitrum Sepolia. This logic and data will be hashed and submitted within a transaction to Ethereum's parent chian Sepolia network, and then it will be mirrored across all nodes in the Sepolia network[^6].
 
