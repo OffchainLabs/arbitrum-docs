@@ -41,7 +41,7 @@ Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-n
 
 The following will walk you through the methods and properties you will use to configure your chain.
 
-#### 1. RollupDeploymentParams struct
+#### 1. `RollupDeploymentParams` struct
 
 ```solidity {2,4,6,8}
 struct RollupDeploymentParams {
@@ -58,7 +58,7 @@ struct RollupDeploymentParams {
 
 This Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
 
-#### 2. Config struct
+#### 2. `Config` struct
 
 ```solidity {2,4,6}
 struct Config {
@@ -78,7 +78,7 @@ struct Config {
 
 The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
 
-#### 3. MaxTimeVariation struct
+#### 3. `MaxTimeVariation` struct
 
 ```solidity {2,4}
 struct MaxTimeVariation {
@@ -91,7 +91,7 @@ struct MaxTimeVariation {
 
 This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
 
-#### 4. chainConfig
+#### 4. `chainConfig`
 
 The `chainConfig` parameter within the `Config` struct allows you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
 
@@ -190,11 +190,11 @@ While other configurable parameters exist, they are set to defaults, and it's ge
 
 The Orbit SDK provides two APIs, `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
 
-#### **createRollupPrepareDeploymentParamsConfig API**:
+#### `createRollupPrepareDeploymentParamsConfig` API:
 
-This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use.
+This API is designed to take parameters defined in the `Config` struct and fill in the rest with default values. It outputs a complete `Config` struct that is ready for use.
 
-For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#rollup-configuration-parameters), you would use the Orbit SDK as follows:
+For example, to create a `Config` struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#rollup-configuration-parameters), you would use the Orbit SDK as follows:
 
 ```js
 import { createPublicClient, http } from 'viem';
@@ -213,7 +213,7 @@ const config = createRollupPrepareDeploymentParamsConfig(parentPublicClient, {
 });
 ```
 
-#### createRollupPrepareTransactionRequest API:
+#### `createRollupPrepareTransactionRequest` API:
 
 This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
 

@@ -13,7 +13,7 @@ This guide will walk you through configuring an Orbit node supporting a <a data-
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the **Request an update** button at the top of this document.
 
 :::
 

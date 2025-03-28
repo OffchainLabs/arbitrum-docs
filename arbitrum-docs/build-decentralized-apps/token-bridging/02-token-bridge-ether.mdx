@@ -27,7 +27,7 @@ As far as the parent chain knows, all deposited funds are held by Arbitrum's Bri
 
 ## Withdrawing ether
 
-Withdrawing ether can be done using the [ArbSys precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
+Withdrawing ether can be done using the [`ArbSys` precompile](/build-decentralized-apps/precompiles/02-reference.mdx#arbsys)'s `withdrawEth` method:
 
 ```sol
 ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
@@ -35,7 +35,7 @@ ArbSys(100).withdrawEth{ value: 2300000 }(destAddress)
 
 Upon withdrawing, the Ether balance is burnt on the Arbitrum side, and will later be made available on the Ethereum side.
 
-`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain (see ["Child chain to parent chain Messages"](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's `ETH` balance will be credited on the parent chain.
+`ArbSys.withdrawEth` is a convenience function equivalent to calling `ArbSys.sendTxToL1` with empty `calldataForL1`. Like any other `sendTxToL1` call, it will require an additional call to `Outbox.executeTransaction` on the parent chain after the dispute period elapses for the user to finalize claiming their funds on the parent chain (see [Child to parent chain messaging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)). Once the withdrawal is executed from the Outbox, the user's `ETH` balance will be credited on the parent chain.
 
 The following diagram depicts the process that funds follow during a withdraw operation.
 

@@ -119,7 +119,7 @@ In this example, `txReceipt` refers to the transaction receipt you received afte
 The final step is to set up a valid keyset for your Data Availability Committee (DAC) on the parent chain. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx) for instructions.
 
 Once created, your keyset needs to be established on your Orbit chain's `SequencerInbox` contract on the parent chain.
-To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [step three](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the owner's account.
+To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [Step 3](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the owner's account.
 
 Here's an example of how you can use the Orbit SDK to write your keyset:
 

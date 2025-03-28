@@ -75,7 +75,7 @@ We'll use one resource available in Arbitrum: the [`NodeInterface`](/build-decen
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on the parent chain:
   - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
 - L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on the parent chain (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.GasEstimateComponents()` take the second element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
-  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate is posted on the parent chain, [as explained here](/how-arbitrum-works/08-anytrust-protocol.mdx#data-availability-certificates).
+  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/08-anytrust-protocol.mdx#data-availability-certificates).
 
 :::note
 For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`

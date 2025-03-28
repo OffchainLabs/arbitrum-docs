@@ -34,7 +34,7 @@ Let's see in what ways we can configure each fee type:
 
 ### Orbit (minimum) base fee
 
-Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+Your chain is configured with a minimum base fee for execution. This value can be obtained by calling the method `getMinimumGasPrice()(uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getMinimumGasPrice() (uint256)"
@@ -57,7 +57,7 @@ const orbitMinimumBaseFee = await orbitChainClient.arbGasInfoReadContract({
 This minimum base fee defines the minimum value that the chain's base fee can have. However, in periods of congestion, the actual base fee might be higher than this minimum. Check the next section "Orbit surplus fee" for more information.
 :::
 
-To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in wei. For example:
+To set a new minimum base fee, use the method `setMinimumL2BaseFee(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile, and pass the new minimum base fee in `wei`. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setMinimumL2BaseFee(uint256) ()" $NEW_MINIMUM_BASE_FEE_IN_WEI
@@ -86,7 +86,7 @@ await orbitChainClient.sendRawTransaction({
 
 ### Orbit surplus fee
 
-In periods of congestion, the actual base fee of your Orbit chain might be higher than the configured minimum. You can see the current base fee of your chain by calling the method `getPricesInWei()(uint256,uint256,uint256,uint256,uint256,uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile, and check the last result of the returned tuple.
+In periods of congestion, the actual base fee of your Orbit chain might be higher than the configured minimum. You can see the current base fee of your chain by calling the method `getPricesInWei()(uint256,uint256,uint256,uint256,uint256,uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile, and check the last result of the returned tuple.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getPricesInWei() (uint256,uint256,uint256,uint256,uint256,uint256)"
@@ -106,7 +106,7 @@ Orbit chains automatically adjust the Orbit surplus fee based on the traffic of 
 
 ### Parent chain base fee
 
-To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
+To obtain the current parent chain base fee of your chain, you can call the method `getL1BaseFeeEstimate()(uint256)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile.
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1BaseFeeEstimate() (uint256)"
@@ -125,7 +125,7 @@ const parentChainBaseFee = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-You can modify the current estimate of the parent chain base fee by calling the method `setL1PricePerUnit(uint256)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+You can modify the current estimate of the parent chain base fee by calling the method `setL1PricePerUnit(uint256)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricePerUnit(uint256) ()" $NEW_PARENT_CHAIN_BASE_FEE
@@ -166,7 +166,7 @@ Orbit chains that use a custom gas token should have their parent chain base fee
 
 ### Parent chain surplus fee
 
-The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [ArbGasInfo](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of wei per gas unit paid to the appropriate fee collector. For example:
+The parent chain surplus fee collected is based on a reward rate configured in the chain. To obtain this parameter, you can call the method `getL1RewardRate()(uint64)` of the [`ArbGasInfo`](/build-decentralized-apps/precompiles/02-reference.mdx#arbgasinfo) precompile. This function will return the amount of `wei` per gas unit paid to the appropriate fee collector. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006C "getL1RewardRate() (uint64)"
@@ -185,7 +185,7 @@ const parentChainRewardRate = await orbitChainClient.arbGasInfoReadContract({
 });
 ```
 
-To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of wei per gas unit to reward. For example:
+To change the reward rate, you can use the method `setL1PricingRewardRate(uint64)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile and pass the amount of `wei` per gas unit to reward. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setL1PricingRewardRate(uint64) ()" $NEW_REWARD_RATE
@@ -218,14 +218,14 @@ Let's now look at how to configure the collector addresses for each fee type.
 
 ### Orbit base fee
 
-Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()(address)` of the [ArbOwnerPublic](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
+Orbit base fees are paid to the `infraFeeAccount` configured in your chain. You can retrieve the current configured address by calling the method `getInfraFeeAccount()(address)` of the [`ArbOwnerPublic`](/build-decentralized-apps/precompiles/02-reference.mdx#arbownerpublic) precompile. For example:
 
 ```shell
 cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B "getInfraFeeAccount() (address)"
 ```
 
 :::note
-The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getInfraFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 :::
 
 Alternatively, you can use the Orbit SDK to retrieve the current address configured as `infraFeeAccount`:
@@ -241,7 +241,7 @@ const infraFeeAccount = await orbitChainClient.arbOwnerReadContract({
 });
 ```
 
-To set a new `infraFeeAccount`, use the method `setInfraFeeAccount(address)` of the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
+To set a new `infraFeeAccount`, use the method `setInfraFeeAccount(address)` of the [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile. For example:
 
 ```shell
 cast send --rpc-url $ORBIT_CHAIN_RPC --private-key $OWNER_PRIVATE_KEY 0x0000000000000000000000000000000000000070 "setInfraFeeAccount(address) ()" $NEW_INFRAFEEACCOUNT_ADDRESS
@@ -277,7 +277,7 @@ cast call --rpc-url $ORBIT_CHAIN_RPC 0x000000000000000000000000000000000000006B 
 ```
 
 :::note
-The [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
+The [`ArbOwner`](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile also has a `getNetworkFeeAccount()(address)` method that can be used, but only by the owner of the chain.
 :::
 
 Alternatively, you can use the Orbit SDK to retrieve the current address configured as `networkFeeAccount`:

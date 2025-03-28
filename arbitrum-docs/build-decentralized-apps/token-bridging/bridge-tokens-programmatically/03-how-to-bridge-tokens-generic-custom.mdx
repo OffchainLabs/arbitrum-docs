@@ -29,7 +29,7 @@ Keep in mind that this registration can only be done once.
 
 Also, the **child chain counterpart of the token**, must conform to the [`IArbToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface. This means that:
 
-- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
+- It must have`bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract
 - It must have an `l1Address` view method that returns the address of the token on the parent chain
 
 import TokenCompatibilityPartial from '../partials/_token-compatibility.mdx';
@@ -357,7 +357,7 @@ Once this step is done, your parent and child chain tokens will be connected thr
 
 You can bridge tokens between the parent and child chain using the origin parent chain token and the custom token deployed on the child chain, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in Steps 2-5.
 
 ## Frequently asked questions
 
@@ -378,4 +378,3 @@ Yes, if your token has a standard `ERC-20` counterpart on the child chain, you c
 1. [Concept page: Token Bridge](/build-decentralized-apps/token-bridging/01-overview.mdx)
 2. [Arbitrum SDK](https://github.com/OffchainLabs/arbitrum-sdk)
 3. [Token bridge contract addresses](/build-decentralized-apps/reference/02-contract-addresses.mdx)
-   )

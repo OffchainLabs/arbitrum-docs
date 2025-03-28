@@ -83,7 +83,7 @@ As explained in the conceptual page, there are two contracts that we need to be 
 
 For simplicity, in this how-to we’ll focus on the first case: bridging from the parent chain (Ethereum) to the child chain (Arbitrum).
 
-We’ll explain below what specific contracts and methods need to be called to bridge your token, but you can abstract this whole process of finding the right addresses by using Arbitrum’s SDK. You can use the [deposit](/sdk/reference/assetBridger/erc20Bridger.md#deposit) function of the [`Erc20Bridger`](/sdk/reference/assetBridger/erc20Bridger.md) class to bridge your tokens, which will use the appropriate router contract based on the network you’re connected to, and will relay the request to the appropriate gateway contract. You can also use the function [getParentGatewayAddress](/sdk/reference/assetBridger/erc20Bridger.md#getparentgatewayaddress) to get the address of the gateway contract that’s going to be used. But don’t worry about any of this yet, we’ll use those functions in the next steps.
+We’ll explain below what specific contracts and methods need to be called to bridge your token, but you can abstract this whole process of finding the right addresses by using Arbitrum’s SDK. You can use the [deposit](/sdk/reference/assetBridger/erc20Bridger.md#deposit) function of the [`Erc20Bridger`](/sdk/reference/assetBridger/erc20Bridger.md) class to bridge your tokens, which will use the appropriate router contract based on the network you’re connected to, and will relay the request to the appropriate gateway contract. You can also use the function [`getParentGatewayAddress`](/sdk/reference/assetBridger/erc20Bridger.md#getparentgatewayaddress) to get the address of the gateway contract that’s going to be used. But don’t worry about any of this yet, we’ll use those functions in the next steps.
 
 Now, here’s an explanation of the contracts and methods that need to be called to manually bridge your token:
 
@@ -166,7 +166,7 @@ As mentioned before, you can also call the method `outboundTransferCustomRefund`
 - uint256 `_amount`: Amount of tokens to bridge
 - uint256 `_maxGas`: Max gas deducted from user’s child chain balance to cover the execution on the child chain
 - uint256 `_gasPriceBid`: Gas price for the execution on the child chain
-- bytes `_data`: 2 pieces of data encoded:
+- bytes `_data`: two pieces of data encoded:
   - uint256 `maxSubmissionCost`: Max gas deducted from user's child chain balance to cover base submission fee
   - bytes `extraData`: “0x”
 
@@ -210,7 +210,7 @@ const l2Token = erc20Bridger.getChildTokenContract(l2Provider, l2TokenAddress);
 
 To do this operation manually, you can call method `calculateL2TokenAddress` of the router contract.
 
-If you visit that address in [Arbiscan](https://arbiscan.io/), you’ll notice that it is a copy of the contract [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol). This is the standard contract that is automatically created the first time a token that doesn’t exist in Arbitrum is bridged. [The token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging) has more information about this contract.
+If you visit that address on [Arbiscan](https://arbiscan.io/), you’ll notice that it is a copy of the contract [`StandardArbERC20`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/StandardArbERC20.sol). This is the standard contract that is automatically created the first time a token that doesn’t exist in Arbitrum is bridged. [The token bridge conceptual page](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#default-standard-bridging) has more information about this contract.
 
 ## Conclusion
 

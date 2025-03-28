@@ -7,41 +7,41 @@ user_story: As a current or prospective Arbitrum user, I need learn more about N
 content_type: get-started
 ---
 
-This section details how <a data-quicklook-from="stylus">Stylus</a> integrates into the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF), covering execution flow, messaging handling, caching, and interactions with <a data-quicklook-from="arbos">ArbOS</a> and <a data-quicklook-from="geth">Geth</a>.
+This article details how <a data-quicklook-from="stylus">Stylus</a> integrates into the <a data-quicklook-from="state-transition-function">State Transition Function</a> (STF), covering execution flow, messaging handling, caching, and interactions with <a data-quicklook-from="arbos">ArbOS</a> and <a data-quicklook-from="geth">Geth</a>.
 
 ## 1. Execution flow of a Stylus transaction
 
 When a <a data-quicklook-from="transaction">Transaction</a> interacts with a Stylus contract, its execution follows a distinct path compared to EVM transactions:
 
-- **Transaction submission and routing**
+### Transaction submission and routing
 
-  - The transaction is included in a <a data-quicklook-from="child-chain">child chain</a> block by the <a data-quicklook-from="sequencer">Sequencer</a>.
+- The transaction is included in a <a data-quicklook-from="child-chain">child chain</a> block by the <a data-quicklook-from="sequencer">Sequencer</a>.
 
-  - Geth processes the transaction and determines its target contract.
+- Geth processes the transaction and determines its target contract.
 
-  - If the target is a Stylus contract, ArbOS routes execution to the <a data-quicklook-from="wasm">WASM</a> runtime instead of the EVM.
+- If the target is a Stylus contract, ArbOS routes execution to the <a data-quicklook-from="wasm">WASM</a> runtime instead of the EVM.
 
-- **Stylus execution within ArbOS**
+### Stylus execution within ArbOS
 
-  - ArbOS retrieves the Stylus program from its cache (`stylus/src/cache.rs`) or loads it from storage if not cached.
+- ArbOS retrieves the Stylus program from its cache (`stylus/src/cache.rs`) or loads it from storage if not cached.
 
-  - The WebAssembly System Interface (Go-WASI) initializes a secure execution environment.
+- The WebAssembly System Interface (Go-WASI) initializes a secure execution environment.
 
-  - The WASM module executes within ArbOS, processing instructions efficiently and calling host I/O functions.
+- The WASM module executes within ArbOS, processing instructions efficiently and calling host I/O functions.
 
-- **Host I/O operations for <a data-quicklook-from="blockchain">blockchain</a> state access**
+### Host I/O operations for <a data-quicklook-from="blockchain">blockchain</a> state access
 
-  - Stylus contracts do not use EVM opcodes. Instead, they interact with the blockchain through host I/O calls handled by ArbOS.
+- Stylus contracts do not use EVM opcodes. Instead, they interact with the blockchain through host I/O calls handled by ArbOS.
 
-  - These include storage access (`TLOAD` `TSTORE`), arithmetic operations (`MULMOD`, `ADDMOD`), and context retrieval (`GETCALLER`, `GETCALLVALUE`).
+- These include storage access (`TLOAD` `TSTORE`), arithmetic operations (`MULMOD`, `ADDMOD`), and context retrieval (`GETCALLER`, `GETCALLVALUE`).
 
-  - ArbOS ensures these operations are efficient and compatible with Ethereum's state model.
+- ArbOS ensures these operations are efficient and compatible with Ethereum's state model.
 
-- **State commitment and finalization**
+#### State commitment and finalization
 
-  - Once execution is complete, ArbOS finalizes storage changes and updates logs and receipts.
+- Once execution is complete, ArbOS finalizes storage changes and updates logs and receipts.
 
-  - Geth processes the final transaction result and commits it to the state tree.
+- Geth processes the final transaction result and commits it to the state tree.
 
 This process bypasses the EVM interpreter entirely, allowing Stylus contracts to execute significantly faster than their Solidity counterparts.
 
@@ -55,7 +55,7 @@ Unlike standard EVM gas pricing, Stylus pricing follows a multi-dimensional cost
 
   - Measure in `Ink` units (Stylus's equivalent of computational gas).
 
-  - Ink pricing varies based on execution complexity, memory usage, and computation steps.
+  - `Ink` pricing varies based on execution complexity, memory usage, and computation steps.
 
   - Complex WASM operations consume more `Ink`, directly impacting execution costs.
 

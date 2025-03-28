@@ -136,16 +136,16 @@ Each assertion consists of:
 - **Predecessor assertion**: The last confirmed assertion
 - **Number of child chain blocks**: The total child chain blocks included
 - **Number of inbox messages**: Messages consumed during execution
-- **Output hash**: A cryptographic commitment to the resulting state.
+- **Output hash**: A cryptographic commitment to the resulting state
 
 Arbitrum ensures assertions are automatically confirmed or rejected based on protocol rules:
 
 1. An assertion is confirmed if:
-   - Its predecessor is the latest confirmed assertion.
-   - The dispute window has passed without challenges.
+   - Its predecessor is the latest confirmed assertion
+   - The dispute window has passed without challenges
 2. An assertion is rejected if:
-   - Its predecessor assertion is invalid.
-   - A conflicting assertion has been confirmed.
+   - Its predecessor assertion is invalid
+   - A conflicting assertion has been confirmed
 
 For more details on how the Rollup chain works under <a data-quicklook-from="bold">BoLD</a>, the [gentle introduction](/how-arbitrum-works/bold/gentle-introduction.mdx) provides an overview that touches on the Rollup chain.
 
