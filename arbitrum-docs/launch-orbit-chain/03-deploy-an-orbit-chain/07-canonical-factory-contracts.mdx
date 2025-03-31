@@ -1,8 +1,41 @@
 ---
-title: 'Canonical Factory Contracts'
-description: 'Learn how to deploy Canonical factory contracts on your Orbit chain'
-author:
-sme:
+title: 'Canonical factory contracts'
+description: 'Learn how to use the canonical factory contracts for deploying your Orbit chain'
+author: jose-franco
+sme: jose-franco
 content_type: how-to
-tags: ['hide-from-search']
 ---
+
+import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
+
+Deploying new Orbit chains is usually done through a `RollupCreator` contract that takes care of the process of creating the needed contracts and sending the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Orbit chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+
+This page describes the benefits of using these canonical factory contracts, and lists their addresses in all supported chains.
+
+:::info Use the Orbit SDK
+
+Even though these contracts are used to create Orbit chains, it is recommended to go through the [Orbit SDK](/launch-orbit-chain/orbit-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring certain parameters and using appropriate defaults for most of them.
+
+:::
+
+## Benefits of using the canonical factory contracts
+
+The main benefits of using the canonical factory contracts are:
+
+- **End-to-end deployment and initialization**: the canonical contracts will create all needed contracts, initialize them and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This whole process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
+- **Gas efficiency**: the canonical contracts have been designed to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to be able to fit everything into one transaction.
+- **Updated with the latest features**: whenever a new version is available for the contracts of an Orbit chain, the canonical factory contracts are updated so new rollups and token bridges are created using the updated version.
+
+## Addresses of the canonical factory contracts
+
+This table shows the addresses of the deployed and maintained canonical factory contracts.
+
+| Network          | Chain id | RollupCreator                                                                   | TokenBridgeCreator                                                              |
+| ---------------- | -------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Ethereum         | 1        | <AEL address="0x8c88430658a03497D13cDff7684D37b15aA2F3e1" chainID={1} />        | <AEL address="0x60D9A46F24D5a35b95A78Dd3E793e55D94EE0660" chainID={1} />        |
+| Arbitrum One     | 42161    | <AEL address="0x79607f00e61E6d7C0E6330bd7E9c4AC320D50FC9" chainID={42161} />    | <AEL address="0x2f5624dc8800dfA0A82AC03509Ef8bb8E7Ac000e" chainID={42161} />    |
+| Arbitrum Nova    | 42170    | <AEL address="0x9B523BF5F77e8d90e0E9eb0924aEA6E40B081aE6" chainID={42170} />    | <AEL address="0x8B9D9490a68B1F16ac8A21DdAE5Fd7aB9d708c14" chainID={42170} />    |
+| Base             | 8453     | <AEL address="0x091b8FC0F48613b191f81009797ce55Cf97Af7C8" chainID={8453} />     | <AEL address="0x4C240987d6fE4fa8C7a0004986e3db563150CA55" chainID={8453} />     |
+| Sepolia          | 11155111 | <AEL address="0xfb774eA8A92ae528A596c8D90CBCF1bdBC4Cee79" chainID={11155111} /> | <AEL address="0x7edb2dfBeEf9417e0454A80c51EE0C034e45a570" chainID={11155111} /> |
+| Arbitrum Sepolia | 421614   | <AEL address="0xd2Ec8376B1dF436fAb18120E416d3F2BeC61275b" chainID={421614} />   | <AEL address="0x56C486D3786fA26cc61473C499A36Eb9CC1FbD8E" chainID={421614} />   |
+| Base Sepolia     | 84532    | <AEL address="0x6e244cD02BBB8a6dbd7F626f05B2ef82151Ab502" chainID={84532} />    | <AEL address="0xFC71d21a4FE10Cc0d34745ba9c713836f82f8DE3" chainID={84532} />    |
