@@ -50,16 +50,13 @@ The price per estimated byte is set by a dynamic algorithm that compares the tot
 
 A transaction is charged for the parent chain gas if and only if it arrived as part of a sequencer batch. This means that someone would have paid for the parent chain gas to post the transaction on the parent chain chain.
 
-The estimated cost of posting a transaction on the parent chain is the product of the transaction's estimated size, and the current parent chain Gas Basefee. This estimated cost is divided by the current child chain gas basefee to obtain the amount of child chain gas that corresponds to the parent chain operation (more information about this can be found in [this article][two_dimensional_fees_medium_article_link]).
+The estimated cost of posting a transaction on the parent chain is the product of the transaction's estimated size, and the current parent chain Gas Basefee. This estimated cost is divided by the current child chain gas basefee to obtain the amount of child chain gas that corresponds to the parent chain operation (more information about this can be found in [this article](https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9).
 
 The estimated size is measured in the parent chain gas and is calculated as follows: first, compress the transaction's data using the brotli-zero algorithm, then multiply the size of the result by 16. (16 is because the parent chain charges 16 gas per byte. The parent chain charges less for bytes that are zero, but that doesn't make sense here.) Brotli-zero is used in order to reward users for posting transactions that are compressible. Ideally we would like to reward for posting transactions that contribute to the compressibility (using the brotli compressor) of the entire batch, but that is a difficult notion to define and in any case would be too expensive to compute at the child chain. Brotli-zero is an approximation that is cheap enough to compute.
 
-Parent chain gas fee funds that are collected from transactions are transferred to a special [`L1PricerFundsPool`][l1pricerfundspool_link] account, so that account's balance represents the amount of funds that have been collected and are available to pay for costs.
+Parent chain gas fee funds that are collected from transactions are transferred to a special [`L1PricerFundsPool`](https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46) account, so that account's balance represents the amount of funds that have been collected and are available to pay for costs.
 
 The parent chain pricer also records the total number of "data units" (the sum of the estimated sizes, after multiplying by 16) that have been received.
-
-[l1pricerfundspool_link]: https://github.com/OffchainLabs/nitro/blob/3f4939df1990320310e7f39e8abb32d5c4d8045f/arbos/l1pricing/l1pricing.go#L46
-[two_dimensional_fees_medium_article_link]: https://medium.com/offchainlabs/understanding-arbitrum-2-dimensional-fees-fd1d582596c9
 
 ## Child chain gas pricing
 
@@ -87,13 +84,11 @@ The sequencer prioritizes transactions on a first-come first-served basis. Becau
 
 ### Gas estimating retryables
 
-When a transaction schedules another, the subsequent transaction's execution [will be included][estimation_inclusion_link] when estimating gas via the node's RPC. A transaction's gas estimate, then, can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
+When a transaction schedules another, the subsequent transaction's execution [will be included](https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999) when estimating gas via the node's RPC. A transaction's gas estimate, then, can only be found if all the transactions succeed at a given gas limit. This is especially important when working with retryables and scheduling redeem attempts.
 
 Because a call to [`redeem`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) donates all of the call's gas, doing multiple requires limiting the amount of gas provided to each subcall. Otherwise the first will take all of the gas and force the second to necessarily fail irrespective of the estimation's gas limit.
 
 Gas estimation for Retryable submissions is possible via the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx) and similarly requires the auto-redeem attempt to succeed.
-
-[estimation_inclusion_link]: https://github.com/OffchainLabs/go-ethereum/blob/d52739e6d54f2ea06146fdc44947af3488b89082/internal/ethapi/api.go#L999
 
 ### The Speed Limit
 
