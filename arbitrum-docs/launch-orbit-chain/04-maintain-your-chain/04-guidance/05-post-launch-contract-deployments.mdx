@@ -25,10 +25,10 @@ This approach is useful when:
 Common examples include deployments of contracts like `Multicall3`, the `ERC-4337 EntryPoint` contract, or a `create2` factory/deterministic deployment proxy.
 Note that if `deployFactoriesToL2` is set to `true` when calling `createRollup()`, the following contracts are deployed to the Orbit chain by default:
 
-- `Multicall3`
-- `DeterministicDeploymentProxy`
-- `ERC-4337 EntryPoint`
-- `CREATE3Deployer`
+- [`Multicall3`](https://github.com/mds1/multicall3)
+- [`DeterministicDeploymentProxy`](https://github.com/Zoltu/deterministic-deployment-proxy)
+- [`ERC-4337 EntryPoint`](https://github.com/eth-infinitism/account-abstraction)
+- [`CREATE3Deployer`](https://github.com/0xSequence/create3)
 
 ## Overview
 
@@ -44,7 +44,7 @@ To deploy a contract post-launch:
 
 :::warning
 
-Make sure the deployer address is sufficiently funded on the child chain before sending the transaction. If the transaction runs out of gas or fails for any reason, the nonce will be burned and the deployment will need to be retried with a new nonce and payload.
+Make sure that the deployer address is sufficiently funded on the child chain before sending the transaction. If the transaction runs out of gas or fails for any reason, the associated nonce will be burned. This means that the contract cannot be deployed at the predetermined deterministic address, potentially breaking tooling and integrations that rely on that specific address.
 
 :::
 
