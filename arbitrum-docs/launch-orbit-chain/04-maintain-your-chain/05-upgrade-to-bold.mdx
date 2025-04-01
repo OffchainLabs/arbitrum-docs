@@ -20,16 +20,16 @@ However, enabling BoLD does not require upgrading your ArbOS version.
 
 To enable BoLD in your Orbit chain, you'll have to perform these actions:
 
-1. Make sure your nodes are running at least [Nitro v3.5.1](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.1) and enable the required parameters
+1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters
 2. Upgrade your Nitro contracts to [v3.0.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.0.0)
 
 Let's dive into it.
 
-## 1. Upgrade your nodes to Nitro v3.5.1 or higher
+## 1. Upgrade your nodes to Nitro v3.5.4 or higher
 
-Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.1 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and Challenge contracts and will perform the appropriate calls depending on that check.
+Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.4 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and Challenge contracts and will perform the appropriate calls depending on that check.
 
-Most of the parameters used in Nitro before v3.5.1 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters:
+Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters:
 
 - For validator nodes: add `--node.bold.enable=true` and `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
