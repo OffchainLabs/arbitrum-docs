@@ -1053,6 +1053,11 @@ const sidebars = {
               href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
               label: 'Specification: Timeboost with decentralized sequencing',
             },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2306.02179',
+              label: 'White paper: Timeboost',
+            },
           ],
         },
       ],
