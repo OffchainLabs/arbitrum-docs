@@ -9,9 +9,9 @@ content_type: how-to
 
 [Tellor](https://tellor.io/) is a decentralized oracle network that incentivizes an open, permissionless network of data reporting and validation, ensuring that any verifiable data can be brought onchain. It supports basic spot prices, sophisticated pricing specs (TWAP/VWAP), Snapshot Vote Results, and custom data needs.
 
-### Querying the price of $ETH through Tellor
+### Querying the price of `ETH` through Tellor
 
-Here’s an example of how to use a Tellor data feed to query the current price of `$ETH` onchain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found on the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
+Here’s an example of how to use a Tellor data feed to query the current price of `ETH` onchain. The way it works is that a query is crafted asking for the price of one currency against another and sent to the oracle contract. If the information for that query is available, it will be returned. Oracle contracts can be found on the [Contracts Reference](https://docs.tellor.io/tellor/the-basics/contracts-reference) page.
 
 Tellor provides an npm package with the contracts needed to query the contract. We first install that package in our project:
 
