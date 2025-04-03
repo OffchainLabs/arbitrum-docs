@@ -8,13 +8,13 @@ content_type: how-to
 
 import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
-Deploying new Orbit chains is usually done through a `RollupCreator` contract that takes care of the process of creating the needed contracts and sending the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Orbit chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+Deploying new Orbit chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Orbit chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
 
-This page describes the benefits of using these canonical factory contracts, and lists their addresses in all supported chains.
+This page describes the benefits of using these canonical factory contracts and lists their addresses in all supported chains.
 
 :::info Use the Orbit SDK
 
-Even though these contracts are used to create Orbit chains, it is recommended to go through the [Orbit SDK](/launch-orbit-chain/orbit-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring certain parameters and using appropriate defaults for most of them.
+You can use these contracts to create Orbit chains. However, it is strongly recommended to go through the [Orbit SDK](/launch-orbit-chain/orbit-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
 
 :::
 
@@ -22,9 +22,9 @@ Even though these contracts are used to create Orbit chains, it is recommended t
 
 The main benefits of using the canonical factory contracts are:
 
-- **End-to-end deployment and initialization**: the canonical contracts will create all needed contracts, initialize them and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This whole process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
-- **Gas efficiency**: the canonical contracts have been designed to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to be able to fit everything into one transaction.
-- **Updated with the latest features**: whenever a new version is available for the contracts of an Orbit chain, the canonical factory contracts are updated so new rollups and token bridges are created using the updated version.
+- **End-to-end deployment and initialization**: The canonical contracts will create all needed contracts, initialize them, and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
+- **Gas efficiency**: The canonical contract design is to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to fit everything into one transaction.
+- **Updated with the latest features**: Whenever a new version is available for the contracts of an Orbit chain, the canonical factory contracts get updated, so new rollups and token bridges are created using the updated version.
 
 ## Addresses of the canonical factory contracts
 
