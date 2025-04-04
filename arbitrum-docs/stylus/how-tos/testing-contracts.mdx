@@ -1,0 +1,493 @@
+---
+id: 'testing-contracts'
+title: 'Testing Smart Contracts with Stylus'
+description: 'A comprehensive guide to writing and running tests for Stylus smart contracts.'
+sme: anegg0
+target_audience: 'Developers writing smart contracts using Stylus.'
+sidebar_position: 3
+---
+
+import CustomDetails from '@site/src/components/CustomDetails';
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+
+## Introduction
+
+The Stylus SDK provides a robust testing framework that allows developers to write and run tests for their contracts directly in Rust without deploying to a blockchain. This guide will walk you through the process of writing and running tests for Stylus contracts using the built-in testing framework.
+
+The Stylus testing framework allows you to:
+
+- Simulate a complete Ethereum environment for your tests
+- Test contract storage operations and state transitions
+- Mock transaction context and block information
+- Test contract-to-contract interactions with mocked calls
+- Verify contract logic without deployment costs or delays
+- Simulate various user scenarios and edge cases
+
+### Prerequisites
+
+Before you begin, make sure you have:
+
+- Basic familiarity with Rust and smart contract development
+- Understanding of unit testing concepts
+
+<details>
+<summary>Rust toolchain</summary>
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</details>
+
+## The Stylus Testing Framework
+
+The Stylus SDK includes `stylus_test`, a module that provides all the tools you need to test your contracts. This module includes:
+
+- **TestVM**: A mock implementation of the Stylus VM that can simulate all host functions
+- **TestVMBuilder**: A builder pattern to conveniently configure the test VM
+- Built-in utilities for mocking calls, storage, and other EVM operations
+
+### Key Components
+
+Here are the key components you'll use when testing your Stylus contracts:
+
+- `TestVM`: The core component that simulates the Stylus execution environment
+- Storage accessors: For testing contract state changes
+- Call mocking: For simulating interactions with other contracts
+- Block context: For testing time-dependent logic
+
+## Example Smart Contract: Cupcake Vending Machine
+
+Let's look at a Rust-based cupcake vending machine smart contract. This contract follows two simple rules:
+
+1. The vending machine will distribute a cupcake to anyone who hasn't received one in the last 5 seconds
+2. The vending machine tracks each user's cupcake balance
+
+<CustomDetails summary="Cupcake Vending Machine Contract">
+```rust
+//!
+//! Stylus Cupcake Example
+//!
+
+#![cfg_attr(not(feature = "export-abi"), no_main)]
+extern crate alloc;
+
+use alloy_primitives::{Address, Uint};
+use stylus_sdk::alloy_primitives::U256;
+use stylus_sdk::prelude::\*;
+use stylus_sdk::{block, console};
+
+sol_storage! { #[entrypoint]
+pub struct VendingMachine {
+// Mapping from user addresses to their cupcake balances.
+mapping(address => uint256) cupcake_balances;
+// Mapping from user addresses to the last time they received a cupcake.
+mapping(address => uint256) cupcake_distribution_times;
+}
+}
+
+#[public]
+impl VendingMachine {
+// Give a cupcake to the specified user if they are eligible
+// (i.e., if at least 5 seconds have passed since their last cupcake).
+pub fn give_cupcake_to(&mut self, user_address: Address) -> bool {
+// Get the last distribution time for the user.
+let last_distribution = self.cupcake_distribution_times.get(user_address);
+// Calculate the earliest next time the user can receive a cupcake.
+let five_seconds_from_last_distribution = last_distribution + U256::from(5);
+
+        // Get the current block timestamp.
+        let current_time = block::timestamp();
+        // Check if the user can receive a cupcake.
+        let user_can_receive_cupcake =
+            five_seconds_from_last_distribution <= Uint::<256, 4>::from(current_time);
+
+        if user_can_receive_cupcake {
+            // Increment the user's cupcake balance.
+            let mut balance_accessor = self.cupcake_balances.setter(user_address);
+            let balance = balance_accessor.get() + U256::from(1);
+            balance_accessor.set(balance);
+
+            // Update the distribution time to the current time.
+            let mut time_accessor = self.cupcake_distribution_times.setter(user_address);
+            let new_distribution_time = block::timestamp();
+            time_accessor.set(Uint::<256, 4>::from(new_distribution_time));
+            return true;
+        } else {
+            // User must wait before receiving another cupcake.
+            console!(
+                "HTTP 429: Too Many Cupcakes (you must wait at least 5 seconds between cupcakes)"
+            );
+            return false;
+        }
+    }
+
+    // Get the cupcake balance for the specified user.
+    pub fn get_cupcake_balance_for(&self, user_address: Address) -> Uint<256, 4> {
+        // Return the user's cupcake balance from storage.
+        return self.cupcake_balances.get(user_address);
+    }
+
+}
+
+````
+</CustomDetails>
+
+## Writing Tests for the Vending Machine
+
+Now, let's write comprehensive tests for our vending machine contract using the Stylus testing framework. We'll create tests that verify:
+
+1. Users can get an initial cupcake
+2. Users must wait 5 seconds between cupcakes
+3. Cupcake balances are tracked correctly
+4. The contract state updates properly
+
+### Basic Test Structure
+
+Create a test file using standard Rust test patterns. Here's the basic structure:
+
+```rust
+// Import necessary dependencies
+use stylus_sdk::{alloy_primitives::Address, prelude::*};
+use stylus_test::*;
+
+// Import your contract
+use stylus_cupcake_example::*;
+
+#[test]
+fn test_give_cupcake() {
+    // Set up test environment
+//    let vm = TestVM::default();
+ //   let mut contract = VendingMachine::from(&vm);
+
+    // Test logic goes here...
+}
+````
+
+### Using the TestVM
+
+The `TestVM` simulates the execution environment for your Stylus contract. You can control aspects like:
+
+- Block timestamp and number
+- Account balances
+- Transaction value and sender
+- Storage state
+
+For the vending machine contract, we need to control the block timestamp to test the 5-second rule:
+
+```rust
+#[test]
+fn test_give_cupcake() {
+    // Setup test environment
+    use stylus_test::{TestVM, TestVMBuilder};
+
+    let vm = TestVM::default();
+    let mut contract = VendingMachine::from(&vm);
+
+    // Create a test user address
+    let user = Address::from([0x1; 20]);
+
+    // First cupcake should succeed
+    assert!(contract.give_cupcake_to(user));
+
+    // Balance should be 1
+    assert_eq!(contract.get_cupcake_balance_for(user), 1.into());
+
+    // Immediate second attempt should fail (needs 5 second wait)
+    assert!(!contract.give_cupcake_to(user));
+
+    // Balance should still be 1
+    assert_eq!(contract.get_cupcake_balance_for(user), 1.into());
+
+    // Advance block timestamp by 6 seconds
+    vm.set_block_timestamp(6);
+
+    // Should be able to get another cupcake now
+    assert!(contract.give_cupcake_to(user));
+
+    // Balance should be 2
+    assert_eq!(contract.get_cupcake_balance_for(user), 2.into());
+}
+```
+
+### Comprehensive Test Suite
+
+Let's create a more comprehensive test suite that covers all aspects of our contract:
+
+<CustomDetails summary="Comprehensive Test Vending Machine Contract">
+```rust
+use stylus_sdk::{alloy_primitives::Address, prelude::*};
+use stylus_test::*;
+
+use stylus_cupcake_example::\*;
+
+#[test]
+fn test_initial_balance() {
+let vm = TestVM::default();
+let contract = VendingMachine::from(&vm);
+
+    let user = Address::from([0x1; 20]);
+
+    // Initial balance should be zero
+    assert_eq!(contract.get_cupcake_balance_for(user), 0.into());
+
+}
+
+#[test]
+fn test_give_first_cupcake() {
+let vm = TestVM::default();
+let mut contract = VendingMachine::from(&vm);
+
+    let user = Address::from([0x1; 20]);
+
+    // First cupcake should succeed
+    assert!(contract.give_cupcake_to(user));
+
+    // Balance should be 1
+    assert_eq!(contract.get_cupcake_balance_for(user), 1.into());
+
+}
+
+#[test]
+fn test_cooldown_period() {
+let vm = TestVM::default();
+let mut contract = VendingMachine::from(&vm);
+
+    let user = Address::from([0x1; 20]);
+
+    // First cupcake should succeed
+    assert!(contract.give_cupcake_to(user));
+
+    // Immediate second attempt should fail (needs 5 second wait)
+    assert!(!contract.give_cupcake_to(user));
+
+    // Try after 4 seconds (still too early)
+    vm.set_block_timestamp(4);
+    assert!(!contract.give_cupcake_to(user));
+
+    // Try after 5 seconds (exactly at threshold, should succeed)
+    vm.set_block_timestamp(5);
+    assert!(contract.give_cupcake_to(user));
+
+    // Balance should be 2
+    assert_eq!(contract.get_cupcake_balance_for(user), 2.into());
+
+}
+
+#[test]
+fn test_multiple_users() {
+let vm = TestVM::default();
+let mut contract = VendingMachine::from(&vm);
+
+    let user1 = Address::from([0x1; 20]);
+    let user2 = Address::from([0x2; 20]);
+
+    // User1 gets a cupcake
+    assert!(contract.give_cupcake_to(user1));
+
+    // User2 also gets a cupcake
+    assert!(contract.give_cupcake_to(user2));
+
+    // Both should have a balance of 1
+    assert_eq!(contract.get_cupcake_balance_for(user1), 1.into());
+    assert_eq!(contract.get_cupcake_balance_for(user2), 1.into());
+
+    // User1 has to wait, but User2 can get another if time passes
+    vm.set_block_timestamp(6);
+    assert!(contract.give_cupcake_to(user1));
+    assert!(contract.give_cupcake_to(user2));
+
+    // Balances should update accordingly
+    assert_eq!(contract.get_cupcake_balance_for(user1), 2.into());
+    assert_eq!(contract.get_cupcake_balance_for(user2), 2.into());
+
+}
+
+````
+</CustomDetails>
+
+## Advanced Testing Techniques
+
+### Using TestVMBuilder
+
+For more complex test setups, you can use the `TestVMBuilder` to configure the test environment:
+
+```rust
+#[test]
+fn test_with_custom_environment() {
+    // Create a custom VM with specific parameters
+    let vm = TestVMBuilder::new()
+        .sender(Address::from([0x3; 20]))       // Set the transaction sender
+        .contract_address(Address::from([0x4; 20])) // Set contract address
+        .block_timestamp(100)                    // Set the block timestamp
+        .build();
+
+    let mut contract = VendingMachine::from(&vm);
+
+    // Your test logic here...
+}
+````
+
+### Testing Storage State
+
+You can directly inspect and manipulate the contract's storage:
+
+```rust
+#[test]
+fn test_storage_state() {
+    let vm = TestVM::default();
+    let mut contract = VendingMachine::from(&vm);
+
+    let user = Address::from([0x1; 20]);
+    contract.give_cupcake_to(user);
+
+    // Get the key for the user's balance in storage
+    let key = U256::from(keccak256(
+        &[user.as_bytes(), "cupcake_balances".as_bytes()].concat()
+    ));
+
+    // Check the raw storage value
+    let raw_value = vm.get_storage(key);
+    assert_eq!(raw_value, U256::from(1).into());
+
+    // We can also manipulate storage directly
+    vm.set_storage(key, U256::from(10).into());
+
+    // Contract should reflect the modified storage
+    assert_eq!(contract.get_cupcake_balance_for(user), 10.into());
+}
+```
+
+### Mocking Block Data
+
+For testing time-dependent logic, you can control the block data:
+
+```rust
+#[test]
+fn test_time_dependency() {
+    let vm = TestVM::default();
+    let mut contract = VendingMachine::from(&vm);
+
+    let user = Address::from([0x1; 20]);
+
+    // Set block timestamp to a known value
+    vm.set_block_timestamp(1000);
+
+    // Get the first cupcake
+    assert!(contract.give_cupcake_to(user));
+
+    // Set block timestamp to exactly 5 seconds later
+    vm.set_block_timestamp(1005);
+
+    // User can now get another cupcake
+    assert!(contract.give_cupcake_to(user));
+
+    // Check the balance is 2
+    assert_eq!(contract.get_cupcake_balance_for(user), 2.into());
+}
+```
+
+## Testing Contract Interactions
+
+If your contract interacts with other contracts, you can mock these interactions:
+
+```rust
+sol_interface! {
+    interface ICupcakeInventory {
+        function checkInventory() external view returns (uint256);
+    }
+}
+
+#[test]
+fn test_external_contract_interaction() {
+    let vm = TestVM::default();
+
+    // Address of the inventory contract
+    let inventory_contract = Address::from([0x5; 20]);
+
+    // Create the function selector for checkInventory()
+    let call_data = &function_selector!("checkInventory");
+
+    // Mock a response with 100 cupcakes available
+    let expected_response = U256::from(100).abi_encode();
+
+    // Set up the mock call
+    vm.mock_call(inventory_contract, call_data.to_vec(), Ok(expected_response));
+
+    // Now if your contract calls the inventory contract, it will get the mocked response
+    // ...
+}
+```
+
+## Running Tests
+
+To run your tests, you can use the standard Rust test command:
+
+```shell
+cargo test
+```
+
+Or with the `cargo-stylus` CLI tool:
+
+```shell
+cargo stylus test
+```
+
+To run a specific test:
+
+```shell
+cargo test test_give_cupcake
+```
+
+To see test output:
+
+```shell
+cargo test -- --nocapture
+```
+
+## Testing Best Practices
+
+1. **Test Isolation**
+
+   - Create a new `TestVM` instance for each test
+   - Avoid relying on state from previous tests
+
+2. **Comprehensive Coverage**
+
+   - Test both success and error conditions
+   - Test edge cases and boundary conditions
+   - Verify all public functions and important state transitions
+
+3. **Clear Assertions**
+
+   - Use descriptive error messages in assertions
+   - Make assertions that verify the actual behavior you care about
+
+4. **Realistic Scenarios**
+
+   - Test real-world usage patterns
+   - Include tests for authorization and access control
+
+5. **Gas and Resource Efficiency**
+   - For complex contracts, consider testing gas usage patterns
+   - Look for storage optimization opportunities
+
+## Migrating from Global Accessors to VM Accessors
+
+As of Stylus SDK 0.8.0, there's a shift away from global host function invocations to using the `.vm()` method. This is a safer approach that makes testing easier. For example:
+
+```rust
+// Old style (deprecated)
+let timestamp = block::timestamp();
+
+// New style (preferred)
+let timestamp = self.vm().block_timestamp();
+```
+
+To make your contracts more testable, make sure they access host methods through the `HostAccess` trait with the `.vm()` method.
+
+## Conclusion
+
+Testing is an essential part of smart contract development to ensure security, correctness, and reliability. The Stylus SDK provides a powerful testing framework that allows you to thoroughly verify your contracts before deployment.
+
+By using the techniques outlined in this guide, you can create comprehensive test suites that give you confidence in your contract's behavior under various conditions, without the costs or delays associated with on-chain testing.
+
+The ability to test Rust contracts natively, without requiring a blockchain environment, makes the development cycle faster and more efficient while maintaining high standards of security and correctness.
