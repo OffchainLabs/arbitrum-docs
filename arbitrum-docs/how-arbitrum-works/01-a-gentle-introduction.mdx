@@ -8,6 +8,7 @@ content_type: get-started
 ---
 
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
+import ImageZoom from '@site/src/components/ImageZoom';
 
 :::info
 
@@ -15,42 +16,21 @@ This page gives a high-level overview. It explains <a data-quicklook-from="arbit
 
 :::
 
-Arbitrum is a technology suite designed to improve Ethereum. You can use Arbitrum chains for the same things you do on Ethereum, like using Web3 apps and deploying smart contracts. The difference is that your transactions will be cheaper and faster. Our main product, Arbitrum Rollup, is an Optimistic Rollup protocol that offers the same security as Ethereum.
+Arbitrum is a high-throughput, trustless Layer 2 scaling solution for Ethereum, built on the Optimistic Rollup model. It achieves scalable execution with Ethereum-level security by combining offchain sequencing, deterministic computation, and onchain validation via interactive fraud proofs.
 
-### But why?
+This article provides a comprehensive look at how Arbitrum processes transactions from start to finish, covering the lifecycle of a transaction as it flows through the protocol. From the moment it is submitted to the Sequencer, through execution, bridging, validation, and finalization –– the design of each stage upholds correctness, efficiency, and decentralization.
 
-Ethereum is awesome, but it has its limitations. The Ethereum <a data-quicklook-from="blockchain">Blockchain</a> can handle only about 20 to 40 transactions per second (TPS) for all users. Once it reaches this limit, users must compete for space to have their transactions included, increasing fees.
+The following diagram provides a high-level system overview, showing how transactions and messages flow between Arbitrum and Ethereum. It illustrates the roles of the Sequencer, validator, State Transition Function (STF), bridging infrastructure, and proving mechanism.
 
-Arbitrum Rollup solves this issue! Here's how it works: an <a data-quicklook-from="arbitrum-rollup-chain">Arbitrum Rollup Chain</a> acts as a submodule within Ethereum. Unlike regular Ethereum transactions, we don't need Ethereum nodes to handle every Arbitrum transaction. Instead, Ethereum takes an ["innocent until proven guilty"](https://insights.deribit.com/market-research/making-sense-of-rollups-part-2-dispute-resolution-on-arbitrum-and-optimism/) stance with Arbitrum. Initially, the <a data-quicklook-from="parent-chain">Parent chain</a> assumes that actions on Arbitrum follow the rules. If there is a rule violation (like someone claiming, "Now I have all of your money"), that claim is challengeable on the parent chain. In this case, we can prove fraud, disregard the invalid claim, and penalize the guilty party. This ability to investigate and confirm fraud on the parent chain is Arbitrum's main feature and explains why it benefits from Ethereum's security.
+The diagram is interactive –– you can click on each component to navigate to the corresponding section of the document and learn more about how that part of the system works.
 
-### How do these fraud proofs work?
+<ImageZoom
+  src="/img/haw-transaction-lifecycle-interactive.svg"
+  alt="Interactive diagram of the transaction lifecycle"
+  className="img-600px"
+/>
 
-People who help manage the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> on the parent chain are called validators. They make claims about the chain's state, dispute others' claims, and more. Most Arbitrum users are unlikely to run a <a data-quicklook-from="validator">validator</a>, just as most Ethereum users do not operate their parent chain staking node. However, anyone can become a validator; you don't need special permission ([once the allowlist gets lifted](https://docs.arbitrum.foundation/state-of-progressive-decentralization)). You only need to run the [open source validator software](https://github.com/OffchainLabs/nitro) and stake Ether if required.
-
-The chain stays secure if there is at least one honest validator. It only takes one trustworthy fraud prover to catch many bad actors. These features make the system "<a data-quicklook-from="trustless">Trustless</a>." Users do not depend on any specific group to keep their funds safe.
-
-### Who does this fraud proofing?
-
-This step is where the "Rollup" part comes in. Arbitrum Rollup chains handle user <a data-quicklook-from="transaction">transaction</a> data by posting it directly on Ethereum. This setup means that as long as Ethereum is secure, anyone can see what happens on Arbitrum. They can also spot and prove any fraud that occurs.
-
-Validators are the nodes that help move the Arbitrum <a data-quicklook-from="chain-state">Chain state</a> forward on the parent chain. They make claims about the chain's state and can dispute claims made by others. Most Arbitrum users are unlikely to want to run a validator, just as most Ethereum users typically don't run their parent chain staking nodes. However, anyone can become a validator. Once the allowlist gets removed, users only need to run the open-source validator software and stake Ether if they need to take action.
-
-The network stays secure if there is at least one honest validator, which means that just one trustworthy fraud prover can catch any number of bad actors. This setup makes the system "trustless"; users do not have to rely on any specific person to keep their funds safe.
-
-### The game
-
-It's not as complicated as it seems. If two validators disagree, only one is telling the truth. In the event of a dispute, the two validators engage in an interactive game, where they respond to each other in a call-and-response format. This process allows them to narrow their disagreement to a single computational step—something straightforward, like multiplying two numbers. This step executes on the parent chain, which shows which party is honest. For a more detailed explanation, see here.
-
-Users only experience delays when they withdraw funds from Arbitrum back to Ethereum. When withdrawing directly from Arbitrum to Ethereum, users usually wait one week to receive their funds on the parent chain. However, users can skip this waiting period if they use a fast <a data-quicklook-from="bridge">bridge</a> application, often for a small fee. Other activities do not have this delay, like depositing funds from Ethereum to Arbitrum or using a decentralized application (<a data-quicklook-from="dapp">dApp</a>) on the Arbitrum chain.
-
-### How is it cheaper?
-
-Arbitrum helps lower user transaction costs by reducing the strain on the parent chain. The primary way it does this is by processing transactions in batches. A <a data-quicklook-from="batch">batch</a> can contain several hundred <a data-quicklook-from="child-chain">child chain</a> transactions and gets submitted as one parent chain transaction. This batching makes interacting with the parent chain cheaper since you save on overhead costs compared to submitting each transaction individually.
-
-Additionally, Arbitrum posts transaction data on the parent chain in a compressed format. It only decompresses this data within the child chain environment, reducing the amount of information that needs storing on the parent chain.
-
-### How does it all work together?
-
+## The transaction lifecycle: from submission to finalization
 At the most basic level, an Arbitrum chain works like this:
 
 <ImageWithCaption
@@ -58,30 +38,46 @@ At the most basic level, an Arbitrum chain works like this:
   src="https://lh4.googleusercontent.com/qwf_aYyB1AfX9s-_PQysOmPNtWB164_qA6isj3NhkDnmcro6J75f6MC2_AjlN60lpSkSw6DtZwNfrt13F3E_G8jdvjeWHX8EophDA2oUM0mEpPVeTlMbsjUCMmztEM0WvDpyWZ6R"
 />
 
-Users and contracts put messages into the inbox. The chain reads the messages one at a time and processes each one. This processing updates the state of the chain and produces some outputs.
+The original napkin drawing seems primitive, but the core idea remains true. Four big ideas make up the Arbitrum protocol:
 
-If you want an Arbitrum chain to process a transaction for you, you need to put that transaction into the chain's inbox. Then, the chain will see your transaction, execute it, and produce some outputs: a transaction receipt and any withdrawals that your transaction initiated.
+### Sequencing, followed by deterministic execution
+When a user submits a transaction to Arbitrum, it first enters the Sequencer, which establishes a global ordering of transactions.
 
-Execution is deterministic, meaning that the contents of its inbox uniquely determine the chain's behavior. Because of this, the result of your transaction is knowable as soon as it gets put in the inbox. Any Arbitrum node will be able to tell you the result. (And you can run an Arbitrum node yourself if you want.)
+Once ordered, transactions may interact with the parent chain via Arbitrum's canonical bridges. These interactions include moving funds or sending messages from Ethereum to Arbitrum.
 
-All of the technical details in this document connect to this diagram. To get from this diagram to a complete description of Arbitrum, we'll need to answer questions like these:
+### Geth at the core
+After transactions are sequenced, the Arbitrum State Transition Function (STF) consumes them, thereby computing the next state of the chain. The STF operates deterministically, ensuring all validators arrive at the same result when replaying the same input.
 
-- Who keeps track of the inbox, Chain state, and outputs?
-- How does Arbitrum make sure that the chain state and outputs are correct?
-- How can Ethereum users and contracts interact with Arbitrum?
-- How does Arbitrum support Ethereum-compatible contracts and transactions?
-- How are ETH and tokens transferred into and out of Arbitrum chains, and how are they managed while on the chain?
-- How can I run my own Arbitrum node or validator?
+### Separate execution from proving
+At periodic intervals, validators take the resulting post-state and submit assertions (summarizing the executed state) to the parent chain. `ETH` bonds back these assertions, and other validators may challenge them in a fraud-proof dispute game.
 
-### Nitro's Design: The Four Big Ideas
+### Optimistic Rollup with interactive fraud proofs
+Once an assertion passes the challenge window without being disputed, it becomes finalized. Only then can messages originating from the child chain be executed on the parent chain. These include `ETH` or token withdrawals, as well as arbitrary cross-chain messages.
 
-The essence of Nitro and its key innovations lie in four big ideas. We'll list them here with a quick summary of each. We will unpack them in more detail in later sections.
 
-**Big Idea: Sequencing, Followed by Deterministic Execution**: Nitro processes transactions with a two-phase strategy. First, the transactions get organized into a single-ordered sequence, and Nitro commits to that sequence. Then, the transactions get processed in that sequence by a deterministic <a data-quicklook-from="state-transition-function">State Transition Function</a>.
+## Document structure
+We take the four big ideas and break them into six key parts, each corresponding to a critical phase (or big idea) in the Arbitrum system:
 
-**Big Idea: <a data-quicklook-from="geth">Geth</a> at the Core**: Nitro supports Ethereum's data structures, formats, and virtual machine by compiling in the core code of the popular go-ethereum ("Geth") Ethereum node software. Using Geth as a library in this way ensures a very high degree of compatibility with Ethereum.
+### [1. Sequencing, followed by deterministic execution](/how-arbitrum-works/02-transaction-lifecycle.mdx)
+Describes how the Sequencer receives user transactions and posts them to Ethereum in batches. Arbitrum's STF then processes these transactions deterministically offchain.
 
-**Big Idea: Separate Execution from Proving**: Nitro takes the same source code and compiles it twice, once to native code for execution in a Nitro node, optimized for speed, and again to <a data-quicklook-from="wasm">WASM</a> for use in proving, optimized for portability and security.
+### [2. The Sequencer and censorship resistance](/how-arbitrum-works/03-sequencer.mdx)
+Explains how users are protected against censorship via the Delayed Inbox, allowing fallback transaction submission directly to the child chain for guaranteed inclusion.
 
-**Big Idea: Optimistic Rollup with Interactive Fraud Proofs**: Nitro settles transactions to the parent Ethereum chain using an Optimistic Rollup protocol, including the interactive fraud proofs pioneered by Arbitrum.
-Now that we have covered the foundational concepts, the big picture, and the four big ideas of <a data-quicklook-from="arbitrum-nitro">Arbitrum Nitro</a>, we will begin a journey following a transaction through the Arbitrum protocol. In the next section, the transaction lifecycle begins.
+### [3. Bridging from a parent chain to a child chain](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)
+This section covers the inbound messaging system, including retryables, token bridging via canonical contracts, and the mechanisms that allow Ethereum to communicate with Arbitrum.
+
+### [4. State Transition Function (STF)](/how-arbitrum-works/04-state-transition-function/01-stf-gentle-intro.mdx)
+Unpacks the core state computation logic in Arbitrum –– how input messages become state updates, and how Arbitrum supports multiple execution languages like Solidity and Stylus.
+
+### [5. Validation and proving](/how-arbitrum-works/05-validation-and-proving/01-validation-and-proving.mdx)
+Describes how validators confirm chain correctness using assertions and fraud proofs. Includes bonding mechanics, challenge games, and the role of WAVM in proving execution.
+
+### [6. Child to parent chain bridging](/how-arbitrum-works/11-l2-to-l1-messaging.mdx)
+Explains outbound messaging from the child chain to the parent chain –– including `ETH` and token withdrawals, Merkle proofs, and the Outbox execution model.
+
+
+## Bringing it all together
+Each component of the Arbitrum system contributes to a secure, efficient, and trustless pipeline for transaction processing. From submission to sequencing, bridging, execution, validation, and withdrawal, Arbitrum ensures that every transaction is verifiable, censorship-resistant, and anchored in Ethereum's security.
+
+These articles connect each step, from low-level protocol internals to real-world application –– offering a complete picture of how Arbitrum works under the hood.
