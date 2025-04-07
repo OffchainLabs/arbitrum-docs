@@ -48,19 +48,19 @@ The real-time feed represents the Sequencer's commitment to process transactions
 
 - **Receive Immediate Notifications**: Obtain instant information about newly sequenced transactions and their ordering.
 - **Process Transactions Promptly**: Utilize the sequenced transactions to update the state locally, enabling rapid application responses and user interactions.
-- **Benefit from Soft Finality**: Gain provisional assurance about transaction acceptance and ordering before the parent chain reaches finality.
+- **Benefit from Settlement**: Gain provisional assurance about transaction acceptance and ordering before the parent chain reaches finality.
 
 This mechanism is particularly valuable for applications requiring low latency and high throughput, such as decentralized exchanges or real-time gaming platforms.
 
-### Soft Finality and Trust Model
+### Settlement and Trust Model
 
-"Soft finality" refers to the preliminary <a data-quicklook-from="confirmation">confirmation</a> of transactions based on the Sequencer's real-time feed. Key aspects include:
+Settlement (soft finality) refers to the preliminary <a data-quicklook-from="confirmation">confirmation</a> of transactions based on the Sequencer's real-time feed. Key aspects include:
 
 - **Dependence on Sequencer Integrity**: The feed's accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
 - **Immediate User Feedback**: Users can act on transaction confirmations swiftly, improving the user experience.
 - **Eventual Consistency with the parent chain**: While the real-time feed provides quick updates, ultimate security, and finality are established once transactions are posted to and finalized on the parent chain. (See the **Finality** section for an in-depth discussion.)
 
-Understanding this trust model is essential. While we expect the Sequencer to behave correctly, users and developers should know that soft finality depends on this assumption. In scenarios where absolute certainty is required, parties may wait for transactions to achieve finality on the parent chain.
+Understanding this trust model is essential. While we expect the Sequencer to behave correctly, users and developers should know that settlement depends on this assumption. In scenarios where absolute certainty is required, parties may wait for transactions to achieve finality on the parent chain.
 
 ### Role of the Sequencer Feed in the Network
 
@@ -75,7 +75,7 @@ The Sequencer Feed serves several vital functions within the Arbitrum ecosystem:
 While the Sequencer Feed offers significant advantages, consider the following:
 
 - **Reliance on Sequencer Availability**: The effectiveness of the real-time feed depends on the Sequencer's uptime and responsiveness. Network issues or Sequencer downtime can delay transaction visibility.
-- **Provisional Nature of Soft Finality**: Until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
+- **Provisional Nature of Settlement**: Until transactions reach finality on the parent chain, there is a small risk that the provisional ordering provided by the feed could change in exceptional circumstances.
 - **Security Implications**: For high-stakes transactions where security is paramount (e.g., centralized exchange deposits and withdrawals), users may prefer to wait for the parent chain confirmation despite the longer latency.
 
 Developers and users should design their applications and interactions with these factors in mind, choosing the appropriate balance between speed and certainty based on their requirements.
@@ -199,30 +199,30 @@ Finality in blockchain systems refers to the point at which a transaction become
 
 Arbitrum offers two levels of finality:
 
-1. **Soft Finality**: Provided by the Sequencer's real-time feed, offering immediate but provisional transaction confirmations.
+1. **Settlement**: Provided by the Sequencer's real-time feed, offering immediate but provisional transaction confirmations.
 2. **Hard Finality**: Occurs when transactions are included in batches posted to and finalized on the parent chain, providing strong security assurances.
 
 This section explores the concepts of soft and hard finality, their implications, trust considerations, and guidance for utilizing them effectively within the Arbitrum network.
 
-### Soft Finality
+### Settlement (soft finality)
 
-Soft finality refers to the preliminary confirmation of transactions based on the Sequencer's real-time feed. Key characteristics include:
+Settlement refers to the preliminary confirmation of transactions based on the Sequencer's real-time feed. Key characteristics include:
 
 - **Immediate Confirmation**: Transactions are confirmed almost instantly as they are accepted and ordered by the Sequencer.
 - **Provisional Assurance**: The confirmations are provisional and rely on the Sequencer's integrity and availability.
 - **High Performance**: Enables applications to offer rapid responses and real-time interactions, enhancing user experience.
 
-**Advantages of Soft Finality**:
+**Advantages of Settlement**:
 
 - **Low Latency**: Users receive immediate feedback on transaction status.
 - **Optimized for Speed**: Ideal for applications where responsiveness is critical.
 - **Improved User Experience**: Reduces waiting times and uncertainty.
 
-**Limitations of Soft Finality**:
+**Limitations of Settlement**:
 
 - **Trust Dependency**: Relies on the Sequencer's honesty and ability to maintain uptime..
 - **Potential for Reordering**: In rare cases, if the Sequencer acts maliciously or encounters issues, the provisional ordering could change.
-- **Not Suitable for High-Value Transactions**: For transactions requiring strong security guarantees, soft finality may not suffice.
+- **Not Suitable for High-Value Transactions**: For transactions requiring strong security guarantees, settlement may not suffice.
 
 ### Hard Finality
 
@@ -247,7 +247,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 Understanding the trust assumptions associated with each level of finality is essential:
 
-- **Soft Finality Trust Model**:
+- **Settlement Trust Model**:
   - **Reliance on the Sequencer**: Users must trust that the Sequencer operates honestly, sequences transactions correctly, and remains available.
   - **Risk of Misbehavior**: If the Sequencer acts maliciously, it could reorder or censor certain transactions before they achieve hard finality.
 - **Hard Finality Trust Model**:
@@ -258,7 +258,7 @@ Understanding the trust assumptions associated with each level of finality is es
 
 Developers and users should consider the appropriate level of finality based on their specific use cases:
 
-- **When to Rely on Soft Finality**:
+- **When to Rely on Settlement**:
   - **Low-Risk Transactions**: For transactions where the potential impact of reordering or delays is minimal.
   - **User Experience Priority**: Applications where responsiveness and immediacy enhance user engagement, such as gaming or social platforms.
   - **Frequent Transactions**: Scenarios involving a high volume of small transactions where waiting for hard finality is impractical.
