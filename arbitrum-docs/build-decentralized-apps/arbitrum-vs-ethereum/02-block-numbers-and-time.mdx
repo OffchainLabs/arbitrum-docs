@@ -17,7 +17,7 @@ Throughout this and other pages, we mention how the block number of a chain does
 
 :::
 
-As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [delayed inbox](/how-arbitrum-works/03-sequencer.mdx#delayed-messages-on-the-sequencer-feed).
+As in Ethereum, Arbitrum clients submit transactions, and the system executes those transactions later. In Arbitrum, clients submit transactions by posting messages to the Ethereum chain, either [through the Sequencer](/how-arbitrum-works/03-sequencer.mdx) or via the chain's [Delayed Inbox](/how-arbitrum-works/03-sequencer.mdx).
 
 Once in the chain's core inbox contract, transactions are processed in order. Generally, some time will elapse between when a message is put into the inbox (and timestamped) and when the contract processes the message and carries out the transaction requested by the message.
 
@@ -95,7 +95,7 @@ _\*\* **Chain's block number from RPCs:** note that this can be updated multiple
 
 The Multicall contract offers a great case study for the differences between the different block numbers.
 
-The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behaviour.
+The [canonical implementation](https://github.com/makerdao/multicall/) of Multicall returns the value of `block.number`. If attempting to use out-of-the-box, some applications might face unintended behavior.
 
 You can find a version of the adapted `Multicall2` deployed on Arbitrum One at [0x842eC2c7D803033Edf55E478F461FC547Bc54EB2](https://arbiscan.io/address/0x842eC2c7D803033Edf55E478F461FC547Bc54EB2#code).
 
@@ -110,8 +110,8 @@ Block timestamps on Arbitrum are not linked to the timestamp of the parent chain
 1. Must be always equal or greater than the previous child chain block timestamp
 2. Must fall within the established boundaries (24 hours earlier than the current time or one hour in the future). More on this below.
 
-Furthermore, for transactions that are force-included from the parent chain (bypassing the sequencer), the block timestamp will be equal to either the parent chain timestamp when the transaction was put in the delayed inbox on the parent chain (not when it was force-included), or the child chain timestamp of the previous child chain block, whichever of the two timestamps is greater.
+Furthermore, for transactions that are force-included from the parent chain (bypassing the Sequencer), the block timestamp will be equal to either the parent chain timestamp when the transaction was put in the Delayed Inbox on the parent chain (not when it was force-included), or the child chain timestamp of the previous child chain block, whichever of the two timestamps is greater.
 
 ### Timestamp boundaries of the sequencer
 
-As mentioned, block timestamps are usually set based on the sequencer's clock. Because there's a possibility that the sequencer fails to post batches on the parent chain (i.e, Ethereum) for a period of time, it should have the ability to slightly adjust the timestamp of the block to account for those delays and prevent any potential reorganisations of the chain. To limit the degree to which the sequencer can adjust timestamps, some boundaries are set, currently to 24 hours earlier than the current time, and one hour in the future.
+As mentioned, block timestamps are usually set based on the sequencer's clock. Because there's a possibility that the Sequencer fails to post batches on the parent chain (i.e., Ethereum) for a period of time, it should have the ability to slightly adjust the timestamp of the block to account for those delays and prevent any potential reorganizations of the chain. To limit the degree to which the Sequencer can adjust timestamps, some boundaries are set, currently to 24 hours earlier than the current time, and one hour in the future.
