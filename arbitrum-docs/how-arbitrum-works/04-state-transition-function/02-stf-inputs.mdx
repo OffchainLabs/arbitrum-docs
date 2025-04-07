@@ -34,35 +34,16 @@ In the system, we refer to these messages as `L1IncomingMessage` [source code re
 
 When submitted to the Sequencer feed, messages are tagged with a unique identifier, ensuring Arbitrum nodes correctly differentiate and process them. Below is the list of message types, their associated constant values, and descriptions:
 
-```solidity
-uint8 constant L2_MSG = 3;
-uint8 constant L1MessageType_L2FundedByL1 = 7;
-uint8 constant L1MessageType_submitRetryableTx = 9;
-uint8 constant L1MessageType_ethDeposit = 12;
-uint8 constant L1MessageType_batchPostingReport = 13;
-uint8 constant L2MessageType_unsignedEOATx = 0;
-uint8 constant L2MessageType_unsignedContractTx = 1;
-
-uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;
-uint8 constant INITIALIZATION_MSG_TYPE = 11;
-```
-
-- `L2_MSG` (3): Child chain messages submitted directly to the Sequencer.
-
-- `L1MessageType_L2FundedByL1` (7): Child chain messages that go to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, with funding provided on the parent chain itself.
-
-- `L1MessageType_submitRetryableTx` (9): Submitting parent chain messages to the child chain via retryable tickets.
-
-- `L1MessageType_ethDeposit` (12): Child chain messages that handle deposits of native tokens (`ETH`) into the child chain.
-
-- `L1MessageType_batchPostingReport` (13): Used by the Sequencer to update the pricing model based on payment(s) by the batch poster.
-
-- `L2MessageType_unsignedEOATx` (0): Child chain messages submitted by externally owned accounts (EOAs) to the parent chain that does not include a signature.
-
-- `L2MessageType_unsignedContractTx` (1): Child chain messages submitted on the parent chain that does not include a signature.
-
-- `ROLLUP_PROTOCOL_EVENT_TYPE` (8): <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> used it for messages sent to <a data-quicklook-from="bridge">bridge</a>, Nitro does not use it.
-
-- `INITIALIZATION_MSG_TYPE` (11): The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup.
+| Message Type | Constant Value | Description |
+| ------------ | -------------- | ----------- |
+| `L2_MSG` | `uint8 constant L2_MSG = 3;` | Child chain messages submitted directly to the Sequencer. |
+| `L1MessageType_L2FundedByL1` | `uint8 constant L1MessageType_L2FundedByL1 = 7;` | Child chain messages that go to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a>, with funding provided on the parent chain itself. |
+| `L1MessageType_submitRetryableTx` | `uint8 constant L1MessageType_submitRetryableTx = 9;` | Submitting parent chain messages to the child chain via retryable tickets. |
+| `L1MessageType_ethDeposit` | `uint8 constant L1MessageType_ethDeposit = 12;` | Child chain messages that handle deposits of native tokens (`ETH`) into the child chain. |
+| `L1MessageType_batchPostingReport` | `uint8 constant L1MessageType_batchPostingReport = 13;` | Used by the Sequencer to update the pricing model based on payment(s) by the batch poster. |
+| `L2MessageType_unsignedEOATx` | `uint8 constant L2MessageType_unsignedEOATx = 0;` | Child chain messages submitted by externally owned accounts (EOAs) to the parent chain that does not include a signature. |
+| `L2MessageType_unsignedContractTx` | `uint8 constant L2MessageType_unsignedContractTx = 1;` | Child chain messages submitted on the parent chain that does not include a signature. |
+| `ROLLUP_PROTOCOL_EVENT_TYPE` | `uint8 constant ROLLUP_PROTOCOL_EVENT_TYPE = 8;` | <a data-quicklook-from="arbitrum-classic">Arbitrum Classic</a> used it for messages sent to <a data-quicklook-from="bridge">bridge</a>, Nitro does not use it. |
+| `INITIALIZATION_MSG_TYPE` | `uint8 constant INITIALIZATION_MSG_TYPE = 11;` | The first message added to a new Rollup inbox. Its presence indicates proper initialization of the Rollup. |
 
 These tagged identifiers enable Arbitrum nodes to parse incoming messages and direct their payloads appropriately, ensuring smooth and reliable network operation.
