@@ -11,7 +11,7 @@ Although the majority of RPC methods follow the same behavior as in Ethereum, so
 
 :::info
 
-Comprehensive documentation on all generally available JSON-RPC methods for Ethereum [can be found at ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
+Comprehensive documentation on all generally available JSON-RPC methods for Ethereum can be found at [ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
 
 :::
 
@@ -27,7 +27,7 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 
 | Transaction type code | Transaction type name           | Description                                                                                                                                                                |
 | --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from a parent chain to child chain via the Arbitrum bridge                                                                                             |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to child chain via the Arbitrum bridge                                                                                           |
 | `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                  |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
 | `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
@@ -122,7 +122,7 @@ Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitr
 
 :::info
 
-Note that if the sync process encounters an error while trying to collect the data above (not expected) this error will be added to the response.
+If the sync process encounters an error while trying to collect the data above (not expected) this error will be added to the response.
 
 :::
 
