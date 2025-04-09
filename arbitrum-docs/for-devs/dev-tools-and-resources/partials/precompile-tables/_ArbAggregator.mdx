@@ -1,192 +1,53 @@
 <table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        ⚠️<code>getPreferredAggregator(address addr)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L14"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L24"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Deprecated: Do not use this method.</td>
-    </tr>
-    <tr>
-      <td>
-        ⚠️<code>getDefaultAggregator()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L18"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L30"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Deprecated: Do not use this method.</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getBatchPosters()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L22"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L35"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>GetBatchPosters gets the addresses of all current batch posters</td>
-    </tr>
-    <tr>
-      <td>
-        <code>addBatchPoster(address newBatchPoster)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L27"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L40"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Adds additional batch poster address</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getFeeCollector(address batchPoster)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L32"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L63"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>GetFeeCollector gets a batch poster's fee collector</td>
-    </tr>
-    <tr>
-      <td>
-        <code>setFeeCollector(address batchPoster, address newFeeCollector)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L38"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L72"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>
-        SetFeeCollector sets a batch poster's fee collector (caller must be the batch poster, its
-        fee collector, or an owner)
-      </td>
-    </tr>
-    <tr>
-      <td>
-        ⚠️<code>getTxBaseFee(address aggregator)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L43"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L95"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Deprecated: always returns zero</td>
-    </tr>
-    <tr>
-      <td>
-        ⚠️<code>setTxBaseFee(address aggregator, uint256 feeInL1Gas)</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/763bd77906b7677da691eaa31c6e195d455197a4/src/precompiles/ArbAggregator.sol#L51"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.3/precompiles/ArbAggregator.go#L102"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Deprecated: no-op</td>
-    </tr>
-  </tbody>
-</table>
-<p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Solidity interface</th>
+        <th>Go implementation</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+            <td>⚠️<code>getPreferredAggregator()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L14" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L24" target="_blank">Implementation</a></td>
+            <td>Deprecated: Do not use this method.</td>
+          </tr><tr>
+            <td>⚠️<code>getDefaultAggregator()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L20" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L30" target="_blank">Implementation</a></td>
+            <td>Deprecated: Do not use this method.</td>
+          </tr><tr>
+            <td><code>getBatchPosters()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L24" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L35" target="_blank">Implementation</a></td>
+            <td>GetBatchPosters gets the addresses of all current batch posters</td>
+          </tr><tr>
+            <td><code>addBatchPoster()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L29" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L40" target="_blank">Implementation</a></td>
+            <td>Adds additional batch poster address</td>
+          </tr><tr>
+            <td><code>getFeeCollector()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L36" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L63" target="_blank">Implementation</a></td>
+            <td>GetFeeCollector gets a batch poster's fee collector</td>
+          </tr><tr>
+            <td><code>setFeeCollector(address batchPoster, address newFeeCollector)</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L44" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L72" target="_blank">Implementation</a></td>
+            <td>SetFeeCollector sets a batch poster's fee collector (caller must be the batch poster, its fee collector, or an owner)</td>
+          </tr><tr>
+            <td>⚠️<code>getTxBaseFee()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L49" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L95" target="_blank">Implementation</a></td>
+            <td>Deprecated: always returns zero</td>
+          </tr><tr>
+            <td>⚠️<code>setTxBaseFee(address aggregator, uint256 feeInL1Gas)</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbAggregator.sol#L59" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbAggregator.go#L102" target="_blank">Implementation</a></td>
+            <td>Deprecated: no-op</td>
+          </tr>
+    </tbody>
+  </table><p>Note: methods marked with ⚠️ are deprecated and their use is not supported.</p>
