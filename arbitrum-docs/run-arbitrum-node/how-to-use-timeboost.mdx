@@ -45,11 +45,13 @@ Before we begin, make sure you have:
 
 The following table shows this information for the Arbitrum DAO-owned chains:
 
-| Network          | Auction contract                                                              | Autonomous auctioneer endpoint  |
-| ---------------- | ----------------------------------------------------------------------------- | ------------------------------- |
-| Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://sepolia-bv.arbitrum.io/ |
-| Arbitrum One     | Pending onchain governance vote                                               | Pending onchain governance vote |
-| Arbitrum Nova    | Pending onchain governance vote                                               | Pending onchain governance vote |
+#### Table 1: Timeboost reference URLs and addresses
+
+| Network          | Auction contract                                                              | Autonomous auctioneer endpoint             |
+| ---------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
+| Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://arbsepolia-auctioneer.arbitrum.io/ |
+| Arbitrum One     | <AEL address="0x5fcb496a31b7AE91e7c9078Ec662bd7A55cd3079" chainID={42161} />  | Pending on-chain governance vote           |
+| Arbitrum Nova    | <AEL address="0xa5aBADAF73DFcf5261C7f55420418736707Dc0db" chainID={42170} />  | Pending on-chain governance vote           |
 
 ### Step 1: Deposit funds into the auction contract
 
@@ -147,7 +149,7 @@ Bids are submitted to the autonomous auctioneer endpoint. We need to send a `auc
 - address of the express lane controller candidate (for example, our address if we want to be the express lane controller)
 - address of the auction contract
 - round we are bidding for (in our example, `currentRound + 1`)
-- amount in wei of the deposit `ERC-20` token to bid
+- amount in `wei` of the deposit `ERC-20` token to bid
 - signature (explained below)
 
 ::::info Minimum reserve price
@@ -228,6 +230,8 @@ You can also call the function `getBidHash` in the auction contract to obtain th
 ::::
 
 When sending the request, the autonomous auctioneer will return an empty result with an HTTP status `200` if received correctly. If the result returned contains an error message, it means that something went wrong. Following are some of the error messages that can help us understand what's happening:
+
+#### Table 2: Errors relating to bid submission
 
 | Error                   | Description                                                                                                 |
 | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -360,14 +364,20 @@ const signature = await account.signMessage({
 
 When sending the request, the sequencer will return an empty result with an HTTP status `200` if it received it correctly. If the result returned contains an error message, something went wrong. Following are some of the error messages that can help us understand what's happening:
 
-| Error                         | Description                                                           |
-| ----------------------------- | --------------------------------------------------------------------- |
-| `MALFORMED_DATA`              | Wrong input data, failed to deserialize, missing certain fields, etc. |
-| `WRONG_CHAIN_ID`              | Wrong chain id for the target chain                                   |
-| `WRONG_SIGNATURE`             | Signature failed to verify                                            |
-| `BAD_ROUND_NUMBER`            | Incorrect round, such as one from the past                            |
-| `NOT_EXPRESS_LANE_CONTROLLER` | The sender is not the express lane controller                         |
-| `NO_ONCHAIN_CONTROLLER`       | There is no defined, onchain express lane controller for the round    |
+#### Table 3: Errors relating to express lane transaction submission
+
+Note that if you get any of the errors below, then the sequence number used in your express lane transaction was _not_ consumed.
+| Error | Description |
+| ------------------------------ | --------------------------------------------------------------------- |
+| `MALFORMED_DATA` | wrong input data, failed to deserialize, missing certain fields, etc. |
+| `WRONG_CHAIN_ID` | wrong chain id for the target chain |
+| `WRONG_SIGNATURE` | signature failed to verify |
+| `BAD_ROUND_NUMBER` | incorrect round, such as one from the past |
+| `NOT_EXPRESS_LANE_CONTROLLER` | the sender is not the express lane controller |
+| `NO_ONCHAIN_CONTROLLER` | there is no defined, on-chain express lane controller for the round |
+| `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
+| `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
+| `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](../run-arbitrum-node/troubleshoot-timeboost.mdx#the-block-based-timeout-for-express-lane-transactions) |
 
 ::::info What happens if you're not the express lane controller?
 
@@ -496,4 +506,20 @@ l1BlockNumber           "0x6e8b49"
 timeboosted             true
 ```
 
-In the Sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMetadata` field that represents whether a particular transaction in the block was timeboosted or not. The field blockMetadata is an array of bytes and it starts with a byte representing the version (`0`), followed by `ceil(N/8)` number of bytes where `N` is the number of transactions in the block. If a particular transaction was timeboosted, the bit representing its position in the block will be set to `1`, while the rest will be set to `0`. For example, if the `blockMetadata` of a particular message, viewed as bits is `00000000 01100000`, then the 2nd and 3rd transactions in that block were timeboosted.
+In the sequencer feed, the `BroadcastFeedMessage` struct now contains a `blockMetadata` field that represents whether a particular transaction in the block was timeboosted or not. The field blockMetadata is an array of bytes and it starts with a byte representing the version (`0`), followed by `ceil(N/8)` number of bytes where `N` is the number of transactions in the block. If a particular transaction was timeboosted, the bit representing its position in the block will be set to `1`, while the rest will be set to `0`. For example, if the `blockMetadata` of a particular message, viewed as bits is `00000000 01100000`, then the 2nd and 3rd transactions in that block were timeboosted.
+
+## How to view historical bid data
+
+In the current implementation, information about the winning bid for a resolved auction is emitted via the `AuctionResolved` event ([sample interface](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/express-lane-auction/IExpressLaneAuction.sol#L95-L103)). Historical bid information, including the round number and bid amounts, are published to a public S3 bucket at a regular cadence. Teams can use the URLs below to download the data:
+
+#### Table 4: S3 URLs for historical bid data
+
+| Chain            | S3 bucket URL                                                   |
+| ---------------- | --------------------------------------------------------------- |
+| Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
+| Arbitrum One     | Pending on-chain governance vote                                |
+| Arbitrum Nova    | Pending on-chain governance vote                                |
+
+## Troubleshooting and best practices
+
+Our guide on [Troubleshooting Timeboost](../run-arbitrum-node/troubleshoot-timeboost.mdx) contains more information on how response times work and how express lane transactions are sequenced, alongside common errors and best practices for using Timeboost.
