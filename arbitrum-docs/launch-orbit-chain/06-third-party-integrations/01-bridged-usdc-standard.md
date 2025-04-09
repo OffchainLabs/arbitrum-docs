@@ -7,11 +7,11 @@ sidebar_position: 5
 content_type: how-to
 ---
 
-Circle’s [Bridged USDC Standard](https://www.circle.com/blog/bridged-usdc-standard) is a specification and process for deploying a bridged form of USDC on EVM blockchains with optionality for Circle to seamlessly upgrade to native issuance in the future.
+Circle’s [Bridged `USDC` Standard](https://www.circle.com/blog/bridged-usdc-standard) is a specification and process for deploying a bridged form of `USDC` on EVM blockchains with optionality for Circle to seamlessly upgrade to native issuance in the future.
 
-## Why adopt the bridged USDC standard?
+## Why adopt the bridged `USDC` standard?
 
-When USDC is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges USDC from Arbitrum One to an Orbit chain, their Arbitrum One USDC tokens are locked into the Orbit chain’s parent side bridge, and a representative USDC token is minted to the user’s address on the Orbit chain, via the child side bridge.
+When `USDC` is bridged into an Orbit chain, the default path is to use the chain’s [canonical gateway contracts for `ERC-20`'s](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx). By way of example, when a user bridges `USDC` from Arbitrum One to an Orbit chain, their Arbitrum One `USDC` tokens are locked into the Orbit chain’s parent side bridge, and a representative `USDC` token is minted to the user’s address on the Orbit chain, via the child side bridge.
 
 The challenge with this user flow is twofold.
 
@@ -20,7 +20,7 @@ The challenge with this user flow is twofold.
 
 By deploying the bridged `USDC` standard from the start, all `USDC` tokens that are bridged are locked in a gateway contract that can be adopted by Circle should a chain upgrade its `USDC` into native `USDC`. This allows `USDC` adoption on Orbit chains today without encountering either of the two problems above.
 
-## How to implement the bridged USDC Standard
+## How to implement the bridged `USDC` Standard
 
 We provide a custom `USDC` gateway implementation (for parent and child chains) that follows the Bridged `USDC` Standard. These contracts can be used by new Orbit chains. This solution will **not** be used in existing Arbitrum chains that are governed by the DAO.
 
@@ -89,8 +89,8 @@ The script will do the following:
 - deploy new L1 and L2 proxy admins
 - deploy bridged (L2) `USDC` using the Circle's implementation
 - init L2 `USDC`
-- deploy L1 USDC gateway
-- deploy L2 USDC gateway
+- deploy L1 `USDC` gateway
+- deploy L2 `USDC` gateway
 - init both gateways
 - if `ROLLUP_OWNER_KEY` is provided, register the gateway in the router through the UpgradeExecutor
 - if `ROLLUP_OWNER_KEY` is not provided, prepare calldata and store it in the `registerUsdcGatewayTx.json` file
@@ -98,7 +98,7 @@ The script will do the following:
 
 Now, new `USDC` gateways can be used to deposit/withdraw `USDC`. Everything is now in place to support transition to native `USDC` issuance if Circle and the Orbit chain owner agree to it.
 
-## Transitioning to native USDC
+## Transitioning to native `USDC`
 
 Once a transition to native `USDC` is agreed upon, the following steps are required:
 
@@ -108,16 +108,16 @@ Once a transition to native `USDC` is agreed upon, the following steps are requi
 
 :::note
 
-There should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a USDC deposit
+There should be no in-flight deposits when the minter role is revoked. If there are any, they should be finalized first. Anyone can do that by claiming the failed retryable tickets that execute a `USDC` deposit
 
 :::
 
 - L1 gateway owner sets Circle's account as burner on the parent chain gateway using `setBurner(address)`
 - L1 gateway owner reads the total supply of `USDC` on the child chain and then invokes `setBurnAmount(uint256)` on the parent/child gateway where the amount matches the total supply
 - `USDC` `masterMinter` gives the minter role with `0 `allowance to the L1 gateway so that the burn can be executed
-- on the child chain, the L2 gateway owner calls the `setUsdcOwnershipTransferrer(address)` to set the account (provided and controlled by Circle), which will be able to transfer the bridged USDC ownership and proxy admin
+- on the child chain, the L2 gateway owner calls the `setUsdcOwnershipTransferrer(address)` to set the account (provided and controlled by Circle), which will be able to transfer the bridged `USDC` ownership and proxy admin
 - if not already owned by the gateway, the L2 `USDC` owner transfers ownership to the gateway, and proxy admin transfers admin rights to the gateway
-- Circle uses the `usdcOwnershipTransferrer` account to trigger `transferUSDCRoles(address)`, which will set the caller as USDC proxy admin and will transfer `USDC` ownership to the provided address
-- Circle calls `burnLockedUSDC()` on the L1 gateway using the `burner` account to burn the `burnAmount` of USDC
+- Circle uses the `usdcOwnershipTransferrer` account to trigger `transferUSDCRoles(address)`, which will set the caller as `USDC` proxy admin and will transfer `USDC` ownership to the provided address
+- Circle calls `burnLockedUSDC()` on the L1 gateway using the `burner` account to burn the `burnAmount` of `USDC`
   - remaining `USDC` will be cleared off when remaining in-flight `USDC` withdrawals are executed, if any
   - The L1 gateway owner is trusted to not front-run this transaction to modify the burning amount

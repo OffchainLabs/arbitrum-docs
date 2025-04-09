@@ -398,6 +398,11 @@ const sidebars = {
               id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts',
+              label: 'Canonical factory contracts',
+            },
           ],
         },
         {
@@ -443,6 +448,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
                   label: `Manage gas speed limit`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  label: `Post-launch deployments`,
                 },
               ],
             },
