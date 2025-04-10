@@ -403,6 +403,11 @@ const sidebars = {
               id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts',
+              label: 'Canonical factory contracts',
+            },
           ],
         },
         {
@@ -1062,6 +1067,11 @@ const sidebars = {
               type: 'link',
               href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
               label: 'Specification: Timeboost with decentralized sequencing',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2306.02179',
+              label: 'White paper: Timeboost',
             },
           ],
         },
