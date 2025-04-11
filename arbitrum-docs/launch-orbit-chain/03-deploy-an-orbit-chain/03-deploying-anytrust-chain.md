@@ -1,140 +1,160 @@
 ---
-title: 'How to Deploy an AnyTrust chain using the Orbit SDK'
-sidebar_label: 'Deploy an AnyTrust chain'
+title: 'How to deploy an AnyTrust chain using the Orbit SDK'
 description: 'Learn how to deploy an AnyTrust chain using the Orbit SDK '
-author: GreatSoshiant
-sme: GreatSoshiant
+author: GreatSoshiant, jose-franco
+sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 2
 user_story: As a current or prospective Orbit chain deployer, I need to configure and deploy an AnyTrust Orbit chain.
 content_type: how-to
 ---
 
-This section explains how to initiate an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using [Arbitrum's Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk).
+:::info RaaS providers
 
-:::caution UNDER CONSTRUCTION
-
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-orbit-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
 
 :::
 
-:::info
+Creating an new Orbit chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to the process of creating and configuring an Orbit chain.
 
-See the ["set-valid-keyset" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) in the Orbit SDK repository for additional guidance.
+Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md).
+
+## About AnyTrust
+
+AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the Arbitrum Rollup protocol. AnyTrust reduces transaction fees by introducing a minor trust assumption in the form of a permissioned set of parties responsible for managing data availability. You can learn more about the AnyTrust protocol in [this page](/how-arbitrum-works/08-anytrust-protocol.mdx).
+
+## How to create a new AnyTrust chain using the Orbit SDK
+
+The deployment process for AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md), but with some differences that we'll discuss in this guide.
+
+:::info Example script
+
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script available.
 
 :::
-
-### About AnyTrust Orbit
-
-AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the Arbitrum Rollup protocol. AnyTrust reduces transaction fees by introducing a minor trust assumption in the form of a permissioned set of parties responsible for managing data availability. For an overview of Orbit chain types, please refer to the [Orbit SDK introduction](../orbit-sdk-introduction.md).
-
-### Deployment steps
-
-The deployment process of AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#rollup-configuration-parameters), but with some differences that we'll discuss in this guide.
 
 Here are the steps involved in the deployment process:
 
-1. **[Setting up the chain parameters](#1-setting-up-the-chain-parameters)**
-2. **[Deploying your AnyTrust chain](#2-deploying-your-anytrust-chain)**
-3. **[Getting the AnyTrust Orbit chain information after deployment](#3-getting-the-anytrust-orbit-chain-information-after-deployment)**
-4. **[Setting valid keyset on parent chain](#4-setting-valid-keyset-on-parent-chain)**
+1. [Create the chain configuration object](#1-create-the-chain-configuration-object)
+2. [Deploy the AnyTrust Orbit chain](#2-deploy-the-anytrust-orbit-chain)
+3. [Understand the results obtained](#3-understand-the-results-obtained)
+4. [Set the DAC keyset in the SequencerInbox](#4-set-the-dac-keyset-in-the-sequencerinbox)
 
-The deployment of an AnyTrust Orbit chain involves defining and setting up the <a data-quicklook-from="data-availability-committee-dac">`Data Availability Committee (DAC)`</a> keyset. This keyset includes keys from the appointed members of the DAC. They are required to ensure the chain's data availability and integrity. Once you have selected your committee members and gathered their keys, the Orbit SDK helps you configure these keys into a keyset.
-This keyset is then embedded into the chain, serving as a verification mechanism.
+### 1. Create the chain configuration object
 
-Let's go through each deployment step:
+The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
 
-### 1. Setting up the chain parameters
+The only difference between both types of chain is that the AnyTrust chain sets the `arbitrum.DataAvailabilityCommittee` flag to `true`, to indicate that the chain will use a Data Availability Committee (DAC).
 
-Similarly to the Rollup chain, you'll need to prepare the AnyTrust chain configuration, including the core contracts and operational parameters that govern the chain's functionality, focusing on parameters specific to AnyTrust chains.
+Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` and the `prepareChainConfig` methods to craft the configuration needed:
 
-```solidity {10}
-struct Config {
-    uint64 confirmPeriodBlocks;
-    uint64 extraChallengeTimeBlocks;
-    address stakeToken;
-    uint256 baseStake;
-    bytes32 wasmModuleRoot;
-    address owner;
-    address loserStakeEscrow;
-    uint256 chainId;
-    string chainConfig;
-    uint64 genesisBlockNum;
-    ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
-}
-```
+```typescript
+import { createPublicClient, http } from 'viem';
+import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
 
-You can create the `chainConfig` parameter within the `Config` using `prepareChainConfig`. You can find more details on that function [here](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#41-preparechainconfig).
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
 
-```js
-import { prepareChainConfig } from '@arbitrum/orbit-sdk';
-
-const chainConfig = prepareChainConfig({
+const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
   chainId: 123_456,
-  arbitrum: {
-    InitialChainOwner: deployer,
-    DataAvailabilityCommittee: true,
-  },
+  owner: 0x123...890,
+  chainConfig: prepareChainConfig({
+    chainId: 123_456,
+    arbitrum: {
+      InitialChainOwner: 0x123...890,
+      DataAvailabilityCommittee: true,
+    },
+  }),
 });
 ```
 
-Other than the required `chainId` and `arbitrum.InitialChainOwner` params, `arbitrum.DataAvailabilityCommittee` needs to be set to `true` for AnyTrust.
+### 2. Deploy the AnyTrust Orbit chain
 
-### 2. Deploying your AnyTrust chain
+With the crafted configuration, we can call the `createRollup` method, which will send the transaction to the `RollupCreator` contract and wait until it is executed.
 
-After configuring your chain with the `createRollupPrepareDeploymentParamsConfig` API, the next step is to use the `createRollupPrepareTransactionRequest` API. This API is designed to take the parameters defined in the `RollupDeploymentParams`, along with the configuration generated by the `createRollupPrepareDeploymentParamsConfig` API, to prepare a transaction request. This request is then used to invoke the `createRollup` function of the `RollupCreator` contract, which effectively deploys and initializes the core contracts of your AnyTrust Orbit chain.
+Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step:
 
-For instance, to deploy using the Orbit SDK with a Config equal to `config`, a single batch poster in `[batchPoster]`, and a single validator in `[validator]`, the process would look like this:
+```typescript
+import { createPublicClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { createRollup } from '@arbitrum/orbit-sdk';
 
-```js
-import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
+const deployer = privateKeyToAccount(deployerPrivateKey);
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
 
-const request = await createRollupPrepareTransactionRequest({
+const createRollupResults = await createRollup({
   params: {
-    config,
+    config: createRollupConfig,
     batchPosters: [batchPoster],
     validators: [validator],
   },
-  account: deployer_address,
-  publicClient,
+  account: deployer,
+  parentChainPublicClient,
 });
 ```
 
-After creating the raw transaction, you can sign and broadcast it to the network.
+### 3. Understand the results obtained
 
-### 3. Getting the AnyTrust Orbit chain information after deployment
+After calling `createRollup`, an object of type `CreateRollupResults` is obtained with the following fields:
 
-To extract detailed information about your AnyTrust Orbit chain post-deployment, you can use the same API and steps as you would for a Rollup Orbit chain. Here's a reminder of the example:
-
-```js
-import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
-
-const data = createRollupPrepareTransactionReceipt(txReceipt);
+```typescript
+type CreateRollupResults = {
+  // The transaction sent
+  transaction: CreateRollupTransaction;
+  // The transaction receipt
+  transactionReceipt: CreateRollupTransactionReceipt;
+  // An object with the addresses of the contracts created
+  coreContracts: CoreContracts;
+};
 ```
 
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the AnyTrust chain. By inputting this receipt into the `createRollupPrepareTransactionReceipt` function, you can access comprehensive data about your deployment, including details about the core contracts and configuration settings.
+### 4. Set the DAC keyset in the SequencerInbox
 
-### 4. Setting valid keyset on parent chain
+The final step is to set up the keyset of your Data Availability Committee (DAC) on the SequencerInbox contract. This process involves setting up the Data Availability Servers (DAS) and generating the keyset with all DAS' keys. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/01-get-started.mdx) to learn more about setting up a DAC.
 
-The final step is to set up a valid keyset for your Data Availability Committee (DAC) on the parent chain. See [How to configure a DAC](/run-arbitrum-node/data-availability-committees/04-configure-dac.mdx) for instructions.
+:::info
 
-Once created, your keyset needs to be established on your Orbit chain's `SequencerInbox` contract on the parent chain.
-To facilitate this, we provide an API in Orbit SDK named `setValidKeysetPrepareTransactionRequest`. This API requires specific information you can gather at [Step 3](#3-getting-the-anytrust-orbit-chain-information-after-deployment). This includes the `upgradeExecutor` and `sequencerInbox` addresses of your Orbit chain, the generated keyset for your committee, and the owner's account.
+The Orbit SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section, and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script available.
 
-Here's an example of how you can use the Orbit SDK to write your keyset:
+:::
 
-```js
-const txRequest = await setValidKeysetPrepareTransactionRequest({
+The Orbit SDK includes a `setValidKeyset` function to help setting the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the UpgradeExecutor contract (to learn more about the UpgradeExecutor, see [Ownership structure and access control](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx)).
+
+Below is an example of how to use `setValidKeyset` using the parameters described above:
+
+```typescript
+import { createPublicClient, createWalletClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { setValidKeyset } from '@arbitrum/orbit-sdk';
+
+const deployer = privateKeyToAccount(deployerPrivateKey);
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
+const deployerWalletClient = createWalletClient({
+  account: deployer,
+  chain: parentChain,
+  transport: http(),
+});
+
+const transactionReceipt = await setValidKeyset({
   coreContracts: {
-    upgradeExecutor: 'upgradeExecutor_address',
-    sequencerInbox: 'sequencerInbox_address',
+    upgradeExecutor: '0xUpgradeExecutor',
+    sequencerInbox: '0xSequencerInbox',
   },
-  keyset,
-  account: deployer.address,
+  keyset: generatedKeyset,
   publicClient: parentChainPublicClient,
+  walletClient: deployerWalletClient,
 });
 ```
 
-In this example, `upgradeExecutor_address` and `sequencerInbox_address` are placeholders for the Orbit chain's contract addresses. `keyset` is the keyset you generated for your committee, and `deployer.address` refers to the owner's account address.
+This function will send the transaction and wait for its execution, returning the transaction receipt.
 
-Once you've created the transaction request using the above API, the next step is to sign and send the transaction. This transaction writes the keyset to the parent chain, enabling it to recognize and verify the valid keyset for your AnyTrust Orbit chain.
+### 5. Next step
+
+Once the chain's contracts are created, you can move to the next step: [configure your Orbit chain's node](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md).
