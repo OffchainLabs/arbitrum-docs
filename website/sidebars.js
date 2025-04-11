@@ -359,7 +359,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-orbit-chain/orbit-sdk-introduction',
-                  label: `Introduction`,
+                  label: `Overview`,
                 },
                 {
                   type: 'doc',
