@@ -6,7 +6,7 @@ sme: jose-franco
 content_type: how-to
 ---
 
-This how-to provides step-by-step instructions for Orbit chain operators who want to enable BoLD on their chain. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected.
+This how-to provides step-by-step instructions for L2 Orbit chain operators who want to enable BoLD on their chain; L3 support for BoLD is expected in a future update. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected.
 
 ::::info This is not an ArbOS upgrade
 
@@ -18,10 +18,10 @@ However, enabling BoLD does not require upgrading your ArbOS version.
 
 ## Overview
 
-To enable BoLD in your Orbit chain, you'll have to perform these actions:
+To enable BoLD in your L2 Orbit chain, you'll have to perform these actions:
 
 1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters
-2. Upgrade your Nitro contracts to [v3.0.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.0.0)
+2. Upgrade your Nitro contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
 
 Let's dive into it.
 
@@ -34,31 +34,31 @@ Most of the parameters used in Nitro before v3.5.4 will stay the same when runni
 - For validator nodes: add `--node.bold.enable=true` and `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
 
-## 2. Upgrade your Nitro contracts to v3.0.0
+## 2. Upgrade your Nitro contracts to v3.1.0
 
-This section explains how to upgrade of your chain contracts to v3.0.0. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
+This section explains how to upgrade of your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0). Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
 
 During the upgrade operation, the following actions will be performed:
 
-1. Upgrade the Bridge, Inbox, RollupEventInbox, Outbox and SequencerInbox contracts to v3.0.0
-2. Deploy the new v3.0.0 BoLD ChallengeManager
-3. Migrate the v2 Rollup contract into a new v3.0.0 Rollup contract address
+1. Upgrade the Bridge, Inbox, RollupEventInbox, Outbox and SequencerInbox contracts to v3.1.0
+2. Deploy the new v3.1.0 BoLD ChallengeManager
+3. Migrate the v2 Rollup contract into a new v3.1.0 Rollup contract address
 4. Setup the Rollup contract according to the new configuration and use the latest confirmed assertion on the old rollup as the genesis of the new rollup
 
 ### Step 0: Pre-requisites
 
-To effectively upgrade your Nitro contracts using the provided upgrade action, your contracts must be in one of these versions:
+To effectively upgrade your Nitro contracts using the BoLD upgrade action, your contracts must be in one of these versions:
 
-- Inbox: v1.1.0 - v2.1.0 inclusive
+- Inbox: v1.1.0 - v2.1.3 inclusive
 - Outbox: any
-- SequencerInbox: v1.2.1 - v2.1.0 inclusive
+- SequencerInbox: v1.2.1 - v2.1.3 inclusive
 - Bridge
-  - eth chain: v1.1.0 - v2.1.0 inclusive
-  - custom-fee token chain: v2.0.0 - v2.1.0 inclusive
-- RollupProxy: v1.1.0 - v2.1.0 inclusive
-- RollupAdminLogic: v2.0.0 - v2.1.0 inclusive
-- RollupUserLogic: v2.0.0 - v2.1.0 inclusive
-- ChallengeManager: v2.0.0 - v2.1.0 inclusive
+  - eth chain: v1.1.0 - v2.1.3 inclusive
+  - custom-fee token chain: v2.0.0 - v2.1.3 inclusive
+- RollupProxy: v1.1.0 - v2.1.3 inclusive
+- RollupAdminLogic: v2.0.0 - v2.1.3 inclusive
+- RollupUserLogic: v2.0.0 - v2.1.3 inclusive
+- ChallengeManager: v2.0.0 - v2.1.3 inclusive
 
 To determine the exact version your contracts use, [follow these instructions](https://github.com/OffchainLabs/orbit-actions#check-version-and-upgrade-path).
 
@@ -70,14 +70,14 @@ Some contracts will not be updated, and it's normal to have some contracts still
 
 ### Step 1: Clone the `nitro-contracts` repository and build the contracts
 
-You'll use a `BOLDUpgradeAction.sol` contract in the `nitro-contracts` repository to perform the upgrade operation.
+You'll use a [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) contract in the [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) repository to perform the upgrade operation.
 
 First clone the `nitro-contracts` repository and checkout the appropriate version:
 
 ```shell
 $ git clone https://github.com/OffchainLabs/nitro-contracts.git
 $ cd nitro-contracts
-$ git checkout v3.0.0
+$ git checkout v3.1.0
 ```
 
 Once you have the correct version, install the dependencies and build the contracts:
@@ -89,7 +89,7 @@ $ yarn build:all
 
 ### Step 2: Configure your chain parameters
 
-The action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, create a new file, `scripts/files/configs/custom.ts`, with the following contents:
+The BoLD action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, create a new file, `scripts/files/configs/custom.ts`, with the following contents:
 
 ```typescript
 import { parseEther } from 'ethers/lib/utils';
@@ -141,7 +141,7 @@ export const arb1: Config = {
 };
 ```
 
-Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLd's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
+Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
 
 ### Step 3: Prepare and deploy the upgrade contract
 
