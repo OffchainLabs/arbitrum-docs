@@ -9,7 +9,7 @@ content_type: how-to
 
 :::info
 
-Custom gas token support for rollups is currently limited to L2s; support for L3s are expected to be enabled in a future upgrade
+Custom gas token support for rollups is currently limited to L2s with BoLD enabled; support for L3s is expected to be enabled in a future upgrade
 
 :::
 
@@ -75,7 +75,7 @@ Here are the steps you should take for deploying your Orbit Rollup with a custom
     - FEE_TOKEN_ADDRESS = your ERC-20 gas token
     - FEE_TOKEN_PRICER_ADDRESS = your deployed pricer
     - ROLLUP_CREATOR_ADDRESS = the rollup creator contract on L1
-    - STAKE_TOKEN_ADDRESS = token used for staking (see BoLD docs for more details)
+    - STAKE_TOKEN_ADDRESS = token used for staking (see [BoLD docs](https://docs.arbitrum.io/launch-orbit-chain/bold-adoption-for-orbit-chains#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
 
     The script will deploy and initialize the rollup accordingly.
 
