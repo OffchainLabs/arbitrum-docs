@@ -831,6 +831,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-node',
+              label: 'Run a sequencer node',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },

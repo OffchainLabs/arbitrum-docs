@@ -1,0 +1,196 @@
+---
+title: 'How to run a full node for an Orbit chain'
+description: Learn how to run an Arbitrum orbit node on your local machine
+author: Jason Wan
+sme: Jason Wan
+content_type: how-to
+---
+
+(Note: This is for Arbitrum Orbit chains only)
+
+This how-to provides step-by-step instructions for running a sequencer node on your local machine.
+
+## Minimum hardware configuration
+
+The following is the minimum hardware configuration required to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
+
+| Resource     | Recommended                                   |
+| :----------- | :-------------------------------------------- |
+| RAM          | 16 GB                                         |
+| CPU          | 4 core CPU (for AWS, a `t3 xLarge` instance)  |
+| Storage type | NVMe SSD drives are recommended               |
+| Storage size | Depends on the chain and its traffic overtime |
+
+Please note that:
+
+- These minimum requirements for RAM and CPU are recommended for nodes that process a small amount of RPC requests. For nodes that require processing multiple simultaneous requests, both RAM and number of CPU cores will need to be scaled with the amount of traffic being served.
+- Single core performance is important. If the node is falling behind and a single core is 100% busy, it is recommended to update to a faster processor
+- The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended.
+
+## Recommended Nitro version
+
+:::caution
+
+Even though there are alpha and beta versions of the Arbitrum Nitro software, only release versions should be used when running your node. Running alpha or beta versions is not supported and might lead to unexpected behaviors.
+
+:::
+
+Latest Docker image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@</code>
+
+
+## Required parameters
+
+### 1. Sequencer node parameters
+
+The following parameters are required to run a sequencer node:
+
+#### 1. Enable sequencer
+
+Enable the sequencer mode:
+
+```shell
+--node.sequencer=true
+```
+
+#### 2. Make the node acts and posts to l1 as a sequencer
+
+Enable the sequencer execution:
+
+```shell
+--execution.sequencer.enable=true
+--execution.sequencer.max-tx-data-size=85000
+--execution.sequencer.max-block-speed=250ms
+```
+
+#### 3. Enable delayed sequencer
+
+Enable your node to read and include transaction from parent chain delayed inbox.
+
+```shell
+--node.delayed-sequencer.enable=true
+--node.delayed-sequencer.use-merge-finality=false
+--node.delayed-sequencer.finalize-distance=1
+```
+
+#### 4. Enable batch poster
+
+Enable your node to send batches to parent chain:
+
+```shell
+--node.batch-poster.enable=true
+--node.batch-poster.max-size=90000
+--node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key>
+```
+
+#### 4. Disable transaction forwarding
+
+Disable your sequencer's forwarding transaction as the node will queue the transaction directly:
+
+```shell
+--execution.forwarding-target=""
+```
+
+#### 5. Enable feed out queued transaction
+
+Enable your node to feed out transaction so fullnode can receive queued transaction:
+
+```shell
+--node.feed.output.enable=true
+--node.feed.output.addr=<Sequencer feed url>
+--node.feed.output.port=<Sequencer feed port>
+```
+
+#### 5. Connect the node to data availability servers
+
+(This step only required in Anytrust mode)
+Enable your node can send batch to DAS and get DACerts from them.
+
+```shell
+--node.data-availability.enable=true
+--node.data-availability.sequencer-inbox-address=<Sequencer Inbox Address>
+--node.data-availability.parent-chain-node-url=<Parent Chain Node URL>
+--node.data-availability.rest-aggregator.enable=true
+--node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL>
+--node.data-availability.rpc-aggregator.enable=true
+--node.data-availability.rpc-aggregator.assumed-honest=1
+--node.data-availability.rpc-aggregator.backends=<A list of RPC backends>
+```
+
+### 2. Putting it all together
+
+- When running a Docker image, an external volume should be mounted to persist the database across restarts. The mount point inside the Docker image should be `/home/user/.arbitrum`
+
+- Example:
+
+  ```shell wordWrap=true
+  docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.data-availability.enable=true --node.data-availability.sequencer-inbox-address=<Sequencer Inbox Address> --node.data-availability.parent-chain-node-url=<Parent Chain Node URL> --node.data-availability.rest-aggregator.enable=true --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.data-availability.rpc-aggregator.enable=true --node.data-availability.rpc-aggregator.assumed-honest=1 --node.data-availability.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000 --execution.sequencer.max-block-speed=250ms
+  ```
+
+  - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
+
+- Json Example:
+  ```json
+  {
+    "node": {
+      "sequencer": true,
+      "delayed-sequencer": {
+        "enable": true,
+        "use-merge-finality": false,
+        "finalize-distance": 1
+      },
+      "batch-poster": {
+        "max-size": 90000,
+        "enable": true,
+        "parent-chain-wallet": {
+          "private-key": "4a9a2282b8845b7198840154341b628e14dfe8512543d43a7c0f64f090d970e2"
+        }
+      },
+      "feed": {
+        "output": {
+          "enable": true,
+          "addr": "<Sequencer feed url>",
+          "port": "<Sequencer feed port>"
+        }
+      },
+      "data-availability": {
+        "enable": true,
+        "sequencer-inbox-address": "0x55616A4D88Be0290D43a8AF7228c6700E709FBa6",
+        "parent-chain-node-url": "https://sepolia-rollup.arbitrum.io/rpc",
+        "rest-aggregator": {
+          "enable": true,
+          "urls": ["http://das-server:9877"]
+        },
+        "rpc-aggregator": {
+          "enable": true,
+          "assumed-honest": 1,
+          "backends": "[{\"url\":\"http://das-server:9876\",\"pubkey\":\"YAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==\",\"signermask\":1}]"
+        }
+      }
+    },
+    "execution": {
+      "forwarding-target": "",
+      "sequencer": {
+        "enable": true,
+        "max-tx-data-size": 85000,
+        "max-block-speed": "250ms"
+      }
+    }
+  }
+  ```
+
+### Note on permissions
+
+- The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
+
+  ```shell
+  mkdir /data/arbitrum
+  chmod -fR 777 /data/arbitrum
+  ```
+
+## Optional parameters
+
+We show here a list of the parameters that are most commonly used when running your Orbit sequencer node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
+
+import OptionalOrbitSequencerCompatibleCLIFlagsPartial from '../partials/run-full-node/_optional-orbit-sequencer-compatible-cli-partial.mdx';
+
+<OptionalOrbitSequencerCompatibleCLIFlagsPartial />
