@@ -8,46 +8,52 @@ content_type: how-to
 
 :::note
 
-Custom gas token support for rollups is currently limited to L2s with BoLD enabled; support for L3s is expected to be enabled in a future upgrade
+Custom gas token support for Rollups is currently limited to L2s with BoLD enabled. An expected future upgrade will add support for L3s.
 
 :::
 
-When deploying an Orbit chain in [Rollup mode](https://docs.arbitrum.io/how-arbitrum-works/data-availability#rollup-mode), you have the option of using a custom ERC-20 token as the native gas token. This token can be used to pay for transaction fees on that specific Orbit chain and to reimburse the batch poster for data posted to the parent chain. An example would be an L2 Rollup that uses USDC as its custom gas token but pays ETH to post data to L1 Ethereum.
+When deploying an Orbit chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for transaction fees on that specific Orbit chain and reimbursing the batch poster for data posted to the parent chain. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
 
-Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](https://docs.arbitrum.io/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token); it also introduces important exchange-rate considerations. This guide outlines certain implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for rollups.
+Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
 
-- must be a standard ERC-20 token;
-- transfers and approvals must occur directly via the token contract, not via proxies or hooks;
-- must not be rebasing or include transfer fees; and
-- must not use transfer callbacks or any onchain behavior that reverts if the sender and recipient are the same
+- Must be a standard `ERC-20` token
+- Transfers and approvals must occur directly via the token contract, not via proxies or hooks
+- Must not be rebasing or include transfer fees and
+- Must not use transfer callbacks or any onchain behavior that reverts if the sender and recipient are the same
 
 ## Understanding the fee token pricer
 
-In Rollup mode, data posting costs to the parent chain are paid in the parent chain’s native token, but are reimbursed in the child chain’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, which will provide an exchange rate between the two tokens (child fee token and parent fee token). This exchange rate is used when computing the amount of custom fee tokens required to reimburse the batch poster for each batch posted to the parent chain.
+In Rollup mode, data posting costs to the parent chain are paid in the parent chain’s native token but get reimbursed in the child chain’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the batch poster for each batch they post to the parent chain.
 
-Below are three example implementation options that chain owners may consider; chain owners are free to develop their own custom fee token pricers. Please note that the implementations included in the examples below have not been audited nor comprehensively tested; they are meant to provide an illustration of some different options for chain owners to consider.
+Below are three example implementation options that chain owners may consider. Chain owners are free to develop their custom fee token pricers. 
 
-1. **Manual exchange rate**: the chain owner manually sets and updates the exchange rate; this is the simplest option, but requires manual updates to track price changes or dependence on an owner-defined oracle.
+:::warning
+
+The implementations included in the examples below have not undergone comprehensive testing or auditing. The intent is to illustrate different options for chain owners to consider. 
+
+:::
+
+1. **Manual exchange rate**: The chain owner manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
     
     This approach generally makes sense if:
-    - You as the chain owner want full control over the exchange rate
+    - You, as the chain owner, want full control over the exchange rate
     - The chain owner and the batch poster are the same entity
     - You are operating in a tightly controlled or experimental environment
     
     An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
-2. **External oracle**: an external oracle is used to fetch the exchange rate; this reduces operational requirements for the chain owner but introduces a dependency on an external service to provide accurate, reliable pricing data.
+2. **External oracle**: An external oracle fetches the exchange rate; this reduces operational requirements for the chain owner but introduces a dependency on an external service to provide accurate, reliable pricing data.
 
     This approach generally makes sense if:
     - Reliable, robust oracles are available for the gas token pair
     - Reducing trust in the chain owner is important for your implementation
-    - You as the chain owner want to avoid manual exchange rate updates
+    - You, as the chain owner, want to avoid manual exchange rate updates
 
     See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
 
-3. **Exchange rate tracking**: the batch poster records the actual rate used when converting the child gas token to the parent gas token; this approach can ensure accurate reimbursement but it also requires trusted reporting and more complex accounting.
+3. **Exchange rate tracking**: The batch poster records the rate when converting the child gas token to the parent gas token. This approach can ensure accurate reimbursement but also requires trusted reporting and more complex accounting.
 
     This approach generally makes sense if:
     - Your batch poster is trusted and willing to record exchange rates when purchasing parent chain gas
@@ -56,31 +62,31 @@ Below are three example implementation options that chain owners may consider; c
 	
     Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
-An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operting but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early stage chains, the financial consequences for the batch poster or for end users on your Orbit chain should be carefully considered. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should take their unique situation into account when determining which fee pricer strategy makes the most sense for them (if any).
+An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operating but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early-stage chains, you should carefully consider the financial consequences for the batch poster or for end users on your Orbit chain. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should assess their unique situation when determining which fee pricer strategy makes the most sense for them (if any).
 
 ## Configuration of the Rollup when using a custom gas token
 
-Here are the steps you should take for deploying your Orbit Rollup with a custom gas token:
-1. **Deploy your ERC-20 token (if not already deployed)**
+Here are the steps you should take to deploy your Orbit Rollup with a custom gas token:
+1. **Deploy your `ERC-20` token (if not already deployed)**
 2. **Deploy your fee token pricer**
     Choose a pricer approach that best meets your needs; unaudited examples are:
     - [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
     - [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
     - [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
     
-    Make sure the pricer is deployed on the parent chain.
+    Make sure the pricer is deployed successfully on the parent chain.
 3. **Configure the fee token and pricer when creating the rollup**
     Use the [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
-    - FEE_TOKEN_ADDRESS = your ERC-20 gas token
+    - FEE_TOKEN_ADDRESS = your `ERC-20` gas token
     - FEE_TOKEN_PRICER_ADDRESS = your deployed pricer
     - ROLLUP_CREATOR_ADDRESS = the rollup creator contract on L1
-    - STAKE_TOKEN_ADDRESS = token used for staking (see [BoLD docs](https://docs.arbitrum.io/launch-orbit-chain/bold-adoption-for-orbit-chains#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+    - STAKE_TOKEN_ADDRESS = token used for staking (see [BoLD docs](/launch-orbit-chain/bold-adoption-for-orbit-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
 
-    The script will deploy and initialize the rollup accordingly.
+    The script will deploy and initialize the Rollup accordingly.
 
 ---
 
-You can consult the source files for more details on:
+You can refer to the source files for more details on:
 - [fee-token-pricers](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
 - [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
-You can also find more info about how Nitro manages [gas and fees](https://docs.arbitrum.io/how-arbitrum-works/gas-fees) here. If you’re unsure how to configure the rollup correctly or have questions about fee pricer implementations, feel free to reach out to Offchain Labs or your chain’s deployment provider.
+You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/09-gas-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
