@@ -56,7 +56,7 @@ Below are three example implementation options that chain owners may consider; c
 	
     Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
-An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. While this risk may be acceptable for experimental or early stage chains, the financial consequences for the batch poster and for end users on your Orbit chain should be carefully considered. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should take their unique situation into account when determining which fee pricer strategy makes the most sense for them (if any).
+An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operting but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early stage chains, the financial consequences for the batch poster or for end users on your Orbit chain should be carefully considered. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should take their unique situation into account when determining which fee pricer strategy makes the most sense for them (if any).
 
 ## Configuration of the Rollup when using a custom gas token
 
