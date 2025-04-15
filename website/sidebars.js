@@ -46,6 +46,11 @@ const sidebars = {
         },
         {
           type: 'doc',
+          label: 'Use Timeboost',
+          id: 'run-arbitrum-node/how-to-use-timeboost',
+        },
+        {
+          type: 'doc',
           label: 'Chains and testnets',
           id: 'build-decentralized-apps/public-chains',
         },
@@ -747,11 +752,6 @@ const sidebars = {
           type: 'doc',
           id: 'run-arbitrum-node/l1-ethereum-beacon-chain-rpc-providers',
           label: 'L1 Ethereum RPC providers',
-        },
-        {
-          type: 'doc',
-          label: 'Use Timeboost',
-          id: 'run-arbitrum-node/how-to-use-timeboost',
         },
         {
           type: 'doc',
