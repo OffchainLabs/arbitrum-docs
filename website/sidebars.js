@@ -46,11 +46,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          label: 'Use Timeboost',
-          id: 'run-arbitrum-node/how-to-use-timeboost',
-        },
-        {
-          type: 'doc',
           label: 'Chains and testnets',
           id: 'build-decentralized-apps/public-chains',
         },
@@ -754,11 +749,6 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
-          type: 'doc',
-          label: 'Troubleshoot Timeboost',
-          id: 'run-arbitrum-node/troubleshoot-timeboost',
-        },
-        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -1047,6 +1037,16 @@ const sidebars = {
               type: 'doc',
               id: 'how-arbitrum-works/timeboost/gentle-introduction',
               label: 'Public preview',
+            },
+            {
+              type: 'doc',
+              label: 'Use Timeboost',
+              id: 'how-arbitrum-works/timeboost/how-to-use-timeboost',
+            },
+            {
+              type: 'doc',
+              label: 'Troubleshoot Timeboost',
+              id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
             },
             {
               type: 'link',
