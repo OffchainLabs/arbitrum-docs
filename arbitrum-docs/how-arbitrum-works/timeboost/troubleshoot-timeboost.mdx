@@ -6,7 +6,7 @@ author: dlee
 content_type: how-to
 ---
 
-This is a short guide on how response times work and how <a data-quicklook-from="express-lane">express lane</a> <a data-quicklook-from="transaction">transactions</a> are sequenced, alongside common errors and best practices for using <a data-quicklook-from="timeboost">Timeboost</a>. This guide assumes you have reviewed our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx).
+This is a short guide on how response times work and how <a data-quicklook-from="express-lane">express lane</a> <a data-quicklook-from="transaction">transactions</a> are sequenced, alongside common errors and best practices for using <a data-quicklook-from="timeboost">Timeboost</a>. This guide assumes you have reviewed our guide on [How to use Timeboost](/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx).
 
 ## How express lane transactions are ordered into blocks
 
@@ -16,7 +16,7 @@ Express lane transactions are processed in the order of their `sequenceNumber`, 
 
 ## How response times work
 
-The response for a transaction submission to the express lane is returned immediately once received by the sequencer. For example, if an express lane transaction is sent to the sequencer at `t=0ms` and it took 50ms to arrive at the sequencer (defined as `time_to_arrive`), then the expected response time is at `t=50ms`. Note that an accepted transaction is defined as an express lane transaction submission where the sequencer returns an empty result with an HTTP status of `200` and will always have their `sequenceNumber` consumed. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](../run-arbitrum-node/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
+The response for a transaction submission to the express lane is returned immediately once received by the sequencer. For example, if an express lane transaction is sent to the sequencer at `t=0ms` and it took 50ms to arrive at the sequencer (defined as `time_to_arrive`), then the expected response time is at `t=50ms`. Note that an accepted transaction is defined as an express lane transaction submission where the sequencer returns an empty result with an HTTP status of `200` and will always have their `sequenceNumber` consumed. You can read more about how to submit express lane transactions in: [How to submit transactions to the express lane](/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx#how-to-submit-transactions-to-the-express-lane).
 
 ## Errors relating to the `sequenceNumber`
 
@@ -38,7 +38,7 @@ A block-based timeout is applied to all express lane transactions, even those in
 
 ## Common error responses
 
-The below two tables can also be found on our guide on [How to use Timeboost](../run-arbitrum-node/how-to-use-timeboost.mdx).
+The below two tables can also be found on our guide on [How to use Timeboost](/how-arbitrum-works/timeboost/how-to-use-timeboost.mdx).
 
 #### Table 1: Errors relating to bid submission
 
