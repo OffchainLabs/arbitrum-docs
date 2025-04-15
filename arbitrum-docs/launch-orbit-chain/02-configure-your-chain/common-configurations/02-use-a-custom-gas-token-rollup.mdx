@@ -14,7 +14,7 @@ Custom gas token support for Rollups is currently limited to L2s with BoLD enabl
 
 When deploying an Orbit chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for transaction fees on that specific Orbit chain and reimbursing the batch poster for data posted to the parent chain. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
 
-Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
+Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
 ## Requirements of the custom gas token
 
