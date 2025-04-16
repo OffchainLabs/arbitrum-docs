@@ -83,59 +83,9 @@ $ yarn build:all
 
 ### Step 2: Configure your chain parameters
 
-The BoLD action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, create a new file, `scripts/files/configs/custom.ts`, with the following contents:
+The BoLD action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
 
-```typescript
-import { parseEther } from 'ethers/lib/utils';
-import { Config } from '../../boldUpgradeCommon';
-import { hoursToBlocks } from './utils';
-
-export const arb1: Config = {
-  contracts: {
-    excessStakeReceiver: '0xAddress',
-    rollup: '0xAddress',
-    bridge: '0xAddress',
-    sequencerInbox: '0xAddress',
-    rollupEventInbox: '0xAddress',
-    outbox: '0xAddress',
-    inbox: '0xAddress',
-    upgradeExecutor: '0xAddress',
-  },
-  proxyAdmins: {
-    outbox: '0xAddress',
-    inbox: '0xAddress',
-    bridge: '0xAddress',
-    rei: '0xAddress',
-    seqInbox: '0xAddress',
-  },
-  settings: {
-    challengeGracePeriodBlocks: hoursToBlocks(48),
-    confirmPeriodBlocks: 45818, // ~6.4 days
-    challengePeriodBlocks: 45818, // ~6.4 days
-    stakeToken: '0xAddress',
-    stakeAmt: parseEther('1'),
-    miniStakeAmounts: [parseEther('0'), parseEther('1'), parseEther('1')],
-    chainId: YourChainId,
-    minimumAssertionPeriod: 75,
-    validatorAfkBlocks: 201600,
-    disableValidatorWhitelist: false,
-    blockLeafSize: 2 ** 26,
-    bigStepLeafSize: 2 ** 19,
-    smallStepLeafSize: 2 ** 23,
-    numBigStepLevel: 1,
-    maxDataSize: 117964,
-    isDelayBufferable: true,
-    bufferConfig: {
-      max: hoursToBlocks(48), // 2 days
-      threshold: hoursToBlocks(1), // well above typical posting frequency
-      replenishRateInBasis: 500, // 5% replenishment rate
-    },
-  },
-  validators: ['0xAddress', '0xAddress', '0xAddress'],
-};
-```
-
-Adjust the configuration to match that of your chain. **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
+**Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
 
 ### Step 3: Prepare and deploy the upgrade contract
 
