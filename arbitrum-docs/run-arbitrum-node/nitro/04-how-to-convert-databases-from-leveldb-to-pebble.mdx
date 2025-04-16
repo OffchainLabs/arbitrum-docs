@@ -1,6 +1,6 @@
 ---
 title: 'How to convert databases from leveldb to pebble'
-sidebar_label: 'How-to'
+sidebar_label: 'Convert node database'
 description: 'Learn how convert your node database from leveldb to pebble'
 author: joshuacolvin0
 sme: joshuacolvin0
@@ -12,7 +12,7 @@ content_type: How-To
 
 The `convert-databases.bash` script converts Nitro databases from `leveldb` to `pebble`. Internally, it uses the `dbconv` tool (see: [dbconv tool](https://www.notion.so/dbconv-tool-17401a3f59f8801d8c9deadab636a619?pvs=21)).
 
-The script is in the Nitro Docker image.
+The script can be found in the [Nitro Docker image](https://github.com/OffchainLabs/nitro/blob/7fdc5681c410bf283029e62bde4a1367b32f647d/Dockerfile#L283).
 
 ```bash
 Usage: convert-databases.bash [OPTIONS..]
