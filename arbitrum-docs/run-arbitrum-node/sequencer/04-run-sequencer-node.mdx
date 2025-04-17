@@ -8,7 +8,7 @@ content_type: how-to
 
 :::caution
 
-This is for Arbitrum Orbit chains only, and this docs only applies to the test environment. If you are looking for production, we recommend you to get supports from [RaaS providers](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support to spin up a production Orbit chain, we recommend contacting a [provider](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
 :::
 
@@ -55,7 +55,7 @@ Enable the sequencer mode:
 --node.sequencer=true
 ```
 
-#### 2. Make the node acts and posts to l1 as a sequencer
+#### 2. Make the node act as a sequencer and post to L1
 
 Enable the sequencer execution:
 
@@ -67,7 +67,7 @@ Enable the sequencer execution:
 
 #### 3. Enable delayed sequencer
 
-Enable your node to read and include transaction from parent chain delayed inbox.
+Enable your node to read and include transactions from the parent chain delayed inbox.
 
 ```shell
 --node.delayed-sequencer.enable=true
@@ -77,7 +77,7 @@ Enable your node to read and include transaction from parent chain delayed inbox
 
 #### 4. Enable batch poster
 
-Enable your node to send batches to parent chain:
+Enable your node to send batches to the parent chain:
 
 ```shell
 --node.batch-poster.enable=true
@@ -87,15 +87,15 @@ Enable your node to send batches to parent chain:
 
 #### 4. Disable transaction forwarding
 
-Disable your sequencer's forwarding transaction as the node will queue the transaction directly:
+Disable your sequencer's forwarding transactions, as the node will queue the transaction directly:
 
 ```shell
 --execution.forwarding-target=""
 ```
 
-#### 5. Enable feed out queued transaction
+#### 5. Enable feed-out queued transactions
 
-Enable your node to feed out transaction so fullnode can receive queued transaction:
+Enable your node to feed out transactions so full node can receive queued transactions:
 
 ```shell
 --node.feed.output.enable=true
@@ -105,8 +105,8 @@ Enable your node to feed out transaction so fullnode can receive queued transact
 
 #### 5. Connect the node to data availability servers
 
-(This step only required in Anytrust mode)
-Enable your node can send batch to DAS and get DACerts from them.
+(This step is only required in Anytrust mode)
+Enable your node to send batches to DAS and get DACerts from them.
 
 ```shell
 --node.data-availability.enable=true
@@ -129,7 +129,7 @@ Enable your node can send batch to DAS and get DACerts from them.
   docker run --rm -it -v /some/local/dir/arbitrum:/home/user/.arbitrum -p 0.0.0.0:8547:8547 -p 0.0.0.0:8548:8548 @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.1-8f247fd@@ --node.sequencer=true --node.delayed-sequencer.enable=true --node.delayed-sequencer.use-merge-finality=false --node.delayed-sequencer.finalize-distance=1 --node.batch-poster.enable=true --node.batch-poster.max-size=90000 --node.batch-poster.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.staker.enable=true --node.staker.strategy=MakeNodes --node.staker.parent-chain-wallet.private-key=<Your Parent Chain Wallet Private Key> --node.data-availability.enable=true --node.data-availability.sequencer-inbox-address=<Sequencer Inbox Address> --node.data-availability.parent-chain-node-url=<Parent Chain Node URL> --node.data-availability.rest-aggregator.enable=true --node.data-availability.rest-aggregator.urls=<A list of DAS REST endpoints, can be only one URL> --node.data-availability.rpc-aggregator.enable=true --node.data-availability.rpc-aggregator.assumed-honest=1 --node.data-availability.rpc-aggregator.backends=<A list of RPC backends> --execution.sequencer.enable=true --execution.sequencer.max-tx-data-size=85000 --execution.sequencer.max-block-speed=250ms
   ```
 
-  - Ensure that `/some/local/dir/arbitrum` already exists otherwise the directory might be created with `root` as owner, and the Docker container won't be able to write to it
+  - Ensure that `/some/local/dir/arbitrum` already exists otherwise, the directory might be created with `root` as owner, and the Docker container won't be able to write to it.
 
 - Json Example:
   ```json
@@ -192,7 +192,7 @@ Enable your node can send batch to DAS and get DACerts from them.
 
 ## Optional parameters
 
-We show here a list of the parameters that are most commonly used when running your Orbit sequencer node. You can also use the flag `--help` for a full comprehensive list of the available parameters.
+Here's a list of the parameters that are most commonly used when running your Orbit sequencer node. You can also use the flag `--help` for a comprehensive list of available parameters.
 
 import OptionalOrbitSequencerCompatibleCLIFlagsPartial from '../partials/run-full-node/_optional-orbit-sequencer-compatible-cli-partial.mdx';
 
