@@ -322,7 +322,7 @@ const res = await fetch(<SEQUENCER_ENDPOINT>, {
         chainId: hexChainId,
         round: `0x${currentRound.toString(16)}`,
         auctionContractAddress: auctionContractAddress,
-        sequence: `0x${sequenceNumber.toString(16)}`,
+        sequenceNumber: `0x${sequenceNumber.toString(16)}`,
         transaction: serializedTransaction,
         options: {},
         signature: signature,
