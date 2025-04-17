@@ -8,11 +8,11 @@ content_type: how-to
 
 :::info
 
-Custom gas token support for Rollups is currently limited to L2s that post data to Ethereum and have BoLD enabled. An expected future upgrade will add support for L3s.
+Custom gas token support for Rollups is currently limited to L2s that post data to Ethereum and have <a data-quicklook-from="bold">BoLD</a> enabled. An expected future upgrade will add support for L3s.
 
 :::
 
-When deploying an Orbit chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for transaction fees on that specific Orbit chain and reimbursing the batch poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
+When deploying an Orbit chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Orbit chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
 
 Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
 
@@ -25,7 +25,7 @@ Enabling a custom fee token for a Rollup chain requires additional configuration
 
 ## Understanding the fee token pricer
 
-In Rollup mode, data posting costs to the parent chain are paid in the parent chain’s native token but get reimbursed in the child chain’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the batch poster for each batch they post to the parent chain.
+In Rollup mode, data posting costs to the <a data-quicklook-from="parent-chain">Parent chain</a> are paid in the parent chain’s native token but get reimbursed in the <a data-quicklook-from="child-chain">Child chain</a>’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the batch poster for each batch they post to the parent chain.
 
 Below are three example implementation options that chain owners may consider. Chain owners are free to develop their custom fee token pricers.
 
@@ -35,7 +35,7 @@ The implementations included in the examples below have not undergone comprehens
 
 :::
 
-1. **Manual exchange rate**: The chain owner manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
+1. **Manual exchange rate**: The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
 
    This approach generally makes sense if:
 
