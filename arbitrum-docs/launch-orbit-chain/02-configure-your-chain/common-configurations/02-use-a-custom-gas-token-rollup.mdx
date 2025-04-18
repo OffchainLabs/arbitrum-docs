@@ -322,7 +322,7 @@ abstract contract TradeTracker is IFeeTokenPricer, IGasRefunder {
 ```
 </CustomDetails>
 
-An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operating but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early-stage chains, you should carefully consider the financial consequences for the batch poster or for end users on your Orbit chain. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should assess their unique situation when determining which fee pricer strategy makes the most sense for them (if any).
+An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operating but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early-stage chains, you should carefully consider the financial consequences for the batch poster or end users on your Orbit chain. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should assess their unique situation when determining which fee-pricing strategy makes the most sense for them (if any).
 
 ## Configuration of the Rollup when using a custom gas token
 
