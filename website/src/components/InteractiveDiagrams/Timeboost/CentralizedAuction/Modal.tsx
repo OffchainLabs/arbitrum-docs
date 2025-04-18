@@ -16,13 +16,24 @@ import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity
 import { useColorMode } from '@docusaurus/theme-common';
 import { SyntaxHighlighterProps } from './types';
 
-// Define the CodeBlock interface
+/**
+ * Interface for code block data structure.
+ */
 interface CodeBlock {
   language: string;
   code: string;
 }
 
-// Create a properly typed wrapper component for SyntaxHighlighter
+/**
+ * A wrapper component for SyntaxHighlighter with proper TypeScript typing.
+ *
+ * @param props - The component props
+ * @param props.language - The programming language for syntax highlighting
+ * @param props.style - The style theme to apply
+ * @param props.customStyle - Additional custom styles to apply
+ * @param props.children - The code content to highlight
+ * @returns A syntax-highlighted code block
+ */
 const StyledSyntaxHighlighter: React.FC<SyntaxHighlighterProps> = ({
   language,
   style,
@@ -64,9 +75,32 @@ const components = {
   },
 };
 
+/**
+ * Modal component for the CentralizedAuction diagram.
+ *
+ * @remarks
+ * This component renders an interactive modal that displays step-specific content
+ * when a numbered button is clicked. It uses React Spring for animations and
+ * Radix UI for the dialog functionality.
+ *
+ * @param props - The component props
+ * @param props.number - The step number (1-5) that determines which content to display
+ * @returns An SVG element with a clickable number that opens a modal with step-specific content
+ */
 export function Modal({ number }: { number: number }) {
+  /**
+   * State to track whether the modal is currently open.
+   */
   const [isOpen, setIsOpen] = useState(false);
+
+  /**
+   * Get the current color mode (light/dark) from Docusaurus.
+   */
   const { isDarkTheme } = useColorMode();
+
+  /**
+   * Map of step numbers to their corresponding content components.
+   */
   const stepContent = {
     1: step1Content,
     2: step2Content,
@@ -76,6 +110,9 @@ export function Modal({ number }: { number: number }) {
   };
   const StepContent = stepContent[number];
 
+  /**
+   * Animation configuration for the modal content.
+   */
   const transitions = useTransition(isOpen, {
     from: { opacity: 0, transform: 'scale(0.95)' },
     enter: { opacity: 1, transform: 'scale(1)' },
@@ -83,6 +120,9 @@ export function Modal({ number }: { number: number }) {
     config: { tension: 300, friction: 20 },
   });
 
+  /**
+   * Animation configuration for the modal overlay.
+   */
   const overlayTransitions = useTransition(isOpen, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -90,6 +130,13 @@ export function Modal({ number }: { number: number }) {
     config: { duration: 200 },
   });
 
+  /**
+   * Renders a code block with syntax highlighting.
+   *
+   * @param block - The code block to render
+   * @param index - The index of the code block
+   * @returns A styled code block with syntax highlighting
+   */
   const renderCodeBlock = (block: CodeBlock, index: number) => (
     <div key={index} style={{ position: 'relative' }}>
       <StyledSyntaxHighlighter
@@ -161,6 +208,11 @@ export function Modal({ number }: { number: number }) {
   );
 }
 
+/**
+ * Close icon for the modal dialog.
+ *
+ * @returns An SVG element representing a close (X) button
+ */
 const CloseIcon = () => (
   <svg width="22" height="22" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
