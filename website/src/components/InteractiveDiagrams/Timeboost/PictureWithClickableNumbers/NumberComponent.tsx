@@ -7,7 +7,7 @@ import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
 
 /**
- * Number component for the CentralizedAuction diagram.
+ * Number component for the PictureWithClickableNumbers diagram.
  *
  * @remarks
  * This component renders a numbered circle that represents a step in the diagram.

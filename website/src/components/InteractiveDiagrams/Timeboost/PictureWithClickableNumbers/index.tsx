@@ -3,22 +3,22 @@ import { Modal } from './Modal';
 import { NumberComponent } from './NumberComponent';
 
 /**
- * Main export for the CentralizedAuction diagram component.
- * 
- * @returns The complete CentralizedAuction diagram component
+ * Main export for the PictureWithClickableNumbers diagram component.
+ *
+ * @returns The complete PictureWithClickableNumbers diagram component
  */
-export default function CentralizedAuction(): JSX.Element {
+export default function PictureWithClickableNumbers(): JSX.Element {
   return <FlowChart />;
 }
 
 /**
- * FlowChart component for the CentralizedAuction diagram.
- * 
+ * FlowChart component for the PictureWithClickableNumbers diagram.
+ *
  * @remarks
  * This component renders the complete SVG diagram showing the centralized auction process.
  * It includes interactive numbered steps (2, 3, and 4) that can be clicked to display
  * detailed information in modal dialogs.
- * 
+ *
  * @param props - Standard SVG props that can be passed to the component
  * @returns An SVG element containing the complete diagram with interactive elements
  */

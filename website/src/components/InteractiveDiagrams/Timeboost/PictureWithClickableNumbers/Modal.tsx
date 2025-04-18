@@ -76,7 +76,7 @@ const components = {
 };
 
 /**
- * Modal component for the CentralizedAuction diagram.
+ * Modal component for the PictureWithClickableNumbers diagram.
  *
  * @remarks
  * This component renders an interactive modal that displays step-specific content

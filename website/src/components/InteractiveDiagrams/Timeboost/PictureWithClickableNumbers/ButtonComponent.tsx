@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ButtonComponentProps } from './types';
 
 /**
- * Interactive button component for the CentralizedAuction diagram.
+ * Interactive button component for the PictureWithClickableNumbers diagram.
  *
  * @remarks
  * This component renders an interactive SVG button that responds to hover events.
