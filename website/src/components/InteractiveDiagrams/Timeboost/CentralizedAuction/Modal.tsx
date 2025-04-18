@@ -9,18 +9,33 @@ import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
 import { NumberComponent } from './NumberComponent';
 import { MDXProvider } from '@mdx-js/react';
-import type { MDXComponents } from '@mdx-js/react/lib';
+/* import type { MDXComponents } from '@mdx-js/react/lib'; */
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
 import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
 import { useColorMode } from '@docusaurus/theme-common';
+import { SyntaxHighlighterProps } from './types';
 
 // Define the CodeBlock interface
 interface CodeBlock {
   language: string;
   code: string;
 }
+
+// Create a properly typed wrapper component for SyntaxHighlighter
+const StyledSyntaxHighlighter: React.FC<SyntaxHighlighterProps> = ({
+  language,
+  style,
+  customStyle,
+  children,
+}) => {
+  return (
+    <SyntaxHighlighter language={language} style={style} customStyle={customStyle}>
+      {children}
+    </SyntaxHighlighter>
+  );
+};
 
 SyntaxHighlighter.registerLanguage('javascript', javascript);
 SyntaxHighlighter.registerLanguage('solidity', solidity);
@@ -34,7 +49,7 @@ const components = {
   code: ({ children, className }) => {
     const language = className?.replace('language-', '') || 'text';
     return (
-      <SyntaxHighlighter
+      <StyledSyntaxHighlighter
         language={language}
         style={useColorMode().isDarkTheme ? oneDark : oneLight}
         customStyle={{
@@ -44,8 +59,8 @@ const components = {
           backgroundColor: useColorMode().isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
         }}
       >
-        {children}
-      </SyntaxHighlighter>
+        {String(children)}
+      </StyledSyntaxHighlighter>
     );
   },
 };
@@ -78,7 +93,7 @@ export function Modal({ number }: { number: number }) {
 
   const renderCodeBlock = (block: CodeBlock, index: number) => (
     <div key={index} style={{ position: 'relative' }}>
-      <SyntaxHighlighter
+      <StyledSyntaxHighlighter
         language={block.language}
         style={isDarkTheme ? oneDark : oneLight}
         customStyle={{
@@ -89,7 +104,7 @@ export function Modal({ number }: { number: number }) {
         }}
       >
         {block.code.trim()}
-      </SyntaxHighlighter>
+      </StyledSyntaxHighlighter>
     </div>
   );
 

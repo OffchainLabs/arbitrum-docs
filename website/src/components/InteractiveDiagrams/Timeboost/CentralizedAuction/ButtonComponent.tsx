@@ -3,11 +3,11 @@ import { ButtonComponentProps } from './types';
 
 /**
  * Interactive button component for the CentralizedAuction diagram.
- * 
+ *
  * @remarks
  * This component renders an interactive SVG button that responds to hover events.
  * It's used within the NumberComponent to make certain numbers clickable.
- * 
+ *
  * @param props - The component props
  * @param props.x - The x-coordinate position of the button
  * @param props.y - The y-coordinate position of the button
