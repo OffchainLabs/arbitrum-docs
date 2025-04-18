@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTransition, animated } from '@react-spring/web';
 import * as Dialog from '@radix-ui/react-dialog';
 import step1Content from './modal-centralized-auction-step-1.mdx';
@@ -85,9 +85,16 @@ const components = {
  *
  * @param props - The component props
  * @param props.number - The step number (1-5) that determines which content to display
+ * @param props.customContent - Optional custom content component to override default step content
  * @returns An SVG element with a clickable number that opens a modal with step-specific content
  */
-export function Modal({ number }: { number: number }) {
+export function Modal({
+  number,
+  customContent,
+}: {
+  number: 1 | 2 | 3 | 4 | 5;
+  customContent?: React.ComponentType;
+}) {
   /**
    * State to track whether the modal is currently open.
    */
@@ -108,7 +115,7 @@ export function Modal({ number }: { number: number }) {
     4: step4Content,
     5: step5Content,
   };
-  const StepContent = stepContent[number];
+  const StepContent = customContent || stepContent[number];
 
   /**
    * Animation configuration for the modal content.
