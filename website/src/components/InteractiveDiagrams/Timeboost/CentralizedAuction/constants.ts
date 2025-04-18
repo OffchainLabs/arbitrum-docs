@@ -1,5 +1,5 @@
 export const CIRCLE_RADIUS = 20.95;
-
+// Defines the shape of each number character
 export const numberPaths = {
   1: 'M412.16 410.7v-3.06c2.5 0 3.66-.47 4.05-2.65h3.99v14.72h-4.35v-9.01h-3.68Z',
   2: 'M583.04 633.46c.8-1.14 1.46-1.64 3.86-2.91 2.09-1.12 2.61-1.64 2.61-2.61 0-.84-.54-1.36-1.38-1.36-1.06 0-1.57.67-1.64 2.11h-4.42c0-3.25 2.35-5.21 6.25-5.21 3.36 0 5.62 1.68 5.62 4.18 0 2.11-.99 3.55-3.34 4.78l-.78.41c-2.05 1.08-2.67 1.55-2.84 2.48.73-.06 1.42-.11 2.2-.11h5.17v3.3h-12.52c0-2.46.37-3.86 1.21-5.06Z',
@@ -8,6 +8,12 @@ export const numberPaths = {
   5: 'M1003.53 257.43c1.01 0 1.7-.97 1.7-2.18s-.67-2.05-1.75-2.05c-.82 0-1.36.52-1.7 1.31l-4.27-.3.86-8.73h10.43v3.3h-4.42c-.78 0-1.75-.02-2.52-.11-.09.8-.15 1.96-.45 2.76h.17c.69-.78 1.77-1.16 3.12-1.16 2.93 0 5.08 2.11 5.08 4.96 0 3.21-2.46 5.34-6.23 5.34s-6.18-1.92-6.31-4.8h4.52c.06 1.01.73 1.66 1.75 1.66Z',
 };
 
+// Defines positioning information for each numbered element, with the following structure:
+//    - A key for each number (1-5)
+//    - Each number has:
+//      - `circle`: The x,y coordinates for the center of the circle
+//      - `path`: The x,y coordinates for the path (number shape)
+//      - `offset`: Optional x,y adjustments to fine-tune the positioning
 export const coordinates = {
   1: { circle: { x: 416.59, y: 412.69 }, path: { x: 412.16, y: 410.7 }, offset: { x: -4, y: -2 } },
   2: { circle: { x: 588.13, y: 631.51 }, path: { x: 583.04, y: 633.46 }, offset: { x: -4, y: 1 } },
