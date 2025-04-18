@@ -23,3 +23,10 @@ export interface ButtonComponentProps {
   width: number;
   height: number;
 }
+
+export interface SyntaxHighlighterProps {
+  language: string;
+  style: any;
+  customStyle?: React.CSSProperties;
+  children: string;
+}

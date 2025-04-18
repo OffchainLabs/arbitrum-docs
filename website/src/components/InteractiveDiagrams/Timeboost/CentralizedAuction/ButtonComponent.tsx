@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { ButtonComponentProps } from './types';
 
-const ButtonComponent = ({ x, y, width, height }) => {
-  const [isHovered, setIsHovered] = React.useState(false);
+const ButtonComponent: React.FC<ButtonComponentProps> = ({ x, y, width, height }) => {
+  const [isHovered, setIsHovered] = React.useState<boolean>(false);
 
   return (
     <svg

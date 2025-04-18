@@ -6,7 +6,7 @@ import ButtonComponent from './ButtonComponent';
 import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
 import { NumberComponentProps } from './types';
 
-export const NumberComponent = ({ number }) => {
+export const NumberComponent: React.FC<NumberComponentProps> = ({ number }) => {
   const { isDarkTheme } = useColorMode();
 
   const animationProps =
@@ -17,7 +17,7 @@ export const NumberComponent = ({ number }) => {
           to: [
             { opacity: 1, fill: '#ff7f2a' },
             { opacity: 1, fill: '#3578e5' },
-            { opacity: 0, fill: '#3578e5' }
+            { opacity: 0, fill: '#3578e5' },
           ],
           config: { tension: 20000, friction: 10 },
           loop: true,
