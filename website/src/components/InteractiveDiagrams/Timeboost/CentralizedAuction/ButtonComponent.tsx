@@ -1,7 +1,24 @@
 import * as React from 'react';
 import { ButtonComponentProps } from './types';
 
+/**
+ * Interactive button component for the CentralizedAuction diagram.
+ * 
+ * @remarks
+ * This component renders an interactive SVG button that responds to hover events.
+ * It's used within the NumberComponent to make certain numbers clickable.
+ * 
+ * @param props - The component props
+ * @param props.x - The x-coordinate position of the button
+ * @param props.y - The y-coordinate position of the button
+ * @param props.width - The width of the button
+ * @param props.height - The height of the button
+ * @returns An SVG element representing an interactive button
+ */
 const ButtonComponent: React.FC<ButtonComponentProps> = ({ x, y, width, height }) => {
+  /**
+   * State to track whether the button is currently being hovered over.
+   */
   const [isHovered, setIsHovered] = React.useState<boolean>(false);
 
   return (
