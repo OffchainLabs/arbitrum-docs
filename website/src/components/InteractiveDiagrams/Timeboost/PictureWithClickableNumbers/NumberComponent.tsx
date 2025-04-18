@@ -16,33 +16,51 @@ import { NumberComponentProps } from './types';
  *
  * @param props - The component props
  * @param props.number - The step number (1-5) to display
+ * @param props.animated - Whether the number should be animated (default: true for numbers 2, 3, 4)
+ * @param props.interactive - Whether the number should be interactive (default: true for numbers 2, 3, 4)
  * @returns An SVG element representing a numbered step in the diagram
  */
-export const NumberComponent: React.FC<NumberComponentProps> = ({ number }) => {
+export const NumberComponent: React.FC<
+  NumberComponentProps & {
+    animated?: boolean;
+    interactive?: boolean;
+  }
+> = ({ number, animated, interactive }) => {
   /**
    * Get the current color mode (light/dark) from Docusaurus.
    */
   const { isDarkTheme } = useColorMode();
 
   /**
-   * Animation configuration for the numbered circles.
-   * Numbers 2, 3, and 4 have pulsing animations, while 1 and 5 remain static.
+   * Determine if the number should be animated based on props or default behavior
    */
-  const animationProps =
-    number === 1 || number === 5
-      ? { opacity: 1 }
-      : useSpring({
-          from: { opacity: 0, fill: '#ff7f2a' },
-          to: [
-            { opacity: 1, fill: '#ff7f2a' },
-            { opacity: 1, fill: '#3578e5' },
-            { opacity: 0, fill: '#3578e5' },
-          ],
-          config: { tension: 20000, friction: 10 },
-          loop: true,
-          reset: true,
-          immediate: false,
-        });
+  const shouldAnimate =
+    animated !== undefined ? animated : number === 2 || number === 3 || number === 4;
+
+  /**
+   * Determine if the number should be interactive based on props or default behavior
+   */
+  const shouldBeInteractive =
+    interactive !== undefined ? interactive : number === 2 || number === 3 || number === 4;
+
+  /**
+   * Animation configuration for the numbered circles.
+   * By default, numbers 2, 3, and 4 have pulsing animations, while 1 and 5 remain static.
+   */
+  const animationProps = !shouldAnimate
+    ? { opacity: 1 }
+    : useSpring({
+        from: { opacity: 0, fill: '#ff7f2a' },
+        to: [
+          { opacity: 1, fill: '#ff7f2a' },
+          { opacity: 1, fill: '#3578e5' },
+          { opacity: 0, fill: '#3578e5' },
+        ],
+        config: { tension: 20000, friction: 10 },
+        loop: true,
+        reset: true,
+        immediate: false,
+      });
 
   /**
    * Get the coordinates and path data for the current number.
@@ -68,8 +86,8 @@ export const NumberComponent: React.FC<NumberComponentProps> = ({ number }) => {
 
   return (
     <g id={`number${number}`}>
-      {/* Only add interactive buttons to numbers 2, 3, and 4 */}
-      {(number === 2 || number === 3 || number === 4) && (
+      {/* Add interactive buttons based on shouldBeInteractive */}
+      {shouldBeInteractive && (
         <ButtonComponent
           x={coords.circle.x - CIRCLE_RADIUS}
           y={coords.circle.y - CIRCLE_RADIUS}
@@ -78,14 +96,25 @@ export const NumberComponent: React.FC<NumberComponentProps> = ({ number }) => {
         />
       )}
       {/* The circle background for the number */}
-      <animated.circle
-        id={`circle${number}`}
-        cx={coords.circle.x}
-        cy={coords.circle.y}
-        r={CIRCLE_RADIUS}
-        className={circleClassName}
-        style={{ ...animationProps }}
-      />
+      {shouldAnimate ? (
+        <animated.circle
+          id={`circle${number}`}
+          cx={coords.circle.x}
+          cy={coords.circle.y}
+          r={CIRCLE_RADIUS}
+          className={circleClassName}
+          style={animationProps as any}
+        />
+      ) : (
+        <circle
+          id={`circle${number}`}
+          cx={coords.circle.x}
+          cy={coords.circle.y}
+          r={CIRCLE_RADIUS}
+          className={circleClassName}
+          style={{ opacity: 1 }}
+        />
+      )}
       {/* The number path (SVG shape of the number) */}
       <path
         id={`path${number}`}
