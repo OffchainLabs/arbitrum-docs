@@ -86,6 +86,7 @@ export const NumberComponent: React.FC<
 
   return (
     <g id={`number${number}`}>
+      {/* Add interactive buttons based on shouldBeInteractive */}
       {shouldBeInteractive && (
         <ButtonComponent
           x={coords.circle.x - CIRCLE_RADIUS}
@@ -94,8 +95,9 @@ export const NumberComponent: React.FC<
           height={CIRCLE_RADIUS * 2}
         />
       )}
+      {/* The circle background for the number */}
       {shouldAnimate ? (
-        <animated
+        <animated.circle
           id={`circle${number}`}
           cx={coords.circle.x}
           cy={coords.circle.y}
@@ -113,6 +115,7 @@ export const NumberComponent: React.FC<
           style={{ opacity: 1 }}
         />
       )}
+      {/* The number path (SVG shape of the number) */}
       <path
         id={`path${number}`}
         d={pathData}
