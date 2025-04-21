@@ -24,16 +24,16 @@ If you're looking for a conceptual introduction to Orbit chains, see the [Gentle
 
 - [Docker](https://docs.docker.com/get-docker/)
 - A browser-based Ethereum wallet (e.g., [MetaMask](https://metamask.io/) and click View MetaMask web or [OKX Wallet](https://www.okx.com/web3) and click Connect Wallet to install.
-- At least 1.2 testnet ETH (for custom gas token chains, 0.8 ETH and 0.4 native tokens)
+- At least 1.2 testnet `ETH` (for custom gas token chains, 0.8 `ETH` and 0.4 native tokens)
 
-## Step 1: Acquire Arbitrum Testnet $ETH (and the native token for Orbit chains with custom gas tokens)
+## Step 1: Acquire Arbitrum Testnet `ETH` (and the native token for Orbit chains with custom gas tokens)
 
-You'll need at least 1.2 testnet $ETH for regular Orbit chains or 0.8 $ETH plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
+You'll need at least 1.2 testnet `ETH` for regular Orbit chains or 0.8 `ETH` plus 0.4 of your desired native token for Orbit chains with a custom gas token. The funds are needed to cover the cost of deploying your Orbit chain's **base contracts** to its **base chain** (Arbitrum Sepolia).
 
-At the time of this quickstart's writing, the easiest way to acquire $ETH is to bridge testnet $ETH from Ethereum's L1 Sepolia network to Arbitrum Sepolia L2 testnet:
+At the time of this quickstart's writing, the easiest way to acquire `ETH` is to bridge testnet `ETH` from Ethereum's L1 Sepolia network to Arbitrum Sepolia L2 testnet:
 
-1. Use an L1 testnet $ETH faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet $ETH on an L1 testnet.
-2. Bridge your L1 testnet $ETH into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
+1. Use an L1 testnet `ETH` faucet like [sepoliafaucet.com](https://sepoliafaucet.com/) to acquire some testnet `ETH` on an L1 testnet.
+2. Bridge your L1 testnet `ETH` into Arbitrum L2 using [the Arbitrum bridge](https://bridge.arbitrum.io/).
 
 ## Step 2: Choose your chain type: AnyTrust or Rollup
 
@@ -64,19 +64,19 @@ import { PlaceholderForm } from '/src/components/PlaceholderForm/PlaceholderForm
 
 <PlaceholderForm inputs="Chain ID, Chain name, Challenge period (blocks), Stake token, Base stake, Owner" />
 
-The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx):
+The below table provides a brief description of each of these configuration parameters. We recommend sticking to the defaults; to learn more about customizing your Orbit chain's deployment configuration, visit [How (and when) to customize your Orbit chain's deployment config](/launch-orbit-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx):
 
 <!-- todo: determine whether or not we want to align the UI with docs section-casing and param-casing patterns; align docs to UI if needed -->
 
-| Parameter                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Chain ID**                  | A unique integer identifier that represents your chain's network. Your `Chain ID` can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.                                                                                                                                                                                                                      |
-| **Chain name**                | A human-readable way to distinguish your Orbit chain from other Orbit chains. Users, developers and the wider community will refer to your chain by your `Chain name` and/or your `Chain ID`.                                                                                                                                                                                                                                                                                    |
-| **Challenge period (blocks)** | The amount of time that your Orbit chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) on the underlying L2 chain (e.g. Arbitrum Sepolia). Note that this refers to the number of blocks on the underlying L1 chain (e.g. Ethereum's Sepolia chain).                                                                                                                                                                   |
-| **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to $ETH for now, but future versions of Orbit chains will let you specify an arbitrary ERC-20 token contract here.                                                                                                                                                                                                                                                    |
-| **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                             |
-| **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later.                                                                                                                                        |
-| **Gas token**                 | The address of the ERC-20 token on the parent chain that is intended to be used as the native gas token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration). |
+| Parameter                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Chain ID**                  | A unique integer identifier that represents your chain's network. Your `Chain ID` can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.                                                                                                                                                                                                                        |
+| **Chain name**                | A human-readable way to distinguish your Orbit chain from other Orbit chains. Users, developers and the wider community will refer to your chain by your `Chain name` and/or your `Chain ID`.                                                                                                                                                                                                                                                                                      |
+| **Challenge period (blocks)** | The amount of time that your Orbit chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) on the underlying L2 chain (e.g., Arbitrum Sepolia). Note that this refers to the number of blocks on the underlying L1 chain (e.g., Ethereum's Sepolia chain).                                                                                                                                                                   |
+| **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to `ETH` for now, but future versions of Orbit chains will let you specify an arbitrary `ERC-20` token contract here.                                                                                                                                                                                                                                                   |
+| **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                               |
+| **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later.                                                                                                                                          |
+| **Gas token**                 | The address of the `ERC-20` token on the parent chain that is intended to be used as the native gas token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration). |
 
 ## Step 4: Configure your chain's validator(s)
 
@@ -124,7 +124,7 @@ Deploy your chain's base contracts to Arbitrum Sepolia
 
 <!-- todo: label-casing alignment - could sentence-case in UI -->
 
-Click the `Deploy` button located below the config form. Your wallet should prompt you to submit a transaction to the Arbitrum testnet. You'll have to pay a little gas; your wallet may denominate this in $ETH; as long as you see your chosen Arbitrum testnet in the transaction details, this gas fee will be paid in testnet $ETH.
+Click the **Deploy** button located below the config form. Your wallet should prompt you to submit a transaction to the Arbitrum testnet. You'll have to pay a little gas; your wallet may denominate this in ETH; as long as you see your chosen Arbitrum testnet in the transaction details, this gas fee will be paid in testnet ETH.
 
 Before proceeding, let's briefly review what just happened:
 
@@ -147,7 +147,7 @@ For the Batch Poster to function correctly, it's essential that the keyset corre
 
 The current version of Orbit AnyTrust chains uses a single Data Availability Server and assigns a null value to its private key in order to generate an initial keyset. As part of this transaction process, you'll assign this initial keyset to your recently generated `SequencerInbox` contract.
 
-Click the `Deploy` button located below the Deployment Summary. Again, your wallet should prompt you to submit a transaction to the Arbitrum testnet. Gas fees will be handled similarly to the previous transaction.
+Click the **Deploy** button located below the Deployment Summary. Again, your wallet should prompt you to submit a transaction to the Arbitrum testnet. Gas fees will be handled similarly to the previous transaction.
 
 Once the transaction completes, you'll be directed to the download page to continue your chain deployment.
 
@@ -194,7 +194,7 @@ PRIVATE_KEY="0xYourPrivateKey" L2_RPC_URL="https://sepolia-rollup.arbitrum.io/rp
 
 ## Congratulations
 
-Your local Orbit chain is now running. You'll see an `outputInfo.json` file in the main directory of your script folder - this contains more information about your chain, including the addresses of your chain's base contracts.
+Your local Orbit chain is now running. You'll see an `outputInfo.json` file in the main directory of your script folder––this contains more information about your chain, including the addresses of your chain's base contracts.
 
 ### Appendix A: Logging
 
@@ -206,7 +206,7 @@ docker-compose logs -f nitro
 
 ### Appendix B: Depositing ETH/native token
 
-If you need to deposit more ETH (or native tokens) into your Orbit chain account, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the originating account, and `<AMOUNT>` with the amount to send:
+If you need to deposit more `ETH` (or native tokens) into your Orbit chain account, run this command on the base directory of the setup script, replacing `0xYourPrivateKey` with the private key of the originating account, and `<AMOUNT>` with the amount to send:
 
 Using Arbitrum Sepolia:
 
@@ -217,4 +217,4 @@ AMOUNT="<AMOUNT>" yarn run deposit
 
 ### Appendix C: Troubleshooting
 
-- You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually safe to ignore. It's usually displayed when your Orbit chain's base contract deployment isn't yet finalized on the L1 chain. This finalization can take 15-20 minutes, but don't worry - the deployment doesn't need to be L1-finalized in order for your chain to function properly.
+- You may see `error getting latest batch count` in your node's output logs (from Appendix A). This is usually safe to ignore. It's usually displayed when your Orbit chain's base contract deployment isn't yet finalized on the L1 chain. This finalization can take 15-20 minutes, but don't worry––the deployment doesn't need to be L1-finalized in order for your chain to function properly.

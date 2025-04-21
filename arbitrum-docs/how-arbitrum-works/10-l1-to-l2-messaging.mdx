@@ -9,7 +9,7 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-In the [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">delayed inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
+In the [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
 - Submit child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
 - Deposit `ETH` or native tokens from a parent chain to a child chain
@@ -19,10 +19,10 @@ We generally categorize these parent-to-child chain messaging methods as follows
 
 1. **Native token bridging**: Refers to depositing a child chain's native token from the parent chain to the child chain. Depending on the type of <a data-quicklook-from="arbitrum">Arbitrum</a> chain, this can include:
 
-- **ETH Bridging**: For Arbitrum chains that use `ETH` as their gas token, users can deposit `ETH` onto a child chain via the delayed inbox.
+- **`ETH` Bridging**: For Arbitrum chains that use `ETH` as their gas token, users can deposit `ETH` onto a child chain via the Delayed Inbox.
 - **Custom gas token bridging**: For Arbitrum chains that use a custom gas token, users can deposit that chain's native token to a child chain using the same mechanism.
 
-2. **Transaction via the delayed inbox**: As described in the [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) section, this method allows users to send transactions through the parent chain. It includes two sub-types of messages:
+2. **Transaction via the Delayed Inbox**: As described in the [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) section, this method allows users to send transactions through the parent chain. It includes two sub-types of messages:
 
 - **Unsigned messages**: General arbitrary data or function calls
 - **Signed messages**: Messages that include a signature, enabling certain authenticated actions
@@ -40,7 +40,7 @@ This section will explore these categories in detail and explain how they work. 
 
 Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Orbit chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/launch-orbit-chain/concepts/custom-gas-token-sdk.mdx).
 
-Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's delayed inbox contract.
+Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's Delayed Inbox contract.
 
 ### Depositing ETH
 
@@ -75,7 +75,7 @@ A diagram illustrating this deposit process is below:
 
 ### Address aliasing
 
-All unsigned messages submitted through the delayed inbox have their sender addresses "aliased" when executed on the child chain. Instead of returning the parent chain sender's address as `msg.sender`, the child chain sees the "child alias" of that address. Formally, the child alias calculation is:
+All unsigned messages submitted through the Delayed Inbox have their sender addresses "aliased" when executed on the child chain. Instead of returning the parent chain sender's address as `msg.sender`, the child chain sees the "child alias" of that address. Formally, the child alias calculation is:
 
 ```solidity
 Child_Alias = Parent_Contract_Address + 0x1111000000000000000000000000000000001111
@@ -83,7 +83,7 @@ Child_Alias = Parent_Contract_Address + 0x11110000000000000000000000000000000011
 
 #### Why aliasing?
 
-Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child-chain contracts can distinguish between parent-chain contract calls and those from child-chain-native addresses.
+Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child chain contracts can distinguish between parent-chain contract calls and those from child chain native addresses.
 
 #### Computing the original parent chain address
 
@@ -96,26 +96,26 @@ modifier onlyFromMyL1Contract() override {
 }
 ```
 
-## Transacting via the delayed inbox
+## Transacting via the Delayed Inbox
 
-Arbitrum provides a _delayed inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
+Arbitrum provides a _Delayed Inbox_ contract on the parent chain that can deliver arbitrary messages to the child chain. This functionality is important for two reasons:
 
 1. **General cross-chain messaging**: Allows parent chain EOAs or parent chain contracts to send messages or transactions to a child chain. This functionality is critical for bridging assets (other than the chain's native token) and performing cross-chain operations.
 2. **Censorship resistance**: It ensures the <a data-quicklook-from="arbitrum-chain">Arbitrum chain</a> remains censorship-resistant, even if the Sequencer misbehaves or excludes certain transactions; refer to [Bypassing the Sequencer](/how-arbitrum-works/02-transaction-lifecycle.mdx#bypassing-the-sequencer) for more details.
 
-Users can send child chain transactions through the delayed inbox in two primary ways:
+Users can send child chain transactions through the Delayed Inbox in two primary ways:
 
 1. [General child chain messaging](#general-child-chain-messaging)
 2. [Retryable tickets](#retryable-tickets)
 
 ### General child chain messaging
 
-Any message sent via the delayed inbox can ultimately produce a transaction on the child chain. These messages may or may not include a signature.
+Any message sent via the Delayed Inbox can ultimately produce a transaction on the child chain. These messages may or may not include a signature.
 
 - **Signed messages**: Signed by an EOA on the parent chain. This signature proves the sender is an EOA rather than a contract, preventing certain cross-chain exploits and bypassing the need for aliasing.
 - **Unsigned messages**: These do not include a signature from an EOA. For security reasons, the sender's address on the child chain must be _aliased_ when the message gets executed; see the [Address aliasing](#address-aliasing) section for details.
 
-Below, we describe the delayed inbox methods for each scenario.
+Below, we describe the Delayed Inbox methods for each scenario.
 
 ### Signed messages
 
@@ -126,12 +126,12 @@ Signed messages let a parent chain EOA prove ownership of an address, ensuring t
 
 #### How signed messages work
 
-When submitting through the delayed inbox, a child chain transaction signature gets included in the message's calldata. Because it matches the EOA's signature, the child chain can safely treat the signer's address as the sender.
+When submitting through the Delayed Inbox, a child chain transaction signature gets included in the message's calldata. Because it matches the EOA's signature, the child chain can safely treat the signer's address as the sender.
 
 Example use case:
 [Withdraw Ether tutorial](https://github.com/OffchainLabs/arbitrum-tutorials/blob/a1c3f64a5abdd0f0e728cb94d4ecc2700eab7579/packages/delayedInbox-l2msg/scripts/withdrawFunds.js#L61-L65)
 
-#### Delayed inbox methods for signed messages
+#### Delayed Inbox methods for signed messages
 
 There are two primary methods for sending signed messages:
 
@@ -161,7 +161,7 @@ function sendL2MessageFromOrigin(
 
 ### Unsigned messages
 
-Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The delayed inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
+Unsigned messages allow a parent chain sender to specify transaction parameters without an EOA signature. Because there is no signature, **the sender's address must be aliased on the child chain** (see the [Address aliasing](#address-aliasing) section for the rationale). The Delayed Inbox provides four main methods for unsigned messages, divided based on whether the sender is an EOA or a contract and whether it includes parent chain funds:
 
 1. **Unsigned from EOA's**: These methods incorporate a nonce for replay protection, similar to standard EOA-based transactions on Ethereum.
 
@@ -249,17 +249,17 @@ Here, we walk through the different stages of the lifecycle of a <a data-quicklo
 
 1. Creating a retryable ticket is initiated with a call (direct or internal) to the `createRetryableTicket` function of the [`inbox` contract](https://github.com/OffchainLabs/nitro-contracts/blob/67127e2c2fd0943d9d87a05915d77b1f220906aa/src/bridge/Inbox.sol). A ticket is guaranteed to get created if this call succeeds. Here, we describe parameters that need adjusting with care. Note that this function forces the sender to provide _a reasonable_ amount of funds (at least enough for submitting and _attempting_ to execute the ticket), but that doesn't guarantee a successful auto-redemption.
 
-| Parameter                                   | Description                                                                                                                                                                                                                                                                                                             |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1CallValue` (also referred to as deposit) | Not a real function parameter; it is rather the `callValue` that gets sent along with the transaction                                                                                                                                                                                                                   |
-| `address to`                                | The destination child chain address                                                                                                                                                                                                                                                                                     |
-| `uint256 l2CallValue`                       | The `callvalue` for the retryable child chain message that is supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                               |
-| `uint256 maxSubmissionCost`                 | The maximum amount of `ETH` payable for submitting the ticket. This amount is (1) supplied within the deposit (`l1CallValue`) to be later deducted from the sender's child chain balance and is (2) directly proportional to the size of the retryable's data and parent chain basefee.                                 |
-| `address excessFeeRefundAddress`            | The unused gas cost and submission cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (**Note**: The excess deposit will transfer to the alias address of the parent chain tx's `msg.sender` rather than this address) |
-| `address callValueRefundAddress`            | The child chain address to which the `l2CallValue` is credited if the ticket times out or gets canceled (also called the `beneficiary`, who's got a critical permission to cancel the ticket).                                                                                                                          |
-| uint256 gasLimit                            | Maximum amount of gas used to cover the child chain execution of the ticket                                                                                                                                                                                                                                             |
-| uint256 maxFeePerGas                        | The gas price bid for child chain execution of the ticket supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                                   |
-| bytes calldata data                         | The calldata to the destination child chain address                                                                                                                                                                                                                                                                     |
+| Parameter                                   | Description                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1CallValue` (also referred to as deposit) | Not a real function parameter; it is rather the `callValue` that gets sent along with the transaction                                                                                                                                                                                                                            |
+| `address to`                                | The destination child chain address                                                                                                                                                                                                                                                                                              |
+| `uint256 l2CallValue`                       | The `callvalue` for the retryable child chain message that is supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                                        |
+| `uint256 maxSubmissionCost`                 | The maximum amount of `ETH` payable for submitting the ticket. This amount is (1) supplied within the deposit (`l1CallValue`) to be later deducted from the sender's child chain balance and is (2) directly proportional to the size of the retryable's data and parent chain basefee.                                          |
+| `address excessFeeRefundAddress`            | The unused gas cost and submission cost will deposit to this address, formula is: `(gasLimit x maxFeePerGas - execution cost) + (maxSubmission - (autoredeem ? 0 : submission cost))`. (**Note**: The excess deposit will transfer to the alias address of the parent chain transaction's `msg.sender` rather than this address) |
+| `address callValueRefundAddress`            | The child chain address to which the `l2CallValue` is credited if the ticket times out or gets canceled (also called the `beneficiary`, who's got a critical permission to cancel the ticket).                                                                                                                                   |
+| uint256 gasLimit                            | Maximum amount of gas used to cover the child chain execution of the ticket                                                                                                                                                                                                                                                      |
+| uint256 maxFeePerGas                        | The gas price bid for child chain execution of the ticket supplied within the deposit (`l1CallValue`)                                                                                                                                                                                                                            |
+| bytes calldata data                         | The calldata to the destination child chain address                                                                                                                                                                                                                                                                              |
 
 2. The sender's deposit must be enough to make the parent chain submission succeed and for child chain execution to be _attempted_. If provided correctly, a new ticket with a unique `TicketID` is created and added to the retryable buffer. Also, funds (`submissionCost` + `l2CallValue`) are deducted from the sender and placed into escrow for later use in redeeming the ticket.
 
@@ -313,7 +313,7 @@ If a `redeem` is not done at submission or the submission's initial `redeem` fai
 
 #### Manual redemption
 
-1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. <a data-quicklook-from="arbos">ArbOS</a> will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block it's forming. In this manner, `redeem`'s are scheduled to happen as soon as possible and will always be in the same block as the tx that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance to reach the block's gas limit before execution.
+1. At this point, _anyone_ can attempt to manually redeem the ticket again by calling [`ArbRetryableTx`](/build-decentralized-apps/precompiles/02-reference.mdx#arbretryabletx) `redeem` precompile method, which donates the call's gas to the next attempt. Note that the amount of gas is **not** limited by the original `gasLimit` set during the ticket creation. <a data-quicklook-from="arbos">ArbOS</a> will [enqueue the `redeem`](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/block_processor.go#L245) before moving on to the next non-`redeem` transaction in the block it's forming. In this manner, `redeem`'s are scheduled to happen as soon as possible and will always be in the same block as the transaction that scheduled it. Note that the `redeem` attempt's gas comes from the call to `redeem`, so there's no chance to reach the block's gas limit before execution.
 
 2. If the fixed period (one week) elapses without a successful `redeem`, the ticket **expires** and will be [automatically discarded](https://github.com/OffchainLabs/nitro/blob/fa36a0f138b8a7e684194f9840315d80c390f324/arbos/retryables/retryable.go#L262), unless some party has paid a fee to [keep the ticket alive](https://github.com/OffchainLabs/nitro-contracts/blob/a68783436b5105a64f54efe5fbd55174704a7618/src/precompiles/ArbRetryableTx.sol#L41) for another full period. A ticket can live indefinitely as long as it continues to renew each time before it expires.
 
@@ -336,7 +336,7 @@ If a `redeem` is not done at submission or the submission's initial `redeem` fai
 
 Any associated messages and values, excluding the escrowed `callValue`, may be permanently lost if a ticket is not redeemed or rescheduled within seven days.
 
-On success, the `To` address receives the escrowed `callValue`, and any unused gas returns to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee gets paid during the scheduling tx, so no fee charges or refunds get made.
+On success, the `To` address receives the escrowed `callValue`, and any unused gas returns to ArbOS's gas pools. On failure, the `callValue` is returned to the escrow for the future `redeem` attempt. In either case, the network fee gets paid during the scheduling transaction, so no fee charges or refunds get made.
 
 During ticket redemption, attempts to cancel the same ticket or schedule another `redeem` of the same ticket will revert. In this manner, retryable tickets are not self-modifying.
 
@@ -416,9 +416,9 @@ For any given gateway pairing, we require that calls initiate through the corres
 
 Any `ERC-20` token on a parent chain not registered to a gateway can be permissionlessly bridged through the `StandardERC20Gateway` by default.
 
-You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard ERC-20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
+You can use the [bridge UI](https://bridge.arbitrum.io/) or follow the instructions in [How to bridge tokens via Arbitrum's standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx) to bridge a token to a child chain via this gateway.
 
-#### Example: Standard `Arb-ERC20` deposit and withdraw
+#### Example: Standard `Arb-ERC-20` deposit and withdraw
 
 To help illustrate what this all looks like in practice, let's go through the steps of what depositing and withdrawing `SomeERC20Token` via our standard `ERC-20` gateway looks like. We assume that `SomeERC20Token` has already been registered in the `L1GatewayRouter` to use the standard `ERC-20` gateway.
 
@@ -455,7 +455,7 @@ Suppose your custom token can increase its supply (i.e., mint) directly on the c
 Some examples of token features suitable for the generic-custom gateway:
 
 - A child chain token contract upgradable via a proxy
-- A child chain token contract that includes address whitelisting/blacklisting
+- A child chain token contract that includes address allowlisting/denylisting
 - The deployer determines the address of the child chain token contract
 
 #### Setting up your token with the generic-custom gateway
@@ -466,18 +466,18 @@ The following steps can set up your token for the generic-custom gateway. You ca
 
 Your token on the parent chain should conform to the [ICustomToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/ICustomToken.sol) interface (see [`TestCustomTokenL1`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/test/TestCustomTokenL1.sol) for an example implementation). Crucially, it must have an `isArbitrumEnabled` method in its interface.
 
-1. Deploy your token on the child chain
+1. **Deploy your token on the child chain**
 
 - Your token should conform to the minimum [IArbToken](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/arbitrum/IArbToken.sol) interface, i.e., it should have `bridgeMint` and `bridgeBurn` methods only callable by the `L2CustomGateway` contract, and the address of its corresponding Ethereum token accessible via `l1Address`. For an example implementation, see [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol).
 - Token compatibility with available tooling
   - If you want your token to be compatible out of the box with all the tooling available (e.g., the [Arbitrum bridge]), we recommend that you keep the implementation of the IArbToken interface as close as possible to the [`L2GatewayToken`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/libraries/L2GatewayToken.sol) implementation example.
   - For example, if an allowance check is added to the `bridgeBurn()` function, the token will not be easily withdrawable through the <a data-quicklook-from="arbitrum-bridge-ui">Arbitrum Bridge UI</a>, as the UI does not prompt an approval transaction of tokens by default (it expects the tokens to follow the recommended `L2GatewayToken` implementation).
 
-2. Register your token on the parent chain to your token on the child chain via the `L1CustomGateway` contract
+2. **Register your token on the parent chain to your token on the child chain via the `L1CustomGateway` contract**
 
 - Have your parent chain token's contract make an external call to `L1CustomGateway.registerTokenToL2`. Alternatively, this registration is submittable as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
 
-3. Register your token on the parent chain to the `L1GatewayRouter`
+3. **Register your token on the parent chain to the `L1GatewayRouter`**
 
 - After your token's registration to the generic-custom gateway is complete, have your parent chain token's contract make an external call to `L1GatewayRouter.setGateway`; Alternatively, this registration is submittable as a chain-owner registration via an [Arbitrum DAO](https://forum.arbitrum.foundation/) proposal.
 

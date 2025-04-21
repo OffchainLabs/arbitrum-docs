@@ -11,9 +11,9 @@ Before starting to implement and deploy a custom gateway, it is strongly encoura
 
 :::
 
-In this how-to you’ll learn how to bridge your own token between Ethereum (parent chain) and Arbitrum (child chain), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
+In this how-to you’ll learn how to bridge your own token between Ethereum (the parent chain) and Arbitrum (the child chain), using a custom gateway. For alternative ways of bridging tokens, don’t forget to check out this [overview](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/01-get-started.mdx).
 
-Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Hardhat)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
+Familiarity with [Arbitrum’s token bridge system](/build-decentralized-apps/token-bridging/01-overview.mdx), smart contracts, and blockchain development is expected. If you’re new to blockchain development, consider reviewing our [Quickstart: Build a dApp with Arbitrum (Solidity, Remix)](/build-decentralized-apps/01-quickstart-solidity-remix.mdx) before proceeding. We will use [Arbitrum’s SDK](https://github.com/OffchainLabs/arbitrum-sdk) throughout this how-to, although no prior knowledge is required.
 
 We will go through all steps involved in the process. However, if you want to jump straight to the code, we have created [this script in our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging) that encapsulates the entire process.
 
@@ -29,7 +29,7 @@ First of all, the **parent chain counterpart of the gateway**, must conform to t
 - A method `outboundTransfer`, to handle forwarded calls from `L1GatewayRouter.outboundTransfer`. It should only allow calls from the router.
 - A method `finalizeInboundTransfer`, to handle messages coming **only** from child chain's gateway.
 - Two methods `calculateL2TokenAddress` and `getOutboundCalldata` to handle other bridging operations.
-- Methods to send cross-chain messages through the [inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [L1ArbitrumMessenger](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
+- Methods to send cross-chain messages through the [Inbox contract](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/bridge/Inbox.sol). An example implementation can be found in `sendTxToL2` and `sendTxToL2CustomRefund` on [`L1ArbitrumMessenger`](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/L1ArbitrumMessenger.sol).
 
 Furthermore, if you plan on having permissionless registration of tokens in your gateway, your parent chain gateway should also have a `registerCustomL2Token` method, similar to the one being used in Arbitrum’s [generic-custom gateway](https://github.com/OffchainLabs/token-bridge-contracts/blob/main/contracts/tokenbridge/ethereum/gateway/L1CustomGateway.sol#L146).
 
@@ -786,7 +786,7 @@ In this case, when using this function only one action will be performed:
 
 1. Call function `setGateway` of `L1GatewayRouter`. This will change the `l1TokenToGateway` internal mapping it holds and will send a retryable ticket to the counterpart `L2GatewayRouter` contract on the child chain, to also set its mapping to the new values.
 
-To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the registerTokenOnL2 method of the token passed by parameter.
+To simplify the process, we’ll use Arbitrum’s SDK and call the method [`registerCustomToken`](../../../sdk/reference/assetBridger/erc20Bridger.md#registercustomtoken) of the [`AdminErc20Bridger`](../../../sdk/reference/assetBridger/erc20Bridger.md#adminerc20bridger) class, which will call the `registerTokenOnL2` method of the token passed by parameter.
 
 ```tsx
 /**
@@ -833,9 +833,9 @@ Once this step is done, your parent chain and child chain gateways will be regis
 
 You can bridge tokens between the parent chain and child chain using the custom tokens, along with the router and gateway contracts from each layer.
 
-If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard ERC20 gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in steps 2-5.
+If you want to see an example of bridging a token from the parent to child chain using Arbitrum’s SDK, you can check out [How to bridge tokens via Arbitrum’s standard `ERC-20` gateway](/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/02-how-to-bridge-tokens-standard.mdx), where the process is described in Steps 2-5.
 
-The full code of this how-to and a more extensive deployment and testing script can be found [in this package of our tutorials repository](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging).
+The full code of this how-to and a more extensive deployment and testing scripts can be found [in this package](https://github.com/OffchainLabs/arbitrum-tutorials/tree/master/packages/custom-gateway-bridging) of our tutorials repository.
 
 ## Resources
 

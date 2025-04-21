@@ -17,7 +17,7 @@ Arbitrum chains are child chain solutions built on top of the Ethereum blockchai
 
 ### Arbitrum Nova
 
-**Arbitrum Nova** is a high-performance alternative to Arbitrum One's chain. While Arbitrum One implements the purely trustless Rollup protocol, Arbitrum Nova implements the mostly trustless [AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) protocol. The key difference between Rollup and AnyTrust is that the AnyTrust protocol introduces an additional trust assumption in the form of a data availability committee (DAC). This committee (detailed below) is responsible for expediting the process of storing, batching, and posting child chain transaction data to Ethereum's parent chain. This lets you use Arbitrum in scenarios that demand performance and affordability, while Arbitrum One is optimal for scenarios that demand Ethereum's pure trustlessness.
+**Arbitrum Nova** is a high-performance alternative to Arbitrum One's chain. While Arbitrum One implements the purely trustless Rollup protocol, Arbitrum Nova implements the mostly trustless [AnyTrust](/how-arbitrum-works/08-anytrust-protocol.mdx) protocol. The key difference between Rollup and AnyTrust is that the AnyTrust protocol introduces an additional trust assumption in the form of a Data Availability Committee (DAC). This committee (detailed below) is responsible for expediting the process of storing, batching, and posting child chain transaction data to Ethereum's parent chain. This lets you use Arbitrum in scenarios that demand performance and affordability, while Arbitrum One is optimal for scenarios that demand Ethereum's pure trustlessness.
 
 ## What Arbitrum testnet chains are available?
 
@@ -61,7 +61,7 @@ Nitro is the technology that powers Arbitrum One, Arbitrum Nova (with AnyTrust c
 
 ### AnyTrust (variant of Nitro)
 
-AnyTrust is a variant of the Nitro technology stack that lowers costs by accepting a mild trust assumption. The AnyTrust protocol relies on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members, of which AnyTrust assumes at least two are honest. Keeping the data off-chain in the happy/common case means the system can charge the user significantly lower fees. You can find more information about AnyTrust in [Anytrust protocol](/how-arbitrum-works/08-anytrust-protocol.mdx).
+AnyTrust is a variant of the Nitro technology stack that lowers costs by accepting a mild trust assumption. The AnyTrust protocol relies on an external Data Availability Committee (DAC) to store data and provide it on demand. The DAC has `N` members, of which AnyTrust assumes at least two are honest. Keeping the data offchain in the happy/common case means the system can charge the user significantly lower fees. You can find more information about AnyTrust in [Anytrust protocol](/how-arbitrum-works/08-anytrust-protocol.mdx).
 
 ### Classic (deprecated)
 

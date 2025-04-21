@@ -1,6 +1,6 @@
 # The Graph
 
-Getting historical data on a smart contract can be frustrating when building a dApp. [The Graph](https://thegraph.com/) provides an easy way to query smart contract data through APIs known as subgraphs, which utilize `GraphQL`.  The Graph's infrastructure relies on a decentralized network of indexers, enabling your dApp to become truly decentralized.
+Getting historical data on a smart contract can be frustrating when building a dApp. [The Graph](https://thegraph.com/) provides an easy way to query smart contract data through APIs known as subgraphs, which utilize `GraphQL`. The Graph's infrastructure relies on a decentralized network of indexers, enabling your dApp to become truly decentralized.
 
 ## Quick start
 
@@ -16,7 +16,7 @@ Here's a step by step walkthrough:
 
 ## 1. Initialize your subgraph project
 
-### Create a subgraph on Subgraph Studio⁠
+### Create a subgraph on Subgraph Studio
 
 Go to the [Subgraph Studio](https://thegraph.com/studio/) and connect your wallet. Once your wallet is connected, you can begin by clicking "Create a Subgraph". Please choose a good name for the subgraph: this name can't be edited later. It is recommended to use Title Case: "Subgraph Name Chain Name."
 
@@ -26,7 +26,7 @@ You will then land on your subgraph's page. All the CLI commands you need will b
 
 ![CLI commands](https://lh7-us.googleusercontent.com/docsz/AD_4nXe3YvCxiOH_LupSWe8zh9AmP-VrV4PlOq3f7Ix6hNlBUYcANUFuLuVIWR74OGiBs0nrugTyT0v3o6RPmTsgHONdv_ZJNWtcDWEkRntXPHlQGFcqmEBa-D6j4aoIPzUKYdOJMVUPu8O3fwjdZ4IaXXZoTzY?key=fnI6SyFgXU9SZRNX5C5vPQ)
 
-### Install the Graph CLI⁠
+### Install the Graph CLI
 
 On your local machine, run the following:
 
@@ -34,7 +34,7 @@ On your local machine, run the following:
 npm install -g @graphprotocol/graph-cli
 ```
 
-### Initialize your Subgraph⁠
+### Initialize your Subgraph
 
 You can copy this directly from your subgraph page to include your specific subgraph slug:
 
@@ -50,7 +50,7 @@ Simply have your contract verified on the block explorer, and the CLI will autom
 
 ## 2. Deploy & publish
 
-### Deploy to Subgraph Studio⁠
+### Deploy to Subgraph Studio
 
 First, run these commands in your terminal
 
@@ -68,7 +68,7 @@ graph deploy --studio <SUBGRAPH_SLUG>
 
 You will be asked for a version label. You can enter something like `V0.0.1`, but you're free to choose the format.
 
-### Test your subgraph⁠
+### Test your subgraph
 
 You can test your subgraph by making a sample query in the playground section. The Details tab will show you an API endpoint. You can use that endpoint to test from your dApp.
 
@@ -82,7 +82,7 @@ Once your subgraph is ready for production, you can publish it to the decentrali
 
 Before you can query your subgraph, Indexers need to begin serving queries on it. In order to streamline this process, you can curate your own subgraph using `$GRT`.
 
-When publishing, you'll see the option to curate your subgraph. As of May 2024, it is recommended that you curate your own subgraph with at least 3,000 `$GRT` to ensure that it is indexed and available for querying as soon as possible.
+When publishing, you'll see the option to curate your subgraph. As of May 2024, it is recommended that you curate your own subgraph with at least 3,000 `GRT` to ensure that it is indexed and available for querying as soon as possible.
 
 ![Publish screen](https://lh7-us.googleusercontent.com/docsz/AD_4nXerUr-IgWjwBZvp9Idvz5hTq8AFB0n_VlXCzyDtUxKaCTANT4gkk-2O77oW-a0ZWOh3hnqQsY7zcSaLeCQin9XU1NTX1RVYOLFX9MuVxBEqcMryqgnGQKx-MbDnOWKuMoLBhgyVWQereg3cdWtCPcTQKFU?key=fnI6SyFgXU9SZRNX5C5vPQ)
 
@@ -102,7 +102,7 @@ The query URL for this subgraph is:
 https://gateway-arbitrum.network.thegraph.com/api/**[api-key]**/subgraphs/id/HdVdERFUe8h61vm2fDyycHgxjsde5PbB832NHgJfZNqK
 ```
 
-Now, you simply need to  fill in your own API Key to start sending `GraphQL` queries to this endpoint.
+Now, you simply need to fill in your own API Key to start sending `GraphQL` queries to this endpoint.
 
 ### Getting your own API key
 

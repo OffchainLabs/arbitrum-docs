@@ -9,7 +9,7 @@ content_type: get-started
 
 import ImageZoom from '@site/src/components/ImageZoom';
 
-The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of the <a data-quicklook-from="arbitrum">Arbitrum</a> network and is responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast <a data-quicklook-from="transaction">Transaction</a> confirmations while maintaining the security and integrity of the <a data-quicklook-from="blockchain">Blockchain</a>. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to <a data-quicklook-from="parent-chain">parent chain</a>, optimizing costs and performance.
+The <a data-quicklook-from="sequencer">Sequencer</a> is a pivotal component of the <a data-quicklook-from="arbitrum">Arbitrum</a> network and is responsible for efficiently ordering and processing transactions. It plays a crucial role in providing users with fast <a data-quicklook-from="transaction">transaction</a> confirmations while maintaining the security and integrity of the <a data-quicklook-from="blockchain">Blockchain</a>. In Arbitrum, the Sequencer orders incoming transactions and manages the batching, compression, and posting of transaction data to <a data-quicklook-from="parent-chain">parent chain</a>, optimizing costs and performance.
 
 <ImageZoom
   src="/img/haw-sequencer-operations.svg"
@@ -54,7 +54,7 @@ This mechanism is particularly valuable for applications requiring low latency a
 
 ### Soft Finality and Trust Model
 
-"Soft finality" refers to the preliminary <a data-quicklook-from="confirmation">Confirmation</a> of transactions based on the Sequencer's real-time feed. Key aspects include:
+"Soft finality" refers to the preliminary <a data-quicklook-from="confirmation">confirmation</a> of transactions based on the Sequencer's real-time feed. Key aspects include:
 
 - **Dependence on Sequencer Integrity**: The feed's accuracy and reliability depend on the Sequencer operating honestly and without significant downtime.
 - **Immediate User Feedback**: Users can act on transaction confirmations swiftly, improving the user experience.
@@ -84,9 +84,9 @@ Developers and users should design their applications and interactions with thes
 
 As illustrated in the diagram, the Sequencer feed not only sends <a data-quicklook-from="child-chain">child chain</a> transactions posted directly to the Sequencer but also incorporates parent chain-–submitted child chain transactions. These include child chain messages submitted on the parent chain and retryable transactions. The Sequencer agent monitors the finalized messages submitted to the parent chain's <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> Contract. Once finalized, it processes them as incoming messages to the feed, ensuring they are added as ordered transactions.
 
-It is important to note that the Nitro node can be configured to add delayed inbox transactions immediately after their submission to the parent chain, even before finalization. However, this approach introduces a risk of the child chain reorganization if the transaction fails to finalize on the parent chain. To mitigate this risk, on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova, the Sequencer only includes these transactions in the feed once they are finalized on the Ethereum chain.
+It is important to note that the Nitro node can be configured to add Delayed Inbox transactions immediately after their submission to the parent chain, even before finalization. However, this approach introduces a risk of the child chain reorganization if the transaction fails to finalize on the parent chain. To mitigate this risk, on <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova, the Sequencer only includes these transactions in the feed once they are finalized on the Ethereum chain.
 
-You can also explore how the feed sends incoming messages via WebSocket and learn how to extract message data from the feed on this page: [Read Sequencer Feed](https://docs.arbitrum.io/run-arbitrum-node/sequencer/read-sequencer-feed).
+You can also explore how the feed sends incoming messages via WebSocket and learn how to extract message data from the feed on this page: [Read Sequencer Feed](/run-arbitrum-node/sequencer/02-read-sequencer-feed.mdx).
 
 ## Batch-Posting
 
@@ -96,7 +96,7 @@ In this section, we will explore the Batch-Posting process in detail, covering t
 
 - **Batching**: How the Sequencer groups incoming transactions into batches for efficient processing and posting.
 - **Compression**: The methods used to compress transaction data, minimizing the amount of data that needs to be posted on parent chain and thereby reducing costs.
-- **Sending to Sequencer Inbox Contract**: The procedure for submitting compressed batches to the Sequencer Inbox Contract on parent chain, ensuring secure and reliable recording of transactions.
+- **Sending to Sequencer Inbox contract**: The procedure for submitting compressed batches to the Sequencer Inbox contract on parent chain, ensuring secure and reliable recording of transactions.
 
 Understanding Batch-Posting is essential for grasping how Arbitrum achieves scalability and cost-efficiency without compromising security. By delving into these subtopics, you'll gain insight into the Sequencer's role in optimizing transaction throughput and minimizing fees, as well as the innovative solutions implemented to address the challenges of parent chain data pricing.
 
@@ -174,7 +174,7 @@ There are two primary methods the Sequencer uses to send batches to the parent c
 ### 2. Using Calldata with `addSequencerL2Batch`
 
 - **Alternative Approach**: If the **Blob Base Fee** is significantly high or the blob space is constrained during batch posting, the Sequencer may opt to use calldata.
-- **Method**: The Batch Poster calls the `addSequencerL2Batch` function of the Sequencer Inbox Contract.
+- **Method**: The Batch Poster calls the `addSequencerL2Batch` function of the Sequencer Inbox contract.
 - **Process**:
   - The compressed batch transactions are included directly in the transaction's calldata.
 - **Considerations**:
@@ -191,7 +191,7 @@ The Sequencer continuously monitors network conditions to choose the most econom
 - **Soft-Confirmation Receipts**: The Sequencer's unique ability to immediately process and include transactions allows it to provide users with instant, "soft-confirmation" receipts,
 - **Parent chain Finality**: Once batches post, the transactions achieve parent-chain-level finality, secured by Parent chain’s consensus mechanism.
 
-By efficiently sending compressed transaction batches to the Sequencer Inbox Contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on parent chain. This process maintains the integrity and reliability of the network, providing users with fast and secure transaction processing.
+By efficiently sending compressed transaction batches to the Sequencer Inbox contract using the most cost-effective method available, the Sequencer ensures transactions are securely recorded on parent chain. This process maintains the integrity and reliability of the network, providing users with fast and secure transaction processing.
 
 ## Finality
 
@@ -230,7 +230,7 @@ Hard finality occurs when batched transactions get posted to the parent chain. K
 
 - **Strong Security Guarantees**: When included in blocks on the parent chain, transactions inherit the parent chain's security assurances.
 - **Irreversibility**: Once finalized, transactions are immutable and cannot be altered or reversed.
-- **Data Availability**: All transaction data is recorded on-chain, ensuring transparency and verifiability.
+- **Data Availability**: All transaction data is recorded onchain, ensuring transparency and verifiability.
 
 **Advantages of Hard Finality**:
 
@@ -282,11 +282,11 @@ To explain how this feature improves the security of chains settling to Arbitrum
 
 The Censorship Timeout feature mitigates this by decreasing the force inclusion threshold when unexpected delays in delayed message inclusion occur due to one (or all) of the above mentioned cases of censorship or sequencer outage, enabling entities to make moves without the 24 hour delay-per-move.
 
-The force inclusion window is actually the lesser of either the `delayBuffer` and `delayBlocks`, where delayBlocks is a constant, currently set to 24 hours, and `delayBuffer` grows and shrinks between 30 minutes and 48 hours.
+The force inclusion window is actually the lesser of either the `delayBuffer` and `delayBlocks`, where `delayBlocks` is a constant, currently set to 24 hours, and `delayBuffer` grows and shrinks between 30 minutes and 48 hours.
 
-The `delayBuffer` value "grows and shrinks" depending on how long the sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message's delay beyond the `threshold` and how long it has been delayed (i.e. when some delayed messages are delayed by more than the `threshold`, the difference between the messages' delay and the `threshold` is removed from the buffer). As an example, if the `threshold` is 30 minutes and a message was delayed by 32 minutes, then the `delayBuffer` is decremented by 2 minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
+The `delayBuffer` value "grows and shrinks" depending on how long the Sequencer is offline or censoring transactions. As a way to measure this behavior, the `delayBuffer` is decremented by the difference between a delayed message's delay beyond the `threshold` and how long it has been delayed (i.e., when some delayed messages are delayed by more than the `threshold`, the difference between the messages' delay and the `threshold` is removed from the buffer). As an example, if the `threshold` is 30 minutes and a message was delayed by 32 minutes, then the `delayBuffer` is decremented by two minutes. The `threshold` is set to 30 minutes on Arbitrum One and 1 hour on Arbitrum Nova.
 
-The `delayBuffer` replenishes at a linear rate when the sequencer is operating correctly at a nominal rate of 1 minute for every 20 minutes of time where no messages are delayed beyond the `threshold`.
+The `delayBuffer` replenishes at a linear rate when the sequencer is operating correctly at a nominal rate of one minute for every 20 minutes of time where no messages are delayed beyond the `threshold`.
 
 Below are the initial, proposed parameter values for the Censorship Timeout feature for Arbitrum One and Arbitrum Nova:
 
