@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring, animated as a } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
 import '@site/src/css/custom.css';
 import ButtonComponent from './ButtonComponent';
@@ -97,13 +97,13 @@ export const NumberComponent: React.FC<
       )}
       {/* The circle background for the number */}
       {shouldAnimate ? (
-        <animated.circle
+        <a.circle
           id={`circle${number}`}
           cx={coords.circle.x}
           cy={coords.circle.y}
           r={CIRCLE_RADIUS}
           className={circleClassName}
-          style={animationProps as any}
+          style={animationProps}
         />
       ) : (
         <circle
