@@ -52,11 +52,9 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({ x, y, width, height }
         cx="256"
         cy="256"
         r="144"
+        className="interactive-button-circle"
         style={{
-          fill: '#ff7f2a',
           filter: isHovered ? 'brightness(1.2)' : 'none',
-          transition: 'filter 0.2s',
-          animation: 'blink 2s ease-in-out infinite',
         }}
       />
     </svg>
