@@ -37,16 +37,17 @@ The implementations included in the examples below have not undergone comprehens
 
 :::
 
-### 1. Manual exchange rate 
+### 1. Manual exchange rate
+
 The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
 
-   This approach generally makes sense if:
+This approach generally makes sense if:
 
-   - You, as the chain owner, want full control over the exchange rate
-   - The chain owner and the batch poster are the same entity
-   - You are operating in a tightly controlled or experimental environment
+- You, as the chain owner, want full control over the exchange rate
+- The chain owner and the batch poster are the same entity
+- You are operating in a tightly controlled or experimental environment
 
-   An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
 
       <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
 
@@ -88,16 +89,17 @@ The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updat
       </CustomDetails>
 
 ### 2. External oracle
+
 An external oracle fetches the exchange rate; this reduces operational requirements for the chain owner but introduces a dependency on an external service to provide accurate, reliable pricing data.
 
-   This approach generally makes sense if:
+This approach generally makes sense if:
 
-   - Reliable, robust oracles are available for the gas token pair
-   - Reducing trust in the chain owner is important for your implementation
-   - You, as the chain owner, want to avoid manual exchange rate updates
+- Reliable, robust oracles are available for the gas token pair
+- Reducing trust in the chain owner is important for your implementation
+- You, as the chain owner, want to avoid manual exchange rate updates
 
-   See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
-      <CustomDetails summary="UniswapV2TwapPricer.sol">
+See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+<CustomDetails summary="UniswapV2TwapPricer.sol">
 
       ```solidity
       // SPDX-License-Identifier: MIT
@@ -209,30 +211,31 @@ An external oracle fetches the exchange rate; this reduces operational requireme
       </CustomDetails>
 
 ### 3. Exchange rate tracking
+
 The batch poster records the rate when converting the child gas token to the parent gas token. This approach can ensure accurate reimbursement but also requires trusted reporting and more complex accounting.
 
-   This approach generally makes sense if:
+This approach generally makes sense if:
 
-   - Your batch poster is trusted and willing to record exchange rates when purchasing parent chain gas
-   - You want reimbursement to be precise and not over- or under-charge users
-   - You want to minimize reliance on the chain owner or external oracles
+- Your batch poster is trusted and willing to record exchange rates when purchasing parent chain gas
+- You want reimbursement to be precise and not over- or under-charge users
+- You want to minimize reliance on the chain owner or external oracles
 
-   Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
 
 <CustomDetails summary="TradeTracker.sol">
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {IFeeTokenPricer} from "../../../../src/bridge/ISequencerInbox.sol";
-import {IGasRefunder} from "../../../../src/libraries/IGasRefunder.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IFeeTokenPricer } from '../../../../src/bridge/ISequencerInbox.sol';
+import { IGasRefunder } from '../../../../src/libraries/IGasRefunder.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { ERC20 } from '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 abstract contract TradeTracker is IFeeTokenPricer, IGasRefunder {
-    using SafeERC20 for IERC20;
+using SafeERC20 for IERC20;
 
     uint8 public immutable childTokenDecimals;
     uint256 public immutable calldataCost;
@@ -318,8 +321,10 @@ abstract contract TradeTracker is IFeeTokenPricer, IGasRefunder {
             return amount / 10 ** (childTokenDecimals - 18);
         }
     }
+
 }
-```
+
+````
 </CustomDetails>
 
 An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operating but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early-stage chains, you should carefully consider the financial consequences for the batch poster or end users on your Orbit chain. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should assess their unique situation when determining which fee-pricing strategy makes the most sense for them (if any).
@@ -609,3 +614,4 @@ You can refer to the source files for more details on:
 - [fee-token-pricers](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
 - [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
   You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/09-gas-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
+````
