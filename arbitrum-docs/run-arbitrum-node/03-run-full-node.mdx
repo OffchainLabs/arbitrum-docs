@@ -38,7 +38,7 @@ Even though there are alpha and beta versions of the Arbitrum Nitro software, on
 
 :::
 
-Latest Docker image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.3-0a9c975@@</code>
+Latest Docker image: <code>@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@</code>
 
 ## Database snapshots
 
@@ -135,6 +135,15 @@ import OrbitChainsExample from './partials/run-full-node/_orbit-chains-example.m
 
 - Pruning a full node refers to removing older, unnecessary data from the local copy of the blockchain that the node maintains to save disk space and slightly improve the node's efficiency. Pruning will remove all states from blocks older than the latest 128.
 - You can activate pruning by using the parameter `--init.prune` and using "full" or "validator" as the value (depending on the type of node you are running). Remember that this process will happen upon starting the node and will not serve RPC requests while pruning.
+
+## Transaction prechecker
+
+- Enabling the transaction prechecker will add extra checks before your node forward `eth_sendRawTransaction` to the Sequencer endpoint.
+- Below we list the flags to set up the prechecker:
+
+import OptionalTxPrecheckerParameters from './partials/run-full-node/_tx-prechecker-parameters.mdx';
+
+<OptionalTxPrecheckerParameters />
 
 ## Optional parameters
 

@@ -50,8 +50,8 @@ The following table shows this information for the Arbitrum DAO-owned chains:
 | Network          | Auction contract                                                              | Autonomous auctioneer endpoint             |
 | ---------------- | ----------------------------------------------------------------------------- | ------------------------------------------ |
 | Arbitrum Sepolia | <AEL address="0x991DbEDf388CB5925318f06362D4fCa7b040527D" chainID={421614} /> | https://arbsepolia-auctioneer.arbitrum.io/ |
-| Arbitrum One     | <AEL address="0x5fcb496a31b7AE91e7c9078Ec662bd7A55cd3079" chainID={42161} />  | Pending on-chain governance vote           |
-| Arbitrum Nova    | <AEL address="0xa5aBADAF73DFcf5261C7f55420418736707Dc0db" chainID={42170} />  | Pending on-chain governance vote           |
+| Arbitrum One     | <AEL address="0x5fcb496a31b7AE91e7c9078Ec662bd7A55cd3079" chainID={42161} />  | https://arb1-auctioneer.arbitrum.io/       |
+| Arbitrum Nova    | <AEL address="0xa5aBADAF73DFcf5261C7f55420418736707Dc0db" chainID={42170} />  | https://nova-auctioneer.arbitrum.io/       |
 
 ### Step 1: Deposit funds into the auction contract
 
@@ -322,7 +322,7 @@ const res = await fetch(<SEQUENCER_ENDPOINT>, {
         chainId: hexChainId,
         round: `0x${currentRound.toString(16)}`,
         auctionContractAddress: auctionContractAddress,
-        sequence: `0x${sequenceNumber.toString(16)}`,
+        sequenceNumber: `0x${sequenceNumber.toString(16)}`,
         transaction: serializedTransaction,
         options: {},
         signature: signature,
@@ -377,7 +377,7 @@ Note that if you get any of the errors below, then the sequence number used in y
 | `NO_ONCHAIN_CONTROLLER` | there is no defined, on-chain express lane controller for the round |
 | `SEQUENCE_NUMBER_ALREADY_SEEN` | the sequence number used for the given transaction was already consumed, try resubmitting with a new sequence number |
 | `SEQUENCE_NUMBER_TOO_LOW` | the sequencer number used for the given transaction is numerically lower than the expeected sequence number, try resubmitting with the expected sequence number
-| `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](../run-arbitrum-node/troubleshoot-timeboost.mdx#the-block-based-timeout-for-express-lane-transactions) |
+| `sequence number has reached max allowed limit` | the limit on the number of buffered express lane transactions was reached. Read more about this on our [Troubleshoot Timeboost page](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx#the-block-based-timeout-for-express-lane-transactions) |
 
 ::::info What happens if you're not the express lane controller?
 
@@ -517,9 +517,9 @@ In the current implementation, information about the winning bid for a resolved 
 | Chain            | S3 bucket URL                                                   |
 | ---------------- | --------------------------------------------------------------- |
 | Arbitrum Sepolia | s3://timeboost-auctioneer-sepolia/ue2/validated-timeboost-bids/ |
-| Arbitrum One     | Pending on-chain governance vote                                |
-| Arbitrum Nova    | Pending on-chain governance vote                                |
+| Arbitrum One     | s3://timeboost-auctioneer-arb1/ue2/validated-timeboost-bids/    |
+| Arbitrum Nova    | s3://timeboost-auctioneer-nova/ue2/validated-timeboost-bids/    |
 
 ## Troubleshooting and best practices
 
-Our guide on [Troubleshooting Timeboost](../run-arbitrum-node/troubleshoot-timeboost.mdx) contains more information on how response times work and how express lane transactions are sequenced, alongside common errors and best practices for using Timeboost.
+Our guide on [Troubleshooting Timeboost](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx) contains more information on how response times work and how express lane transactions are sequenced, alongside common errors and best practices for using Timeboost.

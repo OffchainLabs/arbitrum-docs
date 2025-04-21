@@ -64,7 +64,7 @@ For troubleshooting, check Docker's section in [their documentation](https://doc
 ### Step 2. Download the Nitro source code
 
 ```shell
-git clone --branch @@nitroVersionTag=v3.5.3@@ https://github.com/OffchainLabs/nitro.git
+git clone --branch @@nitroVersionTag=v3.5.5@@ https://github.com/OffchainLabs/nitro.git
 cd nitro
 git submodule update --init --recursive --force
 ```
@@ -138,17 +138,21 @@ nvm use 18
 
 ### Step 6. Configure [Rust](https://www.rust-lang.org/tools/install)
 
+#### Note that you may also need to use `rustup toolchain remove nightly...` to remove other Rust nightly toolchains that are installed
+
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source "$HOME/.cargo/env"
-rustup install 1.84.1
-rustup default 1.84.1
-rustup install nightly-2025-02-14
-rustup target add wasm32-unknown-unknown --toolchain 1.84.1
-rustup target add wasm32-wasi --toolchain 1.84.1
-rustup target add wasm32-unknown-unknown --toolchain nightly-2025-02-14
-rustup target add wasm32-wasi --toolchain nightly-2025-02-14
-rustup component add rust-src --toolchain nightly-2025-02-14
+rustup install 1.83.0
+rustup default 1.83.0
+rustup install nightly-2024-08-08
+rustup target add wasm32-unknown-unknown --toolchain 1.83.0
+rustup target add wasm32-wasi --toolchain 1.83.0
+rustup target add wasm32-wasip1 --toolchain 1.83.0
+rustup target add wasm32-unknown-unknown --toolchain nightly-2024-08-08
+rustup target add wasm32-wasi --toolchain nightly-2024-08-08
+rustup target add wasm32-wasip1 --toolchain nightly-2024-08-08
+rustup component add rust-src --toolchain nightly-2024-08-08
 cargo install cbindgen
 ```
 
