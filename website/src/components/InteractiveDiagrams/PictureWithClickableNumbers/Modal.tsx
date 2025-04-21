@@ -15,6 +15,7 @@ import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javasc
 import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
 import { useColorMode } from '@docusaurus/theme-common';
 import { SyntaxHighlighterProps } from './types';
+import { coordinates as defaultCoordinates } from './constants';
 
 /**
  * Interface for code block data structure.
@@ -91,9 +92,13 @@ const components = {
 export function Modal({
   number,
   customContent,
+  coordinates,
+  children,
 }: {
   number: 1 | 2 | 3 | 4 | 5;
   customContent?: React.ComponentType;
+  coordinates?: typeof defaultCoordinates;
+  children?: React.ReactNode;
 }) {
   /**
    * State to track whether the modal is currently open.
@@ -170,7 +175,7 @@ export function Modal({
           pointerEvents: 'all',
         }}
       >
-        <NumberComponent number={number} />
+        {children || <NumberComponent number={number} coordinates={coordinates} />}
       </g>
       {typeof document !== 'undefined' &&
         createPortal(

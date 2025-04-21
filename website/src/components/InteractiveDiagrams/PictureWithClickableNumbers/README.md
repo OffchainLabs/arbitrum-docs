@@ -9,6 +9,7 @@ PictureWithClickableNumbers provides an interactive way to explore technical con
 ## Features
 
 - Interactive SVG diagrams with clickable numbered points
+- Support for external SVG files or embedded SVG content
 - Animated number indicators to draw user attention
 - Modal dialogs that display rich content from MDX files
 - Syntax highlighting for code examples in multiple languages (JavaScript, Solidity)
@@ -50,6 +51,8 @@ Modal content is loaded from MDX files, allowing for rich formatting and code sy
 
 ## Usage
 
+### Basic Usage (Default SVG)
+
 ```jsx
 import PictureWithClickableNumbers from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers';
 
@@ -62,6 +65,30 @@ function MyDocPage() {
 }
 ```
 
+### Using an External SVG File
+
+```jsx
+import PictureWithClickableNumbers from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers';
+
+function MyDocPage() {
+  return (
+    <div className="my-diagram-container">
+      <PictureWithClickableNumbers 
+        svgFilePath="/img/my-custom-diagram.svg"
+        viewBox="0 0 800 600"
+        customCoordinates={{
+          1: { circle: { x: 100, y: 200 }, path: { x: 96, y: 198 }, offset: { x: -4, y: -2 } },
+          2: { circle: { x: 300, y: 150 }, path: { x: 296, y: 152 }, offset: { x: -4, y: 2 } },
+          3: { circle: { x: 500, y: 250 }, path: { x: 501, y: 255 }, offset: { x: 1, y: 5 } },
+          4: { circle: { x: 400, y: 400 }, path: { x: 394, y: 404 }, offset: { x: -6, y: 4 } },
+          5: { circle: { x: 600, y: 350 }, path: { x: 601, y: 354 }, offset: { x: 1, y: 4 } },
+        }}
+      />
+    </div>
+  );
+}
+```
+
 ## Animation Behavior
 
 By default, numbers 2, 3, and 4 have pulsing animations to indicate interactivity, while numbers 1 and 5 remain static. This behavior can be customized through the `NumberComponent` props.
@@ -69,3 +96,13 @@ By default, numbers 2, 3, and 4 have pulsing animations to indicate interactivit
 ## Theming
 
 The component adapts to Docusaurus light and dark themes, using different color schemes for each mode to ensure readability and consistent visual styling.
+
+## Using SVG Files
+
+When using external SVG files, you need to:
+
+1. Provide an `svgFilePath` pointing to your SVG file (this should be in the `/static` directory or a public URL)
+2. Provide `customCoordinates` that match the positions of elements in your SVG where you want the numbered indicators to appear
+3. Optionally provide a custom `viewBox` if your SVG has different dimensions than the default
+
+The component will load the SVG file and overlay the interactive numbered elements on top of it.

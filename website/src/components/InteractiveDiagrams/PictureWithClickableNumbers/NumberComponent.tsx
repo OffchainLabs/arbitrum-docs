@@ -3,7 +3,7 @@ import { useSpring, animated as a } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
 import '@site/src/css/custom.css';
 import ButtonComponent from './ButtonComponent';
-import { CIRCLE_RADIUS, numberPaths, coordinates } from './constants';
+import { CIRCLE_RADIUS, numberPaths, coordinates as defaultCoordinates } from './constants';
 import { NumberComponentProps } from './types';
 
 /**
@@ -18,14 +18,16 @@ import { NumberComponentProps } from './types';
  * @param props.number - The step number (1-5) to display
  * @param props.animated - Whether the number should be animated (default: true for numbers 2, 3, 4)
  * @param props.interactive - Whether the number should be interactive (default: true for numbers 2, 3, 4)
+ * @param props.coordinates - Optional custom coordinates to override the default positions
  * @returns An SVG element representing a numbered step in the diagram
  */
 export const NumberComponent: React.FC<
   NumberComponentProps & {
     animated?: boolean;
     interactive?: boolean;
+    coordinates?: typeof defaultCoordinates;
   }
-> = ({ number, animated, interactive }) => {
+> = ({ number, animated, interactive, coordinates = defaultCoordinates }) => {
   /**
    * Get the current color mode (light/dark) from Docusaurus.
    */

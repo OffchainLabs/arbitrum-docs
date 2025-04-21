@@ -33,6 +33,12 @@ export interface SyntaxHighlighterProps {
 
 export interface PictureWithClickableNumbersProps {
   /**
+   * Path to SVG file to use as background
+   * If not provided, the default SVG defined in the component will be used
+   */
+  svgFilePath?: string;
+
+  /**
    * Custom SVG viewBox dimensions
    * @default "0 0 1600 900"
    */
@@ -58,6 +64,27 @@ export interface PictureWithClickableNumbersProps {
    * Custom class name for the SVG container
    */
   className?: string;
+
+  /**
+   * Custom coordinates for the numbered elements
+   * If provided, these will override the default coordinates
+   */
+  customCoordinates?: {
+    [key in 1 | 2 | 3 | 4 | 5]?: {
+      circle: {
+        x: number;
+        y: number;
+      };
+      path: {
+        x: number;
+        y: number;
+      };
+      offset?: {
+        x: number;
+        y: number;
+      };
+    };
+  };
 }
 
 export interface ModalContentProps {
