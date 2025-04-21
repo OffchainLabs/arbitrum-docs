@@ -7,7 +7,7 @@ export interface Coordinates {
     x: number;
     y: number;
   };
-  offset: {
+  offset?: {
     x: number;
     y: number;
   };
@@ -26,7 +26,7 @@ export interface ButtonComponentProps {
 
 export interface SyntaxHighlighterProps {
   language: string;
-  style: any;
+  style: Record<string, unknown>;
   customStyle?: React.CSSProperties;
   children: string;
 }
