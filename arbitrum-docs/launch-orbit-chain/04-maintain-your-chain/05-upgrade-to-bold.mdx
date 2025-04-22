@@ -64,7 +64,7 @@ To determine the exact version your contracts use, [follow these instructions](h
 
 ### Step 1: Clone the `nitro-contracts` repository and build the contracts
 
-You'll use a [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) contract in the [`nitro-contracts`](https://github.com/OffchainLabs/nitro-contracts) repository to perform the upgrade operation.
+You'll use a [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) contract in the `nitro-contracts` repository to perform the upgrade operation.
 
 First clone the `nitro-contracts` repository and checkout the appropriate version:
 
@@ -83,7 +83,7 @@ $ yarn build:all
 
 ### Step 2: Configure your chain parameters
 
-The BoLD action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
+The BoLD upgrade action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
 
 **Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
 
