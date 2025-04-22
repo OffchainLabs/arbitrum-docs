@@ -36,7 +36,7 @@ Most of the parameters used in Nitro before v3.5.4 will stay the same when runni
 
 ## 2. Upgrade your Nitro contracts to v3.1.0
 
-This section explains how to upgrade of your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0). Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
+This section explains how to upgrade of your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0); this guide follows the same steps outlined in the [3.1.0 upgrade guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/contract-upgrades/3.1.0) in the `orbit-actions` repo. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
 
 During the upgrade operation, the following actions will be performed:
 
@@ -172,3 +172,5 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 ### Step 6: Monitor the validation process
 
 Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 1 hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is 7 days).
+
+A separate  is also available in the `orbit-actions` repository. 
