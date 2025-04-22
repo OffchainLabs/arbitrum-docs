@@ -14,7 +14,7 @@ It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if y
 
 :::
 
-Creating an new Orbit chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. These contracts are:
+Creating a new Orbit chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. These contracts are:
 
 - Bridge contracts: used to send cross-chain messages between the Orbit chain and its parent chain, including batches posted by the sequencer
 - Rollup contracts: used by validators to create and confirm assertions of the current state of the Orbit chain
@@ -30,7 +30,7 @@ Before we describe the process of creating a chain using the Orbit SDK, let's se
 
 Deploying a new Orbit chain is done through a [RollupCreator](/launch-orbit-chain/03-deploy-an-orbit-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Orbit chain.
 
-`createRollup` is the function of that contract that will deploy the core contracts of the chain on the parent chain. This function takes a complex struct `RollupDeploymentParams` as its only input, which defines the parameters of the Orbit chain to be created.
+`RollupCreator` has a `createRollup` function that deploys your chain's core contracts to the parent chain. `createRollup` takes a complex struct called `RollupDeploymentParams` as its only input. This struct defines the parameters of the Orbit chain to be created.
 
 ```solidity
 struct RollupDeploymentParams {
@@ -45,7 +45,7 @@ struct RollupDeploymentParams {
 }
 ```
 
-The following table describes these parameters:
+The following table describes `RollupDeploymentParams`'s parameters:
 
 | Parameter                   | Type      | Description                                                                                                                                                                                                                                                                                                                |
 | :-------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -154,17 +154,17 @@ The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` 
 
 ## How to create a new Rollup chain using the Orbit SDK
 
-Now we look at what methods we need to use when creating a new Rollup Orbit chain with the Orbit SDK.
+Now, let's look at the methods to use when creating a new Rollup Orbit chain with the Orbit SDK.
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script available.
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
 
 :::
 
 ### 1. Create the chain configuration object
 
-The `prepareChainConfig` function creates a `chainConfig` structure like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to be desired values.
+The `prepareChainConfig` function creates a `chainConfig` struct like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
 
 Below is an example of how to use `prepareChainConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `InitialChainOwner`:
 
@@ -180,7 +180,7 @@ const chainConfig = prepareChainConfig({
 });
 ```
 
-Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` structure like the one defined in the section above. Again, this function will set the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to be desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
+Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` struct like the one defined in the section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
 
 Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `owner`:
 
@@ -204,7 +204,7 @@ const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChain
 
 With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.
 
-Besides the `Config` structured created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults set by the Orbit SDK. Batch poster and validator addresses must be set to be desired values. Additionally, a public client of the parent chain, and a deployer PrivateKeyAccount must be passed as arguments to the function.
+Besides the `Config` structure created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults set by the Orbit SDK. Batch poster and validator addresses must be set to the desired values. Additionally, a public client of the parent chain and a deployer PrivateKeyAccount must be passed as arguments to the function.
 
 Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step:
 
@@ -230,9 +230,9 @@ const createRollupResults = await createRollup({
 });
 ```
 
-### 3. Understand the results obtained
+### 3. Understand the returned data
 
-After calling `createRollup`, an object of type `CreateRollupResults` is obtained with the following fields:
+After calling `createRollup`, an object of type `CreateRollupResults` is returned with the following fields:
 
 ```typescript
 type CreateRollupResults = {

@@ -14,9 +14,12 @@ It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if y
 
 :::
 
-Creating an new Orbit chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy acustom gas token Orbit chain using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to the process of creating and configuring an Orbit chain.
+Creating a new Orbit chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. This page explains how to deploy a custom gas token Orbit chain using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to creating and configuring an Orbit chain.
 
-Before reading this guide, we recommend that you're familiar with the general process of creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md), and the process of [creating new AnyTrust chains](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md) since custom gas token chains must use the <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust protocol</a>.
+Before reading this guide, we recommend:
+
+- Becoming familiar with the general process of creating new chains explained in [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md)
+- Learning about the process of [creating new AnyTrust chains](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md) since custom gas token chains must use the <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust protocol</a>
 
 :::info
 
@@ -26,7 +29,7 @@ Custom gas tokens are **not supported yet** on Rollup chains, only on AnyTrust c
 
 ## About custom gas token Orbit chains
 
-Custom gas token orbit chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard ERC-20 tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. The `ERC-20` token to use must be deployed on the parent chain of your chain.
+Custom gas token orbit chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard ERC-20 tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. The `ERC-20` token to be used must be deployed on your chain's parent chain.
 
 ## How to create a new custom gas token chain using the Orbit SDK
 
@@ -34,18 +37,18 @@ The deployment process for a custom gas token chain is very similar to that of a
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating a custom gas token Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) script available.
+The Orbit SDK includes an example script for creating a custom gas token Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) script.
 
 :::
 
 Here are the steps involved in the deployment process:
 
-1. [Create the chain configuration object](#1-create-the-chain-configuration-object)
+1. [Create the chain's configuration object](#1-create-the-chains-configuration-object)
 2. [Deploy the custom gas token Orbit chain](#2-deploy-the-custom-gas-token-orbit-chain)
-3. [Understand the results obtained](#3-understand-the-results-obtained)
+3. [Understand the returned data](#3-understand-the-returned-data)
 4. [Additional configuration](#4-additional-configuration)
 
-### 1. Create the chain configuration object
+### 1. Create the chain's configuration object
 
 The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
 
@@ -81,7 +84,7 @@ With the crafted configuration, we can call the `createRollup` function, which w
 
 However, before doing that, the owner needs to give allowance to the `RollupCreator` contract before starting the deployment process, so that it can spend enough tokens to send the correspondant Parent-to-Child messages during the deployment process. This process is handled within the `createRollup` function, but the owner must own enough tokens to create these messages.
 
-Additionally, we'll pass the ERC-20 token to use as custom gas token in the `nativeToken` parameter of the `createRollup` function. We'll specify the address of the token contract in the parent chain.
+Additionally, we'll pass the `ERC-20` token to use as custom gas token in the `nativeToken` parameter of the `createRollup` function. We'll specify the address of the token contract in the parent chain.
 
 Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step, and the parameters mentioned above:
 
@@ -108,9 +111,9 @@ const createRollupResults = await createRollup({
 });
 ```
 
-### 3. Understand the results obtained
+### 3. Understand the returned data
 
-After calling `createRollup`, an object of type `CreateRollupResults` is obtained with the following fields:
+After calling `createRollup`, an object of type `CreateRollupResults` is returned with the following fields:
 
 ```typescript
 type CreateRollupResults = {

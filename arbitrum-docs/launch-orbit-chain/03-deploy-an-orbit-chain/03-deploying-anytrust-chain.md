@@ -14,7 +14,7 @@ It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if y
 
 :::
 
-Creating an new Orbit chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to the process of creating and configuring an Orbit chain.
+Creating a new Orbit chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Orbit chain</a> using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to the process of creating and configuring an Orbit chain.
 
 Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md).
 
@@ -24,11 +24,11 @@ AnyTrust chains implement the Arbitrum AnyTrust protocol, an alternative to the 
 
 ## How to create a new AnyTrust chain using the Orbit SDK
 
-The deployment process for AnyTrust chains is very similar to that of [Rollup chains](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md), but with some differences that we'll discuss in this guide.
+AnyTrust chains' deployment process is very similar to that of [Rollup chains](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md), but with some differences that we'll discuss in this guide.
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script available.
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
 
 :::
 
@@ -41,11 +41,11 @@ Here are the steps involved in the deployment process:
 
 ### 1. Create the chain configuration object
 
-The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
+The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration struct that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend becoming familiar with that section before continuing.
 
 The only difference between both types of chain is that the AnyTrust chain sets the `arbitrum.DataAvailabilityCommittee` flag to `true`, to indicate that the chain will use a Data Availability Committee (DAC).
 
-Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` and the `prepareChainConfig` methods to craft the configuration needed:
+Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` and the `prepareChainConfig` methods to craft the needed configuration:
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -97,9 +97,9 @@ const createRollupResults = await createRollup({
 });
 ```
 
-### 3. Understand the results obtained
+### 3. Understand the returned data
 
-After calling `createRollup`, an object of type `CreateRollupResults` is obtained with the following fields:
+After calling `createRollup`, an object of type `CreateRollupResults` is returned with the following fields:
 
 ```typescript
 type CreateRollupResults = {
@@ -118,11 +118,11 @@ The final step is to set up the keyset of your Data Availability Committee (DAC)
 
 :::info
 
-The Orbit SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section, and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script available.
+The Orbit SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section, and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
 :::
 
-The Orbit SDK includes a `setValidKeyset` function to help setting the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the UpgradeExecutor contract (to learn more about the UpgradeExecutor, see [Ownership structure and access control](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx)).
+The Orbit SDK includes a `setValidKeyset` function to help set the keyset in the SequencerInbox. From the last step, you can gather the `sequencerInbox` and `upgradeExecutor` addresses and pass them to the function along with the `keyset`, a public client of the parent chain, and a wallet client of an account that has executor privileges in the `UpgradeExecutor` contract (to learn more about `UpgradeExecutor`, see [Ownership structure and access control](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx)).
 
 Below is an example of how to use `setValidKeyset` using the parameters described above:
 
