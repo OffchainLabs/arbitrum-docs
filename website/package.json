@@ -25,7 +25,8 @@
     "format:check": "prettier --check --config \"./.prettierrc.js\" -- \"./*.{js,json}\" \"src/**/*.{tsx,ts,scss,json,js}\" \"../arbitrum-docs/**/*.{md,mdx}\"",
     "typecheck": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check-redirects": "tsx scripts/check-redirects.ts"
   },
   "dependencies": {
     "@arbitrum/sdk": "^3.0.0",
