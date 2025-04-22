@@ -31,7 +31,7 @@ In the most basic example, this is how a Rust contract will be organized. The si
 
 Your contract may also include other dot files (such as `.gitignore`, `.env`, etc), markdown files for docs, or additional subfolders.
 
-## State Variables
+## State variables
 
 Like Solidity, Rust contracts are able to define _state variables_. These are variables which are stored on the chain's _state trie_, which is essentially the chain's database. They differ from standard Rust variables in that they must implement the `Storage` trait from the Stylus SDK. This trait is used to layout the data in the trie in a Solidity-compatible fashion. The Stylus SDK provides Storage types for all Solidity primitives out-of-the-box, such as `StorageAddress`, `StorageU256`, etc. See [storage module](https://docs.rs/stylus-sdk/latest/stylus_sdk/storage/index.html#structs) for more information.
 
