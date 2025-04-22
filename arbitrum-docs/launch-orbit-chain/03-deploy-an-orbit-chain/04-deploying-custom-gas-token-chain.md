@@ -37,7 +37,7 @@ The deployment process for a custom gas token chain is very similar to that of a
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating a custom gas token Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) script.
+The Orbit SDK includes an example script for creating a custom gas token Orbit chain. We recommend that you first understand the process described in this section and then check the [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) script.
 
 :::
 

@@ -158,13 +158,13 @@ Now, let's look at the methods to use when creating a new Rollup Orbit chain wit
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
 
 :::
 
 ### 1. Create the chain configuration object
 
-The `prepareChainConfig` function creates a `chainConfig` struct like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
+The `prepareChainConfig` function creates a `chainConfig` structure like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
 
 Below is an example of how to use `prepareChainConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `InitialChainOwner`:
 
@@ -180,7 +180,7 @@ const chainConfig = prepareChainConfig({
 });
 ```
 
-Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` struct like the one defined in the section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
+Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` structure like the one defined in the section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
 
 Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `owner`:
 

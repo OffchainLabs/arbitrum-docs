@@ -28,7 +28,7 @@ AnyTrust chains' deployment process is very similar to that of [Rollup chains](/
 
 :::info Example script
 
-The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section, and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
 
 :::
 
@@ -41,7 +41,7 @@ Here are the steps involved in the deployment process:
 
 ### 1. Create the chain configuration object
 
-The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration struct that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend becoming familiar with that section before continuing.
+The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend becoming familiar with that section before continuing.
 
 The only difference between both types of chain is that the AnyTrust chain sets the `arbitrum.DataAvailabilityCommittee` flag to `true`, to indicate that the chain will use a Data Availability Committee (DAC).
 
@@ -118,7 +118,7 @@ The final step is to set up the keyset of your Data Availability Committee (DAC)
 
 :::info
 
-The Orbit SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section, and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
+The Orbit SDK includes an example script for setting up the keyset in the SequencerInbox. We recommend that you first understand the process described in this section and then check the [set-valid-keyset](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/set-valid-keyset/index.ts) script.
 
 :::
 
