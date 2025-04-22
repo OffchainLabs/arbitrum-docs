@@ -1,18 +1,18 @@
 import React from 'react';
 import { getAddress, isAddress } from '@ethersproject/address';
 
-type ChainID = 1 | 11155111 | 42170 | 42161 | 421614 | 13331371 | 23011913;
+type ChainID = 1 | 42161 | 42170 | 8453 | 11155111 | 421614 | 84532;
 
 const chainIDToExplorerUrlRoot: {
   [chainId in ChainID]: string;
 } = {
   1: 'https://etherscan.io/address',
-  11155111: 'https://sepolia.etherscan.io/address',
   42161: 'https://arbiscan.io/address',
   42170: 'https://nova.arbiscan.io/address',
+  8453: 'https://basescan.org/address',
+  11155111: 'https://sepolia.etherscan.io/address',
   421614: 'https://sepolia.arbiscan.io/address',
-  13331371: 'https://stylusv2-explorer.arbitrum.io/address',
-  23011913: 'https://stylus-testnet-explorer.arbitrum.io/address',
+  84532: 'https://sepolia.basescan.org/address',
 };
 
 export const AddressExplorerLink = (props: {

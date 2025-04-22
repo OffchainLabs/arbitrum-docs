@@ -45,7 +45,7 @@ A mirror DAS will use the same tool and, thus, the same configuration options as
 
 Gather the following information:
 
-- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.3-0a9c975@@`
+- The latest Nitro docker image: `@@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@`
 - An RPC endpoint for the <a data-quicklook-from="parent-chain">parent chain</a>. It is recommended to use a [third-party provider RPC](/build-decentralized-apps/reference/01-node-providers.mdx#third-party-rpc-providers) or [run your own node](/run-arbitrum-node/03-run-full-node.mdx) to prevent being rate limited.
 - The SequencerInbox contract address in the parent chain.
 - URL of the list of REST endpoints of other DA servers to configure the REST aggregator.
@@ -201,7 +201,7 @@ spec:
             mkdir -p /home/user/data/badgerdb
             mkdir -p /home/user/data/syncState
             /usr/local/bin/daserver --data-availability.parent-chain-node-url "<YOUR PARENT CHAIN RPC ENDPOINT>" --data-availability.sequencer-inbox-address "<ADDRESS OF SEQUENCERINBOX ON PARENT CHAIN>" --enable-rest --rest-addr '0.0.0.0' --log-level 3 --data-availability.local-cache.enable --data-availability.rest-aggregator.enable --data-availability.rest-aggregator.urls "http://your-main-das.svc.cluster.local:9877" --data-availability.rest-aggregator.online-url-list "<URL TO LIST OF REST ENDPOINTS>" --data-availability.rest-aggregator.sync-to-storage.eager  --data-availability.rest-aggregator.sync-to-storage.eager-lower-bound-block "BLOCK NUMBER" --data-availability.rest-aggregator.sync-to-storage.state-dir /home/user/data/syncState --data-availability.s3-storage.enable --data-availability.s3-storage.access-key "<YOUR ACCESS KEY>" --data-availability.s3-storage.bucket "<YOUR BUCKET>" --data-availability.s3-storage.region "<YOUR REGION>" --data-availability.s3-storage.secret-key "<YOUR SECRET KEY>" --data-availability.s3-storage.object-prefix "<YOUR OBJECT KEY PREFIX>/" --data-availability.local-file-storage.enable --data-availability.local-file-storage.data-dir /home/user/data/das-data
-        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.3-0a9c975@@
+        image: @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@
         imagePullPolicy: Always
         resources:
             limits:
@@ -240,10 +240,20 @@ Archive DA servers are servers that don't discard any data after expiring. Each 
 To activate the "archive mode" in your DAS, set the parameter `discard-after-timeout` to `false` in your storage method. For example:
 
 ```shell
---data-availability.s3-storage.discard-after-timeout=false
+--data-availability.local-db-storage.discard-after-timeout=false
 ```
 
-Note that `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
+:::note
+
+The `s3-storage` **doesn't support** expiration of data, instead that can be enabled from user side by setting `Expiration` as a rule in Lifecycle Configuration of the corresponding S3 bucket. More information available at [AWS Expiring objects](https://docs.aws.amazon.com/AmazonS3/latest/userguide/lifecycle-expire-general-considerations.html).
+
+:::
+
+:::note
+
+The `local-file-storage` doesn't discard data after expiring by default, but expiration can be enabled with `enable-expiry`.
+
+:::
 
 Archive servers should make use of the `--data-availability.rest-aggregator.sync-to-storage` options described above to pull in any data that they don't have.
 

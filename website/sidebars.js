@@ -398,6 +398,11 @@ const sidebars = {
               id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
             },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts',
+              label: 'Canonical factory contracts',
+            },
           ],
         },
         {
@@ -443,6 +448,11 @@ const sidebars = {
                   type: 'doc',
                   id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
                   label: `Manage gas speed limit`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  label: `Post-launch deployments`,
                 },
               ],
             },
@@ -739,16 +749,6 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
-          type: 'doc',
-          label: 'Use Timeboost',
-          id: 'run-arbitrum-node/how-to-use-timeboost',
-        },
-        {
-          type: 'doc',
-          label: 'Troubleshoot Timeboost',
-          id: 'run-arbitrum-node/troubleshoot-timeboost',
-        },
-        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -1039,6 +1039,16 @@ const sidebars = {
               label: 'Public preview',
             },
             {
+              type: 'doc',
+              label: 'Use Timeboost',
+              id: 'how-arbitrum-works/timeboost/how-to-use-timeboost',
+            },
+            {
+              type: 'doc',
+              label: 'Troubleshoot Timeboost',
+              id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
+            },
+            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
@@ -1047,6 +1057,11 @@ const sidebars = {
               type: 'link',
               href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
               label: 'Specification: Timeboost with decentralized sequencing',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2306.02179',
+              label: 'White paper: Timeboost',
             },
           ],
         },

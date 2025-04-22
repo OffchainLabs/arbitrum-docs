@@ -28,7 +28,7 @@ Below, you will find four examples of ArbOS-related code changes and, generally,
 ### 1. Add a new method to existing precompile on a specific ArbOS version:
 
 After you add `sayHi()` to `ArbSys.go` according to the guide in [customize precompile option 1](./customize-precompile.mdx#option-1-add-new-methods-to-an-existing-precompile),
-you need continue to modify [precompile.go][precompile_main_file_link].
+you need continue to modify [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go).
 
 For example, the original code is:
 
@@ -54,7 +54,7 @@ In this way, this method will be executed normally and return results only after
 
 ### 2. Create a new precompile contract on a specific ArbOS version
 
-After you add a new precompile named `ArbHi` according to the guide in [customize precompile option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [precompile.go][precompile_main_file_link],
+After you add a new precompile named `ArbHi` according to the guide in [customize precompile option 2](./customize-precompile.mdx#option-2-create-a-new-precompile) and make changes to [precompile.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go),
 you also need to make the following changes:
 
 ```go
@@ -71,8 +71,8 @@ In this way, `ArbHi` and all its methods will be activated after the ArbOS versi
 
 ### 3. Create a new ArbOS state on a specific ArbOS version
 
-After you add a new state `myNumber` according to the guide in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state), you also need to rewrite [UpgradeArbosVersion][arbosstate_updatearbosversion_method_link] in [arbosstate.go][arbosstate_file_link]:
-Add your expected ArbOS version to the switch case statement of nextArbosVersion. Here we will take ArbOS v21 as an example:
+After you add a new state `myNumber` according to the guide in [customize precompile Option 5](./customize-precompile.mdx#option-5-call-and-modify-state), you also need to rewrite [UpgradeArbosVersion](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/arbos/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go#L253) in [arbosstate.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go):
+Add your expected ArbOS version to the switch case statement of nextArbosVersion. Here we will take ArbOS V21 as an example:
 
 ```go
 ensure := func(err error) {
@@ -130,7 +130,7 @@ func (con *ArbHi) SayHi(c ctx, evm mech) (string, error) {
 }
 ```
 
-In the above code, we use precompiles as an example. Some logic might also affect the STF, such as the methods in [block_process.go][block_processor_file_link], [internal_tx.go][internal_tx_file_link], [tx_processor.go][tx_processor_file_link] and so on.
+In the above code, we use precompiles as an example. Some logic might also affect the STF, such as the methods in [block_process.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/@@nitroPathToArbos=arbos@@/block_processor.go), [internal_tx.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/@@nitroPathToArbos=arbos@@/internal_tx.go), [tx_processor.go](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/@@nitroPathToArbos=arbos@@/tx_processor.go) and so on.
 The aforementioned ArbOS control methods will be needed for interacting with different versions of the STF logic.
 
 :::tip Backward compatibility
@@ -149,10 +149,3 @@ Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-
 After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the document [ArbOS upgrade](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md) to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current and target versions will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, all the features between v18 and v25 will be loaded.
-
-[precompile_main_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.3@@/@@nitroPathToPrecompiles=precompiles@@/precompile.go
-[arbosstate_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go
-[arbosstate_updatearbosversion_method_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/v3.1.0/arbos/@@nitroPathToArbosState=arbos/arbosState@@/arbosstate.go#L253
-[block_processor_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.3@@/@@nitroPathToArbos=arbos@@/block_processor.go
-[internal_tx_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.3@@/@@nitroPathToArbos=arbos@@/internal_tx.go
-[tx_processor_file_link]: https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.3@@/@@nitroPathToArbos=arbos@@/tx_processor.go
