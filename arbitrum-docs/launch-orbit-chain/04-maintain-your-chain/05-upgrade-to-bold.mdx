@@ -124,6 +124,10 @@ Optionally, the script can try to verify the deployed contracts by adding the fo
 ```shell
 $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ```
+Note that:
+
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ### Step 4: Gather the information of the current state of the chain
 
@@ -135,16 +139,16 @@ If a new assertion is confirmed between steps 4 and 5, step 5 will revert and st
 
 :::
 
-Note that:
-
-- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-- `L1_RPC_URL` should point to an RPC of your parent chain.
-
 ```shell
 $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-populate-lookup
 ...
 Done.
 ```
+
+Note that:
+
+- You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ### Step 5: Run the upgrade script
 
@@ -168,5 +172,3 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 ### Step 6: Monitor the validation process
 
 Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 1 hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is 7 days).
-
-If you stopped all validators in Step 4, start them again so they can continue creating assertions.
