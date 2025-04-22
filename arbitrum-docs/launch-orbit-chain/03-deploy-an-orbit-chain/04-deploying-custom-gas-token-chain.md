@@ -26,7 +26,7 @@ Custom gas tokens are **not supported yet** on Rollup chains, only on AnyTrust c
 
 ## About custom gas token Orbit chains
 
-Custom gas token orbit chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard ERC-20 tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. The `ERC-20` token to use must be deployed on the parent chain of your chain.
+Custom gas token orbit chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard ERC-20 tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. The `ERC-20` token to use must be deployed on the parent chain of your chain.
 
 ## How to create a new custom gas token chain using the Orbit SDK
 
