@@ -36,7 +36,7 @@ Here are the steps involved in the deployment process:
 
 1. [Create the chain configuration object](#1-create-the-chain-configuration-object)
 2. [Deploy the AnyTrust Orbit chain](#2-deploy-the-anytrust-orbit-chain)
-3. [Understand the results obtained](#3-understand-the-results-obtained)
+3. [Understand the results obtained](#3-understand-the-returned-data)
 4. [Set the DAC keyset in the SequencerInbox](#4-set-the-dac-keyset-in-the-sequencerinbox)
 
 ### 1. Create the chain configuration object
