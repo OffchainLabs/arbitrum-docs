@@ -1111,6 +1111,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/orbit-quickstart/?)",
       "destination": "/launch-orbit-chain/a-gentle-introduction",
       "permanent": false

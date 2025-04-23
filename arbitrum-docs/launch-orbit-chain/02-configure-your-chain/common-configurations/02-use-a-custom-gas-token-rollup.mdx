@@ -1,0 +1,619 @@
+---
+title: 'How to configure a custom gas token for your Rollup Orbit chain'
+description: 'Learn how to deploy your Rollup Orbit chain with a custom gas token'
+author: allan-gulley
+sme: allan-gulley
+content_type: how-to
+---
+
+import CustomDetails from '@site/src/components/CustomDetails';
+
+:::info
+
+Custom gas token support for Rollups is currently limited to L2s that post data to Ethereum and have <a data-quicklook-from="bold">BoLD</a> enabled. An expected future upgrade will add support for L3s.
+
+:::
+
+When deploying an Orbit chain in [Rollup mode](/how-arbitrum-works/12-data-availability.mdx#rollup-mode), you can use a custom `ERC-20` token as the native gas token. This token is usable for <a data-quicklook-from="transaction">Transaction</a> fees on that specific Orbit chain and reimbursing the <a data-quicklook-from="batch">Batch</a> poster for data posted to Ethereum. An example would be an L2 Rollup that uses `USDC` as its custom gas token but pays `ETH` to post data to L1 Ethereum.
+
+Enabling a custom fee token for a Rollup chain requires additional configuration compared to an [AnyTrust chain](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx); it also introduces important exchange-rate considerations. This guide outlines specific implementation steps and operational considerations for chain owners or operators to consider when enabling a custom fee token for Rollups.
+
+## Requirements of the custom gas token
+
+- Must be a standard `ERC-20` token
+- Transfers and approvals must occur directly via the token contract, not via proxies or hooks
+- Must not be rebasing or include transfer fees and
+- Must not use transfer callbacks or any onchain behavior that reverts if the sender and recipient are the same
+
+## Understanding the fee token pricer
+
+In Rollup mode, data posting costs to the <a data-quicklook-from="parent-chain">Parent chain</a> are paid in the parent chain’s native token but get reimbursed in the <a data-quicklook-from="child-chain">Child chain</a>’s fee token. To facilitate this, you must deploy and register a fee token pricer contract, providing an exchange rate between the two tokens (child fee token and parent fee token). We use this exchange rate to calculate the custom fee tokens required to reimburse the batch poster for each batch they post to the parent chain.
+
+Below are three example implementation options that chain owners may consider. Chain owners are free to develop their custom fee token pricers.
+
+:::warning
+
+The implementations included in the examples below have not undergone comprehensive testing or auditing. The intent is to illustrate different options for chain owners to consider.
+
+:::
+
+### 1. Manual exchange rate
+
+The <a data-quicklook-from="chain-owner">Chain Owner</a> manually sets and updates the exchange rate; this is the simplest option but requires manual updates to track price changes or dependence on an owner-defined oracle.
+
+This approach generally makes sense if:
+
+- You, as the chain owner, want full control over the exchange rate
+- The chain owner and the batch poster are the same entity
+- You are operating in a tightly controlled or experimental environment
+
+An (unaudited) example to reference is: [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+
+      <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
+
+      ```solidity
+      // SPDX-License-Identifier: MIT
+      pragma solidity ^0.8.0;
+
+      import {IFeeTokenPricer} from "../../../src/bridge/ISequencerInbox.sol";
+      import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+      /// @title A uniswap twap pricer
+      /// @notice An example of a type 1 fee token pricer. The owner can adjust the exchange rate at any time
+      ///         to ensure the batch poster is reimbursed an appropriate amount on the child chain
+      contract OwnerAdjustableExchangeRatePricer is IFeeTokenPricer, Ownable {
+         uint256 public exchangeRate;
+
+         event ExchangeRateSet(uint256 newExchangeRate);
+
+         constructor(
+            uint256 initialExchangeRate
+         ) Ownable() {
+            exchangeRate = initialExchangeRate;
+            emit ExchangeRateSet(initialExchangeRate);
+         }
+
+         function setExchangeRate(
+            uint256 _exchangeRate
+         ) external onlyOwner {
+            exchangeRate = _exchangeRate;
+            emit ExchangeRateSet(_exchangeRate);
+         }
+
+         // @inheritdoc IFeeTokenPricer
+         function getExchangeRate() external view returns (uint256) {
+            return exchangeRate;
+         }
+      }
+      ```
+      </CustomDetails>
+
+### 2. External oracle
+
+An external oracle fetches the exchange rate; this reduces operational requirements for the chain owner but introduces a dependency on an external service to provide accurate, reliable pricing data.
+
+This approach generally makes sense if:
+
+- Reliable, robust oracles are available for the gas token pair
+- Reducing trust in the chain owner is important for your implementation
+- You, as the chain owner, want to avoid manual exchange rate updates
+
+See an (unaudited) example here using a TWAP oracle: [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+
+<CustomDetails summary="UniswapV2TwapPricer.sol">
+
+      ```solidity
+      // SPDX-License-Identifier: MIT
+      pragma solidity ^0.8.0;
+
+      import {IFeeTokenPricer} from "../../../../src/bridge/ISequencerInbox.sol";
+      import {FixedPoint} from "./FixedPoint.sol";
+      import {IUniswapV2Pair} from "@uniswap/v2-core/interfaces/IUniswapV2Pair.sol";
+
+      /// @title A uniswap twap pricer
+      /// @notice An example of a type 2 fee token pricer. It uses an oracle to get the fee token price at
+      ///         at the time the batch is posted
+      contract UniswapV2TwapPricer is IFeeTokenPricer {
+         using FixedPoint for *;
+
+         uint256 public constant TWAP_WINDOW = 1 hours;
+
+         IUniswapV2Pair immutable pair;
+         address public immutable weth;
+         address public immutable token;
+
+         uint256 public price0CumulativeLast;
+         uint256 public price1CumulativeLast;
+         uint32 public pricerUpdatedAt;
+
+         FixedPoint.uq112x112 public price0Average;
+         FixedPoint.uq112x112 public price1Average;
+
+         constructor(IUniswapV2Pair _pair, address _weth) {
+            pair = _pair;
+            address token0 = _pair.token0();
+            address token1 = _pair.token1();
+
+            require(token0 == _weth || token1 == _weth, "WETH not in pair");
+
+            weth = _weth;
+            token = token0 == _weth ? token1 : token0;
+
+            price0CumulativeLast = _pair.price0CumulativeLast();
+            price1CumulativeLast = _pair.price1CumulativeLast();
+            uint112 reserve0;
+            uint112 reserve1;
+            (reserve0, reserve1, pricerUpdatedAt) = _pair.getReserves();
+            require(reserve0 != 0 && reserve1 != 0, "No reserves"); // ensure that there's liquidity in the pair
+         }
+
+         // @inheritdoc IFeeTokenPricer
+         function getExchangeRate() external returns (uint256) {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+            uint32 timeElapsed = currentBlockTimestamp - pricerUpdatedAt;
+
+            if (timeElapsed >= TWAP_WINDOW) {
+                  _update(timeElapsed);
+            }
+
+            if (weth == pair.token0()) {
+                  return FixedPoint.mul(price0Average, uint256(1)).decode144();
+            } else {
+                  return FixedPoint.mul(price1Average, uint256(1)).decode144();
+            }
+         }
+
+         function updatePrice() external {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+            uint32 timeElapsed = currentBlockTimestamp - pricerUpdatedAt;
+            require(timeElapsed >= TWAP_WINDOW, "Minimum TWAP window not elapsed");
+
+            _update(timeElapsed);
+         }
+
+         function _update(
+            uint256 timeElapsed
+         ) internal {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+
+            // fetch latest cumulative price accumulators
+            IUniswapV2Pair _pair = pair;
+            uint256 price0Cumulative = _pair.price0CumulativeLast();
+            uint256 price1Cumulative = _pair.price1CumulativeLast();
+
+            // add the current price if prices haven't been updated in this block
+            (uint112 reserve0, uint112 reserve1, uint32 pairUpdatedAt) =
+                  IUniswapV2Pair(pair).getReserves();
+            if (pairUpdatedAt != currentBlockTimestamp) {
+                  uint256 delta = currentBlockTimestamp - pairUpdatedAt;
+                  unchecked {
+                     price0Cumulative += uint256(FixedPoint.fraction(reserve1, reserve0)._x) * delta;
+                     price1Cumulative += uint256(FixedPoint.fraction(reserve0, reserve1)._x) * delta;
+                  }
+            }
+
+            // overflow is desired, casting never truncates
+            // cumulative price is in (uq112x112 price * seconds) units so we simply wrap it after division by time elapsed
+            unchecked {
+                  price0Average = FixedPoint.uq112x112(
+                     uint224((price0Cumulative - price0CumulativeLast) / timeElapsed)
+                  );
+                  price1Average = FixedPoint.uq112x112(
+                     uint224((price1Cumulative - price1CumulativeLast) / timeElapsed)
+                  );
+            }
+
+            price0CumulativeLast = price0Cumulative;
+            price1CumulativeLast = price1Cumulative;
+            pricerUpdatedAt = currentBlockTimestamp;
+         }
+      }
+      ```
+      </CustomDetails>
+
+### 3. Exchange rate tracking
+
+The batch poster records the rate when converting the child gas token to the parent gas token. This approach can ensure accurate reimbursement but also requires trusted reporting and more complex accounting.
+
+This approach generally makes sense if:
+
+- Your batch poster is trusted and willing to record exchange rates when purchasing parent chain gas
+- You want reimbursement to be precise and not over- or under-charge users
+- You want to minimize reliance on the chain owner or external oracles
+
+Consider this (unaudited) example: [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+
+<CustomDetails summary="TradeTracker.sol">
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import { IFeeTokenPricer } from '../../../../src/bridge/ISequencerInbox.sol';
+import { IGasRefunder } from '../../../../src/libraries/IGasRefunder.sol';
+import { Ownable } from '@openzeppelin/contracts/access/Ownable.sol';
+import { IERC20 } from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import { ERC20 } from '@openzeppelin/contracts/token/ERC20/ERC20.sol';
+import { SafeERC20 } from '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+
+abstract contract TradeTracker is IFeeTokenPricer, IGasRefunder {
+using SafeERC20 for IERC20;
+
+    uint8 public immutable childTokenDecimals;
+    uint256 public immutable calldataCost;
+    address public immutable sequencerInbox;
+
+    uint256 public thisChainTokenReserve;
+    uint256 public childChainTokenReserve;
+
+    error NotSequencerInbox(address caller);
+    error InsufficientThisChainTokenReserve(address batchPoster);
+    error InsufficientChildChainTokenReserve(address batchPoster);
+
+    constructor(uint8 _childTokenDecimals, uint256 _calldataCost, address _sequencerInbox) {
+        childTokenDecimals = _childTokenDecimals;
+        calldataCost = _calldataCost;
+        sequencerInbox = _sequencerInbox;
+    }
+
+    // @inheritdoc IFeeTokenPricer
+    function getExchangeRate() public view returns (uint256) {
+        uint256 thisChainTokens = thisChainTokenReserve;
+        uint256 childChainTokens = childChainTokenReserve;
+        // if either of the reserves is empty the spender will receive no reimbursement
+        if (thisChainTokens == 0 || childChainTokens == 0) {
+            return 0;
+        }
+
+        // gas tokens on this chain always have 18 decimals
+        return (childChainTokens * 1e18) / thisChainTokens;
+    }
+
+    /// @notice Record that a trade occurred. The sub contract can choose how and when trades can be recorded
+    ///         but it is likely that the batchposter will be trusted to report the correct trade price.
+    /// @param thisChainTokensPurchased The number of this chain tokens purchased
+    /// @param childChainTokensPaid The number of child chain tokens purchased
+    function recordTrade(uint256 thisChainTokensPurchased, uint256 childChainTokensPaid) internal {
+        thisChainTokenReserve += thisChainTokensPurchased;
+        childChainTokenReserve += scaleTo18Decimals(childChainTokensPaid);
+    }
+
+    /// @notice A hook to record when gas is spent by the batch poster
+    ///         Matches the interface used in GasRefundEnable so can be used by the caller as a gas refunder
+    /// @param batchPoster The address spending the gas
+    /// @param gasUsed The amount of gas used
+    /// @param calldataSize The calldata size - will be added to the gas used at some predetermined rate
+    function onGasSpent(
+        address payable batchPoster,
+        uint256 gasUsed,
+        uint256 calldataSize
+    ) external returns (bool) {
+        if (msg.sender != sequencerInbox) revert NotSequencerInbox(msg.sender);
+
+        // each time gas is spent we reduce the reserves
+        // to represent what will have been refunded on the child chain
+
+        gasUsed += calldataSize * calldataCost;
+        uint256 thisTokenSpent = gasUsed * block.basefee;
+        uint256 exchangeRateUsed = getExchangeRate();
+        uint256 childTokenReceived = exchangeRateUsed * thisTokenSpent / 1e18;
+
+        if (thisTokenSpent > thisChainTokenReserve) {
+            revert InsufficientThisChainTokenReserve(batchPoster);
+        }
+        thisChainTokenReserve -= thisTokenSpent;
+
+        if (childTokenReceived > childChainTokenReserve) {
+            // it shouldn't be possible to hit this revert if the maths of calculating an exchange rate are correct
+            revert InsufficientChildChainTokenReserve(batchPoster);
+        }
+        childChainTokenReserve -= childTokenReceived;
+
+        return true;
+    }
+
+    function scaleTo18Decimals(
+        uint256 amount
+    ) internal view returns (uint256) {
+        if (childTokenDecimals == 18) {
+            return amount;
+        } else if (childTokenDecimals < 18) {
+            return amount * 10 ** (18 - childTokenDecimals);
+        } else {
+            return amount / 10 ** (childTokenDecimals - 18);
+        }
+    }
+
+}
+
+````
+</CustomDetails>
+
+An important risk for chain owners to consider is exchange rate stability. If the fee token pricer returns stale or manipulated prices, the batch poster may be under- or over-reimbursed. In the case of under-reimbursement, the batch poster would continue operating but at a loss. In the case of over-reimbursement, end users would end up overpaying transaction fees. While this risk may be acceptable for experimental or early-stage chains, you should carefully consider the financial consequences for the batch poster or end users on your Orbit chain. The “External oracle” and the “Exchange rate tracking” approaches seek to mitigate this risk. Ultimately, the chain owner should assess their unique situation when determining which fee-pricing strategy makes the most sense for them (if any).
+
+## Configuration of the Rollup when using a custom gas token
+
+Here are the steps you should take to deploy your Orbit Rollup with a custom gas token:
+
+1. **Deploy your `ERC-20` token on the parent chain (if not already deployed)**
+2. **Deploy your fee token pricer**
+   Choose a pricer approach that best meets your needs; unaudited examples are:
+
+   - [OwnerAdjustableExchangeRatePricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/OwnerAdjustableExchangeRatePricer.sol)
+
+      <CustomDetails summary="OwnerAdjustableExchangeRatePricer.sol">
+
+      ```solidity
+      // SPDX-License-Identifier: MIT
+      pragma solidity ^0.8.0;
+
+      import {IFeeTokenPricer} from "../../../src/bridge/ISequencerInbox.sol";
+      import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+
+      /// @title A uniswap twap pricer
+      /// @notice An example of a type 1 fee token pricer. The owner can adjust the exchange rate at any time
+      ///         to ensure the batch poster is reimbursed an appropriate amount on the child chain
+      contract OwnerAdjustableExchangeRatePricer is IFeeTokenPricer, Ownable {
+         uint256 public exchangeRate;
+
+         event ExchangeRateSet(uint256 newExchangeRate);
+
+         constructor(
+            uint256 initialExchangeRate
+         ) Ownable() {
+            exchangeRate = initialExchangeRate;
+            emit ExchangeRateSet(initialExchangeRate);
+         }
+
+         function setExchangeRate(
+            uint256 _exchangeRate
+         ) external onlyOwner {
+            exchangeRate = _exchangeRate;
+            emit ExchangeRateSet(_exchangeRate);
+         }
+
+         // @inheritdoc IFeeTokenPricer
+         function getExchangeRate() external view returns (uint256) {
+            return exchangeRate;
+         }
+      }
+      ```
+      </CustomDetails>
+
+   - [UniswapV2TwapPricer.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/uniswap-v2-twap/UniswapV2TwapPricer.sol)
+
+      <CustomDetails summary="UniswapV2TwapPricer.sol">
+
+      ```solidity
+      // SPDX-License-Identifier: MIT
+      pragma solidity ^0.8.0;
+
+      import {IFeeTokenPricer} from "../../../../src/bridge/ISequencerInbox.sol";
+      import {FixedPoint} from "./FixedPoint.sol";
+      import {IUniswapV2Pair} from "@uniswap/v2-core/interfaces/IUniswapV2Pair.sol";
+
+      /// @title A uniswap twap pricer
+      /// @notice An example of a type 2 fee token pricer. It uses an oracle to get the fee token price at
+      ///         at the time the batch is posted
+      contract UniswapV2TwapPricer is IFeeTokenPricer {
+         using FixedPoint for *;
+
+         uint256 public constant TWAP_WINDOW = 1 hours;
+
+         IUniswapV2Pair immutable pair;
+         address public immutable weth;
+         address public immutable token;
+
+         uint256 public price0CumulativeLast;
+         uint256 public price1CumulativeLast;
+         uint32 public pricerUpdatedAt;
+
+         FixedPoint.uq112x112 public price0Average;
+         FixedPoint.uq112x112 public price1Average;
+
+         constructor(IUniswapV2Pair _pair, address _weth) {
+            pair = _pair;
+            address token0 = _pair.token0();
+            address token1 = _pair.token1();
+
+            require(token0 == _weth || token1 == _weth, "WETH not in pair");
+
+            weth = _weth;
+            token = token0 == _weth ? token1 : token0;
+
+            price0CumulativeLast = _pair.price0CumulativeLast();
+            price1CumulativeLast = _pair.price1CumulativeLast();
+            uint112 reserve0;
+            uint112 reserve1;
+            (reserve0, reserve1, pricerUpdatedAt) = _pair.getReserves();
+            require(reserve0 != 0 && reserve1 != 0, "No reserves"); // ensure that there's liquidity in the pair
+         }
+
+         // @inheritdoc IFeeTokenPricer
+         function getExchangeRate() external returns (uint256) {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+            uint32 timeElapsed = currentBlockTimestamp - pricerUpdatedAt;
+
+            if (timeElapsed >= TWAP_WINDOW) {
+                  _update(timeElapsed);
+            }
+
+            if (weth == pair.token0()) {
+                  return FixedPoint.mul(price0Average, uint256(1)).decode144();
+            } else {
+                  return FixedPoint.mul(price1Average, uint256(1)).decode144();
+            }
+         }
+
+         function updatePrice() external {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+            uint32 timeElapsed = currentBlockTimestamp - pricerUpdatedAt;
+            require(timeElapsed >= TWAP_WINDOW, "Minimum TWAP window not elapsed");
+
+            _update(timeElapsed);
+         }
+
+         function _update(
+            uint256 timeElapsed
+         ) internal {
+            uint32 currentBlockTimestamp = uint32(block.timestamp);
+
+            // fetch latest cumulative price accumulators
+            IUniswapV2Pair _pair = pair;
+            uint256 price0Cumulative = _pair.price0CumulativeLast();
+            uint256 price1Cumulative = _pair.price1CumulativeLast();
+
+            // add the current price if prices haven't been updated in this block
+            (uint112 reserve0, uint112 reserve1, uint32 pairUpdatedAt) =
+                  IUniswapV2Pair(pair).getReserves();
+            if (pairUpdatedAt != currentBlockTimestamp) {
+                  uint256 delta = currentBlockTimestamp - pairUpdatedAt;
+                  unchecked {
+                     price0Cumulative += uint256(FixedPoint.fraction(reserve1, reserve0)._x) * delta;
+                     price1Cumulative += uint256(FixedPoint.fraction(reserve0, reserve1)._x) * delta;
+                  }
+            }
+
+            // overflow is desired, casting never truncates
+            // cumulative price is in (uq112x112 price * seconds) units so we simply wrap it after division by time elapsed
+            unchecked {
+                  price0Average = FixedPoint.uq112x112(
+                     uint224((price0Cumulative - price0CumulativeLast) / timeElapsed)
+                  );
+                  price1Average = FixedPoint.uq112x112(
+                     uint224((price1Cumulative - price1CumulativeLast) / timeElapsed)
+                  );
+            }
+
+            price0CumulativeLast = price0Cumulative;
+            price1CumulativeLast = price1Cumulative;
+            pricerUpdatedAt = currentBlockTimestamp;
+         }
+      }
+      ```
+      </CustomDetails>
+
+   - [TradeTracker.sol](https://github.com/OffchainLabs/nitro-contracts/blob/main/test/foundry/fee-token-pricers/trade-tracker/TradeTracker.sol)
+
+      <CustomDetails summary="TradeTracker.sol">
+
+      ```solidity
+      // SPDX-License-Identifier: MIT
+      pragma solidity ^0.8.0;
+
+      import {IFeeTokenPricer} from "../../../../src/bridge/ISequencerInbox.sol";
+      import {IGasRefunder} from "../../../../src/libraries/IGasRefunder.sol";
+      import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+      import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+      import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+      import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+      abstract contract TradeTracker is IFeeTokenPricer, IGasRefunder {
+         using SafeERC20 for IERC20;
+
+         uint8 public immutable childTokenDecimals;
+         uint256 public immutable calldataCost;
+         address public immutable sequencerInbox;
+
+         uint256 public thisChainTokenReserve;
+         uint256 public childChainTokenReserve;
+
+         error NotSequencerInbox(address caller);
+         error InsufficientThisChainTokenReserve(address batchPoster);
+         error InsufficientChildChainTokenReserve(address batchPoster);
+
+         constructor(uint8 _childTokenDecimals, uint256 _calldataCost, address _sequencerInbox) {
+            childTokenDecimals = _childTokenDecimals;
+            calldataCost = _calldataCost;
+            sequencerInbox = _sequencerInbox;
+         }
+
+         // @inheritdoc IFeeTokenPricer
+         function getExchangeRate() public view returns (uint256) {
+            uint256 thisChainTokens = thisChainTokenReserve;
+            uint256 childChainTokens = childChainTokenReserve;
+            // if either of the reserves is empty the spender will receive no reimbursement
+            if (thisChainTokens == 0 || childChainTokens == 0) {
+                  return 0;
+            }
+
+            // gas tokens on this chain always have 18 decimals
+            return (childChainTokens * 1e18) / thisChainTokens;
+         }
+
+         /// @notice Record that a trade occurred. The sub contract can choose how and when trades can be recorded
+         ///         but it is likely that the batchposter will be trusted to report the correct trade price.
+         /// @param thisChainTokensPurchased The number of this chain tokens purchased
+         /// @param childChainTokensPaid The number of child chain tokens purchased
+         function recordTrade(uint256 thisChainTokensPurchased, uint256 childChainTokensPaid) internal {
+            thisChainTokenReserve += thisChainTokensPurchased;
+            childChainTokenReserve += scaleTo18Decimals(childChainTokensPaid);
+         }
+
+         /// @notice A hook to record when gas is spent by the batch poster
+         ///         Matches the interface used in GasRefundEnable so can be used by the caller as a gas refunder
+         /// @param batchPoster The address spending the gas
+         /// @param gasUsed The amount of gas used
+         /// @param calldataSize The calldata size - will be added to the gas used at some predetermined rate
+         function onGasSpent(
+            address payable batchPoster,
+            uint256 gasUsed,
+            uint256 calldataSize
+         ) external returns (bool) {
+            if (msg.sender != sequencerInbox) revert NotSequencerInbox(msg.sender);
+
+            // each time gas is spent we reduce the reserves
+            // to represent what will have been refunded on the child chain
+
+            gasUsed += calldataSize * calldataCost;
+            uint256 thisTokenSpent = gasUsed * block.basefee;
+            uint256 exchangeRateUsed = getExchangeRate();
+            uint256 childTokenReceived = exchangeRateUsed * thisTokenSpent / 1e18;
+
+            if (thisTokenSpent > thisChainTokenReserve) {
+                  revert InsufficientThisChainTokenReserve(batchPoster);
+            }
+            thisChainTokenReserve -= thisTokenSpent;
+
+            if (childTokenReceived > childChainTokenReserve) {
+                  // it shouldn't be possible to hit this revert if the maths of calculating an exchange rate are correct
+                  revert InsufficientChildChainTokenReserve(batchPoster);
+            }
+            childChainTokenReserve -= childTokenReceived;
+
+            return true;
+         }
+
+         function scaleTo18Decimals(
+            uint256 amount
+         ) internal view returns (uint256) {
+            if (childTokenDecimals == 18) {
+                  return amount;
+            } else if (childTokenDecimals < 18) {
+                  return amount * 10 ** (18 - childTokenDecimals);
+            } else {
+                  return amount / 10 ** (childTokenDecimals - 18);
+            }
+         }
+      }
+      ```
+      </CustomDetails>
+
+   Make sure the pricer is deployed successfully on the parent chain.
+
+3. **Configure the fee token and pricer when creating the rollup**
+   Use the [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
+
+   - `FEE_TOKEN_ADDRESS` = your `ERC-20` gas token
+   - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
+   - `ROLLUP_CREATOR_ADDRESS` = the rollup creator contract on L1
+   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-orbit-chain/bold-adoption-for-orbit-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+
+   The script will deploy and initialize the Rollup accordingly.
+
+You can refer to the source files for more details on:
+
+- [fee-token-pricers](https://github.com/OffchainLabs/nitro-contracts/tree/main/test/foundry/fee-token-pricers)
+- [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts)
+  You can also find more info about how Nitro manages [gas and fees](/how-arbitrum-works/09-gas-fees.mdx) here. If you’re unsure how to configure the Rollup correctly or have questions about fee pricer implementations, please get in touch with Offchain Labs or your chain’s deployment provider.
+
+````
