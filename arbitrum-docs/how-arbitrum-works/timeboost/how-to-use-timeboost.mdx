@@ -522,6 +522,26 @@ In the current implementation, information about the winning bid for a resolved 
 
 Note: Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
+Here is an example query on how to look up and download historical bid data:
+
+```bash
+➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids --recursive --summarize --human-readable --no-sign-request
+
+2025-04-17 11:13:39    2.1 KiB uw2/validated-timeboost-bids/2025/04/17/0053581-0053595.csv.gzip
+2025-04-17 11:28:39    2.5 KiB uw2/validated-timeboost-bids/2025/04/17/0053596-0053610.csv.gzip
+...
+2025-04-24 14:28:55    3.6 KiB uw2/validated-timeboost-bids/2025/04/24/0063856-0063870.csv.gzip
+2025-04-24 14:43:55    3.2 KiB uw2/validated-timeboost-bids/2025/04/24/0063871-0063885.csv.gzip
+2025-04-24 14:58:55    3.0 KiB uw2/validated-timeboost-bids/2025/04/24/0063886-0063900.csv.gzip
+
+Total Objects: 694
+   Total Size: 1.3 MiB
+
+
+➜ ~ aws s3 cp s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/2025/04/24/0063886-0063900.csv.gzip local.csv.gzip --no-sign-request
+download: s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids/2025/04/24/0063886-0063900.csv.gzip to ./local.csv.gzip
+```
+
 ## Troubleshooting and best practices
 
 Our guide on [Troubleshooting Timeboost](/how-arbitrum-works/timeboost/troubleshoot-timeboost.mdx) contains more information on how response times work and how express lane transactions are sequenced, alongside common errors and best practices for using Timeboost.
