@@ -523,6 +523,7 @@ In the current implementation, information about the winning bid for a resolved 
 Note: Make sure you use `--no-sign-request` with the [AWS S3 CLI](https://docs.aws.amazon.com/cli/latest/reference/s3/).
 
 Here is an example query on how to look up and download historical bid data:
+
 ```bash
 ➜  ~ aws s3 ls s3://timeboost-auctioneer-arb1/uw2/validated-timeboost-bids --recursive --summarize --human-readable --no-sign-request
 
