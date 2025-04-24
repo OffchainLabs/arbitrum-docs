@@ -326,6 +326,11 @@ const sidebars = {
                   label: `Enable fast withdrawals`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/deploy-timeboost',
+                  label: `Deploy and configure Timeboost`,
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -537,6 +542,11 @@ const sidebars = {
           type: 'doc',
           id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
+        },
+        {
+          type: 'doc',
+          id: 'launch-orbit-chain/timeboost-for-orbit',
+          label: 'Timeboost for Orbit chains',
         },
         {
           type: 'doc',
@@ -1054,6 +1064,20 @@ const sidebars = {
               id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
             },
             {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/launch-orbit-chain/configure-your-chain/advanced-configurations/deploy-timeboost">Deploy Timeboost <span class="other-section-icon">↑</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
+            },
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/launch-orbit-chain/timeboost-for-orbit">Timeboost for Orbit chains<span class="other-section-icon">↑</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
+            },
+            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
@@ -1067,6 +1091,11 @@ const sidebars = {
               type: 'link',
               href: 'https://arxiv.org/abs/2306.02179',
               label: 'White paper: Timeboost',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2410.10797',
+              label: 'MEV Capture Through Time-Advantaged Arbitrage',
             },
           ],
         },

@@ -1,0 +1,91 @@
+---
+title: 'Timeboost for Orbit chains'
+sidebar_label: 'Timeboost for Orbit chains'
+description: 'Guidance & best practices for using Timeboost on Orbit chains'
+user_story: 'As a developer or researcher of the Arbitrum product suite, I want to learn about Timeboost, a new transaction ordering policy for Arbitrum chains'
+content_type: release announcement
+author: leeederek
+sme: leeederek
+---
+
+:::info PUBLIC PREVIEW DOCUMENT
+
+This document is currently in **public preview** and may change significantly as feedback is captured from readers like you. Click the **Request an update** button at the top of this document or [join the Arbitrum Discord](https://discord.gg/arbitrum) to share your feedback.
+
+:::
+
+## Launch details and key dates
+
+- **Status:** Alpha - not formally supported yet for deployments on Orbit chains
+- **Arbitrum Sepolia**: Feb 12, 2025
+- <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a>: April 17, 2025{' '}
+- <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a>: April 17, 2025{' '}
+
+## tldr;
+
+<a data-quicklook-from="timeboost">Arbitrum Timeboost</a> is a novel transaction ordering policy that
+can be optionally deployed and enabled for any Arbitrum chain. Timeboost allows a chain owner to capture
+some of the available Maximum Extractable Value (MEV) on their blockchain and reduces latency-related
+spamming, in exchange for a small impact on user response times (despite block times not changing). It
+is therefore recommended that chains only consider deploying and enabling Timeboost if there is substantial
+DeFi and related MEV activity (e.g. liquidations, arbitrage) on the chain. Please read the [gentle introduction
+to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn more about how Timeboost
+works.
+
+As with all features on the Arbitrum stack, Orbit chains can adopt Timeboost at their own discretion and on their own timeline. To deploy and enable Arbitrum Timeboost on your chain, please refer to this guide on how to [deploy and configure Timeboost](../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-deploy-timeboost.mdx).
+
+## Recommended Adoption Path
+
+It is recommended that most Orbit chains **do not** deploy Arbitrum Timeboost because the benefits do not outweigh the trade-offs, in the majority of cases. The reason behind this recommendation mainly comes down to cost and user experience. The only cases where Timeboost might make sense are for chains who have significant DeFi and related MEV activity, since the potential revenue from bids might outweigh the costs and potential impact on user experience.
+
+Again, Orbit chains can adopt Timeboost at their own discretion and on their own timeline so this is only a recommendation.
+
+## Benefits of adopting Timeboost
+
+Timeboost allows a chain owner to capture some of the available MEV on their blockchain and reduces latency-related spamming while still preserving the built-in protections and UX benefits that Arbitrum users have come to know and enjoy. A more in-depth overview of the benefits of Timeboost are explored in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx) and also a paper on how Timeboost is more profitable for arbitrageurs compared to other forms of MEV capture, like Priority Gas Auctions (PGA) [here](https://arxiv.org/abs/2410.10797).
+
+#### Fair(er) MEV capture
+
+Timeboost gives sophisticated actors (e.g. searchers) the ability to purchase a fixed time-advantage over a fixed number of blocks to perform various MEV activities, such as liquidations and arbitrage. This design preserves the use of a private mempool that all Arbitrum chains have by default and does not impact block times, which both protects users from harmful types of MEV (e.g. frontrunning) and does not change block times.
+
+#### Potential revenue capture for chain owners
+
+The auction, run at a fixed cadence, is held off-chain. Bids can be made in any asset that the chain owner designates, including custom ERC-20 tokens. Furthermore, the chain owner has full discretion over what to do with the bid proceeds. For example, chain owners may decide to burn the bid proceeds or use the bid proceeds to support the chain in other ways.
+
+It stands to reason that sophisticated actors (e.g. searchers) will bid up to the amount that they believe they can profit or realize from the time-advantage. Therefore, at equilibrium, one could reasonably expect that the bid proceeds will approach or equal the amount of available MEV on a Timeboost-enabled chain.
+
+#### Potential reduction in latency-based spam
+
+As explained earlier, searchers will be incentivized to bid on-chain for the time-advantage, rather than spending money on off-chain hardware to win latency races. Therefore, at equilibrium, one could reasonably expect that the amount of latency-based spam should reduce on a Timeboost-enabled chain.
+
+## Trade offs with adopting Timeboost
+
+As mentioned earlier, there exist several trade-offs that chain owners should weigh when deciding whether or not to adopt Timeboost. Below we cover two of them.
+
+#### Cost
+
+As explained in the guide on [how to deploy and configure Timeboost](../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-deploy-timeboost.mdx), there are are three core components to Timeboost:
+
+- An off-chain auctioneer (responsible for receiving and validating bids, and resolving express lane auctions),
+- An on-chain smart contract (to manage the express lane auction), and
+- A new configuration on the sequencer (to implement the express lane time advantage).
+
+Often times, the cost required to set up, configure, and maintain the infrastructure above (especially the auctioneer) will exceed that of the potential revenue that Timeboost brings in. Most importantly, the revenue that Timeboost can generate for the chain is _not guaranteed_ either.
+
+#### User Experience
+
+As explained in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artifical delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artifical delay and the block time of the chain.
+
+## Configuring Timeboost's Parameters
+
+Below is a table of the configurable parameters and how to think about adjusting their values, should you choose to deploy and enable Timeboost for your chain.
+
+| Parameter name          | Description                                                                                                                                                                                                                                          | Considerations                                                                                                                                                                                                                                |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `roundDurationSeconds`  | Duration of time that the sequencer will honor the express lane privileges for transactions signed by the current round’s express lane controller. Default: 60 seconds                                                                               | The larger this value, the more powerful and valuable controlling the express lane will be. Higher values may incentivize more participation and demand for the express lane time advantage.                                                  |
+| `auctionClosingSeconds` | Time before the start of the next round. The autonomous auctioneer will not accept bids during this time interval. Default: 15 seconds                                                                                                               | The larger the value, the more difficult it is for participants to predict the value of the future express lane round. However, too small of a value may leave not enough time for the auctioneer to resolve the auction in a timely fashion. |
+| `beneficiary`           | Address where proceeds from the Timeboost auction are sent to when `flushBeneficiaryBalance()` gets called on the auction contract. Default: An address controlled by the chain's owner                                                              | Can be any address, including the burn address, that the chain owner desginates or controls.                                                                                                                                                  |
+| `_biddingToken`         | Address of the token used to make bids in the Timeboost auction. It can be any `ERC-20` token (assuming the token address chosen does not have fee-on-transfer, rebasing, transfer hooks, or otherwise non-standard `ERC-20` logic). Default: `WETH` | This asset should ideally be liquid and easily obtainable for your auction participants. Furthermore, the less volatile this asset is, the more consistent your auction will be.                                                              |
+| `nonExpressDelayMsec`   | The artificial delay applied to the arrival timestamp of non-express lane transactions _before_ the non-express lane transactions are sequenced. Default: 0.2 seconds, or 200 millisecond                                                            | The larger the value, the more valuable the express lane control will be but at the expense of slower response times for users in the non-express lane.                                                                                       |
+| `reservePrice`          | The minimum bid amount accepted by the auction contract for Timeboost auctions, denominated in `_biddingToken`. Default: None                                                                                                                        | This value should be left empty and only be changed to raise the minimum bid post-deployment of the auction contract.                                                                                                                         |
+| `_minReservePrice`      | A value that must be equal to or below the `reservePrice` to act as a "floor minimum" for Timeboost bids. Enforced by the auction contract. Default: 0.001 `WETH`                                                                                    | A value that is low enough to make the auction worth while participating in, but not high enough to pose a significant barrier to entry (which therefore could result in monopolization of the express lane)                                  |
