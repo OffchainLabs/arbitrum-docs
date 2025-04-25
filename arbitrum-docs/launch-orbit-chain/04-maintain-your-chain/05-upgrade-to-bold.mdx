@@ -124,6 +124,7 @@ Optionally, the script can try to verify the deployed contracts by adding the fo
 ```shell
 $ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ```
+
 Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
@@ -173,4 +174,4 @@ execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca
 
 Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 1 hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is 7 days).
 
-A separate  is also available in the `orbit-actions` repository. 
+A separate is also available in the `orbit-actions` repository.
