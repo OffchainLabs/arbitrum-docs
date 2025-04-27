@@ -94,16 +94,21 @@ export function Modal({
   customContent,
   coordinates,
   children,
+  id = 'default',
 }: {
   number: 1 | 2 | 3 | 4 | 5;
   customContent?: React.ComponentType;
   coordinates?: typeof defaultCoordinates;
   children?: React.ReactNode;
+  id?: string;
 }) {
   /**
    * State to track whether the modal is currently open.
    */
   const [isOpen, setIsOpen] = useState(false);
+
+  // Create a unique modal ID for this instance
+  const modalId = `modal-${id}-${number}`;
 
   /**
    * Get the current color mode (light/dark) from Docusaurus.
@@ -179,7 +184,7 @@ export function Modal({
       </g>
       {typeof document !== 'undefined' &&
         createPortal(
-          <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+          <Dialog.Root open={isOpen} onOpenChange={setIsOpen} id={modalId}>
             <Dialog.Portal>
               {overlayTransitions(
                 (styles, item) =>

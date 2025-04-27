@@ -33,6 +33,12 @@ export interface SyntaxHighlighterProps {
 
 export interface PictureWithClickableNumbersProps {
   /**
+   * Unique identifier for this diagram instance
+   * Required when using multiple diagrams on the same page
+   */
+  id?: string;
+
+  /**
    * Path to SVG file to use as background
    * If not provided, the default SVG defined in the component will be used
    */

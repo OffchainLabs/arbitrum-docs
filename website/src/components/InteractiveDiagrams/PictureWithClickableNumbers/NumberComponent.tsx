@@ -26,8 +26,9 @@ export const NumberComponent: React.FC<
     animated?: boolean;
     interactive?: boolean;
     coordinates?: typeof defaultCoordinates;
+    id?: string;
   }
-> = ({ number, animated, interactive, coordinates = defaultCoordinates }) => {
+> = ({ number, animated, interactive, coordinates = defaultCoordinates, id = 'default' }) => {
   /**
    * Get the current color mode (light/dark) from Docusaurus.
    */

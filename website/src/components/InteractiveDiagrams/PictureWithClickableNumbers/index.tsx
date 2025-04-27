@@ -27,18 +27,18 @@ export default function PictureWithClickableNumbers(
  * @param props - Props for the SVG component, including custom SVG file path
  * @returns An SVG element containing the complete diagram with interactive elements
  */
-export const FlowChart: React.FC<
-  PictureWithClickableNumbersProps & React.SVGProps<SVGSVGElement>
-> = ({
-  svgFilePath,
-  viewBox = '0 0 1600 900',
-  backgroundElements,
-  numbers = [1, 2, 3, 4, 5],
-  style,
-  className,
-  customCoordinates,
-  ...svgProps
-}) => {
+export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => {
+  const {
+    id = 'default',
+    svgFilePath,
+    viewBox = '0 0 1600 900',
+    backgroundElements,
+    numbers = [1, 2, 3, 4, 5],
+    style,
+    className,
+    customCoordinates,
+    ...svgProps
+  } = props;
   // If a custom SVG file path is provided, use it as the background
   const [svgContent, setSvgContent] = React.useState<string | null>(null);
   const svgRef = React.useRef<SVGSVGElement>(null);
@@ -85,8 +85,8 @@ export const FlowChart: React.FC<
           {...svgProps}
         >
           {numbers.map((number) => (
-            <Modal key={number} number={number} coordinates={finalCoordinates}>
-              <NumberComponent number={number} coordinates={finalCoordinates} />
+            <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
+              <NumberComponent number={number} coordinates={finalCoordinates} id={id} />
             </Modal>
           ))}
           {backgroundElements}
@@ -2406,11 +2406,11 @@ export const FlowChart: React.FC<
             d="M256.03 618.93v-63.6c0-6.61 5.36-11.97 11.97-11.97h138.61c6.61 0 11.97-5.36 11.97-11.97V294.43c0-6.61 5.36-11.97 11.97-11.97h54.36"
             className="cls-4"
           />
-          <NumberComponent number={1} coordinates={finalCoordinates} />
-          <Modal number={2} coordinates={finalCoordinates} />
-          <Modal number={3} coordinates={finalCoordinates} />
-          <Modal number={4} coordinates={finalCoordinates} />
-          <NumberComponent number={5} coordinates={finalCoordinates} />
+          <NumberComponent number={1} coordinates={finalCoordinates} id={id} />
+          <Modal number={2} coordinates={finalCoordinates} id={id} />
+          <Modal number={3} coordinates={finalCoordinates} id={id} />
+          <Modal number={4} coordinates={finalCoordinates} id={id} />
+          <NumberComponent number={5} coordinates={finalCoordinates} id={id} />
         </g>
       </g>
     </svg>

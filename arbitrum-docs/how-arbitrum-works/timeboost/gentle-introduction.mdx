@@ -81,7 +81,21 @@ The value of the express lane will be the sum of how much MEV the express lane c
 
 Control of the express lane in each round (default: 60 seconds) is determined by a per-round auction, which is a sealed-bid, second-price auction. This auction is held to determine the express lane controller for the next round. In other words, the express lane controller was determined at any point in time in the previous auction round. Bids for the auction can be made with any `ERC-20` token, in any amount, and be collected by any address - at the full discretion of the chain owner.
 
-<FlowChart />
+<FlowChart
+  id="diagram1"
+  svgFilePath="/img/timeboost-centralized-timeboost-auction-workflow.svg"
+  viewBox="0 0 1600 900"
+  numbers={[1, 2, 3]}
+/>
+
+{/* Second diagram showing the same flow with a different ID */}
+
+<FlowChart
+  id="diagram3"
+  svgFilePath="/img/haw-compression.svg"
+  viewBox="0 0 1000 800"
+  numbers={[1, 2, 3, 4, 5]}
+/>
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
 
