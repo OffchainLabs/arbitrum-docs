@@ -1,18 +1,18 @@
-# PictureWithClickableNumbers
+# Interactive Diagram Component
 
-A React component for creating interactive SVG diagrams with numbered elements that can be clicked to reveal detailed information in modal dialogs. This component is specifically designed for the Arbitrum documentation site to explain complex processes through step-by-step visual explanations.
+A React component for creating interactive SVG diagrams with numbered elements that can be clicked to reveal detailed information in modal dialogs. This component is designed for documentation sites to explain complex processes through step-by-step visual explanations.
 
 ## Overview
 
-PictureWithClickableNumbers provides an interactive way to explore technical concepts by clicking on numbered elements within a diagram. The component is built to work seamlessly with Docusaurus, supporting both light and dark themes, and uses MDX files for modal content.
+This component provides an interactive way to explore technical concepts by clicking on numbered elements within a diagram. It works seamlessly with Docusaurus, supporting both light and dark themes.
 
 ## Features
 
 - Interactive SVG diagrams with clickable numbered points
 - Support for external SVG files or embedded SVG content
 - Animated number indicators to draw user attention
-- Modal dialogs that display rich content from MDX files
-- Syntax highlighting for code examples in multiple languages (JavaScript, Solidity)
+- Modal dialogs that display rich content
+- Syntax highlighting for code examples in multiple languages
 - Smooth animations and transitions using React Spring
 - Dark/light theme compatibility via Docusaurus theming
 - Accessible UI with Radix UI components
@@ -20,24 +20,11 @@ PictureWithClickableNumbers provides an interactive way to explore technical con
 ## Component Structure
 
 - `index.tsx`: Main component export and SVG diagram definition
-- `Modal.tsx`: Handles modal dialog display with MDX content
+- `Modal.tsx`: Handles modal dialog display with content
 - `NumberComponent.tsx`: Renders numbered circles that can be clicked
 - `ButtonComponent.tsx`: Creates interactive hover effects for clickable elements
 - `constants.ts`: Defines coordinates and SVG paths for numbered elements
 - `types.ts`: TypeScript interface definitions
-- `modal-centralized-auction-step-*.mdx`: Content files for each modal step
-
-## Current Implementation
-
-The component is currently implemented to display an interactive diagram of a centralized auction process with five numbered steps:
-
-1. Deposit funds into the auction contract
-2. Bidding starts when a new auction round begins
-3. Highest bid wins when the auction round ends
-4. Winning bid is processed by the sequencer
-5. Settled transactions are executed on-chain
-
-Each numbered step can be clicked to reveal a modal with detailed information, code examples, and explanations.
 
 ## Customization
 
@@ -47,7 +34,7 @@ The component uses several configuration objects in `constants.ts` to define:
 - `numberPaths`: SVG path data for rendering each number
 - `CIRCLE_RADIUS`: Size of the circular background for numbers
 
-Modal content is loaded from MDX files, allowing for rich formatting and code syntax highlighting.
+Modal content can be provided as React components or MDX files, allowing for rich formatting and code syntax highlighting.
 
 ## Usage
 
@@ -59,7 +46,7 @@ import PictureWithClickableNumbers from '@site/src/components/InteractiveDiagram
 function MyDocPage() {
   return (
     <div className="my-diagram-container">
-      <PictureWithClickableNumbers />
+      <PictureWithClickableNumbers id="my-diagram" />
     </div>
   );
 }
@@ -74,6 +61,7 @@ function MyDocPage() {
   return (
     <div className="my-diagram-container">
       <PictureWithClickableNumbers 
+        id="custom-diagram"
         svgFilePath="/img/my-custom-diagram.svg"
         viewBox="0 0 800 600"
         customCoordinates={{
@@ -89,9 +77,42 @@ function MyDocPage() {
 }
 ```
 
+### With Custom Modal Content
+
+```jsx
+import PictureWithClickableNumbers from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers';
+import { Modal } from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers/Modal';
+import { NumberComponent } from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers/NumberComponent';
+
+function MyDocPage() {
+  return (
+    <div className="my-diagram-container">
+      <PictureWithClickableNumbers id="diagram-with-custom-content">
+        <Modal number={1} customContent={() => (
+          <div>
+            <h2>First Step</h2>
+            <p>This is the first step in the process.</p>
+          </div>
+        )} />
+        <Modal number={2} customContent={() => (
+          <div>
+            <h2>Second Step</h2>
+            <p>This is the second step in the process.</p>
+          </div>
+        )} />
+      </PictureWithClickableNumbers>
+    </div>
+  );
+}
+```
+
 ## Animation Behavior
 
-By default, numbers 2, 3, and 4 have pulsing animations to indicate interactivity, while numbers 1 and 5 remain static. This behavior can be customized through the `NumberComponent` props.
+By default, numbers 2, 3, and 4 have pulsing animations to indicate interactivity, while numbers 1 and 5 remain static. This behavior can be customized through the `NumberComponent` props:
+
+```jsx
+<NumberComponent number={1} animated={true} />
+```
 
 ## Theming
 
@@ -106,3 +127,12 @@ When using external SVG files, you need to:
 3. Optionally provide a custom `viewBox` if your SVG has different dimensions than the default
 
 The component will load the SVG file and overlay the interactive numbered elements on top of it.
+
+## Example Use Cases
+
+- Explaining system architectures
+- Illustrating workflow processes
+- Creating step-by-step guides
+- Visualizing complex technical concepts
+- Documenting API interactions
+- Explaining data flows
