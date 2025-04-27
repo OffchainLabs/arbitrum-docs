@@ -1111,6 +1111,11 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/orbit-quickstart/?)",
       "destination": "/launch-orbit-chain/a-gentle-introduction",
       "permanent": false
@@ -1129,7 +1134,7 @@
       "source": "/(launch-orbit-chain/how-tos/orbit-managing-state-growth/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-growth",
       "permanent": false
-    },    
+    },
     {
       "source": "/(launch-orbit-chain/how-tos/orbit-managing-gas-speed-limit/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-size-limit",
@@ -1199,7 +1204,7 @@
       "source": "/(launch-orbit-chain/aeplicense/?)",
       "destination": "/launch-orbit-chain/aep-license",
       "permanent": false
-    }, 
+    },
     {
       "source": "/(launch-orbit-chain/aep-fee-router-introduction/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/aep-fee-router-introduction",
@@ -1643,6 +1648,16 @@
     {
       "source": "/(stylus/using-stylus-cli/?)",
       "destination": "/stylus/using-cli",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
+      "destination": "/(how-arbitrum-works/timeboost/how-to-use-timeboost/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/troubleshoot-timeboost/?)",
+      "destination": "/(how-arbitrum-works/timeboost/troubleshoot-timeboost/?)",
       "permanent": false
     }
   ]
