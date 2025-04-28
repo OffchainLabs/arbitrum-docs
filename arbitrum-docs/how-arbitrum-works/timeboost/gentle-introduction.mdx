@@ -63,10 +63,11 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
 
 ### The express lane
 
-<ImageZoom
-  src="/img/timeboost-centralized-timeboost-express-lane-workflow.jpg"
-  alt="using the express lane"
-  className="img-900px"
+<FlowChart
+  id="diagram1"
+  svgFilePath="/img/timeboost-express-lane.svg"
+  viewBox="0 0 1600 900"
+  numbers={[2, 3, 4]}
 />
 
 The express lane is implemented using a special endpoint on the sequencer, formally titled `timeboost_sendExpressLaneTransaction`. This endpoint is special because transactions submitted to it will be sequenced immediately by the sequencer, hence the name, express lane. The sequencer will only accept valid transaction payloads to this endpoint if they are correctly signed by the current round’s <a data-quicklook-from='express-lane-controller'>express lane controller</a>. Other transactions can still be submitted to the sequencer as normal, but these will be considered non-express lane transactions and will, therefore, have their arrival timestamp delayed by 200 milliseconds. It is important to note that transactions from both the express and non-express lanes are eventually sequenced into a single, ordered stream of transactions for node operators to produce an assertion and later post the data to a data availability layer. The express lane controller does _not_:
@@ -86,15 +87,6 @@ Control of the express lane in each round (default: 60 seconds) is determined by
   svgFilePath="/img/timeboost-centralized-timeboost-auction-workflow.svg"
   viewBox="0 0 1600 900"
   numbers={[2, 3, 4]}
-/>
-
-{/* Second diagram showing the same flow with a different ID */}
-
-<FlowChart
-  id="diagram3"
-  svgFilePath="/img/haw-compression.svg"
-  viewBox="0 0 1000 800"
-  numbers={[1, 2, 3, 4, 5]}
 />
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
