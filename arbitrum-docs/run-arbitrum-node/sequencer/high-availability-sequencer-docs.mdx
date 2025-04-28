@@ -1,0 +1,479 @@
+import ImageZoom from '@site/src/components/ImageZoom';
+
+# How to Set Up a High Availability Sequencer for Your Arbitrum Chain
+
+:::caution
+
+This documentation is intended for production sequencer deployments. If you're looking to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node](/how-tos/04-run-sequencer-node).
+
+:::
+
+## Introduction
+
+The sequencer is a critical component of your Arbitrum chain, responsible for queueing transactions submitted to the network. It serves as the transaction ordering engin, accepting transactions forwarded from fullnodes, queuing them, returning feed messages back to those fullnodes, and sending queued transaction to batch posters for data posting.
+
+If your sequencer goes offline, the network will be unable to process new transactions comes to child chain rpc nodes, effectively affecting the user experience. This guide provides detailed instructions for setting up a high availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- Experience with Kubernetes and container orchestration
+- Access to a Kubernetes cluster with multiple availability zones
+- Understanding of Redis and cloud infrastructure
+- A properly configured parent chain node or rpc node endpoint
+- Sequencer keys and appropriate permissions
+- Sufficient storage and compute resources
+
+## High Availability Sequencer Architecture
+
+A high availability sequencer deployment consists of seven key components:
+
+1. **CDN/Load Balancer** - Manages traffic routing and bot detection
+2. **Nitro Fullnodes** - Process read requests and forward write transactions
+3. **External Relays** - Handle public feed traffic
+4. **Sequencer Relays** - Combine feeds from all sequencers
+5. **Sequencers** - Multiple redundant transaction queueing machines
+6. **Redis** - Coordinates active sequencer selection and sequencer related information sharing
+7. **Batch Poster** - Posts transaction batches to the parent chain
+
+### Architecture Diagrams
+
+The architecture varies slightly depending on whether your fullnodes use Redis to identify the active sequencer or forward transactions to a predefined endpoint.
+
+#### Send to Active Enabled
+
+In this configuration, fullnodes query Redis to determine the active sequencer and forward transactions directly to it:
+
+<ImageZoom
+  src="/img/ha-sequencer-sendto-active.png"
+  alt="send to active enable"
+  className="img-600px"
+/>
+
+#### Send to Active Disabled
+
+In this configuration, fullnodes forward transactions to a predefined endpoint without checking which sequencer is active:
+
+<ImageZoom
+  src="/img/ha-sequencer-sendto-nonactive.png"
+  alt="send to active disable"
+  className="img-600px"
+/>
+## Detailed Component Setup
+
+### 1. Load Balancing (CDN)
+
+A CDN is strongly recommended for managing traffic and security concerns:
+
+- **Recommendation**: Use Cloudflare or similar CDN service
+- **Configuration**:
+  - Direct `/rpc` traffic to the Nitro fullnode fleet
+  - Direct `/feed` traffic to public-facing relays
+  - Implement rate limiting and bot detection as needed
+- **Benefits**: Distributes load, improves security, and enhances availability
+
+### 2. Relays Setup
+
+Two types of relays are needed in the architecture:
+
+#### Sequencer Relays
+
+- Deployment should have multiple replicas
+- Configure to listen to feed outputs from all sequencers
+- All other components connect to these relays instead of directly to sequencers
+- Minimize direct load on sequencer nodes
+
+#### External Relays
+
+- Connect to sequencer Relays (not directly to sequencers)
+- Handle all public feed requests
+- Provide an additional layer of isolation for production sequencers
+
+You can check [run a feed relay](/run-arbitrum-node/sequencer/run-feed-relay) to see how to set up a relay node.
+
+### 3. Nitro Fullnodes Setup
+
+Deploy a set of Nitro fullnodes to handle read requests and forward write transactions, please refer to [run a full node](/run-arbitrum-node/03-run-full-node.mdx).
+
+#### Configuration Options:
+
+**Standard Configuration**:
+
+- Forward transactions to a round-robin Kubernetes service containing all sequencer replicas
+- Configure with `--execution.forwarding-target=http://sequencer-nitro.svc:8547`
+
+**Send to Active Configuration (Optional)**:
+
+- Monitor Redis to identify the active sequencer
+- Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
+- Ensure connectivity to individual sequencer services and Redis
+- Test failover scenarios before production deployment
+
+**Mutating-Only Endpoint (Optional)**:
+
+- Deploy dedicated nodes for transaction submission only
+- Add this configuration to restrict endpoints to transaction submission only:
+
+```json
+{
+  "execution": {
+    "rpc": {
+      "allow-method": ["eth_sendRawTransaction"]
+    }
+  }
+}
+```
+
+### 4. Redis Setup
+
+Set up a highly available Redis cluster for sequencer coordination:
+
+- **Deployment Options**:
+  - Use a managed service like AWS ElastiCache (recommended)
+  - Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
+- **Requirements**:
+
+  - Minimum of three replicas across different availability zones (recommended)
+  - Secured access (only accessible within the Kubernetes cluster)
+  - Backups enabled
+
+- **Configuration**:
+  - Use a Redis cluster or Redis Sentinel for high availability
+  - Secure the endpoint with proper network policies
+  - Monitor Redis health as part of your overall monitoring strategy
+
+### 5. Sequencer Setup
+
+#### Sequencer Deployment
+
+Deploy multiple sequencer replicas with availability zone spread:
+
+- Use a StatefulSet for sequencer deployment
+- Configure individual services for each sequencer replica
+- Create a service for all sequencer replicas
+
+#### Individual Sequencer Service Example:
+
+```yaml
+kind: Service
+metadata:
+  name: sequencer-nitro-0
+spec:
+  ports:
+    - name: rpc
+      port: 8547
+      protocol: TCP
+      targetPort: 8547
+    - name: ws
+      port: 8548
+      protocol: TCP
+      targetPort: 8548
+    - name: metrics
+      port: 6070
+      protocol: TCP
+      targetPort: 6070
+    - name: feed
+      port: 9642
+      protocol: TCP
+      targetPort: 9642
+  selector:
+    app.kubernetes.io/instance: sequencer
+    app.kubernetes.io/name: nitro
+    statefulset.kubernetes.io/pod-name: sequencer-nitro-0
+  sessionAffinity: None
+  type: LoadBalancer
+```
+
+#### All Sequencers Service Example:
+
+```yaml
+kind: Service
+metadata:
+  name: sequencer-nitro
+spec:
+  ports:
+    - name: rpc
+      port: 8547
+      protocol: TCP
+      targetPort: 8547
+    - name: ws
+      port: 8548
+      protocol: TCP
+      targetPort: 8548
+    - name: metrics
+      port: 6070
+      protocol: TCP
+      targetPort: 6070
+    - name: feed
+      port: 9642
+      protocol: TCP
+      targetPort: 9642
+  selector:
+    app.kubernetes.io/instance: sequencer
+    app.kubernetes.io/name: nitro
+  sessionAffinity: None
+  type: LoadBalancer
+```
+
+#### Sequencer ConfigMap Example:
+
+```yaml
+apiVersion: v1
+data:
+  config.json: |
+    {
+      "parent-chain": {
+          "id": <parent-chain-id>,
+          "connection": {
+              "url": "<parent-node-url>"
+          }
+      },
+      "chain": {
+        "id": <child-chain-id>,
+        "info-json": <child-chain-info>,
+      },
+      "log-type": "json",
+      "node": {
+          "sequencer": {
+              "enable": true
+          },
+          "delayed-sequencer": {
+              "enable": true
+          },
+          "seq-coordinator": {
+              "enable": true,
+              "redis-url": "<redis-url>",
+              "lockout-duration": "30s",
+              "lockout-spare": "1s",
+              "my-url": "<Your unique node url>",
+              "retry-interval": "0.5s",
+              "seq-num-duration": "24h0m0s"
+          },
+          "feed": {
+              "output": {
+                  "enable": true,
+                  "port": 9642
+              }
+          },
+          "batch-poster": {
+              "enable": false
+          }
+      },
+      "execution": {
+        "forwarding-target": "",
+        "sequencer": {
+          "enable": true,
+          "max-tx-data-size": 85000,
+          "max-block-speed": "250ms"
+        },
+        "caching": {
+          "archive": true
+        }
+      }
+      "http": {
+          "addr": "0.0.0.0",
+          "port": "8547",
+          "vhosts": "*",
+          "api": ["arb","personal","eth","net","web3","txpool"],
+          "corsdomain": "*"
+      },
+      "ws": {
+          "addr": "0.0.0.0",
+          "port": "8548",
+          "origins": "*",
+          "api": ["arb","personal","eth","net","web3","txpool"]
+      },
+      "persistent": {
+          "chain": "/home/user/data/"
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: sequencer-nitro
+```
+
+#### Command Line Arguments and Environment Variables:
+
+```yaml
+- args:
+    - --conf.env-prefix=NITRO
+    - --conf.file=/config/config.json
+    - --metrics
+    - --metrics-server.addr=0.0.0.0
+    - --node.seq-coordinator.signer.symmetric-fallback
+    - --node.seq-coordinator.signer.symmetric-sign
+    - --node.seq-coordinator.signer.symmetric.signing-key=<secure_key>
+  command:
+    - /usr/local/bin/nitro
+  env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: NITRO_NODE_SEQ__COORDINATOR.MY__URL
+      value: ws://$(POD_NAME).svc:8548
+```
+
+#### Volume and ConfigMap Mapping:
+
+```yaml
+volumeMounts:
+  - mountPath: /home/user/data/
+    name: data
+  - mountPath: /config/
+    name: config
+  - mountPath: /home/user/seqkeystore/sequencer-wallet.key
+    name: l3-sequencer-keystore
+    subPath: sequencer-wallet.key
+volumes:
+  - configMap:
+      defaultMode: 420
+      name: sequencer-nitro
+    name: config
+  - name: l3-sequencer-keystore
+    secret:
+      defaultMode: 420
+      secretName: l3-sequencer-keystore
+volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: data
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Ti
+      storageClassName: gp3
+      volumeMode: Filesystem
+```
+
+### 6. Sequencer Coordinator Manager
+
+To manage active sequencer selection, use the built-in sequencer coordinator UI:
+
+- Follow detailed instructions at: [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/node-running/how-tos/running-a-sequencer-coordinator-manager)
+- Use this interface to manually switch between sequencer replicas when needed
+- Configure permissions and access controls appropriately
+
+### 7. Batchposter Setup
+
+The Batchposter component posts transaction batches to the parent chain.
+
+You need to configure it to connect to the sequencer coordinator redis but don't set this node to sequencer priority list in SQM (Sequencer Coordinator Manager) to prevent it to be active sequencer:
+
+#### Batchposter ConfigMap Example:
+
+```yaml
+apiVersion: v1
+data:
+  config.json: |
+    {
+      "parent-chain": {
+          "id": <parent-chain-id>,
+          "connection": {
+              "url": "<parent-node-url>"
+          }
+      },
+      "chain": {
+        "id": <child-chain-id>,
+        "info-json": <child-chain-info>,
+      },
+      "log-type": "json",
+      "execution": {
+        "forwarding-target": "null"
+      },
+      "node": {
+        "seq-coordinator": {
+          "enable": true,
+          "redis-url": "<redis-url>",
+          "lockout-duration": "30s",
+          "lockout-spare": "1s",
+          "my-url": "<Your unique node url>",
+          "retry-interval": "0.5s",
+          "seq-num-duration": "24h0m0s"
+        },
+        "batch-poster": {
+          "enable": true,
+          "parent-chain-wallet": {
+            "private-key": "<Your Parent Chain Wallet Private Key>"
+          }
+        }
+      },
+      "http": {
+        "addr": "0.0.0.0",
+        "port": "8547",
+        "vhosts": "*",
+        "api": [
+          "personal",
+          "eth",
+          "net",
+          "web3",
+          "txpool"
+        ],
+        "corsdomain": "*",
+        "rpcprefix": "/rpc"
+      },
+      "ws": {
+        "addr": "0.0.0.0",
+        "port": "8548",
+        "origins": "*",
+        "api": [
+          "personal",
+          "eth",
+          "net",
+          "web3",
+          "txpool",
+          "debug",
+          "arbdebug"
+        ],
+        "rpcprefix": "/ws"
+      },
+      "persistent": {
+        "chain": "/home/user/data/"
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: batchposter-config
+```
+
+#### Batchposter Command Line Arguments:
+
+```
+--conf.env-prefix=NITRO
+--conf.file=/config/config.json
+--metrics
+--metrics-server.addr=0.0.0.0
+--node.parent-chain-reader.tx-timeout=1h
+--node.seq-coordinator.signer.symmetric-fallback
+--node.seq-coordinator.signer.symmetric-sign
+--node.seq-coordinator.signer.symmetric.signing-key=<secure_key>
+--node.batch-poster.data-poster.redis-signer.signing-key=<secure_key_2>
+--node.batch-poster.data-poster.max-queued-transactions=256
+```
+
+## Monitoring and Maintenance
+
+### Health Checks
+
+Implement comprehensive health checks for all components:
+
+- **Sequencer Health**: Monitor Sequencer logs and metrics
+- **Redis Connectivity**: Ensure all components can access Redis
+- **Feed Availability**: Verify feed connectivity between components
+- **Transaction Processing**: Monitor end-to-end transaction flow
+
+### Troubleshooting
+
+If you run into any issues, visit the [node-running troubleshooting guide](/run-arbitrum-node/06-troubleshooting.mdx).
+
+## References
+
+- [Arbitrum Documentation](https://docs.arbitrum.io/)
+- [How to Run a Fullnode](https://docs.arbitrum.io/node-running/how-tos/running-a-node)
+- [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/node-running/how-tos/running-a-sequencer-coordinator-manager)
+- [Kubernetes Documentation](https://kubernetes.io/docs/)
