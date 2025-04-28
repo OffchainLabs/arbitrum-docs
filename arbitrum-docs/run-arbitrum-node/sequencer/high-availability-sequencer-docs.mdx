@@ -4,15 +4,15 @@ import ImageZoom from '@site/src/components/ImageZoom';
 
 :::caution
 
-This documentation is intended for production sequencer deployments. If you're looking to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node].
+This documentation is intended for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node].
 
 :::
 
 ## Introduction
 
-The sequencer is a critical component of your Arbitrum chain, responsible for queueing transactions submitted to the network. It serves as the transaction ordering engin, accepting transactions forwarded from fullnodes, queuing them, returning feed messages back to those fullnodes, and sending queued transaction to batch posters for data posting.
+The sequencer is a critical component of your Arbitrum chain and is responsible for queueing transactions submitted to the network. It serves as the transaction ordering engine, accepting transactions forwarded from full nodes, queuing them, returning feed messages to those full nodes, and sending queued transactions to batch posters for data posting.
 
-If your sequencer goes offline, the network will be unable to process new transactions comes to child chain rpc nodes, effectively affecting the user experience. This guide provides detailed instructions for setting up a high availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
+If your sequencer goes offline, the network will be unable to process new transactions that come to child chain RPC nodes, effectively affecting the user experience. This guide provides detailed instructions for setting up a high availability (HA) sequencer architecture to minimize downtime and ensure your Arbitrum chain remains operational even if individual components fail.
 
 ## Prerequisites
 
@@ -21,7 +21,7 @@ Before you begin, ensure you have:
 - Experience with Kubernetes and container orchestration
 - Access to a Kubernetes cluster with multiple availability zones
 - Understanding of Redis and cloud infrastructure
-- A properly configured parent chain node or rpc node endpoint
+- A properly configured parent chain node or RPC node endpoint
 - Sequencer keys and appropriate permissions
 - Sufficient storage and compute resources
 
@@ -34,16 +34,16 @@ A high availability sequencer deployment consists of seven key components:
 3. **External Relays** - Handle public feed traffic
 4. **Sequencer Relays** - Combine feeds from all sequencers
 5. **Sequencers** - Multiple redundant transaction queueing machines
-6. **Redis** - Coordinates active sequencer selection and sequencer related information sharing
+6. **Redis** - Coordinates active sequencer selection and sequencer-related information sharing
 7. **Batch Poster** - Posts transaction batches to the parent chain
 
 ### Architecture Diagrams
 
-The architecture varies slightly depending on whether your fullnodes use Redis to identify the active sequencer or forward transactions to a predefined endpoint.
+The architecture varies slightly depending on whether your full nodes use Redis to identify the active sequencer or forward transactions to a predefined endpoint.
 
 #### Send to Active Enabled
 
-In this configuration, fullnodes query Redis to determine the active sequencer and forward transactions directly to it:
+In this configuration, full nodes query Redis to determine the active sequencer and forward transactions directly to it:
 
 <ImageZoom
   src="/img/ha-sequencer-sendto-active.png"
@@ -53,7 +53,7 @@ In this configuration, fullnodes query Redis to determine the active sequencer a
 
 #### Send to Active Disabled
 
-In this configuration, fullnodes forward transactions to a predefined endpoint without checking which sequencer is active:
+In this configuration, full nodes forward transactions to a predefined endpoint without checking which sequencer is active:
 
 <ImageZoom
   src="/img/ha-sequencer-sendto-nonactive.png"
@@ -64,18 +64,18 @@ In this configuration, fullnodes forward transactions to a predefined endpoint w
 
 ### 1. Load Balancing (CDN)
 
-A CDN is strongly recommended for managing traffic and security concerns:
+It is a strong recommendation to use a CDN for managing traffic and security concerns:
 
-- **Recommendation**: Use Cloudflare or similar CDN service
+- **Recommendation**: Use Cloudflare or a similar CDN service
 - **Configuration**:
-  - Direct `/rpc` traffic to the Nitro fullnode fleet
+  - Direct `/rpc` traffic to the Nitro full node fleet
   - Direct `/feed` traffic to public-facing relays
   - Implement rate limiting and bot detection as needed
 - **Benefits**: Distributes load, improves security, and enhances availability
 
 ### 2. Relays Setup
 
-Two types of relays are needed in the architecture:
+The requirement is for two types of relays in the architecture:
 
 #### Sequencer Relays
 
@@ -86,7 +86,7 @@ Two types of relays are needed in the architecture:
 
 #### External Relays
 
-- Connect to sequencer Relays (not directly to sequencers)
+- Connect to Sequencer Relays (not directly to sequencers)
 - Handle all public feed requests
 - Provide an additional layer of isolation for production sequencers
 
@@ -94,7 +94,7 @@ You can check [run a feed relay](/run-arbitrum-node/sequencer/run-feed-relay) to
 
 ### 3. Nitro Fullnodes Setup
 
-Deploy a set of Nitro fullnodes to handle read requests and forward write transactions, please refer to [run a full node](/run-arbitrum-node/03-run-full-node.mdx).
+Deploy a set of Nitro full nodes to handle read requests and forward write transactions; please refer to [run a full node](/run-arbitrum-node/03-run-full-node.mdx).
 
 #### Configuration Options:
 
@@ -105,7 +105,7 @@ Deploy a set of Nitro fullnodes to handle read requests and forward write transa
 
 **Send to Active Configuration (Optional)**:
 
-- Monitor Redis to identify the active sequencer
+- Monitor Redis to identify the active Sequencer
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
 - Ensure connectivity to individual sequencer services and Redis
 - Test failover scenarios before production deployment
@@ -131,7 +131,7 @@ Set up a highly available Redis cluster for sequencer coordination:
 
 - **Deployment Options**:
   - Use a managed service like AWS ElastiCache (recommended)
-  - Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
+  - Deploy within Kubernetes using a `StatefulSet` with `PersistentVolumeClaims`
 - **Requirements**:
 
   - Minimum of three replicas across different availability zones (recommended)
@@ -139,7 +139,7 @@ Set up a highly available Redis cluster for sequencer coordination:
   - Backups enabled
 
 - **Configuration**:
-  - Use a Redis cluster or Redis Sentinel for high availability
+  - Use a Redis cluster or Redis Sentinel for high-availability
   - Secure the endpoint with proper network policies
   - Monitor Redis health as part of your overall monitoring strategy
 
@@ -149,7 +149,7 @@ Set up a highly available Redis cluster for sequencer coordination:
 
 Deploy multiple sequencer replicas with availability zone spread:
 
-- Use a StatefulSet for sequencer deployment
+- Use a `StatefulSet` for sequencer deployment
 - Configure individual services for each sequencer replica
 - Create a service for all sequencer replicas
 
@@ -356,14 +356,14 @@ volumeClaimTemplates:
 To manage active sequencer selection, use the built-in sequencer coordinator UI:
 
 - Follow detailed instructions at: [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/node-running/how-tos/running-a-sequencer-coordinator-manager)
-- Use this interface to manually switch between sequencer replicas when needed
+- Use this interface to switch between sequencer replicas when needed manually
 - Configure permissions and access controls appropriately
 
 ### 7. Batchposter Setup
 
-The Batchposter component posts transaction batches to the parent chain.
+The Batchposter component's primary function is posting transaction batches to the parent chain.
 
-You need to configure it to connect to the sequencer coordinator redis but don't set this node to sequencer priority list in SQM (Sequencer Coordinator Manager) to prevent it to be active sequencer:
+You need to configure it to connect to the Sequencer coordinator Redis but don't set this node in the Sequencer priority list in SQM (Sequencer Coordinator Manager) to prevent it to be active sequencer:
 
 #### Batchposter ConfigMap Example:
 
