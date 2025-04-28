@@ -3418,18 +3418,21 @@
        r="12.13"
        id="circle503" />
     <g
-       id="g503">
+       id="g503"
+       style="fill:#19abff;fill-opacity:1;stroke-width:2.6;stroke-dasharray:none">
       <line
          class="cls-9"
          x1="800.02002"
          y1="717.57001"
          x2="800.02002"
          y2="610.45001"
-         id="line503" />
+         id="line503"
+         style="fill:#19abff;fill-opacity:1;stroke-width:2.6;stroke-dasharray:none" />
       <polygon
          class="cls-16"
          points="800.02,602.64 794.6,612.04 805.45,612.04 "
-         id="polygon503" />
+         id="polygon503"
+         style="fill:#19abff;fill-opacity:1;stroke-width:2.6;stroke-dasharray:none" />
     </g>
     <rect
        class="cls-15"
@@ -3577,7 +3580,8 @@
          y1="484.01001"
          x2="754.90002"
          y2="357.10999"
-         id="line531" />
+         id="line531"
+         style="stroke-width:2.69;stroke-dasharray:none" />
       <polygon
          class="cls-16"
          points="751.4,350.12 750.76,360.96 760.47,356.1 "
