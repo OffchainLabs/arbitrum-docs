@@ -3,7 +3,8 @@
    viewBox="0 0 1600 900"
    version="1.1"
    id="svg415"
-   sodipodi:docname="1024_Timeboost_Infographics_R4_1.svg"
+   sodipodi:docname="timeboost-centralized-timeboost-auction-workflow.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +17,16 @@
      inkscape:showpageshadow="2"
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1" />
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.65368093"
+     inkscape:cx="802.37922"
+     inkscape:cy="444.40641"
+     inkscape:window-width="1712"
+     inkscape:window-height="1006"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Layer_1" />
   <defs
      id="defs3">
     <style
@@ -2767,32 +2777,6 @@
          id="path358" />
     </g>
     <g
-       id="g359">
-      <circle
-         class="cls-5"
-         cx="588.13"
-         cy="631.51001"
-         r="20.950001"
-         id="circle358" />
-      <path
-         class="cls-10"
-         d="m 583.04,633.46 c 0.8,-1.14 1.46,-1.64 3.86,-2.91 2.09,-1.12 2.61,-1.64 2.61,-2.61 0,-0.84 -0.54,-1.36 -1.38,-1.36 -1.06,0 -1.57,0.67 -1.64,2.11 h -4.42 c 0,-3.25 2.35,-5.21 6.25,-5.21 3.36,0 5.62,1.68 5.62,4.18 0,2.11 -0.99,3.55 -3.34,4.78 l -0.78,0.41 c -2.05,1.08 -2.67,1.55 -2.84,2.48 0.73,-0.06 1.42,-0.11 2.2,-0.11 h 5.17 v 3.3 h -12.52 c 0,-2.46 0.37,-3.86 1.21,-5.06 z"
-         id="path359" />
-    </g>
-    <g
-       id="g360">
-      <circle
-         class="cls-5"
-         cx="586.22998"
-         cy="776.88"
-         r="20.950001"
-         id="circle359" />
-      <path
-         class="cls-10"
-         d="m 586.28,781.21 c 1.06,0 1.72,-0.62 1.72,-1.53 0,-1.03 -0.67,-1.59 -2.15,-1.59 h -0.6 v -3.21 h 0.47 c 1.49,0 2.05,-0.52 2.05,-1.57 0,-0.82 -0.67,-1.42 -1.62,-1.42 -1.12,0 -1.75,0.78 -1.77,2.05 h -4.29 c 0.09,-3.19 2.31,-5.11 6.14,-5.11 3.83,0 5.88,1.57 5.88,4.07 0,1.7 -0.91,2.93 -2.76,3.34 v 0.11 c 2,0.39 3.02,1.64 3.02,3.51 0,2.71 -2.28,4.42 -6.23,4.42 -3.51,0 -6.23,-1.42 -6.23,-5.3 h 4.35 c 0.06,1.42 0.78,2.24 2,2.24 z"
-         id="path360" />
-    </g>
-    <g
        id="g406">
       <path
          class="cls-10"
@@ -3054,19 +3038,6 @@
          class="cls-10"
          d="m 412.16,410.7 v -3.06 c 2.5,0 3.66,-0.47 4.05,-2.65 h 3.99 v 14.72 h -4.35 v -9.01 h -3.68 z"
          id="path412" />
-    </g>
-    <g
-       id="g413">
-      <circle
-         class="cls-5"
-         cx="1055.6"
-         cy="597.97998"
-         r="20.950001"
-         id="circle412" />
-      <path
-         class="cls-10"
-         d="m 1048.97,602.13 v -3.3 l 5.49,-8.55 h 5.54 v 8.66 h 2.13 v 3.19 H 1060 V 605 h -4.24 v -2.87 z m 3.53,-3.19 h 3.45 c 0,-1.7 0,-3.38 0.22,-5.52 l -0.19,-0.06 -3.47,5.58 z"
-         id="path413" />
     </g>
     <g
        id="g414">
