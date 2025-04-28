@@ -28,7 +28,7 @@ can be optionally deployed and enabled for any Arbitrum chain. Timeboost allows 
 some of the available Maximum Extractable Value (MEV) on their blockchain and reduces latency-related
 spamming, in exchange for a small impact on user response times (despite block times not changing). It
 is therefore recommended that chains only consider deploying and enabling Timeboost if there is substantial
-DeFi and related MEV activity (e.g. liquidations, arbitrage) on the chain. Please read the [gentle introduction
+DeFi and related MEV activity (e.g. liquidations, arbitrage, backrunning) on the chain. Please read the [gentle introduction
 to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx) to learn more about how Timeboost
 works.
 
@@ -46,7 +46,7 @@ Timeboost allows a chain owner to capture some of the available MEV on their blo
 
 #### Fair(er) MEV capture
 
-Timeboost gives sophisticated actors (e.g. searchers) the ability to purchase a fixed time-advantage over a fixed number of blocks to perform various MEV activities, such as liquidations and arbitrage. This design preserves the use of a private mempool that all Arbitrum chains have by default and does not impact block times, which both protects users from harmful types of MEV (e.g. frontrunning) and does not change block times.
+Timeboost gives sophisticated actors (e.g. searchers) the ability to purchase a fixed time-advantage over a fixed number of blocks to perform various MEV activities, such as backrunning, liquidations, or arbitrage. This design preserves the use of a private mempool that all Arbitrum chains have by default and does not impact block times, which both protects users from harmful types of MEV (e.g. frontrunning) and does not change block times.
 
 #### Potential revenue capture for chain owners
 
@@ -56,7 +56,7 @@ It stands to reason that sophisticated actors (e.g. searchers) will bid up to th
 
 #### Potential reduction in latency-based spam
 
-As explained earlier, searchers will be incentivized to bid on-chain for the time-advantage, rather than spending money on off-chain hardware to win latency races. Therefore, at equilibrium, one could reasonably expect that the amount of latency-based spam should reduce on a Timeboost-enabled chain.
+As explained earlier, searchers will be incentivized to bid on-chain for the time-advantage, rather than spending money on off-chain hardware to win latency races. Therefore, at equilibrium, one could reasonably expect that the amount of latency-based spam should reduce on a Timeboost-enabled chain. To learn more about this phenomenon, please check out this analysis on how the Timeboost ordering policy impacts backrunning strategies: [TimeBoost and Backrunning: Probabilistic Strategies](https://research.arbitrum.io/t/timeboost-and-backrunning-probabilistic-strategies/9727).
 
 ## Trade offs with adopting Timeboost
 
@@ -74,7 +74,7 @@ Often times, the cost required to set up, configure, and maintain the infrastruc
 
 #### User Experience
 
-As explained in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artifical delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artifical delay and the block time of the chain. Note that this artificaly delay is only applied when there is an express lane controller for a round, meaning that there is no change in user experience if nobody is using Timeboost even though it is enabled (for the duration of that round).
+As explained in the [gentle introduction to Timeboost](../how-arbitrum-works/timeboost/gentle-introduction.mdx), the Timeboost express lane time advantage is implemented by imposing an artifical delay (default: `200ms`) on all non-express lane transactions whenever there is an express lane controller for a round (default: `1 minute`). While Timeboost does not change the default Arbitrum blocktimes (default: `250ms`), this artificial delay _does_ mean that the average response time for a user in the non-express lane is the sum of the artifical delay and the block time of the chain. Note that this artifical delay is only applied when there is an express lane controller for a round, meaning that there is no change in user experience if nobody is using Timeboost even though it is enabled (for the duration of that round).
 
 ## Configuring Timeboost's Parameters
 
