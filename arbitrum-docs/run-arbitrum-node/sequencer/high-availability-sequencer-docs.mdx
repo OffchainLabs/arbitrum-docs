@@ -46,7 +46,7 @@ The architecture varies slightly depending on whether your full nodes use Redis 
 In this configuration, full nodes query Redis to determine the active sequencer and forward transactions directly to it:
 
 <ImageZoom
-  src="/img/ha-sequencer-sendto-active.png"
+  src="/img/ha-sequencer-sendto-active.svg"
   alt="send to active enable"
   className="img-600px"
 />
@@ -56,7 +56,7 @@ In this configuration, full nodes query Redis to determine the active sequencer 
 In this configuration, full nodes forward transactions to a predefined endpoint without checking which sequencer is active:
 
 <ImageZoom
-  src="/img/ha-sequencer-sendto-nonactive.png"
+  src="/img/ha-sequencer-sendto-nonactive.svg"
   alt="send to active disable"
   className="img-600px"
 />
