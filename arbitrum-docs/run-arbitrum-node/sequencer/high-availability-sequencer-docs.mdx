@@ -133,6 +133,7 @@ Set up a highly available Redis cluster for sequencer coordination:
   - Use a managed service like AWS ElastiCache (recommended)
   - Deploy within Kubernetes using a `StatefulSet` with `PersistentVolumeClaims`
 - **Requirements**:
+
   - Minimum of three replicas across different availability zones (recommended)
   - Secured access (only accessible within the Kubernetes cluster)
   - Backups enabled
