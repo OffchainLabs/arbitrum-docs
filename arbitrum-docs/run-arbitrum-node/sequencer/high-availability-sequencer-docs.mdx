@@ -227,6 +227,10 @@ Make sure to adjust the domain name (`<NAMESPACE>.svc.cluster.local`) to match y
 
 You can enable automatic creation of headless services for each sequencer replica by setting the `perReplicaHeadlessService.enabled=true` parameter in the Helm chart (as shown in the installation command above). This will create individual services named `<release-name>-nitro-<index>` that allow direct access to each sequencer replica.
 
+These individual services are critical for a proper high availability setup because they allow components like sequencer relays to connect directly to specific sequencer instances. This direct connection is essential for:
+- **Proper failover**: When the active sequencer changes, other components can address the new active sequencer directly 
+- **Feed aggregation**: Sequencer relays need to collect feeds from all sequencer instances to ensure no messages are lost during transitions
+
 ### 6. Sequencer coordinator manager
 
 To manage active sequencer selection, use the built-in sequencer coordinator UI:
