@@ -258,8 +258,13 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
-                  label: `Configure a custom gas token`,
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
+                  label: `Configure a custom AnyTrust gas token`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup',
+                  label: `Configure a custom Rollup gas token`,
                 },
                 {
                   type: 'doc',
@@ -321,6 +326,11 @@ const sidebars = {
                   label: `Enable fast withdrawals`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -359,7 +369,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-orbit-chain/orbit-sdk-introduction',
-                  label: `Introduction`,
+                  label: `Overview`,
                 },
                 {
                   type: 'doc',
@@ -455,6 +465,11 @@ const sidebars = {
                   label: `Post-launch deployments`,
                 },
               ],
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/maintain-your-chain/upgrade-to-bold',
+              label: 'Upgrade to BoLD',
             },
           ],
         },
