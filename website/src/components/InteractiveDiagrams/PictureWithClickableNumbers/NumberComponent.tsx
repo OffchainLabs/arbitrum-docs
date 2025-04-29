@@ -3,52 +3,63 @@ import { useSpring, animated as a } from '@react-spring/web';
 import { useColorMode } from '@docusaurus/theme-common';
 import '@site/src/css/custom.css';
 import ButtonComponent from './ButtonComponent';
-import { CIRCLE_RADIUS, numberPaths, coordinates as defaultCoordinates } from './constants';
+import { numberPaths } from './constants';
 import { NumberComponentProps } from './types';
 
 /**
  * Number component for the PictureWithClickableNumbers diagram.
  *
  * @remarks
- * This component renders a numbered circle that represents a step in the diagram.
- * It includes animations for certain numbers and integrates with the ButtonComponent
- * for interactive elements.
+ * This component renders a numbered element that can be either static or dynamic.
+ * Static numbers are just the number shape without a circle or interactivity.
+ * Dynamic numbers have a circle background, animations, and can be clicked.
  *
  * @param props - The component props
- * @param props.number - The step number (1-5) to display
- * @param props.animated - Whether the number should be animated (default: true for numbers 2, 3, 4)
- * @param props.interactive - Whether the number should be interactive (default: true for numbers 2, 3, 4)
- * @param props.coordinates - Optional custom coordinates to override the default positions
- * @returns An SVG element representing a numbered step in the diagram
+ * @param props.number - The number (0-5) to display
+ * @param props.type - The type of number component ('static' or 'dynamic')
+ * @param props.animated - Whether the number should be animated (only applies to dynamic type)
+ * @param props.interactive - Whether the number should be interactive (only applies to dynamic type)
+ * @param props.coordinates - Coordinates for positioning the number
+ * @param props.id - Unique identifier for this component
+ * @returns An SVG element representing a number in the diagram
  */
 export const NumberComponent: React.FC<
   NumberComponentProps & {
     animated?: boolean;
     interactive?: boolean;
-    coordinates?: typeof defaultCoordinates;
+    coordinates: Record<
+      number,
+      {
+        circle: { x: number; y: number };
+        path: { x: number; y: number };
+        offset?: { x: number; y: number };
+      }
+    >;
     id?: string;
   }
-> = ({ number, animated, interactive, coordinates = defaultCoordinates, id = 'default' }) => {
+> = ({ number, type = 'static', animated, interactive, coordinates, id = 'default' }) => {
   /**
    * Get the current color mode (light/dark) from Docusaurus.
    */
   const { isDarkTheme } = useColorMode();
 
   /**
-   * Determine if the number should be animated based on props or default behavior
+   * Determine if the number should be animated based on props
+   * Animation only applies to dynamic numbers
    */
-  const shouldAnimate =
-    animated !== undefined ? animated : number === 2 || number === 3 || number === 4;
+  const shouldAnimate = 
+    type === 'dynamic' && (animated !== undefined ? animated : true);
 
   /**
-   * Determine if the number should be interactive based on props or default behavior
+   * Determine if the number should be interactive based on props
+   * Interactivity only applies to dynamic numbers
    */
   const shouldBeInteractive =
-    interactive !== undefined ? interactive : number === 2 || number === 3 || number === 4;
+    type === 'dynamic' && (interactive !== undefined ? interactive : true);
 
   /**
    * Animation configuration for the numbered circles.
-   * By default, numbers 2, 3, and 4 have pulsing animations, while 1 and 5 remain static.
+   * Only applied to dynamic numbers.
    */
   const animationProps = !shouldAnimate
     ? { opacity: 1 }
@@ -75,6 +86,9 @@ export const NumberComponent: React.FC<
     return null;
   }
 
+  // Hard-coded circle radius value
+  const CIRCLE_RADIUS = 20.95;
+
   /**
    * Calculate the offset for proper positioning of the number path within the circle.
    */
@@ -87,9 +101,24 @@ export const NumberComponent: React.FC<
   const circleClassName = isDarkTheme ? 'cls-5' : 'cls-5-light';
   const pathClassName = isDarkTheme ? 'cls-10' : 'cls-10-light';
 
+  // For static numbers, we only render the number path without a circle or interactivity
+  if (type === 'static') {
+    return (
+      <g id={`number${number}-${id}`}>
+        <path
+          id={`path${number}-${id}`}
+          d={pathData}
+          className={pathClassName}
+          transform={`translate(${offsetX}, ${offsetY})`}
+        />
+      </g>
+    );
+  }
+
+  // For dynamic numbers, we render the full interactive component with circle and animations
   return (
-    <g id={`number${number}`}>
-      {/* Add interactive buttons based on shouldBeInteractive */}
+    <g id={`number${number}-${id}`}>
+      {/* Add interactive button for dynamic numbers */}
       {shouldBeInteractive && (
         <ButtonComponent
           x={coords.circle.x - CIRCLE_RADIUS}
@@ -98,10 +127,11 @@ export const NumberComponent: React.FC<
           height={CIRCLE_RADIUS * 2}
         />
       )}
+      
       {/* The circle background for the number */}
       {shouldAnimate ? (
         <a.circle
-          id={`circle${number}`}
+          id={`circle${number}-${id}`}
           cx={coords.circle.x}
           cy={coords.circle.y}
           r={CIRCLE_RADIUS}
@@ -110,7 +140,7 @@ export const NumberComponent: React.FC<
         />
       ) : (
         <circle
-          id={`circle${number}`}
+          id={`circle${number}-${id}`}
           cx={coords.circle.x}
           cy={coords.circle.y}
           r={CIRCLE_RADIUS}
@@ -118,9 +148,10 @@ export const NumberComponent: React.FC<
           style={{ opacity: 1 }}
         />
       )}
+      
       {/* The number path (SVG shape of the number) */}
       <path
-        id={`path${number}`}
+        id={`path${number}-${id}`}
         d={pathData}
         className={pathClassName}
         transform={`translate(${offsetX}, ${offsetY})`}

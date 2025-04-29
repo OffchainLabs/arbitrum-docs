@@ -14,7 +14,8 @@ export interface Coordinates {
 }
 
 export interface NumberComponentProps {
-  number: 1 | 2 | 3 | 4 | 5;
+  number: 0 | 1 | 2 | 3 | 4 | 5;
+  type?: 'static' | 'dynamic';
 }
 
 export interface ButtonComponentProps {

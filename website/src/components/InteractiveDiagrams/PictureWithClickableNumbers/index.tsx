@@ -86,7 +86,7 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
         >
           {numbers.map((number) => (
             <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-              <NumberComponent number={number} coordinates={finalCoordinates} id={id} />
+              <NumberComponent number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
             </Modal>
           ))}
           {backgroundElements}
@@ -120,7 +120,7 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
         </linearGradient>
         <style id="style1">
           {
-            '.cls-1,.cls-2,.cls-4{fill:none}.cls-5{fill:#e30663}.cls-7{fill:#12aaff}.cls-8,.cls-9{fill:#e5e5e5}.cls-2,.cls-4{stroke-miterlimit:10}.cls-2{stroke-width:.86px;stroke:#fff}.cls-4{stroke-width:1.09px}.cls-10{fill:#fff}.cls-11,.cls-9{opacity:.1}.cls-4{stroke:#e5e5e5}.cls-13{fill:#213147}'
+            '.cls-1,.cls-2,.cls-4{fill:none}.cls-5{fill:#e30663}.cls-5-light{fill:#e30663}.cls-7{fill:#12aaff}.cls-8,.cls-9{fill:#e5e5e5}.cls-2,.cls-4{stroke-miterlimit:10}.cls-2{stroke-width:.86px;stroke:#fff}.cls-4{stroke-width:1.09px}.cls-10{fill:#fff}.cls-10-light{fill:#000}.cls-11,.cls-9{opacity:.1}.cls-4{stroke:#e5e5e5}.cls-13{fill:#213147}'
           }
         </style>
       </defs>
