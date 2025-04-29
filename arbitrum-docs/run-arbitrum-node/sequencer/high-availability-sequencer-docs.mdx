@@ -103,7 +103,7 @@ Deploy a set of Nitro full nodes to handle read requests and forward write trans
 - Forward transactions to a round-robin Kubernetes service containing all sequencer replicas
 - Configure with `--execution.forwarding-target=http://sequencer-nitro.svc:8547`
 
-**Send to Active Configuration (Optional)**:
+**Send to active configuration (optional)**:
 
 - Monitor Redis to identify the active Sequencer
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
