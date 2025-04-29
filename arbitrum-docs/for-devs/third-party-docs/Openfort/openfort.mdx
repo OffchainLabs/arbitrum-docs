@@ -1,6 +1,6 @@
 ---
-title: 'How to onboard users in your game and make a gasless transaction'
-description: 'Learn how to use Openfort to integrate authentication, private key management, and account abstraction into your game on Arbitrum'
+title: 'How to onboard users and make a sponsored transaction'
+description: 'Learn how to use Openfort to integrate authentication, private key management, and account abstraction into your project on Arbitrum'
 author: Joan Alavedra
 sme: joalavedra
 sidebar_label: 'Openfort'
@@ -12,33 +12,33 @@ The following document was contributed by [@joalavedra](https://github.com/joala
 
 :::
 
-**[Openfort](https://www.openfort.xyz/)** is a headless wallet solution that helps developers integrate authentication, private key management, and account abstraction into their dApps. By abstracting away the complexities of blockchain interactions, Openfort allows you to build Web3 applications with a Web2-like user experience without requiring end users to manage private keys or hold cryptocurrency.
+[Openfort](https://openfort.io) is an open-source alternative to wallet infrastructure solutions. The core offerings—Openfort Kit, Invisible Wallet, and Cross-app Wallet - enable rapid integration of wallet functionality, intuitive onboarding, and flexible user journeys for any application or ecosystem.
 
-Openfort enables you to:
+### [Openfort Kit](https://www.openfort.io/docs/products/kit/react/quickstart)
 
-- Implement secure authentication and key management
-- Create and manage smart contract wallets
-- Enable gasless and sponsored transactions
+Openfort Kit is a developer toolkit that streamlines the integration of wallet authentication and connectivity into any web application. It provides:
 
-Check out **[Openfort's Documentation](https://www.openfort.xyz/docs)** to get started.
+- **Plug-and-play UI Components**: Prebuilt, customizable authentication and wallet connection flows that can be deployed in minutes, not weeks, with support for major authentication providers and wallet connector
+- **Developer Experience**: TypeScript-ready, ecosystem-standard libraries (wagmi, viem), and easy integration with frameworks like React, Next.js, and Create React App.
+- **Full Customization**: Predesigned themes or the ability to fully tailor the UI to match your brand.
 
-## Openfort dashboard
+### [Invisible Wallet](https://www.openfort.io/docs/products/embedded-wallet/javascript)
 
-The Openfort dashboard allows you to:
+Invisible Wallet enables applications to onboard users without requiring them to interact directly with traditional wallet interfaces. Features include:
 
-- Create and manage projects
-- Generate API keys
-- Configure authentication providers
-- Monitor transactions and analytics
-- Set up webhooks for real-time notifications
+- **Embedded Non-custodial Signer**: Secure, self-custodied wallet creation and signing for users, with no need for browser extensions or external apps.
+- **Fundign Support**: Users can onramp their newly created wallets with traditional methods or depositing crypto. 
+- **Key Export**: Users can always export private keys, allowing them to take the wallet with them.
 
-:::info Openfort Dashboard
+### [Cross-app Wallet](https://www.openfort.io/docs/products/cross-app-wallet/setup)
 
-Please check out the [docs](https://www.openfort.xyz/docs/) to learn more about using the Openfort Dashboard. Click [here](https://dashboard.openfort.xyz) to access the Openfort Dashboard.
+The Cross-app Wallet empowers ecosystems and platforms to offer branded, interoperable wallets that work across multiple apps and services. Key capabilities:
 
-:::
+- **Ecosystem SDK**: Build your own wallet SDK that can be integrated across your suite of apps, ensuring users have a consistent identity and asset management experience everywhere.
+- **No App or Extension Required**: Users can create and use wallets instantly via iFrames or embedded flows, compatible with any EVM chain.
+- **Modern Standards**: Supports the latest Ethereum standards (EIP-1193, 6963, 7702, 4337, and more) for broad compatibility and future-proofing.
 
-## How to implement a gasless transaction on Arbitrum using Openfort
+## How to implement a sponsored transaction on Arbitrum using Openfort
 
 With Openfort, you can sponsor transactions for your users, meaning that in-game wallets don't need native tokens to execute transactions, such as minting an NFT. This guide will walk you through the process of implementing a gasless transaction to mint an NFT on Arbitrum.
 
@@ -130,7 +130,7 @@ By following these steps, you've created a gasless transaction on Arbitrum using
 
 :::info Detailed tutorial
 
-For a more detailed tutorial, please refer to the [Openfort Quick Start Guide](https://www.openfort.xyz/docs/guides/getting-started).
+For a more detailed tutorial, please refer to the [Openfort Quick Start Guide](https://www.openfort.io/docs/).
 
 :::
 
@@ -138,8 +138,6 @@ For a more detailed tutorial, please refer to the [Openfort Quick Start Guide](h
 
 Need further assistance? Reach out to Openfort for support and stay updated:
 
-- Visit Openfort's official website at [openfort.xyz](https://www.openfort.xyz)
-- Read the [Documentation](https://www.openfort.xyz/docs)
-- For support, contact the Openfort team via [Discord](https://discord.gg/t7x7hwkJF4)
-- Follow Openfort on [Twitter](https://twitter.com/openfortxyz)
+- Visit Openfort's official website at [openfort.io](https://www.openfort.io)
+- Read the [Documentation](https://www.openfort.io/docs)
 - Check out Openfort on [GitHub](https://github.com/openfort-xyz)
