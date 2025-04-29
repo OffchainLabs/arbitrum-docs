@@ -603,10 +603,10 @@ Here are the steps you should take to deploy your Orbit Rollup with a custom gas
 3. **Configure the fee token and pricer when creating the rollup**
    Use the [createERC20Rollup.ts](https://github.com/OffchainLabs/nitro-contracts/blob/main/scripts/createERC20Rollup.ts) script, which accepts environment variables for:
 
-   - FEE_TOKEN_ADDRESS = your `ERC-20` gas token
-   - FEE_TOKEN_PRICER_ADDRESS = your deployed pricer
-   - ROLLUP_CREATOR_ADDRESS = the rollup creator contract on L1
-   - STAKE_TOKEN_ADDRESS = token used for staking (see [BoLD docs](/launch-orbit-chain/bold-adoption-for-orbit-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
+   - `FEE_TOKEN_ADDRESS` = your `ERC-20` gas token
+   - `FEE_TOKEN_PRICER_ADDRESS` = your deployed pricer
+   - `ROLLUP_CREATOR_ADDRESS` = the rollup creator contract on L1
+   - `STAKE_TOKEN_ADDRESS` = token used for staking (see [BoLD docs](/launch-orbit-chain/bold-adoption-for-orbit-chains.mdx#use-of-your-projects-native-token-as-the-bonding-asset-to-secure-the-chain) for more details)
 
    The script will deploy and initialize the Rollup accordingly.
 
