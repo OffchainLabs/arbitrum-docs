@@ -109,7 +109,7 @@ Key configuration parameters:
 - Provide an additional layer of isolation for production sequencers
 - Since these are public facing, ensure they scale appropriately based on your traffic needs:
 
-```console
+```shell
 helm install external-relay offchainlabs/relay \
   --set replicaCount=2 \
   --set configmap.data.chain.id=<your-chain-id> \
