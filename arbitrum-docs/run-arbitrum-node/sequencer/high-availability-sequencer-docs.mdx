@@ -139,7 +139,7 @@ To enable Redis-based active sequencer discovery:
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
 - Ensure connectivity to individual sequencer services and Redis
 - Test failover scenarios before production deployment
-```console
+```shell
 helm install fullnode offchainlabs/nitro \
   --set replicaCount=2 \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
