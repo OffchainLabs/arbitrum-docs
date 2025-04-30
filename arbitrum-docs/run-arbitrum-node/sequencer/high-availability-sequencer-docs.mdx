@@ -60,6 +60,11 @@ In this configuration, full nodes forward transactions to a predefined endpoint 
   alt="send to active disable"
   className="img-600px"
 />
+
+## Using helm charts for deployment
+
+We recommend using the [Offchain Labs community Helm charts](https://github.com/OffchainLabs/community-helm-charts) to deploy your high-availability sequencer setup. These charts provide pre-configured templates for all the necessary components and make it easier to maintain your deployment. Base configuration values are provided in the examples below. However, you should adjust them to fit your specific needs and use values files for production deployments.
+
 ## Detailed component setup
 
 ### 1. Load balancing (CDN)
@@ -68,8 +73,8 @@ We strongly recommend using a CDN for managing traffic and security concerns:
 
 - **Recommendation**: Use Cloudflare or a similar CDN service
 - **Configuration**:
-  - Direct `/rpc` traffic to the Nitro full node fleet
-  - Direct `/feed` traffic to public-facing relays
+  - Direct rpc traffic to the Nitro full node fleet
+  - Direct feed traffic to public-facing relays
   - Implement rate limiting and bot detection as needed
 - **Benefits**: Distributes load, improves security, and enhances availability
 
@@ -83,57 +88,80 @@ The requirement is for two types of relays in the architecture:
 - Configure to listen to feed outputs from all sequencers
 - All other components connect to these relays instead of directly to the sequencers
 - Minimize direct load on sequencer nodes
+Deploy sequencer relays using the relay helm chart:
+
+```shell
+helm install sequencer-relay offchainlabs/relay \
+  --set replicaCount=2 \
+  --set configmap.data.chain.id=<your-chain-id> \
+  --set configmap.data.node.feed.input.url=ws://sequencer-nitro-0.sequencer-nitro:9642,ws://sequencer-nitro-1.sequencer-nitro:9642,ws://sequencer-nitro-2.sequencer-nitro:9642
+```
+
+Key configuration parameters:
+- `replicaCount`: Number of relay replicas to deploy (recommend at least 2 for high availability)
+- `configmap.data.chain.id`: Your chain ID
+- `configmap.data.node.feed.input.url`: Comma-separated list of WebSocket URLs for all sequencer feed outputs. This relies on the `perReplicaHeadlessService.enabled=true` parameter in the sequencer deployment to create individual services for each sequencer replica.
 
 #### External relays
 
 - Connect to Sequencer Relays (not directly to sequencers)
 - Handle all public feed requests
 - Provide an additional layer of isolation for production sequencers
+- Since these are public facing, ensure they scale appropriately based on your traffic needs:
+
+```shell
+helm install external-relay offchainlabs/relay \
+  --set replicaCount=2 \
+  --set configmap.data.chain.id=<your-chain-id> \
+  --set configmap.data.node.feed.input.url=ws://sequencer-relay:9642
+```
 
 You can check [run a feed relay](/run-arbitrum-node/sequencer/run-feed-relay) to see how to set up a relay node.
 
-### 3. Nitro full nodes setup
+### 3. Nitro full node setup
 
-Deploy a set of Nitro full nodes to handle read requests and forward write transactions; please refer to [run a full node](/run-arbitrum-node/03-run-full-node.mdx) for more details.
 
-#### Configuration options:
+```console
+helm install fullnode offchainlabs/nitro \
+  --set replicaCount=2 \
+  --set configmap.data.parent-chain.id=<parent-chain-id> \
+  --set configmap.data.parent-chain.connection.url=<parent-node-url> \
+  --set configmap.data.chain.id=<child-chain-id> \
+  --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
+```
 
-**Standard configuration**:
 
-- Forward transactions to a round-robin Kubernetes service containing all sequencer replicas
-- Configure with `--execution.forwarding-target=http://sequencer-nitro.svc:8547`
+#### Send to active configuration (optional)
 
-**Send to active configuration (optional)**:
+To enable Redis-based active sequencer discovery:
 
 - Monitor Redis to identify the active Sequencer
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
 - Ensure connectivity to individual sequencer services and Redis
 - Test failover scenarios before production deployment
-
-**Mutating-only endpoint (optional)**:
-
-- Deploy dedicated nodes for transaction submission only
-- Add this configuration to restrict endpoints to transaction submission only:
-
-```json
-{
-  "execution": {
-    "rpc": {
-      "allow-method": ["eth_sendRawTransaction"]
-    }
-  }
-}
+```shell
+helm install fullnode offchainlabs/nitro \
+  --set replicaCount=2 \
+  --set configmap.data.parent-chain.id=<parent-chain-id> \
+  --set configmap.data.parent-chain.connection.url=<parent-node-url> \
+  --set configmap.data.chain.id=<child-chain-id> \
+  --set configmap.data.execution.sequencer.forwarder.redis-url=redis://<redis-url>:6379
 ```
+
+#### Mutating-only endpoint (optional)
+
+For high availability, it is recommended to route mutating transactions to a fleet of `precheckers`, which will forward them to the sequencer. This can be done by setting up a separate endpoint for mutating transactions and only allowing calls such as `eth_sendRawTransaction` to be routed to the precheckers, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, this configuration requires custom load balancing logic and is out of scope for this guide.
+
 
 ### 4. Redis setup
 
 Set up a highly available Redis cluster for sequencer coordination:
 
-- **Deployment options**:
+#### Deployment options
   - Use a managed service like AWS ElastiCache (recommended)
-  - Deploy within Kubernetes using a `StatefulSet` with `PersistentVolumeClaims`
-- **Requirements**:
+  - Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
 
+#### Requirements
   - Minimum of three replicas across different availability zones (recommended)
   - Secured access (only accessible within the Kubernetes cluster)
   - Backups enabled
@@ -145,211 +173,63 @@ Set up a highly available Redis cluster for sequencer coordination:
 
 ### 5. Sequencer setup
 
-#### Sequencer deployment
+Deploy multiple sequencer replicas with availability zone spread using the nitro helm chart(availability zone spread is not demonstrated in the example below):
 
-Deploy multiple sequencer replicas with availability zone spread:
-
-- Use a `StatefulSet` for sequencer deployment
-- Configure individual services for each sequencer replica
-- Create a service for all sequencer replicas
-
-#### Individual sequencer service example:
-
-```yaml
-kind: Service
-metadata:
-  name: sequencer-nitro-0
-spec:
-  ports:
-    - name: rpc
-      port: 8547
-      protocol: TCP
-      targetPort: 8547
-    - name: ws
-      port: 8548
-      protocol: TCP
-      targetPort: 8548
-    - name: metrics
-      port: 6070
-      protocol: TCP
-      targetPort: 6070
-    - name: feed
-      port: 9642
-      protocol: TCP
-      targetPort: 9642
-  selector:
-    app.kubernetes.io/instance: sequencer
-    app.kubernetes.io/name: nitro
-    statefulset.kubernetes.io/pod-name: sequencer-nitro-0
-  sessionAffinity: None
-  type: LoadBalancer
+```shell
+helm install sequencer offchainlabs/nitro \
+  --set replicaCount=3 \
+  --set configmap.data.parent-chain.id=<parent-chain-id> \
+  --set configmap.data.parent-chain.connection.url=<parent-node-url> \
+  --set configmap.data.chain.id=<child-chain-id> \
+  --set configmap.data.node.sequencer.enable=true \
+  --set configmap.data.node.delayed-sequencer.enable=true \
+  --set configmap.data.node.seq-coordinator.enable=true \
+  --set configmap.data.node.seq-coordinator.redis-url=<redis-url> \
+  --set configmap.data.node.feed.output.enable=true \
+  --set configmap.data.node.feed.output.port=9642 \
+  --set configmap.data.execution.sequencer.enable=true \
+  --set perReplicaHeadlessService.enabled=true
 ```
 
-#### All sequencers service example:
+#### Critical sequencer coordinator parameters
+
+The sequencer coordinator is the key component for high availability. These parameters are essential:
+
+| Parameter                        | Description                  | Recommended Value    |
+|----------------------------------|------------------------------|----------------------|
+| `node.seq-coordinator.enable`    | Enable sequencer coordinator | `true`               |
+| `node.seq-coordinator.redis-url` | Redis URL for coordination   | Your Redis URL       |
+| `node.seq-coordinator.my-url`    | URL for this sequencer       | Unique per sequencer |
+
+#### Setting the sequencer's self URL
+
+A critical configuration for the sequencer coordinator is setting a unique URL for each sequencer instance. This can be done using Kubernetes environment variables:
 
 ```yaml
-kind: Service
-metadata:
-  name: sequencer-nitro
-spec:
-  ports:
-    - name: rpc
-      port: 8547
-      protocol: TCP
-      targetPort: 8547
-    - name: ws
-      port: 8548
-      protocol: TCP
-      targetPort: 8548
-    - name: metrics
-      port: 6070
-      protocol: TCP
-      targetPort: 6070
-    - name: feed
-      port: 9642
-      protocol: TCP
-      targetPort: 9642
-  selector:
-    app.kubernetes.io/instance: sequencer
-    app.kubernetes.io/name: nitro
-  sessionAffinity: None
-  type: LoadBalancer
+extraEnv:
+  - name: POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
+    value: "http://$(POD_NAME).<NAMESPACE>.svc.cluster.local:8547/rpc"
 ```
 
-#### Sequencer ConfigMap Example:
+This configuration:
+1. Gets the pod name from Kubernetes metadata
+2. Uses it to create a unique URL for each sequencer instance
+3. Sets this URL as the `node.seq-coordinator.my-url` parameter
 
-```yaml
-apiVersion: v1
-data:
-  config.json: |
-    {
-      "parent-chain": {
-          "id": <parent-chain-id>,
-          "connection": {
-              "url": "<parent-node-url>"
-          }
-      },
-      "chain": {
-        "id": <child-chain-id>,
-        "info-json": <child-chain-info>,
-      },
-      "log-type": "json",
-      "node": {
-          "sequencer": {
-              "enable": true
-          },
-          "delayed-sequencer": {
-              "enable": true
-          },
-          "seq-coordinator": {
-              "enable": true,
-              "redis-url": "<redis-url>",
-              "lockout-duration": "30s",
-              "lockout-spare": "1s",
-              "my-url": "<Your unique node url>",
-              "retry-interval": "0.5s",
-              "seq-num-duration": "24h0m0s"
-          },
-          "feed": {
-              "output": {
-                  "enable": true,
-                  "port": 9642
-              }
-          },
-          "batch-poster": {
-              "enable": false
-          }
-      },
-      "execution": {
-        "forwarding-target": "",
-        "sequencer": {
-          "enable": true,
-          "max-tx-data-size": 85000,
-          "max-block-speed": "250ms"
-        },
-        "caching": {
-          "archive": true
-        }
-      }
-      "http": {
-          "addr": "0.0.0.0",
-          "port": "8547",
-          "vhosts": "*",
-          "api": ["arb","personal","eth","net","web3","txpool"],
-          "corsdomain": "*"
-      },
-      "ws": {
-          "addr": "0.0.0.0",
-          "port": "8548",
-          "origins": "*",
-          "api": ["arb","personal","eth","net","web3","txpool"]
-      },
-      "persistent": {
-          "chain": "/home/user/data/"
-      }
-    }
-kind: ConfigMap
-metadata:
-  name: sequencer-nitro
-```
+Make sure to adjust the domain name (`<NAMESPACE>.svc.cluster.local`) to match your Kubernetes cluster's DNS configuration. This configuration requires nitro being configured to read environment variables beginning with `NITRO_`.
 
-#### Command Line Arguments and Environment Variables:
 
-```yaml
-- args:
-    - --conf.env-prefix=NITRO
-    - --conf.file=/config/config.json
-    - --metrics
-    - --metrics-server.addr=0.0.0.0
-    - --node.seq-coordinator.signer.symmetric-fallback
-    - --node.seq-coordinator.signer.symmetric-sign
-    - --node.seq-coordinator.signer.symmetric.signing-key=<secure_key>
-  command:
-    - /usr/local/bin/nitro
-  env:
-    - name: POD_NAME
-      valueFrom:
-        fieldRef:
-          apiVersion: v1
-          fieldPath: metadata.name
-    - name: NITRO_NODE_SEQ__COORDINATOR.MY__URL
-      value: ws://$(POD_NAME).svc:8548
-```
+#### Individual sequencer services
 
-#### Volume and ConfigMap Mapping:
+You can enable automatic creation of headless services for each sequencer replica by setting the `perReplicaHeadlessService.enabled=true` parameter in the Helm chart (as shown in the installation command above). This will create individual services named `<release-name>-nitro-<index>` that allow direct access to each sequencer replica.
 
-```yaml
-volumeMounts:
-  - mountPath: /home/user/data/
-    name: data
-  - mountPath: /config/
-    name: config
-  - mountPath: /home/user/seqkeystore/sequencer-wallet.key
-    name: l3-sequencer-keystore
-    subPath: sequencer-wallet.key
-volumes:
-  - configMap:
-      defaultMode: 420
-      name: sequencer-nitro
-    name: config
-  - name: l3-sequencer-keystore
-    secret:
-      defaultMode: 420
-      secretName: l3-sequencer-keystore
-volumeClaimTemplates:
-  - apiVersion: v1
-    kind: PersistentVolumeClaim
-    metadata:
-      name: data
-    spec:
-      accessModes:
-        - ReadWriteOnce
-      resources:
-        requests:
-          storage: 1Ti
-      storageClassName: gp3
-      volumeMode: Filesystem
-```
+These individual services are critical for a proper high availability setup because they allow components like sequencer relays to connect directly to specific sequencer instances. This direct connection is essential for:
+- **Proper failover**: When the active sequencer changes, other components can address the new active sequencer directly 
+- **Feed aggregation**: Sequencer relays need to collect feeds from all sequencer instances to ensure no messages are lost during transitions
 
 ### 6. Sequencer coordinator manager
 
@@ -361,100 +241,21 @@ To manage active sequencer selection, use the built-in sequencer coordinator UI:
 
 ### 7. Batchposter setup
 
-The Batchposter component's primary function is posting transaction batches to the parent chain.
-
-You need to configure it to connect to the Sequencer coordinator Redis but don't set this node in the Sequencer priority list in SQM (Sequencer Coordinator Manager) to prevent it to be active sequencer:
-
-#### Batchposter ConfigMap example:
-
-```yaml
-apiVersion: v1
-data:
-  config.json: |
-    {
-      "parent-chain": {
-          "id": <parent-chain-id>,
-          "connection": {
-              "url": "<parent-node-url>"
-          }
-      },
-      "chain": {
-        "id": <child-chain-id>,
-        "info-json": <child-chain-info>,
-      },
-      "log-type": "json",
-      "execution": {
-        "forwarding-target": "null"
-      },
-      "node": {
-        "seq-coordinator": {
-          "enable": true,
-          "redis-url": "<redis-url>",
-          "lockout-duration": "30s",
-          "lockout-spare": "1s",
-          "my-url": "<Your unique node url>",
-          "retry-interval": "0.5s",
-          "seq-num-duration": "24h0m0s"
-        },
-        "batch-poster": {
-          "enable": true,
-          "parent-chain-wallet": {
-            "private-key": "<Your Parent Chain Wallet Private Key>"
-          }
-        }
-      },
-      "http": {
-        "addr": "0.0.0.0",
-        "port": "8547",
-        "vhosts": "*",
-        "api": [
-          "personal",
-          "eth",
-          "net",
-          "web3",
-          "txpool"
-        ],
-        "corsdomain": "*",
-        "rpcprefix": "/rpc"
-      },
-      "ws": {
-        "addr": "0.0.0.0",
-        "port": "8548",
-        "origins": "*",
-        "api": [
-          "personal",
-          "eth",
-          "net",
-          "web3",
-          "txpool",
-          "debug",
-          "arbdebug"
-        ],
-        "rpcprefix": "/ws"
-      },
-      "persistent": {
-        "chain": "/home/user/data/"
-      }
-    }
-kind: ConfigMap
-metadata:
-  name: batchposter-config
-```
-
-#### Batchposter Command Line Arguments:
+Deploy the batch poster using the nitro helm chart:
 
 ```shell
---conf.env-prefix=NITRO
---conf.file=/config/config.json
---metrics
---metrics-server.addr=0.0.0.0
---node.parent-chain-reader.tx-timeout=1h
---node.seq-coordinator.signer.symmetric-fallback
---node.seq-coordinator.signer.symmetric-sign
---node.seq-coordinator.signer.symmetric.signing-key=<secure_key>
---node.batch-poster.data-poster.redis-signer.signing-key=<secure_key_2>
---node.batch-poster.data-poster.max-queued-transactions=256
+helm install batchposter offchainlabs/nitro \
+  --set configmap.data.parent-chain.id=<parent-chain-id> \
+  --set configmap.data.parent-chain.connection.url=<parent-node-url> \
+  --set configmap.data.chain.id=<child-chain-id> \
+  --set configmap.data.execution.forwarding-target=null \
+  --set configmap.data.node.seq-coordinator.enable=true \
+  --set configmap.data.node.seq-coordinator.redis-url=<redis-url> \
+  --set configmap.data.node.batch-poster.enable=true \
+  --set "configmap.data.node.batch-poster.parent-chain-wallet.private-key=<your-private-key>"
 ```
+
+Important: Do not add the batch poster to the sequencer priority list in the Sequencer Coordinator Manager (SQM) to prevent it from becoming the active sequencer unintentionally.
 
 ## Monitoring and maintenance
 
@@ -476,3 +277,4 @@ If you run into any issues, visit the [node-running troubleshooting guide](/run-
 - [How to Run a Fullnode](https://docs.arbitrum.io/node-running/how-tos/running-a-node)
 - [Running a Sequencer Coordinator Manager](https://docs.arbitrum.io/node-running/how-tos/running-a-sequencer-coordinator-manager)
 - [Kubernetes Documentation](https://kubernetes.io/docs/)
+- [Offchain Labs Community Helm Charts](https://github.com/OffchainLabs/community-helm-charts)
