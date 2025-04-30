@@ -150,7 +150,7 @@ helm install fullnode offchainlabs/nitro \
 
 #### Mutating-only endpoint (optional)
 
-For high availability, it is recommended to route mutating transactions to a fleet of `precheckers` which will then forward them to the sequencer. This can be done by setting up a separate endpoint for mutating transactions, and only allowing calls such as `eth_sendRawTransaction` to be routed to the precheckers which then route to the sequencer. This insulates the sequencer from unnecessary load and allows it to focus on transaction ordering. However, this configuration requires custom load balancing logic and is out of scope for this guide.
+For high availability, it is recommended to route mutating transactions to a fleet of `precheckers`, which will forward them to the sequencer. This can be done by setting up a separate endpoint for mutating transactions and only allowing calls such as `eth_sendRawTransaction` to be routed to the precheckers, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, this configuration requires custom load balancing logic and is out of scope for this guide.
 
 
 ### 4. Redis setup
