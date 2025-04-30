@@ -175,7 +175,7 @@ Set up a highly available Redis cluster for sequencer coordination:
 
 Deploy multiple sequencer replicas with availability zone spread using the nitro helm chart(availability zone spread is not demonstrated in the example below):
 
-```console
+```shell
 helm install sequencer offchainlabs/nitro \
   --set replicaCount=3 \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
