@@ -90,7 +90,7 @@ The requirement is for two types of relays in the architecture:
 - Minimize direct load on sequencer nodes
 Deploy sequencer relays using the relay helm chart:
 
-```console
+```shell
 helm install sequencer-relay offchainlabs/relay \
   --set replicaCount=2 \
   --set configmap.data.chain.id=<your-chain-id> \
