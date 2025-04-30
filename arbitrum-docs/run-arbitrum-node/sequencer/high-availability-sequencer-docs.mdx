@@ -243,7 +243,7 @@ To manage active sequencer selection, use the built-in sequencer coordinator UI:
 
 Deploy the batch poster using the nitro helm chart:
 
-```console
+```shell
 helm install batchposter offchainlabs/nitro \
   --set configmap.data.parent-chain.id=<parent-chain-id> \
   --set configmap.data.parent-chain.connection.url=<parent-node-url> \
