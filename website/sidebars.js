@@ -634,6 +634,11 @@ const sidebars = {
             },
             {
               type: 'doc',
+              id: 'stylus/how-tos/using-inheritance',
+              label: 'Using Inheritance',
+            },
+            {
+              type: 'doc',
               id: 'stylus/how-tos/verifying-contracts-arbiscan',
               label: 'Verify on Arbiscan',
             },
