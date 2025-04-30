@@ -11,7 +11,7 @@ Following [Ethereum's Dencun upgrade in March 2024](https://eips.ethereum.org/EI
 
 ### What does this mean for node operators?
 
-To run a node for a child Arbitrum chain (i.e. Arbitrum One, Arbitrum Nova, and L3 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum child chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](/run-arbitrum-node/03-run-full-node.mdx).
+To run a node for a child Arbitrum chain (i.e., Arbitrum One, Arbitrum Nova, and L3 Orbit chains), your node will need access to blob data to sync up to the latest state of your Arbitrum child chain. Blob data on Ethereum is stored on the beacon chain and is inaccessible to the EVM, hence why dedicated RPC endpoints for the beacon chain will be required after the Dencun upgrade. You can find more details on node requirements in the [Run a full node guide](/run-arbitrum-node/03-run-full-node.mdx).
 
 Furthermore, new node operators joining a network or node operators who come online following an extended period of offline time will require access to _historical_ blob data to sync up to the latest state of their Arbitrum chain.
 
@@ -23,7 +23,7 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 | --------------------------------------------------------------------------- | -------------------------- | ----------------------------- | -------------------------- | -------------------------- |
 | [Ankr](https://www.ankr.com/docs/rpc-service/chains/chains-api/eth-beacon/) | ✅                         | ✅                            |                            |                            |
 | [Chainbase](https://chainbase.com/)                                         | ✅                         |                               |                            |                            |
-| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                         | ✅                            |                            | ✅                         |
+| [Chainstack](https://docs.chainstack.com/reference/beacon-chain)            | ✅                         | ✅                            | ✅                         | ✅                         |
 | [Conduit](https://conduit.xyz/)\*                                           | ✅                         | ✅                            |                            |                            |
 | [BlastAPI](https://blastapi.io/public-api/ethereum)                         |                            |                               | ✅                         |                            |
 | [Nirvana Labs](https://nirvanalabs.io)                                      | ✅                         | ✅                            |                            |                            |
@@ -33,4 +33,4 @@ Offchain Labs has plans to reduce a Nitro validator's reliance on historical blo
 
 Please reach out to these teams individually if you need assistance with setting up your validator with any of the above providers.
 
-**\*Case-by-case basis, please contact them directly for help**
+**Case-by-case basis, please contact them directly for help**

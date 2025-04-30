@@ -20,16 +20,14 @@
  *
  * Configuration:
  * The script accepts the following options (passed to generateSidebarTree):
- * - indentBase: Base number of dashes for indentation (default: 6)
- * - indentLevel: Additional dashes per nested level (default: 15)
  * - skipEmpty: Whether to skip items without labels (default: true)
  * - handleMissing: How to handle invalid/missing items (default: true)
  *
  * Example output format:
- * |------ Section
- * |--------------------- Category
- * |------------------------------------ Page Title
- * |------------------------------------ External Link (https://example.com)
+ * |-- Section
+ * |  -- Category
+ * |    -- Page Title
+ * |    -- External Link (https://example.com)
  */
 
 const sidebars = require('../../sidebars.js');
@@ -38,14 +36,12 @@ const path = require('path');
 
 function generateSidebarTree(sidebar, options = {}) {
   const {
-    indentBase = 6, // Base number of dashes
-    indentLevel = 15, // Additional dashes per level
     skipEmpty = true, // Skip items without labels
     handleMissing = true, // Handle missing/undefined items gracefully
   } = options;
 
   function getIndent(level) {
-    return '|' + '-'.repeat(indentBase + level * indentLevel);
+    return '|' + ' '.repeat(level * 2) + '-'.repeat(2);
   }
 
   function processItem(item, level = 0) {
@@ -123,8 +119,6 @@ function generateSidebarTree(sidebar, options = {}) {
 
 // Generate the tree using the actual sidebars configuration
 const treeOutput = generateSidebarTree(sidebars, {
-  indentBase: 6,
-  indentLevel: 15,
   skipEmpty: true,
   handleMissing: true,
 });

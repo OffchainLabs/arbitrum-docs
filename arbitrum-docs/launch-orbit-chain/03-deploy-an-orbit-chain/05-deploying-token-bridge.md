@@ -16,7 +16,7 @@ The token bridge architecture includes contracts deployed on the <a data-quicklo
 
 :::caution UNDER CONSTRUCTION
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the **Request an update** button at the top of this document.
 
 :::
 
@@ -28,9 +28,9 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 ### Prerequisites
 
-- A running **sequencer node**. See steps 1-2 in the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) to start the related Docker containers (note that you don't need the `orbitSetupScriptConfig.json` file here). Use `docker-compose logs -f nitro` to verify that your node is running.
+- A running **sequencer node**. See Steps 1-2 in the [orbit-setup-script](https://github.com/OffchainLabs/orbit-setup-script) to start the related Docker containers (note that you don't need the `orbitSetupScriptConfig.json` file here). Use `docker-compose logs -f nitro` to verify that your node is running.
 
-### Token Bridge Deployment Steps
+### Token bridge deployment steps
 
 Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
 
@@ -38,14 +38,14 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 2. **[Token bridge contract deployment](#2-token-bridge-contract-deployment)**
 3. **[Transaction recipient and checking for deployment on child chain](#3-transaction-recipient-and-checking-for-deployment-on-child-chain)**
 4. **[Deployment information and contract addresses](#4-deployment-information-and-contract-addresses)**
-5. **[Setting up the WETH gateway](#5-setting-up-the-weth-gateway)**
+5. **[Setting up the `WETH` gateway](#5-setting-up-the-weth-gateway)**
 
 :::info
 
 The token bridge deployment process is the same for all Orbit chains types except for the following:
 
 - **Custom fee token Orbit chains** which require [token approval](#1-token-approval).
-- **`ETH`-based Orbit chains**, for which you need to [set up a WETH gateway](#5-setting-up-the-weth-gateway).
+- **`ETH`-based Orbit chains**, for which you need to [set up a `WETH` gateway](#5-setting-up-the-weth-gateway).
 
 :::
 
@@ -172,7 +172,7 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 });
 ```
 
-### 5. Setting up the WETH gateway
+### 5. Setting up the `WETH` gateway
 
 The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway.
 
@@ -180,7 +180,7 @@ The last step in spinning up the token bridge for an `ETH`- based Orbit chain is
 
 That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain.
 
-You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](https://docs.arbitrum.io/for-devs/concepts/token-bridge/token-bridge-erc20#other-flavors-of-gateways).
+You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 :::
 

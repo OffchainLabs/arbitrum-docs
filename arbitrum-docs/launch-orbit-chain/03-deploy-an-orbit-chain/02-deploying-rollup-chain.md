@@ -1,49 +1,38 @@
 ---
-title: 'How to Deploy a Rollup chain using the Orbit SDK'
-sidebar_label: 'Deploy a Rollup chain'
+title: 'How to deploy a Rollup chain using the Orbit SDK'
 description: 'How to deploy a Rollup chain using the Orbit SDK '
-author: GreatSoshiant
-sme: GreatSoshiant
+author: GreatSoshiant, jose-franco
+sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 1
 user_story: As a current or prospective Orbit chain deployer, I need to configure and deploy a Rollup Orbit chain.
 content_type: how-to
 ---
 
-This document explains how to use the Orbit SDK to deploy a <a data-quicklook-from="arbitrum-rollup-chain">`Rollup Orbit chain`</a>.
+:::info RaaS providers
 
-:::caution UNDER CONSTRUCTION
-
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-orbit-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
 
 :::
 
-:::info
+Creating a new Orbit chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. These contracts are:
 
-See the ["create-rollup-eth" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) in the Orbit SDK repository for additional guidance.
+- Bridge contracts: used to send cross-chain messages between the Orbit chain and its parent chain, including batches posted by the sequencer
+- Rollup contracts: used by validators to create and confirm assertions of the current state of the Orbit chain
+- Challenge protocol contracts: used by validators to dispute current assertions of the state of the chain, and ultimately resolve those disputes
 
-:::
+You can explore the code of these contracts in the [nitro-contracts repository](https://github.com/OffchainLabs/nitro-contracts).
 
-The main benefit of the Orbit SDK lies in facilitating the deployment and fine-tuning of Orbit chains core Smart-Contracts.
+This page explains how to deploy a <a data-quicklook-from="arbitrum-rollup-chain">Rollup Orbit chain</a> using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to the process of creating and configuring an Orbit chain.
 
-These contracts are deployed on <a data-quicklook-from="parent-chain">`parent chains`</a>, they are:
+## Parameters used when deploying a new chain
 
-- Rollup contracts
-- <a data-quicklook-from="bridge">Bridge contracts</a>
-- Contracts handling <a data-quicklook-from="fraud-proof">fraud proofs</a>
+Before we describe the process of creating a chain using the Orbit SDK, let's see what configuration options we have available when creating a chain.
 
-Core contracts are the backbone of Arbitrum's <a data-quicklook-from="arbitrum-nitro">Nitro stack</a>, ensuring its robust and efficient operation. You can explore their code in the [nitro-contracts GitHub repository](https://github.com/OffchainLabs/nitro-contracts).
+Deploying a new Orbit chain is done through a [RollupCreator](/launch-orbit-chain/03-deploy-an-orbit-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Orbit chain.
 
-### Rollup deployment parameters
+`RollupCreator` has a `createRollup` function that deploys your chain's core contracts to the parent chain. `createRollup` takes a complex struct called `RollupDeploymentParams` as its only input. This struct defines the parameters of the Orbit chain to be created.
 
-[`createRollup`](https://github.com/OffchainLabs/nitro-contracts/blob/acb0ef919cce9f41da531f8dab1b0b31d9860dcb/src/rollup/RollupCreator.sol#L107) is the function that will deploy your core contracts on the parent chain.
-`createRollup` takes a complex input named `deployParams`, which defines the characteristics of an Orbit Rollup chain.
-
-The following will walk you through the methods and properties you will use to configure your chain.
-
-#### 1. RollupDeploymentParams struct
-
-```solidity {2,4,6,8}
+```solidity
 struct RollupDeploymentParams {
     Config config;
     address[] validators;
@@ -56,14 +45,24 @@ struct RollupDeploymentParams {
 }
 ```
 
-This Solidity struct includes key settings like the chain configuration (`Config`), validator addresses, maximum data size, the native token of the chain, and more.
+The following table describes `RollupDeploymentParams`'s parameters:
 
-#### 2. Config struct
+| Parameter                   | Type      | Description                                                                                                                                                                                                                                                                                                                |
+| :-------------------------- | :-------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config`                    | Config    | The chain's configuration, explained below.                                                                                                                                                                                                                                                                                |
+| `validators`                | address[] | Initial set of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting assertions (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty assertions submitted by other validators. |
+| `maxDataSize`               | uint256   | Maximum message size for the Inbox contract (`117964` for L2 chains, and `104857` for L3 chains).                                                                                                                                                                                                                          |
+| `nativeToken`               | address   | Address of the token contract in the parent chain, used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for [custom gas token Orbit chains](/launch-orbit-chain/03-deploy-an-orbit-chain/04-deploying-custom-gas-token-chain.md).                               |
+| `deployFactoriesToL2`       | bool      | Whether or not to deploy several deterministic factory contracts to the Orbit chain.                                                                                                                                                                                                                                       |
+| `maxFeePerGasForRetryables` | uint256   | Gas price bid to use when sending the retryable tickets.                                                                                                                                                                                                                                                                   |
+| `batchPosters`              | address[] | Initial set of batch poster addresses. Batch posters batch and compress transactions on the Orbit chain and transmit them back to the parent chain.                                                                                                                                                                        |
+| `batchPosterManager`        | address   | Address of the account responsible for managing currently active batch posters. Not mandatory, as these actions can also be taken by the chain owner.                                                                                                                                                                      |
 
-```solidity {2,4,6}
+The `Config` struct used in the previous configuration looks like this:
+
+```solidity
 struct Config {
     uint64 confirmPeriodBlocks;
-    uint64 extraChallengeTimeBlocks;
     address stakeToken;
     uint256 baseStake;
     bytes32 wasmModuleRoot;
@@ -71,182 +70,181 @@ struct Config {
     address loserStakeEscrow;
     uint256 chainId;
     string chainConfig;
-    uint64 genesisBlockNum;
+    uint256 minimumAssertionPeriod;
+    uint64 validatorAfkBlocks;
+    uint256[] miniStakeValues;
     ISequencerInbox.MaxTimeVariation sequencerInboxMaxTimeVariation;
+    uint256 layerZeroBlockEdgeHeight;
+    uint256 layerZeroBigStepEdgeHeight;
+    uint256 layerZeroSmallStepEdgeHeight;
+    AssertionState genesisAssertionState;
+    uint256 genesisInboxCount;
+    address anyTrustFastConfirmer;
+    uint8 numBigStepLevel;
+    uint64 challengeGracePeriodBlocks;
+    BufferConfig bufferConfig;
 }
 ```
 
-The `Config` struct defines the chain's core settings, including block confirmation periods, stake parameters, and the chain ID.
+Most of these parameters don't need to be configured, since the Orbit SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-#### 3. MaxTimeVariation struct
+| Parameter             | Type    | Description                                                                                                                                                                                                                                                                                      |
+| :-------------------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `confirmPeriodBlocks` | uint64  | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. Learn more about it in [Customizable challenge period](/launch-orbit-chain/02-configure-your-chain/common-configurations/03-customizable-challenge-period.mdx). |
+| `stakeToken`          | address | Address of the token that validators must stake to participate in the chain's validation process.                                                                                                                                                                                                |
+| `baseStake`           | uint256 | Orbit chain validator nodes must stake a certain amount to incentivize honest participation. This parameter specifies this amount.                                                                                                                                                               |
+| `wasmModuleRoot`      | address | Hash of the WASM module root to be used when validating.                                                                                                                                                                                                                                         |
+| `owner`               | address | Account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.                                                                                                                                                                           |
+| `loserStakeEscrow`    | address | Address that will receive any extra stakes deposited in the same assertion (when creating disputes).                                                                                                                                                                                             |
+| `chainId`             | uint256 | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                                                                                                                                                       |
+| `chainConfig`         | string  | Additional chain configuration, explained below.                                                                                                                                                                                                                                                 |
 
-```solidity {2,4}
-struct MaxTimeVariation {
-    uint256 delayBlocks;
-    uint256 futureBlocks;
-    uint256 delaySeconds;
-    uint256 futureSeconds;
-}
-```
+The `chainConfig` parameter within the `Config` struct is a stringified `JSON` object that looks like this:
 
-This nested struct within `Config` specifies time variations related to block sequencing, providing control over block delay and future block settings.
-
-#### 4. chainConfig
-
-The `chainConfig` parameter within the `Config` struct allows you to customize your Orbit chain. It's a stringified `JSON` object containing various configuration options that dictate how the Orbit chain behaves and interacts with the parent chain network.
-
-Here's a brief overview of `chainConfig`:
-
-```json {2,24,25,26,28,29}
+```typescript
 {
-    chainId: number;
-    homesteadBlock: number;
-    daoForkBlock: null;
-    daoForkSupport: boolean;
-    eip150Block: number;
-    eip150Hash: string;
-    eip155Block: number;
-    eip158Block: number;
-    byzantiumBlock: number;
-    constantinopleBlock: number;
-    petersburgBlock: number;
-    istanbulBlock: number;
-    muirGlacierBlock: number;
-    berlinBlock: number;
-    londonBlock: number;
-    clique: {
-        period: number;
-        epoch: number;
-    };
-    arbitrum: {
-        EnableArbOS: boolean;
-        AllowDebugPrecompiles: boolean;
-        DataAvailabilityCommittee: boolean;
-        InitialArbOSVersion: number;
-        InitialChainOwner: Address;
-        GenesisBlockNum: number;
-        MaxCodeSize: number;
-        MaxInitCodeSize: number;
-    };
+  chainId: number;
+  homesteadBlock: number;
+  daoForkBlock: null;
+  daoForkSupport: boolean;
+  eip150Block: number;
+  eip150Hash: string;
+  eip155Block: number;
+  eip158Block: number;
+  byzantiumBlock: number;
+  constantinopleBlock: number;
+  petersburgBlock: number;
+  istanbulBlock: number;
+  muirGlacierBlock: number;
+  berlinBlock: number;
+  londonBlock: number;
+  clique: {
+    period: number;
+    epoch: number;
+  }
+  arbitrum: {
+    EnableArbOS: boolean;
+    AllowDebugPrecompiles: boolean;
+    DataAvailabilityCommittee: boolean;
+    InitialArbOSVersion: number;
+    InitialChainOwner: Address;
+    GenesisBlockNum: number;
+    MaxCodeSize: number;
+    MaxInitCodeSize: number;
+  }
 }
 ```
 
-Out of `chainConfig`'s parameters, a few are particularly important and are likely to be configured by the chain owner: `chainId`, `arbitrum.InitialChainOwner`, `arbitrum.InitialArbOSVersion`, `arbitrum.DataAvailabilityCommittee`, `arbitrum.MaxCodeSize`, and `arbitrum.MaxInitCodeSize`.
+Again, most of these parameters don't need to be configured, since the Orbit SDK will provide the right default values for them. However, the following table describes some of the parameters that you might want to configure:
 
-#### 4.1. `prepareChainConfig`
+| Parameter                            | Type    | Description                                                                                                                                                     |
+| :----------------------------------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chainId`                            | number  | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                                                                      |
+| `arbitrum.DataAvailabilityCommittee` | bool    | Whether or not to use a Data Avalability Committee (DAC) to store your chain's data (this should be `false` for Rollup chains, and `true` for AnyTrust chains). |
+| `arbitrum.InitialArbOSVersion`       | number  | ArbOS version to use (it should be the latest ArbOS version available).                                                                                         |
+| `arbitrum.InitialChainOwner`         | address | Account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.                                          |
+| `arbitrum.MaxCodeSize`               | number  | Sets the maximum size for contract bytecodes on the chain (it's recommended to use the default 24Kb, and not set it higher than 96Kb).                          |
+| `arbitrum.MaxInitCodeSize`           | number  | Maximum initialization bytecode size allowed (usually double the amount set in `MaxCodeSize`).                                                                  |
 
-For easier config preparation, the Orbit SDK provides the `prepareChainConfig` function, which takes config parameters as arguments and returns a full `chainConfig`. Any parameters not provided will default to standard values, which are detailed [here](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/src/prepareChainConfig.ts).
+:::info
 
-Here are the parameters you can use with `prepareChainConfig`:
+The `chainId` and `InitialChainOwner` parameters must be equal to the `chainId` and `owner` defined in the `Config` struct.
 
-| Parameter                            | Type    | Required | Default Value  | Description                                                                                                          |
-| :----------------------------------- | :------ | :------- | :------------- | :------------------------------------------------------------------------------------------------------------------- |
-| `chainId`                            | Number  | **Yes**  | /              | Your chain's unique identifier. It differentiates your chain from others in the ecosystem.                           |
-| `arbitrum.InitialChainOwner`         | Address | **Yes**  | /              | Specifies who owns and controls the chain.                                                                           |
-| `arbitrum.InitialArbOSVersion`       | Number  | No       | latest         | Specifies which version of ArbOS should the chain run.                                                               |
-| `arbitrum.DataAvailabilityCommittee` | Boolean | No       | false          | When set to `false`, your chain will run as a Rollup chain, and when set to `true` it will run as an AnyTrust chain. |
-| `arbitrum.MaxCodeSize`               | Number  | No       | 24,576 (bytes) | Sets the maximum size for contract bytecodes on the chain.                                                           |
-| `arbitrum.MaxInitCodeSize`           | Number  | No       | 49,152 (bytes) | Similar to `arbitrum.MaxCodeSize`, defines the maximum size for your chain's **initialization** code.                |
+:::
 
-Below is an example of how to use `prepareChainConfig` to set up a Rollup chain with a specific `chainId`, an `InitialChainOwner` (named as `deployer`):
+## How to create a new Rollup chain using the Orbit SDK
 
-```js
+Now, let's look at the methods to use when creating a new Rollup Orbit chain with the Orbit SDK.
+
+:::info Example script
+
+The Orbit SDK includes an example script for creating an Orbit chain. We recommend that you first understand the process described in this section and then check the [create-rollup-eth](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-eth/index.ts) script.
+
+:::
+
+### 1. Create the chain configuration object
+
+The `prepareChainConfig` function creates a `chainConfig` structure like the one defined in the previous section. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults. However, the `chainId` and `InitialChainOwner` parameters must be set to the desired values.
+
+Below is an example of how to use `prepareChainConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `InitialChainOwner`:
+
+```typescript
 import { prepareChainConfig } from '@arbitrum/orbit-sdk';
 
 const chainConfig = prepareChainConfig({
   chainId: 123_456,
   arbitrum: {
-    InitialChainOwner: deployer,
+    InitialChainOwner: 0x123...890,
     DataAvailabilityCommittee: false,
   },
 });
 ```
 
-### Rollup configuration parameters
+Once we have the `chainConfig`, we can use the function `createRollupPrepareDeploymentParamsConfig` to craft a `Config` structure like the one defined in the section above. Again, this function will set the appropriate defaults for most parameters, allowing you to override any of these defaults. However, the `chainId` and `owner` parameters must be set to the desired values. Additionally, a public client of the parent chain must be passed as an argument to the function.
 
-In this section, we'll provide detailed explanations of the various chain configuration parameters used in the deployment of Orbit chains.
+Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` to obtain the chain configuration for a Rollup chain with a specific `chainId` and `owner`:
 
-| Parameter             | Description                                                                                                                                                                                                                                                                                                           |
-| :-------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `batchPosters`        | Array of batch poster addresses. Batch posters batch and compress transactions on the Orbit chain and transmit them back to the parent chain.                                                                                                                                                                         |
-| `batchPosterManager`  | Account address responsible for managing currently active batch posters. Not mandatory, as these actions can also be taken by the chain owner.                                                                                                                                                                        |
-| `validators`          | Array of <a data-quicklook-from="validator">validator</a> addresses. Validators are responsible for validating the chain state and posting assertions (`RBlocks`) back to the parent chain. They also monitor the chain and initiate challenges against potentially faulty assertions submitted by other validators.  |
-| `nativeToken`         | Determines the token used for paying gas fees on the Orbit chain. It can be set to `ETH` for regular chains or to any `ERC-20` token for **gas fee token network** Orbit chains.                                                                                                                                      |
-| `confirmPeriodBlocks` | Sets the challenge period in terms of blocks, which is the time allowed for validators to dispute or challenge state assertions. On Arbitrum One and Arbitrum Nova, this is currently set to approximately seven days in block count. `confirmPeriodBlocks` is measured in L1 blocks, we recommend a value of `45818` |
-| `baseStake`           | Orbit chain validator nodes must stake a certain amount to incentivize honest participation. The `basestake` parameter specifies this amount.                                                                                                                                                                         |
-| `stakeToken`          | Token in which the `basestake` is required. It represents the token's address on the parent chain. Can be `ETH` or a `ERC-20`token. Note that the use of an `ERC-20` token as the `stakeToken` is currently not supported by Nitro, but will be soon.                                                                 |
-| `owner`               | Account address responsible for deploying, owning, and managing your Orbit chain's base contracts on its parent chain.                                                                                                                                                                                                |
-| `chainId`             | Sets the unique chain ID of your Orbit chain.                                                                                                                                                                                                                                                                         |
-
-:::note
-
-`chainId` and owner parameters must be equal to the chain ID and `InitialOwner` defined in the `chainConfig` section.
-
-:::
-
-While other configurable parameters exist, they are set to defaults, and it's generally not anticipated that a chain deployer would need to modify them. However, if you believe there's a need to alter any other parameters not listed here, please feel free to [contact us on our Discord server](https://discord.com/channels/585084330037084172/1116812793606328340/1205801459518804018) for further details and support.
-
-### Configuration and deployment helpers
-
-The Orbit SDK provides two APIs, `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest` to facilitate the configuration and deployment of Rollup parameters for an Orbit chain. These APIs simplify the process of setting up and deploying the core contracts necessary for an Orbit chain.
-
-#### **createRollupPrepareDeploymentParamsConfig API**:
-
-This API is designed to take parameters defined in the Config struct and fill in the rest with default values. It outputs a complete Config struct that is ready for use.
-
-For example, to create a Config struct with a specific chain ID (`chainId`), an owner address (`deployer_address`), and a `chainConfig` as described in the [previous section](#rollup-configuration-parameters), you would use the Orbit SDK as follows:
-
-```js
+```typescript
 import { createPublicClient, http } from 'viem';
-import { arbitrumSepolia } from 'viem/chains';
 import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
 
-const parentPublicClient = createPublicClient({
-  chain: arbitrumSepolia,
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
   transport: http(),
 });
 
-const config = createRollupPrepareDeploymentParamsConfig(parentPublicClient, {
-  chainId: BigInt(chainId),
-  owner: deployer.address,
-  chainConfig,
+const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+  chainId: 123_456,
+  owner: 0x123...890,
+  chainConfig: chainConfig,
 });
 ```
 
-#### createRollupPrepareTransactionRequest API:
+### 2. Deploy the Rollup Orbit chain
 
-This API accepts parameters defined in the `RollupDeploymentParams` struct, applying defaults where necessary, and generates the `RollupDeploymentParams`. This struct is then used to create a raw transaction which calls the `createRollup` function of the `RollupCreator` contract. As discussed in previous sections, this function deploys and initializes all core Orbit contracts.
+With the new crafted configuration, we can call the `createRollup` method which will send the transaction to the `RollupCreator` contract and wait until it is executed.
 
-For instance, to deploy using the Orbit SDK with a Config equal to `config`, a single batch poster in `[batchPoster]`, and a single validator in `[validator]`, the process would look like this:
+Besides the `Config` structure created in the previous step, other parameters from the `RollupDeploymentParams` structure can be passed to override the defaults set by the Orbit SDK. Batch poster and validator addresses must be set to the desired values. Additionally, a public client of the parent chain and a deployer PrivateKeyAccount must be passed as arguments to the function.
 
-```js
-import { createRollupPrepareTransactionRequest } from '@arbitrum/orbit-sdk';
+Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step:
 
-const request = await createRollupPrepareTransactionRequest({
+```typescript
+import { createPublicClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { createRollup } from '@arbitrum/orbit-sdk';
+
+const deployer = privateKeyToAccount(deployerPrivateKey);
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
+
+const createRollupResults = await createRollup({
   params: {
-    config,
+    config: createRollupConfig,
     batchPosters: [batchPoster],
     validators: [validator],
   },
-  account: deployer_address,
-  publicClient,
+  account: deployer,
+  parentChainPublicClient,
 });
 ```
 
-After creating the raw transaction, you need to sign and broadcast it to the network.
+### 3. Understand the returned data
 
-### Getting the Orbit chain information after deployment
+After calling `createRollup`, an object of type `CreateRollupResults` is returned with the following fields:
 
-Once you've successfully deployed your Orbit chain, the next step is to retrieve detailed information about the deployment, which you can do with the `createRollupPrepareTransactionReceipt` API.
-
-After sending the signed transaction and receiving the transaction receipt, you can use the `createRollupPrepareTransactionReceipt` API to parse this receipt and extract the relevant data. This process will provide comprehensive details about the deployed chain, such as contract addresses, configuration settings, and other information.
-
-Here's an example of how to use the Orbit SDK to get data from a deployed Orbit chain:
-
-```js
-import { createRollupPrepareTransactionReceipt } from '@arbitrum/orbit-sdk';
-
-const data = createRollupPrepareTransactionReceipt(txReceipt);
+```typescript
+type CreateRollupResults = {
+  // The transaction sent
+  transaction: CreateRollupTransaction;
+  // The transaction receipt
+  transactionReceipt: CreateRollupTransactionReceipt;
+  // An object with the addresses of the contracts created
+  coreContracts: CoreContracts;
+};
 ```
 
-In this example, `txReceipt` refers to the transaction receipt you received after deploying the chain. You can access your Orbit chain's information by passing this receipt to the `createRollupPrepareTransactionReceipt` function. This feature of the Orbit SDK simplifies the post-deployment process, allowing you to quickly and efficiently gather all necessary details about your chain for further use or reference.
+### 4. Next step
+
+Once the chain's contracts are created, you can move to the next step: [configure your Orbit chain's node](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md).
