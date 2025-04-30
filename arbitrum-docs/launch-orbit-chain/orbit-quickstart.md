@@ -73,8 +73,8 @@ The below table provides a brief description of each of these configuration para
 | **Chain ID**                  | A unique integer identifier that represents your chain's network. Your `Chain ID` can be submitted to chain indexes like [Chainlist.org](http://chainlist.org). For devnets, this is randomly generated for each deployment - don't worry about it for now.                                                                                                                                                                                                                        |
 | **Chain name**                | A human-readable way to distinguish your Orbit chain from other Orbit chains. Users, developers and the wider community will refer to your chain by your `Chain name` and/or your `Chain ID`.                                                                                                                                                                                                                                                                                      |
 | **Challenge period (blocks)** | The amount of time that your Orbit chain's nodes have to dispute the current state of the chain before it's confirmed (and ultimately finalized) on the underlying L2 chain (e.g., Arbitrum Sepolia). Note that this refers to the number of blocks on the underlying L1 chain (e.g., Ethereum's Sepolia chain).                                                                                                                                                                   |
-| **Stake token**               | The token that your chain's validators must stake in order to participate in your chain. This is hardcoded to `ETH` for now, but future versions of Orbit chains will let you specify an arbitrary `ERC-20` token contract here.                                                                                                                                                                                                                                                   |
-| **Base stake**                | The amount of your configured `Stake token` that your chain's validators must stake in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                               |
+| **Stake token**               | The token that your chain's validators must bond in order to participate in your chain. This is hardcoded to `ETH` for now, but future versions of Orbit chains will let you specify an arbitrary `ERC-20` token contract here.                                                                                                                                                                                                                                                   |
+| **Base stake**                | The amount of your configured `Stake token` that your chain's validators must bond in order to participate in your chain. Should be greater than 0.                                                                                                                                                                                                                                                                                                                               |
 | **Owner**                     | The administrative Ethereum address that will deploy, own, and update your chain's base contracts. This will default to your connected wallet's address. This needs to be a standard Ethereum wallet account - an EOA, not a contract address. Note that you'll have to specify this wallet's private key within a local JSON file later.                                                                                                                                          |
 | **Gas token**                 | The address of the `ERC-20` token on the parent chain that is intended to be used as the native gas token on the Orbit chain. This token must already be deployed natively on the parent chain and is bridged to the Orbit chain during chain deployment. This feature is only supported on AnyTrust chains currently, and more information around token restrictions can be found [here](https://docs.arbitrum.io/launch-orbit-chain/how-tos/customize-deployment-configuration). |
 
@@ -94,7 +94,7 @@ Your chain's validators are responsible for validating the integrity of transact
 
 <!-- possible cut (relevance is unclear): We call this validator ```Staker account ```, because this validator would be responsible to create new RBlocks and stake on them. -->
 
-Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's **base contracts**, allowing them each to **stake** and validate transactions submitted to your Orbit chain.
+Each of the validator addresses specified in this step will be added to an allow-list in one of your chain's **base contracts**, allowing them each to **bond** and validate transactions submitted to your Orbit chain.
 
 <!-- todo: triple-check that "base contracts" is the term we want to use - previously signed off in pattern guide -->
 
@@ -157,7 +157,7 @@ You should see two JSON code blocks appear labeled `Rollup Config` and `L3 Confi
 
 <!-- todo: align UI with terminology patterns - eg NOT saying L3 -->
 
-1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (staker) and batch poster, which are used to sign transactions that post RBlocks and batches to your chain's base contracts on L2.
+1.  **Download Rollup JSON**: This will generate `nodeConfig.json`, which contains your **chain's node configuration**. Note that this includes the private keys for your validator (bonder) and batch poster, which are used to sign transactions that post RBlocks and batches to your chain's base contracts on L2.
 2.  **Download L3Config JSON**: This will generate `orbitSetupScriptConfig.json`, which contains your **chain's configuration**, including that which supports your **Token Bridge contracts**.
 
 ## Step 9: Clone the setup script repository and add your configuration files
@@ -177,7 +177,7 @@ A Nitro node and BlockScout explorer instance will be started. Visit [http://loc
 
 We've provided a Hardhat script that handles the following tasks:
 
-1. Fund the **batch-poster** and **validator** (staker) accounts on your underlying L2 chain.
+1. Fund the **batch-poster** and **validator** (bonder) accounts on your underlying L2 chain.
 2. Deposit ETH into your account on the chain using your chain's newly deployed bridge.
 3. Deploy your Token Bridge contracts on both L2 and local Orbit chains.
 4. Configure parameters on the chain.
