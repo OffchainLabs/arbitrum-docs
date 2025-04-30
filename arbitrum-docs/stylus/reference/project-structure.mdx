@@ -27,7 +27,7 @@ In the most basic example, this is how a Rust contract will be organized. The si
 
 `Cargo.toml` is a standard file that Rust projects use to define a package's name, repository location, etc, as well as import dependencies and define feature and build flags. From here, you can define required dependencies such as the [Stylus SDK](https://crates.io/crates/stylus-sdk) itself or import third-party packages from [crates.io](https://crates.io). See [First Steps with Cargo](https://doc.rust-lang.org/cargo/getting-started/first-steps.html) if you are new to Rust.
 
-`rust-toolchain.toml` is used by public blockchain explorers, like [Arbiscan](https://arbiscan.io/), to assist with source code verification. To ensure that source code can be compiled deterministically, we use this file to include relevant metadata like what version of Rust was used.
+`rust-toolchain.toml` is used by public blockchain explorers, like [Arbiscan](https://arbiscan.io/), to assist with source code verification. To ensure that source code can be compiled deterministically, we use this file to include relevant metadata like what version of Rust was used. It can also be used to pin the project to a specific Rust version that it's compatible with.
 
 Your contract may also include other dot files (such as `.gitignore`, `.env`, etc), markdown files for docs, or additional subfolders.
 
@@ -71,6 +71,8 @@ let new_count = self.count.get() + U256::from(1);
 self.count.set(new_count);
 ```
 
+See [Storage Data Types](https://stylus-by-example.org/basic_examples/storage_data_types) for more examples of this.
+
 ## Functions
 
 Contract functions are defined by providing an `impl` block for your contract's `#[entrypoint]` struct and annotating that block with `#[public]` to make the functions part of the contract's public API. The first parameter of each function is `&self`, which references the struct annotated with `#[entrypoint]`, it's used for reading state variables. By default, methods are view-only and cannot mutate state. To make a function mutable and able to alter state, `&mut self` must be used. Internal methods can be defined on a separate impl block for the struct that is not annotated with `#[public]`. Internal methods can access state.
@@ -86,7 +88,7 @@ impl Counter {
     }
 
     // By annotating with &mut self, this is a mutable public function
-	pub fn set_count(&mut self, count: U256) {
+    pub fn set_count(&mut self, count: U256) {
         self.count.set(count);
     }
 }
@@ -156,7 +158,7 @@ Use imported types in your contract:
 let price = dec!(72.00);
 ```
 
-See [Using public Rust crates](https://docs.arbitrum.io/stylus/recommended-libraries#using-public-rust-crates) for more important details on using public Rust crates as well as a curated list of crates that tend to work well for smart contract development.
+Note, not all Rust crates are compatible with Stylus since they need to be compiled to WASM and used in a blockchain context, which is more limited than a desktop application. For instance, the `rand` crate is not usable, as there is no onchain randomness available to smart contracts. In addition, contracts cannot access functions that use networking or filesystem access features. There is also a need to be mindful of the size of the crates you import, since the default contract size limit is 24KB (compressed). Crates that do not use the standard library (`no_std` crates) tend to work best. See [Using public Rust crates](https://docs.arbitrum.io/stylus/recommended-libraries#using-public-rust-crates) for more important details on using public Rust crates as well as a curated list of crates that tend to work well for smart contract development.
 
 ## Events
 
