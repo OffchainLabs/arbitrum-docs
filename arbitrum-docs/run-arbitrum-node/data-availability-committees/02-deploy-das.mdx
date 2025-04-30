@@ -100,7 +100,7 @@ Gather the following information:
 - **Mirror DAS** – Mirrors do even less work. When a CDN (e.g., Cloudflare, Fastly, CloudFront) sits in front, most requests never reach the node.
 
 :::info Heads-up
-> If you crank up the in-memory cache or co-host other services, consider bumping the memory to 2 GiB for safety. Disk (or S3) requirements scale with your retention policy: archive nodes need space for the full history, while non-archive nodes can offload older data via lifecycle rules.
+If you crank up the in-memory cache or co-host other services, consider bumping the memory to 2 GiB for safety. Disk (or S3) requirements scale with your retention policy: archive nodes need space for the full history, while non-archive nodes can offload older data via lifecycle rules.
 
 :::
 
