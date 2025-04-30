@@ -243,11 +243,6 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/orbit-quickstart',
-          label: 'Quickstart',
-        },
-        {
-          type: 'doc',
           id: 'launch-orbit-chain/aep-license',
           label: 'Orbit licensing',
         },
@@ -263,8 +258,13 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token',
-                  label: `Configure a custom gas token`,
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
+                  label: `Configure a custom AnyTrust gas token`,
+                },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup',
+                  label: `Configure a custom Rollup gas token`,
                 },
                 {
                   type: 'doc',
@@ -326,6 +326,11 @@ const sidebars = {
                   label: `Enable fast withdrawals`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -364,7 +369,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-orbit-chain/orbit-sdk-introduction',
-                  label: `Introduction`,
+                  label: `Overview`,
                 },
                 {
                   type: 'doc',
@@ -402,6 +407,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts',
+              label: 'Canonical factory contracts',
             },
           ],
         },
@@ -449,7 +459,17 @@ const sidebars = {
                   id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
                   label: `Manage gas speed limit`,
                 },
+                {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  label: `Post-launch deployments`,
+                },
               ],
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/maintain-your-chain/upgrade-to-bold',
+              label: 'Upgrade to BoLD',
             },
           ],
         },
@@ -503,9 +523,11 @@ const sidebars = {
           collapsed: true,
           items: [
             {
-              type: 'doc',
-              id: 'node-running/how-tos/running-an-orbit-node',
-              label: 'Run a full node',
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/run-full-node">Run a full node <span class="other-section-icon">↓</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
             },
             {
               type: 'html',
@@ -742,18 +764,6 @@ const sidebars = {
           label: 'L1 Ethereum RPC providers',
         },
         {
-          type: 'doc',
-          label: 'Use Timeboost',
-          id: 'run-arbitrum-node/how-to-use-timeboost',
-        },
-        {
-          type: 'html',
-          value:
-            '<a class="menu__link menu__list-item" href="/node-running/how-tos/running-an-orbit-node">Run a full Orbit node <span class="other-section-icon">↑</span></a>',
-          // q: why use an anchor html tag here?
-          // a: see note at end of file
-        },
-        {
           type: 'html',
           value:
             '<a class="menu__link menu__list-item" href="/run-arbitrum-node/data-availability-committees/get-started">Data Availability Committees <span class="other-section-icon">↑</span></a>',
@@ -942,19 +952,25 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'how-arbitrum-works/separating-execution-from-proving',
-          label: 'Separating Execution from Proving',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/optimistic-rollup',
-          label: 'Optimistic Rollup',
-        },
-        {
-          type: 'doc',
-          id: 'how-arbitrum-works/interactive-fraud-proofs',
-          label: 'Challenges: Interactive Fraud Proofs',
+          type: 'category',
+          label: 'Validation and Proving',
+          items: [
+            {
+              type: 'doc',
+              label: 'Validation and proving overview',
+              id: 'how-arbitrum-works/validation-and-proving/validation-and-proving',
+            },
+            {
+              type: 'doc',
+              label: 'Rollup protocol',
+              id: 'how-arbitrum-works/validation-and-proving/rollup-protocol',
+            },
+            {
+              type: 'doc',
+              label: 'Proving and challenges',
+              id: 'how-arbitrum-works/validation-and-proving/proving-and-challenges',
+            },
+          ],
         },
         {
           type: 'doc',
@@ -963,13 +979,13 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/gas-fees',
-          label: 'Gas and fees',
+          id: 'how-arbitrum-works/l2-to-l1-messaging',
+          label: 'Child to parent chain messaging',
         },
         {
           type: 'doc',
-          id: 'how-arbitrum-works/l2-to-l1-messaging',
-          label: 'L2 to L1 messaging',
+          id: 'how-arbitrum-works/gas-fees',
+          label: 'Gas and fees',
         },
         {
           type: 'doc',
@@ -1038,6 +1054,16 @@ const sidebars = {
               label: 'Public preview',
             },
             {
+              type: 'doc',
+              label: 'Use Timeboost',
+              id: 'how-arbitrum-works/timeboost/how-to-use-timeboost',
+            },
+            {
+              type: 'doc',
+              label: 'Troubleshoot Timeboost',
+              id: 'how-arbitrum-works/timeboost/troubleshoot-timeboost',
+            },
+            {
               type: 'link',
               href: 'https://github.com/OffchainLabs/timeboost-design/blob/main/research_spec.md',
               label: 'Specification: Timeboost',
@@ -1046,6 +1072,11 @@ const sidebars = {
               type: 'link',
               href: 'https://github.com/OffchainLabs/decentralized-timeboost-spec',
               label: 'Specification: Timeboost with decentralized sequencing',
+            },
+            {
+              type: 'link',
+              href: 'https://arxiv.org/abs/2306.02179',
+              label: 'White paper: Timeboost',
             },
           ],
         },

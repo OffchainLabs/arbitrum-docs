@@ -6,6 +6,21 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/arbos/geth/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/introduction/?)",
+      "destination": "/how-arbitrum-works/state-transition-function/arbos",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/l2-l1-messaging/?)",
+      "destination": "/how-arbitrum-works/l2-to-l1-messaging",
+      "permanent": false
+    },
+    {
       "source": "/(bold/concepts/bold-technical-deep-dive/?)",
       "destination": "/how-arbitrum-works/bold/bold-technical-deep-dive",
       "permanent": false
@@ -17,117 +32,132 @@
     },
     {
       "source": "/(proving/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/optimistic-rollup/?)",
+      "destination": "/how-arbitrum-works/validation-and-proving/rollup-protocol",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/interactive-fraud-proofs/?)",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/separating-execution-from-proving/?)",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving.mdx",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/geth-at-the-core/?)",
-      "destination": "/how-arbitrum-works/state-transition-function/01-stf-gentle-intro",
+      "destination": "/how-arbitrum-works/state-transition-function/stf-gentle-intro",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/challenge-manager/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/osp-assumptions/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wasm-to-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wasm-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wasm-wavm/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(how-arbitrum-works/fraud-proofs/wavm-custom-opcodes/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wavm-floats/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(proving/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(fraud-proofs/wavm-modules/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
       "source": "/(arbos/geth/?)",
-      "destination": "/how-arbitrum-works/geth-at-the-core",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
       "permanent": false
     },
     {
       "source": "/(arbos/?)",
-      "destination": "/how-arbitrum-works/geth-at-the-core",
+      "destination": "/how-arbitrum-works/state-transition-function/modified-geth-on-arbitrum",
       "permanent": false
     },
     {
@@ -176,6 +206,11 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/timeboost/?)",
+      "destination": "/how-arbitrum-works/timeboost/gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/(arbos/gas/?)",
       "destination": "/how-arbitrum-works/gas-fees",
       "permanent": false
@@ -186,12 +221,22 @@
       "permanent": false
     },
     {
+      "source": "/(how-arbitrum-works/inside-anytrust/?)",
+      "destination": "/how-arbitrum-works/anytrust-protocol",
+      "permanent": false
+    },
+    {
       "source": "/(anytrust/inside-anytrust/?)",
       "destination": "/how-arbitrum-works/anytrust-protocol",
       "permanent": false
     },
     {
       "source": "/(arbos/l1-l2-messaging/?)",
+      "destination": "/how-arbitrum-works/l1-to-l2-messaging",
+      "permanent": false
+    },
+    {
+      "source": "/(how-arbitrum-works/arbos/l1-l2-messaging/?)",
       "destination": "/how-arbitrum-works/l1-to-l2-messaging",
       "permanent": false
     },
@@ -261,6 +306,26 @@
       "permanent": false
     },
     {
+      "source": "/(sequencer/?)",
+      "destination": "/how-arbitrum-works/sequencer",
+      "permanent": false
+    },
+    {
+      "source": "/(learn-more/?)",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/(learnmore/faq/?)",
+      "destination": "/learn-more/faq",
+      "permanent": false
+    },
+    {
+      "source": "/(txlifecycle/?)",
+      "destination": "/how-arbitrum-works/transaction-lifecycle",
+      "permanent": false
+    },
+    {
       "source": "/(docs/censorship_resistance/?)",
       "destination": "/how-arbitrum-works/sequencer",
       "permanent": false
@@ -292,7 +357,7 @@
     },
     {
       "source": "/(docs/dispute_resolution/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
@@ -302,7 +367,7 @@
     },
     {
       "source": "/(docs/avm_specification/?)",
-      "destination": "/how-arbitrum-works/interactive-fraud-proofs",
+      "destination": "/how-arbitrum-works/validation-and-proving/proving-and-challenges",
       "permanent": false
     },
     {
@@ -312,6 +377,11 @@
     },
     {
       "source": "/(run-arbitrum-node/arbos-releases/arbos31/?)",
+      "destination": "/run-arbitrum-node/arbos-releases/arbos32",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/arbos-releases/arbos30/?)",
       "destination": "/run-arbitrum-node/arbos-releases/arbos32",
       "permanent": false
     },
@@ -416,6 +486,11 @@
       "permanent": false
     },
     {
+      "source": "/(node-running/how-tos/running-an-orbit-node/?)",
+      "destination": "/run-arbitrum-node/run-full-node",
+      "permanent": false
+    },
+    {
       "source": "/(bridge-tokens/concepts/usdc-concept/?)",
       "destination": "/arbitrum-bridge/usdc-arbitrum-one",
       "permanent": false
@@ -462,7 +537,7 @@
     },
     {
       "source": "/(for-devs/useful-addresses/?)",
-      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "destination": "/build-decentralized-apps/reference/02-contract-addresses",
       "permanent": false
     },
     {
@@ -482,21 +557,26 @@
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-custom-gateway/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-custom-gateway",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-custom-gateway",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-generic-custom/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-generic-custom",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-generic-custom",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-standard/?)",
-      "destination": "/build-decentralized-apps/token-bridging/how-to-bridge-tokens-standard",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/how-to-bridge-tokens-standard",
       "permanent": false
     },
     {
       "source": "/(devs-how-tos/bridge-tokens/how-to-bridge-tokens-overview/?)",
+      "destination": "/build-decentralized-apps/token-bridging/bridge-tokens-programmatically/get-started",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/bridge-tokens/gentle-introduction-bridge/?)",
       "destination": "/build-decentralized-apps/token-bridging/get-started",
       "permanent": false
     },
@@ -527,17 +607,32 @@
     },
     {
       "source": "/(for-devs/dev-tools-and-resources/oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/reference",
-      "permanent": false
-    },
-    {
-      "source": "/(devs-how-tos/how-to-use-oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/how-to-use-oracles",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
       "permanent": false
     },
     {
       "source": "/(for-devs/concepts/oracles/?)",
-      "destination": "/build-decentralized-apps/oracles/overview",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(devs-how-tos/how-to-use-oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(/build-decentralized-apps/oracles/how-to-use-oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(for-devs/concepts/oracles/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/oracles/reference/?)",
+      "destination": "/build-decentralized-apps/oracles/overview-oracles",
       "permanent": false
     },
     {
@@ -591,12 +686,27 @@
       "permanent": false
     },
     {
+      "source": "/(welcome/?)",
+      "destination": "/welcome/arbitrum-gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/(for-devs/gentle-introduction-dapps/?)",
       "destination": "/welcome/arbitrum-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(for-devs/quickstart-solidity-hardhat/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "permanent": false
+    },
+    {
+      "source": "/(quickstart/?)",
+      "destination": "/build-decentralized-apps/quickstart-solidity-remix",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/quickstart-solidity-hardhat/?)",
       "destination": "/build-decentralized-apps/quickstart-solidity-remix",
       "permanent": false
     },
@@ -657,7 +767,12 @@
     },
     {
       "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
-      "destination": "/run-arbitrum-node/run-local-dev-node",
+      "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/run-local-dev-node/?)",
+      "destination": "/run-arbitrum-node/run-local-full-chain-simulation",
       "permanent": false
     },
     {
@@ -667,6 +782,11 @@
     },
     {
       "source": "/docs/(mainnet-beta/?)",
+      "destination": "/build-decentralized-apps/reference/mainnet-risks",
+      "permanent": false
+    },
+    {
+      "source": "/(mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
@@ -717,7 +837,12 @@
     },
     {
       "source": "/docs/useful_addresses",
-      "destination": "/build-decentralized-apps/reference/useful-addresses",
+      "destination": "/build-decentralized-apps/reference/contract-addresses",
+      "permanent": false
+    },
+    {
+      "source": "/(build-decentralized-apps/reference/useful-addresses/?)",
+      "destination": "/build-decentralized-apps/reference/contract-addresses",
       "permanent": false
     },
     {
@@ -986,12 +1111,27 @@
       "permanent": false
     },
     {
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token/?)",
+      "destination": "/launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/orbit-quickstart/?)",
+      "destination": "/launch-orbit-chain/a-gentle-introduction",
+      "permanent": false
+    },
+    {
       "source": "/(launch-orbit-chain/reference/command-line-options/?)",
       "destination": "/node-running/how-tos/running-an-orbit-node",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/how-tos/orbit-managing-state-growth/?)",
+      "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-growth",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/how-tos/orbit-managing-state-growth/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/guidance/state-growth",
       "permanent": false
     },
@@ -1058,6 +1198,11 @@
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/fast-withdrawals/?)",
       "destination": "/launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-orbit-chain/aeplicense/?)",
+      "destination": "/launch-orbit-chain/aep-license",
       "permanent": false
     },
     {
@@ -1138,6 +1283,381 @@
     {
       "source": "/(launch-orbit-chain/concepts/chain-ownership/?)",
       "destination": "/launch-orbit-chain/maintain-your-chain/ownership-structure-access-control",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_eventFetcher/?)",
+      "destination": "/sdk/reference/utils/eventFetcher",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_event/?)",
+      "destination": "/sdk/reference/dataEntities/event",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_retryableData/?)",
+      "destination": "/sdk/reference/dataEntities/retryableData",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/inbox/?)",
+      "destination": "/sdk/inbox/inbox",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/byte_serialize_params/?)",
+      "destination": "/sdk/reference/utils/byte_serialize_params",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/lib/?)",
+      "destination": "/sdk/reference/utils/lib",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/event/?)",
+      "destination": "/sdk/reference/dataEntities/event",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_signerOrProvider/?)",
+      "destination": "/sdk/reference/dataEntities/signerOrProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities_constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_errors/?)",
+      "destination": "/sdk/reference/dataEntities/errors",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_networks/?)",
+      "destination": "/sdk/reference/dataEntities/networks",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/?)",
+      "destination": "/sdk/introduction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/signerOrProvider/?)",
+      "destination": "/sdk/reference/dataEntities/signerOrProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_lib/?)",
+      "destination": "/sdk/reference/utils/lib",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1MessageClassic/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageClassic",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/arbProvider/?)",
+      "destination": "/sdk/reference/utils/arbProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_constants/?)",
+      "destination": "/sdk/reference/dataEntities/constants",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2MessageCreator/?)",
+      "destination": "",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_arbProvider/?)",
+      "destination": "/sdk/reference/utils/arbProvider",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_transactionRequest/?)",
+      "destination": "/sdk/reference/dataEntities/transactionRequest",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1MessageNitro/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageNitro",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils/multicall/?)",
+      "destination": "/sdk/reference/utils/multicall",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_rpc/?)",
+      "destination": "/sdk/reference/dataEntities/rpc",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2MessageGasEstimator/?)",
+      "destination": "/sdk/reference/message/ParentToChildGasEstimator",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2Transaction/?)",
+      "destination": "/sdk/reference/message/ChildTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1Transaction/?)",
+      "destination": "/sdk/reference/message/ParentTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/assetBridger_erc20Bridger/?)",
+      "destination": "/sdk/reference/assetBridger/erc20Bridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/erc20Bridger/?)",
+      "destination": "/sdk/reference/assetBridger/erc20Bridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L2ToL1Message/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/assetBridger_ethBridger/?)",
+      "destination": "/sdk/reference/assetBridger/ethBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/message_L1ToL2Message/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/address/?)",
+      "destination": "/sdk/reference/dataEntities/address",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/types/?)",
+      "destination": "/sdk/reference/utils/types",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1ToL2Message/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/networks?)",
+      "destination": "/sdk/reference/dataEntities/networks",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1Transaction/?)",
+      "destination": "/sdk/reference/message/ParentTransaction",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1MessageNitro/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageNitro",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/dataEntities_address/?)",
+      "destination": "/sdk/reference/dataEntities/address",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/utils/eventFetcher/?)",
+      "destination": "/sdk/reference/utils/eventFetcher",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/inbox_inbox/?)",
+      "destination": "/sdk/reference/inbox/inbox",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/ethBridger/?)",
+      "destination": "/sdk/reference/assetBridger/ethBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/assetBridger/?)",
+      "destination": "/sdk/reference/assetBridger/assetBridger",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/rpc/?)",
+      "destination": "/sdk/reference/dataEntities/rpc",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L1ToL2MessageCreator/?)",
+      "destination": "/sdk/reference/message/ParentToChildMessageCreator",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/retryableData/?)",
+      "destination": "/sdk/reference/dataEntities/retryableData",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1Message/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessage",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/transactionRequest/?)",
+      "destination": "/sdk/reference/dataEntities/transactionRequest",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/message/L2ToL1MessageClassic/?)",
+      "destination": "/sdk/reference/message/ChildToParentMessageClassic",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk-docs/dataEntities/message/?)",
+      "destination": "/sdk/reference/dataEntities/message",
+      "permanent": false
+    },
+    {
+      "source": "/(sdk/utils_multicall?)",
+      "destination": "/sdk/reference/utils/multicall",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/abi_decode/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/abi_decode",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/abi_encode/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/abi_encode",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/bytes_in_bytes_out/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/errors/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/errors",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/events/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/events",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/function/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/function",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/function_selector/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/hashing/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/hello_world/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/hello_world",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/inheritance/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/applications",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/primitive_data_types/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/primitive_data_types",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/sending_ether/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/sending_ether",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus-by-example/variables/?)",
+      "destination": "https://github.com/OffchainLabs/stylus-by-example/tree/master/example_code/basic_examples/variables",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/concepts/stylus-cache-manager/?)",
+      "destination": "/stylus/concepts/how-it-works",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/debug-stylus-transactions/?)",
+      "destination": "/stylus/how-tos/debugging-tx",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/local-stylus-dev-node/?)",
+      "destination": "/stylus/overview",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/how-tos/verify-contracts/?)",
+      "destination": "/stylus/how-tos/verifying-contracts",
+      "permanent": false
+    },
+    {
+      "source": "/(stylus/using-stylus-cli/?)",
+      "destination": "/stylus/using-cli",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/how-to-use-timeboost/?)",
+      "destination": "/(how-arbitrum-works/timeboost/how-to-use-timeboost/?)",
+      "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/troubleshoot-timeboost/?)",
+      "destination": "/(how-arbitrum-works/timeboost/troubleshoot-timeboost/?)",
       "permanent": false
     }
   ]

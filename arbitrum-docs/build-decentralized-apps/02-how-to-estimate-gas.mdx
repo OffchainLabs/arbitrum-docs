@@ -21,7 +21,7 @@ Multiplying the value obtained from `eth_estimateGas` by the child chain gas pri
 
 Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the child chain gas price, which is available in the third result, `baseFee`.
 
-Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)), you can use the function [L1ToL2MessageGasEstimator.estimateAll()](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [NodeInterface.estimateRetryableTicket()](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.1@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
+Note that when working with parent to child chain messages (also known as [retryable tickets](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)), you can use the function [`L1ToL2MessageGasEstimator.estimateAll()`](https://github.com/OffchainLabs/arbitrum-sdk/blob/main/src/lib/message/L1ToL2MessageGasEstimator.ts#L215) of the Arbitrum SDK or [`NodeInterface.estimateRetryableTicket()`](https://github.com/OffchainLabs/@@nitroRepositorySlug=nitro@@/blob/@@nitroVersionTag=v3.5.5@@/nodeInterface/NodeInterface.go#L120) to get all the gas information needed to send a successful transaction.
 
 ## Breaking down the formula
 
@@ -44,7 +44,7 @@ Gas Limit (G) = Gas used on L2 (L2G) + Extra Buffer for L1 cost (B)
 This buffer takes into account the cost of posting the transaction, batched and compressed, on the parent chain. The parent chain estimated posting cost is calculated by multiplying these two values:
 
 - L1S, which estimates the amount of data the transaction will take up in the batch by compressing the transaction with Brotli.
-- L1P, which is the L2's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
+- L1P, which is the child chain's estimated view of the current parent chain's price of data (per byte), which the child chain dynamically adjusts over time.
 
 More information is available [in this page](/how-arbitrum-works/09-gas-fees.mdx).
 
@@ -66,7 +66,7 @@ TXFEES = P * (L2G + ((L1P * L1S) / P))
 
 ## Where do we get all this information from?
 
-We'll use one resource available in Arbitrum: the [NodeInterface](/build-decentralized-apps/nodeinterface/02-reference.mdx).
+We'll use one resource available in Arbitrum: the [`NodeInterface`](/build-decentralized-apps/nodeinterface/02-reference.mdx).
 
 - P (L2 Gas Price) ⇒ Price to pay for each gas unit. It starts at @@arbOneGasFloorGwei=0.01@@ gwei on Arbitrum One (@@novaGasFloorGwei=0.01@@ gwei on Arbitrum Nova) and can increase depending on the demand for network resources.
   - Call `NodeInterface.GasEstimateComponents()` and get the third element, `baseFee`.
@@ -75,7 +75,7 @@ We'll use one resource available in Arbitrum: the [NodeInterface](/build-decentr
 - L1P (L1 estimated price per byte of data) ⇒ Estimated cost of posting 1 byte of data on the parent chain:
   - Call `NodeInterface.GasEstimateComponents()`, get the fourth element `l1BaseFeeEstimate` and multiply it by 16.
 - L1S (Size of data to be posted on L1, in bytes) ⇒ This will depend on the data of the transaction. Keep in mind that Arbitrum adds a fixed amount to this number to make up for the static part of the transaction, which is also posted on the parent chain (140 bytes). We can do a small calculation to obtain this value: call `NodeInterface.GasEstimateComponents()` take the second element, `gasEstimateForL1` (this is equivalent to `B` in our formula), multiply it by P and divide it by L1P.
-  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate is posted on the parent chain, [as explained here](/how-arbitrum-works/08-anytrust-protocol.mdx#data-availability-certificates).
+  - For Arbitrum Nova (AnyTrust), the size of the data is also a fixed value, as only the Data Availability Certificate (DAC) is posted on the parent chain, [as explained here](/how-arbitrum-works/08-anytrust-protocol.mdx#data-availability-certificates).
 
 :::note
 For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to get `l1BaseFeeEstimate` and `gasEstimateForL1`
@@ -85,7 +85,7 @@ For L1P and L1S, you can also call `NodeInterface.gasEstimateL1Component()` to g
 
 Finally, we show an example of how to get the values we just described and how to estimate the gas usage of a transaction in Javascript. We'll use our [SDK](https://github.com/OffchainLabs/arbitrum-sdk) to connect to the `NodeInterface`.
 
-We first instantiate a factory object for the NodeInterface, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the child chain network we are using, and `NODE_INTERFACE_ADDRESS` is the addresses that we need to call to access NodeInterface methods in said network.
+We first instantiate a factory object for the `NodeInterface`, using two methods from the SDK. `l2Provider` is a regular JSON RPC provider for the child chain network we are using, and `NODE_INTERFACE_ADDRESS` is the addresses that we need to call to access the `NodeInterface` methods in said network.
 
 ```ts
 const { NodeInterface__factory } = require("@arbitrum/sdk/dist/lib/abi/factories/NodeInterface__factory");

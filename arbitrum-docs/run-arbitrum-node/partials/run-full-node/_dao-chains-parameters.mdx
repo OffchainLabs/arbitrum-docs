@@ -1,0 +1,33 @@
+<!--
+    Breaking the title ordering here (it should be h3 instead of h4) so these titles don't appear in the right-hand sidebar
+-->
+
+#### 1. Parent chain (Ethereum) parameters
+
+The `--parent-chain.connection.url` parameter needs to provide a standard RPC endpoint for an Ethereum node, whether self-hosted or obtained from a node service provider:
+
+```shell
+--parent-chain.connection.url=<Ethereum RPC URL>
+```
+
+Additionally, use the parameter `--parent-chain.blob-client.beacon-url` to provide a beacon chain RPC endpoint:
+
+```shell
+--parent-chain.blob-client.beacon-url=<Ethereum beacon chain RPC URL>
+```
+
+You can find a list of Ethereum beacon chain RPC providers [here](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx). Note that historical blob data is required for these chains to properly sync up if they are new or have been offline for more than 18 days. This means that the beacon chain RPC endpoint you use may also need to provide historical blob data. Please see [Special notes on ArbOS 20: Atlas support for EIP-4844](/run-arbitrum-node/arbos-releases/arbos20.mdx#special-notes-on-arbos-20-atlas-support-for-eip-4844) for more details.
+
+#### 2. Arbitrum chain parameters
+
+Use the parameter `--chain.id` to specify the chain you're running this node for. See [RPC endpoints and providers](/build-decentralized-apps/reference/01-node-providers.mdx) to find the IDs of these chains.
+
+```shell
+--chain.id=<Arbitrum chain ID>
+```
+
+Alternatively, you can use the parameter `--chain.name` to specify the chain you're running this node for. Use `arb1` for Arbitrum One, `nova` for Arbitrum Nova or `sepolia-rollup` for Arbitrum Sepolia.
+
+```shell
+--chain.name=<Child chain name>
+```

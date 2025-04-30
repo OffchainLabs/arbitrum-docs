@@ -11,7 +11,7 @@ Although the majority of RPC methods follow the same behavior as in Ethereum, so
 
 :::info
 
-Comprehensive documentation on all generally available JSON-RPC methods for Ethereum [can be found at ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
+Comprehensive documentation on all generally available JSON-RPC methods for Ethereum can be found at [ethereum.org](https://ethereum.org/en/developers/docs/apis/json-rpc/). As Arbitrum has `go-ethereum` at its core, most of the documented methods there can be used with no modifications.
 
 :::
 
@@ -27,8 +27,8 @@ On RPC calls that return transactions, the `type` field will reflect the custom 
 
 | Transaction type code | Transaction type name           | Description                                                                                                                                                                |
 | --------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `100`                 | `ArbitrumDepositTxType`         | Used to deposit ETH from a parent chain to child chain via the Arbitrum bridge                                                                                             |
-| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parenet chain, originated by a user through the Arbitrum bridge                                                                 |
+| `100`                 | `ArbitrumDepositTxType`         | Used to deposit `ETH` from a parent chain to child chain via the Arbitrum bridge                                                                                           |
+| `101`                 | `ArbitrumUnsignedTxType`        | Used to call a child chain contract from a parent chain, originated by a user through the Arbitrum bridge                                                                  |
 | `102`                 | `ArbitrumContractTxType`        | Used to call a child chain contract from a parent chain, originated by a contract through the Arbitrum bridge                                                              |
 | `104`                 | `ArbitrumRetryTxType`           | Used to [manually redeem a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx) on a child chain that failed to execute automatically (usually due to low gas) |
 | `105`                 | `ArbitrumSubmitRetryableTxType` | Used to [submit a retryable ticket](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#submission) via the Arbitrum bridge on the parent chain                                  |
@@ -58,10 +58,10 @@ When calling [`eth_getTransactionReceipt`](https://ethereum.org/en/developers/do
 
 On RPC calls that return transaction receipts, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | The parent chain block number that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `gasUsedForL1`  | Amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                     |
+| Field name      | Description                                                                                                                                                                                                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | The block number of the first non-Arbitrum ancestor chain that would be used for `block.number` calls. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `gasUsedForL1`  | Amount of gas spent on parent chain calldata in units of child chain gas. More information in [Gas and fees](/how-arbitrum-works/09-gas-fees.mdx)                                                                                 |
 
 ## Blocks
 
@@ -71,11 +71,11 @@ When calling [`eth_getBlockByHash`](https://ethereum.org/en/developers/docs/apis
 
 On RPC calls that return a block, the following fields are added to the returned object.
 
-| Field name      | Description                                                                                                                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `l1BlockNumber` | An approximate parent chain block number that occurred before this child chain block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
-| `sendCount`     | The number of child to parent chain messages since Nitro genesis                                                                                                                                                 |
-| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                         |
+| Field name      | Description                                                                                                                                                                                                                                  |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `l1BlockNumber` | An approximate block number of the first non-Arbitrum ancestor chain that occurred before this child chain block. More information in [Block numbers and time](/build-decentralized-apps/arbitrum-vs-ethereum/02-block-numbers-and-time.mdx) |
+| `sendCount`     | The number of child to parent chain messages since Nitro genesis                                                                                                                                                                             |
+| `sendRoot`      | The Merkle root of the outbox tree state                                                                                                                                                                                                     |
 
 ### Existing fields with different behavior
 
@@ -117,12 +117,12 @@ Note that the exact output for the `eth_syncing` RPC call of an out-of-sync Nitr
 | `blockNum`                     | Last block created by the Nitro node (up-to-date child chain block the node is synced to)                                                                                                |
 | `messageOfLastBlock`           | Message that was used to produce the block above                                                                                                                                         |
 | `broadcasterQueuedMessagesPos` | If different than 0, this is expected to be greater than `msgCount`. This field notes a message that was read from the feed but not processed because earlier messages are still missing |
-| `lastL1BlockNum`               | Last block number from the parent chain that Nitro sees. This is used to debug the connection with the parent chain                                                                      |
+| `lastL1BlockNum`               | Last block number of the first non-Arbitrum ancestor chain that Nitro sees. This is used to debug the connection with the parent chain                                                   |
 | `lastl1BlockHash`              | Last block hash from the parent chain that Nitro sees. This is used to debug the connection with the parent chain                                                                        |
 
 :::info
 
-Note that if the sync process encounters an error while trying to collect the data above (not expected) this error will be added to the response.
+If the sync process encounters an error while trying to collect the data above (not expected) this error will be added to the response.
 
 :::
 
@@ -147,19 +147,19 @@ More information can be found on [How to debug Stylus transactions using Cargo S
 
 The table below describes each field of the `stylusTracer` return value.
 
-| Field Name | Description                                                     |
-| ---------- | --------------------------------------------------------------- |
-| `name`     | Name of the execute HostIO.                                     |
-| `args`     | Arguments of the HostIO encoded as hex.                         |
-| `outs`     | Outputs of the HostIO encoded as hex.                           |
-| `startInk` | Amount of Ink before executing the HostIO.                      |
-| `endInk`   | Amount of Ink after executing the HostIO.                       |
-| `address`  | For \*call HostIOs, the address of the called contract.         |
-| `steps`    | For \*call HostIOs, the steps performed by the called contract. |
+| Field Name | Description                                                   |
+| ---------- | ------------------------------------------------------------- |
+| `name`     | Name of the execute HostIO.                                   |
+| `args`     | Arguments of the HostIO encoded as hex.                       |
+| `outs`     | Outputs of the HostIO encoded as hex.                         |
+| `startInk` | Amount of Ink before executing the HostIO.                    |
+| `endInk`   | Amount of Ink after executing the HostIO.                     |
+| `address`  | For call HostIOs, the address of the called contract.         |
+| `steps`    | For call HostIOs, the steps performed by the called contract. |
 
 For example, the command below illustrates how to call this tracer for a transaction:
 
-```
+```shell
 curl -s \
     -X POST \
     -H "Content-Type: application/json" \
@@ -169,7 +169,7 @@ curl -s \
 
 The result of this call will be something along the lines of:
 
-```
+```shell
 {
   "jsonrpc": "2.0",
   "id": 1,

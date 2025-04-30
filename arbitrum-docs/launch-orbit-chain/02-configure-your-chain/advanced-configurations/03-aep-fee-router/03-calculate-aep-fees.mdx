@@ -25,7 +25,7 @@ Based on the above, we interpret that an Orbit chain’s revenue sources include
 
 ### Assertion costs
 
-The above fee system applies to an Orbit chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/06-optimistic-rollup.mdx#validators).
+The above fee system applies to an Orbit chain’s Sequencer and Batch Poster, but there is another important actor that is considered essential to the chain. These are the [validators](/how-arbitrum-works/05-validation-and-proving/03-proving-and-challenges.mdx).
 
 Validators are responsible for posting assertions on the parent chain, which are disputable claims about the new state of the Rollup. Posting an assertion is what progressed chain state on the parent chain. Validators are also responsible for securing the chain by creating disputes on false assertions.
 
@@ -79,13 +79,13 @@ The following costs can be deducted for an eligible validator:
 
 If a team elects to deduct their assertion posting costs from eligible validators, they must establish and obey the following process:
 
-- Communicate to the Arbitrum Foundation that they intend to deduct on-chain assertion costs
+- Communicate to the Arbitrum Foundation that they intend to deduct onchain assertion costs
   - Align on a cadence of disbursal and accounting these costs with the Arbitrum Foundation (e.g., quarterly, annually)
-  - At this cadence, provide on-chain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
+  - At this cadence, provide onchain accounting to the Arbitrum Foundation to substantiate deducted costs from the AEP Fee Router stream.
 
 To implement the deduction, the team should do the following:
 
-- [Configure all Orbit chain fee components](/launch-orbit-chain/02-configure-your-chain/common-configurations/06-fee-management.mdx#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
+- [Configure all Orbit chain fee components](/launch-orbit-chain/02-configure-your-chain/common-configurations/07-fee-management.mdx#how-to-configure-the-fee-collector-addresses) to send all fees to a secure multisig address.
   - For ease of accounting, it’s strongly recommended that this multisig handle no funds other than the rewards earned from the protocol.
 - On the established regular cadence (e.g., quarterly) deduct _all eligible assertion gas costs_ from the multisig’s balance by transferring it to your preferred fee-collecting address. The remainder of the amount must be forwarded to the `RewardDistributor` contract (configured as directed previously)
 - Following this, the `RewardDistributor` will split the post-deduction funds between the **AEP Fee Router** contracts and the configured chain-owner controlled addresses.
@@ -96,7 +96,7 @@ Certain Orbit configurations and customizations require special handling of AEP 
 
 ### L2-based custom gas tokens
 
-If you are an L3 or higher chain with a custom gas token, your custom gas token contract might be deployed on L2. If this L2 is not an Arbitrum chain, then the L2 token can't be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in ETH by manually sending fees to an ETH-configured routing system.
+If you are an L3 or higher chain with a custom gas token, your custom gas token contract might be deployed on L2. If this L2 is not an Arbitrum chain, then the L2 token can't be transferred via the AEP Fee Router, as this would first require bridging down to Ethereum (impossible for L2-based tokens). In this instance, we recommend your chain pay fees in `ETH` by manually sending fees to an `ETH`-configured routing system.
 
 ### Non-Ethereum L1
 
