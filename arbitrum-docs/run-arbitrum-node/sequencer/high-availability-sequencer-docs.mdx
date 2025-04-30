@@ -1,12 +1,11 @@
 import ImageZoom from '@site/src/components/ImageZoom';
+import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
 # How to set up a high availability sequencer for your Arbitrum chain
 
-:::caution
-
+<VanillaAdmonition type="note">
 This documentation is intended for production sequencer deployments. If you want to set up a sequencer for testing or on a testnet, please refer to [How to run a testnet sequencer node].
-
-:::
+</VanillaAdmonition>
 
 ## Introduction
 
@@ -48,7 +47,7 @@ In this configuration, full nodes query Redis to determine the active sequencer 
 <ImageZoom
   src="/img/ha-sequencer-sendto-active.svg"
   alt="send to active enable"
-  className="img-600px"
+  className="img-900px"
 />
 
 #### Send to active disabled
@@ -58,7 +57,7 @@ In this configuration, full nodes forward transactions to a predefined endpoint 
 <ImageZoom
   src="/img/ha-sequencer-send-to-nonactive.svg"
   alt="send to active disable"
-  className="img-600px"
+  className="img-900px"
 />
 
 ## Using helm charts for deployment
@@ -99,6 +98,7 @@ helm install sequencer-relay offchainlabs/relay \
 ```
 
 Key configuration parameters:
+
 - `replicaCount`: Number of relay replicas to deploy (recommend at least 2 for high availability)
 - `configmap.data.chain.id`: Your chain ID
 - `configmap.data.node.feed.input.url`: Comma-separated list of WebSocket URLs for all sequencer feed outputs. This relies on the `perReplicaHeadlessService.enabled=true` parameter in the sequencer deployment to create individual services for each sequencer replica.
@@ -121,7 +121,6 @@ You can check [run a feed relay](/run-arbitrum-node/sequencer/run-feed-relay) to
 
 ### 3. Nitro full node setup
 
-
 ```console
 helm install fullnode offchainlabs/nitro \
   --set replicaCount=2 \
@@ -131,7 +130,6 @@ helm install fullnode offchainlabs/nitro \
   --set configmap.data.execution.forwarding-target=http://sequencer-nitro:8547
 ```
 
-
 #### Send to active configuration (optional)
 
 To enable Redis-based active sequencer discovery:
@@ -140,6 +138,7 @@ To enable Redis-based active sequencer discovery:
 - Enable with: `-execution.forwarder.redis-url=redis://<redis-url>:6379`
 - Ensure connectivity to individual sequencer services and Redis
 - Test failover scenarios before production deployment
+
 ```shell
 helm install fullnode offchainlabs/nitro \
   --set replicaCount=2 \
@@ -153,19 +152,20 @@ helm install fullnode offchainlabs/nitro \
 
 For high availability, it is recommended to route mutating transactions to a fleet of `precheckers`, which will forward them to the sequencer. This can be done by setting up a separate endpoint for mutating transactions and only allowing calls such as `eth_sendRawTransaction` to be routed to the precheckers, which then route to the sequencer. This insulates the sequencer from unnecessary load and enables it to focus on transaction ordering. However, this configuration requires custom load balancing logic and is out of scope for this guide.
 
-
 ### 4. Redis setup
 
 Set up a highly available Redis cluster for sequencer coordination:
 
 #### Deployment options
-  - Use a managed service like AWS ElastiCache (recommended)
-  - Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
+
+- Use a managed service like AWS ElastiCache (recommended)
+- Deploy within Kubernetes using a StatefulSet with PersistentVolumeClaims
 
 #### Requirements
-  - Minimum of three replicas across different availability zones (recommended)
-  - Secured access (only accessible within the Kubernetes cluster)
-  - Backups enabled
+
+- Minimum of three replicas across different availability zones (recommended)
+- Secured access (only accessible within the Kubernetes cluster)
+- Backups enabled
 
 - **Configuration**:
   - Use a Redis cluster or Redis Sentinel for high-availability
@@ -197,7 +197,7 @@ helm install sequencer offchainlabs/nitro \
 The sequencer coordinator is the key component for high availability. These parameters are essential:
 
 | Parameter                        | Description                  | Recommended Value    |
-|----------------------------------|------------------------------|----------------------|
+| -------------------------------- | ---------------------------- | -------------------- |
 | `node.seq-coordinator.enable`    | Enable sequencer coordinator | `true`               |
 | `node.seq-coordinator.redis-url` | Redis URL for coordination   | Your Redis URL       |
 | `node.seq-coordinator.my-url`    | URL for this sequencer       | Unique per sequencer |
@@ -213,23 +213,24 @@ extraEnv:
       fieldRef:
         fieldPath: metadata.name
   - name: NITRO_NODE_SEQ__COORDINATOR_MY__URL
-    value: "http://$(POD_NAME).<NAMESPACE>.svc.cluster.local:8547/rpc"
+    value: 'http://$(POD_NAME).<NAMESPACE>.svc.cluster.local:8547/rpc'
 ```
 
 This configuration:
+
 1. Gets the pod name from Kubernetes metadata
 2. Uses it to create a unique URL for each sequencer instance
 3. Sets this URL as the `node.seq-coordinator.my-url` parameter
 
 Make sure to adjust the domain name (`<NAMESPACE>.svc.cluster.local`) to match your Kubernetes cluster's DNS configuration. This configuration requires nitro being configured to read environment variables beginning with `NITRO_`.
 
-
 #### Individual sequencer services
 
 You can enable automatic creation of headless services for each sequencer replica by setting the `perReplicaHeadlessService.enabled=true` parameter in the Helm chart (as shown in the installation command above). This will create individual services named `<release-name>-nitro-<index>` that allow direct access to each sequencer replica.
 
 These individual services are critical for a proper high availability setup because they allow components like sequencer relays to connect directly to specific sequencer instances. This direct connection is essential for:
-- **Proper failover**: When the active sequencer changes, other components can address the new active sequencer directly 
+
+- **Proper failover**: When the active sequencer changes, other components can address the new active sequencer directly
 - **Feed aggregation**: Sequencer relays need to collect feeds from all sequencer instances to ensure no messages are lost during transitions
 
 ### 6. Sequencer coordinator manager
