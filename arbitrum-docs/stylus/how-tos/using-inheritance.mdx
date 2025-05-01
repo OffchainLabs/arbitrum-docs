@@ -8,533 +8,199 @@ sidebar_position: 1
 ---
 
 import CustomDetails from '@site/src/components/CustomDetails';
-import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
+import VanillaAdmonition from '@site/src/components/VanillaAdmonition';
 
+# How To Implement Inheritance Patterns in Stylus
 
-# Using Inheritance Patterns in Stylus Contracts
+Inheritance is a powerful design pattern that allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing inheritance in your Stylus smart contracts.
 
-This guide explains how to implement inheritance patterns in Stylus smart contracts. Inheritance allows you to create more modular, reusable code by extending existing contracts.
+## Overview
 
-## Introduction
+Stylus allows you to write smart contracts in Rust that are fully interoperable with EVM contracts. The inheritance model in Stylus aims to replicate the composition pattern found in Solidity, where types that implement the Router trait (provided by the `#[public]` macro) can be connected via inheritance.
 
-Inheritance is a key feature in object-oriented programming that allows a new class (or contract) to inherit properties and methods from an existing one. In Stylus, you can use inheritance to:
-
-- Reuse code across multiple contracts
-- Implement a standardized interface
-- Extend functionality of base contracts
-- Create a hierarchical contract structure
-
-<VanillaAdmonition type="note">
-Stylus doesn't support contract multi-inheritance yet.
+<VanillaAdmonition type="warning" title="Inheritance Limitation">
+  Stylus doesn't currently support contract multi-inheritance, so you should design your contracts accordingly.
 </VanillaAdmonition>
 
+## Getting Started
 
-## Prerequisites
+Before implementing inheritance, ensure you have:
 
-Before starting, make sure you have:
+1. Installed the Rust toolchain
+2. Installed `cargo-stylus` CLI tool: `cargo install --force cargo-stylus`
+3. Set up a Stylus project: `cargo stylus new your_project_name`
 
-- [Rust](https://www.rust-lang.org/tools/install) installed
-- [Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html) package manager
-- Basic understanding of [Stylus](https://docs.arbitrum.io/stylus/stylus-quickstart) and [Rust](https://www.rust-lang.org/learn)
-- [stylus-sdk](https://github.com/OffchainLabs/stylus-sdk-rs) installed
+## Basic Inheritance Pattern
 
-## Basic Inheritance
+The inheritance pattern in Stylus requires two main components:
 
-Here's how to implement basic inheritance in a Stylus contract:
+1. A storage structure using the `#[borrow]` annotation
+2. An implementation block using the `#[inherit]` annotation
 
-<CustomDetails summary="Basic Inheritance Example">
+Let's walk through a practical example.
+
+### Step 1: Define the Base Contract
+
+First, define your base contract that will be inherited:
+
+<CustomDetails summary="Base Contract Example">
+
 ```rust
-use stylus_sdk::{prelude::*, storage::StorageU256};
+use stylus_sdk::{alloy_primitives::U256, prelude::*};
 
-// Base contract #[external]
-impl BaseContract { #[storage]
-struct Storage {
-value: StorageU256,
+sol_storage! {
+    pub struct BaseContract {
+        uint256 value;
+    }
 }
 
-    pub fn get_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.value.get())
-    }
-
-    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.value.set(new_value);
-        Ok(())
-    }
-
-}
-
-// Derived contract #[external]
-impl DerivedContract { #[storage]
-struct Storage {
-base: BaseContract,
-additional_value: StorageU256,
-}
-
-    pub fn get_value(&self) -> Result<U256, Vec<u8>> {
-        self.storage.base.get_value()
-    }
-
-    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.base.set_value(new_value)
-    }
-
-    pub fn get_additional_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.additional_value.get())
-    }
-
-    pub fn set_additional_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.additional_value.set(new_value);
-        Ok(())
-    }
-
-}
-
-````
-</CustomDetails>
-
-In this example, `DerivedContract` inherits from `BaseContract` by including it as a field in its storage struct. This allows `DerivedContract` to reuse the functionality defined in `BaseContract` while adding its own additional functionality.
-
-## Using Traits for Inheritance
-
-Rust traits provide a powerful way to implement inheritance-like patterns in Stylus:
-
-<CustomDetails summary="Trait-Based Inheritance">
-```rust
-use stylus_sdk::{prelude::*, storage::StorageU256};
-
-// Define a trait for common functionality
-trait ValueOperations {
-    fn get_value(&self) -> Result<U256, Vec<u8>>;
-    fn set_value(&mut self, value: U256) -> Result<(), Vec<u8>>;
-}
-
-// Base contract implementing the trait
-#[external]
+#[public]
 impl BaseContract {
-    #[storage]
-    struct Storage {
-        value: StorageU256,
-    }
-}
-
-// Implement the trait for the base contract
-impl ValueOperations for BaseContract {
-    fn get_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.value.get())
-    }
-
-    fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.value.set(new_value);
-        Ok(())
-    }
-}
-
-// Derived contract also implementing the trait
-#[external]
-impl DerivedContract {
-    #[storage]
-    struct Storage {
-        value: StorageU256,
-        additional_value: StorageU256,
-    }
-}
-
-// Implement the trait for the derived contract
-impl ValueOperations for DerivedContract {
-    fn get_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.value.get())
-    }
-
-    fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.value.set(new_value);
-        Ok(())
-    }
-}
-
-// Add additional functionality
-impl DerivedContract {
-    pub fn get_additional_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.additional_value.get())
-    }
-
-    pub fn set_additional_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.additional_value.set(new_value);
-        Ok(())
-    }
-}
-````
-
-</CustomDetails>
-
-Using traits allows you to define a common interface that multiple contracts can implement, providing a form of inheritance.
-
-## Composition-Based Inheritance
-
-Composition is often preferred over inheritance in Rust. Here's how to use composition to achieve similar results:
-
-<CustomDetails summary="Composition-Based Inheritance">
-```rust
-use stylus_sdk::{prelude::*, storage::StorageU256};
-
-// Base contract component
-struct BaseContractComponent {
-value: StorageU256,
-}
-
-impl BaseContractComponent {
-fn new(value: StorageU256) -> Self {
-Self { value }
-}
-
-    fn get_value(&self) -> Result<U256, Vec<u8>> {
+    pub fn get_value(&self) -> Result<U256, Vec<u8>> {
         Ok(self.value.get())
     }
-
-    fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
+    
+    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
         self.value.set(new_value);
         Ok(())
     }
-
 }
+```
 
-// Main contract using composition #[external]
-impl MainContract { #[storage]
-struct Storage {
-base_component_value: StorageU256,
-additional_value: StorageU256,
-}
-
-    pub fn get_value(&self) -> Result<U256, Vec<u8>> {
-        let base_component = BaseContractComponent::new(self.storage.base_component_value);
-        base_component.get_value()
-    }
-
-    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        let mut base_component = BaseContractComponent::new(self.storage.base_component_value);
-        base_component.set_value(new_value)
-    }
-
-    pub fn get_additional_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.additional_value.get())
-    }
-
-    pub fn set_additional_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.additional_value.set(new_value);
-        Ok(())
-    }
-
-}
-
-````
 </CustomDetails>
 
-With composition, you create a component that encapsulates the functionality you want to reuse, then include and delegate to it in your main contract.
+### Step 2: Define the Child Contract with Inheritance
 
-## Standard Contract Inheritance
+Next, create your child contract that inherits from the base contract:
 
-When implementing standard contracts like ERC-20 or ERC-721, inheritance can be particularly useful:
+<CustomDetails summary="Child Contract Example">
+
+```rust
+sol_storage! {
+    #[entrypoint]
+    pub struct ChildContract {
+        #[borrow]
+        BaseContract base_contract;
+        uint256 additional_value;
+    }
+}
+
+#[public]
+#[inherit(BaseContract)]
+impl ChildContract {
+    pub fn get_additional_value(&self) -> Result<U256, Vec<u8>> {
+        Ok(self.additional_value.get())
+    }
+    
+    pub fn set_additional_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
+        self.additional_value.set(new_value);
+        Ok(())
+    }
+}
+```
+
+</CustomDetails>
+
+### How It Works
+
+When you add the `#[entrypoint]` macro to your `ChildContract` struct, calls to the contract will first check if the requested method exists within `ChildContract`. If a matching function is not found, it will then try the `BaseContract`. Only after trying everything `ChildContract` inherits will the call revert.
+
+The `#[borrow]` annotation in your storage declaration is crucial for inheritance to work properly, as it allows the child contract to access the base contract's storage.
+
+## Method Overriding
+
+If both parent and child implement the same method, the one in the child will override the one in the parent, which won't be callable. This allows for patterns where you import a crate implementing a standard, like an ERC-20, and then add or override just the methods you want to without modifying the imported type.
+
+For example:
+
+<CustomDetails summary="Method Overriding Example">
+
+```rust
+#[public]
+#[inherit(BaseContract)]
+impl ChildContract {
+    // This overrides the base_contract.set_value method
+    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
+        // Custom implementation
+        if new_value > U256::from(100) {
+            return Err("Value too large".as_bytes().to_vec());
+        }
+        self.base_contract.set_value(new_value)?;
+        Ok(())
+    }
+}
+```
+
+</CustomDetails>
+
+<VanillaAdmonition type="caution" title="No Explicit Override Keywords">
+  Stylus does not currently contain explicit `override` or `virtual` keywords for marking override functions. It is important to carefully ensure that contracts are only overriding the functions you intend to override.
+</VanillaAdmonition>
+
+## Storage Layout Considerations
+
+<VanillaAdmonition type="info" title="Storage Layout in Inherited Contracts">
+  Note that one exception to Stylus's storage layout guarantee is contracts which utilize inheritance. The current solution in Stylus using `#[borrow]` and `#[inherits(...)]` packs nested (inherited) structs into their own slots. This is consistent with regular struct nesting in Solidity, but not with inherited structs.
+</VanillaAdmonition>
+
+This has important implications when upgrading from Solidity to Rust, as storage slots may not align the same way.
+
+## Working Example: ERC-20 Token with Inheritance
+
+A practical example of inheritance in Stylus is implementing an ERC-20 token with custom functionality. Here's how it works:
 
 <CustomDetails summary="ERC-20 Implementation with Inheritance">
+
 ```rust
-use stylus_sdk::{prelude::*, evm, msg, storage::*, alloy_primitives::Address};
-
-// ERC-20 interface trait
-trait ERC20Interface {
-    fn total_supply(&self) -> Result<U256, Vec<u8>>;
-    fn balance_of(&self, account: Address) -> Result<U256, Vec<u8>>;
-    fn transfer(&mut self, recipient: Address, amount: U256) -> Result<bool, Vec<u8>>;
-    // Additional ERC-20 methods...
+// Define the base ERC-20 functionality
+struct StylusTokenParams;
+impl Erc20Params for StylusTokenParams {
+    const NAME: &'static str = "StylusToken";
+    const SYMBOL: &'static str = "STK";
+    const DECIMALS: u8 = 18;
 }
 
-// Base ERC-20 implementation
-struct BaseERC20 {
-    total_supply: StorageU256,
-    balances: StorageMap<Address, U256>,
-}
-
-impl BaseERC20 {
-    fn new(total_supply: StorageU256, balances: StorageMap<Address, U256>) -> Self {
-        Self { total_supply, balances }
+sol_storage! {
+    #[entrypoint]
+    struct StylusToken {
+        #[borrow]
+        Erc20<StylusTokenParams> erc20;
     }
 }
 
-impl ERC20Interface for BaseERC20 {
-    fn total_supply(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.total_supply.get())
-    }
-
-    fn balance_of(&self, account: Address) -> Result<U256, Vec<u8>> {
-        Ok(self.balances.get(account))
-    }
-
-    fn transfer(&mut self, recipient: Address, amount: U256) -> Result<bool, Vec<u8>> {
-        let sender = msg::sender();
-        let sender_balance = self.balances.get(sender);
-
-        require(sender_balance >= amount, "Insufficient balance");
-
-        self.balances.insert(sender, sender_balance - amount);
-        self.balances.insert(recipient, self.balances.get(recipient) + amount);
-
-        // Emit transfer event
-        evm::log(Transfer { from: sender, to: recipient, value: amount });
-
-        Ok(true)
-    }
-}
-
-// Custom token extending the base ERC-20
-#[external]
-impl CustomToken {
-    #[storage]
-    struct Storage {
-        total_supply: StorageU256,
-        balances: StorageMap<Address, U256>,
-        // Additional fields specific to the custom token
-        paused: StorageBool,
-    }
-
-    pub fn total_supply(&self) -> Result<U256, Vec<u8>> {
-        let base = BaseERC20::new(self.storage.total_supply, self.storage.balances);
-        base.total_supply()
-    }
-
-    pub fn balance_of(&self, account: Address) -> Result<U256, Vec<u8>> {
-        let base = BaseERC20::new(self.storage.total_supply, self.storage.balances);
-        base.balance_of(account)
-    }
-
-    pub fn transfer(&mut self, recipient: Address, amount: U256) -> Result<bool, Vec<u8>> {
-        require(!self.storage.paused.get(), "Transfers are paused");
-
-        let mut base = BaseERC20::new(self.storage.total_supply, self.storage.balances);
-        base.transfer(recipient, amount)
-    }
-
-    pub fn pause(&mut self) -> Result<(), Vec<u8>> {
-        require(msg::sender() == self.owner(), "Not authorized");
-        self.storage.paused.set(true);
+#[public]
+#[inherit(Erc20<StylusTokenParams>)]
+impl StylusToken {
+    // Add custom functionality
+    pub fn mint(&mut self, value: U256) -> Result<(), Erc20Error> {
+        self.erc20.mint(msg::sender(), value)?;
         Ok(())
     }
-
-    pub fn unpause(&mut self) -> Result<(), Vec<u8>> {
-        require(msg::sender() == self.owner(), "Not authorized");
-        self.storage.paused.set(false);
-        Ok(())
-    }
-
-    fn owner(&self) -> Address {
-        // Logic to get the owner
-        Address::from([0; 20]) // Placeholder
-    }
 }
-
-// Event struct
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct Transfer {
-    pub from: Address,
-    pub to: Address,
-    pub value: U256,
-}
-````
+```
 
 </CustomDetails>
 
-This example shows how to implement an ERC-20 token with additional functionality by extending a base implementation.
+This example shows how to inherit from a generic ERC-20 implementation and add custom minting functionality.
 
-## Advanced Inheritance Patterns
+## Current Limitations
 
-### Multi-Level Inheritance
-
-You can create multi-level inheritance by nesting contracts:
-
-<CustomDetails summary="Multi-Level Inheritance">
-```rust
-use stylus_sdk::{prelude::*, storage::StorageU256};
-
-// Base contract #[external]
-impl BaseContract { #[storage]
-struct Storage {
-base_value: StorageU256,
-}
-
-    pub fn get_base_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.base_value.get())
-    }
-
-    pub fn set_base_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.base_value.set(new_value);
-        Ok(())
-    }
-
-}
-
-// Intermediate contract #[external]
-impl IntermediateContract { #[storage]
-struct Storage {
-base: BaseContract,
-intermediate_value: StorageU256,
-}
-
-    pub fn get_base_value(&self) -> Result<U256, Vec<u8>> {
-        self.storage.base.get_base_value()
-    }
-
-    pub fn set_base_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.base.set_base_value(new_value)
-    }
-
-    pub fn get_intermediate_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.intermediate_value.get())
-    }
-
-    pub fn set_intermediate_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.intermediate_value.set(new_value);
-        Ok(())
-    }
-
-}
-
-// Derived contract #[external]
-impl DerivedContract { #[storage]
-struct Storage {
-intermediate: IntermediateContract,
-derived_value: StorageU256,
-}
-
-    pub fn get_base_value(&self) -> Result<U256, Vec<u8>> {
-        self.storage.intermediate.get_base_value()
-    }
-
-    pub fn set_base_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.intermediate.set_base_value(new_value)
-    }
-
-    pub fn get_intermediate_value(&self) -> Result<U256, Vec<u8>> {
-        self.storage.intermediate.get_intermediate_value()
-    }
-
-    pub fn set_intermediate_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.intermediate.set_intermediate_value(new_value)
-    }
-
-    pub fn get_derived_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.derived_value.get())
-    }
-
-    pub fn set_derived_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.derived_value.set(new_value);
-        Ok(())
-    }
-
-}
-
-````
-</CustomDetails>
-
-### Multiple Inheritance
-
-Rust doesn't support traditional multiple inheritance, but you can achieve similar functionality using traits and composition:
-
-<CustomDetails summary="Multiple Inheritance Using Traits">
-```rust
-use stylus_sdk::{prelude::*, storage::StorageU256};
-
-// First trait
-trait ValueOperations {
-    fn get_value(&self) -> Result<U256, Vec<u8>>;
-    fn set_value(&mut self, value: U256) -> Result<(), Vec<u8>>;
-}
-
-// Second trait
-trait NameOperations {
-    fn get_name(&self) -> Result<String, Vec<u8>>;
-    fn set_name(&mut self, name: String) -> Result<(), Vec<u8>>;
-}
-
-// Contract implementing both traits
-#[external]
-impl MultiContract {
-    #[storage]
-    struct Storage {
-        value: StorageU256,
-        // For simplicity, we're not implementing proper string storage here
-        // In a real contract, you would use StorageString or similar
-    }
-}
-
-// Implement first trait
-impl ValueOperations for MultiContract {
-    fn get_value(&self) -> Result<U256, Vec<u8>> {
-        Ok(self.storage.value.get())
-    }
-
-    fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        self.storage.value.set(new_value);
-        Ok(())
-    }
-}
-
-// Implement second trait (simplified)
-impl NameOperations for MultiContract {
-    fn get_name(&self) -> Result<String, Vec<u8>> {
-        // Simplified implementation
-        Ok("MultiContract".to_string())
-    }
-
-    fn set_name(&mut self, _name: String) -> Result<(), Vec<u8>> {
-        // Simplified implementation
-        Ok(())
-    }
-}
-
-// Expose trait methods through the external interface
-#[external]
-impl MultiContractExternal for MultiContract {
-    pub fn get_value(&self) -> Result<U256, Vec<u8>> {
-        ValueOperations::get_value(self)
-    }
-
-    pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        ValueOperations::set_value(self, new_value)
-    }
-
-    pub fn get_name(&self) -> Result<String, Vec<u8>> {
-        NameOperations::get_name(self)
-    }
-
-    pub fn set_name(&mut self, name: String) -> Result<(), Vec<u8>> {
-        NameOperations::set_name(self, name)
-    }
-}
-````
-
-</CustomDetails>
+1. Stylus doesn't support contract multi-inheritance yet
+2. The storage layout for inherited contracts differs from Solidity's inheritance model
+3. There's a risk of undetected selector collisions with functions from inherited contracts
 
 ## Best Practices
 
-When using inheritance patterns in Stylus contracts, consider the following best practices:
-
-1. **Favor Composition Over Inheritance**: In Rust, composition is generally preferred over inheritance. Use composition when possible.
-
-2. **Use Traits for Interface Definitions**: Traits provide a way to define common interfaces that multiple contracts can implement.
-
-3. **Keep Storage Layout in Mind**: When extending contracts, be careful about storage layout to avoid conflicts.
-
-4. **Document Inheritance Relationships**: Clearly document the inheritance structure of your contracts.
-
-5. **Test Inherited Functionality**: Ensure that functionality inherited from base contracts is properly tested.
-
-6. **Consider Gas Efficiency**: Deep inheritance hierarchies can lead to increased gas costs. Keep your inheritance structure efficient.
+1. Use `cargo expand` to examine the expanded code and verify inheritance is working as expected
+2. Be cautious with method overriding since there are no explicit override keywords
+3. Design your contracts with single inheritance in mind
+4. Test thoroughly to ensure all inherited methods work correctly
+5. Be aware of potential storage layout differences when migrating from Solidity
 
 ## Conclusion
 
-Inheritance patterns in Stylus contracts provide a powerful way to create modular, reusable code. By leveraging Rust's traits and composition, you can implement sophisticated contract hierarchies while maintaining the benefits of Rust's safety and performance.
+Inheritance in Stylus provides a powerful way to compose contracts and reuse code. While it has some limitations compared to Solidity's inheritance model, it offers a familiar pattern for developers coming from Solidity and enables clean extension of existing functionality.
 
-Remember that Rust's approach to inheritance differs from other languages like Solidity. Understanding these differences is key to writing effective Stylus contracts.
+By following the patterns outlined in this guide, you can create modular, extensible smart contracts in Rust that leverage inheritance while maintaining full EVM compatibility.
 
-## Next Steps
-
-- Explore examples of inheritance in the [Stylus SDK documentation](https://github.com/OffchainLabs/stylus-sdk-rs)
-- Review implementations of standard contracts like ERC-20 and ERC-721 that use inheritance patterns
-- Practice implementing your own contract hierarchies using the patterns shown in this guide
+For more information, refer to the [Stylus SDK documentation](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide).
