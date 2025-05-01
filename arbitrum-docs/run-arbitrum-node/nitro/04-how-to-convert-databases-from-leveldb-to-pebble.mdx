@@ -8,6 +8,11 @@ user_story: As a node runner, I want to learn how to migrate my node database fr
 content_type: How-To
 ---
 
+Switching from LevelDB to Pebble in Ethereum's Geth client provides several advantages, particularly in terms of resilience to data corruption during unexpected shutdowns, which helps maintain the integrity of your Ethereum node's database.
+
+It's important to understand that transitioning to Pebble may necessitate a complete resynchronization of your Ethereum node. This process can be time-consuming and could lead to downtime. If you are not facing significant issues with LevelDB and do not need Pebble's specific advantages, there may not be a strong reason to make the switch at this time.
+
+While Pebble provides better resilience and potentially improved performance, deciding to switch should consider your specific needs and the possible effects of a full resync on your operations.
 ## convert-databases.bash script
 
 The `convert-databases.bash` script converts Nitro databases from `leveldb` to `pebble`. Internally, it uses the `dbconv` tool (see: [dbconv tool](https://www.notion.so/dbconv-tool-17401a3f59f8801d8c9deadab636a619?pvs=21)).
