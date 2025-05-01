@@ -180,7 +180,9 @@ export function Modal({
           pointerEvents: 'all',
         }}
       >
-        {children || <NumberComponent number={number} type="dynamic" coordinates={coordinates} id={id} />}
+        {children || (
+          <NumberComponent number={number} type="dynamic" coordinates={coordinates} id={id} />
+        )}
       </g>
       {typeof document !== 'undefined' &&
         createPortal(

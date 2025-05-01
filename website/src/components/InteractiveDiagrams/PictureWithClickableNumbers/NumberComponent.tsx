@@ -47,8 +47,7 @@ export const NumberComponent: React.FC<
    * Determine if the number should be animated based on props
    * Animation only applies to dynamic numbers
    */
-  const shouldAnimate = 
-    type === 'dynamic' && (animated !== undefined ? animated : true);
+  const shouldAnimate = type === 'dynamic' && (animated !== undefined ? animated : true);
 
   /**
    * Determine if the number should be interactive based on props
@@ -127,7 +126,7 @@ export const NumberComponent: React.FC<
           height={CIRCLE_RADIUS * 2}
         />
       )}
-      
+
       {/* The circle background for the number */}
       {shouldAnimate ? (
         <a.circle
@@ -148,7 +147,7 @@ export const NumberComponent: React.FC<
           style={{ opacity: 1 }}
         />
       )}
-      
+
       {/* The number path (SVG shape of the number) */}
       <path
         id={`path${number}-${id}`}
