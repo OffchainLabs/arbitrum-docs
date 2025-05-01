@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal } from './Modal';
-import { NumberComponent } from './NumberComponent';
+import Button from './Button';
 import { PictureWithClickableNumbersProps } from './types';
 import { coordinates as defaultCoordinates } from './constants';
 import DefaultBackground from './DefaultBackground';
@@ -87,12 +87,7 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
         >
           {numbers.map((number) => (
             <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-              <NumberComponent
-                number={number}
-                type="dynamic"
-                coordinates={finalCoordinates}
-                id={id}
-              />
+              <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
             </Modal>
           ))}
           {backgroundElements}
@@ -117,7 +112,7 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
       {/* Render the numbered elements */}
       {numbers.map((number) => (
         <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-          <NumberComponent number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
+          <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
         </Modal>
       ))}
       {backgroundElements}

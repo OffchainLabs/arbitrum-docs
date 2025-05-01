@@ -7,7 +7,7 @@ import step3Content from './modal-centralized-auction-step-3.mdx';
 import step4Content from './modal-centralized-auction-step-4.mdx';
 import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
-import { NumberComponent } from './NumberComponent';
+import Button from './Button';
 import { MDXProvider } from '@mdx-js/react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
@@ -180,9 +180,7 @@ export function Modal({
           pointerEvents: 'all',
         }}
       >
-        {children || (
-          <NumberComponent number={number} type="dynamic" coordinates={coordinates} id={id} />
-        )}
+        {children || <Button number={number} type="dynamic" coordinates={coordinates} id={id} />}
       </g>
       {typeof document !== 'undefined' &&
         createPortal(

@@ -16,13 +16,18 @@ export interface Coordinates {
 export interface NumberComponentProps {
   number: 0 | 1 | 2 | 3 | 4 | 5;
   type?: 'static' | 'dynamic';
-}
-
-export interface ButtonComponentProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
+  animated?: boolean;
+  interactive?: boolean;
+  coordinates: Record<
+    number,
+    {
+      circle: { x: number; y: number };
+      path: { x: number; y: number };
+      offset?: { x: number; y: number };
+    }
+  >;
+  id?: string;
+  onHover?: (isHovered: boolean) => void;
 }
 
 export interface SyntaxHighlighterProps {
