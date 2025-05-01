@@ -326,6 +326,11 @@ const sidebars = {
                   label: `Enable fast withdrawals`,
                 },
                 {
+                  type: 'doc',
+                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/bold',
+                  label: 'BoLD configuration parameters',
+                },
+                {
                   type: 'category',
                   label: 'Configure AEP fee routing',
                   collapsed: true,
@@ -364,7 +369,7 @@ const sidebars = {
                 {
                   type: 'doc',
                   id: 'launch-orbit-chain/orbit-sdk-introduction',
-                  label: `Introduction`,
+                  label: `Overview`,
                 },
                 {
                   type: 'doc',
@@ -460,6 +465,11 @@ const sidebars = {
                   label: `Post-launch deployments`,
                 },
               ],
+            },
+            {
+              type: 'doc',
+              id: 'launch-orbit-chain/maintain-your-chain/upgrade-to-bold',
+              label: 'Upgrade to BoLD',
             },
           ],
         },
@@ -583,6 +593,11 @@ const sidebars = {
               type: 'doc',
               id: 'stylus/reference/overview',
               label: 'Overview',
+            },
+            {
+              type: 'doc',
+              id: 'stylus/reference/project-structure',
+              label: 'Structure of a Contract',
             },
             ...stylusByExampleDocsSidebarSDK,
             {

@@ -1,119 +1,135 @@
 ---
 title: 'How to deploy a custom gas token chain using the Orbit SDK'
-sidebar_label: 'Deploy a custom gas token chain'
 description: 'How to deploy a custom gas token chain using the Orbit SDK'
-author: GreatSoshiant
-sme: GreatSoshiant
+author: GreatSoshiant, jose-franco
+sme: GreatSoshiant, jose-franco
 target_audience: 'Developers deploying and maintaining Orbit chains.'
-sidebar_position: 3
 user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy a custom gas token chain using the Orbit SDK.
 content_type: how-to
 ---
 
-:::caution UNDER CONSTRUCTION
+:::info RaaS providers
 
-This document is under construction and may change significantly as we incorporate [style guidance](/for-devs/contribute#document-type-conventions) and feedback from readers. Feel free to request specific clarifications by clicking the `Request an update` button at the top of this document.
+It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-orbit-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
 
 :::
+
+Creating a new Orbit chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. This page explains how to deploy a custom gas token Orbit chain using the Orbit SDK. See the [Overview](/launch-orbit-chain/orbit-sdk-introduction.md) for an introduction to creating and configuring an Orbit chain.
+
+Before reading this guide, we recommend:
+
+- Becoming familiar with the general process of creating new chains explained in [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md)
+- Learning about the process of [creating new AnyTrust chains](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md) since custom gas token chains must use the <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust protocol</a>
 
 :::info
 
-See the ["create a rollup custom fee token" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) in the Orbit SDK repository for additional guidance.
+Custom gas tokens are **not supported yet** on Rollup chains, only on AnyTrust chains.
 
 :::
 
-This guide will help you configure and deploy a custom gas token Orbit chain.
+## About custom gas token Orbit chains
 
-Custom gas token orbit chains let participants pay transaction fees in `ERC-20` token instead of `ETH`, which is ideal for use cases requiring this feature and low transaction fees. You can learn more on our page covering [custom gas token requirements and configuration](/launch-orbit-chain/02-configure-your-chain/common-configurations/02-use-a-custom-gas-token-rollup.mdx).
+Custom gas token orbit chains let participants pay transaction fees in an `ERC-20` token instead of `ETH`. Standard ERC-20 tokens can be used as gas tokens, while more complex tokens with additional functionality must fulfill [these requirements](/launch-orbit-chain/02-configure-your-chain/common-configurations/01-use-a-custom-gas-token-anytrust.mdx#requirements-of-the-custom-gas-token) to be used as gas tokens. The `ERC-20` token to be used must be deployed on your chain's parent chain.
 
-Deploying a custom gas token Orbit chain is similar to deploying an AnyTrust Orbit chain but with additional steps. To take advantage of all the chains configurations supported by Orbit, we recommend reading our short guides about [Rollup](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md) and [AnyTrust](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md) configuration.
+## How to create a new custom gas token chain using the Orbit SDK
 
-:::note
+The deployment process for a custom gas token chain is very similar to that of an [AnyTrust chain](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md), but with some differences that we'll discuss in this guide.
 
-- Custom gas tokens are **not supported yet** on Rollup Orbit chains, only on Orbit AnyTrust chains.
-- `ERC-20` tokens need 18 decimals to operate as gas tokens on Orbit chains.
+:::info Example script
 
-:::
-
-## 1. Custom gas token specification
-
-The difference between custom gas token chains and other Orbit chains is the use of an `ERC-20` token as the gas token. Enabling this feature requires that you select an existing `ERC-20` token or deploy a new one on the parent chain.
-
-## 2. Chain configuration
-
-Chain configuration is the same as for any other AnyTrust chain. See more [here](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md#1-setting-up-the-chain-parameters).
-
-## 3. Token approval before deployment process
-
-In Custom gas token Orbit chains, the owner needs to give allowance to the `rollupCreator` contract before starting the deployment process so that `rollupCreator` can spend enough tokens for the deployment process. For this purpose, we defined two APIs on the Orbit SDK:
-
-#### A. createRollupEnoughCustomFeeTokenAllowance
-
-This API gets related inputs and checks if the `rollupCreator` contract has enough token `Allowance` from the owner:
-
-```js
-import { createRollupEnoughCustomFeeTokenAllowance } from '@arbitrum/orbit-sdk';
-
-const allowanceParams = {
-  nativeToken,
-  account: deployer.address,
-  publicClient: parentChainPublicClient,
-};
-
-const enoughAllowance = await createRollupEnoughCustomFeeTokenAllowance(allowanceParams);
-```
-
-To build the `allowanceParams` object as shown in the example above, you need to provide with the following:
-
-| Parameter      | Type           | Description                                                                                           |
-| -------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
-| `nativeToken`  | `Address`      | The contract address on the parent chain of the `ERC-20` token your chain will use for `gas` fees.    |
-| `account`      | `Address`      | The address of the Orbit chain's deployer.                                                            |
-| `publicClient` | `PublicClient` | The `PublicClient` object [as defined by the Viem library](https://viem.sh/docs/clients/public.html). |
-
-#### B. createRollupPrepareCustomFeeTokenApprovalTransactionRequest
-
-This API gets related inputs and creates the transaction request to secure enough allowance from the owner to the `RollupCreator` to spend `nativeToken` on the deployment process.
-
-Example:
-
-```js
-import { createRollupEnoughCustomFeeTokenAllowance } from '@arbitrum/orbit-sdk';
-
-const allowanceParams = {
-  nativeToken,
-  account: deployer.address,
-  publicClient: parentChainPublicClient,
-};
-
-const approvalTxRequest = await createRollupPrepareCustomFeeTokenApprovalTransactionRequest(
-  allowanceParams,
-);
-```
-
-## 4. Deployment process
-
-The overall deployment process, including the use of APIs like `createRollupPrepareDeploymentParamsConfig` and `createRollupPrepareTransactionRequest`, remains similar to the [AnyTrust deployment](./03-deploying-anytrust-chain.md) process. However, attention must be given to incorporating the `ERC-20` token details into these configurations.
-
-:::note
-
-When using the API, you also need to specify `nativeToken` as a param.
+The Orbit SDK includes an example script for creating a custom gas token Orbit chain. We recommend that you first understand the process described in this section and then check the [create-rollup-custom-fee-token](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-rollup-custom-fee-token/index.ts) script.
 
 :::
 
-Example:
+Here are the steps involved in the deployment process:
 
-```js
-const txRequest = await createRollupPrepareTransactionRequest({
-  params: {
-    config,
-    batchPosters: [batchPoster],
-    validators: [validator],
-    nativeToken,
-  },
-  account: deployer.address,
-  publicClient: parentChainPublicClient,
+1. [Create the chain's configuration object](#1-create-the-chains-configuration-object)
+2. [Deploy the custom gas token Orbit chain](#2-deploy-the-custom-gas-token-orbit-chain)
+3. [Understand the returned data](#3-understand-the-returned-data)
+4. [Additional configuration](#4-additional-configuration)
+
+### 1. Create the chain's configuration object
+
+The [How to deploy a Rollup chain](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
+
+Because we are deploying an AnyTrust chain, we must set the `arbitrum.DataAvailabilityCommittee` flag to `true`, to indicate that the chain will use a Data Availability Committee (DAC).
+
+Below is an example of how to use `createRollupPrepareDeploymentParamsConfig` and the `prepareChainConfig` methods to craft the configuration needed:
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import { createRollupPrepareDeploymentParamsConfig } from '@arbitrum/orbit-sdk';
+
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
+
+const createRollupConfig = createRollupPrepareDeploymentParamsConfig(parentChainPublicClient, {
+  chainId: 123_456,
+  owner: 0x123...890,
+  chainConfig: prepareChainConfig({
+    chainId: 123_456,
+    arbitrum: {
+      InitialChainOwner: 0x123...890,
+      DataAvailabilityCommittee: true,
+    },
+  }),
 });
 ```
 
-All other parts would be the same as explained in the [Rollup Orbit chain deployment page](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md).
+### 2. Deploy the custom gas token Orbit chain
+
+With the crafted configuration, we can call the `createRollup` function, which will send the transaction to the `RollupCreator` contract and wait until it is executed.
+
+However, before doing that, the owner needs to give allowance to the `RollupCreator` contract before starting the deployment process, so that it can spend enough tokens to send the correspondant Parent-to-Child messages during the deployment process. This process is handled within the `createRollup` function, but the owner must own enough tokens to create these messages.
+
+Additionally, we'll pass the `ERC-20` token to use as custom gas token in the `nativeToken` parameter of the `createRollup` function. We'll specify the address of the token contract in the parent chain.
+
+Below is an example of how to use `createRollup` using the `createRollupConfig` crafted in the previous step, and the parameters mentioned above:
+
+```typescript
+import { createPublicClient, http } from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
+import { createRollup } from '@arbitrum/orbit-sdk';
+
+const deployer = privateKeyToAccount(deployerPrivateKey);
+const parentChainPublicClient = createPublicClient({
+  chain: parentChain,
+  transport: http(),
+});
+
+const createRollupResults = await createRollup({
+  params: {
+    config: createRollupConfig,
+    batchPosters: [batchPoster],
+    validators: [validator],
+    nativeToken: '0xAddressInParentChain',
+  },
+  account: deployer,
+  parentChainPublicClient,
+});
+```
+
+### 3. Understand the returned data
+
+After calling `createRollup`, an object of type `CreateRollupResults` is returned with the following fields:
+
+```typescript
+type CreateRollupResults = {
+  // The transaction sent
+  transaction: CreateRollupTransaction;
+  // The transaction receipt
+  transactionReceipt: CreateRollupTransactionReceipt;
+  // An object with the addresses of the contracts created
+  coreContracts: CoreContracts;
+};
+```
+
+### 4. Additional configuration
+
+Since custom gas token chains are AnyTrust chains, we'll also have to set the DAC keyset in the SequencerInbox. Refer to [Set the DAC keyset in the SequencerInbox](/launch-orbit-chain/03-deploy-an-orbit-chain/03-deploying-anytrust-chain.md#4-set-the-dac-keyset-in-the-sequencerinbox) in the AnyTrust guide to learn how to do it.
+
+### 5. Next step
+
+Once the chain's contracts are created, you can move to the next step: [configure your Orbit chain's node](/launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config.md).

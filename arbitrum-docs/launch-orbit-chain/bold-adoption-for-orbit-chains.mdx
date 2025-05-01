@@ -19,7 +19,7 @@ This document is currently in **public preview** and may change significantly as
 
 ## Launch details and key dates
 
-- **Status:** Alpha - continued testing and evaluation of performance of BoLD with Stylus
+- **Status:** Generally available for L2s and launched on Arbitrum One and Arbitrum Nova. _BoLD for L3s are not yet supported at the time of writing._
 - **Arbitrum Sepolia** Dec 11, 2024
 - <a data-quicklook-from="arbitrum-one">**Arbitrum One**</a> 09:00 ET (GMT-5) on Feb 12, 2025{' '}
 - <a data-quicklook-from="arbitrum-nova">**Arbitrum Nova**</a> 09:00 ET (GMT-5) on Feb 12, 2025{' '}
@@ -34,7 +34,7 @@ parent chain.{' '}
 
 ### Recommended Adoption Path
 
-BoLD brings new security benefits to Orbit chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Orbit chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**. We currently recommend Orbit chain owners to adopt Arbitrum BoLD ~30 days after BoLD has been activated on Arbitrum One and Arbitrum Nova (timestamps [here](https://docs.arbitrum.foundation/network-upgrades#network-activation-statuses)) to minimize any stability risks/bugs.
+BoLD brings new security benefits to Orbit chains, regardless of whether their validators are permissioned or permissionless. These new security benefits include improved resistance to delay attacks and increased censorship resistance for `L3s`. We strongly recommend Orbit chains adopt Arbitrum BoLD to register these security benefits while **keeping validation permissioned**.
 
 :::warning
 
@@ -74,7 +74,9 @@ Arbitrum BoLD enables the chain owner to use any `ERC-20` token on the parent ch
 
 #### Increased censorship resistance for `L3` Orbit chains
 
-Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with the _Censorship Timeout_ feature that will automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the Sequencer goes offline. This massively benefits Orbit `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
+Today, the force inclusion window is a fixed 24 hours. This force inclusion window exists to enable both users and validators to force-include their transactions and assertions on the parent chain, with a 24-hour delay, if the sequencer is offline or censoring transactions. Arbitrum BoLD's release will come with an optional _Censorship Timeout_ feature that can automatically reduce the force inclusion time window if the parent chain or sequencer is maliciously censoring user transactions/assertions or the Sequencer goes offline. This massively benefits Orbit `L3` chains (that settle to a BoLD-enabled parent chain) as it ensures the chain can advance with minimal UX degradation during periods of censorship. You can read more about how this feature works in the [gentle introduction to BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx#q-how-do-bold-based-l3s-challenge-periods-operate-considering-the-worst-case-scenario).
+
+By default, the Censorship Timeout feature is disabled because proper configuration depends on a variety of factors, including the batch posting frequency of the chain and which parent chain(s) an Orbit chain settles to. For example, both the maximum delay buffer and the threshold itself should both be higher than your chain's batch posting frequency, otherwise the Censorship Timeout feature will not work as.
 
 ### Caveats that come with adopting Arbitrum BoLD for permissionless validation
 
@@ -98,7 +100,7 @@ Related to, and expanding on, the above point about resource exhaustion attacks,
 
 #### Risks to liveness or delays of the chain
 
-If the bond sizes are set too low, an adversary can cheaply create a challenge and delay confirmation of an assertion for up to an entire extra challenge period if they can censor honest BoLD moves. Remember that challenges, while time-bound, still take time to complete. Delaying the confirmation of assertions for a chain could negatively impact the chain in many ways that an attacker could benefit from (e.g., profiting from price volatility and price impacts on the Orbit chain's token may make delaying the chain worthwhile for an attacker). We recommend teams set bond sizes to be much greater than the opportunity cost of a week of delay, based on your chain's TVL (e.g., if your chain's TVL is $1B, then the opportunity cost of $1B should be used as a _floor_ for the block level bond amount size). We further recommend that the bonding token used is highly liquid on the parent chain and relatively non-volatile.
+If the bond sizes are set too low, an adversary can cheaply create a challenge and delay confirmation of an assertion for up to an entire extra challenge period if they can censor honest BoLD moves. Remember that challenges, while time-bound, still take time to complete. Delaying the confirmation of assertions for a chain could negatively impact the chain in many ways that an attacker could benefit from (e.g., profiting from price volatility and price impacts on the Orbit chain's token may make delaying the chain worthwhile for an attacker). We recommend teams set bond sizes to be much greater than the opportunity cost of a week of delay, based on your chain's TVL (e.g., if your chain's TVL is \$1B, then the opportunity cost of \$1B should be used as a _floor_ for the block level bond amount size). We further recommend that the bonding token used is highly liquid on the parent chain and relatively non-volatile.
 
 ### Conclusion for Orbit chains considering BoLD Permissionless Validation
 
