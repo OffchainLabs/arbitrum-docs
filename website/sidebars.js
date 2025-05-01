@@ -594,6 +594,11 @@ const sidebars = {
               id: 'stylus/reference/overview',
               label: 'Overview',
             },
+            {
+              type: 'doc',
+              id: 'stylus/reference/project-structure',
+              label: 'Structure of a Contract',
+            },
             ...stylusByExampleDocsSidebarSDK,
             {
               type: 'doc',
