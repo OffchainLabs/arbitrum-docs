@@ -50,22 +50,42 @@ First, define your base contract that will be inherited:
 <CustomDetails summary="Base Contract Example">
 
 ```rust
+// Import necessary components from the Stylus SDK
+// - alloy_primitives::U256 for 256-bit unsigned integers (equivalent to uint256 in Solidity)
+// - prelude contains common traits and macros used in most Stylus contracts
 use stylus_sdk::{alloy_primitives::U256, prelude::*};
 
+// Define the storage layout for our base contract
+// sol_storage! is a macro that generates Rust structs with fields mapped to
+// Solidity-equivalent storage slots and types
 sol_storage! {
+    // Public struct that will hold our contract's state
     pub struct BaseContract {
+        // This defines a uint256 field in storage, equivalent to Solidity's uint256
         uint256 value;
     }
 }
 
+// Mark this implementation block as containing public methods 
+// The #[public] macro makes these methods available to be called from other contracts
 #[public]
 impl BaseContract {
+    // Read-only function to retrieve the stored value
+    // - &self indicates this is a view function (doesn't modify state)
+    // - Returns either a U256 value or an error as Vec<u8>
     pub fn get_value(&self) -> Result<U256, Vec<u8>> {
+        // Retrieve the value from storage and return it wrapped in Ok
         Ok(self.value.get())
     }
 
+    // Mutable function to update the stored value
+    // - &mut self indicates this function can modify state
+    // - Takes a new_value parameter of type U256
+    // - Returns either unit type () or an error
     pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
+        // Update the storage value with the new value
         self.value.set(new_value);
+        // Return success (no error)
         Ok(())
     }
 }
@@ -82,26 +102,53 @@ Next, create your child contract that inherits from the base contract:
 <CustomDetails summary="Child Contract Example">
 
 ```rust
+// Define the storage layout for our child contract that inherits from BaseContract
 sol_storage! {
+    // #[entrypoint] marks this struct as the main entry point for the contract
+    // When the contract is called, execution begins here
     #[entrypoint]
     pub struct ChildContract {
+        // #[borrow] enables the contract to borrow BaseContract's implementation
+        // This is crucial for inheritance - it implements the Borrow trait automatically
+        // Without this, the contract couldn't access BaseContract's methods
         #[borrow]
         BaseContract base_contract;
+        
+        // Additional state variable specific to the child contract
+        // This extends the parent contract's state
         uint256 additional_value;
     }
 }
 
+// Define the public implementation for ChildContract
+// #[public] makes these methods callable from other contracts or externally
 #[public]
+// #[inherit(BaseContract)] connects ChildContract to BaseContract via the Router trait
+// This allows ChildContract to inherit all BaseContract's public methods
 #[inherit(BaseContract)]
 impl ChildContract {
+    // Define a method specific to the child contract to get its additional value
+    // Similar to BaseContract.get_value() but for the child's own state
     pub fn get_additional_value(&self) -> Result<U256, Vec<u8>> {
+        // Access the child-specific storage value
         Ok(self.additional_value.get())
     }
 
+    // Define a method to set the additional value
+    // Similar to BaseContract.set_value() but for the child's own state
     pub fn set_additional_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
+        // Update the child-specific storage value
         self.additional_value.set(new_value);
+        // Return success
         Ok(())
     }
+    
+    // Note: ChildContract can also call methods on BaseContract like:
+    // self.base_contract.get_value() or self.base_contract.set_value()
+    
+    // Additionally, external callers can call BaseContract methods directly on ChildContract
+    // due to the #[inherit] annotation, e.g.:
+    // child_contract.get_value() - will call BaseContract.get_value()
 }
 ```
 
@@ -128,18 +175,34 @@ For example:
 <CustomDetails summary="Method Overriding Example">
 
 ```rust
+// Define implementation for ChildContract that will override a parent method
 #[public]
+// Inherit from BaseContract to get access to its methods
 #[inherit(BaseContract)]
 impl ChildContract {
-    // This overrides the base_contract.set_value method
+    // This deliberately has the same name as BaseContract.set_value
+    // When this method is called, it will be chosen over the parent's implementation
+    // This is method overriding in Stylus
     pub fn set_value(&mut self, new_value: U256) -> Result<(), Vec<u8>> {
-        // Custom implementation with validation
+        // Add custom validation logic in the overridden method
+        // This demonstrates extending parent functionality with additional checks
         if new_value > U256::from(100) {
+            // Create a custom error message and convert it to bytes
+            // This will be returned as an error, causing the transaction to revert
             return Err("Value too large".as_bytes().to_vec());
         }
+        
+        // If validation passes, call the parent's implementation
+        // This shows composition pattern - reusing parent logic while adding your own
+        // The ? operator unwraps the Result or returns early if it's an Err
         self.base_contract.set_value(new_value)?;
+        
+        // Return success if everything worked
         Ok(())
     }
+    
+    // Note: Without explicit override keywords (like in Solidity),
+    // you must be careful about naming to avoid unintentional overrides
 }
 ```
 
@@ -256,44 +319,85 @@ A practical example of inheritance in Stylus is implementing an ERC-20 token wit
 <CustomDetails summary="ERC-20 Implementation with Inheritance">
 
 ```rust
-// Define the base ERC-20 functionality parameters
+// Define the token parameters structure (no fields required, just for implementing the trait)
+// This is a concrete implementation of the Erc20Params trait defined earlier
 struct StylusTokenParams;
+
+// Implement the ERC-20 parameters trait for our token
+// This sets up the token's basic descriptive properties
 impl Erc20Params for StylusTokenParams {
+    // Token name - displayed in wallets and explorers
     const NAME: &'static str = "StylusToken";
+    
+    // Token symbol/ticker - short identifier used on exchanges and UIs
     const SYMBOL: &'static str = "STK";
+    
+    // Decimal precision - standard is 18 for ERC-20 tokens (like ETH)
+    // This means 1 token = 10^18 of the smallest unit
     const DECIMALS: u8 = 18;
 }
 
-// Storage definition with inheritance
+// Define the storage structure for our token contract
 sol_storage! {
+    // Mark this as the entry point for all contract calls
     #[entrypoint]
     struct StylusToken {
+        // Include the base ERC-20 implementation with our parameters
+        // The #[borrow] annotation is essential for inheritance to work
         #[borrow]
         Erc20<StylusTokenParams> erc20;
+        
+        // We could add additional StylusToken-specific storage here
+        // For example: mapping(address => bool) minters;
     }
 }
 
-// Implementation with inheritance
+// Implement the public interface for our token contract
 #[public]
+// Inherit all functionality from the ERC-20 implementation
+// This gives our token standard methods like:
+// - balanceOf
+// - transfer 
+// - transferFrom
+// - approve
+// - allowance
 #[inherit(Erc20<StylusTokenParams>)]
 impl StylusToken {
-    // Add custom functionality
+    // Add custom mint functionality
+    // This lets the caller mint tokens for themselves
     pub fn mint(&mut self, value: U256) -> Result<(), Erc20Error> {
+        // Call the ERC-20 implementation's mint method
+        // msg::sender() gives the address of the caller
+        // The ? operator propagates any errors that might occur
         self.erc20.mint(msg::sender(), value)?;
+        
+        // Return success if everything worked
         Ok(())
     }
     
-    // Add more custom methods as needed
+    // Add a method to mint tokens to a specific address
+    // This can be used for airdrops, rewards, etc.
     pub fn mint_to(&mut self, to: Address, value: U256) -> Result<(), Erc20Error> {
+        // Similar to mint, but with a specified recipient
+        // Could add custom logic here, like permission checks
         self.erc20.mint(to, value)?;
         Ok(())
     }
     
-    // Override parent methods if needed
+    // Add a burn functionality to destroy tokens
+    // This could be used for deflationary mechanics
     pub fn burn(&mut self, value: U256) -> Result<(), Erc20Error> {
+        // Call the base implementation's burn method
+        // This could be extended with custom logic
         self.erc20.burn(msg::sender(), value)?;
         Ok(())
     }
+    
+    // Could add more custom methods:
+    // - pausable functionality
+    // - role-based minting permissions
+    // - token recovery functions
+    // - etc.
 }
 ```
 
