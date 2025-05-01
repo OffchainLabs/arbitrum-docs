@@ -237,10 +237,23 @@ Inheritance can be chained. When using `#[inherit(A, B, C)]`, the contract will 
 <CustomDetails summary="Chained Inheritance Example">
 
 ```rust
+// Define implementation for a contract with multiple inherited types
 #[public]
+// Inherit from multiple contracts, specifying the search order
+// When a method is called, it will first look in MyContract
+// If not found, it will check A, then B, then C in that order
 #[inherit(A, B, C)]
 impl MyContract {
-    // Custom implementations here
+    // Custom implementations specific to MyContract
+    // These can override any methods from A, B, or C with the same name
+    
+    // For method resolution:
+    // - Calling my_contract.foo() will execute MyContract.foo() if it exists
+    // - Otherwise it will check A.foo(), then B.foo(), then C.foo()
+    // - If none exist, the call will revert
+    
+    // This chaining allows for sophisticated composition patterns
+    // but requires careful planning of the inheritance hierarchy
 }
 ```
 
