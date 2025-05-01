@@ -233,18 +233,18 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Run an Orbit chain',
+      label: 'Run an Arbitrum chain',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'launch-orbit-chain/a-gentle-introduction',
+          id: 'launch-arbitrum-chain/a-gentle-introduction',
           label: 'A gentle introduction',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/aep-license',
-          label: 'Orbit licensing',
+          id: 'launch-arbitrum-chain/aep-license',
+          label: 'Arbitrum chain licensing',
         },
         {
           type: 'category',
@@ -258,22 +258,22 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust',
                   label: `Configure a custom AnyTrust gas token`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup',
                   label: `Configure a custom Rollup gas token`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/customizable-challenge-period',
                   label: 'Customize the challenge period',
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/fee-management',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management',
                   label: `Manage the fee parameters`,
                 },
                 {
@@ -305,12 +305,12 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/customize-deployment-configuration',
+                  id: 'launch-arbitrum-chain/how-tos/customize-deployment-configuration',
                   label: `Customize your chain's deployment`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/reference/additional-configuration-parameters',
+                  id: 'launch-arbitrum-chain/reference/additional-configuration-parameters',
                   label: `Additional configuration parameters`,
                 },
               ],
@@ -322,12 +322,12 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals',
                   label: `Enable fast withdrawals`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/bold',
+                  id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold',
                   label: 'BoLD configuration parameters',
                 },
                 {
@@ -337,17 +337,17 @@ const sidebars = {
                   items: [
                     {
                       type: 'doc',
-                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction',
                       label: `AEP fee router overview`,
                     },
                     {
                       type: 'doc',
-                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router',
                       label: `Set up AEP fee router`,
                     },
                     {
                       type: 'doc',
-                      id: 'launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
+                      id: 'launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees',
                       label: `Calculate AEP license fees`,
                     },
                   ],
@@ -358,7 +358,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Deploy an Orbit chain',
+          label: 'Deploy an Arbitrum chain',
           collapsed: true,
           items: [
             {
@@ -368,49 +368,49 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/orbit-sdk-introduction',
+                  id: 'launch-arbitrum-chain/arbitrum-chain-sdk-introduction',
                   label: `Overview`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain',
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain',
                   label: `Deploy a Rollup chain`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain',
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain',
                   label: `Deploy an AnyTrust chain`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain',
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain',
                   label: `Deploy a custom gas token chain`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config',
+                  id: 'launch-arbitrum-chain/how-tos/arbitrum-sdk-preparing-node-config',
                   label: `Generate the node config file`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge',
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
                   label: `Deploy a token bridge`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain',
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain',
                   label: `Configure your chain`,
                 },
               ],
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations',
               label: 'Monitoring tools and considerations',
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts',
+              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
               label: 'Canonical factory contracts',
             },
           ],
@@ -422,7 +422,7 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/maintain-your-chain/ownership-structure-access-control',
+              id: 'launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control',
               label: 'Ownership structure and access control',
             },
             {
@@ -439,7 +439,7 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade',
+                  id: 'launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade',
                   label: `Upgrade ArbOS`,
                 },
               ],
@@ -451,24 +451,24 @@ const sidebars = {
               items: [
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/maintain-your-chain/guidance/state-growth',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-growth',
                   label: `Manage gas state growth`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/maintain-your-chain/guidance/state-size-limit',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit',
                   label: `Manage gas speed limit`,
                 },
                 {
                   type: 'doc',
-                  id: 'launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
+                  id: 'launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments',
                   label: `Post-launch deployments`,
                 },
               ],
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/maintain-your-chain/upgrade-to-bold',
+              id: 'launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold',
               label: 'Upgrade to BoLD',
             },
           ],
@@ -480,22 +480,22 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/customize-your-chain/customize-precompile',
+              id: 'launch-arbitrum-chain/customize-your-chain/customize-precompile',
               label: `Customize your chain's precompiles`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/customize-your-chain/customize-stf',
+              id: 'launch-arbitrum-chain/customize-your-chain/customize-stf',
               label: `Customize your chain's behavior`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/customize-your-chain/customize-arbos',
+              id: 'launch-arbitrum-chain/customize-your-chain/customize-arbos',
               label: `Customize ArbOS version`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/how-tos/orbit-chain-finality',
+              id: 'launch-arbitrum-chain/how-tos/arbitrum-chain-finality',
               label: `Configure delayed inbox finality`,
             },
           ],
@@ -507,19 +507,19 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'launch-orbit-chain/third-party-integrations/bridged-usdc-standard',
+              id: 'launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard',
               label: `Implement Circle bridged USDC`,
             },
             {
               type: 'doc',
-              id: 'launch-orbit-chain/third-party-integrations/third-party-providers',
+              id: 'launch-arbitrum-chain/third-party-integrations/third-party-providers',
               label: 'Third-party infrastructure providers',
             },
           ],
         },
         {
           type: 'category',
-          label: 'Run a node for an Orbit chain',
+          label: 'Run a node for an Arbitrum chain',
           collapsed: true,
           items: [
             {
@@ -540,27 +540,27 @@ const sidebars = {
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui',
+          id: 'launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui',
           label: `Add your chain to the bridge`,
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/custom-gas-token-sdk',
+          id: 'launch-arbitrum-chain/concepts/custom-gas-token-sdk',
           label: 'Custom gas token SDK',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/bold-adoption-for-orbit-chains',
-          label: 'BoLD for Orbit chains',
+          id: 'launch-arbitrum-chain/bold-adoption-for-arbitrum-chains',
+          label: 'BoLD for Arbitrum chains',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/concepts/public-preview-expectations',
+          id: 'launch-arbitrum-chain/concepts/public-preview-expectations',
           label: 'Public preview',
         },
         {
           type: 'doc',
-          id: 'launch-orbit-chain/faq-troubleshooting/troubleshooting-building-orbit',
+          id: 'launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain',
           label: 'FAQ',
         },
       ],
