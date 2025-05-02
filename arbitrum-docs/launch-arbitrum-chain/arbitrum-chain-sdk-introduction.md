@@ -47,7 +47,7 @@ After selecting a chain type, you can follow the corresponding guide to deploy y
 
 ## 3. Configure your Arbitrum chain's node
 
-Once the chain is deployed, you'll need to craft the configuration to run its node. To learn how, visit [Configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-sdk-preparing-node-config.md).
+Once the chain is deployed, you'll need to craft the configuration to run its node. To learn how, visit [Configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
 
 ## 4. Deploy your Arbitrum chain's token bridge
 

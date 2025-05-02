@@ -2169,6 +2169,11 @@
       "source": "/(launch-orbit-chain/reference/orbit-smart-contract-size-limit/?)",
       "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit/?)",
       "permanent": false
+    },
+    {
+      "source": "/(partials/_troubleshooting-orbit-partial/?)",
+      "destination": "/(partials/_troubleshooting-arbitrum-chain-partial/?)",
+      "permanent": false
     }
   ]
 }

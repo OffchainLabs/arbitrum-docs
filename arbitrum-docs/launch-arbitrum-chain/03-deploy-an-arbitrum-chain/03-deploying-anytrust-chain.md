@@ -14,7 +14,7 @@ It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if y
 
 :::
 
-Creating a new Arbitrum chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Arbitrum chain</a> using the Arbitrum chain (Orbit) SDK. See the [Overview](/launch-arbitrum-chain/arbitrum-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
+Creating a new Arbitrum chain involves deploying a set of contracts on the <a data-quicklook-from="parent-chain">parent chain</a> of your chain. This page explains how to deploy an <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust Arbitrum chain</a> using the Arbitrum chain (Orbit) SDK. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
 
 Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md).
 
