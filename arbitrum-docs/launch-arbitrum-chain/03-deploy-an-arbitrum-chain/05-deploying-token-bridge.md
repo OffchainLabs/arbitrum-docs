@@ -1,12 +1,12 @@
 ---
-title: 'Deploy a token bridge using the Orbit SDK'
+title: 'Deploy a token bridge using the Arbitrum chain (Orbit) SDK'
 sidebar_label: 'Deploy a token bridge'
-description: 'How to deploy a token bridge using the Orbit SDK '
+description: 'How to deploy a token bridge using the Arbitrum chain (Orbit) SDK '
 author: GreatSoshiant
 sme: GreatSoshiant
-target_audience: 'Developers deploying and maintaining Orbit chains.'
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 sidebar_position: 5
-user_story: As a current or prospective Orbit chain deployer, I need to understand how to deploy a token bridge using the Orbit SDK.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to deploy a token bridge using the Arbitrum chain (Orbit) SDK.
 content_type: how-to
 ---
 
@@ -32,7 +32,7 @@ See the [`ERC-20` token bridge overview](/build-decentralized-apps/token-bridgin
 
 ### Token bridge deployment steps
 
-Once an Orbit chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
+Once an Arbitrum chain has been deployed and initialized, the bridge contracts need to be deployed on both the parent and child chains. This process involves several steps:
 
 1. **[Token approval](#1-token-approval)**
 2. **[Token bridge contract deployment](#2-token-bridge-contract-deployment)**
@@ -42,10 +42,10 @@ Once an Orbit chain has been deployed and initialized, the bridge contracts need
 
 :::info
 
-The token bridge deployment process is the same for all Orbit chains types except for the following:
+The token bridge deployment process is the same for all Arbitrum chains types except for the following:
 
-- **Custom fee token Orbit chains** which require [token approval](#1-token-approval).
-- **`ETH`-based Orbit chains**, for which you need to [set up a `WETH` gateway](#5-setting-up-the-weth-gateway).
+- **Custom fee token Arbitrum chains** which require [token approval](#1-token-approval).
+- **`ETH`-based Arbitrum chains**, for which you need to [set up a `WETH` gateway](#5-setting-up-the-weth-gateway).
 
 :::
 
@@ -53,11 +53,11 @@ The token bridge deployment process is the same for all Orbit chains types excep
 
 :::note
 
-This step is only required for custom fee token Orbit chains.
+This step is only required for custom fee token Arbitrum chains.
 
 :::
 
-Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-orbit-chain/concepts/custom-gas-token-sdk.mdx)** on orbit chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Orbit SDK provides two APIs:
+Initiating the deployment of a token bridge for **[Custom Fee Token](/launch-arbitrum-chain/concepts/custom-gas-token-sdk.mdx)** on Arbitrum chains begins with ensuring the `TokenBridgeCreator` contract is granted sufficient approvals of the native token. To facilitate this process, the Arbitrum chain (Orbit) SDK provides two APIs:
 
 1. **`createTokenBridgeEnoughCustomFeeTokenAllowance`**: This method verifies that the deployer's address has enough allowance to pay for the fees associated with the token bridge deployment.
 2. **`createTokenBridgePrepareCustomFeeTokenApprovalTransactionRequest`**: This function assists in generating the raw transaction required to approve the native token for the `TokenBridgeCreator` contract.
@@ -91,11 +91,11 @@ Please note that after generating the raw transaction, the deployer must still s
 
 ### 2. Token bridge contract deployment
 
-Deploying token bridge contracts is the first step in creating a bridge between the parent and the Orbit chain.
+Deploying token bridge contracts is the first step in creating a bridge between the parent and the Arbitrum chain.
 
-The deployment process is the same as Orbit chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets).
+The deployment process is the same as Arbitrum chain contracts', where a primary contract facilitates the deployment of core contracts. The token bridge contracts are deployed on the parent and child chains by `TokenBridgeCreator`. `TokenBridgeCreator` does it in a single transaction using the [ Retryable Tickets protocol ](/how-arbitrum-works/10-l1-to-l2-messaging.mdx#retryable-tickets).
 
-Orbit SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
+Arbitrum chain (Orbit) SDK provides an API that automates the deployment by interacting with the `TokenBridgeCreator` contract. The API is `createTokenBridgePrepareTransactionRequest`, which processes the necessary inputs and generates a transaction request tailored for token bridge deployment.
 
 Example:
 
@@ -115,10 +115,10 @@ Here are the parameters used in the above example:
 
 | Parameter                 | Description                                       |
 | :------------------------ | :------------------------------------------------ |
-| `rollupContractAddress`   | Orbit chain's Rollup contract address.            |
+| `rollupContractAddress`   | Arbitrum chain (Orbit) chain's Rollup contract address.            |
 | `rollupOwnerAddress`      | Rollup owner's address.                           |
 | `parentChainPublicClient` | Parent chain's public client, as defined by Viem. |
-| `orbitChainPublicClient`  | Orbit chain's public client, as defined by Viem.  |
+| `orbitChainPublicClient`  | Arbitrum chain (Orbit) chain's public client, as defined by Viem.  |
 
 For more insights into these variables and their usage, consider exploring this [token bridge deployment example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts).
 
@@ -128,7 +128,7 @@ Following the creation of the raw transaction, the next steps involve signing it
 
 After sending the deployment transaction, you will need to retrieve the transaction receipt and verify the successful deployment of the contracts on both the parent and child chains.
 
-Our Orbit SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient.
+Our Arbitrum chain (Orbit) SDK includes a dedicated API for this purpose, named `createTokenBridgePrepareTransactionReceipt`, which simplifies the process of obtaining the deployment transaction's recipient.
 
 Example:
 
@@ -174,17 +174,17 @@ const tokenBridgeContracts = await txReceipt.getTokenBridgeContracts({
 
 ### 5. Setting up the `WETH` gateway
 
-The last step in spinning up the token bridge for an `ETH`- based Orbit chain is setting up the `WETH` Gateway.
+The last step in spinning up the token bridge for an `ETH`- based Arbitrum chain is setting up the `WETH` Gateway.
 
 :::note
 
-That step only applies to `ETH`-based Orbit chains, not Custom fee token orbit chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Orbit chain.
+That step only applies to `ETH`-based Arbitrum chains, not Custom fee token Arbitrum chains. Our canonical bridge design has a separate custom gateway for `WETH` to bridge it in and out of the Arbitrum chain.
 
 You can find more info about `WETH` gateways in our ["other gateways flavors" documentation](/build-decentralized-apps/token-bridging/03-token-bridge-erc20.mdx#other-flavors-of-gateways).
 
 :::
 
-So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH` gateway on both parent and child chains. To handle that, we have two APIs on our Orbit SDK:
+So, after the token bridge has been deployed and you have secured a successful deployment on both parent and child chains, it's time to set the `WETH` gateway on both parent and child chains. To handle that, we have two APIs on our Arbitrum chain (Orbit) SDK:
 
 #### 1. `createTokenBridgePrepareSetWethGatewayTransactionRequest`:
 
@@ -206,7 +206,7 @@ const setWethGatewayTxRequest = await createTokenBridgePrepareSetWethGatewayTran
 });
 ```
 
-In this example, `rollupContractAddress` is the address of Orbit chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and orbit chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit, thus securing successful retryable tickets.
+In this example, `rollupContractAddress` is the address of Arbitrum chain's Rollup contract, and `rollupOwnerAddress` is the address of the Rollup owner. **parentChainPublicClient** and **orbitChainPublicClient** are the public clients of the parent and Arbitrum chains. This API also has optional fields to override the Retryable ticket setups. In this example, **percentIncrease** is the buffer to increase the gas limit, thus securing successful retryable tickets.
 
 After creating the raw transaction, you need to use Viem to sign it and broadcast it to the network.
 
@@ -231,4 +231,4 @@ if (orbitChainSetWethGatewayRetryableReceipt[0].status !== 'success') {
 console.log(`Retryables executed successfully`);
 ```
 
-In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent, setting the `WETH` gateway on your Orbit chain.
+In this example **`setWethGatewayTxHash`** is the hash of the transaction you sent, setting the `WETH` gateway on your Arbitrum chain.

@@ -98,9 +98,9 @@ Furthermore, the following logs will indicate that all components are working as
 - The log line `validation succeeded` shows that the node is validating chain blocks successfully
 - The log line `found correct assertion` shows that the node is finding assertions on the parent chain successfully
 
-## Run a validator for an Orbit chain
+## Run a validator for an Arbitrum chain
 
-Validation for Orbit chains works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/run-arbitrum-node/03-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by using `--chain.info-json`.
+Validation for Arbitrum chains (Orbit) works the same way as for DAO-governed Arbitrum chains. However, as specified in [How to run a node](/run-arbitrum-node/03-run-full-node.mdx#required-parameters), you need to include the information of the chain when configuring your node by using `--chain.info-json`.
 
 ```shell
 --chain.info-json=<Orbit chain's info>
@@ -136,7 +136,7 @@ If you prefer not to include your password in the command line, you can use envi
 
 ::::
 
-### How to add new validators to the allowlist (Orbit chains)
+### How to add new validators to the allowlist (Arbitrum chains)
 
 On permissioned validation setups, the set of validators that can act on a given chain is limited to the ones added to the allowlist of validators in the Rollup contract.
 

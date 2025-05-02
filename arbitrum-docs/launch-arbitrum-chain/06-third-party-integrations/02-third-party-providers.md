@@ -1,23 +1,23 @@
 ---
-title: 'Third-party Orbit infrastructure providers'
-description: 'A high-level overview of third-party Orbit chain infrastructure providers for production-grade chains.'
+title: 'Third-party Arbitrum chain infrastructure providers'
+description: 'A high-level overview of third-party Arbitrum chain infrastructure providers for production-grade chains.'
 author: leartulaj
 sme: leartulaj
-user_story: As an Orbit chain deployer, I want to know what third-party infrastructure options are available that will help me deploy and maintain a production-grade Orbit chain.
+user_story: As an Arbitrum chain deployer, I want to know what third-party infrastructure options are available that will help me deploy and maintain a production-grade Arbitrum chain.
 content_type: overview
 ---
 
-This document provides an overview of third-party Orbit chain infrastructure providers that support production-grade Orbit chain deployments.
+This document provides an overview of third-party Arbitrum chain infrastructure providers that support production-grade Arbitrum chain deployments.
 
 :::note
 
-This list is not exhaustive, and will be continuously updated as the Orbit ecosystem evolves.
+This list is not exhaustive, and will be continuously updated as the Arbitrum ecosystem evolves.
 
 :::
 
 ## Rollup-as-a-Service (RaaS) providers
 
-For most production use-cases, we encourage Orbit chain operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Orbit chain deployments:
+For most production use-cases, we encourage Arbitrum chain (Orbit) operators to work with one of the following RaaS (Rollup as a Service) providers. These providers manage the infrastructure required to maintain high-performance, secure Arbitrum chain deployments:
 
 - [QuickNode](https://www.quicknode.com/rollup?utm_source=arb-docs)
 - [Caldera](https://www.caldera.xyz/)
@@ -30,20 +30,20 @@ For most production use-cases, we encourage Orbit chain operators to work with o
 
 ## Chain explorers
 
-Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Orbit chain. The following explorers support Orbit chains, and can be used to monitor and analyze your chain's activity:
+Chain explorers let you view transactions, blocks, addresses, and network activity associated with your Arbitrum chain. The following explorers support Arbitrum chains (Orbit), and can be used to monitor and analyze your chain's activity:
 
 - [Blockscout](https://www.blockscout.com/)
 - [Socialscan](https://socialscan.io/)
 - [Lore](https://www.lorescan.com/)
 - [Routescan](https://routescan.io/)
 
-Additionally, Orbit chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block includes a given transaction.
+Additionally, Arbitrum chains leveraging blobs for data availability may use tools like [Blobscan](https://blobscan.com/) to see which blob/block includes a given transaction.
 
 ## Bridges
 
-You can easily launch an Orbit chain with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Orbit chain settles transactions.
+You can easily launch an Arbitrum chain (Orbit) with a canonical token bridge, which allows transfers to and from the chain via <a data-quicklook-from="arbitrum-one">Arbitrum One</a>, <a data-quicklook-from="arbitrum-nova">Nova</a>, or the parent chain to which your Arbitrum chain settles transactions.
 
-For applications that require the ability to transfer assets to chains outside of the Orbit ecosystem or in an expedited manner (without waiting for complete finality), the following third-party bridging providers can be used:
+For applications that require the ability to transfer assets to chains outside of the Arbitrum ecosystem or in an expedited manner (without waiting for complete finality), the following third-party bridging providers can be used:
 
 - [LayerZero](https://layerzero.network/)
 - [Connext](https://www.connext.network/)
@@ -67,7 +67,7 @@ AnyTrust protocol offers native support data availability. If you are turning on
 
 ## Indexers
 
-Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Orbit chains:
+Indexers provide a convenient way to retrieve historic or application-specific data without having to interface with your chain through an RPC endpoint. The following third-party providers offer indexing services that can be used with Arbitrum chains (Orbit):
 
 - [Alchemy](https://www.alchemy.com/)
 - [Chainstack](https://chainstack.com/)
@@ -80,7 +80,7 @@ Indexers provide a convenient way to retrieve historic or application-specific d
 
 ## Oracles
 
-The following Oracle providers can be used to integrate offchain data with your Orbit chain's smart contracts:
+The following Oracle providers can be used to integrate offchain data with your Arbitrum chain's (Orbit) smart contracts:
 
 - [Chainlink](https://chain.link/)
 - [Chronicle](https://chroniclelabs.org/)
@@ -92,7 +92,7 @@ The following Oracle providers can be used to integrate offchain data with your 
 
 ## RPC endpoints
 
-RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Orbit chains:
+RPC endpoints are the primary interface through which users and developers interact with any chain, whether it be for transaction submission, reading state, or indexing historical data. The following third-party providers offer RPC endpoint services compatible with Arbitrum chains (Orbit:
 
 - [Alchemy](https://www.alchemy.com/)
 - [Ankr](https://www.ankr.com/)
@@ -102,7 +102,7 @@ RPC endpoints are the primary interface through which users and developers inter
 
 ## Alternative data availability
 
-One way to reduce transaction fees for Orbit chains is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Orbit AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
+One way to reduce transaction fees for Arbitrum chains (Orbit) is to configure a Data Availability (DA) solution that stores chain data offchain. Although the AnyTrust protocol offers native support for this functionality (and is configurable by default on Arbitrum AnyTrust chains), the following third-party providers give you another way to store data offchain. Note that using these services will limit your chain's ability to leverage AnyTrust protocol improvements as they relate to transaction fee and DA configurability:
 
 - [Celestia](https://celestia.org/)
 - [EigenDA](https://www.eigenlayer.xyz/)

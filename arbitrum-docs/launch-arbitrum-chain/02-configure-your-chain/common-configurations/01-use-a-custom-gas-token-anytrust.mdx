@@ -1,17 +1,17 @@
 ---
-title: 'How to configure a custom gas token for your AnyTrust Orbit chain'
-description: 'Learn how to deploy your AnyTrust Orbit chain with a custom gas token'
+title: 'How to configure a custom gas token for your AnyTrust Arbitrum chain'
+description: 'Learn how to deploy your AnyTrust Arbitrum chain with a custom gas token'
 author: jose-franco
 sme: jose-franco
 sidebar_position: 3
 content_type: how-to
 ---
 
-When deploying your AnyTrust Orbit chain you have the option of using a custom gas token, different than `ETH`, that is natively used for gas payments on the network. When choosing this option, there are certain requirements that the token needs to comply with, as well as certain chain configuration that needs to be adjusted. This guide covers this information.
+When deploying your AnyTrust Arbitrum chain you have the option of using a custom gas token, different than `ETH`, that is natively used for gas payments on the network. When choosing this option, there are certain requirements that the token needs to comply with, as well as certain chain configuration that needs to be adjusted. This guide covers this information.
 
 ## Requirements of the custom gas token
 
-The main requirements for a custom gas token is that it must be an `ERC-20` token, and it must be natively deployed on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Orbit chain.
+The main requirements for a custom gas token is that it must be an `ERC-20` token, and it must be natively deployed on the parent chain. During chain deployment, the gas token is "natively bridged" and then properly configured as the native gas token on the Arbitrum chain.
 
 There are other important considerations to keep in mind when deciding to use a custom gas token. Restrictions on the `ERC-20` token include:
 
@@ -27,9 +27,9 @@ While certain restrictions are in place today (see above), some of them may be r
 
 :::
 
-## Configuration of the Orbit chain when using a custom gas token
+## Configuration of the Arbitrum chain when using a custom gas token
 
-There are several parameter changes required to ensure proper functioning of an Orbit chain configured to use a custom gas token.
+There are several parameter changes required to ensure proper functioning of an Arbitrum chain configured to use a custom gas token.
 
 After deploying the chain, you must reset the base fees of the parent chain by calling the following functions in the [ArbOwner](/build-decentralized-apps/precompiles/02-reference.mdx#arbowner) precompile:
 
@@ -38,7 +38,7 @@ After deploying the chain, you must reset the base fees of the parent chain by c
 
 :::note
 
-These methods use L1 to refer to the parent chain of the Orbit chain.
+These methods use L1 to refer to the parent chain of the Arbitrum chain.
 
 :::
 

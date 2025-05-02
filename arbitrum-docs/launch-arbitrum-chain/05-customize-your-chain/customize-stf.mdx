@@ -1,19 +1,19 @@
 ---
-title: "How to customize your Orbit chain's behavior"
-description: "Learn how to customize your Orbit chain's behavior (known as the State Transition Function or STF)"
+title: "How to customize your Arbitrum chain's behavior"
+description: "Learn how to customize your Arbitrum chain's behavior (known as the State Transition Function or STF)"
 author: plasmapower
 sme: jasonwan
 sidebar_position: 4
 content_type: how-to
 ---
 
-import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
+import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize-caution-banner-partial.md';
 
 <CustomizeCautionBannerPartial />
 
 ## Introduction
 
-Before customizing your Orbit chain, it's important to understand what the State Transition Function (aka the STF) is.
+Before customizing your Arbitrum chain, it's important to understand what the State Transition Function (aka the STF) is.
 The STF defines how new blocks are produced from input messages (i.e., transactions).
 
 This guide is only necessary for changes that modify the STF.
@@ -117,7 +117,7 @@ With that, you have now two ways of running your node.
 
 **1. Using the docker-compose file**
 
-This is the recommended way if you're running your Orbit chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container:
+This is the recommended way if you're running your Arbitrum chain (Orbit) locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container:
 
 ```
 ...
@@ -139,7 +139,7 @@ docker run --rm -it -v /path/to/your/node/dir:/home/user/.arbitrum -p 0.0.0.0:84
 
 :::info
 
-The instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Orbit node. See [Optional parameters (Orbit)](/run-arbitrum-node/03-run-full-node.mdx#optional-parameters) for Orbit-specific CLI flags.
+The instructions provided in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx) **will not** work with your Arbitrum chain node. See [Optional parameters (Arbitrum chain)](/run-arbitrum-node/03-run-full-node.mdx#optional-parameters) for Arbitrum chain (Orbit)-specific CLI flags.
 
 :::
 
@@ -187,7 +187,7 @@ After that, you'll have, again, two ways of running your node.
 
 **1. Using the docker-compose file**
 
-As mentioned before, this is the recommended way if you're running your Orbit chain locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
+As mentioned before, this is the recommended way if you're running your Arbitrum chain (Orbit) locally through the provided [docker-compose file](https://github.com/OffchainLabs/orbit-setup-script/blob/main/docker-compose.yaml#L39). In `docker-compose.yml`, modify the Docker image used for the Nitro container. Notice that we'll now use the `custom-nitro-node-dev` you just created:
 
 ```
 ...
