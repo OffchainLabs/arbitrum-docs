@@ -113,12 +113,12 @@ const txRequest = await createTokenBridgePrepareTransactionRequest({
 
 Here are the parameters used in the above example:
 
-| Parameter                 | Description                                       |
-| :------------------------ | :------------------------------------------------ |
-| `rollupContractAddress`   | Arbitrum chain (Orbit) chain's Rollup contract address.            |
-| `rollupOwnerAddress`      | Rollup owner's address.                           |
-| `parentChainPublicClient` | Parent chain's public client, as defined by Viem. |
-| `orbitChainPublicClient`  | Arbitrum chain (Orbit) chain's public client, as defined by Viem.  |
+| Parameter                 | Description                                                       |
+| :------------------------ | :---------------------------------------------------------------- |
+| `rollupContractAddress`   | Arbitrum chain (Orbit) chain's Rollup contract address.           |
+| `rollupOwnerAddress`      | Rollup owner's address.                                           |
+| `parentChainPublicClient` | Parent chain's public client, as defined by Viem.                 |
+| `orbitChainPublicClient`  | Arbitrum chain (Orbit) chain's public client, as defined by Viem. |
 
 For more insights into these variables and their usage, consider exploring this [token bridge deployment example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/blob/main/examples/create-token-bridge-eth/index.ts).
 
