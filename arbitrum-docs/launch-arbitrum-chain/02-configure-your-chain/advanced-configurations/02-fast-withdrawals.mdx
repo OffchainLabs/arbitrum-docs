@@ -1,16 +1,16 @@
 ---
-title: 'Enable fast withdrawals on your Orbit chain'
+title: 'Enable fast withdrawals on your Arbitrum chain'
 sidebar_label: 'Enable fast withdrawals'
 description: 'Learn to deploy Fast Withdrawals'
 author: coopermidroni, jose-franco
 sme: jose-franco
-user_story: As a current or prospective Orbit chain owner, I need to understand how to integrate with the Fast Withdrawal feature.
+user_story: As a current or prospective Arbitrum chain owner, I need to understand how to integrate with the Fast Withdrawal feature.
 content_type: get-started
 ---
 
 Optimistic Rollups must sustain a multi-day challenge period to allow time for fraud proofs. This delays finality for users and dApps, resulting in multi-day withdrawal times and cross-chain communication delays.
 
-Fast withdrawals is a new configuration allowing Orbit chains to achieve fast finality. When an Orbit chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
+Fast withdrawals is a new configuration allowing Arbitrum chains to achieve fast finality. When an Arbitrum chain operates on Fast Withdrawals, its transactions will be processed by a committee of validators. Transactions reaching a unanimous vote across the committee will be immediately confirmed.
 
 This will allow:
 
@@ -20,7 +20,7 @@ This will allow:
 
 ## Recommended configuration
 
-While any Orbit chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
+While any Arbitrum chain can adopt Fast Withdrawals, we only _recommend_ that fast withdrawals be adopted by AnyTrust chains with a minimum validator and DAC member requirement. We explain both these recommendations below:
 
 ### Fast withdrawals for AnyTrust chains
 
@@ -28,7 +28,7 @@ As AnyTrust chains are an optimum (an optimistic rollup using a separate data av
 
 The optimal setup for an AnyTrust chain is to have all DAC members _also_ run validators as part of the fast withdrawals committee. This will leverage the existing trust assumption placed on the DAC operators such that **enabling fast withdrawals does not add any new trusted parties.**
 
-It is possible for an Orbit Rollup to adopt fast withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
+It is possible for an Arbitrum chain Rollup to adopt fast withdrawals. However, it would technically no longer be a Rollup as the minimum trust assumption will shift to the trust placed in the Fast Confirmations committee.
 
 ### Minimum validator and DAC nodes
 
@@ -55,7 +55,7 @@ For an Arbitrum One-based Layer-3, there are three tiers of finality to consider
 2. Safe finality from batch inclusion after Arbitrum One's assertion is included in an Ethereum block.
 3. Hard finality after the Ethereum block containing Arbitrum One's batch is finalized on Ethereum (~15 minutes)
 
-Layer-3 Orbit chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Orbit chain to configure fast withdrawals down to 15 seconds.
+Layer-3 Arbitrum chains can make their own determination about what level of finality to accept. We consider it safe to rely on soft finality, which would practically enable an Arbitrum chain to configure fast withdrawals down to 15 seconds.
 
 ## Adoption instructions (example script)
 
@@ -67,9 +67,9 @@ To enable the fast withdrawals feature, there are three actions to take:
 
 ### Upgrading to nitro-contracts v2.1.0
 
-As mentioned above, the fast withdrawals feature is available for chains that are using nitro-contracts v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [orbit versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path).
+As mentioned above, the fast withdrawals feature is available for chains that are using nitro-contracts v2.1.0 or above, especially the `RollupAdminLogic` and the `RollupUserLogic` contracts. You can check what nitro-contracts version your chain is using by running the [Arbitrum chain (Orbit) versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path).
 
-If your chain is not running with nitro-contracts v2.1.0 or above, you’ll need to perform an upgrade to enable this version. The [orbit versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) will provide the upgrade paths needed to reach v2.1.0, but basically:
+If your chain is not running with nitro-contracts v2.1.0 or above, you’ll need to perform an upgrade to enable this version. The [Arbitrum chain (Orbit) versioner script](https://github.com/OffchainLabs/orbit-actions/blob/main/README.md#check-version-and-upgrade-path) will provide the upgrade paths needed to reach v2.1.0, but basically:
 
 - If the chain is running nitro-contracts v1.1.x, you need to [upgrade first to v1.2.1](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/1.2.1/README.md).
 - If the chain is running nitro-contracts v1.2.1, you need to [upgrade to v2.1.0](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/contract-upgrades/2.1.0/README.md).
@@ -82,16 +82,16 @@ Suppose you’re upgrading your nitro-contracts from v1.2.1 to v2.1.0 and using 
 
 Once the chain runs nitro-contracts v2.1.0 or above, the new fast withdrawal parameters will be available in the `RollupAdminLogic` and the `RollupUserLogic` contracts.
 
-Both the Orbit SDK and the Orbit actions repository provide configurable scripts to activate and configure fast withdrawals on an AnyTrust chain. You can use either of those to activate the feature. Both scripts perform the same actions.
+Both the Arbitrum (Orbit) chain SDK and the Arbitrum (Orbit) chain actions repository provide configurable scripts to activate and configure fast withdrawals on an AnyTrust chain. You can use either of those to activate the feature. Both scripts perform the same actions.
 
 <aside>
   ℹ️ Even though two scripts are available to activate Fast Withdrawals, you only need to execute
   one of them. Both scripts perform the same actions.
 </aside>
 
-**Orbit SDK script**
+**Arbitrum chain (Orbit) SDK script**
 
-The Orbit SDK provides an [example script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fast-withdrawal) to set up a fast withdrawal committee by performing the following operations:
+The Arbitrum chain (Orbit) SDK provides an [example script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-fast-withdrawal) to set up a fast withdrawal committee by performing the following operations:
 
 1. Create a new n/n Safe wallet with the specified validators as signers
 2. Add the specified validators to the Rollup validators allowlist
@@ -129,9 +129,9 @@ cp .env.example .env
 yarn run dev
 ```
 
-**Orbit actions script**
+**Arbitrum chain (Orbit) actions script**
 
-The Orbit actions repository also provides an [action script](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md) to activate fast withdrawals by performing the following operations:
+The Arbitrum chain (Orbit) actions repository also provides an [action script](https://github.com/OffchainLabs/orbit-actions/blob/main/scripts/foundry/fast-confirm/README.md) to activate fast withdrawals by performing the following operations:
 
 1. Make sure the "Validate fast confirmation" has not been enabled yet
 2. Create a Safe contract for the fast confirmation committee

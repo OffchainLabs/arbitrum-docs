@@ -4,15 +4,15 @@ sidebar_label: 'Manage state growth'
 description: 'Learn about state growth and corresponding issues'
 author: anegg0
 sme: anegg0
-target_audience: 'Developers deploying and maintaining Orbit chains.'
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
 sidebar_position: 6
-user_story: As a current or prospective Orbit chain deployer, I need to understand what state growth is & the issues it can create.
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand what state growth is & the issues it can create.
 content_type: how-to
 ---
 
-As the Orbit ecosystem grows, more and more teams are choosing to build on the Arbitrum tech stack. Orbit offers a feature-rich and scalable rollup stack that allows teams to focus on their ecosystem growth and build great products. As a result, many Orbit chains are seeing usage and throughput increase rapidly, often with sustained transaction load at the chain’s throughput limit for months on end.
+As the Arbitrum ecosystem grows, more and more teams are choosing to build on the Arbitrum tech stack. Arbitrum chains offer a feature-rich and scalable rollup stack that allows teams to focus on their ecosystem growth and build great products. As a result, many Arbitrum chains are seeing usage and throughput increase rapidly, often with sustained transaction load at the chain’s throughput limit for months on end.
 
-This page aims to educate Orbit chain operators and owners on safely operating a high throughput chain. Amongst all the factors, the primary consideration is **state growth rate** and **state size**. We’ll discuss how increased state size affects the performance of different components in the Orbit stack and how certain metrics can be used to indicate a need to upgrade various infrastructure components.
+This page aims to educate Arbitrum chain operators and owners on safely operating a high throughput chain. Amongst all the factors, the primary consideration is **state growth rate** and **state size**. We’ll discuss how increased state size affects the performance of different components in the Arbitrum chain (Orbit) stack and how certain metrics can be used to indicate a need to upgrade various infrastructure components.
 
 ## Understanding state size and state growth rate
 
@@ -20,13 +20,13 @@ When we say ‘state size’, we mean the total amount of data recorded on the b
 
 The state growth rate is simply the rate at which state size increases. A high state growth rate creates higher requirements for nodes to process state transitions and perform operations needed to keep up with the tip of the chain.
 
-The critical Nitro stack parameter affecting state growth and state growth rate is the **gas speed limit**. Offchain Labs has set the gas speed limit to a default (7,000,000 gas/s), ensuring a safe, sustained operating limit for Orbit chains. You can read more about the nuances of the gas speed limit [here](/how-arbitrum-works/09-gas-fees.mdx#the-speed-limit).
+The critical Nitro stack parameter affecting state growth and state growth rate is the **gas speed limit**. Offchain Labs has set the gas speed limit to a default (7,000,000 gas/s), ensuring a safe, sustained operating limit for Arbitrum chains. You can read more about the nuances of the gas speed limit [here](/how-arbitrum-works/09-gas-fees.mdx#the-speed-limit).
 
-The default gas speed limit is designed to ensure Orbit chains operate performantly and sustainably.
+The default gas speed limit is designed to ensure Arbitrum chains operate performantly and sustainably.
 
 ## Behaviour at ultra-high throughput
 
-At high state growth rates, especially in cases where a chain is pushing past prescribed limits, an Orbit chain may display certain behaviors that either indicate or result from the chain load being higher than its infrastructure can support. The following is a list of such behaviors.
+At high state growth rates, especially in cases where a chain is pushing past prescribed limits, an Arbitrum chain may display certain behaviors that either indicate or result from the chain load being higher than its infrastructure can support. The following is a list of such behaviors.
 
 ### 1. Read Operation Bottleneck at High Disk Latency
 

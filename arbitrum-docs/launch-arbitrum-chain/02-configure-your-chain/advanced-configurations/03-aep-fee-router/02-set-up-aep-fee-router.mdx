@@ -4,13 +4,13 @@ sidebar_label: 'Set up an AEP fee router'
 description: 'Learn how to setup an AEP fee router.'
 author: Midroni, TucksonDev
 sme: Midroni, TucksonDev
-user_story: As a current Orbit chain owner, I need to learn how to set up an AEP fee router.
+user_story: As a current Arbitrum chain owner, I need to learn how to set up an AEP fee router.
 content_type: how-to
 ---
 
 ## Quick start
 
-You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Orbit SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
+You can adopt the AEP Fee Router by using the [AEP Router deployment scripts](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) provided in the [Arbitrum chain (Orbit) SDK](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main)
 
 ### Canonical contracts
 
@@ -38,21 +38,21 @@ The `ChildToParentRouter` is configured to withdraw a single token (immutable an
 
 ## Deploying your AEP fee router contracts
 
-An Orbit chain is responsible for deploying all `ChildToParentRouters` necessary for their AEP funds to arrive at the address controlled by the Arbitrum Foundation on Ethereum.
+An Arbitrum chain is responsible for deploying all `ChildToParentRouters` necessary for their AEP funds to arrive at the address controlled by the Arbitrum Foundation on Ethereum.
 
 This includes:
 
-- Deploying a `ChildToParentRouter` on their Orbit chain configured for their gas token and configured to send funds to either:
+- Deploying a `ChildToParentRouter` on their Arbitrum chain configured for their gas token and configured to send funds to either:
   - An address controlled by the Arbitrum Foundation on Ethereum (assuming the network is a Layer-2)
   - Another `ChildToParentRouter` configured to the same gas token and configured to send funds to a successive parent chain (this is the case for a Layer-3 network or higher)
 - Deploying a `RewardDistributor` contract configured to forward 10% of fees to the `ChildToParentRouter` and 90% to the chain owner’s preferred reward-receiving address.
 
-In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Orbit chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
+In the event that a `ChildToParentRouter` does not connect to the address controlled by the Arbitrum Foundation on Ethereum, an Arbitrum chain must deploy successive `ChildToParentRouter` contracts until a connection to such address is established. Additional `ChildToParentRouter` contracts configured to route ETH have been deployed in certain networks and can be leveraged by chains created on top of these networks. You can see which networks have a router deployed [here](#canonical-contracts).
 
-Optionally, an Orbit chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-orbit-chain/02-configure-your-chain/advanced-configurations/03-aep-fee-router/03-calculate-aep-fees.mdx#assertion-costs) section:
+Optionally, an Arbitrum chain can decide to deduct assertion costs by following the instructions in the [Deducting Assertion Costs](/launch-arbitrum-chain/02-configure-your-chain/advanced-configurations/03-aep-fee-router/03-calculate-aep-fees.mdx#assertion-costs) section:
 
 <aside>
-🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Orbit chains with L2-based tokens to distribute fees using the routing system.
+🚨 Layer-3 chains with custom gas tokens with L2-based token contracts cannot send their custom gas tokens to Ethereum. A future version of the AEP Fee Router may allow Arbitrum chains with L2-based tokens to distribute fees using the routing system.
 
 In the absence of these, please send `ETH` through the AEP Fee Router to fulfill your AEP license obligations.
 
@@ -60,15 +60,15 @@ In the absence of these, please send `ETH` through the AEP Fee Router to fulfill
 
 Here are a few flows to help visualize the deployment:
 
-2. Scenario 1: You are an L2 Orbit Chain that settles on Ethereum.
+2. Scenario 1: You are an L2 Arbitrum Chain that settles on Ethereum.
 
-3. Scenario 2: You are an L3 Orbit Chain that settles to another L2. The custom gas token you are using exists on L1.
+3. Scenario 2: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token you are using exists on L1.
 
-4. Scenario 3: You are an L3 Orbit Chain that settles to another L2. The custom gas token doesn't exist on L1.
+4. Scenario 3: You are an L3 Arbitrum Chain that settles to another L2. The custom gas token doesn't exist on L1.
 
 ## Deployment scripts
 
-The Orbit SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
+The Arbitrum chain (Orbit) SDK provides a [configurable script](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/setup-aep-fee-router) that allows a chain operator to deploy quickly and set up the AEP fee router contracts.
 
 ::::info Note for L3 chains with custom gas tokens
 
@@ -81,7 +81,7 @@ L3 chains (or further layers) might need to specify a different target address o
 The script performs the following operations:
 
 1. Obtain the rollup and inbox contract of the chain. These are needed to execute the next steps.
-2. Obtain the current fee collectors of the chain: Orbit base fee collector, Orbit surplus fee collector, and Parent chain surplus fee collector.
+2. Obtain the current fee collectors of the chain: Arbitrum chain (Orbit) base fee collector, Arbitrum chain (Orbit) surplus fee collector, and Parent chain surplus fee collector.
 3. Deploy the `ChildToParentRouter` contract, configured to send the amounts received to the appropriate target address on the parent chain.
 4. Deploy a `RewardDistributor` contract for each different fee collector account, configured to distribute 90% of the amounts received to the current fee collector, and 10% to the ChildToParentRouter contract deployed in the previous step.
 5. Set each of the fee collectors to the `RewardDistributor` contracts
@@ -96,8 +96,8 @@ To configure the script, you need to specify the following [environment variable
 
 - `ROLLUP_ADDRESS`: address of the rollup contract
 - `CHAIN_OWNER_PRIVATE_KEY`: private key of the account with executor privileges in the `UpgradeExecutor` admin contract for the chain
-- `ORBIT_CHAIN_ID`: chain id of the Orbit chain
-- `ORBIT_CHAIN_RPC`: RPC of the Orbit chain
+- `ORBIT_CHAIN_ID`: chain id of the Arbitrum chain (Orbit)
+- `ORBIT_CHAIN_RPC`: RPC of the Arbitrum chain (Orbit)
 - `PARENT_CHAIN_ID`: chain id of the parent chain, which shouldn't be an Arbitrum chain
 - `PARENT_CHAIN_TARGET_ADDRESS`: address on the parent chain where 10% of the revenue will be sent to. You can find the potential target addresses in this document's [canonical contracts](#canonical-contracts) section. If the parent chain is not on that list, or if your chain uses a gas token different than the one the router is configured for, contact the Arbitrum Foundation to obtain a specific target address for your chain.
 
@@ -123,7 +123,7 @@ yarn dev
 
 ## Triggering movement of funds
 
-Any `ChildToParentRouter` contract deployed by an Orbit chain must be periodically called to move funds.
+Any `ChildToParentRouter` contract deployed by an Arbitrum chain must be periodically called to move funds.
 The following commands should be set up to execute at the same interval as the router's minimum distribution interval (`minDistributionIntervalSeconds`).
 
 The [router contracts repository](https://github.com/OffchainLabs/fund-distribution-contracts) contains scripts for calling the routers.

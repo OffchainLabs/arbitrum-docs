@@ -1,15 +1,15 @@
 ---
-title: "How to configure your Orbit chain's node using the Orbit SDK"
+title: "How to configure your Arbitrum chain's node using the Arbitrum chain (Orbit) SDK"
 sidebar_label: "Configure your chain's node"
-description: 'How to configure a node using the Orbit SDK'
+description: 'How to configure a node using the Arbitrum chain (Orbit) SDK'
 author: GreatSoshiant
 sme: GreatSoshiant
-target_audience: 'Developers deploying and maintaining Orbit chains.'
-user_story: As a current or prospective Orbit chain deployer, I need to understand how to configure a node using the Orbit SDK.
+target_audience: 'Developers deploying and maintaining Arbitrum chains.'
+user_story: As a current or prospective Arbitrum chain deployer, I need to understand how to configure a node using the Arbitrum chain (Orbit) SDK.
 content_type: how-to
 ---
 
-This guide will walk you through configuring an Orbit node supporting a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain.
+This guide will walk you through configuring an Arbitrum chain node supporting a <a data-quicklook-from="arbitrum-rollup-chain">Rollup</a> or <a data-quicklook-from="arbitrum-anytrust-chain">AnyTrust</a> chain.
 
 :::caution UNDER CONSTRUCTION
 
@@ -19,15 +19,15 @@ This document is under construction and may change significantly as we incorpora
 
 :::info
 
-See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/prepare-node-config) in the Orbit SDK repository for additional guidance.
+See the ["prepare-node-config" example](https://github.com/OffchainLabs/arbitrum-orbit-sdk/tree/main/examples/prepare-node-config) in the Arbitrum chain (Orbit) SDK repository for additional guidance.
 
 :::
 
-- Prerequisite: having deployed an Orbit chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md) section of the rollup deployment guide.
+- Prerequisite: having deployed an Arbitrum chain. If you haven't done so yet, you can find detailed instructions in the [Rollup Deployment Parameters](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md) section of the rollup deployment guide.
 
-Once you have successfully deployed and initialized the Orbit core contracts, the next step is configuring and running your Orbit chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
+Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is configuring and running your Arbitrum chain using a Node Config `JSON` file describing all the configurations for the Arbitrum Node, including settings for the Batch-poster, Validator, and the chain itself.
 
-Example for a Rollup Orbit Chain:
+Example for a Rollup Arbitrum Chain:
 
 ```js
 {
@@ -63,9 +63,9 @@ Here are some inputs details from the example above:
 | `http`         | Configuration parameters for the HTTP server.                                 |
 | `node`         | Specific node settings, including sequencer and batch-poster configurations.  |
 
-### Additional configuration for AnyTrust Orbit chains:
+### Additional configuration for AnyTrust Arbitrum chains:
 
-For AnyTrust Orbit chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
+For AnyTrust Arbitrum chains, the Node Config `JSON` has an additional segment under the `node` field. This addition includes settings specific to the AnyTrust model, such as:
 
 - Sequencer's inbox address
 - Parent chain node URL
@@ -98,15 +98,15 @@ Example addition for AnyTrust Node Config:
 
 The Node Config file includes three fields types:
 
-1. **Information from the Orbit deployment chain**: Such as the addresses of the core contracts.
+1. **Information from the Arbitrum deployment chain**: Such as the addresses of the core contracts.
 2. **Parameters configurable by the chain deployer**: These parameters, like `max-block-speed`, can be adjusted to modify your chain's behavior.
 3. **Fields not typically configured**: Like the HTTP section, which usually remains standard.
 
-Let's explore the parameters allowing you to set up a stable, and secure Orbit chain tailored to your project's requirements:
+Let's explore the parameters allowing you to set up a stable, and secure Arbitrum chain tailored to your project's requirements:
 
-### Node config generation with Orbit SDK
+### Node config generation with Arbitrum chain (Orbit) SDK
 
-Generating a Node Config `JSON` file to initiate your Orbit chain is a step in the deployment process. The Orbit SDK simplifies this task with an API named `prepareNodeConfig`. This API takes specific parameters for your Orbit chain and returns a `JSON` file that can be used as the Node Config to initiate the chain.
+Generating a Node Config `JSON` file to initiate your Arbitrum chain is a step in the deployment process. The Arbitrum chain (Orbit) SDK simplifies this task with an API named `prepareNodeConfig`. This API takes specific parameters for your Arbitrum chain and returns a `JSON` file that can be used as the Node Config to initiate the chain.
 
 Here’s an example of using the `prepareNodeConfig` API to generate the node config:
 
@@ -126,12 +126,12 @@ Here are some details about the parameters used in the example above:
 
 | Parameters                | Description                                                                                                                                                                                                                                                     |
 | :------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chainName`               | The name you have chosen for your Orbit chain.                                                                                                                                                                                                                  |
-| `chainConfig`             | Configuration used for [chain deployment](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md), returned from the [createRollupPrepareTransactionReceipt](/launch-orbit-chain/03-deploy-an-orbit-chain/02-deploying-rollup-chain.md) API. |
-| `coreContracts`           | Addresses of your newly deployed Orbit chain's, also returned from the `createRollupPrepareTransactionReceipt` API.                                                                                                                                             |
+| `chainName`               | The name you have chosen for your Arbitrum chain.                                                                                                                                                                                                                  |
+| `chainConfig`             | Configuration used for [chain deployment](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md), returned from the [createRollupPrepareTransactionReceipt](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md) API. |
+| `coreContracts`           | Addresses of your newly deployed Arbitrum chain's, also returned from the `createRollupPrepareTransactionReceipt` API.                                                                                                                                             |
 | `batchPosterPrivateKey  ` | Private key of the batch-poster account, used for signing batch-posting transactions and related functions.                                                                                                                                                     |
 | `validatorPrivateKey`     | Private key of the validator(s), used for validating state, posting assertions (`RBlocks`) to the parent chain, and initiating challenges if necessary.                                                                                                         |
-| `parentChainId`           | Chain ID of the parent chain where your Orbit chain is deployed.                                                                                                                                                                                                |
+| `parentChainId`           | Chain ID of the parent chain where your Arbitrum chain is deployed.                                                                                                                                                                                                |
 | `parentChainRpcUrl`       | Parent chain's RPC URL.                                                                                                                                                                                                                                         |
 
 If you don't have the `chainConfig` and `coreContracts` readily available, you can obtain them using the `createRollupPrepareTransaction` and `createRollupPrepareTransactionReceipt` APIs.

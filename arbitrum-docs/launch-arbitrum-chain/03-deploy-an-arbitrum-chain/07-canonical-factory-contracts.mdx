@@ -1,6 +1,6 @@
 ---
 title: 'Canonical factory contracts'
-description: 'Learn how to use the canonical factory contracts for deploying your Orbit chain'
+description: 'Learn how to use the canonical factory contracts for deploying your Arbitrum chain'
 author: jose-franco
 sme: jose-franco
 content_type: how-to
@@ -8,13 +8,13 @@ content_type: how-to
 
 import { AddressExplorerLink as AEL } from '@site/src/components/AddressExplorerLink';
 
-Deploying new Orbit chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Orbit chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
+Deploying new Arbitrum chains is usually done through a `RollupCreator` contract that processes the creation of the needed contracts and sends the initialization messages from the parent to the child chain. Similarly, creating a token bridge for an Arbitrum chain is usually done using a `TokenBridgeCreator` contract that creates the token bridge contracts in both the parent and child chains (this last one via [Parent-to-child messages](/how-arbitrum-works/10-l1-to-l2-messaging.mdx)).
 
 This page describes the benefits of using these canonical factory contracts and lists their addresses in all supported chains.
 
-:::info Use the Orbit SDK
+:::info Use the Arbitrum chain (Orbit) SDK
 
-You can use these contracts to create Orbit chains. However, it is strongly recommended to go through the [Orbit SDK](/launch-orbit-chain/orbit-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
+You can use these contracts to create Arbitrum chains. However, it is strongly recommended to go through the [Arbitrum chain (Orbit) SDK](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) to interact with them. Doing so prevents misconfiguring parameters and using appropriate defaults for most of them.
 
 :::
 
@@ -24,7 +24,7 @@ The main benefits of using the canonical factory contracts are:
 
 - **End-to-end deployment and initialization**: The canonical contracts will create all needed contracts, initialize them, and configure them with the parameters passed. Additionally, they will send the appropriate initialization messages to the chain's Inbox contract so the sequencer can process them upon starting. This process is done atomically in a single transaction, guaranteeing a successful chain or token bridge creation.
 - **Gas efficiency**: The canonical contract design is to be gas efficient. Creating and initializing all contracts for a chain or token bridge is a gas-consuming process, so special care has been taken to fit everything into one transaction.
-- **Updated with the latest features**: Whenever a new version is available for the contracts of an Orbit chain, the canonical factory contracts get updated, so new rollups and token bridges are created using the updated version.
+- **Updated with the latest features**: Whenever a new version is available for the contracts of an Arbitrum chain, the canonical factory contracts get updated, so new rollups and token bridges are created using the updated version.
 
 ## Addresses of the canonical factory contracts
 
@@ -46,7 +46,7 @@ This section describes the process of deploying a new `RollupCreator` and a new 
 
 :::warning The use of non-canonical factory contracts is unsupported
 
-This section describes the process of deploying new factory contracts. This can be useful when creating Orbit chains on a parent chain that doesn't have canonical factory contracts, or when modifying the core or token bridge contracts. However, keep in mind that using factory contracts different than the ones listed above (canonical) is not supported and might lead to unexpected issues.
+This section describes the process of deploying new factory contracts. This can be useful when creating Arbitrum chains on a parent chain that doesn't have canonical factory contracts, or when modifying the core or token bridge contracts. However, keep in mind that using factory contracts different than the ones listed above (canonical) is not supported and might lead to unexpected issues.
 
 :::
 

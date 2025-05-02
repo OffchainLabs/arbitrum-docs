@@ -1,5 +1,5 @@
 ---
-title: 'How to customize ArbOS on your Orbit chain'
+title: 'How to customize ArbOS on your Arbitrum chain'
 description: 'Learn how to customize your ArbOS version'
 author: jasonwan
 sme: jasonwan
@@ -7,7 +7,7 @@ sidebar_position: 7
 content_type: how-to
 ---
 
-import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-banner-partial.md';
+import CustomizeCautionBannerPartial from '../partials/_arbitrum-chain-customize-caution-banner-partial.md';
 
 <CustomizeCautionBannerPartial />
 
@@ -15,7 +15,7 @@ import CustomizeCautionBannerPartial from '../partials/_orbit-customize-caution-
 
 1. When you want to make changes to your Nitro code that affect the State Transition Function, or STF (you may refer to the [Customize STF docs](./customize-stf.mdx#introduction)), and
 
-2. If your desired changes need to be made to a live and operational Orbit chain
+2. If your desired changes need to be made to a live and operational Arbitrum chain
 
 If your changes meet both those two points, then you will need a custom ArbOS upgrade.
 
@@ -146,6 +146,6 @@ Please continue reading [customize stf](./customize-stf.mdx#step-3-run-the-node-
 
 ## Schedule ArbOS upgrade
 
-After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the document [ArbOS upgrade](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md) to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
+After you add ArbOS version control to the Nitro code, you can update ArbOS. You can refer to the document [ArbOS upgrade](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md) to upgrade. It is recommended that teams who opt to version control their custom ArbOS version choose an ArbOS version number that builds on top of the canonical releases shipped by Offchain Labs. As an example, if your team is customizing ArbOS 31, we recommend versioning your ArbOS version as ArbOS 32.
 It should be noted that if you set a higher ArbOS version as the upgrade target, all the features added between the current and target versions will be activated.
 For example, if your current version is ArbOS v18 and you set the target version to v25, all the features between v18 and v25 will be loaded.
