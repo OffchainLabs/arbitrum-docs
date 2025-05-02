@@ -2047,12 +2047,12 @@
     },
     {
       "source": "/(launch-orbit-chain/orbit-node-runners/orbit-node-providers/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-node-runners/arbitrum-chain-node-providers/?)",
+      "destination": "/(launch-arbitrum-chain/ecosystem-support/arbitrum-chain-portal/?)",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/ecosystem-support/orbit-portal/?)",
-      "destination": "/(launch-arbitrum-chain/ecosystem-support/arbitrum-chain-portal/?)",
+      "destination": "/(launch-arbitrum-chain/ecosystem-support/get-listed-arbitrum-chain-platforms/?)",
       "permanent": false
     },
     {
@@ -2062,7 +2062,7 @@
     },
     {
       "source": "/(launch-orbit-chain/ecosystem-support/get-listed-orbit-platforms/?)",
-      "destination": "/(launch-arbitrum-chain/ecosystem-support/get-listed-arbitrum-chain-platforms/?)",
+      "destination": "/(launch-arbitrum-chain/arbitrum-node-runners/arbitrum-chain-node-providers/?)",
       "permanent": false
     },
     {
