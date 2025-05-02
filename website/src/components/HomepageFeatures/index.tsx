@@ -44,11 +44,11 @@ const FeatureList: FeatureItem[] = [
     description: 'Learn about the decentralized organization that governs the One and Nova chains.',
   },
   {
-    title: 'Quickstart: Launch an Orbit chain',
+    title: 'Quickstart: Launch an Arbitrum chain',
     Svg: require('@site/static/img/quickstart.svg').default,
-    href: '/launch-orbit-chain/orbit-quickstart',
+    href: '/launch-arbitrum-chain/arbitrum-chain-quickstart',
     description:
-      'Learn how to launch a local Orbit chain that settles to the public Arbitrum Sepolia testnet.',
+      'Learn how to launch a local Arbitrum chain that settles to the public Arbitrum Sepolia testnet.',
   },
 ];
 

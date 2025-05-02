@@ -44,13 +44,13 @@ The Arbitrum chain (Orbit) SDK includes an example script for creating a custom 
 Here are the steps involved in the deployment process:
 
 1. [Create the chain's configuration object](#1-create-the-chains-configuration-object)
-2. [Deploy the custom gas token Arbitrum chain](#2-deploy-the-custom-gas-token-orbit-chain)
+2. [Deploy the custom gas token Arbitrum chain](#2-deploy-the-custom-gas-token-arbitrum-chain)
 3. [Understand the returned data](#3-understand-the-returned-data)
 4. [Additional configuration](#4-additional-configuration)
 
 ### 1. Create the chain's configuration object
 
-The [How to deploy a Rollup chain](/launch-aribtrum-chain/03-deploy-an-aribtrum-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
+The [How to deploy a Rollup chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md#parameters-used-when-deploying-a-new-chain) guide explains the configuration structure that we need to craft and send to the `RollupCreator` contract when we wish to create a new chain. We recommend that you familiarize yourself with that section before continuing.
 
 Because we are deploying an AnyTrust chain, we must set the `arbitrum.DataAvailabilityCommittee` flag to `true`, to indicate that the chain will use a Data Availability Committee (DAC).
 
@@ -132,4 +132,4 @@ Since custom gas token chains are AnyTrust chains, we'll also have to set the DA
 
 ### 5. Next step
 
-Once the chain's contracts are created, you can move to the next step: [configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-sdk-preparing-node-config.md).
+Once the chain's contracts are created, you can move to the next step: [configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
