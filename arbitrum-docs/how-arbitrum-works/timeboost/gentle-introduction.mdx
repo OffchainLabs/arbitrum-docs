@@ -68,6 +68,8 @@ To start, the default duration of a round is 60 seconds. Transactions not in the
   backgroundImagePath="/img/timeboost-express-lane.svg"
   isSvgBackground={true}
   viewBox="0 0 1600 900"
+  dynamicButtons={[1]}
+  animatedButtons={[1]}
   customCoordinates={{
     1: { circle: { x: 900, y: 200 }, path: { x: 96, y: 198 }, offset: { x: -4, y: -2 } },
   }}
@@ -91,6 +93,8 @@ Control of the express lane in each round (default: 60 seconds) is determined by
   isSvgBackground={true}
   viewBox="0 0 1600 900"
   numbers={[2, 3, 4]}
+  dynamicButtons={[2, 3, 4]}
+  animatedButtons={[2, 3, 4]}
 />
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.

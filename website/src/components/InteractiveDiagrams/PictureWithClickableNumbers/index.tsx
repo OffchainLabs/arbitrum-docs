@@ -98,11 +98,21 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
           }}
           {...svgProps}
         >
-          {numbers.map((number) => (
-            <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-              <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
-            </Modal>
-          ))}
+          {numbers.map((number) => {
+            const isDynamic = props.dynamicButtons?.includes(number);
+            const isAnimated = props.animatedButtons?.includes(number);
+            return (
+              <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
+                <Button 
+                  number={number} 
+                  type={isDynamic ? "dynamic" : "static"} 
+                  animated={isAnimated}
+                  coordinates={finalCoordinates} 
+                  id={id} 
+                />
+              </Modal>
+            );
+          })}
           {backgroundElements}
         </svg>
       </div>
@@ -132,11 +142,21 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
           }}
           {...svgProps}
         >
-          {numbers.map((number) => (
-            <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-              <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
-            </Modal>
-          ))}
+          {numbers.map((number) => {
+            const isDynamic = props.dynamicButtons?.includes(number);
+            const isAnimated = props.animatedButtons?.includes(number);
+            return (
+              <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
+                <Button 
+                  number={number} 
+                  type={isDynamic ? "dynamic" : "static"} 
+                  animated={isAnimated}
+                  coordinates={finalCoordinates} 
+                  id={id} 
+                />
+              </Modal>
+            );
+          })}
           {backgroundElements}
         </svg>
       </div>
@@ -157,11 +177,21 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
       <DefaultBackground viewBox={viewBox} />
 
       {/* Render the numbered elements */}
-      {numbers.map((number) => (
-        <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-          <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
-        </Modal>
-      ))}
+      {numbers.map((number) => {
+        const isDynamic = props.dynamicButtons?.includes(number);
+        const isAnimated = props.animatedButtons?.includes(number);
+        return (
+          <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
+            <Button 
+              number={number} 
+              type={isDynamic ? "dynamic" : "static"} 
+              animated={isAnimated}
+              coordinates={finalCoordinates} 
+              id={id} 
+            />
+          </Modal>
+        );
+      })}
       {backgroundElements}
     </svg>
   );

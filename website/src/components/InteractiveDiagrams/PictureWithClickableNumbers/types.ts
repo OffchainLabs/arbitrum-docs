@@ -91,6 +91,18 @@ export interface PictureWithClickableNumbersProps {
   className?: string;
 
   /**
+   * Configure which buttons should be dynamic (clickable with circle background)
+   * Each button must be explicitly set as dynamic or static
+   */
+  dynamicButtons?: Array<1 | 2 | 3 | 4 | 5>;
+
+  /**
+   * Configure which buttons should be animated with color transitions
+   * Only applies to dynamic buttons
+   */
+  animatedButtons?: Array<1 | 2 | 3 | 4 | 5>;
+
+  /**
    * Custom coordinates for the numbered elements
    * If provided, these will override the default coordinates
    */
