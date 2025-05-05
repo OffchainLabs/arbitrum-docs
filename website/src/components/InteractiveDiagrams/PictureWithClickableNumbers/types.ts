@@ -45,10 +45,23 @@ export interface PictureWithClickableNumbersProps {
   id?: string;
 
   /**
-   * Path to SVG file to use as background
+   * Path to SVG or image file to use as background
    * If not provided, the default SVG defined in the component will be used
+   * For static images, use a path from /website/static/img/
+   */
+  backgroundImagePath?: string;
+
+  /**
+   * Path to SVG file to use as background (DEPRECATED: use backgroundImagePath instead)
+   * @deprecated Use backgroundImagePath instead
    */
   svgFilePath?: string;
+
+  /**
+   * Whether the background is an SVG (true) or static image (false)
+   * @default true
+   */
+  isSvgBackground?: boolean;
 
   /**
    * Custom SVG viewBox dimensions

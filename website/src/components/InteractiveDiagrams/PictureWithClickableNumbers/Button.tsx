@@ -62,15 +62,16 @@ export const Button: React.FC<NumberComponentProps> = ({
   /**
    * Animation configuration for the numbered circles.
    * Only applied to dynamic numbers.
+   * Animation cycles between two colors while maintaining 100% opacity.
    */
   const animationProps = !shouldAnimate
     ? { opacity: 1 }
     : useSpring({
-        from: { opacity: 0, fill: '#ff7f2a' },
+        from: { opacity: 1, fill: '#ff7f2a' },
         to: [
           { opacity: 1, fill: '#ff7f2a' },
           { opacity: 1, fill: '#3578e5' },
-          { opacity: 0, fill: '#3578e5' },
+          { opacity: 1, fill: '#ff7f2a' },
         ],
         config: { tension: 20000, friction: 10 },
         loop: true,
@@ -170,6 +171,7 @@ export const Button: React.FC<NumberComponentProps> = ({
           className={circleClassName}
           style={{
             ...animationProps,
+            opacity: 1, // Ensure opacity is always 1
             filter: isHovered && shouldBeInteractive ? 'brightness(1.2)' : 'none',
           }}
         />

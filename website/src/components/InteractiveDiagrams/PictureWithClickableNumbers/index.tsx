@@ -21,17 +21,21 @@ export default function PictureWithClickableNumbers(
  * FlowChart component for the PictureWithClickableNumbers diagram.
  *
  * @remarks
- * This component renders the complete SVG diagram showing the centralized auction process.
- * It includes interactive numbered steps (2, 3, and 4) that can be clicked to display
- * detailed information in modal dialogs.
+ * This component renders an interactive diagram with clickable numbered elements.
+ * It supports three background modes:
+ * 1. Default SVG background (built-in)
+ * 2. Custom SVG background (loaded from a file)
+ * 3. Static image background (from /website/static/img/)
  *
- * @param props - Props for the SVG component, including custom SVG file path
- * @returns An SVG element containing the complete diagram with interactive elements
+ * @param props - Props for the SVG component, including custom background options
+ * @returns An element containing the complete diagram with interactive elements
  */
 export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => {
   const {
     id = 'default',
-    svgFilePath,
+    backgroundImagePath,
+    svgFilePath, // For backward compatibility
+    isSvgBackground = true,
     viewBox = '0 0 1600 900',
     backgroundElements,
     numbers = [1, 2, 3, 4, 5],
@@ -40,13 +44,17 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
     customCoordinates,
     ...svgProps
   } = props;
-  // If a custom SVG file path is provided, use it as the background
+
+  // For backward compatibility: use svgFilePath if backgroundImagePath is not provided
+  const finalBackgroundPath = backgroundImagePath || svgFilePath;
+
+  // If a custom SVG file path is provided, load it
   const [svgContent, setSvgContent] = React.useState<string | null>(null);
   const svgRef = React.useRef<SVGSVGElement>(null);
 
   React.useEffect(() => {
-    if (svgFilePath) {
-      fetch(svgFilePath)
+    if (finalBackgroundPath && isSvgBackground) {
+      fetch(finalBackgroundPath)
         .then((response) => response.text())
         .then((data) => {
           setSvgContent(data);
@@ -55,15 +63,54 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
           console.error('Error loading SVG file:', error);
         });
     }
-  }, [svgFilePath]);
+  }, [finalBackgroundPath, isSvgBackground]);
 
   // Use custom coordinates if provided, otherwise use default
   const finalCoordinates = customCoordinates
     ? { ...defaultCoordinates, ...customCoordinates }
     : defaultCoordinates;
 
-  // If using custom SVG, render it with numbered elements on top
-  if (svgFilePath) {
+  // Case 1: Static image background (non-SVG)
+  if (finalBackgroundPath && !isSvgBackground) {
+    return (
+      <div className={className} style={{ position: 'relative', ...style }}>
+        <img
+          src={finalBackgroundPath}
+          alt="Background"
+          style={{
+            width: '100%',
+            height: 'auto',
+            display: 'block',
+            pointerEvents: 'none',
+          }}
+        />
+        <svg
+          ref={svgRef}
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={viewBox}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+          }}
+          {...svgProps}
+        >
+          {numbers.map((number) => (
+            <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
+              <Button number={number} type="dynamic" coordinates={finalCoordinates} id={id} />
+            </Modal>
+          ))}
+          {backgroundElements}
+        </svg>
+      </div>
+    );
+  }
+
+  // Case 2: Custom SVG background
+  if (finalBackgroundPath && isSvgBackground) {
     return (
       <div className={className} style={{ position: 'relative', ...style }}>
         {svgContent ? (
@@ -96,7 +143,7 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
     );
   }
 
-  // If no SVG file path is provided, use the default SVG
+  // Case 3: Default SVG background (built-in)
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
