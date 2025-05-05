@@ -106,10 +106,10 @@ CONFIG_NETWORK_NAME=custom
 Now, you can run the `prepare` script to deploy the action contract with the specified configuration parameters. Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-- `L1_RPC_URL` should point to an RPC of your parent chain.
+- The `network` parameter should be your parent chain. You can find the identifiers of these networks in the `hardhat.config.ts`. Note that if your parent chain is an L1, you'll have to configure an additional `INFURA_KEY` env variable for its endpoint.
 
 ```shell
-$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-prepare
+$ L1_PRIV_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ...
 Deployed contracts written to: scripts/files/sepoliaDeployedContracts.json
 Done.
@@ -119,16 +119,14 @@ Optionally, the script can try to verify the deployed contracts by adding the fo
 
 - Set `DISABLE_VERIFICATION` to `false`.
 - Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
-- Set the `network` flag to your parent chain.
 
 ```shell
-$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+$ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ```
 
 Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-- `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ### Step 4: Gather the information of the current state of the chain
 
@@ -141,7 +139,7 @@ If a new assertion is confirmed between steps 4 and 5, step 5 will revert and st
 :::
 
 ```shell
-$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-populate-lookup
+$ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 ...
 Done.
 ```
@@ -149,7 +147,6 @@ Done.
 Note that:
 
 - You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-- `L1_RPC_URL` should point to an RPC of your parent chain.
 
 ### Step 5: Run the upgrade script
 
@@ -165,7 +162,7 @@ The following script will send the upgrade transaction directly if the `L1_PRIV_
 :::
 
 ```shell
-$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-local-execute
+$ L1_PRIV_KEY=xxx yarn script:bold-local-execute --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 upgrade executor: 0x5FEe78FE9AD96c1d8557C6D6BB22Eb5A61eeD315
 execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca3702c09c78b957d4d820311125753c6d2000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4ebe03a93000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000008a8f0a24d7e58a76fc8f77bb68c7c902b91e182e00000000000000000000000087630025e63a30ecf9ca9d580d9d95922fea6af0000000000000000000000000c32b93e581db6ebc50c08ce381143a259b92f1ed00000000000000000000000000000000000000000000000000000000
 ```
