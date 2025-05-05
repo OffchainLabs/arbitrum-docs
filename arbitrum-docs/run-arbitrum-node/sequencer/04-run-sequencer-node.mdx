@@ -62,7 +62,6 @@ Enable the sequencer execution:
 ```shell
 --execution.sequencer.enable=true
 --execution.sequencer.max-tx-data-size=85000
---execution.sequencer.max-block-speed=250ms
 ```
 
 #### 3. Enable delayed sequencer
@@ -99,7 +98,7 @@ Enable your node to feed out transactions so full node can receive queued transa
 
 ```shell
 --node.feed.output.enable=true
---node.feed.output.addr=<Sequencer feed url>
+--node.feed.output.addr=0.0.0.0
 --node.feed.output.port=<Sequencer feed port>
 ```
 
@@ -151,7 +150,7 @@ Enable your node to send batches to DAS and get DACerts from them.
       "feed": {
         "output": {
           "enable": true,
-          "addr": "<Sequencer feed url>",
+          "addr": "0.0.0.0",
           "port": "<Sequencer feed port>"
         }
       },
@@ -174,8 +173,7 @@ Enable your node to send batches to DAS and get DACerts from them.
       "forwarding-target": "",
       "sequencer": {
         "enable": true,
-        "max-tx-data-size": 85000,
-        "max-block-speed": "250ms"
+        "max-tx-data-size": 85000
       }
     }
   }
