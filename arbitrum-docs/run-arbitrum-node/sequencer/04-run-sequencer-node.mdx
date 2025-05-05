@@ -144,7 +144,7 @@ Enable your node to send batches to DAS and get DACerts from them.
         "max-size": 90000,
         "enable": true,
         "parent-chain-wallet": {
-          "private-key": "4a9a2282b8845b7198840154341b628e14dfe8512543d43a7c0f64f090d970e2"
+          "private-key": "<batch post key>"
         }
       },
       "feed": {
@@ -183,7 +183,6 @@ Enable your node to send batches to DAS and get DACerts from them.
 
 - The Docker image is configured to run as non-root `UID 1000`. If you are running Linux or macOS and you are getting permission errors when trying to run the Docker image, run this command to allow all users to update the persistent folders:
 
-
 ```shell
 mkdir /data/arbitrum
 chmod -fR 777 /data/arbitrum
@@ -195,3 +194,4 @@ Here's a list of the parameters that are most commonly used when running your Or
 import OptionalOrbitSequencerCompatibleCLIFlagsPartial from '../partials/run-full-node/_optional-orbit-sequencer-compatible-cli-partial.mdx';
 
 <OptionalOrbitSequencerCompatibleCLIFlagsPartial />
+```
