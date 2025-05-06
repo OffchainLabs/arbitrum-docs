@@ -8,16 +8,16 @@ content_type: how-to
 
 :::caution
 
-The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support to spin up a production Orbit chain, we recommend contacting a [provider](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support spinning up a production Orbit chain, we recommend contacting a [provider](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
-We also provide a guide to run a high availability sequencer node for an Orbit chain. You can find it [here](./05-high-availability-sequencer-docs.mdx).
+We also provide a guide for running a high-availability sequencer node for an Orbit chain. You can find it [here](./05-high-availability-sequencer-docs.mdx).
 :::
 
 This how-to provides step-by-step instructions for running a sequencer node on your local machine.
 
 ## Minimum hardware configuration
 
-The following is the minimum hardware configuration required to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
+The following are the minimum hardware configurations required to set up a <a data-quicklook-from="arbitrum-nitro">Nitro</a> full node (not archival):
 
 | Resource     | Recommended                                   |
 | :----------- | :-------------------------------------------- |
@@ -28,7 +28,7 @@ The following is the minimum hardware configuration required to set up a <a data
 
 Please note that:
 
-- These minimum requirements for RAM and CPU are recommended for nodes that process a small amount of RPC requests. For nodes that require processing multiple simultaneous requests, both RAM and number of CPU cores will need to be scaled with the amount of traffic being served.
+- These minimum requirements for RAM and CPU are recommended for nodes that process a small amount of RPC requests. For nodes that require processing multiple simultaneous requests, both RAM and the number of CPU cores will need to scale with the amount of traffic served.
 - Single core performance is important. If the node is falling behind and a single core is 100% busy, it is recommended to update to a faster processor
 - The minimum storage requirements will change over time as the chain grows. Using more than the minimum requirements to run a robust full node is recommended.
 
@@ -36,7 +36,7 @@ Please note that:
 
 :::caution
 
-Even though there are alpha and beta versions of the Arbitrum Nitro software, only release versions should be used when running your node. Running alpha or beta versions is not supported and might lead to unexpected behaviors.
+Even though there are alpha and beta versions of the Arbitrum Nitro software, only use release versions when running your node. Running alpha or beta versions is unsupported and might lead to unexpected behaviors.
 
 :::
 
@@ -105,7 +105,12 @@ Enable your node to feed out transactions so full node can receive queued transa
 
 #### 5. Connect the node to data availability servers
 
-Note: This step is only required in Anytrust mode.
+:::note
+
+This step is only required in Anytrust mode.
+
+:::
+
 Enable your node to send batches to DAS and get DACerts from them.
 
 ```shell
