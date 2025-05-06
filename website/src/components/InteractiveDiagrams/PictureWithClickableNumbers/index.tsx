@@ -103,12 +103,12 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
             const isAnimated = props.animatedButtons?.includes(number);
             return (
               <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-                <Button 
-                  number={number} 
-                  type={isDynamic ? "dynamic" : "static"} 
+                <Button
+                  number={number}
+                  type={isDynamic ? 'dynamic' : 'static'}
                   animated={isAnimated}
-                  coordinates={finalCoordinates} 
-                  id={id} 
+                  coordinates={finalCoordinates}
+                  id={id}
                 />
               </Modal>
             );
@@ -147,12 +147,12 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
             const isAnimated = props.animatedButtons?.includes(number);
             return (
               <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-                <Button 
-                  number={number} 
-                  type={isDynamic ? "dynamic" : "static"} 
+                <Button
+                  number={number}
+                  type={isDynamic ? 'dynamic' : 'static'}
                   animated={isAnimated}
-                  coordinates={finalCoordinates} 
-                  id={id} 
+                  coordinates={finalCoordinates}
+                  id={id}
                 />
               </Modal>
             );
@@ -182,12 +182,12 @@ export const FlowChart: React.FC<PictureWithClickableNumbersProps> = (props) => 
         const isAnimated = props.animatedButtons?.includes(number);
         return (
           <Modal key={`${id}-${number}`} number={number} coordinates={finalCoordinates} id={id}>
-            <Button 
-              number={number} 
-              type={isDynamic ? "dynamic" : "static"} 
+            <Button
+              number={number}
+              type={isDynamic ? 'dynamic' : 'static'}
               animated={isAnimated}
-              coordinates={finalCoordinates} 
-              id={id} 
+              coordinates={finalCoordinates}
+              id={id}
             />
           </Modal>
         );
