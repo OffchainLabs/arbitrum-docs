@@ -836,6 +836,11 @@ const sidebars = {
           items: [
             {
               type: 'doc',
+              id: 'run-arbitrum-node/sequencer/run-sequencer-node',
+              label: 'Run a sequencer node',
+            },
+            {
+              type: 'doc',
               id: 'run-arbitrum-node/sequencer/run-feed-relay',
               label: 'Run a feed relay',
             },
@@ -848,6 +853,11 @@ const sidebars = {
               type: 'doc',
               id: 'run-arbitrum-node/sequencer/run-sequencer-coordination-manager',
               label: 'Run a Sequencer Coordination Manager (SQM)',
+            },
+            {
+              type: 'doc',
+              id: 'run-arbitrum-node/sequencer/high-availability-sequencer-docs',
+              label: 'Run high availability sequencer nodes',
             },
           ],
         },
