@@ -1659,6 +1659,11 @@
       "source": "/(run-arbitrum-node/troubleshoot-timeboost/?)",
       "destination": "/(how-arbitrum-works/timeboost/troubleshoot-timeboost/?)",
       "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "destination": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "permanent": false
     }
   ]
 }
