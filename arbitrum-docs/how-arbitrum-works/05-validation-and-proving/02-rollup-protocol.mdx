@@ -212,7 +212,7 @@ Anyone can do it, but most people will choose not to. In practice, we expect peo
 
 ### Staking and validator incentives
 
-Arbitrum requires validators to stake `ETH` as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability:
+Arbitrum requires validators to bond `ETH` as a security deposit to ensure honest participation and prevent malicious behavior. This mechanism enforces economic accountability:
 
 - **Proposers** (validators submitting assertions) must bond `ETH` to support their claims.
 - **Challenges** against incorrect assertions result in bond forfeiture for dishonest validators.
@@ -228,7 +228,7 @@ The protocol design requires only one honest validator to secure the system, mak
 
 ### Staking mechanism
 
-Some validators will act as bonders (staked participants) at any given time, while others remain passive. Bonders deposit `ETH` bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
+Some validators will act as bonders at any given time, while others remain passive. Bonders deposit `ETH` bonds into Arbitrum's smart contracts, which are forfeited if they lose a challenge.
 
 :::note
 
@@ -236,13 +236,13 @@ Nitro chains exclusively accept `ETH` as collateral for staking.
 
 :::
 
-A single bond can secure a sequence of assertions, meaning a validator's stake applies to multiple checkpoints of the chain's history. This checkpoint allows efficient resource use while maintaining security.
+A single bond can secure a sequence of assertions, meaning a validator's bond applies to multiple checkpoints of the chain's history. This checkpoint allows efficient resource use while maintaining security.
 
 A validator must be bonded to its predecessor to create a new assertion. The bond ensures that validators have economic risk in any assertion they make.
 
 ### Staking rules
 
-1. **New validators**: If unbonded, a validator can stake on the latest confirmed assertion by depositing the required `ETH` bond.
+1. **New validators**: If unbonded, a validator can bond on the latest confirmed assertion by depositing the required `ETH` bond.
 2. **Extending an existing bond**: The validator can extend its bond to one successor assertion if already bonded. - If a validator submits a new assertion, they automatically extend their existing bond to cover it.
 3. **Unbonding**: A validator can only request a refund if they have a bond on the latest confirmed assertion.
 4. **Losing a challenge**: If a validator's assertion is challenged successfully (i.e., they are malicious), they lose **all** their bonded `ETH` across any unresolved assertions.

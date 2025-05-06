@@ -1,0 +1,177 @@
+---
+title: 'How to upgrade to BoLD'
+description: 'How to upgrade an Orbit chain to BoLD'
+author: jose-franco
+sme: jose-franco
+content_type: how-to
+---
+
+This how-to provides step-by-step instructions for L2 Orbit chain operators who want to enable BoLD on their chain; L3 support for BoLD is expected in a future update. Familiarity with Nitro, [BoLD](/how-arbitrum-works/bold/gentle-introduction.mdx), and [chain ownership](/launch-orbit-chain/04-maintain-your-chain/03-ownership-structure-access-control.mdx) is expected.
+
+::::info This is not an ArbOS upgrade
+
+Enabling BoLD in your chain involves updating your chain's Nitro contracts and ensuring that your nodes are running the expected minimum (or higher) version.
+
+However, enabling BoLD does not require upgrading your ArbOS version.
+
+::::
+
+## Overview
+
+To enable BoLD in your L2 Orbit chain, you'll have to perform these actions:
+
+1. Make sure your nodes are running at least [Nitro v3.5.4](https://github.com/OffchainLabs/nitro/releases/tag/v3.5.4) and enable the required parameters
+2. Upgrade your Nitro contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0)
+
+Let's dive into it.
+
+## 1. Upgrade your nodes to Nitro v3.5.4 or higher
+
+Before updating the contracts, you want to make sure your nodes are ready for the update. Nitro v3.5.4 introduced compatibility with pre-BoLD and BoLD chains to ensure a smooth upgrade. Nodes will automatically detect whether the chain is running pre-BoLD or BoLD Rollup and Challenge contracts and will perform the appropriate calls depending on that check.
+
+Most of the parameters used in Nitro before v3.5.4 will stay the same when running a higher version but, depending on the type of node, you'll have to include a few more BoLD-specific parameters:
+
+- For validator nodes: add `--node.bold.enable=true` and `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
+- For all other types of node: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
+
+## 2. Upgrade your Nitro contracts to v3.1.0
+
+This section explains how to upgrade of your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0); this guide follows the same steps outlined in the [3.1.0 upgrade guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/contract-upgrades/3.1.0) in the `orbit-actions` repo. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
+
+During the upgrade operation, the following actions will be performed:
+
+1. Upgrade the Bridge, Inbox, RollupEventInbox, Outbox and SequencerInbox contracts to v3.1.0
+2. Deploy the new v3.1.0 BoLD ChallengeManager
+3. Migrate the v2 Rollup contract into a new v3.1.0 Rollup contract address
+4. Setup the Rollup contract according to the new configuration and use the latest confirmed assertion on the old rollup as the genesis of the new rollup
+
+### Step 0: Pre-requisites
+
+To effectively upgrade your Nitro contracts using the BoLD upgrade action, your contracts must be in one of these versions:
+
+- Inbox: v1.1.0 - v2.1.3 inclusive
+- Outbox: any
+- SequencerInbox: v1.2.1 - v2.1.3 inclusive
+- Bridge
+  - eth chain: v1.1.0 - v2.1.3 inclusive
+  - custom-fee token chain: v2.0.0 - v2.1.3 inclusive
+- RollupProxy: v1.1.0 - v2.1.3 inclusive
+- RollupAdminLogic: v2.0.0 - v2.1.3 inclusive
+- RollupUserLogic: v2.0.0 - v2.1.3 inclusive
+- ChallengeManager: v2.0.0 - v2.1.3 inclusive
+
+To determine the exact version your contracts use, [follow these instructions](https://github.com/OffchainLabs/orbit-actions#check-version-and-upgrade-path).
+
+### Step 1: Clone the `nitro-contracts` repository and build the contracts
+
+You'll use a [`BOLDUpgradeAction.sol`](https://github.com/OffchainLabs/nitro-contracts/blob/main/src/rollup/BOLDUpgradeAction.sol) contract in the `nitro-contracts` repository to perform the upgrade operation.
+
+First clone the `nitro-contracts` repository and checkout the appropriate version:
+
+```shell
+$ git clone https://github.com/OffchainLabs/nitro-contracts.git
+$ cd nitro-contracts
+$ git checkout v3.1.0
+```
+
+Once you have the correct version, install the dependencies and build the contracts:
+
+```shell
+$ yarn install
+$ yarn build:all
+```
+
+### Step 2: Configure your chain parameters
+
+The BoLD upgrade action contract that performs the upgrade will need to be parametrized with your chain information. To set this configuration, copy the [`scripts/files/configs/custom.ts`](https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/scripts/files/configs/custom.ts) file and adjust the configuration to match that of your chain.
+
+**Please pay close attention** to every parameter since it will override the existing configuration of your chain. Feel free to reference this page on [BoLD's configuration parameters](../../launch-orbit-chain/02-configure-your-chain/advanced-configurations/04-bold.mdx).
+
+### Step 3: Prepare and deploy the upgrade contract
+
+You'll now prepare the upgrade contract with the parameters you just set and then deploy it in the parent chain of our chain.
+
+First, create a `.env` file based on the `.env-sample` file.
+
+```shell
+$ cp .env-sample .env
+```
+
+Ensure you update the `CONFIG_NETWORK_NAME` env variable to match the filename of the configuration file you created in the previous step.
+
+```shell
+CONFIG_NETWORK_NAME=custom
+```
+
+Now, you can run the `prepare` script to deploy the action contract with the specified configuration parameters. Note that:
+
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- `L1_RPC_URL` should point to an RPC of your parent chain.
+
+```shell
+$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-prepare
+...
+Deployed contracts written to: scripts/files/sepoliaDeployedContracts.json
+Done.
+```
+
+Optionally, the script can try to verify the deployed contracts by adding the following parameters:
+
+- Set `DISABLE_VERIFICATION` to `false`.
+- Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
+- Set the `network` flag to your parent chain.
+
+```shell
+$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+```
+
+Note that:
+
+- You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- `L1_RPC_URL` should point to an RPC of your parent chain.
+
+### Step 4: Gather the information of the current state of the chain
+
+The next script will gather information about the chain's current state (the last confirmed assertion), allowing you to initialize the new Rollup contract with that confirmed assertion.
+
+:::info
+
+If a new assertion is confirmed between steps 4 and 5, step 5 will revert and step 4 must be repeated.
+
+:::
+
+```shell
+$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-populate-lookup
+...
+Done.
+```
+
+Note that:
+
+- You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+- `L1_RPC_URL` should point to an RPC of your parent chain.
+
+### Step 5: Run the upgrade script
+
+You are now ready to perform the upgrade. The following script will either perform the upgrade directly or print the upgrade payload depending on the private key used:
+
+- If `L1_PRIV_KEY` is the chain owner, the script will perform the upgrade directly. Note that it will not ask for confirmation before sending the transaction.
+- If `L1_PRIV_KEY` is NOT the chain owner, the script will print the upgrade payload.
+
+:::warning
+
+The following script will send the upgrade transaction directly if the `L1_PRIV_KEY` specified is the private key of the chain owner. Please note that the script DOES NOT ASK FOR CONFIRMATION.
+
+:::
+
+```shell
+$ L1_PRIV_KEY=xxx L1_RPC_URL=xxx yarn script:bold-local-execute
+upgrade executor: 0x5FEe78FE9AD96c1d8557C6D6BB22Eb5A61eeD315
+execute(...) call to upgrade executor: 0x1cff79cd000000000000000000000000f8199ca3702c09c78b957d4d820311125753c6d2000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000a4ebe03a93000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000030000000000000000000000008a8f0a24d7e58a76fc8f77bb68c7c902b91e182e00000000000000000000000087630025e63a30ecf9ca9d580d9d95922fea6af0000000000000000000000000c32b93e581db6ebc50c08ce381143a259b92f1ed00000000000000000000000000000000000000000000000000000000
+```
+
+### Step 6: Monitor the validation process
+
+Once the upgrade executes, monitor assertions to ensure they are created and confirmed in the new Rollup contract. Note that the new events emitted are `AssertionCreated` (which should appear every time an assertion is posted, by default this is 1 hour) and `AssertionConfirmed` (which should only appear after a challenge period has elapsed, by default this is 7 days).
+
+A separate is also available in the `orbit-actions` repository.

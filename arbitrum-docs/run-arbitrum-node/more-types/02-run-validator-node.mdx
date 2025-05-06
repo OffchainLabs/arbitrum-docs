@@ -20,12 +20,12 @@ This how-to assumes that you're familiar with the following:
 
 Validators can be configured to follow a specific validation strategy. Here we describe what strategies are available in Nitro:
 
-| Strategy           | Description                                                                                                                                                                                                                                                                                                                                                     | Gas usage                                                                                               |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| **`Defensive`**    | This validator will follow the chain and if it's local state disagrees with an onchain assertion, this validator will post a stake and create a challenge to defend the chain                                                                                                                                                                                   | Only acts if a bad assertion is found                                                                   |
-| **`StakeLatest`**  | This validator will initially stake on the latest correct assertion found, and then move the stake whenever new correct assertions are created. It will also challenge any bad assertions that it finds (this strategy is only available in pre-BoLD chains)                                                                                                    | Gas used every time a new assertion is created                                                          |
-| **`ResolveNodes`** | This validator will stay staked on the latest assertion found, resolve any unconfirmed assertions, and it will challenge any bad assertions that it finds                                                                                                                                                                                                       | Gas used every time a new assertion is created and to resolve unconfirmed assertions                    |
-| **`MakeNodes`**    | This validator continuously creates new assertions, resolves any unconfirmed assertions, and challenges bad assertions found. Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion simultaneously. In that case, only one will be successful, while the others will have their transactions reverted | Gas used to create new assertions, move the stake to the latest one, and resolve unconfirmed assertions |
+| Strategy           | Description                                                                                                                                                                                                                                                                                                                                                     | Gas usage                                                                                              |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **`Defensive`**    | This validator will follow the chain and if it's local state disagrees with an onchain assertion, this validator will post a bond and create a challenge to defend the chain                                                                                                                                                                                    | Only acts if a bad assertion is found                                                                  |
+| **`StakeLatest`**  | This validator will initially bond on the latest correct assertion found, and then move the bond whenever new correct assertions are created. It will also challenge any bad assertions that it finds (this strategy is only available in pre-BoLD chains)                                                                                                      | Gas used every time a new assertion is created                                                         |
+| **`ResolveNodes`** | This validator will stay bonded on the latest assertion found, resolve any unconfirmed assertions, and it will challenge any bad assertions that it finds                                                                                                                                                                                                       | Gas used every time a new assertion is created and to resolve unconfirmed assertions                   |
+| **`MakeNodes`**    | This validator continuously creates new assertions, resolves any unconfirmed assertions, and challenges bad assertions found. Note that if there is more than one `MakeNodes` validator running, they might all try to create a new assertion simultaneously. In that case, only one will be successful, while the others will have their transactions reverted | Gas used to create new assertions, move the bond to the latest one, and resolve unconfirmed assertions |
 
 ### The watchtower strategy
 
@@ -58,11 +58,11 @@ This section explains how to configure your node to act as a validator.
 
 A validator node is a regular full node with validation enabled, so you'll have to know how to configure a full node. You can find instructions [here](/run-arbitrum-node/03-run-full-node.mdx).
 
-Additionally, you'll need a wallet with enough funds to perform actions onchain and enough tokens to stake. Keep in mind that:
+Additionally, you'll need a wallet with enough funds to perform actions onchain and enough tokens to bond. Keep in mind that:
 
 - The token used to perform actions onchain is the native token of the parent chain (usually `ETH`)
-- For chains with BoLD activated, the token used to stake depends on the chain configuration. For Arbitrum One and Arbitrum Nova, the staking token is `WETH`
-- For chains that don't have BoLD activated, the token used to stake is the native token of the parent chain (usually `ETH`)
+- For chains with BoLD activated, the token used to bond depends on the chain configuration. For Arbitrum One and Arbitrum Nova, the staking token is `WETH`
+- For chains that don't have BoLD activated, the token used to bond is the native token of the parent chain (usually `ETH`)
 
 ### Step 1: configure and run your validator
 
@@ -126,7 +126,7 @@ Here is an example of how to create a validator wallet for Arbitrum One and exit
 docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
 ```
 
-The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the stake when desired.
+The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the bond when desired.
 
 Once the wallet is created, you can instruct your validator to use it by adding the option `--node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"` when running your node.
 

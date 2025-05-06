@@ -189,7 +189,7 @@ The total amount of the child chain ether in the system should not change except
 
 ### `MixDigest` and `ExtraData`
 
-The root hash and leaf count of ArbOS's [send Merkle accumulator](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/merkleAccumulator/merkleAccumulator.go#L13) are stored in each child chain block's `MixDigest` and `ExtraData` fields to aid with <a data-quicklook-from="outbox">outbox</a> proof construction. The yellow paper specifies that the `ExtraData` field may be no larger than 32 bytes, so we use the first 8 bytes of the `MixDigest`, which has no meaning in a system without miners/stakers, to store the send count.
+The root hash and leaf count of ArbOS's [send Merkle accumulator](https://github.com/OffchainLabs/nitro/blob/8e786ec6d1ac3862be85e0c9b5ac79cbd883791c/arbos/merkleAccumulator/merkleAccumulator.go#L13) are stored in each child chain block's `MixDigest` and `ExtraData` fields to aid with <a data-quicklook-from="outbox">outbox</a> proof construction. The yellow paper specifies that the `ExtraData` field may be no larger than 32 bytes, so we use the first 8 bytes of the `MixDigest`, which has no meaning in a system without miners/bonders, to store the send count.
 
 ### Retryable support
 
