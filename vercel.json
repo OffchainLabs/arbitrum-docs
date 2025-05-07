@@ -1752,12 +1752,17 @@
     },
     {
       "source": "/(launch-orbit-chain/reference/monitoring-tools-and-considerations/?)",
-      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations/?)",
-      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations",
+      "permanent": false
+    },
+    {
+      "source": "/(/launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations",
       "permanent": false
     },
     {
