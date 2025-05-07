@@ -26,9 +26,12 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-redirects": "tsx scripts/check-redirects.ts"
+    "check-redirects": "tsx scripts/check-redirects.ts",
+    "check-releases": "ts-node scripts/check-releases.ts"
   },
   "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
     "@arbitrum/sdk": "^3.0.0",
     "@cmfcmf/docusaurus-search-local": "^0.11.0",
     "@docusaurus/core": "^3.6.3",
@@ -59,6 +62,7 @@
     "rehype-katex": "7",
     "remark-math": "6",
     "sass": "^1.66.1",
+    "semver": "^7.6.0",
     "tippy.js": "^6.3.7",
     "trim": "0.0.3"
   },
@@ -70,12 +74,14 @@
     "@tsconfig/docusaurus": "^2.0.3",
     "@types/node": "^22.10.10",
     "@types/react": "^19.0.10",
+    "@types/semver": "^7.5.8",
     "docusaurus-plugin-typedoc": "^1.0.1",
     "gray-matter": "^4.0.3",
     "husky": "^9.1.7",
     "markdown-link-extractor": "^3.1.0",
     "prettier": "^2.8.3",
     "styled-components": "^6.1.15",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typedoc": "^0.25.13",
     "typedoc-plugin-frontmatter": "^1.0.0",

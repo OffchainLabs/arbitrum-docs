@@ -1,0 +1,30 @@
+{
+  "npmPackages": [
+    {
+      "id": "docusaurus-core",
+      "packageName": "@docusaurus/core"
+    },
+    {
+      "id": "docusaurus-preset-classic",
+      "packageName": "@docusaurus/preset-classic"
+    },
+    {
+      "id": "react",
+      "packageName": "react"
+    },
+    {
+      "id": "react-dom",
+      "packageName": "react-dom"
+    }
+  ],
+  "githubRepos": [
+    {
+      "id": "arbitrum-nitro",
+      "repo": "OffchainLabs/nitro"
+    },
+    {
+      "id": "arbitrum-sdk",
+      "repo": "OffchainLabs/arbitrum-sdk"
+    }
+  ]
+} 
