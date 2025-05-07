@@ -10,6 +10,7 @@ content_type: how-to
 
 The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support to spin up a production Orbit chain, we recommend contacting a [provider](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
 
+We also provide a guide to run a high availability sequencer node for an Orbit chain. You can find it [here](./05-high-availability-sequencer-docs.mdx).
 :::
 
 This how-to provides step-by-step instructions for running a sequencer node on your local machine.
@@ -156,7 +157,7 @@ Enable your node to send batches to DAS and get DACerts from them.
       },
       "data-availability": {
         "enable": true,
-        "sequencer-inbox-address": "0x55616A4D88Be0290D43a8AF7228c6700E709FBa6",
+        "sequencer-inbox-address": "<Sequencer inbox address>",
         "parent-chain-node-url": "https://sepolia-rollup.arbitrum.io/rpc",
         "rest-aggregator": {
           "enable": true,
