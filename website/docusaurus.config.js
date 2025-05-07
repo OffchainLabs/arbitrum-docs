@@ -163,7 +163,7 @@ const config = {
           'launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters',
           'launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times',
           'launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration',
-          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit'
+          'launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit',
         ],
       },
     ],
