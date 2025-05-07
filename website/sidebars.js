@@ -405,11 +405,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations',
-              label: 'Monitoring tools and considerations',
-            },
-            {
-              type: 'doc',
               id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts',
               label: 'Canonical factory contracts',
             },
@@ -470,6 +465,11 @@ const sidebars = {
               type: 'doc',
               id: 'launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold',
               label: 'Upgrade to BoLD',
+            },
+            {
+              type: 'doc',
+              id: 'launch-arbitrum-chain/maintain-your-chain/monitoring-tools-and-considerations',
+              label: 'Monitoring tools and considerations',
             },
           ],
         },
