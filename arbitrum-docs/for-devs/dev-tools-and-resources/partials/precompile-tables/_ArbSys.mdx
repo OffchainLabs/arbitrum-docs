@@ -1,361 +1,100 @@
 <table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>arbBlockNumber()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L17"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L34"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>ArbBlockNumber gets the current L2 block number</td>
-    </tr>
-    <tr>
-      <td>
-        <code>arbBlockHash()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L23"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L39"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>ArbBlockHash gets the L2 block hash, if sufficiently recent</td>
-    </tr>
-    <tr>
-      <td>
-        <code>arbChainID()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L31"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L60"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>ArbChainID gets the rollup's unique chain identifier</td>
-    </tr>
-    <tr>
-      <td>
-        <code>arbOSVersion()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L38"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L65"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>ArbOSVersion gets the current ArbOS version</td>
-    </tr>
-    <tr>
-      <td>
-        <code>getStorageGasAvailable()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L44"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L71"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>GetStorageGasAvailable returns 0 since Nitro has no concept of storage gas</td>
-    </tr>
-    <tr>
-      <td>
-        <code>isTopLevelCall()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L51"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L76"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>IsTopLevelCall checks if the call is top-level (deprecated)</td>
-    </tr>
-    <tr>
-      <td>
-        <code>mapL1SenderContractAddressToL2Alias()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L59"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L81"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>MapL1SenderContractAddressToL2Alias gets the contract's L2 alias</td>
-    </tr>
-    <tr>
-      <td>
-        <code>wasMyCallersAddressAliased()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L68"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L86"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>WasMyCallersAddressAliased checks if the caller's caller was aliased</td>
-    </tr>
-    <tr>
-      <td>
-        <code>myCallersAddressWithoutAliasing()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L74"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L96"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>
-        MyCallersAddressWithoutAliasing gets the caller's caller without any potential aliasing
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <code>withdrawEth()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L82"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L207"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>WithdrawEth send paid eth to the destination on L1</td>
-    </tr>
-    <tr>
-      <td>
-        <code>sendTxToL1()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L94"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L111"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>SendTxToL1 sends a transaction to L1, adding it to the outbox</td>
-    </tr>
-    <tr>
-      <td>
-        <code>sendMerkleTreeState()</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L105"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L191"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>
-        SendMerkleTreeState gets the root, size, and partials of the outbox Merkle tree state
-        (caller must be the 0 address)
-      </td>
-    </tr>
-  </tbody>
-</table>
-<table>
-  <thead>
-    <tr>
-      <th>Event</th>
-      <th>Solidity interface</th>
-      <th>Go implementation</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>
-        <code>L2ToL1Tx</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L114"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L170"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Logs a send transaction from L2 to L1, including data for outbox proving</td>
-    </tr>
-    <tr>
-      <td>
-        <code>L2ToL1Transaction</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L127"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L0"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>
-        DEPRECATED in favour of the new <code>L2ToL1Tx</code> event above after the nitro upgrade
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <code>SendMerkleUpdate</code>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro-contracts/blob/780366a0c40caf694ed544a6a1d52c0de56573ba/src/precompiles/ArbSys.sol#L146"
-          target="_blank"
-        >
-          Interface
-        </a>
-      </td>
-      <td>
-        <a
-          href="https://github.com/OffchainLabs/nitro/blob/v3.5.5/precompiles/ArbSys.go#L154"
-          target="_blank"
-        >
-          Implementation
-        </a>
-      </td>
-      <td>Logs a new merkle branch needed for constructing outbox proofs</td>
-    </tr>
-  </tbody>
-</table>
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Solidity interface</th>
+        <th>Go implementation</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+            <td><code>arbBlockNumber()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L17" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L35" target="_blank">Implementation</a></td>
+            <td>ArbBlockNumber gets the current L2 block number</td>
+          </tr><tr>
+            <td><code>arbBlockHash()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L23" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L40" target="_blank">Implementation</a></td>
+            <td>ArbBlockHash gets the L2 block hash, if sufficiently recent</td>
+          </tr><tr>
+            <td><code>arbChainID()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L31" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L61" target="_blank">Implementation</a></td>
+            <td>ArbChainID gets the rollup's unique chain identifier</td>
+          </tr><tr>
+            <td><code>arbOSVersion()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L38" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L66" target="_blank">Implementation</a></td>
+            <td>ArbOSVersion gets the current ArbOS version</td>
+          </tr><tr>
+            <td><code>getStorageGasAvailable()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L44" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L72" target="_blank">Implementation</a></td>
+            <td>GetStorageGasAvailable returns 0 since Nitro has no concept of storage gas</td>
+          </tr><tr>
+            <td><code>isTopLevelCall()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L51" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L77" target="_blank">Implementation</a></td>
+            <td>IsTopLevelCall checks if the call is top-level (deprecated)</td>
+          </tr><tr>
+            <td><code>mapL1SenderContractAddressToL2Alias()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L59" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L82" target="_blank">Implementation</a></td>
+            <td>MapL1SenderContractAddressToL2Alias gets the contract's L2 alias</td>
+          </tr><tr>
+            <td><code>wasMyCallersAddressAliased()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L68" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L87" target="_blank">Implementation</a></td>
+            <td>WasMyCallersAddressAliased checks if the caller's caller was aliased</td>
+          </tr><tr>
+            <td><code>myCallersAddressWithoutAliasing()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L74" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L97" target="_blank">Implementation</a></td>
+            <td>MyCallersAddressWithoutAliasing gets the caller's caller without any potential aliasing</td>
+          </tr><tr>
+            <td><code>withdrawEth()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L82" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L208" target="_blank">Implementation</a></td>
+            <td>WithdrawEth send paid eth to the destination on L1</td>
+          </tr><tr>
+            <td><code>sendTxToL1()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L94" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L112" target="_blank">Implementation</a></td>
+            <td>SendTxToL1 sends a transaction to L1, adding it to the outbox</td>
+          </tr><tr>
+            <td><code>sendMerkleTreeState()</code></td>
+            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L105" target="_blank">Interface</a></td>
+            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L192" target="_blank">Implementation</a></td>
+            <td>SendMerkleTreeState gets the root, size, and partials of the outbox Merkle tree state (caller must be the 0 address)</td>
+          </tr>
+    </tbody>
+  </table><table>
+      <thead>
+        <tr>
+          <th>Event</th>
+          <th>Solidity interface</th>
+          <th>Go implementation</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+              <td><code>L2ToL1Tx</code></td>
+              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L114" target="_blank">Interface</a></td>
+              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L171" target="_blank">Implementation</a></td>
+              <td>Logs a send transaction from L2 to L1, including data for outbox proving</td>
+            </tr><tr>
+              <td><code>L2ToL1Transaction</code></td>
+              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L127" target="_blank">Interface</a></td>
+              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L0" target="_blank">Implementation</a></td>
+              <td>DEPRECATED in favour of the new <code>L2ToL1Tx</code> event above after the nitro upgrade</td>
+            </tr><tr>
+              <td><code>SendMerkleUpdate</code></td>
+              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/9d0e90ef588f94a9d2ffa4dc22713d91a76f57d4/src/precompiles/ArbSys.sol#L146" target="_blank">Interface</a></td>
+              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.0/precompiles/ArbSys.go#L155" target="_blank">Implementation</a></td>
+              <td>Logs a new merkle branch needed for constructing outbox proofs</td>
+            </tr>
+      </tbody>
+    </table>

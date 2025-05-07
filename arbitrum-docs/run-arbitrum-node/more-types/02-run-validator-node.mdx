@@ -80,7 +80,7 @@ On top of the configuration of a regular full node, you'll need to configure the
 Here's an example of how to run a defensive validator for Arbitrum One:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.bold.enable --node.bold.strategy=Defensive
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.0-fc07dd2@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.strategy=Defensive --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD" --node.bold.enable --node.bold.strategy=Defensive
 ```
 
 ### Step 2: verify that your node is running as a validator
@@ -123,7 +123,7 @@ Nitro includes a tool to create a validator wallet for a specific chain automati
 Here is an example of how to create a validator wallet for Arbitrum One and exit:
 
 ```shell
-docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.5.5-90ee45c@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
+docker run --rm -it  -v /some/local/dir/arbitrum:/home/user/.arbitrum @@latestNitroNodeImage=offchainlabs/nitro-node:v3.6.0-fc07dd2@@ --parent-chain.connection.url=https://l1-mainnet-node:8545 --chain.id=42161 --node.staker.enable --node.staker.parent-chain-wallet.only-create-key --node.staker.parent-chain-wallet.password="SOME SECURE PASSWORD"
 ```
 
 The wallet file will be created under the mounted directory inside the `<chain-name>/wallet/` directory (for example, `arb1/wallet/` for Arbitrum One, or `nova/wallet/` for Arbitrum Nova). Be sure to backup the wallet file, as it will be the only way to withdraw the bond when desired.
