@@ -106,10 +106,12 @@ CONFIG_NETWORK_NAME=custom
 Now, you can run the `prepare` script to deploy the action contract with the specified configuration parameters. Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+
 - The `network` parameter should be your parent chain. You can find the identifiers of these networks in the `hardhat.config.ts`. Note that if your parent chain is an L1, you'll have to configure an additional `INFURA_KEY` env variable for its endpoint.
 
 ```shell
 $ L1_PRIV_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
 ...
 Deployed contracts written to: scripts/files/sepoliaDeployedContracts.json
 Done.
@@ -120,13 +122,16 @@ Optionally, the script can try to verify the deployed contracts by adding the fo
 - Set `DISABLE_VERIFICATION` to `false`.
 - Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
 
+
 ```shell
 $ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
 ```
 
 Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+
 
 ### Step 4: Gather the information of the current state of the chain
 
@@ -139,7 +144,9 @@ If a new assertion is confirmed between steps 4 and 5, step 5 will revert and st
 :::
 
 ```shell
+
 $ L1_PRIV_KEY=xxx yarn script:bold-populate-lookup --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
+
 ...
 Done.
 ```
@@ -147,6 +154,7 @@ Done.
 Note that:
 
 - You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
+
 
 ### Step 5: Run the upgrade script
 
