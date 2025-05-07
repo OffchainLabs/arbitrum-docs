@@ -6,7 +6,7 @@ import * as core from '@actions/core';
 
 const DEPENDENCIES_FILE = 'dependencies.json';
 
-interface Product {
+interface Project {
   id: string;
   name: string;
   repo: string;
@@ -18,7 +18,7 @@ interface Product {
 }
 
 interface DependenciesConfig {
-  products: Product[];
+  projects: Project[];
 }
 
 function extractRepoInfo(repoUrl: string): { owner: string; repo: string } | null {
@@ -89,7 +89,7 @@ function isNewerVersion(newVersion: string, currentVersion: string): boolean {
   return semver.gt(cleanNew, cleanCurrent);
 }
 
-async function createPullRequest(updatedProducts: Product[]) {
+async function createPullRequest(updatedProjects: Project[]) {
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
     throw new Error('GITHUB_TOKEN not found in environment');
@@ -128,11 +128,11 @@ async function createPullRequest(updatedProducts: Product[]) {
     const currentContent = Buffer.from(content.content, 'base64').toString();
     const currentConfig: DependenciesConfig = JSON.parse(currentContent);
 
-    // Update only the products that have changed
-    updatedProducts.forEach((updatedProduct) => {
-      const index = currentConfig.products.findIndex((p) => p.id === updatedProduct.id);
+    // Update only the projects that have changed
+    updatedProjects.forEach((updatedProject) => {
+      const index = currentConfig.projects.findIndex((p) => p.id === updatedProject.id);
       if (index !== -1) {
-        currentConfig.products[index] = updatedProduct;
+        currentConfig.projects[index] = updatedProject;
       }
     });
 
@@ -147,7 +147,7 @@ async function createPullRequest(updatedProducts: Product[]) {
     });
 
     // Create pull request
-    const prBody = `This PR updates the following dependencies to their latest versions:\n\n${updatedProducts
+    const prBody = `This PR updates the following dependencies to their latest versions:\n\n${updatedProjects
       .map((p) => `- ${p.name}: ${p.latestRelease} (released on ${p.latestReleaseDate})`)
       .join('\n')}\n\nPlease review the changes and update the documentation accordingly.`;
 
@@ -176,38 +176,38 @@ async function main() {
     const dependenciesFileContent = await fs.readFile(dependenciesFilePath, 'utf-8');
     const config: DependenciesConfig = JSON.parse(dependenciesFileContent);
 
-    console.log('\nChecking latest releases for all products...\n');
+    console.log('\nChecking latest releases for all projects...\n');
 
-    const updatedProducts: Product[] = [];
+    const updatedProjects: Project[] = [];
 
-    for (const product of config.products) {
-      console.log(`Checking ${product.name}...`);
-      const latest = await getGithubLatestRelease(product.repo);
+    for (const project of config.projects) {
+      console.log(`Checking ${project.name}...`);
+      const latest = await getGithubLatestRelease(project.repo);
 
       if (!latest) {
-        console.log(`  ❌ Could not fetch release info for ${product.repo}\n`);
+        console.log(`  ❌ Could not fetch release info for ${project.repo}\n`);
         continue;
       }
 
-      const needsUpdate = isNewerVersion(latest.version, product.latestRelease);
+      const needsUpdate = isNewerVersion(latest.version, project.latestRelease);
 
-      console.log(`  Current docs version: ${product.currentDocsVersion}`);
+      console.log(`  Current docs version: ${project.currentDocsVersion}`);
       console.log(`  Latest release: ${latest.version} (${latest.date})`);
       console.log(`  Status: ${needsUpdate ? '🔄 Update needed' : '✅ Up to date'}\n`);
 
       if (needsUpdate) {
-        const updatedProduct = {
-          ...product,
+        const updatedProject = {
+          ...project,
           latestRelease: latest.version,
           latestReleaseDate: latest.date,
         };
-        updatedProducts.push(updatedProduct);
+        updatedProjects.push(updatedProject);
       }
     }
 
-    if (updatedProducts.length > 0) {
+    if (updatedProjects.length > 0) {
       console.log('Creating pull request with updates...');
-      await createPullRequest(updatedProducts);
+      await createPullRequest(updatedProjects);
     } else {
       console.log('All dependencies are up to date.');
     }
