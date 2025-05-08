@@ -34,6 +34,11 @@ Most of the parameters used in Nitro before v3.5.4 will stay the same when runni
 - For validator nodes: add `--node.bold.enable=true` and `--node.bold.strategy=<MakeNodes | ResolveNodes | Defensive>` to configure the validator to create and/or confirm assertions in the new Rollup contract (find more information in [How to run a validator](/run-arbitrum-node/more-types/02-run-validator-node.mdx#step-1-configure-and-run-your-validator))
 - For all other types of node: add `--node.bold.enable=true` to enable [watchtower mode](/run-arbitrum-node/03-run-full-node.mdx#watchtower-mode)
 
+Additionally, after performing the upgrade, the `--chain.info-json` object also needs to be modified:
+
+- Update the new rollup address in the `rollup.rollup` field
+- Add the stake token in a new `rollup.stake-token` field
+
 ## 2. Upgrade your Nitro contracts to v3.1.0
 
 This section explains how to upgrade of your chain contracts to [v3.1.0](https://github.com/OffchainLabs/nitro-contracts/releases/tag/v3.1.0); this guide follows the same steps outlined in the [3.1.0 upgrade guide](https://github.com/OffchainLabs/orbit-actions/tree/main/scripts/foundry/contract-upgrades/3.1.0) in the `orbit-actions` repo. Note that this process expects that your chain uses the canonical contracts. If your chain uses customized contracts, you might need a different updating script/contract than the one available.
@@ -122,7 +127,6 @@ Optionally, the script can try to verify the deployed contracts by adding the fo
 - Set `DISABLE_VERIFICATION` to `false`.
 - Use the correct key for verifying the contracts on the block explorer depending on your parent chain: `ETHERSCAN_API_KEY | ARBISCAN_API_KEY | NOVA_ARBISCAN_API_KEY | BASESCAN_API_KEY`.
 
-
 ```shell
 $ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bold-prepare --network {mainnet|arb1|nova|base|sepolia|arbSepolia}
 
@@ -131,7 +135,6 @@ $ L1_PRIV_KEY=xxx DISABLE_VERIFICATION=false ARBISCAN_API_KEY=xxx yarn script:bo
 Note that:
 
 - You can use any account to deploy the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-
 
 ### Step 4: Gather the information of the current state of the chain
 
@@ -154,7 +157,6 @@ Done.
 Note that:
 
 - You can use any account in this step to call the contract, so `L1_PRIV_KEY` does not necessarily need to be the chain owner.
-
 
 ### Step 5: Run the upgrade script
 
