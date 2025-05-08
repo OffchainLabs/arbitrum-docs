@@ -2184,6 +2184,11 @@
       "source": "/(partials/_troubleshooting-orbit-partial/?)",
       "destination": "/partials/_troubleshooting-arbitrum-chain-partial",
       "permanent": false
+    },
+    {
+      "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "destination": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "permanent": false
     }
   ]
 }
