@@ -57,7 +57,7 @@
     },
     {
       "source": "/(how-arbitrum-works/separating-execution-from-proving/?)",
-      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving.mdx",
+      "destination": "/how-arbitrum-works/validation-and-proving/validation-and-proving",
       "permanent": false
     },
     {
@@ -776,12 +776,12 @@
       "permanent": false
     },
     {
-      "source": "/docs/(mainnet/?)",
+      "source": "/(docs/mainnet/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
     {
-      "source": "/docs/(mainnet-beta/?)",
+      "source": "/(docs/mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
@@ -867,7 +867,7 @@
     },
      {
       "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
-      "destination": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
+      "destination": "/run-arbitrum-node/sequencer/high-availability-sequencer-docs",
       "permanent": false
     },   
     {
@@ -1227,7 +1227,7 @@
     },
     {
       "source": "/(sdk/message_L1ToL2MessageCreator/?)",
-      "destination": "",
+      "destination": "/sdk/reference/message/ParentToChildMessageCreator",
       "permanent": false
     },
     {
@@ -1837,352 +1837,352 @@
     },
     {
       "source": "/(launch-orbit-chain/a-gentle-introduction/?)",
-      "destination": "/(launch-arbitrum-chain/a-gentle-introduction/?)",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/layer-leap",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/fast-withdrawals/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/fast-withdrawals",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/aep-fee-router-introduction",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/set-up-aep-fee-router",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/aep-fee-router/calculate-aep-fees",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/advanced-configurations/bold/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/advanced-configurations/bold",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-anytrust",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/use-a-custom-gas-token-rollup",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/customizable-challenge-period/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/customizable-challenge-period/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/customizable-challenge-period",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/stake-and-validator-configurations/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/stake-and-validator-configurations",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/arbos-configuration/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-configuration/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-configuration",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/gas-optimization-tools/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/gas-optimization-tools",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/fee-management/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/fee-management",
       "permanent": false
     },
     {
-      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/batch-posting-assertion-control/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control/?)",
+      "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/batch-posting-assertion-control)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/batch-posting-assertion-control",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/sequencer-timing-adjustments/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/sequencer-timing-adjustments/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/sequencer-timing-adjustments",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/per-batch-gas-cost/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/per-batch-gas-cost/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/per-batch-gas-cost",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/smart-contract-size-limit/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/smart-contract-size-limit/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/smart-contract-size-limit",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/customizing-anytrust/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/customizing-anytrust/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/customizing-anytrust",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/configure-your-chain/common-configurations/arbos-upgrade/?)",
-      "destination": "/(launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade/?)",
+      "destination": "/launch-arbitrum-chain/configure-your-chain/common-configurations/arbos-upgrade",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/start-your-journey/?)",
-      "destination": "/(launch-arbitrum-chain/start-your-journey/?)",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-license/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-license/?)",
+      "destination": "/launch-arbitrum-chain/aep-license",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/configuring-orbit-chain/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/deploying-rollup-chain/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/deploying-anytrust-chain/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/deploying-custom-gas-token-chain/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/deploying-token-bridge/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/monitoring-tools-and-considerations/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/monitoring-tools-and-considerations",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/deploy-an-orbit-chain/canonical-factory-contracts/?)",
-      "destination": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts/?)",
+      "destination": "/launch-arbitrum-chain/deploy-an-arbitrum-chain/canonical-factory-contracts",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/bridging/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/bridging/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/bridging",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/monitoring/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/monitoring/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/monitoring",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/ownership-structure-access-control/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/ownership-structure-access-control",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/guidance/decentralization-security/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/guidance/decentralization-security/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/guidance/decentralization-security",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/guidance/guidance-on-altda/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/guidance/guidance-on-altda/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/guidance/guidance-on-altda",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/guidance/state-growth/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/guidance/state-growth/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-growth",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/guidance/state-size-limit/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/guidance/state-size-limit",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/guidance/post-launch-contract-deployments/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/guidance/post-launch-contract-deployments",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/maintain-your-chain/upgrade-to-bold/?)",
-      "destination": "/(launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold/?)",
+      "destination": "/launch-arbitrum-chain/maintain-your-chain/upgrade-to-bold",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/customize-your-chain/customize-arbos/?)",
-      "destination": "/(launch-arbitrum-chain/customize-your-chain/customize-arbos/?)",
+      "destination": "/launch-arbitrum-chain/customize-your-chain/customize-arbos",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/customize-your-chain/customize-precompile/?)",
-      "destination": "/(launch-arbitrum-chain/customize-your-chain/customize-precompile/?)",
+      "destination": "/launch-arbitrum-chain/customize-your-chain/customize-precompile",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/customize-your-chain/customize-stf/?)",
-      "destination": "/(launch-arbitrum-chain/customize-your-chain/customize-stf/?)",
+      "destination": "/launch-arbitrum-chain/customize-your-chain/customize-stf",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/third-party-integrations/bridged-usdc-standard/?)",
-      "destination": "/(launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard/?)",
+      "destination": "/launch-arbitrum-chain/third-party-integrations/bridged-usdc-standard",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/third-party-integrations/third-party-providers/?)",
-      "destination": "/(launch-arbitrum-chain/third-party-integrations/third-party-providers/?)",
+      "destination": "/launch-arbitrum-chain/third-party-integrations/third-party-providers",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/third-party-integrations/integrations/?)",
-      "destination": "/(launch-arbitrum-chain/third-party-integrations/integrations/?)",
+      "destination": "/launch-arbitrum-chain/third-party-integrations/integrations",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-node-runners/orbit-node-providers/?)",
-      "destination": "/(launch-arbitrum-chain/ecosystem-support/arbitrum-chain-portal/?)",
+      "destination": "/launch-arbitrum-chain/ecosystem-support/arbitrum-chain-portal",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/ecosystem-support/orbit-portal/?)",
-      "destination": "/(launch-arbitrum-chain/ecosystem-support/get-listed-arbitrum-chain-platforms/?)",
+      "destination": "/launch-arbitrum-chain/ecosystem-support/get-listed-arbitrum-chain-platforms",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/ecosystem-support/add-orbit-chain-to-bridge-ui/?)",
-      "destination": "/(launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui/?)",
+      "destination": "/launch-arbitrum-chain/ecosystem-support/add-arbitrum-chain-to-bridge-ui",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/ecosystem-support/get-listed-orbit-platforms/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-node-runners/arbitrum-chain-node-providers/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-node-runners/arbitrum-chain-node-providers",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/faq-troubleshooting/troubleshooting-building-orbit/?)",
-      "destination": "/(launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain/?)",
+      "destination": "/launch-arbitrum-chain/faq-troubleshooting/troubleshooting-building-arbitrum-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/aep-license/?)",
-      "destination": "/(launch-arbitrum-chain/aep-license/?)",
+      "destination": "/launch-arbitrum-chain/aep-license",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-quickstart/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-chain-quickstart/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-chain-quickstart",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-sdk-introduction/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-chain-sdk-introduction/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-supported-parent-chains/?)",
-      "destination": "/(launch-arbitrum-chain/arbitrum-chain-supported-parent-chains/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-chain-supported-parent-chains",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/bold-adoption-for-orbit-chains/?)",
-      "destination": "/(launch-arbitrum-chain/bold-adoption-for-arbitrum-chains/?)",
+      "destination": "/launch-arbitrum-chain/bold-adoption-for-arbitrum-chains",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/concepts/custom-gas-token-sdk/?)",
-      "destination": "/(launch-arbitrum-chain/concepts/custom-gas-token-sdk/?)",
+      "destination": "/launch-arbitrum-chain/concepts/custom-gas-token-sdk",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/concepts/public-preview-expectations/?)",
-      "destination": "/(launch-arbitrum-chain/concepts/public-preview-expectations/?)",
+      "destination": "/launch-arbitrum-chain/concepts/public-preview-expectations",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/how-tos/orbit-chain-finality/?)",
-      "destination": "/(launch-arbitrum-chain/how-tos/arbitrum-chain-finality/?)",
+      "destination": "/launch-arbitrum-chain/how-tos/arbitrum-chain-finality",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/how-tos/orbit-sdk-configuring-orbit-chain/?)",
-      "destination": "/(launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-configuring-arbitrum-chain/?)",
+      "destination": "/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-configuring-arbitrum-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/how-tos/orbit-sdk-preparing-node-config/?)",
-      "destination": "/(launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config/?)",
+      "destination": "/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/how-tos/customize-deployment-configuration/?)",
-      "destination": "/(launch-arbitrum-chain/how-tos/customize-deployment-configuration/?)",
+      "destination": "/launch-arbitrum-chain/how-tos/customize-deployment-configuration",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/how-tos/how-to-configure-your-chain/?)",
-      "destination": "/(launch-arbitrum-chain/how-tos/how-to-configure-your-chain/?)",
+      "destination": "/launch-arbitrum-chain/how-tos/how-to-configure-your-chain",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/partials/_orbit-customize-caution-banner-partial/?)",
-      "destination": "/(launch-arbitrum-chain/partials/_arbitrum-chain-customize-caution-banner-partial/?)",
+      "destination": "/launch-arbitrum-chain/partials/_arbitrum-chain-customize-caution-banner-partial",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/partials/_orbit-public-preview-banner-partial/?)",
-      "destination": "/(launch-arbitrum-chain/partials/_arbitrum-chain-public-preview-banner-partial/?)",
+      "destination": "/launch-arbitrum-chain/partials/_arbitrum-chain-public-preview-banner-partial",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/additional-configuration-parameters/?)",
-      "destination": "/(launch-arbitrum-chain/reference/additional-configuration-parameters/?)",
+      "destination": "/launch-arbitrum-chain/reference/additional-configuration-parameters",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/orbit-batch-poster-configuration/?)",
-      "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-batch-poster-configuration/?)",
+      "destination": "/launch-arbitrum-chain/reference/arbitrum-chain-batch-poster-configuration",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/orbit-configuration-parameters/?)",
-      "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters/?)",
+      "destination": "/launch-arbitrum-chain/reference/arbitrum-chain-configuration-parameters",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/orbit-fast-block-times/?)",
-      "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times/?)",
+      "destination": "/launch-arbitrum-chain/reference/arbitrum-chain-fast-block-times",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/orbit-sequencer-configuration/?)",
-      "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration/?)",
+      "destination": "/launch-arbitrum-chain/reference/arbitrum-chain-sequencer-configuration",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/reference/orbit-smart-contract-size-limit/?)",
-      "destination": "/(launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit/?)",
+      "destination": "/launch-arbitrum-chain/reference/arbitrum-chain-smart-contract-size-limit",
       "permanent": false
     },
     {
       "source": "/(partials/_troubleshooting-orbit-partial/?)",
-      "destination": "/(partials/_troubleshooting-arbitrum-chain-partial/?)",
+      "destination": "/partials/_troubleshooting-arbitrum-chain-partial",
       "permanent": false
     },
     {
