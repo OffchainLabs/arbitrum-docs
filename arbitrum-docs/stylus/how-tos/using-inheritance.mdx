@@ -7,9 +7,8 @@ content_type: how-to
 sidebar_position: 1
 ---
 
-import  CustomDetails  from '@site/src/components/CustomDetails';
+import CustomDetails from '@site/src/components/CustomDetails';
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
-
 
 Inheritance allows you to build upon existing smart contract functionality without duplicating code. In Stylus, the Rust SDK provides tools to implement inheritance patterns similar to Solidity, but with some important differences. This guide walks you through implementing inheritance in your Stylus smart contracts.
 
@@ -26,9 +25,30 @@ The inheritance model in Stylus aims to replicate the composition pattern found 
 
 Before implementing inheritance, ensure you have:
 
-1. Installed the Rust toolchain
-2. Installed `cargo-stylus` CLI tool: `cargo install --force cargo-stylus`
-3. Set up a Stylus project: `cargo stylus new your_project_name`
+<CustomDetails summary="Rust toolchain">
+
+Follow the instructions on [Rust Lang's installation page](https://www.rust-lang.org/tools/install) to install a complete Rust toolchain (v1.81 or newer) on your system. After installation, ensure you can access the programs `rustup`, `rustc`, and `cargo` from your preferred terminal application.
+
+</CustomDetails>
+
+<CustomDetails summary="cargo stylus">
+
+In your terminal, run:
+
+```shell
+cargo install --force cargo-stylus
+```
+
+Add WASM ([WebAssembly](https://webassembly.org/)) as a build target for the specific Rust toolchain you are using. The below example sets your default Rust toolchain to 1.81 as well as adding the WASM build target:
+
+```shell
+rustup default 1.81
+rustup target add wasm32-unknown-unknown --toolchain 1.81
+```
+
+You can verify that cargo stylus is installed by running `cargo stylus --help` in your terminal, which will return a list of helpful commands.
+
+</CustomDetails>
 
 ## Understanding the inheritance model in stylus
 
@@ -66,7 +86,7 @@ sol_storage! {
     }
 }
 
-// Mark this implementation block as containing public methods 
+// Mark this implementation block as containing public methods
 // The #[public] macro makes these methods available to be called from other contracts
 #[public]
 impl BaseContract {
@@ -113,7 +133,7 @@ sol_storage! {
         // Without this, the contract couldn't access BaseContract's methods
         #[borrow]
         BaseContract base_contract;
-        
+
         // Additional state variable specific to the child contract
         // This extends the parent contract's state
         uint256 additional_value;
@@ -142,10 +162,10 @@ impl ChildContract {
         // Return success
         Ok(())
     }
-    
+
     // Note: ChildContract can also call methods on BaseContract like:
     // self.base_contract.get_value() or self.base_contract.set_value()
-    
+
     // Additionally, external callers can call BaseContract methods directly on ChildContract
     // due to the #[inherit] annotation, e.g.:
     // child_contract.get_value() - will call BaseContract.get_value()
@@ -191,16 +211,16 @@ impl ChildContract {
             // This will be returned as an error, causing the transaction to revert
             return Err("Value too large".as_bytes().to_vec());
         }
-        
+
         // If validation passes, call the parent's implementation
         // This shows composition pattern - reusing parent logic while adding your own
         // The ? operator unwraps the Result or returns early if it's an Err
         self.base_contract.set_value(new_value)?;
-        
+
         // Return success if everything worked
         Ok(())
     }
-    
+
     // Note: Without explicit override keywords (like in Solidity),
     // you must be careful about naming to avoid unintentional overrides
 }
@@ -223,6 +243,7 @@ When using inheritance, it's important to understand the order in which methods 
 3. If the method is not found in any inherited type, the call reverts
 
 In a typical inheritance chain:
+
 - Calling a method first searches in the child contract
 - If not found there, it looks in the first parent specified in the `#[inherit]` list
 - If still not found, it searches in the next parent in the list
@@ -246,12 +267,12 @@ Inheritance can be chained. When using `#[inherit(A, B, C)]`, the contract will 
 impl MyContract {
     // Custom implementations specific to MyContract
     // These can override any methods from A, B, or C with the same name
-    
+
     // For method resolution:
     // - Calling my_contract.foo() will execute MyContract.foo() if it exists
     // - Otherwise it will check A.foo(), then B.foo(), then C.foo()
     // - If none exist, the call will revert
-    
+
     // This chaining allows for sophisticated composition patterns
     // but requires careful planning of the inheritance hierarchy
 }
@@ -332,6 +353,24 @@ A practical example of inheritance in Stylus is implementing an ERC-20 token wit
 <CustomDetails summary="ERC-20 Implementation with Inheritance">
 
 ```rust
+// Import required dependencies
+use stylus_sdk::{
+    alloy_primitives::{Address, U256},
+    prelude::*,
+};
+use alloy_sol_types::sol;
+
+// Define error type for ERC20 operations
+sol! {
+    /// Errors that can occur during ERC20 operations
+    enum Erc20Error {
+        /// Transfer amount exceeds balance
+        InsufficientBalance();
+        /// Spender allowance too low
+        InsufficientAllowance();
+    }
+}
+
 // Define the token parameters structure (no fields required, just for implementing the trait)
 // This is a concrete implementation of the Erc20Params trait defined earlier
 struct StylusTokenParams;
@@ -341,10 +380,10 @@ struct StylusTokenParams;
 impl Erc20Params for StylusTokenParams {
     // Token name - displayed in wallets and explorers
     const NAME: &'static str = "StylusToken";
-    
+
     // Token symbol/ticker - short identifier used on exchanges and UIs
     const SYMBOL: &'static str = "STK";
-    
+
     // Decimal precision - standard is 18 for ERC-20 tokens (like ETH)
     // This means 1 token = 10^18 of the smallest unit
     const DECIMALS: u8 = 18;
@@ -359,7 +398,7 @@ sol_storage! {
         // The #[borrow] annotation is essential for inheritance to work
         #[borrow]
         Erc20<StylusTokenParams> erc20;
-        
+
         // We could add additional StylusToken-specific storage here
         // For example: mapping(address => bool) minters;
     }
@@ -370,7 +409,7 @@ sol_storage! {
 // Inherit all functionality from the ERC-20 implementation
 // This gives our token standard methods like:
 // - balanceOf
-// - transfer 
+// - transfer
 // - transferFrom
 // - approve
 // - allowance
@@ -380,32 +419,34 @@ impl StylusToken {
     // This lets the caller mint tokens for themselves
     pub fn mint(&mut self, value: U256) -> Result<(), Erc20Error> {
         // Call the ERC-20 implementation's mint method
-        // msg::sender() gives the address of the caller
+        // Using the VM context to get the sender address
         // The ? operator propagates any errors that might occur
-        self.erc20.mint(msg::sender(), value)?;
-        
+        self.erc20.mint(self.vm().msg_sender(), value)?;
+
         // Return success if everything worked
         Ok(())
     }
-    
+
     // Add a method to mint tokens to a specific address
     // This can be used for airdrops, rewards, etc.
     pub fn mint_to(&mut self, to: Address, value: U256) -> Result<(), Erc20Error> {
         // Similar to mint, but with a specified recipient
         // Could add custom logic here, like permission checks
+        // For example, check if the sender has permission to mint
+        // if !is_minter(self.vm().msg_sender()) { return Err(...); }
         self.erc20.mint(to, value)?;
         Ok(())
     }
-    
+
     // Add a burn functionality to destroy tokens
     // This could be used for deflationary mechanics
     pub fn burn(&mut self, value: U256) -> Result<(), Erc20Error> {
         // Call the base implementation's burn method
         // This could be extended with custom logic
-        self.erc20.burn(msg::sender(), value)?;
+        self.erc20.burn(self.vm().msg_sender(), value)?;
         Ok(())
     }
-    
+
     // Could add more custom methods:
     // - pausable functionality
     // - role-based minting permissions
@@ -422,9 +463,11 @@ This example shows how to inherit from a generic ERC-20 implementation and add c
 
 ### Limitations
 
-1. Stylus doesn't support contract multi-inheritance yet
-2. The storage layout for inherited contracts differs from Solidity's inheritance model
+1. Stylus doesn't support Solidity-style multiple inheritance yet (though you can inherit from a chain of contracts)
+2. The storage layout for inherited contracts differs from Solidity's inheritance model (Stylus packs nested structs into their own slots)
 3. There's a risk of undetected selector collisions with functions from inherited contracts
+4. No explicit override or virtual keywords for clearly marking overridden functions
+5. The inheritance mechanism does not automatically emit events that would be emitted by the parent contract (you need to explicitly call the parent's methods)
 
 ### Best practices
 
@@ -433,7 +476,10 @@ This example shows how to inherit from a generic ERC-20 implementation and add c
 3. Design your contracts with single inheritance in mind
 4. Test thoroughly to ensure all inherited methods work correctly
 5. Be aware of potential storage layout differences when migrating from Solidity
-6. Consider using OpenZeppelin's Rust contracts for standardized implementations
+6. Always use `self.vm()` methods for accessing blockchain context (instead of deprecated functions like `msg::sender()`)
+7. When overriding methods that emit events in the parent contract, make sure to explicitly call the parent method or re-emit the events
+8. Use feature flags to control which contract is the entrypoint when working with multiple contracts
+9. Consider using OpenZeppelin's Rust contracts for standardized implementations
 
 ## Debugging inheritance issues
 
@@ -443,7 +489,9 @@ If you encounter issues with inheritance in your Stylus contracts, try these app
 2. Ensure the `#[inherit]` annotation includes the correct parent contract type
 3. Check for method name conflicts between parent and child contracts
 4. Use the `cargo stylus check` command to verify your contract compiles correctly
-5. Test individual methods from both the parent and child contracts to isolate issues
-
+5. Use `cargo clippy` to check for Rust-specific issues and stylus-specific lints
+6. Test individual methods from both the parent and child contracts to isolate issues
+7. If you encounter symbol collision errors with `mark_used`, ensure you're only compiling one contract as the entrypoint at a time using feature flags
+8. For VM context errors, verify you're using `self.vm()` methods instead of deprecated global functions
 
 For more information, refer to the [Stylus SDK documentation](https://docs.arbitrum.io/stylus/reference/rust-sdk-guide) and [Stylus by Example](https://docs.arbitrum.io/stylus-by-example/basic_examples/inheritance).
