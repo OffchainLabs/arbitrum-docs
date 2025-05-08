@@ -1,70 +1,226 @@
 <table>
-    <thead>
-      <tr>
-        <th>Method</th>
-        <th>Solidity interface</th>
-        <th>Go implementation</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-            <td><code>becomeChainOwner()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L13" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L58" target="_blank">Implementation</a></td>
-            <td>Caller becomes a chain owner</td>
-          </tr><tr>
-            <td><code>events(bool flag, bytes32 value)</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L16" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L28" target="_blank">Implementation</a></td>
-            <td>Emits events with values based on the args provided</td>
-          </tr><tr>
-            <td><code>eventsView()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L19" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L47" target="_blank">Implementation</a></td>
-            <td>Tries (and fails) to emit logs in a view context</td>
-          </tr><tr>
-            <td><code>customRevert()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L30" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L53" target="_blank">Implementation</a></td>
-            <td>Throws a custom error</td>
-          </tr><tr>
-            <td><code>panic()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L34" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L63" target="_blank">Implementation</a></td>
-            <td>Halts the chain by panicking in the STF</td>
-          </tr><tr>
-            <td><code>legacyError()</code></td>
-            <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L36" target="_blank">Interface</a></td>
-            <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L68" target="_blank">Implementation</a></td>
-            <td>Throws a hardcoded error</td>
-          </tr>
-    </tbody>
-  </table><table>
-      <thead>
-        <tr>
-          <th>Event</th>
-          <th>Solidity interface</th>
-          <th>Go implementation</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-              <td><code>Basic</code></td>
-              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L22" target="_blank">Interface</a></td>
-              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L33" target="_blank">Implementation</a></td>
-              <td>Emitted in <code>Events</code> for testing</td>
-            </tr><tr>
-              <td><code>Mixed</code></td>
-              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L23" target="_blank">Interface</a></td>
-              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L38" target="_blank">Implementation</a></td>
-              <td>Emitted in <code>Events</code> for testing</td>
-            </tr><tr>
-              <td><code>Store</code></td>
-              <td><a href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L26" target="_blank">Interface</a></td>
-              <td><a href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L0" target="_blank">Implementation</a></td>
-              <td>Never emitted (used for testing log sizes)</td>
-            </tr>
-      </tbody>
-    </table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Solidity interface</th>
+      <th>Go implementation</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>becomeChainOwner()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L13"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L58"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Caller becomes a chain owner</td>
+    </tr>
+    <tr>
+      <td>
+        <code>events(bool flag, bytes32 value)</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L16"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L28"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Emits events with values based on the args provided</td>
+    </tr>
+    <tr>
+      <td>
+        <code>eventsView()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L19"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L47"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Tries (and fails) to emit logs in a view context</td>
+    </tr>
+    <tr>
+      <td>
+        <code>customRevert()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L30"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L53"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Throws a custom error</td>
+    </tr>
+    <tr>
+      <td>
+        <code>panic()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L34"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L63"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Halts the chain by panicking in the STF</td>
+    </tr>
+    <tr>
+      <td>
+        <code>legacyError()</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L36"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L68"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Throws a hardcoded error</td>
+    </tr>
+  </tbody>
+</table>
+<table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>Solidity interface</th>
+      <th>Go implementation</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>Basic</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L22"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L33"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>
+        Emitted in <code>Events</code> for testing
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>Mixed</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L23"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L38"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>
+        Emitted in <code>Events</code> for testing
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>Store</code>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro-contracts/blob/601afc77e5b2a2dfd6f7075f2f3a48989c0be740/src/precompiles/ArbDebug.sol#L26"
+          target="_blank"
+        >
+          Interface
+        </a>
+      </td>
+      <td>
+        <a
+          href="https://github.com/OffchainLabs/nitro/blob/v3.6.2/precompiles/ArbDebug.go#L0"
+          target="_blank"
+        >
+          Implementation
+        </a>
+      </td>
+      <td>Never emitted (used for testing log sizes)</td>
+    </tr>
+  </tbody>
+</table>
