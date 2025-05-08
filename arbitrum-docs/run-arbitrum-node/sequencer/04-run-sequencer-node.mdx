@@ -8,7 +8,7 @@ content_type: how-to
 
 :::caution
 
-The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support spinning up a production Orbit chain, we recommend contacting a [provider](/launch-orbit-chain/third-party-integrations/third-party-providers#rollup-as-a-service-raas-providers).
+The following instructions are meant for Arbitrum Orbit chains only. This article only applies to test environments. If you need support spinning up a production Orbit chain, we recommend contacting a [provider](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
 
 We also provide a guide for running a high-availability sequencer node for an Orbit chain. You can find it [here](./05-high-availability-sequencer-docs.mdx).
 :::
@@ -192,6 +192,7 @@ Enable your node to send batches to DAS and get DACerts from them.
 ```shell
 mkdir /data/arbitrum
 chmod -fR 777 /data/arbitrum
+```
 
 ## Optional parameters
 
@@ -200,4 +201,3 @@ Here's a list of the parameters that are most commonly used when running your Or
 import OptionalOrbitSequencerCompatibleCLIFlagsPartial from '../partials/run-full-node/_optional-orbit-sequencer-compatible-cli-partial.mdx';
 
 <OptionalOrbitSequencerCompatibleCLIFlagsPartial />
-```
