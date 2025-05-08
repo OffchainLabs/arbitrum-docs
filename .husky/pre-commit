@@ -23,4 +23,15 @@ if [ $CHECK_REDIRECTS_EXIT_CODE -ne 0 ]; then
   exit 1
 fi
 
+# Check that all hide-from-search files are excluded from lunr search
+yarn tsx scripts/check-lunr-exclude-hide-from-search.ts
+CHECK_LUNR_EXIT_CODE=$?
+
+if [ $CHECK_LUNR_EXIT_CODE -ne 0 ]; then
+  echo "❌ Error: Some files with 'hide-from-search' are not excluded from lunr search. Please fix before committing."
+  exit 1
+fi
+
+cd ..
+
 echo "\n✅ Pre-commit tasks completed\n💡 Note: To bypass hooks, use git commit --no-verify"
