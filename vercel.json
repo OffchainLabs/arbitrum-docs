@@ -776,12 +776,12 @@
       "permanent": false
     },
     {
-      "source": "/docs/(mainnet/?)",
+      "source": "/(docs/mainnet/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
     {
-      "source": "/docs/(mainnet-beta/?)",
+      "source": "/(docs/mainnet-beta/?)",
       "destination": "/build-decentralized-apps/reference/mainnet-risks",
       "permanent": false
     },
@@ -1937,12 +1937,12 @@
     },
     {
       "source": "/(launch-orbit-chain/start-your-journey/?)",
-      "destination": "/launch-arbitrum-chain/start-your-journey",
+      "destination": "/launch-arbitrum-chain/a-gentle-introduction",
       "permanent": false
     },
     {
       "source": "/(launch-orbit-chain/orbit-license/?)",
-      "destination": "/launch-arbitrum-chain/arbitrum-license",
+      "destination": "/launch-arbitrum-chain/aep-license",
       "permanent": false
     },
     {
