@@ -865,11 +865,6 @@
       "destination": "/run-arbitrum-node/run-full-node",
       "permanent": false
     },
-     {
-      "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
-      "destination": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
-      "permanent": false
-    },   
     {
       "source": "/docs/public_testnet",
       "destination": "/for-devs/concepts/public-chains",

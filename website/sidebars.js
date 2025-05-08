@@ -536,6 +536,20 @@ const sidebars = {
               // q: why use an anchor html tag here?
               // a: see note at end of file
             },
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/sequencer/run-sequencer-node">Run a sequencer node <span class="other-section-icon">↓</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
+            },
+            {
+              type: 'html',
+              value:
+                '<a class="menu__link menu__list-item" href="/run-arbitrum-node/sequencer/high-availability-sequencer-docs">Run high-availability sequencer nodes <span class="other-section-icon">↓</span></a>',
+              // q: why use an anchor html tag here?
+              // a: see note at end of file
+            },
           ],
         },
         {
