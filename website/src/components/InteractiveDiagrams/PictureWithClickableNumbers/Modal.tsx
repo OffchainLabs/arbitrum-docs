@@ -116,7 +116,8 @@ export function Modal({
   /**
    * Set the content component to use based on props
    */
-  const StepContent = customContent || (() => <DiagramContentMap diagramId={diagramId} stepNumber={number} />);
+  const StepContent =
+    customContent || (() => <DiagramContentMap diagramId={diagramId} stepNumber={number} />);
 
   /**
    * Animation configuration for the modal content.

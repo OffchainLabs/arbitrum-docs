@@ -13,6 +13,8 @@ The main export is `FlowChart`, which is the component you should use directly f
   - Static images from /website/static/img/
 - Smooth color-cycling animations on numbered elements for visual emphasis
 - Modal dialogs with rich content (text, code, images)
+- **NEW: Dynamic content loading via plugin system**
+- **NEW: MDX partials rendering support in modals**
 - Syntax highlighting for code examples
 - Optimized animations using React Spring with consistent opacity
 - Dark/light theme compatibility via Docusaurus
@@ -26,7 +28,8 @@ The main export is `FlowChart`, which is the component you should use directly f
 - `DefaultBackground.tsx`: Provides the default SVG background
 - `constants.ts`: Defines coordinates and SVG paths
 - `types.ts`: TypeScript interface definitions
-- `modal-*.mdx`: Content files for each step
+- `DiagramContentLoader.js`: **NEW: Loads content dynamically via plugin system**
+- `DiagramContentMap.js`: **NEW: Maps diagram IDs to content with code highlighting support**
 
 ## Usage
 
@@ -131,6 +134,24 @@ function MyDocPage() {
 }
 ```
 
+### NEW: With Dynamic MDX Content via Plugin System
+
+```jsx
+import { FlowChart } from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers';
+
+function MyDocPage() {
+  return (
+    <FlowChart 
+      id="centralized-auction"  // This ID maps to content in the plugin registry
+      dynamicButtons={[1, 2, 3, 4]}
+      animatedButtons={[1, 2, 3, 4]}
+    />
+  );
+}
+```
+
+The content for each step is loaded dynamically through the `interactive-diagrams-plugin`, which maps diagram IDs and step numbers to MDX content files.
+
 ## Props
 
 ### FlowChart Props
@@ -158,6 +179,7 @@ function MyDocPage() {
 | coordinates | object | Optional custom coordinates |
 | children | ReactNode | Optional custom children elements |
 | id | string | Unique identifier matching parent diagram |
+| diagramId | string | **NEW: ID that maps to content in the plugin registry** |
 
 ### Button Props
 
@@ -170,6 +192,33 @@ function MyDocPage() {
 | coordinates | object | defaultCoordinates | Custom coordinates |
 | id | string | 'default' | Unique identifier matching parent diagram |
 | onHover | function | undefined | Callback fired when hover state changes |
+
+## NEW: Dynamic Content System
+
+The component now supports a plugin-based approach for loading dynamic content:
+
+1. **Content Registry**: The `interactive-diagrams-plugin` maintains a registry of content files for each diagram and step.
+2. **MDX Partials Support**: Content can include MDX partials that are rendered dynamically within the modals.
+3. **Syntax Highlighting**: Built-in support for code highlighting in multiple languages (JavaScript, Solidity, etc.)
+4. **Theme-Aware**: Content rendering respects Docusaurus light/dark theme settings.
+
+### Content Structure
+
+Content is organized by diagram ID and step number:
+
+```javascript
+// Example content structure in DiagramContentMap.js
+const MDX_CONTENT = {
+  'centralized-auction': {
+    1: `# Step 1: Deposit funds into the auction contract
+       ...markdown content with code examples...`,
+    2: `# Step 2: \`timeboost_submitBid()\`
+       ...more content...`,
+    // Additional steps
+  },
+  // Additional diagrams
+};
+```
 
 ## Customization
 
