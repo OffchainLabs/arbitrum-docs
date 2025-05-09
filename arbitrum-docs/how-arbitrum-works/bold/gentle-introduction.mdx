@@ -50,7 +50,7 @@ BoLD enables permissionless validation by allowing _anyone_ to challenge incorre
 
 <ImageZoom src="/img/bold-l2beat-pie-chart.png" alt="Pie slice" className="img-600px" />
 
-With BoLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BoLD contributes to a more permissionless, efficient, and robust rollup ecosystem. Additionally, BoLD will be available as an upgrade for all Orbit chains who wish to adopt it to reap the aforementioned benefits.
+With BoLD at its core, Arbitrum charts a course towards being recognized as a Stage 2 rollup by addressing the currently yellow (above) State Validation wedge in [L2Beat's risk analysis pie chart](https://l2beat.com/scaling/summary). BoLD contributes to a more permissionless, efficient, and robust rollup ecosystem. Additionally, BoLD will be available as an upgrade for all Arbitrum chains who wish to adopt it to reap the aforementioned benefits.
 
 ### BoLD makes withdrawals to parent chain Ethereum safer
 
@@ -105,7 +105,7 @@ The entities responsible for posting assertions about Arbitrum state to Ethereum
 
 #### Q: Why are the bond sizes so high for Arbitrum One?
 
-There are two types of “bonds” in BoLD: **assertion and challenge.** The below sizes are carefully calculated and set for Arbitrum One using a variety of factors, including TVL and optimizing for a balance between cost for honest parties and security of the protocol. As always, the exact bond sizes for an Orbit chain using BoLD is entirely up to the <a data-quicklook-from="chain-owner">chain owner</a> to decide, if they choose to adopt BoLD at all.
+There are two types of “bonds” in BoLD: **assertion and challenge.** The below sizes are carefully calculated and set for Arbitrum One using a variety of factors, including TVL and optimizing for a balance between cost for honest parties and security of the protocol. As always, the exact bond sizes for an Arbitrum chain using BoLD is entirely up to the <a data-quicklook-from="chain-owner">chain owner</a> to decide, if they choose to adopt BoLD at all.
 
 **Assertion bond sizes**
 
@@ -144,11 +144,11 @@ In BoLD, all costs spent by malicious actors are confiscated and sent to the Arb
 - Burning some, or all, of the confiscated funds, or
 - Keep some, or all, of the confiscated funds within the Arbitrum DAO Treasury
 
-As always, an Orbit chain can choose how they wish to structure and manage confiscated funds from dishonest parties.
+As always, an Arbitrum chain can choose how they wish to structure and manage confiscated funds from dishonest parties.
 
 #### Q: Why are honest parties not automatically rewarded with confiscated funds from a malicious actor?
 
-It’s tempting to think that rewarding the honest proposer in a dispute can only make the protocol stronger, but this turns out not to be true, because an adversary can sometimes profit by placing the honest stakes themselves.
+It’s tempting to think that rewarding the honest proposer in a dispute can only make the protocol stronger, but this turns out not to be true, because an adversary can sometimes profit by placing the honest bonds themselves.
 
 This creates perverse incentives that threaten the security of BoLD. Here’s an example, from Ed Felten:
 
@@ -166,11 +166,11 @@ Therefore, the BoLD AIP proposes that the honest parties be rewarded 1% of confi
 Although BoLD supports using an `ERC-20` token, Ethereum, specifically `WETH`, was chosen over `ARB` for a few reasons:
 
 1. **Arbitrum One & Arbitrum Nova both inherit their security from Ethereum already,** Arbitrum One and Nova rely on Ethereum for both data availability and as the referee for determining winners during fraud-proof disputes. It follows then that Ethereum continues to be used in BoLD, which is meant to permissionlessly secure Arbitrum even further. Ethereum’s value is also relatively independent of Arbitrum, especially when compared to `ARB`.
-2. Adversaries might be able to exploit the potential instability of `ARB` when trying to win challenges. Suppose an adversary deposits their bond in `ARB`, and can create an impression that they have a nontrivial chance of winning the challenge. This might drive down the value of `ARB`, which would decrease the adversary's cost to create more stakes (i.e., more spam) during the challenge, which in turn could increase the adversary's chances of winning (which would drive `ARB` lower, making the attack cheaper still for the adversary, etc.)
+2. Adversaries might be able to exploit the potential instability of `ARB` when trying to win challenges. Suppose an adversary deposits their bond in `ARB`, and can create an impression that they have a nontrivial chance of winning the challenge. This might drive down the value of `ARB`, which would decrease the adversary's cost to create more bonds (i.e., more spam) during the challenge, which in turn could increase the adversary's chances of winning (which would drive `ARB` lower, making the attack cheaper still for the adversary, etc.)
 3. **Access to liquidity**: Ethereum has greater liquidity than `ARB`. In the event of an attack on Arbitrum, access and ease of pooling funds may become crucial.
 4. **Fraud proofs are submitted to, and arbitrated on the parent chain (Ethereum).** The bonding of capital to make assertions is done so on the parent chain (Ethereum), since Ethereum is the arbitrator of disputes. If BoLD were to use `ARB` instead of Ethereum, a large amount of `ARB` must be pre-positioned on the parent chain which is more difficult to do when compared to pre-positioning Ethereum on the parent chain (Ethereum).
 
-An Orbit chain owner may choose to use any token they wish for bonding, if they adopt and use BoLD permissionless validation.
+An Arbitrum chain owner may choose to use any token they wish for bonding, if they adopt and use BoLD permissionless validation.
 
 #### Q: Can the required token for the validator be set to `ARB` and can network `ETH` revenues be distributed for validator incentives for Arbitrum One?
 
@@ -184,11 +184,11 @@ BoLD makes it permissionless for any validator to become a proposer and also int
 
 The topic of economic and incentive models for BoLD on Arbitrum One is valuable and we believe it deserves the full focus and attention of the community via a separate proposal/discussion - decoupled from this proposal to bring BoLD to mainnet. Details around proposed economic or incentive models for BoLD will need continued research and development work, but the deployment of BoLD as-is represents a substantial improvement to the security of Arbitrum even without economic-related concerns being resolved. The DAO may choose, via governance, to fund other parties or change this reimbursement model at any time.
 
-For Orbit chains, any economic model can be implemented alongside BoLD, if chain owners decide to adopt BoLD.
+For Arbitrum chains, any economic model can be implemented alongside BoLD, if chain owners decide to adopt BoLD.
 
 #### Q: For Arbitrum One proposers, is the service fee applied to the amount bonded? If that’s the case, the `ETH` would be locked and thus unable to be used to generate yield elsewhere. So, which assets are used to generate this yield for the service fee? Would it involve some `ETH` from the Arbitrum bridge?
 
-The proposed service fee should correlate to the annualized income that Ethereum mainnet validators receive, over the same time period. At the time of writing, the estimated annual income for Ethereum mainnet validators is approximately 3% to 4% of their stake (based on [CoinDesk Indices Composite Ether Staking Rate (CESR)](https://www.coindesk.com/indices/ether/cesr) benchmark and [_Rated.Network_](https://explorer.rated.network/network?network=mainnet&timeWindow=all&rewardsMetric=average&geoDistType=all&hostDistType=all&soloProDist=stake)).
+The proposed service fee should correlate to the annualized income that Ethereum mainnet validators receive, over the same time period. At the time of writing, the estimated annual income for Ethereum mainnet validators is approximately 3% to 4% of their bond (based on [CoinDesk Indices Composite Ether Staking Rate (CESR)](https://www.coindesk.com/indices/ether/cesr) benchmark and [_Rated.Network_](https://explorer.rated.network/network?network=mainnet&timeWindow=all&rewardsMetric=average&geoDistType=all&hostDistType=all&soloProDist=stake)).
 
 The fee is applied to the total amount bonded over the duration of time that a proposer is active. A validator will need to deposit `ETH` into the contracts on the parent chain to become a proposer and so those deposited funds will indeed be unable to be used for yield in other scenarios. The decision on the source of funds for the yield is entirely up to the ArbitrumDAO to decide.
 
@@ -229,13 +229,13 @@ If a malicious entity wanted to attack Arbitrum, they would need to deposit 3600
 
 To recap, both Arbitrum’s current dispute protocol and BoLD require assertions to be posted to the parent chain and employ interactive proving, which involves a back-and-forth between two entities until a single step of disagreement is reached. That single step (of disagreement) is then submitted to contracts on the parent chain. Those contracts are used to declare a winner. For L2s, like Arbitrum One, BoLD must be deployed on a credibly-neutral, censorship-resistant backend to ensure disputes are fairly resolved. Ethereum, therefore, is the perfect candidate for deployment of the BoLD protocol for L2s.
 
-But you might now be wondering: what about L3 Orbit chains that don’t settle to Ethereum? Unlike L2s that settle to Ethereum, assertions on an L3’s state need to be posted to an L2 either via (A) the L3 <a data-quicklook-from="sequencer">Sequencer</a> or (B) the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> queue managed by the L2 sequencer on L2. In the event that the parent chain (in this case, L2) is being repeatedly censored or if the L2 sequencer is offline, every block level assertion and/or sub-challenge assertion would need to wait 24 hours before they can bypass the sequencer (using the the`SequencerInbox`’s `forceInclusion` method described [here](/how-arbitrum-works/03-sequencer.mdx)). If this were to happen, challenge resolution would be delayed by a time _t_ where _t_ = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days!
+But you might now be wondering: what about L3 Arbitrum chains that don’t settle to Ethereum? Unlike L2s that settle to Ethereum, assertions on an L3’s state need to be posted to an L2 either via (A) the L3 <a data-quicklook-from="sequencer">Sequencer</a> or (B) the <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> queue managed by the L2 sequencer on L2. In the event that the parent chain (in this case, L2) is being repeatedly censored or if the L2 sequencer is offline, every block level assertion and/or sub-challenge assertion would need to wait 24 hours before they can bypass the sequencer (using the the`SequencerInbox`’s `forceInclusion` method described [here](/how-arbitrum-works/03-sequencer.mdx)). If this were to happen, challenge resolution would be delayed by a time _t_ where _t_ = (24 hours) \* number of moves for a challenge. To illustrate with sample numbers, if a challenge takes 50 sequential moves to resolve, then the delay would be 50 days!
 
 To mitigate the risk of this issue manifesting for Arbitrum chains, Offchain Labs has included a feature called _Delay Buffer_ as part of BoLD’s 1.0.0 release. The _Delay Buffer_ feature aims to limit the negative effects of: prolonged parent chain censorship, prolonged sequencer censorship, and/or unexpected sequencer outages. This is accomplished by implementing some time threshold that is decremented when unexpected delays occur. Once that time threshold is met, the force inclusion window is lowered - effectively enabling entities to make moves without the 24 hour delay-per-move.
 
 Under reasonable parameterization, the sequencer could be offline / censoring for 24 hours twice, before the force inclusion window is effectively dropped from 24 hours to a minimum inclusion time. The force inclusion window gradually (over weeks) replenishes to it's original value over time as long as the sequencer is on "good behavior" - regularly sequencing messages without unexpected delays. We believe that the Delay Buffer feature provides stronger guarantees of censorship resistance for Arbitrum chains.
 
-The methodology for calculating the parameters, specifically for L3 Orbit chains, will be made available at a later date for teams who wish to use BoLD.
+The methodology for calculating the parameters, specifically for L3 Arbitrum chains, will be made available at a later date for teams who wish to use BoLD.
 
 #### Q: What is the user flow for using the assertion bonding pool contract?
 
@@ -255,7 +255,7 @@ The minimum hardware requirements for running a BoLD validator is still being re
 
 BoLD validators for Arbitrum chains communicate directly with smart contracts on the parent chain (Ethereum). This means that opening challenges, submitting bisected history commitments, one-step proofs, and confirmations are all refereed on Ethereum. There is no P2P between validators.
 
-#### Q: For an L3 Orbit chain, secured using BoLD, that settles to Arbitrum One, does the one-step proof happen on the parent chain?
+#### Q: For an L3 Arbitrum chain, secured using BoLD, that settles to Arbitrum One, does the one-step proof happen on the parent chain?
 
 Yes; it happens on Arbitrum One.
 

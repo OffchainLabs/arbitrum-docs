@@ -1,7 +1,7 @@
 ---
 title: 'How to deploy a Data Availability Server (DAS)'
 description: This how-to will help you deploy a Data Availability Server (DAS)
-author: jose-franco
+author: Mehdi Salehi, jose-franco
 sidebar_position: 2
 content_type: how-to
 ---
@@ -92,6 +92,19 @@ Gather the following information:
 - The `SequencerInbox` contract address in the parent chain.
 
 - If you wish to configure a [REST aggregator for your DAS](#state-synchronization), you'll need the URL where the list of REST endpoints is kept.
+
+#### Hardware requirements
+
+- **Data Availability Server (DAS)** – A single CPU and 1 GiB of RAM can comfortably handle normal DAS duties. CPU spikes are rare and memory usage stays well below 1 GiB—even with an in-memory cache enabled.
+
+- **Mirror DAS** – Mirrors do even less work. When a CDN (e.g., Cloudflare, Fastly, CloudFront) sits in front, most requests never reach the node.
+
+**Note** that CDN is mandatory for any publicly reachable REST endpoint (mirror or main DAS). Without a CDN absorbing traffic, you need beefier hardware and you leave the server open to DoS attacks.
+
+:::info Heads-up
+If you crank up the in-memory cache or co-host other services, consider bumping the memory to 2 GiB for safety. Disk (or S3) requirements scale with your retention policy: archive nodes need space for the full history, while non-archive nodes can offload older data via lifecycle rules.
+
+:::
 
 <!--
 In terms of hardware requirements, these are the minimum specs that your infrastructure should comply with to run a stable DAS:

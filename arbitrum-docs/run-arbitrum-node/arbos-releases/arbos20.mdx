@@ -30,7 +30,7 @@ ArbOS 20 is an upgrade to enable Arbitrum's support for the parent chain Ethereu
 
 - Upgrading to **the Atlas ArbOS release will require access to the parent chain's Ethereum beacon chain endpoints to retrieve blob data. For nodes of a chain that come online 18 days after Atlas gets activated on their chain will need access to historical data to sync up to the latest state.** If you are not operating your own Ethereum consensus client, [please visit this page to view a list of beacon chain RPC providers](/run-arbitrum-node/05-l1-ethereum-beacon-chain-rpc-providers.mdx) where you can access blob data.
 - Applications on Arbitrum will not have to be modified or take any explicit action to get the benefits of using EIP-4844 (i.e., the whole chain opts-in with ArbOS 20 “Atlas”).
-- ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like the parent chain Ethereum, that support the blob transaction type. This includes Arbitrum One and Arbitrum Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that an L3 Orbit chain on top of an Arbitrum L2 will use calldata when posting L3 transaction data to the underlying L2. The child chain (L2) Arbitrum chain will then be able to post data to a parent chain data availability layer like Ethereum using blobs.
+- ArbOS 20 “Atlas” adds support for Arbitrum chains to send data in a blob storage format to data availability layers, like the parent chain Ethereum, that support the blob transaction type. This includes Arbitrum One and Arbitrum Nova. ArbOS 20 “Atlas” does not add support for Arbitrum chains to receive data in a blob storage format. This means that an L3 Arbitrum chain on top of an Arbitrum L2 will use calldata when posting L3 transaction data to the underlying L2. The child chain (L2) Arbitrum chain will then be able to post data to a parent chain data availability layer like Ethereum using blobs.
 - There currently aren’t estimates on what the end-user gas savings of using blob data will be. This topic is something being actively worked on and monitored. Without Mainnet data, the estimates for blob gas prices will not be accurate enough to reliably predict the cost reductions that users will experience - and even with Mainnet data, the savings will vary by use case (i.e., no current way to predict the price impacts from all blob gas market participants yet). In general, however, the use of blobs will reduce the cost of using Arbitrum L2s. To learn more about what EIP-4844 will mean for the child chain users, please checkout this [blog post on Medium by Offchain Lab's Co-foudner and Chief Scientist Ed Felten](https://medium.com/offchainlabs/eip-4844-what-does-it-mean-for-l2-users-5e86ebc4c028).
 
 ### Block explorers
@@ -42,16 +42,16 @@ Below is a non-comprehensive list of explorers that support querying and viewing
 - [Blobscan](https://blobscan.com/)
 - [Beaconcha.in](https://beaconcha.in/)
 
-### Additional requirement for Arbitrum Orbit L2 chain operators: enabling blob batch posting
+### Additional requirement for Arbitrum L2 chain operators: enabling blob batch posting
 
-This section maps to [Step 4 in the guide on _How to upgrade ArbOS on your Arbitrum Orbit L2 chain_](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) and contains additional instructions for Arbitrum Orbit L2 chain operators for ArbOS 20 Atlas. Specifically, the details below are meant to help Arbitrum Orbit L2 chain operators enable blob batch posting to L1 Ethereum following their successful upgrade to the ArbOS 20 Atlas release.
+This section maps to [Step 4 in the guide on _How to upgrade ArbOS on your Arbitrum L2 chain_](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md#step-4-enable-arbos-specific-configurations-or-feature-flags-not-always-required) and contains additional instructions for Arbitrum L2 chain operators for ArbOS 20 Atlas. Specifically, the details below are meant to help Arbitrum L2 chain operators enable blob batch posting to L1 Ethereum following their successful upgrade to the ArbOS 20 Atlas release.
 
 :::caution
-Before proceeding, make sure you have successfully completed Steps 1 through 3 of the guide on [How to upgrade ArbOS on your Orbit chain](/launch-orbit-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md).
+Before proceeding, make sure you have successfully completed Steps 1 through 3 of the guide on [How to upgrade ArbOS on your Arbitrum chain](/launch-arbitrum-chain/02-configure-your-chain/common-configurations/arbos-upgrade.md).
 
 To enable the posting of transaction data in Blobs to L1 Ethereum, you must set `node.batch-poster.post-4844-blobs=true` on the batch poster.
 
-#### Full list of ArbOS Atlas specific configuration options for Orbit chains
+#### Full list of ArbOS Atlas specific configuration options for Arbitrum chains
 
 | Flag                                    | Description                                                                                                                                                                                                                                                                                     |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
