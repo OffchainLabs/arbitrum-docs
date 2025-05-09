@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import { useTransition, animated } from '@react-spring/web';
+import { useTransition } from '@react-spring/web';
 import * as Dialog from '@radix-ui/react-dialog';
-import step1Content from './modal-centralized-auction-step-1.mdx';
-import step2Content from './modal-centralized-auction-step-2.mdx';
-import step3Content from './modal-centralized-auction-step-3.mdx';
-import step4Content from './modal-centralized-auction-step-4.mdx';
-import step5Content from './modal-centralized-auction-step-5.mdx';
 import { createPortal } from 'react-dom';
 import Button from './Button';
 import { MDXProvider } from '@mdx-js/react';
@@ -16,6 +11,7 @@ import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity
 import { useColorMode } from '@docusaurus/theme-common';
 import { SyntaxHighlighterProps } from './types';
 import { coordinates as defaultCoordinates } from './constants';
+import DiagramContentMap from '../DiagramContentMap';
 
 /**
  * Interface for code block data structure.
@@ -95,12 +91,14 @@ export function Modal({
   coordinates,
   children,
   id = 'default',
+  diagramId = 'centralized-auction',
 }: {
   number: 1 | 2 | 3 | 4 | 5;
   customContent?: React.ComponentType;
   coordinates?: typeof defaultCoordinates;
   children?: React.ReactNode;
   id?: string;
+  diagramId?: string;
 }) {
   /**
    * State to track whether the modal is currently open.
@@ -116,16 +114,9 @@ export function Modal({
   const { isDarkTheme } = useColorMode();
 
   /**
-   * Map of step numbers to their corresponding content components.
+   * Set the content component to use based on props
    */
-  const stepContent = {
-    1: step1Content,
-    2: step2Content,
-    3: step3Content,
-    4: step4Content,
-    5: step5Content,
-  };
-  const StepContent = customContent || stepContent[number];
+  const StepContent = customContent || (() => <DiagramContentMap diagramId={diagramId} stepNumber={number} />);
 
   /**
    * Animation configuration for the modal content.

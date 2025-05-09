@@ -1,4 +1,13 @@
 import React from 'react';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark, oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import javascript from 'react-syntax-highlighter/dist/cjs/languages/prism/javascript';
+import solidity from 'react-syntax-highlighter/dist/cjs/languages/prism/solidity';
+import { useColorMode } from '@docusaurus/theme-common';
+
+// Register languages for syntax highlighting
+SyntaxHighlighter.registerLanguage('javascript', javascript);
+SyntaxHighlighter.registerLanguage('solidity', solidity);
 
 // We'll use raw imports instead of MDX imports
 // The actual content will be loaded via the plugin
@@ -105,11 +114,32 @@ export default function DiagramContentMap({ diagramId, stepNumber, ...props }) {
 
         // Code block handling
         if (part.startsWith('```')) {
-          const codeContent = part.split('\n').slice(1, -1).join('\n');
+          const codeLines = part.split('\n');
+          // Extract language from the first line, e.g. ```solidity => solidity
+          const languageMatch = codeLines[0].match(/^```(\w+)$/);
+          // Default to javascript if no language is specified
+          const language = languageMatch ? languageMatch[1] : 'javascript';
+          const codeContent = codeLines.slice(1, -1).join('\n');
+
+          // Get the current color mode
+          const { isDarkTheme } = useColorMode();
+
           return (
-            <pre key={i}>
-              <code className="language-solidity">{codeContent}</code>
-            </pre>
+            <div key={i} style={{ position: 'relative', margin: '1rem 0' }}>
+              <SyntaxHighlighter
+                language={language}
+                style={isDarkTheme ? oneDark : oneLight}
+                customStyle={{
+                  margin: 0,
+                  padding: '16px',
+                  borderRadius: '4px',
+                  backgroundColor: isDarkTheme ? 'rgb(41, 45, 62)' : 'rgb(246, 248, 250)',
+                  fontSize: '0.9em',
+                }}
+              >
+                {codeContent}
+              </SyntaxHighlighter>
+            </div>
           );
         }
 
@@ -117,16 +147,59 @@ export default function DiagramContentMap({ diagramId, stepNumber, ...props }) {
         if (part.includes('\n1. ')) {
           const items = part.split('\n').filter((line) => line.match(/^\d+\./));
           return (
-            <ol key={i}>
-              {items.map((item, j) => (
-                <li key={j}>{item.replace(/^\d+\.\s+/, '')}</li>
-              ))}
+            <ol key={i} style={{ paddingLeft: '1.5rem', margin: '1rem 0' }}>
+              {items.map((item, j) => {
+                const content = item.replace(/^\d+\.\s+/, '');
+                // Check if the content contains inline code
+                const formattedContent = content.replace(
+                  /`([^`]+)`/g,
+                  (_, code) =>
+                    `<code style="background: ${
+                      useColorMode().isDarkTheme ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+                    };
+                  padding: 2px 4px; border-radius: 3px; font-family: monospace;">${code}</code>`,
+                );
+
+                return (
+                  <li
+                    key={j}
+                    style={{ margin: '0.5rem 0' }}
+                    dangerouslySetInnerHTML={{ __html: formattedContent }}
+                  />
+                );
+              })}
             </ol>
           );
         }
 
-        // Regular paragraph
-        return <p key={i} dangerouslySetInnerHTML={{ __html: part }} />;
+        // Regular paragraph with link and inline code handling
+        let processedContent = part;
+
+        // Handle inline code
+        processedContent = processedContent.replace(
+          /`([^`]+)`/g,
+          (_, code) =>
+            `<code style="background: ${
+              useColorMode().isDarkTheme ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+            };
+          padding: 2px 4px; border-radius: 3px; font-family: monospace;">${code}</code>`,
+        );
+
+        // Handle links [text](url)
+        processedContent = processedContent.replace(
+          /\[([^\]]+)\]\(([^)]+)\)/g,
+          (_, text, url) =>
+            `<a href="${url}" target="_blank" rel="noopener noreferrer" 
+             style="color: var(--ifm-link-color); text-decoration: none; font-weight: 500;">${text}</a>`,
+        );
+
+        return (
+          <p
+            key={i}
+            style={{ margin: '1rem 0', lineHeight: 1.6 }}
+            dangerouslySetInnerHTML={{ __html: processedContent }}
+          />
+        );
       })}
     </div>
   );

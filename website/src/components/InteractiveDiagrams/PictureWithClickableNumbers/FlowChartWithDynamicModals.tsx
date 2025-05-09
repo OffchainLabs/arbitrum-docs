@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ModalWithDynamicContent } from './ModalWithDynamicContent';
+import { Modal } from './Modal';
 import Button from './Button';
 import { PictureWithClickableNumbersProps } from './types';
 import { coordinates as defaultCoordinates } from './constants';
@@ -84,7 +84,7 @@ export const FlowChartWithDynamicModals: React.FC<
             const isDynamic = props.dynamicButtons?.includes(number);
             const isAnimated = props.animatedButtons?.includes(number);
             return (
-              <ModalWithDynamicContent
+              <Modal
                 key={`${id}-${number}`}
                 number={number}
                 coordinates={finalCoordinates}
@@ -98,7 +98,7 @@ export const FlowChartWithDynamicModals: React.FC<
                   coordinates={finalCoordinates}
                   id={id}
                 />
-              </ModalWithDynamicContent>
+              </Modal>
             );
           })}
           {backgroundElements}
@@ -134,7 +134,7 @@ export const FlowChartWithDynamicModals: React.FC<
             const isDynamic = props.dynamicButtons?.includes(number);
             const isAnimated = props.animatedButtons?.includes(number);
             return (
-              <ModalWithDynamicContent
+              <Modal
                 key={`${id}-${number}`}
                 number={number}
                 coordinates={finalCoordinates}
@@ -148,7 +148,7 @@ export const FlowChartWithDynamicModals: React.FC<
                   coordinates={finalCoordinates}
                   id={id}
                 />
-              </ModalWithDynamicContent>
+              </Modal>
             );
           })}
           {backgroundElements}
@@ -175,7 +175,7 @@ export const FlowChartWithDynamicModals: React.FC<
         const isDynamic = props.dynamicButtons?.includes(number);
         const isAnimated = props.animatedButtons?.includes(number);
         return (
-          <ModalWithDynamicContent
+          <Modal
             key={`${id}-${number}`}
             number={number}
             coordinates={finalCoordinates}
@@ -189,7 +189,7 @@ export const FlowChartWithDynamicModals: React.FC<
               coordinates={finalCoordinates}
               id={id}
             />
-          </ModalWithDynamicContent>
+          </Modal>
         );
       })}
       {backgroundElements}
