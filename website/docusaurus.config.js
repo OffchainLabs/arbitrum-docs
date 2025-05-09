@@ -4,8 +4,9 @@
 const markdownPreprocessor = require('./src/scripts/markdown-preprocessor');
 const sdkSidebarGenerator = require('./src/scripts/sdk-sidebar-generator');
 const sdkCodebasePath = '../arbitrum-sdk';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+const path = require('path');
+const remarkMath = require('remark-math');
+const rehypeKatex = require('rehype-katex');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -70,15 +71,51 @@ const config = {
     ],
   ],
   plugins: [
-    // Custom plugin for interactive diagrams
+    // Modals-as-pages plugin
     [
-      './src/plugins/interactive-diagrams-plugin',
+      require.resolve('./src/components/InteractiveDiagrams/modals-as-pages-plugin'),
       {
+        contentDir: [
+          // Primary content directory for interactive diagrams
+          'src/components/InteractiveDiagrams/content',
+
+          // Keep the old path for backward compatibility during transition
+          '../arbitrum-docs/how-arbitrum-works/timeboost/diagrams-modals',
+        ],
+        filePattern: '**/*.mdx',
         debug: true,
-        partialsPath: '../arbitrum-docs/how-arbitrum-works/timeboost/diagrams-modals',
-        partialPrefix: '_partial-',
+        // Custom content ID generator to support both new and legacy file naming
+        contentIdGenerator: (filePath) => {
+          // Legacy pattern: _partial-{diagramId}-step-{stepNumber}.mdx
+          const legacyMatch = path.basename(filePath).match(/^_partial-([^-]+)-step-(\d+)\.mdx$/);
+          if (legacyMatch) {
+            return {
+              contextId: 'diagrams',
+              groupId: legacyMatch[1],
+              contentId: `step-${legacyMatch[2]}`,
+            };
+          }
+
+          // New pattern: diagrams/{groupId}/step-{stepNumber}.mdx
+          const parts = filePath.split('/');
+
+          if (parts.length < 3) {
+            return {
+              contextId: 'default',
+              groupId: path.dirname(filePath).replace(/\//g, '-'),
+              contentId: path.basename(filePath, '.mdx'),
+            };
+          }
+
+          return {
+            contextId: parts[0],
+            groupId: parts[1],
+            contentId: path.basename(parts[2], '.mdx'),
+          };
+        },
       },
     ],
+
     [
       'docusaurus-plugin-typedoc',
       {
@@ -198,156 +235,107 @@ const config = {
           //        there may be a way to show the dropdown only on pages that have been translated, but that's out of scope for the initial version
           // {
           //   type: 'localeDropdown',
-          //   position: 'right',
-          // }
+          // },
         ],
       },
       footer: {
         style: 'dark',
         links: [
-          {},
           {
+            title: 'Ecosystem',
             items: [
               {
-                label: 'Arbitrum.io',
-                to: 'https://arbitrum.io/',
+                label: 'Arbitrum One',
+                href: 'https://arbitrum.io',
               },
               {
-                label: 'Arbitrum Rollup',
-                to: 'https://arbitrum.io/rollup',
+                label: 'Arbitrum Nova',
+                href: 'https://nova.arbitrum.io/',
               },
               {
-                label: 'Arbitrum AnyTrust',
-                to: 'https://arbitrum.io/anytrust',
+                label: 'Arbitrum Portal',
+                href: 'https://portal.arbitrum.io',
               },
               {
-                label: 'Arbitrum Orbit',
-                to: 'https://arbitrum.io/orbit',
+                label: 'Arbitrum Bridge',
+                href: 'https://bridge.arbitrum.io',
               },
               {
-                label: 'Arbitrum Stylus',
-                to: 'https://arbitrum.io/stylus',
+                label: 'Arbitrum Governance',
+                href: 'https://arbitrum.foundation',
               },
               {
-                label: 'Arbitrum Foundation',
-                to: 'https://arbitrum.foundation/',
+                label: 'Arbitrum Token Lists',
+                href: 'https://tokenlists.org/token-list?url=https://tokenlist.arbitrum.io/ArbTokenLists/arbed_arb_whitelist_era.json',
               },
               {
-                label: 'Nitro whitepaper',
-                to: 'https://github.com/OffchainLabs/nitro/blob/master/docs/Nitro-whitepaper.pdf',
+                label: 'Stylus Live',
+                href: 'https://live.stylus-sdk.xyz/playground',
               },
             ],
           },
           {
+            title: 'Resources',
             items: [
               {
-                label: 'Network status',
-                to: 'https://status.arbitrum.io/',
+                label: 'Arbitrum One Explorer',
+                href: 'https://arbiscan.io',
               },
               {
-                label: 'Portal',
-                to: 'https://portal.arbitrum.io/',
+                label: 'Arbitrum Nova Explorer',
+                href: 'https://nova.arbiscan.io',
               },
               {
-                label: 'Bridge',
-                to: 'https://bridge.arbitrum.io/',
+                label: 'Arbitrum Sepolia Explorer',
+                href: 'https://sepolia.arbiscan.io/',
               },
               {
-                label: 'Governance docs',
-                to: 'https://docs.arbitrum.foundation/',
+                label: 'Stylus By Example',
+                href: 'https://example.arbitrum.io/',
               },
               {
-                label: 'Careers',
-                to: 'https://offchainlabs.com/careers/',
-              },
-              {
-                label: 'Support',
-                to: 'https://support.arbitrum.io/',
-              },
-              {
-                label: 'Bug Bounties',
-                to: 'https://immunefi.com/bounty/arbitrum/',
+                label: 'Analytics',
+                href: 'https://dune.com/arbitrum/arbitrum-protocol-metrics',
               },
             ],
           },
           {
+            title: 'Community',
             items: [
               {
                 label: 'Discord',
-                to: 'https://discord.gg/ZpZuw7p',
+                href: 'https://discord.gg/arbitrum',
               },
               {
-                label: 'Twitter',
-                to: 'https://twitter.com/OffchainLabs',
+                label: 'Offchain Labs Twitter',
+                href: 'https://twitter.com/OffchainLabs',
               },
               {
-                label: 'Youtube',
-                to: 'https://www.youtube.com/@Arbitrum',
+                label: 'Arbitrum Twitter',
+                href: 'https://twitter.com/arbitrum',
               },
               {
-                label: 'Medium Blog',
-                to: 'https://medium.com/offchainlabs',
+                label: 'Forum',
+                href: 'https://forum.arbitrum.foundation/',
               },
               {
-                label: 'Research forum',
-                to: 'https://research.arbitrum.io/',
-              },
-              {
-                label: 'Privacy Policy',
-                to: 'https://arbitrum.io/privacy',
-              },
-              {
-                label: 'Terms of Service',
-                to: 'https://arbitrum.io/tos',
+                label: 'Research Papers',
+                href: 'https://github.com/OffchainLabs/arbitrum/blob/master/docs/Arbitrum_and_Fraud_Proofs.pdf',
               },
             ],
           },
         ],
-        copyright: `© ${new Date().getFullYear()} Offchain Labs`,
+        copyright: `Copyright © ${new Date().getFullYear()} Offchain Labs, Inc.`,
       },
-      prism: {
-        additionalLanguages: ['solidity', 'rust', 'bash', 'toml'],
+      sidebar: {
+        hideable: true,
       },
-      liveCodeBlock: {
-        /**
-         * The position of the live playground, above or under the editor
-         * Possible values: "top" | "bottom"
-         */
-        playgroundPosition: 'top',
-      },
-      mermaid: {
-        options: {
-          securityLevel: 'loose',
-          flowchart: {
-            curve: 'basis',
-          },
-        },
-      },
-      docs: {
-        sidebar: {
-          autoCollapseCategories: true,
-        },
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: false,
+        respectPrefersColorScheme: true,
       },
     }),
 };
-
-// HACK
-// this was originally included above
-// it broke local builds on Windows, not sure why yet. Works fine on Mac
-// `generate_sdk_docs` runs fine, no difference in outputs between environments, so it's not easy to debug - low pri
-const isRunningLocally = process.env.NODE_ENV === 'development';
-const isRunningOnWindows = process.platform === 'win32';
-if (isRunningLocally && isRunningOnWindows) {
-  config.plugins = config.plugins.filter((plugin) => {
-    if (Array.isArray(plugin) && plugin[0] === '@docusaurus/plugin-content-docs') {
-      return false; // remove the offending plugin config
-    }
-    return true; // keep everything else
-  });
-} else {
-  // another hack for another strange windows-specific issue, reproduceable through clean clone of repo
-  config.themeConfig.prism.theme = require('prism-react-renderer/themes/github');
-  config.themeConfig.prism.darkTheme = require('prism-react-renderer/themes/palenight');
-}
 
 module.exports = config;

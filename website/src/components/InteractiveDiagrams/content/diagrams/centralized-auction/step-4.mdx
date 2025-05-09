@@ -1,0 +1,13 @@
+# Step 4: `auctioneer_submitBidAuctionTransaction`
+
+The auctioneer submits the winning bids to resolve the auction.
+
+1. Auctioneer collects and sorts all valid bids for the round
+2. Identifies the two highest bids
+3. Calls resolveAuction() with the winning bids
+
+```solidity
+function resolveAuction(Bid calldata bid1, Bid calldata bid2) external;
+```
+
+After the auction closes, the auctioneer processes all valid bids and determines the winner. In this sealed-bid second-price auction, the highest bidder wins but pays the second-highest bid amount. The contract handles the transfer of funds and stores the winner's address as the express lane controller for the upcoming round.

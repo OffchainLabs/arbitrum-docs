@@ -1,0 +1,18 @@
+# Step 3: Auctioneer Response
+
+The auctioneer validates the bid and responds with success or failure.
+
+1. Auctioneer verifies chain ID, round number, and signature
+2. Checks if sender is a depositor with sufficient balance
+3. Returns status OK or an error code if validation fails
+
+```javascript
+{
+  status: "OK" | "ERROR",
+  error?: "MALFORMED_DATA" | "NOT_DEPOSITOR" | "WRONG_CHAIN_ID" | "WRONG_SIGNATURE" | "BAD_ROUND_NUMBER" | "INSUFFICIENT_BALANCE"
+}
+```
+
+The auctioneer's immediate response allows bidders to know if their bid was accepted before the auction closes. If a bid is rejected, the bidder has an opportunity to correct any issues and submit again before the round closes.
+
+[Read comprehensive explanation](https://docs.arbitrum.io/run-arbitrum-node/how-to-use-timeboost#step-3-find-out-the-winner-of-the-auction)
