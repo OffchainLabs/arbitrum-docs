@@ -1,0 +1,15 @@
+# Step 1: Deposit funds into the auction contract
+
+Users must first deposit ERC-20 tokens into the auction contract to participate in bidding.
+
+1. Call `submitDeposit()` on the IExpressLaneAuction contract
+2. The contract emits a DepositSubmitted event with the bidder's address and amount
+3. Funds are now available for bidding in future auction rounds
+
+```solidity
+function submitDeposit(uint256 amount) external;
+```
+
+The deposit process establishes a bidder's ability to participate in the auction system by locking tokens that can later be used for bidding. The amount deposited represents the maximum bid a user can make in subsequent rounds.
+
+[Learn more about auction deposits](https://docs.arbitrum.io/run-arbitrum-node/how-to-use-timeboost#step-1-deposit-funds-into-the-auction-contract)
