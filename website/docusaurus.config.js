@@ -70,6 +70,15 @@ const config = {
     ],
   ],
   plugins: [
+    // Custom plugin for interactive diagrams
+    [
+      './src/plugins/interactive-diagrams-plugin',
+      {
+        debug: true,
+        partialsPath: '../arbitrum-docs/how-arbitrum-works/timeboost/diagrams-modals',
+        partialPrefix: '_partial-',
+      },
+    ],
     [
       'docusaurus-plugin-typedoc',
       {

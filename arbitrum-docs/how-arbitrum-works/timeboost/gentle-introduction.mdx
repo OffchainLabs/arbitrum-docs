@@ -9,6 +9,7 @@ content_type: gentle-introduction
 ---
 
 import { FlowChart } from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers';
+import PictureWithDynamicModals from '@site/src/components/InteractiveDiagrams/PictureWithClickableNumbers/PictureWithDynamicModals';
 import ImageWithCaption from '@site/src/components/ImageCaptions/';
 import ImageZoom from '@site/src/components/ImageZoom';
 
@@ -87,7 +88,7 @@ The value of the express lane will be the sum of how much MEV the express lane c
 
 Control of the express lane in each round (default: 60 seconds) is determined by a per-round auction, which is a sealed-bid, second-price auction. This auction is held to determine the express lane controller for the next round. In other words, the express lane controller was determined at any point in time in the previous auction round. Bids for the auction can be made with any `ERC-20` token, in any amount, and be collected by any address - at the full discretion of the chain owner.
 
-<FlowChart
+<PictureWithDynamicModals
   id="diagram2"
   backgroundImagePath="/img/timeboost-centralized-timeboost-auction-workflow.svg"
   isSvgBackground={true}
@@ -95,6 +96,7 @@ Control of the express lane in each round (default: 60 seconds) is determined by
   numbers={[2, 3, 4]}
   dynamicButtons={[2, 3, 4]}
   animatedButtons={[2, 3, 4]}
+  diagramId="centralized-auction"
 />
 
 The auction for a round has a closing time that is `auctionClosingSeconds` (default: 15) seconds before the beginning of the round. This means that, in the default parameters, parties have 45 seconds to submit bids before the auction will no longer accept bids. In the 15 seconds between when bids are no longer accepted and when the new round begins, the autonomous auctioneer will verify all bids, determine the winner, and make a call to the on-chain auction contract to formally resolve the auction.
