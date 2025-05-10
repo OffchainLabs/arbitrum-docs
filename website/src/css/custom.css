@@ -77,3 +77,16 @@
 .img-500px { width: 500px; }
 .img-600px { width: 600px; }
 .img-900px { width: 900px; }
+
+/* Animation for interactive buttons */
+@keyframes blink {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.interactive-button-circle {
+  fill: #ff7f2a;
+  transition: filter 0.2s;
+  animation: blink 2s ease-in-out infinite;
+}

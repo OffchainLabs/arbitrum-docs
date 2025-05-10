@@ -1,7 +1,25 @@
 import * as React from 'react';
+import { ButtonComponentProps } from './types';
 
-const ButtonComponent = ({ x, y, width, height }) => {
-  const [isHovered, setIsHovered] = React.useState(false);
+/**
+ * Interactive button component for the PictureWithClickableNumbers diagram.
+ *
+ * @remarks
+ * This component renders an interactive SVG button that responds to hover events.
+ * It's used within the NumberComponent to make certain numbers clickable.
+ *
+ * @param props - The component props
+ * @param props.x - The x-coordinate position of the button
+ * @param props.y - The y-coordinate position of the button
+ * @param props.width - The width of the button
+ * @param props.height - The height of the button
+ * @returns An SVG element representing an interactive button
+ */
+const ButtonComponent: React.FC<ButtonComponentProps> = ({ x, y, width, height }) => {
+  /**
+   * State to track whether the button is currently being hovered over.
+   */
+  const [isHovered, setIsHovered] = React.useState<boolean>(false);
 
   return (
     <svg
@@ -34,11 +52,9 @@ const ButtonComponent = ({ x, y, width, height }) => {
         cx="256"
         cy="256"
         r="144"
+        className="interactive-button-circle"
         style={{
-          fill: '#ff7f2a',
           filter: isHovered ? 'brightness(1.2)' : 'none',
-          transition: 'filter 0.2s',
-          animation: 'blink 2s ease-in-out infinite',
         }}
       />
     </svg>
