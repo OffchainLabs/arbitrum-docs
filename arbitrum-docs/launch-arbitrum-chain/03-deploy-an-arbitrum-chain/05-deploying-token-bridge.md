@@ -12,11 +12,11 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures seamless ERC-20 token transfers between the parent and child chains.
+The Arbitrum stack doesn't natively support specific token bridging standards at the protocol level. Instead, Offchain Labs designed a "canonical token bridge" that ensures seamless `ERC-20` token transfers between the parent and child chains.
 
-The token bridge architecture includes contracts deployed on the <a data-quicklook-from='parent-chain'>parent chain</a> and on the <a data-quicklook-from='child-chain'>child chain</a>. These entities communicate via the <a data-quicklook-from='retryable-ticket'>retryable ticket</a> protocol, ensuring efficient and secure interactions.
+The token bridge architecture includes contracts deployed on the parent and child chains. These entities communicate via the <a data-quicklook-from='retryable-ticket'>retryable ticket</a> protocol, ensuring efficient and secure interactions.
 
-Once you have deployed your Arbitrum chain and have a node running, you can deploy a token bridge for your chain. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
+Once you have deployed your Arbitrum chain and have a node running, you can deploy a token bridge for your chain. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
 
 Before reading this guide, we recommend:
 
@@ -25,9 +25,9 @@ Before reading this guide, we recommend:
 
 ## Parameters used when deploying a token bridge
 
-Before we describe the process of deploying a token bridge using the Arbitrum chain (Orbit) SDK, let's take a look at the parameters we need to pass to the token bridge creator contract.
+Before we describe the process of deploying a token bridge using the Arbitrum chain (Orbit) SDK, let's look at the parameters we need to pass to the token bridge creator contract.
 
-Deploying a new token bridge for an Arbitrum chain is done through a [TokenBridgeCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate ParentToChild messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
+Deploying a new token bridge for an Arbitrum chain is done through a [TokenBridgeCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the appropriate `ParentToChild` messages from the parent chain to the child chain so the counterpart contracts of the token bridge are created in the Arbitrum chain.
 
 `TokenBridgeCreator` has a `createTokenBridge` function that creates the parent chain contracts of the token bridge and sends the creation message to the arbitrum chain via retryable tickets. `createTokenBridge` takes four parameters as input:
 
@@ -47,11 +47,11 @@ The following table describes these parameters:
 | `maxGasForContracts` | uint256 | Gas limit used for executing the retryable ticket on the child chain.                                                     |
 | `gasPriceBid`        | uint256 | Max gas price used for executing the retryable ticket on the child chain.                                                 |
 
-When creating the token bridge through the Arbitrum chain (Orbit) SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values for them.
+When creating the token bridge through the Arbitrum chain (Orbit) SDK, the parameters `maxGasForContracts` and `gasPriceBid` don't need to be configured, since the SDK will calculate the right values.
 
 ## How to deploy a token bridge using the Arbitrum chain (Orbit) SDK
 
-Let's now look at the methods to use when creating a token bridge using the Arbitrum chain (Orbit) SDK.
+Let's look at the methods to create a token bridge using the Arbitrum chain (Orbit) SDK.
 
 :::info Example script
 
@@ -71,7 +71,7 @@ Deploying a token bridge for a chain involves the following steps:
 
 :::note
 
-This step is only required for Arbitrum chains configured to use a custom gas token.
+This step is only a requirement for Arbitrum chains configured to use a custom gas token.
 
 :::
 
@@ -125,7 +125,7 @@ if (!(await createTokenBridgeEnoughCustomFeeTokenAllowance(allowanceParams))) {
 
 ### 2. Deploy the token bridge
 
-To initiate the token bridge deployment process, we can call the `createTokenBridgePrepareTransactionRequest` function, which will craft a transaction request to be signed by the chain owner, and sent to the `TokenBridgeCreator` contract.
+To initiate the token bridge deployment process, we can call the `createTokenBridgePrepareTransactionRequest` function, which will craft a transaction request to be signed by the chain owner and sent to the `TokenBridgeCreator` contract.
 
 After that, we wait for the transaction to be executed and retrieve its receipt with `createTokenBridgePrepareTransactionReceipt`.
 
@@ -172,9 +172,9 @@ const txReceipt = createTokenBridgePrepareTransactionReceipt(
 
 ### 3. Wait for retryable tickets to execute
 
-After the transaction is executed on the parent chain, we wait for the generated retryable tickets to be executed on the child chain. To do this, we use a `waitForRetryable` method available in the `txReceipt` object returned by `createTokenBridgePrepareTransactionReceipt`.
+After the transaction executes on the parent chain, we wait for the generated retryable tickets to execute on the child chain. To do this, we use a `waitForRetryable` method available in the `txReceipt` object returned by `createTokenBridgePrepareTransactionReceipt`.
 
-Remember that these retryable tickets are meant to create the counterpart contracts of the token bridge in the child chain, so they can communicate with each other. The first retryable ticket creates a creator contract on the child chain configured with the templates of all the token bridge contracts. The second retryable creates the actual counterpart contracts of the token bridge.
+Remember that these retryable tickets intend to create the counterpart contracts of the token bridge in the child chain so that they can communicate. The first retryable ticket creates a creator contract on the child chain configured with the templates of all the token bridge contracts. The second retryable creates the actual counterpart contracts of the token bridge.
 
 Example:
 
@@ -223,11 +223,11 @@ You can find more info about `WETH` gateways in our ["other gateways flavors" do
 
 :::
 
-Once the token bridge is deployed, if the chain uses `ETH` as the gas token, you must set a special gateway to be able to bridge `WETH`. This gateway unwraps `WETH` to bridge it as `ETH` and wraps it back to `WETH` on the destination chain.
+Once the token bridge deploys, if the chain uses `ETH` as the gas token, you must set a special gateway to bridge `WETH`. This gateway unwraps `WETH` to bridge it as `ETH` and wraps it back to `WETH` on the destination chain.
 
-You can use the methods `createTokenBridgePrepareSetWethGatewayTransactionRequest` and `createTokenBridgePrepareSetWethGatewayTransactionReceipt` to set this gateway, in a similar way than what we used to send the `createTokenBridge` request earlier.
+You can use the methods `createTokenBridgePrepareSetWethGatewayTransactionRequest` and `createTokenBridgePrepareSetWethGatewayTransactionReceipt` to set this gateway, in a similar way to what we used to send the `createTokenBridge` request earlier.
 
-This action also generates a retryable ticket that is sent to the child chain to create and configure the `WETH` gateway, so you should wait to verify that the ticket is successfully executed.
+This action also sends a retryable ticket to the child chain to create and configure the `WETH` gateway, so you should wait to verify that the ticket executes successfully.
 
 Below is an example of how to use these functions:
 

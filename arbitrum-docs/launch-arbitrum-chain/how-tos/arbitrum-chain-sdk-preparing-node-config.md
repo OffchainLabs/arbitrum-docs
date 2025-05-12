@@ -12,13 +12,13 @@ import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
 <RaaSNotice />
 
-Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is configuring and running an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. The Nitro node is configured using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to the process of creating and configuring an Arbitrum chain.
+Once you have successfully deployed and initialized the Arbitrum chain core contracts, the next step is to configure and run an Arbitrum <a data-quicklook-from="arbitrum-nitro">Nitro</a> node for your chain. You configure a Nitro node using a `JSON` file describing all the parameters for the node, including settings for the batch poster, validator, and the chain itself. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
 
 Before reading this guide, we recommend that you're familiar with the general process for creating new chains explained in the introduction and the first section of [How to deploy a Rollup chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md).
 
 ## Structure of a Nitro node configuration JSON object
 
-A Nitro node reads its configuration from a JSON object that is usually provided in a file when starting up the node. This object has the following structure:
+When starting up the node, a Nitro node reads its configuration from a JSON object, usually provided in a file. This object has the following structure:
 
 ```typescript
 {
@@ -105,9 +105,9 @@ To generate the configuration file for your node, you'll need the following info
 
 ### 2. Generate the node configuration object
 
-The `prepareNodeConfig` method generates a JSON object with the configuration for the node. It sets the appropriate defaults for most of the parameters, allowing you to override any of these defaults.
+The `prepareNodeConfig` method generates a JSON object with the configuration for the node. It sets the appropriate defaults for most parameters, allowing you to override any of these defaults.
 
-Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash` (_note: this transaction hash is not strictly required; it's only used to obtain the core contracts and chain config to use in the node_):
+Below is an example of how to use `prepareNodeConfig` to obtain the node configuration for an Arbitrum chain deployed on transaction `txHash` (**Note**: _This transaction hash is not strictly required; it's only for obtaining the core contracts and chain config to use in the node_):
 
 ```typescript
 import { createPublicClient, http } from 'viem';
@@ -152,8 +152,8 @@ const nodeConfig = prepareNodeConfig({
 
 Note that `prepareNodeConfig` will also generate the specific configuration for AnyTrust chains if it detects that the chain configuration includes the appropriate flag.
 
-Once the node configuration object is generated, it can be saved on a file to be provided to the Nitro node later.
+After generating the node configuration object, it can be saved to a file for later use by the Nitro node.
 
 ### 3. Next step
 
-With the node configuration generated, you can now run the Nitro node for your Arbitrum chain. You can find instructions for running a node in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx).
+You can now run the Nitro node for your Arbitrum chain with the node configuration generated. You can find instructions for running a node in [How to run a full node](/run-arbitrum-node/03-run-full-node.mdx).
