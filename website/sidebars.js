@@ -373,18 +373,8 @@ const sidebars = {
                 },
                 {
                   type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-rollup-chain',
-                  label: `Deploy a Rollup chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-anytrust-chain',
-                  label: `Deploy an AnyTrust chain`,
-                },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-custom-gas-token-chain',
-                  label: `Deploy a custom gas token chain`,
+                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-an-arbitrum-chain',
+                  label: `Deploy an Arbitrum chain`,
                 },
                 {
                   type: 'doc',

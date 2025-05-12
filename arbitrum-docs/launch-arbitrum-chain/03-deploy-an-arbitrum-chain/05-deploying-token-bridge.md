@@ -20,7 +20,7 @@ Once you have deployed your Arbitrum chain and have a node running, you can depl
 
 Before reading this guide, we recommend:
 
-- Becoming familiar with the general process of creating new chains explained in [How to deploy a Rollup chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-rollup-chain.md)
+- Becoming familiar with the general process of creating new chains explained in [How to deploy an Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/02-deploying-an-arbitrum-chain.md)
 - Learning about the canonical token bridge in the [Token bridging](/build-decentralized-apps/token-bridging/01-overview.mdx) section
 
 ## Parameters used when deploying a token bridge
