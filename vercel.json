@@ -865,11 +865,11 @@
       "destination": "/run-arbitrum-node/run-full-node",
       "permanent": false
     },
-     {
+    {
       "source": "/(run-arbitrum-node/sequencer/high-availability-sequencer-docs/?)",
       "destination": "/run-arbitrum-node/sequencer/high-availability-sequencer-docs",
       "permanent": false
-    },   
+    },
     {
       "source": "/docs/public_testnet",
       "destination": "/for-devs/concepts/public-chains",
@@ -2183,6 +2183,11 @@
     {
       "source": "/(partials/_troubleshooting-orbit-partial/?)",
       "destination": "/partials/_troubleshooting-arbitrum-chain-partial",
+      "permanent": false
+    },
+    {
+      "source": "/(launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain/?)",
+      "destination": "/launch-arbitrum-chain/arbitrum-chain-sdk-introduction",
       "permanent": false
     }
   ]

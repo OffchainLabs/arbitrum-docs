@@ -45,12 +45,8 @@ After selecting a chain type, you can follow the corresponding guide to deploy y
 
 ## 3. Configure your Arbitrum chain's node
 
-Once the chain is deployed, you'll need to craft the configuration to run its node. To learn how, visit [Configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
+Once the chain is deployed, you'll need to generate the configuration to run its node. To learn how, visit [Configure your Arbitrum chain's node](/launch-arbitrum-chain/how-tos/arbitrum-chain-sdk-preparing-node-config.md).
 
 ## 4. Deploy your Arbitrum chain's token bridge
 
 Your Arbitrum chain's token bridge contracts allow `ERC-20` tokens to move between your Arbitrum chain and its underlying parent chain. Read [Deploy your Arbitrum chain's token bridge](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/05-deploying-token-bridge.md) to learn how to set up your bridge.
-
-## 5. Configure your Arbitrum chain
-
-Lastly, your chain has multiple parameters that you might want to configure. [Configure your Arbitrum chain](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/01-configuring-arbitrum-chain.md) walks you through each of these parameters.

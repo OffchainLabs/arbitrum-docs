@@ -396,11 +396,6 @@ const sidebars = {
                   id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/deploying-token-bridge',
                   label: `Deploy a token bridge`,
                 },
-                {
-                  type: 'doc',
-                  id: 'launch-arbitrum-chain/deploy-an-arbitrum-chain/configuring-arbitrum-chain',
-                  label: `Configure your chain`,
-                },
               ],
             },
             {
