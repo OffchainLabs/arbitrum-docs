@@ -8,11 +8,9 @@ user_story: As a current or prospective Arbitrum chain deployer, I need to under
 content_type: how-to
 ---
 
-:::info RaaS providers
+import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
-It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
-
-:::
+<RaaSNotice />
 
 Creating a new Arbitrum chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. This page explains how to deploy a custom gas token Arbitrum chain using the Arbitrum chain (Orbit) SDK. See the [Overview](/launch-arbitrum-chain/arbitrum-chain-sdk-introduction.md) for an introduction to creating and configuring an Arbitrum chain.
 

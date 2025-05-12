@@ -8,11 +8,9 @@ user_story: As a current or prospective Arbitrum chain deployer, I need to confi
 content_type: how-to
 ---
 
-:::info RaaS providers
+import RaaSNotice from '../partials/_raas-providers-notice.mdx';
 
-It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
-
-:::
+<RaaSNotice />
 
 Creating a new Arbitrum chain involves deploying a set of contracts on your chain's <a data-quicklook-from="parent-chain">parent chain</a>. These contracts are:
 

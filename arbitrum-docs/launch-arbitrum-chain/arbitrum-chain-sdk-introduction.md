@@ -7,11 +7,9 @@ user_story: As a current or prospective Arbitrum chain owner, I need to onboard 
 content_type: overview
 ---
 
-:::info RaaS providers
+import RaaSNotice from './partials/_raas-providers-notice.mdx';
 
-It is highly recommended to work with a Rollup-as-a-Service (RaaS) provider if you intend to deploy a production chain. You can find a list of RaaS providers [here](/launch-arbitrum-chain/06-third-party-integrations/02-third-party-providers.md#rollup-as-a-service-raas-providers).
-
-:::
+<RaaSNotice />
 
 Deploying new Arbitrum chains is done through a [RollupCreator](/launch-arbitrum-chain/03-deploy-an-arbitrum-chain/07-canonical-factory-contracts.mdx) contract that processes the creation of the needed contracts and sends the initialization messages from the parent chain to the newly created Arbitrum chain. To assist with these operations, the Arbitrum chain SDK contains a series of tools and scripts that help create and manage your chain(s). Its capabilities include:
 
