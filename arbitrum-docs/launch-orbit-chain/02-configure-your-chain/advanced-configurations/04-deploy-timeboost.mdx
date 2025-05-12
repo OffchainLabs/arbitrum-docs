@@ -76,7 +76,7 @@ forge script --sender $DEPLOYER --rpc-url $CHILD_CHAIN_RPC --slow ./DeployExpres
 Verify successful deployment by checking that the contract returns your configured bid token:
 
 ```bash
-cast call --rpc-url=http://localhost:8449 <Your chain's endpoint> <Your ExpressLaneAuction address> "biddingToken()(address)"
+cast call --rpc-url=<Your chain's endpoint> <Your ExpressLaneAuction address> "biddingToken()(address)"
 # Example output: 0xYourBidTokenAddress
 ```
 
@@ -126,7 +126,7 @@ Start the auction server with:
 
 ## Step 3: Configure Your Sequencer Node for Timeboost
 
-Update your sequencer node configuration to enable Timeboost functionality. Add the following to your node's configuration file:
+Update your sequencer node configuration to enable Timeboost functionality. Add the following new config to your sequencer node's configuration file:
 
 ```json
 {
