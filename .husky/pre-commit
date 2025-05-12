@@ -1,37 +1,69 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-cd website
+# Function to handle errors
+handle_error() {
+  echo "❌ Error: $1"
+  exit 1
+}
+
+# Function to log success messages
+log_success() {
+  echo "✅ $1"
+}
+
+# Function to log info messages
+log_info() {
+  echo "💡 $1"
+}
+
+# Function to run yarn command and check exit code
+run_yarn_command() {
+  local command=$1
+  local error_message=$2
+  
+  yarn $command
+  local exit_code=$?
+  
+  if [ $exit_code -ne 0 ]; then
+    handle_error "$error_message"
+  fi
+}
+
+# Change to website directory
+cd website || handle_error "Failed to change to website directory"
 
 # Check if globalVars.js has staged changes
 if git diff --cached --name-only | grep -q "src/resources/globalVars.js"; then
-  echo "🔄 Updating variable references..."
-  yarn update_variable_refs
-
-  echo "🔄 globalVars.js changed, running precompiles reference table generator..."
-  yarn generate_precompiles_ref_tables
-
-  echo "💅 running formatter"
-  yarn format
+  log_info "Detected changes in globalVars.js"
+  
+  # Run variable references update
+  log_info "Updating variable references..."
+  run_yarn_command "update_variable_refs" "Failed to update variable references"
+  
+  # Run the globalVars update checker script
+  run_yarn_command "tsx scripts/check-globalvars-updates.ts" "globalVars update check failed"
+  
+  log_info "Running precompiles reference table generator..."
+  run_yarn_command "generate_precompiles_ref_tables" "Failed to generate precompiles reference tables"
+  
+  log_info "Running formatter..."
+  run_yarn_command "format" "Formatting failed"
 fi
 
-# Check for missing redirects
-yarn check-redirects
-CHECK_REDIRECTS_EXIT_CODE=$?
+# Check redirects
+log_info "Checking redirects..."
+run_yarn_command "check-redirects" "The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
 
-if [ $CHECK_REDIRECTS_EXIT_CODE -ne 0 ]; then
-  echo "❌ Error: The redirect checker found issues that need to be addressed. Please check the output above and fix any issues before committing."
-  exit 1
-fi
+# Check lunr search exclusions
+log_info "Checking lunr search exclusions..."
+run_yarn_command "tsx scripts/check-lunr-exclude-hide-from-search.ts" "Some files with 'hide-from-search' are not excluded from lunr search. Please fix before committing."
 
-# Check that all hide-from-search files are excluded from lunr search
-yarn tsx scripts/check-lunr-exclude-hide-from-search.ts
-CHECK_LUNR_EXIT_CODE=$?
+# Final formatting pass
+log_info "Running final formatting pass..."
+run_yarn_command "format" "Final formatting failed"
 
-if [ $CHECK_LUNR_EXIT_CODE -ne 0 ]; then
-  echo "❌ Error: Some files with 'hide-from-search' are not excluded from lunr search. Please fix before committing."
-  exit 1
-fi
+# Return to original directory
+cd .. || handle_error "Failed to return to original directory"
 
-cd ..
-
-echo "\n✅ Pre-commit tasks completed\n💡 Note: To bypass hooks, use git commit --no-verify"
+log_success "Pre-commit tasks completed"
+log_info "Note: To bypass hooks, use git commit --no-verify"
